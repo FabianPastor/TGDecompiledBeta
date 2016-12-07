@@ -22,6 +22,7 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
@@ -33,6 +34,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -64,7 +66,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
@@ -503,9 +504,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -941,7 +942,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             }
                         }
                         if (!TextUtils.isEmpty(functionCode)) {
-                            if (VERSION.SDK_INT >= 26) {
+                            if (VERSION.SDK_INT >= 21) {
                                 functionCode = functionCode + functionName + "('" + this.sig.substring(3) + "');";
                             } else {
                                 functionCode = functionCode + "window." + WebPlayerView.this.interfaceName + ".returnResultToJava(" + functionName + "('" + this.sig.substring(3) + "'));";
@@ -950,15 +951,19 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             try {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
-                                        if (VERSION.SDK_INT >= 26) {
+                                        if (VERSION.SDK_INT >= 21) {
                                             WebPlayerView.this.webView.evaluateJavascript(functionCodeFinal, new ValueCallback<String>() {
                                                 public void onReceiveValue(String value) {
                                                     YoutubeVideoTask.this.result[0] = YoutubeVideoTask.this.result[0].replace(YoutubeVideoTask.this.sig, "/signature/" + value.substring(1, value.length() - 1));
                                                     YoutubeVideoTask.this.semaphore.release();
                                                 }
                                             });
-                                        } else {
-                                            WebPlayerView.this.webView.loadUrl("javascript:" + functionCodeFinal);
+                                            return;
+                                        }
+                                        try {
+                                            WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes("UTF-8"), 0));
+                                        } catch (Throwable e) {
+                                            FileLog.e("tmessages", e);
                                         }
                                     }
                                 });
@@ -1148,9 +1153,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         this.backgroundPaint.setColor(-16777216);
         this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context);
         addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        this.interfaceName = "JavaScriptInterface" + Math.abs(Utilities.random.nextLong());
+        this.interfaceName = "JavaScriptInterface";
         this.webView = new WebView(context);
-        this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.addJavascriptInterface(new JavaScriptInterface(new CallJavaResultInterface() {
             public void jsCallFinished(String value) {
                 if (WebPlayerView.this.currentTask != null && !WebPlayerView.this.currentTask.isCancelled() && (WebPlayerView.this.currentTask instanceof YoutubeVideoTask)) {
@@ -1158,6 +1162,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 }
             }
         }), this.interfaceName);
+        WebSettings webSettings = this.webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
         this.textureView = new TextureView(context);
         this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
         this.videoPlayer = new VideoPlayer();

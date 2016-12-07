@@ -757,7 +757,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
 
                     public void needOpenWebView(String url, String title, String description, String originalUrl, int w, int h) {
-                        new EmbedBottomSheet(ChatActivityAdapter.this.mContext, title, description, originalUrl, url, w, h).show();
+                        EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, title, description, originalUrl, url, w, h);
                     }
 
                     public void didPressedReplyMessage(ChatMessageCell cell, int id) {
@@ -2635,7 +2635,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 public void onContextClick(BotInlineResult result) {
                     if (ChatActivity.this.getParentActivity() != null && result.content_url != null) {
                         if (result.type.equals(MimeTypes.BASE_TYPE_VIDEO) || result.type.equals("web_player_video")) {
-                            new EmbedBottomSheet(ChatActivity.this.getParentActivity(), result.title != null ? result.title : "", result.description, result.content_url, result.content_url, result.w, result.h).show();
+                            EmbedBottomSheet.show(ChatActivity.this.getParentActivity(), result.title != null ? result.title : "", result.description, result.content_url, result.content_url, result.w, result.h);
                         } else {
                             Browser.openUrl(ChatActivity.this.getParentActivity(), result.content_url);
                         }

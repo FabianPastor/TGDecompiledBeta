@@ -1879,7 +1879,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private void openCaptionEnter() {
-        if (this.imageMoveAnimation == null && this.changeModeAnimation == null) {
+        if (this.imageMoveAnimation == null && this.changeModeAnimation == null && this.currentEditMode == 0) {
             this.captionEditText.setTag(Integer.valueOf(1));
             this.captionEditText.openKeyboard();
             this.lastTitle = this.actionBar.getTitle();
@@ -2197,7 +2197,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private void switchToEditMode(int mode) {
-        if (this.currentEditMode == mode || this.centerImage.getBitmap() == null || this.changeModeAnimation != null || this.imageMoveAnimation != null || this.radialProgressViews[0].backgroundState != -1) {
+        if (this.currentEditMode == mode || this.centerImage.getBitmap() == null || this.changeModeAnimation != null || this.imageMoveAnimation != null || this.radialProgressViews[0].backgroundState != -1 || this.captionEditText.getTag() != null) {
             return;
         }
         final int i;

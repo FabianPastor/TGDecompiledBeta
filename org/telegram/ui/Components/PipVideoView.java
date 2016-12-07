@@ -1,12 +1,12 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
+import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar;
 
 public class PipVideoView {
@@ -69,10 +70,20 @@ public class PipVideoView {
                     access$100.x = (int) (((float) access$100.x) + dx);
                     access$100 = PipVideoView.this.windowLayoutParams;
                     access$100.y = (int) (((float) access$100.y) + dy);
-                    if (PipVideoView.this.windowLayoutParams.x < (-null)) {
-                        PipVideoView.this.windowLayoutParams.x = -null;
-                    } else if (PipVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + 0) {
-                        PipVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + 0;
+                    int maxDiff = PipVideoView.this.videoWidth / 2;
+                    if (PipVideoView.this.windowLayoutParams.x < (-maxDiff)) {
+                        PipVideoView.this.windowLayoutParams.x = -maxDiff;
+                    } else if (PipVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff) {
+                        PipVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff;
+                    }
+                    float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (PipVideoView.this.windowLayoutParams.x < 0) {
+                        alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + ((((float) PipVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                    } else if (PipVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) {
+                        alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((((float) ((PipVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                    }
+                    if (PipVideoView.this.windowView.getAlpha() != alpha) {
+                        PipVideoView.this.windowView.setAlpha(alpha);
                     }
                     if (PipVideoView.this.windowLayoutParams.y < (-null)) {
                         PipVideoView.this.windowLayoutParams.y = -null;
@@ -104,7 +115,7 @@ public class PipVideoView {
         aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
         this.controlsView = controls;
         this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
-        this.windowManager = (WindowManager) activity.getSystemService("window");
+        this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
         int sidex = this.preferences.getInt("sidex", 1);
         int sidey = this.preferences.getInt("sidey", 0);
@@ -118,7 +129,7 @@ public class PipVideoView {
             this.windowLayoutParams.y = getSideCoord(false, sidey, py);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
-            this.windowLayoutParams.type = VERSION.SDK_INT >= 18 ? 2003 : 99;
+            this.windowLayoutParams.type = 2003;
             this.windowLayoutParams.flags = 16777736;
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.parentSheet = sheet;
@@ -141,7 +152,7 @@ public class PipVideoView {
         if (isX) {
             total = AndroidUtilities.displaySize.x - this.videoWidth;
         } else {
-            total = AndroidUtilities.displaySize.y - this.videoHeight;
+            total = (AndroidUtilities.displaySize.y - this.videoHeight) - ActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.dp(10.0f);
@@ -187,39 +198,58 @@ public class PipVideoView {
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
         int maxDiff = AndroidUtilities.dp(20.0f);
-        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff) {
+        boolean slideOut = false;
+        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
             if (null == null) {
                 animators = new ArrayList();
             }
             editor.putInt("sidex", 0);
+            if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            }
             animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
-        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff) {
+        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
             if (null == null) {
                 animators = new ArrayList();
             }
             editor.putInt("sidex", 1);
+            if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            }
             animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
+        } else if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (null == null) {
+                animators = new ArrayList();
+            }
+            if (this.windowLayoutParams.x < 0) {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
+            } else {
+                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
+            }
+            slideOut = true;
         } else {
             editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
             editor.putInt("sidex", 2);
         }
-        if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || maxDiff <= ActionBar.getCurrentActionBarHeight()) {
-            if (animators == null) {
-                animators = new ArrayList();
+        if (!slideOut) {
+            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
+                if (animators == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidey", 0);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
+            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
+                if (animators == null) {
+                    animators = new ArrayList();
+                }
+                editor.putInt("sidey", 1);
+                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
+            } else {
+                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
+                editor.putInt("sidey", 2);
             }
-            editor.putInt("sidey", 0);
-            animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
-        } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
-            if (animators == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidey", 1);
-            animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
-        } else {
-            editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-            editor.putInt("sidey", 2);
+            editor.commit();
         }
-        editor.commit();
         if (animators != null) {
             if (this.decelerateInterpolator == null) {
                 this.decelerateInterpolator = new DecelerateInterpolator();
@@ -227,6 +257,14 @@ public class PipVideoView {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.setInterpolator(this.decelerateInterpolator);
             animatorSet.setDuration(150);
+            if (slideOut) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
+                animatorSet.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        PipVideoView.this.parentSheet.destroy();
+                    }
+                });
+            }
             animatorSet.playTogether(animators);
             animatorSet.start();
         }

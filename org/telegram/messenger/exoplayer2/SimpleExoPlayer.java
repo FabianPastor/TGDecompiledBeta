@@ -584,11 +584,11 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     protected void buildVideoRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, VideoRendererEventListener eventListener, long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
+        int extensionRendererIndex;
         Throwable e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecVideoRenderer(context, MediaCodecSelector.DEFAULT, allowedVideoJoiningTimeMs, drmSessionManager, false, mainHandler, eventListener, 50));
         if (extensionRendererMode != 0) {
-            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;
@@ -616,11 +616,11 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     protected void buildAudioRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
-        int extensionRendererIndex;
         Exception e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, mainHandler, eventListener, AudioCapabilities.getCapabilities(context)));
         if (extensionRendererMode != 0) {
+            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;

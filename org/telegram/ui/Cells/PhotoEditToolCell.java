@@ -22,7 +22,7 @@ public class PhotoEditToolCell extends FrameLayout {
         this.width = w;
         this.iconImage = new ImageView(context);
         this.iconImage.setScaleType(ScaleType.CENTER);
-        addView(this.iconImage, LayoutHelper.createFrame(-1, -1.0f, 49, 0.0f, 0.0f, 5.0f, 12.0f));
+        addView(this.iconImage, LayoutHelper.createFrame(-1, -1.0f, 49, 0.0f, 0.0f, 7.0f, 12.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setGravity(17);
         this.nameTextView.setTextColor(-1);
@@ -31,12 +31,13 @@ public class PhotoEditToolCell extends FrameLayout {
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TruncateAt.END);
-        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 81, 0.0f, 0.0f, 5.0f, 0.0f));
+        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 81, 0.0f, 0.0f, 7.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(-9649153);
         this.valueTextView.setTextSize(1, 11.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 52.0f, 3.0f, 0.0f, 0.0f));
+        this.valueTextView.setSingleLine(true);
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 50.0f, 3.0f, 0.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

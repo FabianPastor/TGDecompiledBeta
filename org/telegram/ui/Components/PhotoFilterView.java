@@ -1233,7 +1233,7 @@ public class PhotoFilterView extends FrameLayout {
         layoutManager.setOrientation(0);
         this.recyclerListView.setLayoutManager(layoutManager);
         this.recyclerListView.setClipToPadding(false);
-        this.recyclerListView.setPadding(AndroidUtilities.dp(14.0f), 0, 0, 0);
+        this.recyclerListView.setPadding(AndroidUtilities.dp(15.0f), 0, 0, 0);
         this.recyclerListView.setTag(Integer.valueOf(12));
         this.recyclerListView.setOverScrollMode(2);
         RecyclerListView recyclerListView = this.recyclerListView;
@@ -1586,7 +1586,7 @@ public class PhotoFilterView extends FrameLayout {
             maxWidth = Math.max(paint.measureText(titles[i]), maxWidth);
             i++;
         }
-        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(32.0f)) + maxWidth);
+        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + maxWidth);
     }
 
     private void updateSelectedBlurType() {

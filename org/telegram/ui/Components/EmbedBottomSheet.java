@@ -74,8 +74,14 @@ public class EmbedBottomSheet extends BottomSheet {
     private WebView webView;
     private int width;
 
+    public static void show(Context context, String title, String description, String originalUrl, String url, int w, int h) {
+        if (instance == null) {
+            new EmbedBottomSheet(context, title, description, originalUrl, url, w, h).show();
+        }
+    }
+
     @SuppressLint({"SetJavaScriptEnabled"})
-    public EmbedBottomSheet(Context context, String title, String descripton, String originalUrl, String url, int w, int h) {
+    protected EmbedBottomSheet(Context context, String title, String description, String originalUrl, String url, int w, int h) {
         TextView textView;
         super(context, false);
         this.lastOrientation = -1;
@@ -87,7 +93,7 @@ public class EmbedBottomSheet extends BottomSheet {
             this.parentActivity = (Activity) context;
         }
         this.embedUrl = url;
-        boolean z = descripton != null && descripton.length() > 0;
+        boolean z = description != null && description.length() > 0;
         this.hasDescription = z;
         this.openUrl = originalUrl;
         this.width = w;
@@ -123,6 +129,9 @@ public class EmbedBottomSheet extends BottomSheet {
                         EmbedBottomSheet.this.webView.destroy();
                     }
                     if (!EmbedBottomSheet.this.videoView.isInline()) {
+                        if (EmbedBottomSheet.instance == EmbedBottomSheet.this) {
+                            EmbedBottomSheet.instance = null;
+                        }
                         EmbedBottomSheet.this.videoView.destroy();
                     }
                 } catch (Throwable e) {
@@ -314,7 +323,7 @@ public class EmbedBottomSheet extends BottomSheet {
             textView = new TextView(context);
             textView.setTextSize(1, 16.0f);
             textView.setTextColor(Theme.REPLY_PANEL_MESSAGE_TEXT_COLOR);
-            textView.setText(descripton);
+            textView.setText(description);
             textView.setSingleLine(true);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setEllipsize(TruncateAt.END);
@@ -480,6 +489,8 @@ public class EmbedBottomSheet extends BottomSheet {
         if (this.videoView != null) {
             this.videoView.destroy();
         }
+        instance = null;
+        dismissInternal();
     }
 
     public static EmbedBottomSheet getInstance() {
