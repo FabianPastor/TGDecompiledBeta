@@ -1355,7 +1355,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
             a++;
         }
-        if (this.user_id != 0 || (this.chat_id >= 0 && !ChatObject.isLeftFromChat(this.currentChat))) {
+        if (this.user_id != 0 || (this.chat_id >= 0 && (!ChatObject.isLeftFromChat(this.currentChat) || ChatObject.isChannel(this.currentChat)))) {
             this.writeButton = new ImageView(context);
             try {
                 this.writeButton.setBackgroundResource(R.drawable.floating_user_states);

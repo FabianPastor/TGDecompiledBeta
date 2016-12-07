@@ -26,6 +26,7 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
@@ -65,6 +66,8 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported_old;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
+import org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer;
+import org.telegram.tgnet.TLRPC.TL_messages_botResults;
 import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_messages_messages;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
@@ -207,6 +210,8 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS chat_pinned_mid_idx ON chat_pinned(uid, pinned) WHERE pinned != 0;").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE chat_hints(did INTEGER, type INTEGER, rating REAL, date INTEGER, PRIMARY KEY(did, type))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS chat_hints_rating_idx ON chat_hints(rating);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE users(uid INTEGER PRIMARY KEY, name TEXT, status INTEGER, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
@@ -230,7 +235,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE bot_info(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
             } else {
                 try {
                     SQLiteCursor cursor = this.database.queryFinalized("SELECT seq, pts, date, qts, lsv, sg, pbytes FROM params WHERE id = 1", new Object[0]);
@@ -261,7 +266,7 @@ public class MessagesStorage {
                     }
                 }
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
-                if (version < 37) {
+                if (version < 38) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -560,6 +565,12 @@ public class MessagesStorage {
                     if (version == 36) {
                         MessagesStorage.this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN in_seq_no INTEGER default 0").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 37").stepThis().dispose();
+                        version = 37;
+                    }
+                    if (version == 37) {
+                        MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
@@ -1772,6 +1783,70 @@ public class MessagesStorage {
         });
     }
 
+    public void saveBotCache(final String key, final TLObject result) {
+        if (result != null && !TextUtils.isEmpty(key)) {
+            this.storageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    try {
+                        int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                        if (result instanceof TL_messages_botCallbackAnswer) {
+                            currentDate += ((TL_messages_botCallbackAnswer) result).cache_time;
+                        } else if (result instanceof TL_messages_botResults) {
+                            currentDate += ((TL_messages_botResults) result).cache_time;
+                        }
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO botcache VALUES(?, ?, ?)");
+                        NativeByteBuffer data = new NativeByteBuffer(result.getObjectSize());
+                        result.serializeToStream(data);
+                        state.bindString(1, key);
+                        state.bindInteger(2, currentDate);
+                        state.bindByteBuffer(3, data);
+                        state.step();
+                        state.dispose();
+                        data.reuse();
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
+                }
+            });
+        }
+    }
+
+    public void getBotCache(final String key, final RequestDelegate requestDelegate) {
+        if (key != null && requestDelegate != null) {
+            final int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+            this.storageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    TLObject result = null;
+                    try {
+                        MessagesStorage.this.database.executeFast("DELETE FROM botcache WHERE date < " + currentDate).stepThis().dispose();
+                        SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM botcache WHERE id = '%s'", new Object[]{key}), new Object[0]);
+                        if (cursor.next()) {
+                            try {
+                                NativeByteBuffer data = cursor.byteBufferValue(0);
+                                if (data != null) {
+                                    int constructor = data.readInt32(false);
+                                    if (constructor == TL_messages_botCallbackAnswer.constructor) {
+                                        result = TL_messages_botCallbackAnswer.TLdeserialize(data, constructor, false);
+                                    } else {
+                                        result = TL_messages_botResults.TLdeserialize(data, constructor, false);
+                                    }
+                                    data.reuse();
+                                }
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
+                            }
+                        }
+                        cursor.dispose();
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
+                    } finally {
+                        requestDelegate.run(result, null);
+                    }
+                }
+            });
+        }
+    }
+
     public void updateChatInfo(final ChatFull info, final boolean ifExist) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
@@ -2064,7 +2139,7 @@ Error: java.util.NoSuchElementException
             L_0x0081:
                 throw r5;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.34.run():void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.36.run():void");
             }
         });
         try {
@@ -3211,7 +3286,7 @@ Error: java.util.NoSuchElementException
                 L_0x0084:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.49.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.51.run():void");
                 }
             });
         }
@@ -3293,7 +3368,7 @@ Error: java.util.NoSuchElementException
                 L_0x0057:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.50.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
                 }
             });
         }
@@ -3359,7 +3434,7 @@ Error: java.util.NoSuchElementException
                 L_0x0038:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.51.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
                 }
             });
         }
@@ -3425,7 +3500,7 @@ Error: java.util.NoSuchElementException
                 L_0x0038:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
                 }
             });
         }
@@ -3650,7 +3725,7 @@ Error: java.util.NoSuchElementException
                 L_0x0159:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
                 }
             });
         }
@@ -4335,12 +4410,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
-        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
+                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -4760,7 +4835,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -4813,6 +4887,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

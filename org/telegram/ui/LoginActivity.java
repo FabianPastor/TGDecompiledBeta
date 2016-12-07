@@ -24,6 +24,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -104,13 +105,17 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.CountrySelectActivity.CountrySelectActivityDelegate;
 
+@SuppressLint({"HardwareIds"})
 public class LoginActivity extends BaseFragment {
     private static final int done_button = 1;
     private boolean checkPermissions = true;
+    private boolean checkShowPermissions = true;
     private int currentViewNum = 0;
     private View doneButton;
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems = new ArrayList();
+    private Dialog permissionsShowDialog;
+    private ArrayList<String> permissionsShowItems = new ArrayList();
     private ProgressDialog progressDialog;
     private SlideView[] views = new SlideView[9];
 
@@ -1755,7 +1760,6 @@ public class LoginActivity extends BaseFragment {
                             boolean ok = false;
                             String textToSet = null;
                             if (text.length() > 4) {
-                                PhoneView.this.ignoreOnTextChange = true;
                                 for (int a = 4; a >= 1; a--) {
                                     String sub = text.substring(0, a);
                                     if (((String) PhoneView.this.codesMap.get(sub)) != null) {
@@ -1767,7 +1771,6 @@ public class LoginActivity extends BaseFragment {
                                     }
                                 }
                                 if (!ok) {
-                                    PhoneView.this.ignoreOnTextChange = true;
                                     textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
                                     EditText access$600 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
@@ -2106,19 +2109,87 @@ public class LoginActivity extends BaseFragment {
             }
         }
 
+        public void fillNumber() {
+            boolean allowSms = false;
+            try {
+                TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                if (VERSION.SDK_INT >= 23 && tm.getSimState() != 1 && tm.getPhoneType() != 0) {
+                    boolean allowCall;
+                    if (LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0) {
+                        allowCall = true;
+                    } else {
+                        allowCall = false;
+                    }
+                    if (LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.RECEIVE_SMS") == 0) {
+                        allowSms = true;
+                    }
+                    if (LoginActivity.this.checkShowPermissions && !allowCall && !allowSms) {
+                        LoginActivity.this.permissionsShowItems.clear();
+                        if (!allowCall) {
+                            LoginActivity.this.permissionsShowItems.add("android.permission.READ_PHONE_STATE");
+                        }
+                        if (!allowSms) {
+                            LoginActivity.this.permissionsShowItems.add("android.permission.RECEIVE_SMS");
+                        }
+                        if (!LoginActivity.this.permissionsShowItems.isEmpty()) {
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                            if (preferences.getBoolean("firstloginshow", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
+                                preferences.edit().putBoolean("firstloginshow", false).commit();
+                                Builder builder = new Builder(LoginActivity.this.getParentActivity());
+                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setMessage(LocaleController.getString("AllowFillNumber", R.string.AllowFillNumber));
+                                LoginActivity.this.permissionsShowDialog = LoginActivity.this.showDialog(builder.create());
+                                return;
+                            }
+                            LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsShowItems.toArray(new String[LoginActivity.this.permissionsShowItems.size()]), 7);
+                        }
+                    } else if (allowCall || allowSms) {
+                        String number = PhoneFormat.stripExceptNumbers(tm.getLine1Number());
+                        String textToSet = null;
+                        boolean ok = false;
+                        if (!TextUtils.isEmpty(number)) {
+                            if (number.length() > 4) {
+                                for (int a = 4; a >= 1; a--) {
+                                    String sub = number.substring(0, a);
+                                    if (((String) this.codesMap.get(sub)) != null) {
+                                        ok = true;
+                                        textToSet = number.substring(a, number.length());
+                                        this.codeField.setText(sub);
+                                        break;
+                                    }
+                                }
+                                if (!ok) {
+                                    textToSet = number.substring(1, number.length());
+                                    this.codeField.setText(number.substring(0, 1));
+                                }
+                            }
+                            if (textToSet != null) {
+                                this.phoneField.requestFocus();
+                                this.phoneField.setText(textToSet);
+                                this.phoneField.setSelection(this.phoneField.length());
+                            }
+                        }
+                    }
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+
         public void onShow() {
             super.onShow();
-            if (this.phoneField == null) {
-                return;
+            if (this.phoneField != null) {
+                if (this.codeField.length() != 0) {
+                    AndroidUtilities.showKeyboard(this.phoneField);
+                    this.phoneField.requestFocus();
+                    this.phoneField.setSelection(this.phoneField.length());
+                } else {
+                    AndroidUtilities.showKeyboard(this.codeField);
+                    this.codeField.requestFocus();
+                }
             }
-            if (this.codeField.length() != 0) {
-                AndroidUtilities.showKeyboard(this.phoneField);
-                this.phoneField.requestFocus();
-                this.phoneField.setSelection(this.phoneField.length());
-                return;
-            }
-            AndroidUtilities.showKeyboard(this.codeField);
-            this.codeField.requestFocus();
+            fillNumber();
         }
 
         public String getHeaderName() {
@@ -2261,6 +2332,11 @@ public class LoginActivity extends BaseFragment {
             if (this.currentViewNum == 0) {
                 this.views[this.currentViewNum].onNextPressed();
             }
+        } else if (requestCode == 7) {
+            this.checkShowPermissions = false;
+            if (this.currentViewNum == 0) {
+                ((PhoneView) this.views[this.currentViewNum]).fillNumber();
+            }
         }
     }
 
@@ -2325,8 +2401,13 @@ public class LoginActivity extends BaseFragment {
     }
 
     protected void onDialogDismiss(Dialog dialog) {
-        if (VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty() && getParentActivity() != null) {
+        if (VERSION.SDK_INT < 23) {
+            return;
+        }
+        if (dialog == this.permissionsDialog && !this.permissionsItems.isEmpty() && getParentActivity() != null) {
             getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
+        } else if (dialog == this.permissionsShowDialog && !this.permissionsShowItems.isEmpty() && getParentActivity() != null) {
+            getParentActivity().requestPermissions((String[]) this.permissionsShowItems.toArray(new String[this.permissionsShowItems.size()]), 7);
         }
     }
 
@@ -2423,6 +2504,7 @@ public class LoginActivity extends BaseFragment {
         } else {
             if (page == 0) {
                 this.checkPermissions = true;
+                this.checkShowPermissions = true;
             }
             this.doneButton.setVisibility(0);
         }

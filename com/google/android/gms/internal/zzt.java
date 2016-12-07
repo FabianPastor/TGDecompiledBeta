@@ -111,28 +111,28 @@ public class zzt implements zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
+        byte[] zza;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
-            HttpResponse zza;
+            HttpResponse zza2;
             int statusCode;
-            byte[] zza2;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzk_.zzh());
-                zza = this.zzbp.zza(com_google_android_gms_internal_zzk_, hashMap);
-                StatusLine statusLine = zza.getStatusLine();
+                zza2 = this.zzbp.zza(com_google_android_gms_internal_zzk_, hashMap);
+                StatusLine statusLine = zza2.getStatusLine();
                 statusCode = statusLine.getStatusCode();
-                emptyMap = zza(zza.getAllHeaders());
+                emptyMap = zza(zza2.getAllHeaders());
                 if (statusCode == 304) {
                     break;
                 }
-                zza2 = zza.getEntity() != null ? zza(zza.getEntity()) : new byte[0];
-                zza(SystemClock.elapsedRealtime() - elapsedRealtime, com_google_android_gms_internal_zzk_, zza2, statusLine);
+                zza = zza2.getEntity() != null ? zza(zza2.getEntity()) : new byte[0];
+                zza(SystemClock.elapsedRealtime() - elapsedRealtime, com_google_android_gms_internal_zzk_, zza, statusLine);
                 if (statusCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION && statusCode <= 299) {
-                    return new zzi(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
+                    return new zzi(statusCode, zza, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
                 }
             } catch (SocketTimeoutException e2) {
                 zza("socket", com_google_android_gms_internal_zzk_, new zzq());
@@ -145,8 +145,8 @@ public class zzt implements zzf {
                 throw new RuntimeException(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), th);
             } catch (IOException e5) {
                 e4 = e5;
-                byte[] bArr = zza2;
-                httpResponse = zza;
+                byte[] bArr = zza;
+                httpResponse = zza2;
                 if (httpResponse != null) {
                     statusCode = httpResponse.getStatusLine().getStatusCode();
                     zzs.zzc("Unexpected response code %d for %s", Integer.valueOf(statusCode), com_google_android_gms_internal_zzk_.getUrl());

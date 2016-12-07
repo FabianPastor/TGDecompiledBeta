@@ -431,6 +431,12 @@ public final class R {
         public static final int nocover_small = NUM;
         public static final int nophotos = NUM;
         public static final int notification = NUM;
+        public static final int notifications_s_1d = NUM;
+        public static final int notifications_s_1h = NUM;
+        public static final int notifications_s_2d = NUM;
+        public static final int notifications_s_custom = NUM;
+        public static final int notifications_s_off = NUM;
+        public static final int notifications_s_on = NUM;
         public static final int notify_members_off = NUM;
         public static final int notify_members_on = NUM;
         public static final int numberpicker_selection_divider = NUM;
@@ -1055,7 +1061,6 @@ public final class R {
         public static final int CurvesBlue = NUM;
         public static final int CurvesGreen = NUM;
         public static final int CurvesRed = NUM;
-        public static final int Custom = NUM;
         public static final int CustomHelp = NUM;
         public static final int CustomNotifications = NUM;
         public static final int CustomShareInfo = NUM;
@@ -1740,6 +1745,8 @@ public final class R {
         public static final int SaveToGallery = NUM;
         public static final int SaveToGallerySettings = NUM;
         public static final int SaveToMusic = NUM;
+        public static final int ScreenCapture = NUM;
+        public static final int ScreenCaptureInfo = NUM;
         public static final int SdCard = NUM;
         public static final int Search = NUM;
         public static final int SearchGifs = NUM;
@@ -1806,7 +1813,6 @@ public final class R {
         public static final int SetRecoveryEmail = NUM;
         public static final int SetTimer = NUM;
         public static final int Settings = NUM;
-        public static final int SettingsDefault = NUM;
         public static final int Shadows = NUM;
         public static final int ShareContact = NUM;
         public static final int ShareFile = NUM;
@@ -1833,10 +1839,6 @@ public final class R {
         public static final int SmartNotificationsDetail = NUM;
         public static final int SmartNotificationsDisabled = NUM;
         public static final int SmartNotificationsInfo = NUM;
-        public static final int SmartNotificationsMinutes = NUM;
-        public static final int SmartNotificationsSoundAtMost = NUM;
-        public static final int SmartNotificationsTimes = NUM;
-        public static final int SmartNotificationsWithin = NUM;
         public static final int SmsText = NUM;
         public static final int SoftUserLimitAlert = NUM;
         public static final int SortBy = NUM;
@@ -1860,7 +1862,6 @@ public final class R {
         public static final int Stickers_two = NUM;
         public static final int Stickers_zero = NUM;
         public static final int Support = NUM;
-        public static final int SystemDefault = NUM;
         public static final int SystemRoot = NUM;
         public static final int TapHereGifs = NUM;
         public static final int TelegramFaq = NUM;

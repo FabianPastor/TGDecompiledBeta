@@ -380,9 +380,9 @@ public class AppendTrack extends AbstractTrack {
             return null;
         }
         int i;
-        Track track;
         int numSyncSamples = 0;
-        for (Track track2 : this.tracks) {
+        for (Track track : this.tracks) {
+            Track track2;
             numSyncSamples += track2.getSyncSamples().length;
         }
         long[] returnSyncSamples = new long[numSyncSamples];

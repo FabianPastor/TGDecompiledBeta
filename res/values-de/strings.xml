@@ -43,7 +43,7 @@
     <string name="ActionMigrateFromGroupNotify">%1$s wurde in eine Supergruppe geändert</string>
     <string name="ActionPinnedContact">un1 hat einen Kontakt angeheftet</string>
     <string name="ActionPinnedFile">un1 hat eine Datei angeheftet</string>
-    <string name="ActionPinnedGame">un1 hat ein %1$s angeheftet</string>
+    <string name="ActionPinnedGame">un1 hat %1$s angeheftet</string>
     <string name="ActionPinnedGeo">un1 hat einen Standort angeheftet</string>
     <string name="ActionPinnedGif">un1 hat ein GIF angeheftet</string>
     <string name="ActionPinnedMusic">un1 hat ein Musikstück angeheftet</string>
@@ -91,6 +91,7 @@
     <string name="Alert">Benachrichtigung</string>
     <string name="AllPhotos">Alle Bilder</string>
     <string name="AllVideo">Alle Videos</string>
+    <string name="AllowFillNumber">Bitte erlaube Telegram Anrufe und SMS zu empfangen, so dass wir deine Handynummer eintragen, einen Code senden und diesen automatisch eintragen können.</string>
     <string name="AllowReadCall">Bitte erlaube Telegram den Zugriff auf Anrufe, so dass wir den Code automatisch in der App eingeben können.</string>
     <string name="AllowReadCallAndSms">Bitte erlaube Telegram den Zugriff auf SMS und Anrufe, so dass wir den Code automatisch in der App eingeben können.</string>
     <string name="AllowReadSms">Bitte erlaube Telegram den Zugriff auf SMS, so dass wir den Code automatisch in der App für dich eingeben können.</string>
@@ -145,6 +146,8 @@
     <string name="AreYouSureShareMyContactInfoBot">Der Bot wird deine Nummer sehen. Das kann für verschiedene Dienste nützlich sein.</string>
     <string name="AreYouSureShareMyContactInfoUser">Möchtest du wirklich deine Nummer %1$s mit &lt;b&gt;%2$s&lt;/b&gt; teilen?</string>
     <string name="AreYouSureUnblockContact">Blockierung für diesen Kontakt wirklich aufheben?</string>
+    <string name="ArticleByAuthor">von %1$s</string>
+    <string name="ArticleDateByAuthor">%1$s von %2$s</string>
     <string name="AskAQuestion">Eine Frage stellen</string>
     <string name="AskAQuestionInfo">Bedenke bitte, dass der Telegram Support von ehrenamtlichen Helfern betreut wird. Wir versuchen so schnell wie möglich zu antworten, dies kann jedoch manchmal ein bisschen dauern.&lt;br&gt;&lt;br&gt;Bitte schau auch in den &lt;a href=\"https://telegram.org/faq/de\"&gt;Fragen und Antworten &lt;/a&gt; nach. Dort findest du Antworten auf die meisten Fragen und wichtige Tipps zur &lt;a href=\"https://telegram.org/faq/de#problembehandlung\"&gt;Problembehandlung&lt;/a&gt;.</string>
     <string name="AskButton">Eine Frage stellen</string>
@@ -190,7 +193,7 @@
     <string name="BotStart">STARTEN</string>
     <string name="BotStatusCantRead">kein Zugriff auf Nachrichten</string>
     <string name="BotStatusRead">Zugriff auf Nachrichten</string>
-    <string name="BotStop">Bot Anhalten</string>
+    <string name="BotStop">Bot anhalten</string>
     <string name="BotUnblock">NEU STARTEN</string>
     <string name="CacheClear">Leeren</string>
     <string name="CacheEmpty">Leer</string>
@@ -331,6 +334,15 @@
     <string name="Close">Schließen</string>
     <string name="Code">Code</string>
     <string name="CodeExpired">Code ist abgelaufen, bitte melde dich erneut an</string>
+    <string name="ColorBlue">Blau</string>
+    <string name="ColorCyan">Cyan</string>
+    <string name="ColorGreen">Grün</string>
+    <string name="ColorOrange">Orange</string>
+    <string name="ColorPink">Pink</string>
+    <string name="ColorRed">Rot</string>
+    <string name="ColorViolet">Violett</string>
+    <string name="ColorWhite">Weiß</string>
+    <string name="ColorYellow">Gelb</string>
     <string name="CompatibilityChat">%1$s benutzt eine ältere Version von Telegram, sodass Bilder in Geheimen Chats im Kompatibilitätsmodus angezeigt werden.\n\nSobald %2$s Telegram aktualisiert, werden Bilder mit Timern von 1 Minute und kürzer per \"Tippen und Halten\" angezeigt. Du wirst benachrichtigt, sobald dein Chatpartner ein Bildschirmfoto macht.</string>
     <string name="Connecting">Verbinde…</string>
     <string name="ContactJoined">Kontakt ist Telegram beigetreten</string>
@@ -358,6 +370,7 @@
     <string name="CurvesGreen">GRÜN</string>
     <string name="CurvesRed">ROT</string>
     <string name="CustomHelp">Wichtig: Du kannst den \"zuletzt gesehen\" Status nur von Personen sehen, mit denen du auch deinen teilst. Ansonsten wird die ungefähre Zeit angezeigt (kürzlich, innerhalb einer Woche, innerhalb eines Monats).</string>
+    <string name="CustomNotifications">Eigene Benachrichtigungen</string>
     <string name="CustomShareInfo">Hier kannst du Nutzer hinzufügen, für die eine Ausnahme gemacht werden soll.</string>
     <string name="CustomShareSettingsHelp">Hier kannst du Kontakte hinzufügen, für die eine Ausnahme gemacht werden soll.</string>
     <string name="DaysBold_few">&lt;b&gt;%1$d&lt;/b&gt; Tage</string>
@@ -380,7 +393,7 @@
     <string name="DeleteAccountTitle">Automatische Kontolöschung</string>
     <string name="DeleteAllFrom">Lösche alles von %1$s</string>
     <string name="DeleteAndExit">Löschen und Gruppe verlassen</string>
-    <string name="DeleteAndStop">Löschen und Anhalten</string>
+    <string name="DeleteAndStop">Löschen und anhalten</string>
     <string name="DeleteBanUser">Nutzer sperren</string>
     <string name="DeleteChat">Löschen und verlassen</string>
     <string name="DeleteChatUser">Chat löschen</string>
@@ -415,7 +428,7 @@
     <string name="EmailPasswordConfirmText">Bitte folge diesen Schritten um die zweistufige Bestätigung abzuschließen:\n\n1. Überprüfe deine Mails (auch den Spam-Ordner)\n%1$s\n\n2. Auf den Link klicken.</string>
     <string name="Emoji">Emoji</string>
     <string name="EmojiBigSize">Draw single big emoji</string>
-    <string name="EmojiUseDefault">Use system default emoji</string>
+    <string name="EmojiUseDefault">Benutze System-Emoji</string>
     <string name="EmpryUsersPlaceholder">Hinzufügen</string>
     <string name="EnableAnimations">Animationen aktivieren</string>
     <string name="Enabled">Aktiviert</string>
@@ -530,6 +543,7 @@
     <string name="FromYou">Du</string>
     <string name="Gallery">Galerie</string>
     <string name="GalleryInfo">Bilder ohne Komprimierung senden</string>
+    <string name="General">Allgemein</string>
     <string name="GettingLinkInfo">Lade Linkvorschau...</string>
     <string name="GlobalSearch">GLOBALE SUCHE</string>
     <string name="GotAQuestion">Hast du eine Frage\nzu Telegram?</string>
@@ -544,6 +558,8 @@
     <string name="GroupUserLeftError">Dieser Nutzer hat die Gruppe verlassen, deshalb kannst du ihn nicht wieder einladen.</string>
     <string name="GroupsAndChannels">Gruppen</string>
     <string name="GroupsAndChannelsHelp">Ändere, wer dich in Gruppen und Kanäle einladen kann.</string>
+    <string name="GroupsInCommon">Gemeinsame Gruppen</string>
+    <string name="GroupsInCommonTitle">Gemeinsame Gruppen</string>
     <string name="Hashtags">HASHTAGS</string>
     <string name="HiddenName">Gelöschtes Konto</string>
     <string name="Highlights">Lichter</string>
@@ -669,7 +685,7 @@
     <string name="MasksInfo">Masken lassen sich Bildern hinzufügen. Öffne dazu vor dem Versand einfach den Editor.</string>
     <string name="MasksRemoved">Masken entfernt</string>
     <string name="MegaAddedBy">un1 hat dich hinzugefügt</string>
-    <string name="MegaAdminsInfo">Administratoren helfen dir, deinen Kanal zu verwalten. Tippen und halten um sie zu löschen.</string>
+    <string name="MegaAdminsInfo">Administratoren helfen dir, deine Gruppe zu verwalten. Tippen und halten um sie zu löschen.</string>
     <string name="MegaDeleteAlert">Wenn du diese Gruppe löschst, werden alle Mitglieder und alle Nachrichten entfernt. Wirklich löschen?</string>
     <string name="MegaDeleteInfo">Du verlierst alle Nachrichten der Gruppe.</string>
     <string name="MegaLeaveAlert">Möchtest du wirklich diese Gruppe verlassen?</string>
@@ -680,7 +696,8 @@
     <string name="MegaPublicInfo">Öffentliche Gruppen kann jeder über die Suche finden, gesamter Chatverlauf ist für alle einsehbar und jeder kann der Gruppe beitreten.</string>
     <string name="MegaUsernameHelp">Jeder kann diesen Link teilen und deine Gruppe in der Telegramsuche finden.</string>
     <string name="MegaWasPrivateAlert">Wenn du einen öffentlichen Link für deinen Kanal festlegst, kann ihn jeder über die Suche finden und beitreten.\n\nWenn du das nicht möchtest, erstelle besser keinen Link.</string>
-    <string name="MembersCount">%1$d/%2$d Mitglieder</string>
+    <string name="MembersCount">%1$d von %2$d ausgewählt</string>
+    <string name="MembersCountZero">bis zu %1$s</string>
     <string name="Members_few">%1$d Mitglieder</string>
     <string name="Members_many">%1$d Mitglieder</string>
     <string name="Members_one">%1$d Mitglied</string>
@@ -750,6 +767,7 @@
     <string name="NoChatsHelp">Tippe unten auf den Stift für deine erste\nChatnachricht oder auf den Menüknopf\num die restlichen Optionen zu öffnen.</string>
     <string name="NoContacts">Noch keine Kontakte</string>
     <string name="NoFiles">Noch keine Dateien…</string>
+    <string name="NoGroupsInCommon">Noch keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
     <string name="NoMailInstalled">Bitte sende eine Email an sms@stel.com mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
@@ -776,8 +794,8 @@
     <string name="NoStickers">Noch keine Sticker</string>
     <string name="NoUsernameFound">Kein Konto mit diesem Benutzernamen</string>
     <string name="NoVideo">Noch keine Videos</string>
-    <string name="NobodyLikesSpam1">Derzeit kannst du nur Kontakten schreiben, die auch deine Nummer haben.</string>
-    <string name="NobodyLikesSpam2">Derzeit kannst du nur Kontakte hinzufügen, die auch deine Nummer haben.</string>
+    <string name="NobodyLikesSpam1">Du hast heute zu viele nicht-gemeinsame Kontakte angeschrieben, bitte probiere es morgen wieder. Du kannst auf Nachrichten antworten, wenn dir die Person zuerst geschrieben hat.</string>
+    <string name="NobodyLikesSpam2">Du kannst diesen Nutzer nicht hinzufügen, weil du heute zu viele nicht-gemeinsame Kontakte angeschrieben hast. Bitte morgen wieder probieren oder einen anderen Teilnehmer der Gruppe fragen, den Nutzer hinzuzufügen.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq/de#kann-keine-nachrichten-an-nicht-kontakte-senden</string>
     <string name="NotMounted">Speicher nicht eingebunden</string>
     <string name="NotificationActionPinnedContact">%1$s hat einen Kontakt in der Gruppe %2$s angeheftet</string>
@@ -848,13 +866,22 @@
     <string name="NotificationUnrecognizedDevice">%1$s,\nWir haben eine Anmeldung von einem neuen Gerät am %2$s festgestellt.\n\nGerät: %3$s\nStandort: %4$s\n\nWenn du das nicht selbst gewesen bist, melde die entsprechende Sitzung in den Telegram Einstellungen unter Privatsphäre und Sicherheit - Sitzungen unverzüglich ab.\n\nKennst du schon unsere zweistufige Bestätigung? Diese kannst du in den Telegram Einstellungen unter Privatsphäre und Sicherheit optional aktivieren.\n\nDein Telegram Team</string>
     <string name="Notifications">Mitteilungen</string>
     <string name="NotificationsAndSounds">Mitteilungen und Töne</string>
+    <string name="NotificationsCustom">Eigene</string>
+    <string name="NotificationsCustomize">Anpassen</string>
     <string name="NotificationsDisabled">Deaktiviert</string>
+    <string name="NotificationsEnableCustom">Eigene Benachrichtigungen</string>
+    <string name="NotificationsLed">LED</string>
+    <string name="NotificationsLedColor">Farbe</string>
+    <string name="NotificationsLedInfo">Einige Geräte besitzen ein kleines Licht, welches farbig leuchten oder blinken kann, um dich über neue Nachrichten zu informieren.</string>
+    <string name="NotificationsOff">Aus</string>
+    <string name="NotificationsOn">An</string>
     <string name="NotificationsOther">Sonstige</string>
     <string name="NotificationsPriority">Priorität</string>
     <string name="NotificationsPriorityDefault">Standard</string>
     <string name="NotificationsPriorityHigh">Hoch</string>
     <string name="NotificationsPriorityLow">Niedrig</string>
     <string name="NotificationsPriorityMax">Max.</string>
+    <string name="NotificationsPrioritySettings">Wie in Einstellungen</string>
     <string name="NotificationsService">Keep-Alive-Dienst</string>
     <string name="NotificationsServiceConnection">Hintergrundverbindung</string>
     <string name="NotificationsServiceConnectionInfo">Nutzt eine batterieschonende Hintergrundverbindung zu Telegram, um Benachrichtigungen zu gewährleisten.</string>
@@ -954,13 +981,18 @@
     <string name="Points_other">%1$d Punkte</string>
     <string name="Points_two">%1$d Punkte</string>
     <string name="Points_zero">%1$d Punkte</string>
+    <string name="PopupDisabled">Deaktiviert</string>
+    <string name="PopupEnabled">Aktiviert</string>
     <string name="PopupNotification">Popup Mitteilungen</string>
+    <string name="PriorityInfo">Mitteilungen höherer Priorität funktionieren auch, wenn sich dein Telefon im \"Bitte nicht stören\"-Modus befindet.</string>
     <string name="PrivacyFloodControlError">Du hast zu oft probiert, deine Einstellungen zu ändern; bitte warte kurz.</string>
     <string name="PrivacyLastSeen">Zuletzt gesehen</string>
     <string name="PrivacyPolicy">Datenschutzerklärung</string>
     <string name="PrivacyPolicyUrl">https://telegram.org/privacy</string>
     <string name="PrivacySettings">Privatsphäre und Sicherheit</string>
     <string name="PrivacyTitle">Privatsphäre</string>
+    <string name="ProfilePopupNotification">Popup Mitteilungen</string>
+    <string name="ProfilePopupNotificationInfo">Neue Nachrichten von diesem Kontakt erscheinen auf deinem Bildschirm, wenn du Telegram nicht benutzt.</string>
     <string name="RaiseToSpeak">Zum Sprechen ans Ohr</string>
     <string name="RaiseToSpeakAlert">Möchtest du \"Zum Sprechen ans Ohr\" für Sprachnachrichten aktivieren?</string>
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
@@ -1021,6 +1053,8 @@
     <string name="SaveToGallery">In der Galerie speichern</string>
     <string name="SaveToGallerySettings">In der Galerie speichern</string>
     <string name="SaveToMusic">Musik speichern</string>
+    <string name="ScreenCapture">Bildschirmfotos erlauben</string>
+    <string name="ScreenCaptureInfo">Aktivierst du diese Funktion, so kannst du Screenshots in der App aufnehmen. Wenn du einen Pincode festgelegt hast, zeigt das System jedoch weiterhin deine Chats in der Liste der geöffneten App an.\n\nDu musst die App nach der Änderung neu starten.</string>
     <string name="SdCard">SD-Karte</string>
     <string name="Search">Suche</string>
     <string name="SearchGifs">GIF-SUCHE</string>
@@ -1057,7 +1091,7 @@
     <string name="SendGameToGroup">Spiel mit %1$s teilen?</string>
     <string name="SendItems">%1$s senden</string>
     <string name="SendLocation">Meinen Standort senden</string>
-    <string name="SendMessageTo">Sende Nachricht an…</string>
+    <string name="SendMessageTo">Leute hinzufügen...</string>
     <string name="SendMessagesTo">Nachricht an %1$s senden?</string>
     <string name="SendMessagesToGroup">Nachricht an %1$s senden?</string>
     <string name="SendSelectedLocation">Diesen Standort senden</string>
@@ -1087,7 +1121,6 @@
     <string name="SetRecoveryEmail">E-Mailadresse festlegen</string>
     <string name="SetTimer">Selbstzerstörungs-Timer setzen</string>
     <string name="Settings">Einstellungen</string>
-    <string name="SettingsDefault">Telegramvorgabe</string>
     <string name="Shadows">Schatten</string>
     <string name="ShareContact">Teilen</string>
     <string name="ShareFile">Teilen</string>
@@ -1110,12 +1143,10 @@
     <string name="ShowAllMedia">Zeige alle Medien</string>
     <string name="SlideToCancel">WISCHEN UM ABZUBRECHEN</string>
     <string name="SmartNotifications">Intelligente Benachrichtigungen</string>
+    <string name="SmartNotificationsAlert">Anzahl Benachrichtigungen</string>
+    <string name="SmartNotificationsDetail">%1$s innerhalb %2$s</string>
     <string name="SmartNotificationsDisabled">Deaktiviert</string>
-    <string name="SmartNotificationsInfo">Höchstens %1$s innerhalb von %2$s</string>
-    <string name="SmartNotificationsMinutes">Minuten</string>
-    <string name="SmartNotificationsSoundAtMost">Höchstens</string>
-    <string name="SmartNotificationsTimes">Mal</string>
-    <string name="SmartNotificationsWithin">innerhalb von</string>
+    <string name="SmartNotificationsInfo">%1$d / %2$s</string>
     <string name="SmsText">Wir senden Dir eine SMS in %1$d:%2$02d</string>
     <string name="SoftUserLimitAlert">Sobald du diese Gruppe zu einer Supergruppe erweitert hast, kannst du mehr Nutzer einladen.</string>
     <string name="SortBy">sortiert nach</string>
@@ -1139,7 +1170,6 @@
     <string name="Stickers_two">%1$d Sticker</string>
     <string name="Stickers_zero">%1$d Sticker</string>
     <string name="Support">Support</string>
-    <string name="SystemDefault">Systemvorgabe</string>
     <string name="SystemRoot">Systemverzeichnis</string>
     <string name="TapHereGifs">Hier tippen um gespeicherte GIFs zu sehen</string>
     <string name="TelegramFaq">Fragen und Antworten</string>

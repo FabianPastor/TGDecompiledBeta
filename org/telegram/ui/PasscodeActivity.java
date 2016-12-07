@@ -62,6 +62,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     private static final int pin_item = 2;
     private int autoLockDetailRow;
     private int autoLockRow;
+    private int captureDetailRow;
+    private int captureRow;
     private int changePasscodeRow;
     private int currentPasswordType = 0;
     private TextView dropDown;
@@ -90,7 +92,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
 
         public boolean isEnabled(int i) {
-            return i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.autoLockRow || (UserConfig.passcodeHash.length() != 0 && i == PasscodeActivity.this.changePasscodeRow);
+            return i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.autoLockRow || i == PasscodeActivity.this.captureRow || (UserConfig.passcodeHash.length() != 0 && i == PasscodeActivity.this.changePasscodeRow);
         }
 
         public int getCount() {
@@ -110,7 +112,6 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
 
         public View getView(int i, View view, ViewGroup viewGroup) {
-            boolean z = false;
             int viewType = getItemViewType(i);
             if (viewType == 0) {
                 if (view == null) {
@@ -119,13 +120,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 }
                 TextCheckCell textCell = (TextCheckCell) view;
                 if (i == PasscodeActivity.this.passcodeRow) {
+                    boolean z;
                     String string = LocaleController.getString("Passcode", R.string.Passcode);
                     if (UserConfig.passcodeHash.length() > 0) {
                         z = true;
+                    } else {
+                        z = false;
                     }
                     textCell.setTextAndCheck(string, z, true);
                 } else if (i == PasscodeActivity.this.fingerprintRow) {
                     textCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", R.string.UnlockFingerprint), UserConfig.useFingerprint, true);
+                } else if (i == PasscodeActivity.this.captureRow) {
+                    textCell.setTextAndCheck(LocaleController.getString("ScreenCapture", R.string.ScreenCapture), UserConfig.allowScreenCapture, false);
                 }
             } else if (viewType == 1) {
                 if (view == null) {
@@ -154,15 +160,19 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 if (view == null) {
                     view = new TextInfoPrivacyCell(this.mContext);
                 }
+                TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
                 if (i == PasscodeActivity.this.passcodeDetailRow) {
-                    ((TextInfoPrivacyCell) view).setText(LocaleController.getString("ChangePasscodeInfo", R.string.ChangePasscodeInfo));
+                    cell.setText(LocaleController.getString("ChangePasscodeInfo", R.string.ChangePasscodeInfo));
                     if (PasscodeActivity.this.autoLockDetailRow != -1) {
-                        view.setBackgroundResource(R.drawable.greydivider);
+                        cell.setBackgroundResource(R.drawable.greydivider);
                     } else {
-                        view.setBackgroundResource(R.drawable.greydivider_bottom);
+                        cell.setBackgroundResource(R.drawable.greydivider_bottom);
                     }
                 } else if (i == PasscodeActivity.this.autoLockDetailRow) {
-                    ((TextInfoPrivacyCell) view).setText(LocaleController.getString("AutoLockInfo", R.string.AutoLockInfo));
+                    cell.setText(LocaleController.getString("AutoLockInfo", R.string.AutoLockInfo));
+                    view.setBackgroundResource(R.drawable.greydivider);
+                } else if (i == PasscodeActivity.this.captureDetailRow) {
+                    cell.setText(LocaleController.getString("ScreenCaptureInfo", R.string.ScreenCaptureInfo));
                     view.setBackgroundResource(R.drawable.greydivider_bottom);
                 }
             }
@@ -170,13 +180,13 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
 
         public int getItemViewType(int i) {
-            if (i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow) {
+            if (i == PasscodeActivity.this.passcodeRow || i == PasscodeActivity.this.fingerprintRow || i == PasscodeActivity.this.captureRow) {
                 return 0;
             }
             if (i == PasscodeActivity.this.changePasscodeRow || i == PasscodeActivity.this.autoLockRow) {
                 return 1;
             }
-            if (i == PasscodeActivity.this.passcodeDetailRow || i == PasscodeActivity.this.autoLockDetailRow) {
+            if (i == PasscodeActivity.this.passcodeDetailRow || i == PasscodeActivity.this.autoLockDetailRow || i == PasscodeActivity.this.captureDetailRow) {
                 return 2;
             }
             return 0;
@@ -486,6 +496,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         UserConfig.useFingerprint = !UserConfig.useFingerprint;
                         UserConfig.saveConfig(false);
                         ((TextCheckCell) view).setChecked(UserConfig.useFingerprint);
+                    } else if (i == PasscodeActivity.this.captureRow) {
+                        UserConfig.allowScreenCapture = !UserConfig.allowScreenCapture;
+                        UserConfig.saveConfig(false);
+                        ((TextCheckCell) view).setChecked(UserConfig.allowScreenCapture);
+                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
                     }
                 }
             });
@@ -547,8 +562,16 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             i = this.rowCount;
             this.rowCount = i + 1;
             this.autoLockDetailRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.captureRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.captureDetailRow = i;
             return;
         }
+        this.captureRow = -1;
+        this.captureDetailRow = -1;
         this.fingerprintRow = -1;
         this.autoLockRow = -1;
         this.autoLockDetailRow = -1;

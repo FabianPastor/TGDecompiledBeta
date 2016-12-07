@@ -77,7 +77,7 @@ public class MentionsAdapter extends Adapter {
         public void onLocationAcquired(Location location) {
             if (MentionsAdapter.this.foundContextBot != null && MentionsAdapter.this.foundContextBot.bot_inline_geo) {
                 MentionsAdapter.this.lastKnownLocation = location;
-                MentionsAdapter.this.searchForContextBotResults(MentionsAdapter.this.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
+                MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
             }
         }
 
@@ -261,7 +261,7 @@ public class MentionsAdapter extends Adapter {
         if (this.delegate != null) {
             this.delegate.onContextSearch(true);
         }
-        searchForContextBotResults(this.foundContextBot, this.searchingContextQuery, "");
+        searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
     }
 
     private void searchForContextBot(final String username, final String query) {
@@ -353,7 +353,7 @@ public class MentionsAdapter extends Adapter {
                                 }
                             });
                         } else if (!MentionsAdapter.this.noUserName) {
-                            MentionsAdapter.this.searchForContextBotResults(MentionsAdapter.this.foundContextBot, query, "");
+                            MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, query, "");
                         }
                     }
                 }
@@ -367,7 +367,7 @@ public class MentionsAdapter extends Adapter {
             this.lastKnownLocation = new Location("network");
             this.lastKnownLocation.setLatitude(-1000.0d);
             this.lastKnownLocation.setLongitude(-1000.0d);
-            searchForContextBotResults(this.foundContextBot, this.searchingContextQuery, "");
+            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
         }
     }
 
@@ -393,11 +393,11 @@ public class MentionsAdapter extends Adapter {
 
     public void searchForContextBotForNextOffset() {
         if (this.contextQueryReqid == 0 && this.nextQueryOffset != null && this.nextQueryOffset.length() != 0 && this.foundContextBot != null && this.searchingContextQuery != null) {
-            searchForContextBotResults(this.foundContextBot, this.searchingContextQuery, this.nextQueryOffset);
+            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, this.nextQueryOffset);
         }
     }
 
-    private void searchForContextBotResults(User user, final String query, final String offset) {
+    private void searchForContextBotResults(boolean cache, User user, String query, String offset) {
         if (this.contextQueryReqid != 0) {
             ConnectionsManager.getInstance().cancelRequest(this.contextQueryReqid, true);
             this.contextQueryReqid = 0;
@@ -405,35 +405,31 @@ public class MentionsAdapter extends Adapter {
         if (query == null || user == null) {
             this.searchingContextQuery = null;
         } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-            TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
-            req.bot = MessagesController.getInputUser(user);
-            req.query = query;
-            req.offset = offset;
-            if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
-                req.flags |= 1;
-                req.geo_point = new TL_inputGeoPoint();
-                req.geo_point.lat = this.lastKnownLocation.getLatitude();
-                req.geo_point._long = this.lastKnownLocation.getLongitude();
-            }
-            int lower_id = (int) this.dialog_id;
-            int high_id = (int) (this.dialog_id >> 32);
-            if (lower_id != 0) {
-                req.peer = MessagesController.getInputPeer(lower_id);
-            } else {
-                req.peer = new TL_inputPeerEmpty();
-            }
-            this.contextQueryReqid = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
+            StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append(offset).append(this.dialog_id);
+            Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? "" : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
+            final String key = append.append(valueOf).toString();
+            final String str = query;
+            final boolean z = cache;
+            final User user2 = user;
+            final String str2 = offset;
+            RequestDelegate requestDelegate = new RequestDelegate() {
+                public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             boolean z = false;
-                            if (MentionsAdapter.this.searchingContextQuery != null && query.equals(MentionsAdapter.this.searchingContextQuery)) {
+                            if (MentionsAdapter.this.searchingContextQuery != null && str.equals(MentionsAdapter.this.searchingContextQuery)) {
                                 if (MentionsAdapter.this.delegate != null) {
                                     MentionsAdapter.this.delegate.onContextSearch(false);
                                 }
                                 MentionsAdapter.this.contextQueryReqid = 0;
-                                if (error == null) {
+                                if (z && response == null) {
+                                    MentionsAdapter.this.searchForContextBotResults(false, user2, str, str2);
+                                }
+                                if (response != null) {
                                     TL_messages_botResults res = response;
+                                    if (!(z || res.cache_time == 0)) {
+                                        MessagesStorage.getInstance().saveBotCache(key, res);
+                                    }
                                     MentionsAdapter.this.nextQueryOffset = res.next_offset;
                                     if (MentionsAdapter.this.searchResultBotContextById == null) {
                                         MentionsAdapter.this.searchResultBotContextById = new HashMap();
@@ -451,7 +447,7 @@ public class MentionsAdapter extends Adapter {
                                         a++;
                                     }
                                     boolean added = false;
-                                    if (MentionsAdapter.this.searchResultBotContext == null || offset.length() == 0) {
+                                    if (MentionsAdapter.this.searchResultBotContext == null || str2.length() == 0) {
                                         MentionsAdapter.this.searchResultBotContext = res.results;
                                         MentionsAdapter.this.contextMedia = res.gallery;
                                     } else {
@@ -503,7 +499,29 @@ public class MentionsAdapter extends Adapter {
                         }
                     });
                 }
-            }, 2);
+            };
+            if (cache) {
+                MessagesStorage.getInstance().getBotCache(key, requestDelegate);
+                return;
+            }
+            TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
+            req.bot = MessagesController.getInputUser(user);
+            req.query = query;
+            req.offset = offset;
+            if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
+                req.flags |= 1;
+                req.geo_point = new TL_inputGeoPoint();
+                req.geo_point.lat = this.lastKnownLocation.getLatitude();
+                req.geo_point._long = this.lastKnownLocation.getLongitude();
+            }
+            int lower_id = (int) this.dialog_id;
+            int high_id = (int) (this.dialog_id >> 32);
+            if (lower_id != 0) {
+                req.peer = MessagesController.getInputPeer(lower_id);
+            } else {
+                req.peer = new TL_inputPeerEmpty();
+            }
+            this.contextQueryReqid = ConnectionsManager.getInstance().sendRequest(req, requestDelegate, 2);
         }
     }
 

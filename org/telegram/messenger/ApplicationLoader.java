@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -25,6 +26,7 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
+    @SuppressLint({"StaticFieldLeak"})
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
     private static volatile boolean applicationInited = false;

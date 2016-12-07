@@ -372,7 +372,9 @@ public class DialogCell extends BaseCell {
                     } else if (this.message.messageOwner.media != null && !this.message.isMediaEmpty()) {
                         currentMessagePaint = messagePrintingPaint;
                         if (this.message.messageOwner.media instanceof TL_messageMediaGame) {
-                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, "🎮 " + this.message.messageOwner.media.game.title}));
+                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎮 %s", new Object[]{name, this.message.messageOwner.media.game.title}));
+                        } else if (this.message.type == 14) {
+                            stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: 🎧 %s - %s", new Object[]{name, this.message.getMusicAuthor(), this.message.getMusicTitle()}));
                         } else {
                             stringBuilder = SpannableStringBuilder.valueOf(String.format("%s: %s", new Object[]{name, this.message.messageText}));
                         }
@@ -395,6 +397,8 @@ public class DialogCell extends BaseCell {
                 } else {
                     if (this.message.messageOwner.media instanceof TL_messageMediaGame) {
                         messageString = "🎮 " + this.message.messageOwner.media.game.title;
+                    } else if (this.message.type == 14) {
+                        messageString = String.format("🎧 %s - %s", new Object[]{this.message.getMusicAuthor(), this.message.getMusicTitle()});
                     } else {
                         messageString = this.message.messageText;
                     }

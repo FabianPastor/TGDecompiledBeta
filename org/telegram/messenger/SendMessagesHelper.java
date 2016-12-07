@@ -1150,28 +1150,26 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return (messageObject == null || button == null || !this.waitingForLocation.containsKey(messageObject.getId() + "_" + Utilities.bytesToHex(button.data))) ? false : true;
     }
 
-    public void sendCallback(MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
+    public void sendCallback(boolean cache, MessageObject messageObject, KeyboardButton button, ChatActivity parentFragment) {
         if (messageObject != null && button != null && parentFragment != null) {
-            final String key = messageObject.getId() + "_" + Utilities.bytesToHex(button.data);
+            final String key = messageObject.getDialogId() + "_" + messageObject.getId() + "_" + Utilities.bytesToHex(button.data) + "_" + (button instanceof TL_keyboardButtonGame ? "1" : "0");
             this.waitingForCallback.put(key, messageObject);
-            TL_messages_getBotCallbackAnswer req = new TL_messages_getBotCallbackAnswer();
-            req.peer = MessagesController.getInputPeer((int) messageObject.getDialogId());
-            req.msg_id = messageObject.getId();
-            req.game = button instanceof TL_keyboardButtonGame;
-            if (button.data != null) {
-                req.flags |= 1;
-                req.data = button.data;
-            }
-            final ChatActivity chatActivity = parentFragment;
+            final boolean z = cache;
             final MessageObject messageObject2 = messageObject;
             final KeyboardButton keyboardButton = button;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            final ChatActivity chatActivity = parentFragment;
+            RequestDelegate requestDelegate = new RequestDelegate() {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             SendMessagesHelper.this.waitingForCallback.remove(key);
-                            if (response != null) {
+                            if (z && response == null) {
+                                SendMessagesHelper.this.sendCallback(false, messageObject2, keyboardButton, chatActivity);
+                            } else if (response != null) {
                                 TL_messages_botCallbackAnswer res = response;
+                                if (!(z || res.cache_time == 0)) {
+                                    MessagesStorage.getInstance().saveBotCache(key, res);
+                                }
                                 int uid;
                                 User user;
                                 if (res.message != null) {
@@ -1233,7 +1231,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                     });
                 }
-            }, 2);
+            };
+            if (cache) {
+                MessagesStorage.getInstance().getBotCache(key, requestDelegate);
+                return;
+            }
+            TL_messages_getBotCallbackAnswer req = new TL_messages_getBotCallbackAnswer();
+            req.peer = MessagesController.getInputPeer((int) messageObject.getDialogId());
+            req.msg_id = messageObject.getId();
+            req.game = button instanceof TL_keyboardButtonGame;
+            if (button.data != null) {
+                req.flags |= 1;
+                req.data = button.data;
+            }
+            ConnectionsManager.getInstance().sendRequest(req, requestDelegate, 2);
         }
     }
 
@@ -1324,9 +1335,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -3870,7 +3881,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
-                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3919,6 +3929,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
+                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;

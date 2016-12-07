@@ -1368,7 +1368,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.currentEncryptedChat != null) {
             MediaController.getInstance().stopMediaObserver();
             try {
-                if (VERSION.SDK_INT >= 23 && UserConfig.passcodeHash.length() == 0) {
+                if (VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
                     getParentActivity().getWindow().clearFlags(8192);
                 }
             } catch (Throwable e) {
@@ -3129,7 +3129,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         updateSpamView();
         updatePinnedMessageView(true);
         try {
-            if (this.currentEncryptedChat != null && VERSION.SDK_INT >= 23 && UserConfig.passcodeHash.length() == 0) {
+            if (this.currentEncryptedChat != null && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
                 getParentActivity().getWindow().setFlags(8192, 8192);
             }
         } catch (Throwable e2) {
@@ -7302,6 +7302,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
         MediaController.getInstance().startRaiseToEarSensors(this);
         checkRaiseSensors();
+        if (this.chatAttachAlert != null) {
+            this.chatAttachAlert.onResume();
+        }
         checkActionBarMenu();
         if (!(this.replyImageLocation == null || this.replyImageView == null)) {
             this.replyImageView.setImage(this.replyImageLocation, "50_50", (Drawable) null);

@@ -93,8 +93,8 @@ final class Id3Util {
     }
 
     private static Pair<String, String> findNextComment(int majorVersion, ParsableByteArray data) {
+        int frameSize;
         while (true) {
-            int frameSize;
             String id;
             if (majorVersion == 2) {
                 if (data.bytesLeft() < 6) {

@@ -165,7 +165,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
-        if (UserConfig.passcodeHash.length() > 0) {
+        if (UserConfig.passcodeHash.length() > 0 && !UserConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(8192, 8192);
             } catch (Throwable e) {
@@ -1925,10 +1925,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     if (AndroidUtilities.isTablet()) {
                         this.actionBarLayout.presentFragment(chatActivity, false, true, true);
                     } else {
-                        this.actionBarLayout.addFragmentToStack(chatActivity, this.actionBarLayout.fragmentsStack.size() - 1);
+                        this.actionBarLayout.addFragmentToStack(chatActivity, dialogsFragment != null ? this.actionBarLayout.fragmentsStack.size() - 1 : this.actionBarLayout.fragmentsStack.size());
                     }
-                    if (!(chatActivity.openVideoEditor(this.videoPath, dialogsFragment != null, false) || dialogsFragment == null || AndroidUtilities.isTablet())) {
-                        dialogsFragment.finishFragment(true);
+                    if (!(chatActivity.openVideoEditor(this.videoPath, dialogsFragment != null, false) || AndroidUtilities.isTablet())) {
+                        if (dialogsFragment != null) {
+                            dialogsFragment.finishFragment(true);
+                        } else {
+                            this.actionBarLayout.showLastFragment();
+                        }
                     }
                 } else {
                     this.actionBarLayout.presentFragment(chatActivity, dialogsFragment != null, dialogsFragment == null, true);
@@ -2245,9 +2249,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             }
         } else if (id != NotificationCenter.didSetPasscode) {
         } else {
-            if (UserConfig.passcodeHash.length() > 0) {
+            if (UserConfig.passcodeHash.length() <= 0 || UserConfig.allowScreenCapture) {
                 try {
-                    getWindow().setFlags(8192, 8192);
+                    getWindow().clearFlags(8192);
                     return;
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
@@ -2255,7 +2259,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             }
             try {
-                getWindow().clearFlags(8192);
+                getWindow().setFlags(8192, 8192);
             } catch (Throwable e2) {
                 FileLog.e("tmessages", e2);
             }

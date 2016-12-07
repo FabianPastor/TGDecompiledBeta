@@ -2172,7 +2172,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 this.parentFragment.showDialog(builder.create());
             } else if ((button instanceof TL_keyboardButtonCallback) || (button instanceof TL_keyboardButtonGame)) {
-                SendMessagesHelper.getInstance().sendCallback(messageObject, button, this.parentFragment);
+                SendMessagesHelper.getInstance().sendCallback(true, messageObject, button, this.parentFragment);
             } else if ((button instanceof TL_keyboardButtonSwitchInline) && !this.parentFragment.processSwitchButton((TL_keyboardButtonSwitchInline) button)) {
                 if (button.same_peer) {
                     int uid = messageObject.messageOwner.from_id;

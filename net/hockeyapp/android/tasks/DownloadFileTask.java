@@ -50,6 +50,7 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
     }
 
     protected Long doInBackground(Void... args) {
+        Long valueOf;
         IOException e;
         Throwable th;
         InputStream input = null;
@@ -58,7 +59,6 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
         connection.connect();
         int lengthOfFile = connection.getContentLength();
         String contentType = connection.getContentType();
-        Long valueOf;
         if (contentType == null || !contentType.contains("text")) {
             try {
                 File dir = new File(this.mFilePath);

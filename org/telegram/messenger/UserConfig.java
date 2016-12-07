@@ -12,6 +12,7 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC.User;
 
 public class UserConfig {
+    public static boolean allowScreenCapture;
     public static boolean appLocked;
     public static int autoLockIn = 3600;
     public static boolean blockedUsersLoaded;
@@ -79,6 +80,7 @@ public class UserConfig {
                 editor.putInt("lastHintsSyncTime", lastHintsSyncTime);
                 editor.putBoolean("draftsLoaded", draftsLoaded);
                 editor.putBoolean("notificationsConverted", notificationsConverted);
+                editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putInt("migrateOffsetId", migrateOffsetId);
                 if (migrateOffsetId != -1) {
                     editor.putInt("migrateOffsetDate", migrateOffsetDate);
@@ -213,6 +215,7 @@ public class UserConfig {
                 lastHintsSyncTime = preferences.getInt("lastHintsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 90000);
                 draftsLoaded = preferences.getBoolean("draftsLoaded", false);
                 notificationsConverted = preferences.getBoolean("notificationsConverted", false);
+                allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
                 migrateOffsetId = preferences.getInt("migrateOffsetId", 0);
                 if (migrateOffsetId != -1) {
                     migrateOffsetDate = preferences.getInt("migrateOffsetDate", 0);
@@ -364,6 +367,7 @@ public class UserConfig {
         draftsLoaded = true;
         notificationsConverted = true;
         isWaitingForPasscodeEnter = false;
+        allowScreenCapture = false;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;

@@ -60,6 +60,9 @@ public class PhoneFormat {
     }
 
     public static String stripExceptNumbers(String str, boolean includePlus) {
+        if (str == null) {
+            return null;
+        }
         StringBuilder res = new StringBuilder(str);
         String phoneChars = "0123456789";
         if (includePlus) {

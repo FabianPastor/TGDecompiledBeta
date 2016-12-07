@@ -372,7 +372,7 @@ public class ContactsController {
                     if (pCur.getCount() > 0) {
                         while (pCur.moveToNext()) {
                             String number = pCur.getString(1);
-                            if (!(number == null || number.length() == 0)) {
+                            if (!TextUtils.isEmpty(number)) {
                                 number = PhoneFormat.stripExceptNumbers(number, true);
                                 if (number.length() != 0) {
                                     String shortNumber = number;
@@ -399,7 +399,12 @@ public class ContactsController {
                                         contact.phones.add(number);
                                         contact.phoneDeleted.add(Integer.valueOf(0));
                                         if (type == 0) {
-                                            contact.phoneTypes.add(pCur.getString(3));
+                                            String custom = pCur.getString(3);
+                                            ArrayList arrayList = contact.phoneTypes;
+                                            if (custom == null) {
+                                                custom = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                                            }
+                                            arrayList.add(custom);
                                         } else if (type == 1) {
                                             contact.phoneTypes.add(LocaleController.getString("PhoneHome", R.string.PhoneHome));
                                         } else if (type == 2) {
@@ -436,7 +441,7 @@ public class ContactsController {
                             if (contact.first_name == null) {
                                 contact.first_name = "";
                             }
-                            if (!(mname == null || mname.length() == 0)) {
+                            if (!TextUtils.isEmpty(mname)) {
                                 if (contact.first_name.length() != 0) {
                                     contact.first_name += " " + mname;
                                 } else {
@@ -446,52 +451,16 @@ public class ContactsController {
                             if (contact.last_name == null) {
                                 contact.last_name = "";
                             }
-                            if (contact.last_name.length() == 0 && contact.first_name.length() == 0 && sname2 != null && sname2.length() != 0) {
+                            if (TextUtils.isEmpty(contact.last_name) && TextUtils.isEmpty(contact.first_name) && !TextUtils.isEmpty(sname2)) {
                                 contact.first_name = sname2;
                             }
                         }
                     }
                     pCur.close();
                 }
-                try {
-                    pCur = cr.query(RawContacts.CONTENT_URI, new String[]{"display_name", "sync1", "contact_id"}, "account_type = 'com.whatsapp'", null, null);
-                    if (pCur != null) {
-                        while (pCur.moveToNext()) {
-                            String phone = pCur.getString(1);
-                            if (!(phone == null || phone.length() == 0)) {
-                                boolean withPlus = phone.startsWith("+");
-                                phone = Utilities.parseIntToString(phone);
-                                if (!(phone == null || phone.length() == 0)) {
-                                    String shortPhone = phone;
-                                    if (!withPlus) {
-                                        phone = "+" + phone;
-                                    }
-                                    if (!shortContacts.containsKey(shortPhone)) {
-                                        String name = pCur.getString(0);
-                                        if (!TextUtils.isEmpty(name)) {
-                                            contact = new Contact();
-                                            contact.first_name = name;
-                                            contact.last_name = "";
-                                            contact.id = pCur.getInt(2);
-                                            contactsMap.put(Integer.valueOf(contact.id), contact);
-                                            contact.phoneDeleted.add(Integer.valueOf(0));
-                                            contact.shortPhones.add(shortPhone);
-                                            contact.phones.add(phone);
-                                            contact.phoneTypes.add(LocaleController.getString("PhoneMobile", R.string.PhoneMobile));
-                                            shortContacts.put(shortPhone, contact);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        pCur.close();
-                    }
-                } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
-                }
             }
-        } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
             contactsMap.clear();
         }
         return contactsMap;
