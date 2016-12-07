@@ -209,6 +209,7 @@ public class EmbedBottomSheet extends BottomSheet {
 
             public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRation, int rotation, boolean byButton) {
                 if (fullscreen) {
+                    EmbedBottomSheet.this.wasInLandscape = false;
                     EmbedBottomSheet.this.fullscreenAspectRatioView.addView(EmbedBottomSheet.this.fullscreenTextureView, LayoutHelper.createFrame(-1, -1.0f));
                     EmbedBottomSheet.this.fullscreenAspectRatioView.setVisibility(0);
                     EmbedBottomSheet.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
@@ -273,7 +274,7 @@ public class EmbedBottomSheet extends BottomSheet {
             public void onPlayStateChanged(WebPlayerView playerView, boolean playing) {
                 if (playing) {
                     try {
-                        EmbedBottomSheet.this.getWindow().addFlags(128);
+                        EmbedBottomSheet.this.parentActivity.getWindow().addFlags(128);
                         return;
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
@@ -281,7 +282,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     }
                 }
                 try {
-                    EmbedBottomSheet.this.getWindow().clearFlags(128);
+                    EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
                 } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
                 }
@@ -416,7 +417,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     return false;
                 }
                 try {
-                    EmbedBottomSheet.this.getWindow().clearFlags(128);
+                    EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
@@ -481,22 +482,16 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    public void dismissInternal() {
-        if (this.videoView.isInline()) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    EmbedBottomSheet.this.fullscreenAspectRatioView.setVisibility(8);
-                    EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
-                    super.dismissInternal();
-                }
-            }, 100);
-        } else {
-            super.dismissInternal();
-        }
-    }
-
     public static EmbedBottomSheet getInstance() {
         return instance;
+    }
+
+    public void dismissInternal() {
+        if (this.videoView.isInline() && this.fullscreenVideoContainer.getVisibility() == 0) {
+            this.fullscreenAspectRatioView.setVisibility(8);
+            this.fullscreenVideoContainer.setVisibility(4);
+        }
+        super.dismissInternal();
     }
 
     public void pause() {

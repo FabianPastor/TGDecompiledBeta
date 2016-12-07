@@ -31,13 +31,13 @@ public class FeedbackParser {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public FeedbackResponse parseFeedbackResponse(String feedbackResponseJson) {
         JSONException e;
+        Feedback feedback;
         FeedbackResponse feedbackResponse = null;
         if (feedbackResponseJson == null) {
             return null;
         }
         try {
             FeedbackResponse feedbackResponse2;
-            Feedback feedback;
             JSONObject jSONObject = new JSONObject(feedbackResponseJson);
             JSONObject feedbackObject = jSONObject.getJSONObject("feedback");
             Feedback feedback2 = new Feedback();

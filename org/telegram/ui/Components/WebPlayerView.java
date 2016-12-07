@@ -143,12 +143,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
             if (WebPlayerView.this.changingTextureView == 1) {
                 WebPlayerView.this.textureView.setSurfaceTexture(surface);
+                WebPlayerView.this.changingTextureView = 0;
                 return false;
             } else if (WebPlayerView.this.changingTextureView != 2) {
                 return true;
             } else {
                 WebPlayerView.this.changedTextureView.setSurfaceTexture(surface);
                 WebPlayerView.this.changedTextureView.setSurfaceTextureListener(WebPlayerView.this.surfaceTextureListener);
+                WebPlayerView.this.changingTextureView = 0;
                 return false;
             }
         }
@@ -501,9 +503,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -1167,10 +1169,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         addView(this.progressView, LayoutHelper.createFrame(48, 48, 17));
         this.fullscreenButton = new ImageView(context);
         this.fullscreenButton.setScaleType(ScaleType.CENTER);
-        this.controlsView.addView(this.fullscreenButton, LayoutHelper.createFrame(56, 56, 85));
+        this.controlsView.addView(this.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
         this.fullscreenButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (WebPlayerView.this.initied) {
+                if (WebPlayerView.this.initied && WebPlayerView.this.changingTextureView == 0) {
                     WebPlayerView.this.inFullscreen = !WebPlayerView.this.inFullscreen;
                     WebPlayerView.this.updateFullscreenState(true);
                 }
@@ -1198,10 +1200,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (allowInline) {
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
-            this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 51));
+            this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons()) {
+                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons() && WebPlayerView.this.changingTextureView == 0) {
                         Rect rect;
                         int[] location = new int[2];
                         if (WebPlayerView.this.inFullscreen) {
@@ -1324,13 +1326,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (this.changingTextureView == 0) {
             return false;
         }
-        if (this.inFullscreen || this.isInline) {
-            this.changedTextureView.setSurfaceTexture(surfaceTexture);
-            this.changedTextureView.setSurfaceTextureListener(this.surfaceTextureListener);
-            return true;
-        }
         this.changingTextureView = 0;
-        return false;
+        if (!this.inFullscreen && !this.isInline) {
+            return false;
+        }
+        this.changedTextureView.setSurfaceTexture(surfaceTexture);
+        this.changedTextureView.setSurfaceTextureListener(this.surfaceTextureListener);
+        return true;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -1441,9 +1443,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.inlineButton.setImageResource(this.isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
             this.inlineButton.setVisibility(this.videoPlayer.isPlayerPrepared() ? 0 : 8);
             if (this.isInline) {
-                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, 51));
+                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, 53));
             } else {
-                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(56, 50, 51));
+                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(56, 50, 53));
             }
         }
     }

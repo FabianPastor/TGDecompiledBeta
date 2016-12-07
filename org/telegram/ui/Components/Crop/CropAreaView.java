@@ -22,6 +22,7 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 public class CropAreaView extends View {
     private Control activeControl;
     private RectF actualRect = new RectF();
+    private Animator animator;
     private RectF bottomEdge = new RectF();
     private RectF bottomLeftCorner = new RectF();
     private float bottomPadding;
@@ -35,6 +36,7 @@ public class CropAreaView extends View {
     private GridType gridType = GridType.NONE;
     Paint handlePaint;
     AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+    private boolean isDragging;
     private RectF leftEdge = new RectF();
     Paint linePaint;
     private AreaViewListener listener;
@@ -94,6 +96,10 @@ public class CropAreaView extends View {
         this.framePaint = new Paint();
         this.framePaint.setStyle(Style.FILL);
         this.framePaint.setColor(-NUM);
+    }
+
+    public boolean isDragging() {
+        return this.isDragging;
     }
 
     public void setDimVisibility(boolean visible) {
@@ -267,7 +273,12 @@ public class CropAreaView extends View {
 
     public void fill(final RectF targetRect, Animator scaleAnimator, boolean animated) {
         if (animated) {
+            if (this.animator != null) {
+                this.animator.cancel();
+                this.animator = null;
+            }
             AnimatorSet set = new AnimatorSet();
+            this.animator = set;
             set.setDuration(300);
             Animator[] animators = new Animator[5];
             animators[0] = ObjectAnimator.ofFloat(this, "cropLeft", new float[]{targetRect.left});
@@ -284,12 +295,20 @@ public class CropAreaView extends View {
             set.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     CropAreaView.this.setActualRect(targetRect);
+                    CropAreaView.this.animator = null;
                 }
             });
             set.start();
             return;
         }
         setActualRect(targetRect);
+    }
+
+    public void resetAnimator() {
+        if (this.animator != null) {
+            this.animator.cancel();
+            this.animator = null;
+        }
     }
 
     private void setCropLeft(float value) {
@@ -411,11 +430,13 @@ public class CropAreaView extends View {
             this.previousX = x;
             this.previousY = y;
             setGridType(GridType.MAJOR, false);
+            this.isDragging = true;
             if (this.listener != null) {
                 this.listener.onAreaChangeBegan();
             }
             return true;
         } else if (action == 1 || action == 3) {
+            this.isDragging = false;
             if (this.activeControl == Control.NONE) {
                 return false;
             }

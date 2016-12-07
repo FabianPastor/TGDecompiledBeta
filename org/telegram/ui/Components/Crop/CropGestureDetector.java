@@ -77,6 +77,10 @@ public class CropGestureDetector {
         return this.mDetector.isInProgress();
     }
 
+    public boolean isDragging() {
+        return this.mIsDragging;
+    }
+
     public boolean onTouchEvent(MotionEvent ev) {
         this.mDetector.onTouchEvent(ev);
         int i = 0;
@@ -140,16 +144,19 @@ public class CropGestureDetector {
                 return true;
                 break;
             case 1:
-                if (this.mIsDragging && this.mVelocityTracker != null) {
-                    this.mLastTouchX = getActiveX(ev);
-                    this.mLastTouchY = getActiveY(ev);
-                    this.mVelocityTracker.addMovement(ev);
-                    this.mVelocityTracker.computeCurrentVelocity(1000);
-                    float vX = this.mVelocityTracker.getXVelocity();
-                    float vY = this.mVelocityTracker.getYVelocity();
-                    if (Math.max(Math.abs(vX), Math.abs(vY)) >= this.mMinimumVelocity) {
-                        this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -vX, -vY);
+                if (this.mIsDragging) {
+                    if (this.mVelocityTracker != null) {
+                        this.mLastTouchX = getActiveX(ev);
+                        this.mLastTouchY = getActiveY(ev);
+                        this.mVelocityTracker.addMovement(ev);
+                        this.mVelocityTracker.computeCurrentVelocity(1000);
+                        float vX = this.mVelocityTracker.getXVelocity();
+                        float vY = this.mVelocityTracker.getYVelocity();
+                        if (Math.max(Math.abs(vX), Math.abs(vY)) >= this.mMinimumVelocity) {
+                            this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -vX, -vY);
+                        }
                     }
+                    this.mIsDragging = false;
                 }
                 if (this.mVelocityTracker != null) {
                     this.mVelocityTracker.recycle();
@@ -163,6 +170,7 @@ public class CropGestureDetector {
                     this.mVelocityTracker = null;
                 }
                 this.started = false;
+                this.mIsDragging = false;
                 break;
         }
         return true;

@@ -119,6 +119,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private PhoneCall call;
     private int callReqId;
     private VoIPController controller;
+    private boolean controllerStarted;
     private WakeLock cpuWakelock;
     private int currentState = 0;
     private int endHash;
@@ -592,11 +593,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
-            if (this.controller != null) {
+            if (this.controller != null && this.controllerStarted) {
                 i = (int) (this.controller.getCallDuration() / 1000);
             }
             req.duration = i;
-            req.connection_id = this.controller != null ? this.controller.getPreferredRelayID() : 0;
+            long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
+            req.connection_id = preferredRelayID;
             switch (reason) {
                 case 2:
                     req.reason = new TL_phoneCallDiscardReasonDisconnect();
@@ -736,6 +738,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.controller.start();
             updateNetworkType();
             this.controller.connect();
+            this.controllerStarted = true;
         } catch (Exception x) {
             FileLog.e(TAG, "error starting call", x);
             callFailed();

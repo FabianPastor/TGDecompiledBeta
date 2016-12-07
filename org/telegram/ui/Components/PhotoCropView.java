@@ -144,6 +144,10 @@ public class PhotoCropView extends FrameLayout {
         requestLayout();
     }
 
+    public boolean isReady() {
+        return this.cropView.isReady();
+    }
+
     public void reset() {
         this.wheelView.reset();
         this.cropView.reset();

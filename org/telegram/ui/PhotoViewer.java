@@ -1613,14 +1613,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             });
             this.editorDoneLayout.doneButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (PhotoViewer.this.currentEditMode == 1) {
-                        PhotoViewer.this.photoCropView.cancelAnimationRunnable();
-                        if (PhotoViewer.this.imageMoveAnimation != null) {
-                            return;
-                        }
+                    if (PhotoViewer.this.currentEditMode != 1 || PhotoViewer.this.photoCropView.isReady()) {
+                        PhotoViewer.this.applyCurrentEditMode();
+                        PhotoViewer.this.switchToEditMode(0);
                     }
-                    PhotoViewer.this.applyCurrentEditMode();
-                    PhotoViewer.this.switchToEditMode(0);
                 }
             });
             this.resetButton = new TextView(this.actvityContext);
@@ -1818,10 +1814,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$7100 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$7000 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$7100.playTogether(animatorArr);
+                        access$7000.playTogether(animatorArr);
                         PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
@@ -2429,14 +2425,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$6500 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                    access$6500.playTogether(r13);
+                    access$7900.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
                         public void onAnimationStart(Animator animation) {
@@ -2540,12 +2536,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$6500 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$6500.playTogether(r12);
+                    access$7900.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
                         public void onAnimationStart(Animator animation) {
@@ -2639,7 +2635,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$6500 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[4];
                     float[] fArr = new float[2];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
@@ -2651,7 +2647,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     fArr2[0] = (float) ((-ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
                     fArr2[1] = 0.0f;
                     r13[3] = ObjectAnimator.ofFloat(actionBar, str, fArr2);
-                    access$6500.playTogether(r13);
+                    access$7900.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
                         public void onAnimationStart(Animator animation) {

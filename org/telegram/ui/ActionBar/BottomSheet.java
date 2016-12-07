@@ -71,6 +71,7 @@ public class BottomSheet extends Dialog {
     private int layoutCount;
     private OnClickListener onClickListener;
     private Drawable shadowDrawable;
+    private boolean showWithoutAnimation;
     private Runnable startAnimationRunnable;
     private int tag;
     private CharSequence title;
@@ -646,6 +647,10 @@ public class BottomSheet extends Dialog {
         window.setAttributes(params);
     }
 
+    public void setShowWithoutAnimation(boolean value) {
+        this.showWithoutAnimation = value;
+    }
+
     public void show() {
         super.show();
         if (this.focusable) {
@@ -654,6 +659,11 @@ public class BottomSheet extends Dialog {
         this.dismissed = false;
         cancelSheetAnimation();
         this.containerView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
+        if (this.showWithoutAnimation) {
+            this.backDrawable.setAlpha(51);
+            this.containerView.setTranslationY(0.0f);
+            return;
+        }
         this.backDrawable.setAlpha(0);
         if (VERSION.SDK_INT >= 18) {
             this.layoutCount = 2;

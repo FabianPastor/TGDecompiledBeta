@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -31,7 +33,7 @@ import org.telegram.ui.Components.Crop.CropGestureDetector.CropGestureListener;
 
 public class CropView extends FrameLayout implements AreaViewListener, CropGestureListener {
     private static final float EPSILON = 1.0E-5f;
-    private static final float MAX_SCALE = 10.0f;
+    private static final float MAX_SCALE = 30.0f;
     private static final int RESULT_SIDE = 1280;
     private boolean animating = false;
     private CropAreaView areaView;
@@ -40,6 +42,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     private float bottomPadding;
     private CropGestureDetector detector;
     private boolean freeform;
+    private boolean hasAspectRatioDialog;
     private ImageView imageView;
     private RectF initialAreaRect = new RectF();
     private CropViewListener listener;
@@ -216,6 +219,10 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         addView(this.areaView);
     }
 
+    public boolean isReady() {
+        return (this.detector.isScaling() || this.detector.isDragging() || this.areaView.isDragging()) ? false : true;
+    }
+
     public void setListener(CropViewListener l) {
         this.listener = l;
     }
@@ -261,6 +268,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     public void reset() {
+        this.areaView.resetAnimator();
         this.areaView.setBitmap(this.bitmap, this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
         this.areaView.setLockedAspectRatio(this.freeform ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         this.state.reset(this.areaView, 0.0f, this.freeform);
@@ -286,8 +294,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         final float[] currentScale = new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
         float scale = Math.max(targetRect.width() / this.areaView.getCropWidth(), targetRect.height() / this.areaView.getCropHeight());
         boolean ensureFit = false;
-        if (this.state.getScale() * scale > MAX_SCALE) {
-            scale = MAX_SCALE / this.state.getScale();
+        if (this.state.getScale() * scale > 30.0f) {
+            scale = 30.0f / this.state.getScale();
             ensureFit = true;
         }
         final float x = ((targetRect.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth();
@@ -463,10 +471,17 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
     public void rotate90Degrees() {
         boolean z = true;
+        this.areaView.resetAnimator();
         resetRotationStartScale();
         float orientation = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
-        this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
-        this.state.reset(this.areaView, orientation, this.freeform);
+        boolean fform = this.freeform;
+        if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
+            this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
+        } else {
+            this.areaView.setActualRect(this.areaView.getLockAspectRatio());
+            fform = false;
+        }
+        this.state.reset(this.areaView, orientation, fform);
         updateMatrix();
         if (this.listener != null) {
             CropViewListener cropViewListener = this.listener;
@@ -553,8 +568,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
 
     public void onScale(float scale, float x, float y) {
         if (!this.animating) {
-            if (this.state.getScale() * scale > MAX_SCALE) {
-                scale = MAX_SCALE / this.state.getScale();
+            if (this.state.getScale() * scale > 30.0f) {
+                scale = 30.0f / this.state.getScale();
             }
             this.state.scale(scale, ((x - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth()) * this.state.getOrientedWidth(), ((y - (((((float) this.imageView.getHeight()) - this.bottomPadding) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight());
             updateMatrix();
@@ -582,7 +597,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     public Bitmap getResult() {
-        if (!this.state.hasChanges() && this.freeform) {
+        if (!this.state.hasChanges() && this.state.getBaseRotation() < EPSILON && this.freeform) {
             return this.bitmap;
         }
         RectF cropRect = new RectF();
@@ -617,50 +632,58 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             this.areaView.setLockedAspectRatio(0.0f);
             if (this.listener != null) {
                 this.listener.onAspectLock(false);
-                return;
             }
-            return;
-        }
-        actions = new String[8];
-        ratios = new Integer[6][];
-        ratios[0] = new Integer[]{Integer.valueOf(3), Integer.valueOf(2)};
-        ratios[1] = new Integer[]{Integer.valueOf(5), Integer.valueOf(3)};
-        ratios[2] = new Integer[]{Integer.valueOf(4), Integer.valueOf(3)};
-        ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
-        ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
-        ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
-        actions[0] = LocaleController.getString("Original", R.string.CropOriginal);
-        actions[1] = LocaleController.getString("Square", R.string.CropSquare);
-        int i = 2;
-        for (Integer[] ratioPair : ratios) {
-            if (this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                actions[i] = String.format("%d:%d", new Object[]{ratioPair[0], ratioPair[1]});
-            } else {
-                actions[i] = String.format("%d:%d", new Object[]{ratioPair[1], ratioPair[0]});
-            }
-            i++;
-        }
-        new Builder(getContext()).setItems(actions, new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        CropView.this.setLockedAspectRatio(CropView.this.state.getWidth() / CropView.this.state.getHeight());
-                        return;
-                    case 1:
-                        CropView.this.setLockedAspectRatio(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        return;
-                    default:
-                        Integer[] ratioPair = ratios[which - 2];
-                        if (CropView.this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                            CropView.this.setLockedAspectRatio(((float) ratioPair[0].intValue()) / ((float) ratioPair[1].intValue()));
-                            return;
-                        } else {
-                            CropView.this.setLockedAspectRatio(((float) ratioPair[1].intValue()) / ((float) ratioPair[0].intValue()));
-                            return;
-                        }
+        } else if (!this.hasAspectRatioDialog) {
+            this.hasAspectRatioDialog = true;
+            actions = new String[8];
+            ratios = new Integer[6][];
+            ratios[0] = new Integer[]{Integer.valueOf(3), Integer.valueOf(2)};
+            ratios[1] = new Integer[]{Integer.valueOf(5), Integer.valueOf(3)};
+            ratios[2] = new Integer[]{Integer.valueOf(4), Integer.valueOf(3)};
+            ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
+            ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
+            ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
+            actions[0] = LocaleController.getString("Original", R.string.CropOriginal);
+            actions[1] = LocaleController.getString("Square", R.string.CropSquare);
+            int i = 2;
+            for (Integer[] ratioPair : ratios) {
+                if (this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    actions[i] = String.format("%d:%d", new Object[]{ratioPair[0], ratioPair[1]});
+                } else {
+                    actions[i] = String.format("%d:%d", new Object[]{ratioPair[1], ratioPair[0]});
                 }
+                i++;
             }
-        }).show();
+            AlertDialog dialog = new Builder(getContext()).setItems(actions, new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    CropView.this.hasAspectRatioDialog = false;
+                    switch (which) {
+                        case 0:
+                            CropView.this.setLockedAspectRatio((CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getHeight() : CropView.this.state.getWidth()) / (CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getWidth() : CropView.this.state.getHeight()));
+                            return;
+                        case 1:
+                            CropView.this.setLockedAspectRatio(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            return;
+                        default:
+                            Integer[] ratioPair = ratios[which - 2];
+                            if (CropView.this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                                CropView.this.setLockedAspectRatio(((float) ratioPair[0].intValue()) / ((float) ratioPair[1].intValue()));
+                                return;
+                            } else {
+                                CropView.this.setLockedAspectRatio(((float) ratioPair[1].intValue()) / ((float) ratioPair[0].intValue()));
+                                return;
+                            }
+                    }
+                }
+            }).create();
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setOnCancelListener(new OnCancelListener() {
+                public void onCancel(DialogInterface dialog) {
+                    CropView.this.hasAspectRatioDialog = false;
+                }
+            });
+            dialog.show();
+        }
     }
 
     public void updateLayout() {

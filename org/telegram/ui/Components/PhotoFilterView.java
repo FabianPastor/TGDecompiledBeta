@@ -1586,7 +1586,7 @@ public class PhotoFilterView extends FrameLayout {
             maxWidth = Math.max(paint.measureText(titles[i]), maxWidth);
             i++;
         }
-        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + maxWidth);
+        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(32.0f)) + maxWidth);
     }
 
     private void updateSelectedBlurType() {
