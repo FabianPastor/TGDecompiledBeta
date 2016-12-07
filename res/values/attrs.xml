@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="imageAspectRatioAdjust">
+        <item>65536</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </attr>
+    <attr name="imageAspectRatio">
+        <item>32</item>
+    </attr>
+    <attr name="circleCrop">
+        <item>8</item>
+    </attr>
+    <attr name="mapType">
+        <item>65536</item>
+        <item>0</item>
+        <item>4</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </attr>
+    <attr name="cameraBearing">
+        <item>32</item>
+    </attr>
+    <attr name="cameraTargetLat">
+        <item>32</item>
+    </attr>
+    <attr name="cameraTargetLng">
+        <item>32</item>
+    </attr>
+    <attr name="cameraTilt">
+        <item>32</item>
+    </attr>
+    <attr name="cameraZoom">
+        <item>32</item>
+    </attr>
+    <attr name="liteMode">
+        <item>8</item>
+    </attr>
+    <attr name="uiCompass">
+        <item>8</item>
+    </attr>
+    <attr name="uiRotateGestures">
+        <item>8</item>
+    </attr>
+    <attr name="uiScrollGestures">
+        <item>8</item>
+    </attr>
+    <attr name="uiTiltGestures">
+        <item>8</item>
+    </attr>
+    <attr name="uiZoomControls">
+        <item>8</item>
+    </attr>
+    <attr name="uiZoomGestures">
+        <item>8</item>
+    </attr>
+    <attr name="useViewLifecycle">
+        <item>8</item>
+    </attr>
+    <attr name="zOrderOnTop">
+        <item>8</item>
+    </attr>
+    <attr name="uiMapToolbar">
+        <item>8</item>
+    </attr>
+    <attr name="ambientEnabled">
+        <item>8</item>
+    </attr>
+    <attr name="cameraMinZoomPreference">
+        <item>32</item>
+    </attr>
+    <attr name="cameraMaxZoomPreference">
+        <item>32</item>
+    </attr>
+    <attr name="latLngBoundsSouthWestLatitude">
+        <item>32</item>
+    </attr>
+    <attr name="latLngBoundsSouthWestLongitude">
+        <item>32</item>
+    </attr>
+    <attr name="latLngBoundsNorthEastLatitude">
+        <item>32</item>
+    </attr>
+    <attr name="latLngBoundsNorthEastLongitude">
+        <item>32</item>
+    </attr>
+    <attr name="buttonSize">
+        <item>65537</item>
+        <item>2</item>
+        <item>0</item>
+        <item>1</item>
+    </attr>
+    <attr name="colorScheme">
+        <item>65537</item>
+        <item>2</item>
+        <item>0</item>
+        <item>1</item>
+    </attr>
+    <attr name="scopeUris">
+        <item>3</item>
+    </attr>
+</resources>

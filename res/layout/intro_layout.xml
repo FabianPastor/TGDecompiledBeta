@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <FrameLayout android:background="#fafafa" android:layout_width="match_parent" android:layout_height="wrap_content"
+        <FrameLayout android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="88dp">
+            <ImageView android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/icon_image1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/intro1" />
+            <ImageView android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/icon_image2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </FrameLayout>
+        <android.support.v4.view.ViewPager android:id="@+id/intro_view_pager" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <TextView android:textSize="16dp" android:textColor="#ffffff" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:layout_gravity="left|right|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/start_messaging_button" android:background="@drawable/regbtn_states" android:paddingLeft="20dp" android:paddingTop="10dp" android:paddingRight="20dp" android:paddingBottom="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="336dp" android:layout_marginRight="10dp" />
+        <LinearLayout android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:orientation="horizontal" android:id="@+id/bottom_pages" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="26dp">
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+            <FrameLayout android:background="#bbbbbb" android:layout_width="UNKNOWN_DATA_0x501" android:layout_height="UNKNOWN_DATA_0x501" android:layout_marginLeft="7dp" />
+        </LinearLayout> />
+</ScrollView>

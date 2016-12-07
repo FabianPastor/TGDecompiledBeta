@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true">
+    <TextView android:textSize="14dp" android:textColor="#ffd7e8f7" android:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:id="@+id/count_text" android:layout_width="UNKNOWN_DATA_0x3801" android:layout_height="match_parent" android:layout_centerInParent="true" />
+</RelativeLayout>

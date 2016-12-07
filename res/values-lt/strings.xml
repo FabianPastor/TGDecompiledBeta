@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_google_play_services_enable_button">Įgalinti</string>
+    <string name="common_google_play_services_enable_text">„%1$s“ neveiks, jei neįgalinsite „Google Play“ paslaugų.</string>
+    <string name="common_google_play_services_enable_title">Įgalinkite „Google Play“ paslaugas</string>
+    <string name="common_google_play_services_install_button">Įdiegti</string>
+    <string name="common_google_play_services_install_text_phone">„%1$s“ nebus paleidžiama be „Google Play“ paslaugų, kurių nėra telefone.</string>
+    <string name="common_google_play_services_install_text_tablet">„%1$s“ nebus paleidžiama be „Google Play“ paslaugų, kurių nėra planšetiniame kompiuteryje.</string>
+    <string name="common_google_play_services_install_title">Gaukite „Google Play“ paslaugas</string>
+    <string name="common_google_play_services_notification_ticker">„Google Play“ paslaugų klaida</string>
+    <string name="common_google_play_services_unknown_issue">Naudojant programą „%1$s“ kyla problemų dėl „Google Play“ paslaugų. Jei problema išlieka, susisiekite su kūrėju, kad jums būtų suteikta pagalba.</string>
+    <string name="common_google_play_services_unsupported_text">Norint naudoti „%1$s“ reikalingos „Google Play“ paslaugos, kurios nepalaikomos jūsų įrenginyje. Susisiekite su gamintoju, kad gautumėte pagalbos.</string>
+    <string name="common_google_play_services_unsupported_title">„Google Play“ paslaugos</string>
+    <string name="common_google_play_services_update_button">Atnaujinti</string>
+    <string name="common_google_play_services_update_text">„%1$s“ nebus paleidžiama, jei neatnaujinsite „Google Play“ paslaugų.</string>
+    <string name="common_google_play_services_update_title">Atnaujinkite „Google Play“ paslaugas</string>
+    <string name="common_google_play_services_updating_text">„%1$s“ nebus paleidžiama be „Google Play“ paslaugų, kurios šiuo metu atnaujinamos.</string>
+    <string name="common_google_play_services_updating_title">„Google Play“ paslaugos atnaujinamos</string>
+    <string name="common_google_play_services_wear_update_text">Reikia naujos versijos „Google Play“ paslaugų. Jos netrukus bus atnaujintos.</string>
+    <string name="common_open_on_phone">Atidaryti telefone</string>
+    <string name="common_signin_button_text">Prisijungti</string>
+    <string name="common_signin_button_text_long">Prisijungti naudojant „Google“</string>
+</resources>

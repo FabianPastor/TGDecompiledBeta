@@ -1,0 +1,232 @@
+package org.telegram.messenger.camera;
+
+import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.Parameters;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
+import android.os.Build;
+import android.view.OrientationEventListener;
+import android.view.WindowManager;
+import java.util.ArrayList;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
+
+public class CameraSession {
+    protected CameraInfo cameraInfo;
+    private String currentFlashMode = "off";
+    private boolean initied;
+    private boolean isVideo;
+    private int lastOrientation = -1;
+    private OrientationEventListener orientationEventListener;
+    private final int pictureFormat;
+    private final Size pictureSize;
+    private final Size previewSize;
+
+    public CameraSession(CameraInfo info, Size preview, Size picture, int format) {
+        this.previewSize = preview;
+        this.pictureSize = picture;
+        this.pictureFormat = format;
+        this.cameraInfo = info;
+        this.currentFlashMode = ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).getString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", "off");
+        this.orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
+            public void onOrientationChanged(int orientation) {
+                if (CameraSession.this.orientationEventListener != null && CameraSession.this.initied) {
+                    int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
+                    if (CameraSession.this.lastOrientation != rotation) {
+                        if (!CameraSession.this.isVideo) {
+                            CameraSession.this.configurePhotoCamera();
+                        }
+                        CameraSession.this.lastOrientation = rotation;
+                    }
+                }
+            }
+        };
+        if (this.orientationEventListener.canDetectOrientation()) {
+            this.orientationEventListener.enable();
+            return;
+        }
+        this.orientationEventListener.disable();
+        this.orientationEventListener = null;
+    }
+
+    public void checkFlashMode(String mode) {
+        if (!CameraController.getInstance().availableFlashModes.contains(this.currentFlashMode)) {
+            this.currentFlashMode = mode;
+            configurePhotoCamera();
+            ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).edit().putString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", mode).commit();
+        }
+    }
+
+    public void setCurrentFlashMode(String mode) {
+        this.currentFlashMode = mode;
+        configurePhotoCamera();
+        ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).edit().putString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", mode).commit();
+    }
+
+    public String getCurrentFlashMode() {
+        return this.currentFlashMode;
+    }
+
+    public String getNextFlashMode() {
+        ArrayList<String> modes = CameraController.getInstance().availableFlashModes;
+        int a = 0;
+        while (a < modes.size()) {
+            if (!((String) modes.get(a)).equals(this.currentFlashMode)) {
+                a++;
+            } else if (a < modes.size() - 1) {
+                return (String) modes.get(a + 1);
+            } else {
+                return (String) modes.get(0);
+            }
+        }
+        return this.currentFlashMode;
+    }
+
+    protected void setInitied() {
+        this.initied = true;
+    }
+
+    protected boolean isInitied() {
+        return this.initied;
+    }
+
+    protected void configurePhotoCamera() {
+        Camera camera = this.cameraInfo.camera;
+        if (camera != null) {
+            int cameraDisplayOrientation;
+            CameraInfo info = new CameraInfo();
+            Parameters params = null;
+            try {
+                params = camera.getParameters();
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
+                return;
+            }
+            Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
+            int displayOrientation = getDisplayOrientation(info, true);
+            if ("samsung".equals(Build.MANUFACTURER) && "sf2wifixx".equals(Build.PRODUCT)) {
+                cameraDisplayOrientation = 0;
+            } else {
+                int temp;
+                int degrees = 0;
+                switch (displayOrientation) {
+                    case 0:
+                        degrees = 0;
+                        break;
+                    case 1:
+                        degrees = 90;
+                        break;
+                    case 2:
+                        degrees = 180;
+                        break;
+                    case 3:
+                        degrees = 270;
+                        break;
+                }
+                if (info.orientation % 90 != 0) {
+                    info.orientation = 0;
+                }
+                if (info.facing == 1) {
+                    temp = (360 - ((info.orientation + degrees) % 360)) % 360;
+                } else {
+                    temp = ((info.orientation - degrees) + 360) % 360;
+                }
+                cameraDisplayOrientation = temp;
+            }
+            camera.setDisplayOrientation(cameraDisplayOrientation);
+            if (params != null) {
+                int outputOrientation;
+                params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
+                params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
+                params.setPictureFormat(this.pictureFormat);
+                String desiredMode = "continuous-picture";
+                if (params.getSupportedFocusModes().contains(desiredMode)) {
+                    params.setFocusMode(desiredMode);
+                }
+                if (info.facing == 1) {
+                    outputOrientation = (360 - displayOrientation) % 360;
+                } else {
+                    outputOrientation = displayOrientation;
+                }
+                try {
+                    params.setRotation(outputOrientation);
+                } catch (Exception e3) {
+                }
+                params.setFlashMode(this.currentFlashMode);
+                try {
+                    camera.setParameters(params);
+                } catch (Exception e4) {
+                }
+            }
+        }
+    }
+
+    protected void configureRecorder(int quality, MediaRecorder recorder) {
+        CameraInfo info = new CameraInfo();
+        Camera.getCameraInfo(this.cameraInfo.cameraId, info);
+        recorder.setOrientationHint(getDisplayOrientation(info, false));
+        int highProfile = getHigh();
+        boolean canGoHigh = CamcorderProfile.hasProfile(this.cameraInfo.cameraId, highProfile);
+        boolean canGoLow = CamcorderProfile.hasProfile(this.cameraInfo.cameraId, 0);
+        if (canGoHigh && (quality == 1 || !canGoLow)) {
+            recorder.setProfile(CamcorderProfile.get(this.cameraInfo.cameraId, highProfile));
+        } else if (canGoLow) {
+            recorder.setProfile(CamcorderProfile.get(this.cameraInfo.cameraId, 0));
+        } else {
+            throw new IllegalStateException("cannot find valid CamcorderProfile");
+        }
+        this.isVideo = true;
+    }
+
+    protected void stopVideoRecording() {
+        this.isVideo = false;
+        configurePhotoCamera();
+    }
+
+    private int getHigh() {
+        if ("LGE".equals(Build.MANUFACTURER) && "g3_tmo_us".equals(Build.PRODUCT)) {
+            return 4;
+        }
+        return 1;
+    }
+
+    private int getDisplayOrientation(CameraInfo info, boolean isStillCapture) {
+        int degrees = 0;
+        switch (((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation()) {
+            case 0:
+                degrees = 0;
+                break;
+            case 1:
+                degrees = 90;
+                break;
+            case 2:
+                degrees = 180;
+                break;
+            case 3:
+                degrees = 270;
+                break;
+        }
+        if (info.facing != 1) {
+            return ((info.orientation - degrees) + 360) % 360;
+        }
+        int displayOrientation = (360 - ((info.orientation + degrees) % 360)) % 360;
+        if (!isStillCapture && displayOrientation == 90) {
+            displayOrientation = 270;
+        }
+        if (!isStillCapture && "Huawei".equals(Build.MANUFACTURER) && "angler".equals(Build.PRODUCT) && displayOrientation == 270) {
+            return 90;
+        }
+        return displayOrientation;
+    }
+
+    public void destroy() {
+        this.initied = false;
+        if (this.orientationEventListener != null) {
+            this.orientationEventListener.disable();
+            this.orientationEventListener = null;
+        }
+    }
+}

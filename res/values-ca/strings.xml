@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_google_play_services_enable_button">Activa</string>
+    <string name="common_google_play_services_enable_text">%1$s no funcionarà si no actives els Serveis de Google Play.</string>
+    <string name="common_google_play_services_enable_title">Activa els Serveis de Google Play</string>
+    <string name="common_google_play_services_install_button">Instal·la</string>
+    <string name="common_google_play_services_install_text_phone">%1$s no s\'executarà si el telèfon no té instal·lats els Serveis de Google Play.</string>
+    <string name="common_google_play_services_install_text_tablet">%1$s no s\'executarà si la tauleta no té instal·lats els Serveis de Google Play.</string>
+    <string name="common_google_play_services_install_title">Obtén els Serveis de Google Play</string>
+    <string name="common_google_play_services_notification_ticker">Error dels Serveis de Google Play</string>
+    <string name="common_google_play_services_unknown_issue">%1$s té problemes amb els Serveis de Google Play. Si el problema continua, contacta amb el desenvolupador per obtenir ajuda.</string>
+    <string name="common_google_play_services_unsupported_text">%1$s depèn dels Serveis de Google Play, que no són compatibles amb el teu dispositiu. Contacta amb el fabricant per obtenir ajuda.</string>
+    <string name="common_google_play_services_unsupported_title">Serveis de Google Play</string>
+    <string name="common_google_play_services_update_button">Actualitza</string>
+    <string name="common_google_play_services_update_text">%1$s no s\'executarà si no actualitzes els Serveis de Google Play.</string>
+    <string name="common_google_play_services_update_title">Actualitza els Serveis de Google Play</string>
+    <string name="common_google_play_services_updating_text">%1$s no s\'executarà sense els Serveis de Google Play, que s\'estan actualitzant en aquest moment.</string>
+    <string name="common_google_play_services_updating_title">Actualitzant els Serveis de Google Play</string>
+    <string name="common_google_play_services_wear_update_text">Cal una nova versió dels Serveis de Google Play. S\'actualitzaran automàticament aviat.</string>
+    <string name="common_open_on_phone">Obre al telèfon</string>
+    <string name="common_signin_button_text">Inicia sessió</string>
+    <string name="common_signin_button_text_long">Inicia la sessió amb Google</string>
+</resources>

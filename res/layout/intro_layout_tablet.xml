@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/cats" android:scaleType="centerCrop" />
+    <FrameLayout android:layout_gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" android:background="@drawable/btnshadow" android:layout_width="UNKNOWN_DATA_0x1f201" android:layout_height="UNKNOWN_DATA_0x21001">
+        <include layout="@layout/intro_layout" />
+    </FrameLayout>
+</FrameLayout>
