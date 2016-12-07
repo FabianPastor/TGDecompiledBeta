@@ -47,6 +47,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class PrivacySettingsActivity extends BaseFragment implements NotificationCenterDelegate {
     private int blockedRow;
+    private int callsRow;
     private int deleteAccountDetailRow;
     private int deleteAccountRow;
     private int deleteAccountSectionRow;
@@ -77,7 +78,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         public boolean isEnabled(int i) {
-            return i == PrivacySettingsActivity.this.passcodeRow || i == PrivacySettingsActivity.this.passwordRow || i == PrivacySettingsActivity.this.blockedRow || i == PrivacySettingsActivity.this.sessionsRow || i == PrivacySettingsActivity.this.secretWebpageRow || ((i == PrivacySettingsActivity.this.groupsRow && !ContactsController.getInstance().getLoadingGroupInfo()) || ((i == PrivacySettingsActivity.this.lastSeenRow && !ContactsController.getInstance().getLoadingLastSeenInfo()) || (i == PrivacySettingsActivity.this.deleteAccountRow && !ContactsController.getInstance().getLoadingDeleteInfo())));
+            return i == PrivacySettingsActivity.this.passcodeRow || i == PrivacySettingsActivity.this.passwordRow || i == PrivacySettingsActivity.this.blockedRow || i == PrivacySettingsActivity.this.sessionsRow || i == PrivacySettingsActivity.this.secretWebpageRow || ((i == PrivacySettingsActivity.this.groupsRow && !ContactsController.getInstance().getLoadingGroupInfo()) || ((i == PrivacySettingsActivity.this.lastSeenRow && !ContactsController.getInstance().getLoadingLastSeenInfo()) || ((i == PrivacySettingsActivity.this.callsRow && !ContactsController.getInstance().getLoadingCallsInfo()) || (i == PrivacySettingsActivity.this.deleteAccountRow && !ContactsController.getInstance().getLoadingDeleteInfo()))));
         }
 
         public int getCount() {
@@ -117,14 +118,21 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     if (ContactsController.getInstance().getLoadingLastSeenInfo()) {
                         value = LocaleController.getString("Loading", R.string.Loading);
                     } else {
-                        value = PrivacySettingsActivity.this.formatRulesString(false);
+                        value = PrivacySettingsActivity.this.formatRulesString(0);
                     }
                     textCell.setTextAndValue(LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), value, true);
+                } else if (i == PrivacySettingsActivity.this.callsRow) {
+                    if (ContactsController.getInstance().getLoadingCallsInfo()) {
+                        value = LocaleController.getString("Loading", R.string.Loading);
+                    } else {
+                        value = PrivacySettingsActivity.this.formatRulesString(2);
+                    }
+                    textCell.setTextAndValue(LocaleController.getString("Calls", R.string.Calls), value, true);
                 } else if (i == PrivacySettingsActivity.this.groupsRow) {
                     if (ContactsController.getInstance().getLoadingGroupInfo()) {
                         value = LocaleController.getString("Loading", R.string.Loading);
                     } else {
-                        value = PrivacySettingsActivity.this.formatRulesString(true);
+                        value = PrivacySettingsActivity.this.formatRulesString(1);
                     }
                     textCell.setTextAndValue(LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), value, false);
                 } else if (i == PrivacySettingsActivity.this.deleteAccountRow) {
@@ -228,6 +236,13 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         i = this.rowCount;
         this.rowCount = i + 1;
         this.lastSeenRow = i;
+        if (MessagesController.getInstance().callsEnabled) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsRow = i;
+        } else {
+            this.callsRow = -1;
+        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.groupsRow = i;
@@ -358,9 +373,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         PrivacySettingsActivity.this.showDialog(builder.create());
                     }
                 } else if (i == PrivacySettingsActivity.this.lastSeenRow) {
-                    PrivacySettingsActivity.this.presentFragment(new PrivacyControlActivity(false));
+                    PrivacySettingsActivity.this.presentFragment(new PrivacyControlActivity(0));
+                } else if (i == PrivacySettingsActivity.this.callsRow) {
+                    PrivacySettingsActivity.this.presentFragment(new PrivacyControlActivity(2));
                 } else if (i == PrivacySettingsActivity.this.groupsRow) {
-                    PrivacySettingsActivity.this.presentFragment(new PrivacyControlActivity(true));
+                    PrivacySettingsActivity.this.presentFragment(new PrivacyControlActivity(1));
                 } else if (i == PrivacySettingsActivity.this.passwordRow) {
                     PrivacySettingsActivity.this.presentFragment(new TwoStepVerificationActivity(0));
                 } else if (i == PrivacySettingsActivity.this.passcodeRow) {
@@ -395,8 +412,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
-    private String formatRulesString(boolean isGroup) {
-        ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance().getPrivacyRules(isGroup);
+    private String formatRulesString(int rulesType) {
+        ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance().getPrivacyRules(rulesType);
         if (privacyRules.size() == 0) {
             return LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody);
         }

@@ -60,7 +60,18 @@ class TextViewCompatJbMr1 {
         textView.setCompoundDrawablesWithIntrinsicBounds(i, top, start, bottom);
     }
 
-    static Drawable[] getCompoundDrawablesRelative(@NonNull TextView textView) {
-        return textView.getCompoundDrawablesRelative();
+    public static Drawable[] getCompoundDrawablesRelative(@NonNull TextView textView) {
+        boolean rtl = true;
+        if (textView.getLayoutDirection() != 1) {
+            rtl = false;
+        }
+        Drawable[] compounds = textView.getCompoundDrawables();
+        if (rtl) {
+            Drawable start = compounds[2];
+            Drawable end = compounds[0];
+            compounds[0] = start;
+            compounds[2] = end;
+        }
+        return compounds;
     }
 }

@@ -5,7 +5,6 @@ import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
-import org.telegram.tgnet.TLRPC;
 
 public class zzaqp implements Closeable {
     private static final char[] bro = ")]}'\n".toCharArray();
@@ -127,7 +126,7 @@ public class zzaqp implements Closeable {
         } else if (i == 4) {
             this.brx[this.bry - 1] = 5;
             switch (zzdi(true)) {
-                case TLRPC.LAYER /*58*/:
+                case 58:
                     break;
                 case 61:
                     bI();
@@ -397,7 +396,7 @@ public class zzaqp implements Closeable {
                     case '\r':
                     case ' ':
                     case ',':
-                    case TLRPC.LAYER /*58*/:
+                    case ':':
                     case '[':
                     case ']':
                     case '{':
@@ -445,7 +444,7 @@ public class zzaqp implements Closeable {
                     case '\r':
                     case ' ':
                     case ',':
-                    case TLRPC.LAYER /*58*/:
+                    case ':':
                     case '[':
                     case ']':
                     case '{':
@@ -621,7 +620,7 @@ public class zzaqp implements Closeable {
             case '\r':
             case ' ':
             case ',':
-            case TLRPC.LAYER /*58*/:
+            case ':':
             case '[':
             case ']':
             case '{':

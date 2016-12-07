@@ -149,7 +149,7 @@
     <string name="ArticleByAuthor">di %1$s</string>
     <string name="ArticleDateByAuthor">%1$s di %2$s</string>
     <string name="AskAQuestion">Fai una domanda</string>
-    <string name="AskAQuestionInfo">Nota che il supporto di Telegram è fornito da volontari. Proviamo a rispondere quanto prima, ma potrebbe volerci del tempo.&lt;br&gt;&lt;br&gt;Dai un\'occhiata alle &lt;a href=\"https://telegram.org/faq/it#domande-generali\"&gt;Domande frequenti di Telegram&lt;/a&gt;: contengono suggerimenti importanti per &lt;a href=\"https://telegram.org/faq/it#risoluzione-dei-problemi\"&gt;risolvere i problemi&lt;/a&gt; e risposte a quasi tutte le domande.</string>
+    <string name="AskAQuestionInfo">Per favore nota che l\'assistenza di Telegram è fornita da volontari. Proviamo a rispondere quanto prima, ma potrebbe volerci del tempo.&lt;br&gt;&lt;br&gt;Dai un\'occhiata alle &lt;a href=\"https://telegram.org/faq/it#domande-generali\"&gt;Domande frequenti di Telegram&lt;/a&gt;: contengono suggerimenti importanti per &lt;a href=\"https://telegram.org/faq/it#risoluzione-dei-problemi\"&gt;risolvere i problemi&lt;/a&gt; e risposte a quasi tutte le domande.</string>
     <string name="AskButton">Chiedi a un volontario</string>
     <string name="AttachAudio">Messaggio vocale</string>
     <string name="AttachBotsHelp">Scorri verso il basso per i bot</string>
@@ -863,7 +863,7 @@
     <string name="NotificationMessageText">%1$s: %2$s</string>
     <string name="NotificationMessageVideo">%1$s ti ha inviato un video</string>
     <string name="NotificationMessagesPeopleDisplayOrder">%1$s %2$s</string>
-    <string name="NotificationUnrecognizedDevice">%1$s,\nAbbiamo rilevato un accesso al tuo account da un nuovo dispositivo il %2$s\n\nDispositivo: %3$s\nPosizione: %4$s\n\nSe non sei stato tu, puoi andare su Impostazioni - Privacy e sicurezza - Sessioni - Termina tutte le sessioni.\n\nSe pensi che qualcuno si sia collegato al tuo account contro il tuo volere, ti raccomandiamo di attivare la verifica in due passaggi nelle impostazioni di Privacy e Sicurezza.\n\nGrazie,\nil team di Telegram</string>
+    <string name="NotificationUnrecognizedDevice">%1$s,\nAbbiamo rilevato un accesso al tuo account da un nuovo dispositivo il %2$s\n\nDispositivo: %3$s\nPosizione: %4$s\n\nSe non sei stato tu, puoi andare nelle Impostazioni - Privacy e sicurezza - Sessioni - Termina tutte le sessioni.\n\nSe pensi che qualcuno si sia collegato al tuo account contro il tuo volere, puoi attivare la verifica in due passaggi nelle impostazioni di Privacy e sicurezza.\n\nSinceramente\nIl Team di Telegram</string>
     <string name="Notifications">Notifiche</string>
     <string name="NotificationsAndSounds">Notifiche e suoni</string>
     <string name="NotificationsCustom">Personalizzate</string>
@@ -1098,7 +1098,7 @@
     <string name="SendSticker">INVIA STICKER</string>
     <string name="SendingAudio">sta inviando un audio...</string>
     <string name="SendingFile">sta inviando un file...</string>
-    <string name="SendingGif">Invio gif...</string>
+    <string name="SendingGif">Invio GIF...</string>
     <string name="SendingPhoto">sta inviando una foto...</string>
     <string name="SendingVideo">Invio video...</string>
     <string name="SendingVideoStatus">sta inviando un video...</string>
@@ -1169,9 +1169,9 @@
     <string name="Stickers_other">%1$d sticker</string>
     <string name="Stickers_two">%1$d sticker</string>
     <string name="Stickers_zero">%1$d sticker</string>
-    <string name="Support">Supporto</string>
+    <string name="Support">Assistenza</string>
     <string name="SystemRoot">Root di sistema</string>
-    <string name="TapHereGifs">Premi qui per accedere alle GIF salvate</string>
+    <string name="TapHereGifs">Tocca qui per vedere le GIF salvate</string>
     <string name="TelegramFaq">Domande frequenti</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/it</string>
     <string name="TerminateAllSessions">Termina le altre sessioni</string>
@@ -1301,4 +1301,15 @@
     <string name="messages_other">%1$d messaggi</string>
     <string name="messages_two">%1$d messaggi</string>
     <string name="messages_zero">nessun messaggio</string>
+    <string name="GifCaption">Didascalia GIF</string>
+    <string name="InstantView">APERTURA RAPIDA</string>
+    <string name="IsSendingGame">%1$s sta giocando a un gioco...</string>
+    <string name="JumpToDate">Vai alla data</string>
+    <string name="NotificationsTurnOff">Disattiva</string>
+    <string name="NotificationsTurnOn">Attiva</string>
+    <string name="PermissionNoAudioVideo">Telegram deve accedere al microfono per poter registrare video.</string>
+    <string name="PreviewFeedback">Lascia un feedback su questa anteprima</string>
+    <string name="SendStickerPreview">Invia sticker</string>
+    <string name="SendingGame">sta giocando a un gioco...</string>
+    <string name="ViewPackPreview">Visualizza pacchetto</string>
 </resources>

@@ -49,6 +49,10 @@ import org.telegram.ui.Components.LayoutHelper;
 public class NotificationsSettingsActivity extends BaseFragment implements NotificationCenterDelegate {
     private int androidAutoAlertRow;
     private int badgeNumberRow;
+    private int callsRingtoneRow;
+    private int callsSectionRow;
+    private int callsSectionRow2;
+    private int callsVibrateRow;
     private int contactJoinedRow;
     private int eventsSectionRow;
     private int eventsSectionRow2;
@@ -101,7 +105,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
 
         public boolean isEnabled(int i) {
-            return (i == NotificationsSettingsActivity.this.messageSectionRow || i == NotificationsSettingsActivity.this.groupSectionRow || i == NotificationsSettingsActivity.this.inappSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow || i == NotificationsSettingsActivity.this.otherSectionRow || i == NotificationsSettingsActivity.this.resetSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow2 || i == NotificationsSettingsActivity.this.groupSectionRow2 || i == NotificationsSettingsActivity.this.inappSectionRow2 || i == NotificationsSettingsActivity.this.otherSectionRow2 || i == NotificationsSettingsActivity.this.resetSectionRow2) ? false : true;
+            return (i == NotificationsSettingsActivity.this.messageSectionRow || i == NotificationsSettingsActivity.this.groupSectionRow || i == NotificationsSettingsActivity.this.inappSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow || i == NotificationsSettingsActivity.this.otherSectionRow || i == NotificationsSettingsActivity.this.resetSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow2 || i == NotificationsSettingsActivity.this.groupSectionRow2 || i == NotificationsSettingsActivity.this.inappSectionRow2 || i == NotificationsSettingsActivity.this.otherSectionRow2 || i == NotificationsSettingsActivity.this.resetSectionRow2 || i == NotificationsSettingsActivity.this.callsSectionRow2 || i == NotificationsSettingsActivity.this.callsSectionRow) ? false : true;
         }
 
         public int getCount() {
@@ -138,6 +142,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     ((HeaderCell) view).setText(LocaleController.getString("NotificationsOther", R.string.NotificationsOther));
                 } else if (i == NotificationsSettingsActivity.this.resetSectionRow) {
                     ((HeaderCell) view).setText(LocaleController.getString("Reset", R.string.Reset));
+                } else if (i == NotificationsSettingsActivity.this.callsSectionRow) {
+                    ((HeaderCell) view).setText(LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings));
                 }
             }
             SharedPreferences preferences;
@@ -189,10 +195,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else if (i == NotificationsSettingsActivity.this.badgeNumberRow) {
                     checkCell.setTextAndCheck(LocaleController.getString("BadgeNumber", R.string.BadgeNumber), preferences.getBoolean("badgeNumber", true), true);
                     return view;
-                } else if (i != NotificationsSettingsActivity.this.inchatSoundRow) {
+                } else if (i == NotificationsSettingsActivity.this.inchatSoundRow) {
+                    checkCell.setTextAndCheck(LocaleController.getString("InChatSound", R.string.InChatSound), preferences.getBoolean("EnableInChatSound", true), true);
+                    return view;
+                } else if (i != NotificationsSettingsActivity.this.callsVibrateRow) {
                     return view;
                 } else {
-                    checkCell.setTextAndCheck(LocaleController.getString("InChatSound", R.string.InChatSound), preferences.getBoolean("EnableInChatSound", true), true);
+                    checkCell.setTextAndCheck(LocaleController.getString("Vibrate", R.string.Vibrate), preferences.getBoolean("EnableCallVibrate", true), true);
                     return view;
                 }
             } else if (type == 2) {
@@ -237,24 +246,32 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 TextSettingsCell textCell3 = (TextSettingsCell) view;
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                 String value;
-                if (i == NotificationsSettingsActivity.this.messageSoundRow || i == NotificationsSettingsActivity.this.groupSoundRow) {
+                if (i == NotificationsSettingsActivity.this.messageSoundRow || i == NotificationsSettingsActivity.this.groupSoundRow || i == NotificationsSettingsActivity.this.callsRingtoneRow) {
                     value = null;
                     if (i == NotificationsSettingsActivity.this.messageSoundRow) {
                         value = preferences.getString("GlobalSound", LocaleController.getString("SoundDefault", R.string.SoundDefault));
                     } else if (i == NotificationsSettingsActivity.this.groupSoundRow) {
                         value = preferences.getString("GroupSound", LocaleController.getString("SoundDefault", R.string.SoundDefault));
+                    } else if (i == NotificationsSettingsActivity.this.callsRingtoneRow) {
+                        value = preferences.getString("CallsRingtone", LocaleController.getString("SoundDefault", R.string.SoundDefault));
                     }
                     if (value.equals("NoSound")) {
                         value = LocaleController.getString("NoSound", R.string.NoSound);
                     }
+                    if (i == NotificationsSettingsActivity.this.callsRingtoneRow) {
+                        textCell3.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), value, true);
+                        return view;
+                    }
                     textCell3.setTextAndValue(LocaleController.getString("Sound", R.string.Sound), value, true);
                     return view;
-                } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow) {
+                } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow || i == NotificationsSettingsActivity.this.callsVibrateRow) {
                     value = 0;
                     if (i == NotificationsSettingsActivity.this.messageVibrateRow) {
                         value = preferences.getInt("vibrate_messages", 0);
                     } else if (i == NotificationsSettingsActivity.this.groupVibrateRow) {
                         value = preferences.getInt("vibrate_group", 0);
+                    } else if (i == NotificationsSettingsActivity.this.callsVibrateRow) {
+                        value = preferences.getInt("vibrate_calls", 0);
                     }
                     if (value == 0) {
                         textCell3.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), true);
@@ -329,7 +346,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         }
 
         public int getItemViewType(int i) {
-            if (i == NotificationsSettingsActivity.this.messageSectionRow || i == NotificationsSettingsActivity.this.groupSectionRow || i == NotificationsSettingsActivity.this.inappSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow || i == NotificationsSettingsActivity.this.otherSectionRow || i == NotificationsSettingsActivity.this.resetSectionRow) {
+            if (i == NotificationsSettingsActivity.this.messageSectionRow || i == NotificationsSettingsActivity.this.groupSectionRow || i == NotificationsSettingsActivity.this.inappSectionRow || i == NotificationsSettingsActivity.this.eventsSectionRow || i == NotificationsSettingsActivity.this.otherSectionRow || i == NotificationsSettingsActivity.this.resetSectionRow || i == NotificationsSettingsActivity.this.callsSectionRow) {
                 return 0;
             }
             if (i == NotificationsSettingsActivity.this.messageAlertRow || i == NotificationsSettingsActivity.this.messagePreviewRow || i == NotificationsSettingsActivity.this.groupAlertRow || i == NotificationsSettingsActivity.this.groupPreviewRow || i == NotificationsSettingsActivity.this.inappSoundRow || i == NotificationsSettingsActivity.this.inappVibrateRow || i == NotificationsSettingsActivity.this.inappPreviewRow || i == NotificationsSettingsActivity.this.contactJoinedRow || i == NotificationsSettingsActivity.this.pinnedMessageRow || i == NotificationsSettingsActivity.this.notificationsServiceRow || i == NotificationsSettingsActivity.this.badgeNumberRow || i == NotificationsSettingsActivity.this.inappPriorityRow || i == NotificationsSettingsActivity.this.inchatSoundRow || i == NotificationsSettingsActivity.this.androidAutoAlertRow || i == NotificationsSettingsActivity.this.notificationsServiceConnectionRow) {
@@ -338,7 +355,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             if (i == NotificationsSettingsActivity.this.messageLedRow || i == NotificationsSettingsActivity.this.groupLedRow) {
                 return 3;
             }
-            if (i == NotificationsSettingsActivity.this.eventsSectionRow2 || i == NotificationsSettingsActivity.this.groupSectionRow2 || i == NotificationsSettingsActivity.this.inappSectionRow2 || i == NotificationsSettingsActivity.this.otherSectionRow2 || i == NotificationsSettingsActivity.this.resetSectionRow2) {
+            if (i == NotificationsSettingsActivity.this.eventsSectionRow2 || i == NotificationsSettingsActivity.this.groupSectionRow2 || i == NotificationsSettingsActivity.this.inappSectionRow2 || i == NotificationsSettingsActivity.this.otherSectionRow2 || i == NotificationsSettingsActivity.this.resetSectionRow2 || i == NotificationsSettingsActivity.this.callsSectionRow2) {
                 return 4;
             }
             if (i == NotificationsSettingsActivity.this.resetNotificationsRow) {
@@ -440,6 +457,25 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             this.inappPriorityRow = i;
         } else {
             this.inappPriorityRow = -1;
+        }
+        if (MessagesController.getInstance().callsEnabled) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsSectionRow2 = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsSectionRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsVibrateRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsRingtoneRow = i;
+        } else {
+            this.callsRingtoneRow = -1;
+            this.callsVibrateRow = -1;
+            this.callsSectionRow = -1;
+            this.callsSectionRow2 = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -552,16 +588,16 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         z = false;
                     }
                     notificationsSettingsActivity.updateServerNotificationsSettings(z);
-                } else if (i == NotificationsSettingsActivity.this.messageSoundRow || i == NotificationsSettingsActivity.this.groupSoundRow) {
+                } else if (i == NotificationsSettingsActivity.this.messageSoundRow || i == NotificationsSettingsActivity.this.groupSoundRow || i == NotificationsSettingsActivity.this.callsRingtoneRow) {
                     try {
                         preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                         Intent intent = new Intent("android.intent.action.RINGTONE_PICKER");
-                        intent.putExtra("android.intent.extra.ringtone.TYPE", 2);
+                        intent.putExtra("android.intent.extra.ringtone.TYPE", i == NotificationsSettingsActivity.this.callsRingtoneRow ? 1 : 2);
                         intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
-                        intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(2));
+                        intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(i == NotificationsSettingsActivity.this.callsRingtoneRow ? 1 : 2));
                         Uri currentSound = null;
                         String defaultPath = null;
-                        Uri defaultUri = System.DEFAULT_NOTIFICATION_URI;
+                        Uri defaultUri = i == NotificationsSettingsActivity.this.callsRingtoneRow ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI;
                         if (defaultUri != null) {
                             defaultPath = defaultUri.getPath();
                         }
@@ -575,6 +611,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                             }
                         } else if (i == NotificationsSettingsActivity.this.groupSoundRow) {
                             path = preferences.getString("GroupSoundPath", defaultPath);
+                            if (path != null) {
+                                if (!path.equals("NoSound")) {
+                                    currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                                }
+                            }
+                        } else if (i == NotificationsSettingsActivity.this.callsRingtoneRow) {
+                            path = preferences.getString("CallsRingtonfePath", defaultPath);
                             if (path != null) {
                                 if (!path.equals("NoSound")) {
                                     currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
@@ -714,8 +757,16 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else {
                         return;
                     }
-                } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow) {
-                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, i == NotificationsSettingsActivity.this.groupVibrateRow, i == NotificationsSettingsActivity.this.messageVibrateRow, new Runnable() {
+                } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow || i == NotificationsSettingsActivity.this.callsVibrateRow) {
+                    String key = null;
+                    if (i == NotificationsSettingsActivity.this.messageVibrateRow) {
+                        key = "vibrate_messages";
+                    } else if (i == NotificationsSettingsActivity.this.groupVibrateRow) {
+                        key = "vibrate_group";
+                    } else if (i == NotificationsSettingsActivity.this.callsVibrateRow) {
+                        key = "vibrate_calls";
+                    }
+                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, key, new Runnable() {
                         public void run() {
                             if (NotificationsSettingsActivity.this.listView != null) {
                                 NotificationsSettingsActivity.this.listView.invalidateViews();
@@ -776,7 +827,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             if (ringtone != null) {
                 Ringtone rng = RingtoneManager.getRingtone(getParentActivity(), ringtone);
                 if (rng != null) {
-                    if (ringtone.equals(System.DEFAULT_NOTIFICATION_URI)) {
+                    if (ringtone.equals(requestCode == this.callsRingtoneRow ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI)) {
                         name = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                     } else {
                         name = rng.getTitle(getParentActivity());
@@ -800,6 +851,14 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else {
                     editor.putString("GroupSound", name);
                     editor.putString("GroupSoundPath", ringtone.toString());
+                }
+            } else if (requestCode == this.callsRingtoneRow) {
+                if (name == null || ringtone == null) {
+                    editor.putString("CallsRingtone", "NoSound");
+                    editor.putString("CallsRingtonePath", "NoSound");
+                } else {
+                    editor.putString("CallsRingtone", name);
+                    editor.putString("CallsRingtonePath", ringtone.toString());
                 }
             }
             editor.commit();

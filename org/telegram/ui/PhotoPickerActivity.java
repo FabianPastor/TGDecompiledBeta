@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build.VERSION;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -50,6 +51,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.AuthFailureError;
 import org.telegram.messenger.volley.RequestQueue;
@@ -83,6 +85,7 @@ import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
+import org.telegram.ui.VideoEditorActivity.VideoEditorActivityDelegate;
 
 public class PhotoPickerActivity extends BaseFragment implements NotificationCenterDelegate, PhotoViewerProvider {
     private boolean allowCaption = true;
@@ -118,7 +121,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public interface PhotoPickerActivityDelegate {
         void actionButtonPressed(boolean z);
 
-        boolean didSelectVideo(String str);
+        void didSelectVideo(String str, VideoEditedInfo videoEditedInfo, long j, long j2, String str2);
 
         void selectedPhotosChanged();
     }
@@ -489,7 +492,39 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         }
                         instance.openPhotoForSelect(arrayList, i, i2, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
                     }
-                } else if (i >= 0 && i < PhotoPickerActivity.this.selectedAlbum.photos.size() && PhotoPickerActivity.this.delegate.didSelectVideo(((PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(i)).path)) {
+                } else if (i >= 0 && i < PhotoPickerActivity.this.selectedAlbum.photos.size()) {
+                    String path = ((PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(i)).path;
+                    if (VERSION.SDK_INT >= 16) {
+                        Bundle args = new Bundle();
+                        args.putString("videoPath", path);
+                        VideoEditorActivity fragment = new VideoEditorActivity(args);
+                        fragment.setDelegate(new VideoEditorActivityDelegate() {
+                            public void didFinishEditVideo(String videoPath, long startTime, long endTime, int resultWidth, int resultHeight, int rotationValue, int originalWidth, int originalHeight, int bitrate, long estimatedSize, long estimatedDuration, String caption) {
+                                PhotoPickerActivity.this.removeSelfFromStack();
+                                VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
+                                videoEditedInfo.startTime = startTime;
+                                videoEditedInfo.endTime = endTime;
+                                videoEditedInfo.rotationValue = rotationValue;
+                                videoEditedInfo.originalWidth = originalWidth;
+                                videoEditedInfo.originalHeight = originalHeight;
+                                videoEditedInfo.bitrate = bitrate;
+                                videoEditedInfo.resultWidth = resultWidth;
+                                videoEditedInfo.resultHeight = resultHeight;
+                                videoEditedInfo.originalPath = videoPath;
+                                PhotoPickerActivity.this.delegate.didSelectVideo(videoPath, videoEditedInfo, estimatedSize, estimatedDuration, caption);
+                            }
+                        });
+                        if (!fragment.onFragmentCreate()) {
+                            PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
+                            PhotoPickerActivity.this.finishFragment();
+                        }
+                        if (PhotoPickerActivity.this.parentLayout.presentFragment(fragment, false, false, true)) {
+                            fragment.setParentChatActivity(PhotoPickerActivity.this.chatActivity);
+                            return;
+                        }
+                        return;
+                    }
+                    PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
                     PhotoPickerActivity.this.finishFragment();
                 }
             }

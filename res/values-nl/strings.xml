@@ -1301,4 +1301,15 @@
     <string name="messages_other">%1$d berichten</string>
     <string name="messages_two">%1$d berichten</string>
     <string name="messages_zero">geen berichten</string>
+    <string name="GifCaption">GIF-Onderschrift</string>
+    <string name="InstantView">SNELLE WEERGAVE</string>
+    <string name="IsSendingGame">%1$s speelt een spel</string>
+    <string name="JumpToDate">Ga naar datum</string>
+    <string name="NotificationsTurnOff">Uitschakelen</string>
+    <string name="NotificationsTurnOn">Inschakelen</string>
+    <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
+    <string name="PreviewFeedback">Feedback over deze voorvertoning</string>
+    <string name="SendStickerPreview">Sticker sturen</string>
+    <string name="SendingGame">speelt een spel</string>
+    <string name="ViewPackPreview">Bundel bekijken</string>
 </resources>

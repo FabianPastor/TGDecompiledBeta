@@ -39,6 +39,7 @@ public class ChatAvatarContainer extends FrameLayout {
     private BackupImageView avatarImageView;
     private int onlineCount = -1;
     private ChatActivity parentFragment;
+    private PlayingGameDrawable playingGameDrawable;
     private RecordStatusDrawable recordStatusDrawable;
     private SendingFileExDrawable sendingFileDrawable;
     private SimpleTextView subtitleTextView;
@@ -121,10 +122,18 @@ public class ChatAvatarContainer extends FrameLayout {
         recordStatusDrawable.setIsChat(z);
         this.sendingFileDrawable = new SendingFileExDrawable();
         SendingFileExDrawable sendingFileExDrawable = this.sendingFileDrawable;
+        if (chat != null) {
+            z = true;
+        } else {
+            z = false;
+        }
+        sendingFileExDrawable.setIsChat(z);
+        this.playingGameDrawable = new PlayingGameDrawable();
+        PlayingGameDrawable playingGameDrawable = this.playingGameDrawable;
         if (chat == null) {
             z2 = false;
         }
-        sendingFileExDrawable.setIsChat(z2);
+        playingGameDrawable.setIsChat(z2);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -185,18 +194,28 @@ public class ChatAvatarContainer extends FrameLayout {
                     this.typingDotsDrawable.start();
                     this.recordStatusDrawable.stop();
                     this.sendingFileDrawable.stop();
+                    this.playingGameDrawable.stop();
                     return;
                 } else if (type.intValue() == 1) {
                     this.subtitleTextView.setLeftDrawable(this.recordStatusDrawable);
                     this.recordStatusDrawable.start();
                     this.typingDotsDrawable.stop();
                     this.sendingFileDrawable.stop();
+                    this.playingGameDrawable.stop();
                     return;
                 } else if (type.intValue() == 2) {
                     this.subtitleTextView.setLeftDrawable(this.sendingFileDrawable);
                     this.sendingFileDrawable.start();
                     this.typingDotsDrawable.stop();
                     this.recordStatusDrawable.stop();
+                    this.playingGameDrawable.stop();
+                    return;
+                } else if (type.intValue() == 3) {
+                    this.subtitleTextView.setLeftDrawable(this.playingGameDrawable);
+                    this.playingGameDrawable.start();
+                    this.typingDotsDrawable.stop();
+                    this.recordStatusDrawable.stop();
+                    this.sendingFileDrawable.stop();
                     return;
                 } else {
                     return;
@@ -210,6 +229,7 @@ public class ChatAvatarContainer extends FrameLayout {
         this.typingDotsDrawable.stop();
         this.recordStatusDrawable.stop();
         this.sendingFileDrawable.stop();
+        this.playingGameDrawable.stop();
     }
 
     public void updateSubtitle() {

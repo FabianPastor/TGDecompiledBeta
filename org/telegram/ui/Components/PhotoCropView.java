@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.ui.ActionBar.Theme;
 
 public class PhotoCropView extends FrameLayout {
     private RectF animationEndValues;
@@ -56,7 +57,7 @@ public class PhotoCropView extends FrameLayout {
         this.circlePaint = new Paint();
         this.circlePaint.setColor(-1);
         this.halfPaint = new Paint();
-        this.halfPaint.setColor(NUM);
+        this.halfPaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.shadowPaint = new Paint();
         this.shadowPaint.setColor(436207616);
         setWillNotDraw(false);

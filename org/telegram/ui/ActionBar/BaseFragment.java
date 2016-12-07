@@ -273,10 +273,14 @@ public class BaseFragment {
     }
 
     public Dialog showDialog(Dialog dialog) {
-        return showDialog(dialog, false);
+        return showDialog(dialog, false, null);
     }
 
-    public Dialog showDialog(Dialog dialog, boolean allowInTransition) {
+    public Dialog showDialog(Dialog dialog, OnDismissListener onDismissListener) {
+        return showDialog(dialog, false, onDismissListener);
+    }
+
+    public Dialog showDialog(Dialog dialog, boolean allowInTransition, final OnDismissListener onDismissListener) {
         Dialog dialog2 = null;
         if (!(dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking || (!allowInTransition && this.parentLayout.checkTransitionAnimation()))) {
             try {
@@ -292,6 +296,9 @@ public class BaseFragment {
                 this.visibleDialog.setCanceledOnTouchOutside(true);
                 this.visibleDialog.setOnDismissListener(new OnDismissListener() {
                     public void onDismiss(DialogInterface dialog) {
+                        if (onDismissListener != null) {
+                            onDismissListener.onDismiss(dialog);
+                        }
                         BaseFragment.this.onDialogDismiss(BaseFragment.this.visibleDialog);
                         BaseFragment.this.visibleDialog = null;
                     }

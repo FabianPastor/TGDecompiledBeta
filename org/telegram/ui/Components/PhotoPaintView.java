@@ -192,12 +192,12 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         addView(this.entitiesView);
         this.dimView = new FrameLayout(context);
         this.dimView.setAlpha(0.0f);
-        this.dimView.setBackgroundColor(Theme.MSG_MEDIA_WEB_PREVIEW_INSTANT_BACKGROUND_COLOR);
+        this.dimView.setBackgroundColor(NUM);
         this.dimView.setVisibility(8);
         addView(this.dimView);
         this.textDimView = new FrameLayout(context);
         this.textDimView.setAlpha(0.0f);
-        this.textDimView.setBackgroundColor(Theme.MSG_MEDIA_WEB_PREVIEW_INSTANT_BACKGROUND_COLOR);
+        this.textDimView.setBackgroundColor(NUM);
         this.textDimView.setVisibility(8);
         this.textDimView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -292,7 +292,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             }
         });
         this.actionBar = new ActionBar(context);
-        this.actionBar.setBackgroundColor(NUM);
+        this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);

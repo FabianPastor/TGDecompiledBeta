@@ -199,7 +199,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         StickersQuery.checkStickers(1);
         this.stickersGridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight());
+                return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
             }
         };
         RecyclerListView recyclerListView = this.stickersGridView;
@@ -222,7 +222,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         recyclerListView.setAdapter(stickersGridAdapter);
         this.stickersGridView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                return StickerPreviewViewer.getInstance().onTouch(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), StickerMasksView.this.stickersOnItemClickListener);
+                return StickerPreviewViewer.getInstance().onTouch(event, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), StickerMasksView.this.stickersOnItemClickListener, null);
             }
         });
         this.stickersOnItemClickListener = new OnItemClickListener() {

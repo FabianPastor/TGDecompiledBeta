@@ -55,12 +55,13 @@ public class ConnectionsManager {
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
     private boolean appPaused = true;
+    private int appResumeCount;
     private int connectionState = native_getConnectionState();
-    private boolean isUpdating = false;
+    private boolean isUpdating;
     private int lastClassGuid = 1;
     private long lastPauseTime = System.currentTimeMillis();
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
-    private WakeLock wakeLock = null;
+    private WakeLock wakeLock;
 
     public static native void native_applyDatacenterAddress(int i, String str, int i2);
 
@@ -183,6 +184,7 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
                         public void run(int response, int errorCode, String errorText) {
+                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -190,8 +192,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e) {
-                                    e = e;
+                                } catch (Exception e2) {
+                                    e = e2;
                                     FileLog.e("tmessages", e);
                                     return;
                                 }
@@ -202,11 +204,10 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e("tmessages", tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e2) {
-                                    Throwable e3;
-                                    e3 = e2;
+                                } catch (Exception e3) {
+                                    e = e3;
                                     error = error2;
-                                    FileLog.e("tmessages", e3);
+                                    FileLog.e("tmessages", e);
                                     return;
                                 }
                             }
@@ -301,8 +302,17 @@ public class ConnectionsManager {
         if (!byScreenState) {
             this.appPaused = value;
             FileLog.d("tmessages", "app paused = " + value);
+            if (value) {
+                this.appResumeCount--;
+            } else {
+                this.appResumeCount++;
+            }
+            FileLog.d("tmessages", "app resume count " + this.appResumeCount);
+            if (this.appResumeCount < 0) {
+                this.appResumeCount = 0;
+            }
         }
-        if (value) {
+        if (this.appResumeCount == 0) {
             if (this.lastPauseTime == 0) {
                 this.lastPauseTime = System.currentTimeMillis();
             }

@@ -1747,7 +1747,7 @@ public class NotificationsController {
                     msgHeardIntent.putExtra("max_id", max_id);
                     unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgHeardIntent, C.SAMPLE_FLAG_DECODE_ONLY));
                     wearReplyAction = null;
-                    if (!(ChatObject.isChannel(chat) || AndroidUtilities.needShowPasscode(false) || UserConfig.isWaitingForPasscodeEnter)) {
+                    if (!((ChatObject.isChannel(chat) && (chat == null || !chat.megagroup)) || AndroidUtilities.needShowPasscode(false) || UserConfig.isWaitingForPasscodeEnter)) {
                         msgReplyIntent = new Intent();
                         msgReplyIntent.addFlags(32);
                         msgReplyIntent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");

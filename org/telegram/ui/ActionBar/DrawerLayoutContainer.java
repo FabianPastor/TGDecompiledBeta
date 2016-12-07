@@ -43,6 +43,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private Object lastInsets;
     private boolean maybeStartTracking;
     private int minDrawerMargin = ((int) ((64.0f * AndroidUtilities.density) + 0.5f));
+    private int paddingTop;
     private ActionBarLayout parentActionBarLayout;
     private float scrimOpacity;
     private Paint scrimPaint = new Paint();
@@ -359,9 +360,9 @@ public class DrawerLayoutContainer extends FrameLayout {
                 LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 try {
                     if (this.drawerLayout != child) {
-                        child.layout(lp.leftMargin, lp.topMargin, lp.leftMargin + child.getMeasuredWidth(), lp.topMargin + child.getMeasuredHeight());
+                        child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                     } else {
-                        child.layout(-child.getMeasuredWidth(), lp.topMargin, 0, lp.topMargin + child.getMeasuredHeight());
+                        child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
                     }
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
@@ -382,6 +383,18 @@ public class DrawerLayoutContainer extends FrameLayout {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(widthSize, heightSize);
+        if (VERSION.SDK_INT < 21) {
+            this.inLayout = true;
+            if (heightSize == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
+                if (getLayoutParams() instanceof MarginLayoutParams) {
+                    setPadding(0, AndroidUtilities.statusBarHeight, 0, 0);
+                }
+                heightSize = AndroidUtilities.displaySize.y;
+            } else if (getLayoutParams() instanceof MarginLayoutParams) {
+                setPadding(0, 0, 0, 0);
+            }
+            this.inLayout = false;
+        }
         boolean applyInsets = this.lastInsets != null && VERSION.SDK_INT >= 21;
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {

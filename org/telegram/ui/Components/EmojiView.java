@@ -68,6 +68,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
@@ -81,6 +82,7 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate;
 import org.telegram.ui.StickerPreviewViewer;
+import org.telegram.ui.StickerPreviewViewer.StickerPreviewViewerDelegate;
 
 public class EmojiView extends FrameLayout implements NotificationCenterDelegate {
     private static final OnScrollChangedListener NOP = new OnScrollChangedListener() {
@@ -125,6 +127,20 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int recentTabBum = -2;
     private HashMap<Long, StickerSetCovered> removingStickerSets = new HashMap();
     private boolean showGifs;
+    private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new StickerPreviewViewerDelegate() {
+        public void sentSticker(Document sticker) {
+            EmojiView.this.listener.onStickerSelected(sticker);
+        }
+
+        public void openSet(TL_messages_stickerSet set) {
+            int position = EmojiView.this.stickersGridAdapter.getPositionForPack(set);
+            if (position != -1) {
+                EmojiView.this.stickersLayoutManager.scrollToPositionWithOffset(position, 0);
+            } else {
+                EmojiView.this.listener.onShowStickerSet(set.set);
+            }
+        }
+    };
     private ArrayList<TL_messages_stickerSet> stickerSets = new ArrayList();
     private TextView stickersEmptyView;
     private StickersGridAdapter stickersGridAdapter;
@@ -631,7 +647,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         void onGifTab(boolean z);
 
-        void onShowStickerSet(StickerSetCovered stickerSetCovered);
+        void onShowStickerSet(StickerSet stickerSet);
 
         void onStickerSelected(Document document);
 
@@ -751,7 +767,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public int getPositionForPack(TL_messages_stickerSet stickerSet) {
-            return ((Integer) this.packStartRow.get(stickerSet)).intValue() * this.stickersPerRow;
+            Integer pos = (Integer) this.packStartRow.get(stickerSet);
+            if (pos == null) {
+                return -1;
+            }
+            return pos.intValue() * this.stickersPerRow;
         }
 
         public int getItemViewType(int position) {
@@ -796,7 +816,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         public void onBindViewHolder(ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0:
-                    ((StickerEmojiCell) holder.itemView).setSticker((Document) this.cache.get(Integer.valueOf(position)), false);
+                    Document sticker = (Document) this.cache.get(Integer.valueOf(position));
+                    ((StickerEmojiCell) holder.itemView).setSticker(sticker, false);
+                    ((StickerEmojiCell) holder.itemView).setRecent(EmojiView.this.recentStickers.contains(sticker));
                     return;
                 case 1:
                     if (position == this.totalItems) {
@@ -1081,7 +1103,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             StickersQuery.checkFeaturedStickers();
             this.stickersGridView = new RecyclerListView(context) {
                 public boolean onInterceptTouchEvent(MotionEvent event) {
-                    return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, EmojiView.this.stickersGridView, EmojiView.this.getMeasuredHeight());
+                    return super.onInterceptTouchEvent(event) || StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, EmojiView.this.stickersGridView, EmojiView.this.getMeasuredHeight(), EmojiView.this.stickerPreviewViewerDelegate);
                 }
 
                 public void setVisibility(int visibility) {
@@ -1113,7 +1135,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             recyclerListView.setAdapter(stickersGridAdapter);
             this.stickersGridView.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    return StickerPreviewViewer.getInstance().onTouch(event, EmojiView.this.stickersGridView, EmojiView.this.getMeasuredHeight(), EmojiView.this.stickersOnItemClickListener);
+                    return StickerPreviewViewer.getInstance().onTouch(event, EmojiView.this.stickersGridView, EmojiView.this.getMeasuredHeight(), EmojiView.this.stickersOnItemClickListener, EmojiView.this.stickerPreviewViewerDelegate);
                 }
             });
             this.stickersOnItemClickListener = new OnItemClickListener() {
@@ -1165,7 +1187,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 public void onItemClick(View view, int position) {
                     StickerSetCovered pack = (StickerSetCovered) EmojiView.this.trendingGridAdapter.positionsToSets.get(Integer.valueOf(position));
                     if (pack != null) {
-                        EmojiView.this.listener.onShowStickerSet(pack);
+                        EmojiView.this.listener.onShowStickerSet(pack.set);
                     }
                 }
             });

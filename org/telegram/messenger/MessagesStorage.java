@@ -79,7 +79,6 @@ import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
 import org.telegram.tgnet.TLRPC.TL_userStatusRecently;
-import org.telegram.tgnet.TLRPC.TL_webPagePending;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WallPaper;
 import org.telegram.tgnet.TLRPC.WebPage;
@@ -150,7 +149,7 @@ public class MessagesStorage {
 
     public MessagesStorage() {
         this.storageQueue.setPriority(10);
-        openDatabase();
+        openDatabase(true);
     }
 
     public SQLiteDatabase getDatabase() {
@@ -161,7 +160,7 @@ public class MessagesStorage {
         return this.storageQueue;
     }
 
-    public void openDatabase() {
+    public void openDatabase(boolean first) {
         this.cacheFile = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db");
         boolean createTable = false;
         if (!this.cacheFile.exists()) {
@@ -172,6 +171,7 @@ public class MessagesStorage {
             this.database.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
             this.database.executeFast("PRAGMA temp_store = 1").stepThis().dispose();
             if (createTable) {
+                FileLog.e("tmessages", "create new database");
                 this.database.executeFast("CREATE TABLE messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
@@ -272,12 +272,16 @@ public class MessagesStorage {
             }
         } catch (Throwable e3) {
             FileLog.e("tmessages", e3);
+            if (first && e3.getMessage().contains("malformed")) {
+                cleanupInternal();
+                openDatabase(false);
+            }
         }
         loadUnreadMessages();
         loadPendingTasks();
     }
 
-    public void updateDbToLastVersion(final int currentVersion) {
+    private void updateDbToLastVersion(final int currentVersion) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
@@ -579,30 +583,34 @@ public class MessagesStorage {
         });
     }
 
+    private void cleanupInternal() {
+        lastDateValue = 0;
+        lastSeqValue = 0;
+        lastPtsValue = 0;
+        lastQtsValue = 0;
+        lastSecretVersion = 0;
+        this.lastSavedSeq = 0;
+        this.lastSavedPts = 0;
+        this.lastSavedDate = 0;
+        this.lastSavedQts = 0;
+        secretPBytes = null;
+        secretG = 0;
+        if (this.database != null) {
+            this.database.close();
+            this.database = null;
+        }
+        if (this.cacheFile != null) {
+            this.cacheFile.delete();
+            this.cacheFile = null;
+        }
+    }
+
     public void cleanup(final boolean isLogin) {
         this.storageQueue.cleanupQueue();
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                MessagesStorage.lastDateValue = 0;
-                MessagesStorage.lastSeqValue = 0;
-                MessagesStorage.lastPtsValue = 0;
-                MessagesStorage.lastQtsValue = 0;
-                MessagesStorage.lastSecretVersion = 0;
-                MessagesStorage.this.lastSavedSeq = 0;
-                MessagesStorage.this.lastSavedPts = 0;
-                MessagesStorage.this.lastSavedDate = 0;
-                MessagesStorage.this.lastSavedQts = 0;
-                MessagesStorage.secretPBytes = null;
-                MessagesStorage.secretG = 0;
-                if (MessagesStorage.this.database != null) {
-                    MessagesStorage.this.database.close();
-                    MessagesStorage.this.database = null;
-                }
-                if (MessagesStorage.this.cacheFile != null) {
-                    MessagesStorage.this.cacheFile.delete();
-                    MessagesStorage.this.cacheFile = null;
-                }
-                MessagesStorage.this.openDatabase();
+                MessagesStorage.this.cleanupInternal();
+                MessagesStorage.this.openDatabase(false);
                 if (isLogin) {
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
@@ -2620,15 +2628,16 @@ Error: java.util.NoSuchElementException
         return result[0];
     }
 
-    public void getMessages(long dialog_id, int count, int max_id, int minDate, int classGuid, int load_type, boolean isChannel, int loadIndex) {
+    public void getMessages(long dialog_id, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, boolean isChannel, int loadIndex) {
         final int i = count;
         final int i2 = max_id;
         final boolean z = isChannel;
         final long j = dialog_id;
         final int i3 = load_type;
         final int i4 = minDate;
-        final int i5 = classGuid;
-        final int i6 = loadIndex;
+        final int i5 = offset_date;
+        final int i6 = classGuid;
+        final int i7 = loadIndex;
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 TL_messages_messages res = new TL_messages_messages();
@@ -2662,7 +2671,7 @@ Error: java.util.NoSuchElementException
                     int lower_id = (int) j;
                     if (lower_id != 0) {
                         boolean containMessage;
-                        if (!(i3 == 1 || i3 == 3 || i4 != 0)) {
+                        if (!(i3 == 1 || i3 == 3 || i3 == 4 || i4 != 0)) {
                             if (i3 == 2) {
                                 cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date FROM dialogs WHERE did = " + j, new Object[0]);
                                 if (cursor.next()) {
@@ -2762,7 +2771,7 @@ Error: java.util.NoSuchElementException
                             }
                             cursor.dispose();
                         }
-                        if (i3 == 3 || (queryFromServer && i3 == 2)) {
+                        if (i3 == 3 || i3 == 4 || (queryFromServer && i3 == 2)) {
                             cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0", new Object[]{Long.valueOf(j)}), new Object[0]);
                             if (cursor.next()) {
                                 last_message_id = cursor.intValue(0);
@@ -3077,16 +3086,16 @@ Error: java.util.NoSuchElementException
                     if (!chatsToLoad.isEmpty()) {
                         MessagesStorage.this.getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
                     }
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, true, i5, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i6, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 } catch (Throwable e2) {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
                     FileLog.e("tmessages", e2);
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, true, i5, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i6, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, true, i5, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i6, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 }
             }
         });
@@ -4274,7 +4283,6 @@ Error: java.util.NoSuchElementException
                                 }
                             }
                             cursor.dispose();
-                            MessagesStorage.this.database.executeFast(String.format(Locale.US, "DELETE FROM webpage_pending WHERE id IN (%s)", new Object[]{ids})).stepThis().dispose();
                             if (!messages.isEmpty()) {
                                 MessagesStorage.this.database.beginTransaction();
                                 SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
@@ -4610,7 +4618,7 @@ Error: java.util.NoSuchElementException
                 state2.bindByteBuffer(5, data);
                 state2.step();
             }
-            if ((message.media instanceof TL_messageMediaWebPage) && (message.media.webpage instanceof TL_webPagePending)) {
+            if (message.media instanceof TL_messageMediaWebPage) {
                 state5.requery();
                 state5.bindLong(1, message.media.webpage.id);
                 state5.bindLong(2, messageId);
@@ -4835,7 +4843,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -4888,6 +4895,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5396,12 +5404,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 58;
+                    message.media.bytes[0] = (byte) 60;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 58;
+                message.media.bytes[0] = (byte) 60;
                 message.flags |= 512;
             }
         }
@@ -5606,11 +5614,11 @@ Error: java.util.NoSuchElementException
                             maxId = ((Message) org_telegram_tgnet_TLRPC_messages_Messages.messages.get(0)).id;
                             MessagesStorage.this.closeHolesInTable("messages_holes", j, i2, maxId);
                             MessagesStorage.this.closeHolesInMedia(j, i2, maxId, -1);
-                        } else if (i == 3 || i == 2) {
-                            if (i2 == 0) {
-                                maxId = ConnectionsManager.DEFAULT_DATACENTER_ID;
-                            } else {
+                        } else if (i == 3 || i == 2 || i == 4) {
+                            if (i2 != 0 || i == 4) {
                                 maxId = ((Message) org_telegram_tgnet_TLRPC_messages_Messages.messages.get(0)).id;
+                            } else {
+                                maxId = ConnectionsManager.DEFAULT_DATACENTER_ID;
                             }
                             minId = ((Message) org_telegram_tgnet_TLRPC_messages_Messages.messages.get(org_telegram_tgnet_TLRPC_messages_Messages.messages.size() - 1)).id;
                             MessagesStorage.this.closeHolesInTable("messages_holes", j, minId, maxId);
@@ -5693,7 +5701,7 @@ Error: java.util.NoSuchElementException
                                 state2.step();
                             }
                             nativeByteBuffer.reuse();
-                            if ((message.media instanceof TL_messageMediaWebPage) && (message.media.webpage instanceof TL_webPagePending)) {
+                            if (message.media instanceof TL_messageMediaWebPage) {
                                 if (state5 == null) {
                                     state5 = MessagesStorage.this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
                                 }

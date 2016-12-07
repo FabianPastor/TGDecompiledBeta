@@ -1586,7 +1586,7 @@ public interface IGoogleMapDelegate extends IInterface {
                     onDestroy();
                     parcel2.writeNoException();
                     return true;
-                case TLRPC.LAYER /*58*/:
+                case 58:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IGoogleMapDelegate");
                     onLowMemory();
                     parcel2.writeNoException();
@@ -1600,7 +1600,7 @@ public interface IGoogleMapDelegate extends IInterface {
                     }
                     parcel2.writeInt(i3);
                     return true;
-                case 60:
+                case TLRPC.LAYER /*60*/:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IGoogleMapDelegate");
                     Bundle bundle = parcel.readInt() != 0 ? (Bundle) Bundle.CREATOR.createFromParcel(parcel) : null;
                     onSaveInstanceState(bundle);

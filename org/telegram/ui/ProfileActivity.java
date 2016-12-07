@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -129,7 +130,6 @@ import org.telegram.ui.Cells.AboutLinkCell.AboutLinkCellDelegate;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.LoadingCell;
-import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailCell;
@@ -1010,9 +1010,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         fragment.setChatInfo(ProfileActivity.this.info);
                         ProfileActivity.this.presentFragment(fragment);
                     } else if (position == ProfileActivity.this.groupsInCommonRow) {
-                        args = new Bundle();
-                        args.putInt("user_id", ProfileActivity.this.user_id);
-                        ProfileActivity.this.presentFragment(new CommonGroupsActivity(args));
+                        ProfileActivity.this.presentFragment(new CommonGroupsActivity(ProfileActivity.this.user_id));
                     } else if (position == ProfileActivity.this.settingsKeyRow) {
                         args = new Bundle();
                         args.putInt("chat_id", (int) (ProfileActivity.this.dialog_id >> 32));
@@ -1021,8 +1019,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         ProfileActivity.this.showDialog(AndroidUtilities.buildTTLAlert(ProfileActivity.this.getParentActivity(), ProfileActivity.this.currentEncryptedChat).create());
                     } else if (position == ProfileActivity.this.settingsNotificationsRow) {
                         long did;
-                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                        int[] selected = new int[1];
                         if (ProfileActivity.this.dialog_id != 0) {
                             did = ProfileActivity.this.dialog_id;
                         } else if (ProfileActivity.this.user_id != 0) {
@@ -1030,42 +1026,35 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             did = (long) (-ProfileActivity.this.chat_id);
                         }
-                        boolean hasOverride = preferences.contains("notify2_" + did);
-                        int value = preferences.getInt("notify2_" + did, 0);
-                        if (value == 0) {
-                            if (hasOverride) {
-                                selected[0] = 0;
-                            } else if (((int) did) < 0) {
-                                selected[0] = preferences.getBoolean("EnableGroup", true) ? 0 : 4;
-                            } else {
-                                selected[0] = preferences.getBoolean("EnableAll", true) ? 0 : 4;
-                            }
-                        } else if (value == 1) {
-                            selected[0] = 0;
-                        } else if (value == 2) {
-                            selected[0] = 4;
-                        } else {
-                            selected[0] = -1;
-                        }
                         String[] descriptions = new String[5];
-                        descriptions[0] = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                        descriptions[0] = LocaleController.getString("NotificationsTurnOn", R.string.NotificationsTurnOn);
                         descriptions[1] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
-                        descriptions[2] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8));
-                        descriptions[3] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
-                        descriptions[4] = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                        descriptions[2] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
+                        descriptions[3] = LocaleController.getString("NotificationsCustomize", R.string.NotificationsCustomize);
+                        descriptions[4] = LocaleController.getString("NotificationsTurnOff", R.string.NotificationsTurnOff);
+                        int i = 5;
+                        int[] icons = new int[]{R.drawable.notifications_s_on, R.drawable.notifications_s_1h, R.drawable.notifications_s_2d, R.drawable.notifications_s_custom, R.drawable.notifications_s_off};
                         View scrollView = new ScrollView(ProfileActivity.this.getParentActivity());
-                        LinearLayout linearLayout = new LinearLayout(ProfileActivity.this.getParentActivity());
-                        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
-                        linearLayout.setOrientation(1);
-                        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-                        int a = 0;
-                        while (a < descriptions.length) {
-                            RadioColorCell cell = new RadioColorCell(ProfileActivity.this.getParentActivity());
-                            cell.setTag(Integer.valueOf(a));
-                            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
-                            cell.setTextAndValue(descriptions[a], selected[0] == a);
-                            linearLayout.addView(cell);
-                            cell.setOnClickListener(new View.OnClickListener() {
+                        scrollView = new LinearLayout(ProfileActivity.this.getParentActivity());
+                        scrollView.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+                        scrollView.setOrientation(1);
+                        scrollView.addView(scrollView, LayoutHelper.createScroll(-1, -2, 51));
+                        for (int a = 0; a < descriptions.length; a++) {
+                            scrollView = new TextView(ProfileActivity.this.getParentActivity());
+                            scrollView.setTextColor(-14606047);
+                            scrollView.setTextSize(1, 16.0f);
+                            scrollView.setLines(1);
+                            scrollView.setMaxLines(1);
+                            scrollView.setCompoundDrawablesWithIntrinsicBounds(icons[a], 0, 0, 0);
+                            scrollView.setTag(Integer.valueOf(a));
+                            scrollView.setBackgroundResource(R.drawable.list_selector);
+                            scrollView.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
+                            scrollView.setSingleLine(true);
+                            scrollView.setGravity(19);
+                            scrollView.setCompoundDrawablePadding(AndroidUtilities.dp(26.0f));
+                            scrollView.setText(descriptions[a]);
+                            scrollView.addView(scrollView, LayoutHelper.createLinear(-1, 48, 51));
+                            scrollView.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
                                     int i = ((Integer) v.getTag()).intValue();
                                     Editor editor;
@@ -1080,14 +1069,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                             dialog.notify_settings = new TL_peerNotifySettings();
                                         }
                                         NotificationsController.updateServerNotificationsSettings(did);
+                                    } else if (i == 3) {
+                                        Bundle args = new Bundle();
+                                        args.putLong("dialog_id", did);
+                                        ProfileActivity.this.presentFragment(new ProfileNotificationsActivity(args));
                                     } else {
                                         long flags;
                                         int untilTime = ConnectionsManager.getInstance().getCurrentTime();
                                         if (i == 1) {
                                             untilTime += 3600;
                                         } else if (i == 2) {
-                                            untilTime += 28800;
-                                        } else if (i == 3) {
                                             untilTime += 172800;
                                         } else if (i == 4) {
                                             untilTime = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -1115,23 +1106,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                     ProfileActivity.this.dismissCurrentDialig();
                                 }
                             });
-                            a++;
                         }
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
                         builder.setView(scrollView);
-                        builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        builder.setNeutralButton(LocaleController.getString("NotificationsCustomize", R.string.NotificationsCustomize), new OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Bundle args = new Bundle();
-                                if (ProfileActivity.this.user_id != 0) {
-                                    args.putLong("dialog_id", ProfileActivity.this.dialog_id == 0 ? (long) ProfileActivity.this.user_id : ProfileActivity.this.dialog_id);
-                                } else if (ProfileActivity.this.chat_id != 0) {
-                                    args.putLong("dialog_id", (long) (-ProfileActivity.this.chat_id));
-                                }
-                                ProfileActivity.this.presentFragment(new ProfileNotificationsActivity(args));
-                            }
-                        });
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (position == ProfileActivity.this.startSecretChatRow) {
                         builder = new Builder(ProfileActivity.this.getParentActivity());
@@ -2783,7 +2761,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (!chat.admins_enabled || chat.creator || chat.admin) {
                         item.addSubItem(8, LocaleController.getString("EditName", R.string.EditName), 0);
                     }
-                    if (chat.creator && (this.info == null || this.info.participants.participants.size() > 1)) {
+                    if (chat.creator && (this.info == null || this.info.participants.participants.size() > 0)) {
                         item.addSubItem(13, LocaleController.getString("ConvertGroupMenu", R.string.ConvertGroupMenu), 0);
                     }
                     item.addSubItem(7, LocaleController.getString("DeleteAndExit", R.string.DeleteAndExit), 0);

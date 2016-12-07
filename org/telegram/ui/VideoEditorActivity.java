@@ -84,10 +84,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     private ImageView compressItem;
     private boolean created;
     private CharSequence currentCaption;
+    private String currentSubtitle;
     private VideoEditorActivityDelegate delegate;
     private long endTime;
     private long esimatedDuration;
     private int estimatedSize;
+    private boolean firstCaptionLayout;
     private float lastProgress;
     private LinearLayoutManager mentionLayoutManager;
     private AnimatorSet mentionListAnimation;
@@ -97,7 +99,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     private boolean muteVideo;
     private boolean needCompressVideo;
     private boolean needSeek;
-    private String oldTitle;
     private int originalBitrate;
     private int originalHeight;
     private long originalSize;
@@ -136,8 +137,13 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                                     try {
                                         VideoEditorActivity.this.videoPlayer.pause();
                                         VideoEditorActivity.this.onPlayComplete();
-                                    } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        try {
+                                            VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
+                                        } catch (Throwable e) {
+                                            FileLog.e("tmessages", e);
+                                        }
+                                    } catch (Throwable e2) {
+                                        FileLog.e("tmessages", e2);
                                     }
                                 }
                             }
@@ -218,6 +224,11 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     }
 
     public void onFragmentDestroy() {
+        try {
+            getParentActivity().getWindow().clearFlags(128);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
         if (this.videoTimelineView != null) {
             this.videoTimelineView.destroy();
         }
@@ -226,8 +237,8 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 this.videoPlayer.stop();
                 this.videoPlayer.release();
                 this.videoPlayer = null;
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
             }
         }
         if (this.captionEditText != null) {
@@ -247,7 +258,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    if (VideoEditorActivity.this.captionEditText.isPopupShowing() || VideoEditorActivity.this.captionEditText.isKeyboardVisible()) {
+                    if (VideoEditorActivity.this.pickerView.getVisibility() != 0) {
                         VideoEditorActivity.this.closeCaptionEnter(false);
                     } else {
                         VideoEditorActivity.this.finishFragment();
@@ -269,10 +280,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             }
 
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int heightSize;
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-                int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-                setMeasuredDimension(widthSize, heightSize);
-                if (!AndroidUtilities.isTablet()) {
+                setMeasuredDimension(widthSize, MeasureSpec.getSize(heightMeasureSpec));
+                if (AndroidUtilities.isTablet()) {
+                    heightSize = AndroidUtilities.dp(424.0f);
+                } else {
                     heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
                 }
                 measureChildWithMargins(VideoEditorActivity.this.captionEditText, widthMeasureSpec, 0, heightMeasureSpec, 0);
@@ -285,7 +298,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
                                 child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, C.ENCODING_PCM_32BIT));
                             } else if (AndroidUtilities.isTablet()) {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight), C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), MeasureSpec.getSize(heightMeasureSpec) - inputFieldHeight), C.ENCODING_PCM_32BIT));
                             } else {
                                 child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, C.ENCODING_PCM_32BIT));
                             }
@@ -317,7 +330,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 int count = getChildCount();
                 int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? 0 : VideoEditorActivity.this.captionEditText.getEmojiPadding();
                 if (AndroidUtilities.isTablet()) {
-                    heightSize = getMeasuredHeight();
+                    heightSize = AndroidUtilities.dp(424.0f);
                 } else {
                     heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
                 }
@@ -361,17 +374,31 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         }
                         if (child == VideoEditorActivity.this.mentionListView) {
                             childTop = (((b - paddingBottom) - t) - height) - lp.bottomMargin;
-                            childTop = (VideoEditorActivity.this.captionEditText.isPopupShowing() || VideoEditorActivity.this.captionEditText.isKeyboardVisible() || VideoEditorActivity.this.captionEditText.getEmojiPadding() != 0) ? childTop - VideoEditorActivity.this.captionEditText.getMeasuredHeight() : childTop + AndroidUtilities.dp(400.0f);
+                            if (VideoEditorActivity.this.pickerView.getVisibility() == 0 || (VideoEditorActivity.this.firstCaptionLayout && !VideoEditorActivity.this.captionEditText.isPopupShowing() && !VideoEditorActivity.this.captionEditText.isKeyboardVisible() && VideoEditorActivity.this.captionEditText.getEmojiPadding() == 0)) {
+                                childTop += AndroidUtilities.dp(400.0f);
+                            } else {
+                                childTop -= VideoEditorActivity.this.captionEditText.getMeasuredHeight();
+                            }
                         } else if (child == VideoEditorActivity.this.captionEditText) {
                             childTop = (((b - paddingBottom) - t) - height) - lp.bottomMargin;
-                            if (!(VideoEditorActivity.this.captionEditText.isPopupShowing() || VideoEditorActivity.this.captionEditText.isKeyboardVisible() || VideoEditorActivity.this.captionEditText.getEmojiPadding() != 0)) {
+                            if (VideoEditorActivity.this.pickerView.getVisibility() == 0 || (VideoEditorActivity.this.firstCaptionLayout && !VideoEditorActivity.this.captionEditText.isPopupShowing() && !VideoEditorActivity.this.captionEditText.isKeyboardVisible() && VideoEditorActivity.this.captionEditText.getEmojiPadding() == 0)) {
                                 childTop += AndroidUtilities.dp(400.0f);
+                            } else {
+                                VideoEditorActivity.this.firstCaptionLayout = false;
                             }
                         } else if (VideoEditorActivity.this.captionEditText.isPopupView(child)) {
-                            childTop = (AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) : VideoEditorActivity.this.captionEditText.getBottom();
+                            if (AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) {
+                                childTop = (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            } else {
+                                childTop = VideoEditorActivity.this.captionEditText.getBottom();
+                            }
                         } else if (child == VideoEditorActivity.this.textureView) {
                             childLeft = ((r - l) - VideoEditorActivity.this.textureView.getMeasuredWidth()) / 2;
-                            childTop = AndroidUtilities.dp(14.0f);
+                            if (AndroidUtilities.isTablet()) {
+                                childTop = (((heightSize - AndroidUtilities.dp(166.0f)) - VideoEditorActivity.this.textureView.getMeasuredHeight()) / 2) + AndroidUtilities.dp(14.0f);
+                            } else {
+                                childTop = (((heightSize - AndroidUtilities.dp(166.0f)) - VideoEditorActivity.this.textureView.getMeasuredHeight()) / 2) + AndroidUtilities.dp(14.0f);
+                            }
                         }
                         child.layout(childLeft, childTop, childLeft + width, childTop + height);
                     }
@@ -426,19 +453,13 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             public void onClick(View v) {
                 VideoEditorActivity.this.captionEditText.setFieldText(VideoEditorActivity.this.currentCaption);
                 VideoEditorActivity.this.pickerView.setVisibility(8);
+                VideoEditorActivity.this.firstCaptionLayout = true;
                 if (!AndroidUtilities.isTablet()) {
                     VideoEditorActivity.this.videoSeekBarView.setVisibility(8);
                     VideoEditorActivity.this.videoTimelineView.setVisibility(8);
                 }
-                LayoutParams layoutParams = (LayoutParams) VideoEditorActivity.this.captionEditText.getLayoutParams();
-                layoutParams.bottomMargin = 0;
-                VideoEditorActivity.this.captionEditText.setLayoutParams(layoutParams);
-                layoutParams = (LayoutParams) VideoEditorActivity.this.mentionListView.getLayoutParams();
-                layoutParams.bottomMargin = 0;
-                VideoEditorActivity.this.mentionListView.setLayoutParams(layoutParams);
                 VideoEditorActivity.this.captionEditText.openKeyboard();
-                VideoEditorActivity.this.oldTitle = VideoEditorActivity.this.actionBar.getSubtitle();
-                VideoEditorActivity.this.actionBar.setTitle(LocaleController.getString("VideoCaption", R.string.VideoCaption));
+                VideoEditorActivity.this.actionBar.setTitle(VideoEditorActivity.this.muteVideo ? LocaleController.getString("GifCaption", R.string.GifCaption) : LocaleController.getString("VideoCaption", R.string.VideoCaption));
                 VideoEditorActivity.this.actionBar.setSubtitle(null);
             }
         });
@@ -504,11 +525,16 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         if (VideoEditorActivity.this.videoPlayer.isPlaying()) {
                             VideoEditorActivity.this.videoPlayer.pause();
                             VideoEditorActivity.this.playButton.setImageResource(R.drawable.video_edit_play);
+                            try {
+                                VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
+                            }
                         }
                         VideoEditorActivity.this.videoPlayer.setOnSeekCompleteListener(null);
                         VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
                     }
                     VideoEditorActivity.this.needSeek = true;
                     VideoEditorActivity.this.videoSeekBarView.setProgress(VideoEditorActivity.this.videoTimelineView.getLeftProgress());
@@ -522,11 +548,16 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         if (VideoEditorActivity.this.videoPlayer.isPlaying()) {
                             VideoEditorActivity.this.videoPlayer.pause();
                             VideoEditorActivity.this.playButton.setImageResource(R.drawable.video_edit_play);
+                            try {
+                                VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
+                            }
                         }
                         VideoEditorActivity.this.videoPlayer.setOnSeekCompleteListener(null);
                         VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
                     }
                     VideoEditorActivity.this.needSeek = true;
                     VideoEditorActivity.this.videoSeekBarView.setProgress(VideoEditorActivity.this.videoTimelineView.getLeftProgress());
@@ -594,7 +625,13 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     if (VideoEditorActivity.this.videoPlayer.isPlaying()) {
                         VideoEditorActivity.this.videoPlayer.pause();
                         VideoEditorActivity.this.playButton.setImageResource(R.drawable.video_edit_play);
-                        return;
+                        try {
+                            VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
+                            return;
+                        } catch (Throwable e) {
+                            FileLog.e("tmessages", e);
+                            return;
+                        }
                     }
                     try {
                         VideoEditorActivity.this.playButton.setImageDrawable(null);
@@ -615,15 +652,29 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                                 VideoEditorActivity.this.videoSeekBarView.setProgress(VideoEditorActivity.this.lastProgress);
                             }
                         });
+                        VideoEditorActivity.this.videoPlayer.setOnCompletionListener(new OnCompletionListener() {
+                            public void onCompletion(MediaPlayer mp) {
+                                try {
+                                    VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
+                                } catch (Throwable e) {
+                                    FileLog.e("tmessages", e);
+                                }
+                            }
+                        });
                         VideoEditorActivity.this.videoPlayer.start();
+                        try {
+                            VideoEditorActivity.this.getParentActivity().getWindow().addFlags(128);
+                        } catch (Throwable e2) {
+                            FileLog.e("tmessages", e2);
+                        }
                         synchronized (VideoEditorActivity.this.sync) {
                             if (VideoEditorActivity.this.thread == null) {
                                 VideoEditorActivity.this.thread = new Thread(VideoEditorActivity.this.progressRunnable);
                                 VideoEditorActivity.this.thread.start();
                             }
                         }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                    } catch (Throwable e22) {
+                        FileLog.e("tmessages", e22);
                     }
                 }
             }
@@ -635,6 +686,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.captionEditText = new PhotoViewerCaptionEnterView(context, frameLayout, null);
         this.captionEditText.setForceFloatingEmoji(AndroidUtilities.isTablet());
         this.captionEditText.setDelegate(new PhotoViewerCaptionEnterViewDelegate() {
+            private int[] location = new int[2];
+            private int previousSize;
+            private int previousY;
+
             public void onCaptionEnter() {
                 VideoEditorActivity.this.closeCaptionEnter(true);
             }
@@ -664,10 +719,15 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         VideoEditorActivity.this.mentionListView.setVisibility(0);
                     }
                 }
-                VideoEditorActivity.this.fragmentView.requestLayout();
+                VideoEditorActivity.this.fragmentView.getLocationInWindow(this.location);
+                if (this.previousSize != size || this.previousY != this.location[1]) {
+                    VideoEditorActivity.this.fragmentView.requestLayout();
+                    this.previousSize = size;
+                    this.previousY = this.location[1];
+                }
             }
         });
-        frameLayout.addView(this.captionEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 0.0f, -400.0f));
+        frameLayout.addView(this.captionEditText, LayoutHelper.createFrame(-1, -2, 83));
         this.captionEditText.onCreate();
         this.mentionListView = new RecyclerListView(context);
         this.mentionListView.setTag(Integer.valueOf(5));
@@ -678,7 +738,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         };
         this.mentionLayoutManager.setOrientation(1);
         this.mentionListView.setLayoutManager(this.mentionLayoutManager);
-        this.mentionListView.setBackgroundColor(NUM);
+        this.mentionListView.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.mentionListView.setVisibility(8);
         this.mentionListView.setClipToPadding(true);
         this.mentionListView.setOverScrollMode(2);
@@ -809,6 +869,19 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    public void onResume() {
+        super.onResume();
+        if (this.textureView != null) {
+            try {
+                if (this.playerPrepared && !this.videoPlayer.isPlaying()) {
+                    this.videoPlayer.seekTo((int) (this.videoSeekBarView.getProgress() * this.videoDuration));
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+    }
+
     public void setParentChatActivity(ChatActivity chatActivity) {
         this.parentChatActivity = chatActivity;
     }
@@ -817,19 +890,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         if (apply) {
             this.currentCaption = this.captionEditText.getFieldCharSequence();
         }
-        this.actionBar.setSubtitle(this.oldTitle);
+        this.actionBar.setSubtitle(this.currentSubtitle);
         this.pickerView.setVisibility(0);
         if (!AndroidUtilities.isTablet()) {
             this.videoSeekBarView.setVisibility(0);
             this.videoTimelineView.setVisibility(0);
         }
-        LayoutParams layoutParams = (LayoutParams) this.captionEditText.getLayoutParams();
-        layoutParams.bottomMargin = -AndroidUtilities.dp(400.0f);
-        this.captionEditText.setLayoutParams(layoutParams);
-        layoutParams = (LayoutParams) this.mentionListView.getLayoutParams();
-        layoutParams.bottomMargin = -AndroidUtilities.dp(400.0f);
-        this.mentionListView.setLayoutParams(layoutParams);
         this.actionBar.setTitle(this.muteVideo ? LocaleController.getString("AttachGif", R.string.AttachGif) : LocaleController.getString("AttachVideo", R.string.AttachVideo));
+        this.actionBar.setSubtitle(this.muteVideo ? null : this.currentSubtitle);
         this.captionItem.setImageResource(TextUtils.isEmpty(this.currentCaption) ? R.drawable.photo_text : R.drawable.photo_text2);
         if (this.captionEditText.isPopupShowing()) {
             this.captionEditText.hidePopup();
@@ -852,6 +920,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         }
         if (this.muteVideo) {
             this.actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
+            this.actionBar.setSubtitle(null);
             this.muteItem.setImageResource(R.drawable.volume_off);
             if (this.captionItem.getVisibility() == 0) {
                 this.needCompressVideo = true;
@@ -864,6 +933,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             return;
         }
         this.actionBar.setTitle(LocaleController.getString("AttachVideo", R.string.AttachVideo));
+        this.actionBar.setSubtitle(this.currentSubtitle);
         this.muteItem.setImageResource(R.drawable.volume_on);
         if (this.captionItem.getVisibility() == 0) {
             this.compressItem.setClickable(true);
@@ -892,6 +962,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         if (this.actionBar != null) {
             int width;
             int height;
+            CharSequence charSequence;
             this.esimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
             if (this.compressItem.getVisibility() == 8 || (this.compressItem.getVisibility() == 0 && !this.needCompressVideo)) {
                 width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalHeight : this.originalWidth;
@@ -916,7 +987,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             String videoDimension = String.format("%dx%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
             int seconds = ((int) Math.ceil((double) (this.esimatedDuration / 1000))) - (((int) ((this.esimatedDuration / 1000) / 60)) * 60);
             String videoTimeSize = String.format("%d:%02d, ~%s", new Object[]{Integer.valueOf((int) ((this.esimatedDuration / 1000) / 60)), Integer.valueOf(seconds), AndroidUtilities.formatFileSize((long) this.estimatedSize)});
-            this.actionBar.setSubtitle(String.format("%s, %s", new Object[]{videoDimension, videoTimeSize}));
+            this.currentSubtitle = String.format("%s, %s", new Object[]{videoDimension, videoTimeSize});
+            ActionBar actionBar = this.actionBar;
+            if (this.muteVideo) {
+                charSequence = null;
+            } else {
+                charSequence = this.currentSubtitle;
+            }
+            actionBar.setSubtitle(charSequence);
         }
     }
 
@@ -942,15 +1020,15 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
                 isAvc = false;
             }
-            for (Box box : boxes) {
-                TrackBox trackBox = (TrackBox) box;
+            for (int b = 0; b < boxes.size(); b++) {
+                TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
                 long sampleSizes = 0;
                 long trackBitrate = 0;
                 try {
                     MediaBox mediaBox = trackBox.getMediaBox();
                     MediaHeaderBox mediaHeaderBox = mediaBox.getMediaHeaderBox();
-                    for (long size : mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes()) {
-                        sampleSizes += size;
+                    for (long j : mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes()) {
+                        sampleSizes += j;
                     }
                     this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
                     trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / this.videoDuration));

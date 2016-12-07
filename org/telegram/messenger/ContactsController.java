@@ -48,6 +48,7 @@ import org.telegram.tgnet.TLRPC.TL_help_inviteText;
 import org.telegram.tgnet.TLRPC.TL_importedContact;
 import org.telegram.tgnet.TLRPC.TL_inputPhoneContact;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyChatInvite;
+import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyStatusTimestamp;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
@@ -59,6 +60,7 @@ import org.telegram.tgnet.TLRPC.contacts_Contacts;
 public class ContactsController {
     private static volatile ContactsController Instance = null;
     private static final Object loadContactsSync = new Object();
+    private ArrayList<PrivacyRule> callPrivacyRules = null;
     private int completedRequestsCount;
     public ArrayList<TL_contact> contacts = new ArrayList();
     public HashMap<Integer, Contact> contactsBook = new HashMap();
@@ -75,10 +77,11 @@ public class ContactsController {
     private boolean ignoreChanges = false;
     private String inviteText;
     private String lastContactsVersions = "";
+    private int loadingCallsInfo;
     private boolean loadingContacts = false;
-    private int loadingDeleteInfo = 0;
-    private int loadingGroupInfo = 0;
-    private int loadingLastSeenInfo = 0;
+    private int loadingDeleteInfo;
+    private int loadingGroupInfo;
+    private int loadingLastSeenInfo;
     private final Object observerLock = new Object();
     public ArrayList<Contact> phoneBookContacts = new ArrayList();
     private ArrayList<PrivacyRule> privacyRules = null;
@@ -175,6 +178,7 @@ public class ContactsController {
         this.deleteAccountTTL = 0;
         this.loadingLastSeenInfo = 0;
         this.loadingGroupInfo = 0;
+        this.loadingCallsInfo = 0;
         Utilities.globalQueue.postRunnable(new Runnable() {
             public void run() {
                 ContactsController.this.completedRequestsCount = 0;
@@ -1717,6 +1721,28 @@ public class ContactsController {
                 }
             });
         }
+        if (this.loadingCallsInfo == 0) {
+            this.loadingCallsInfo = 1;
+            req = new TL_account_getPrivacy();
+            req.key = new TL_inputPrivacyKeyPhoneCall();
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (error == null) {
+                                TL_account_privacyRules rules = response;
+                                MessagesController.getInstance().putUsers(rules.users, false);
+                                ContactsController.this.callPrivacyRules = rules.rules;
+                                ContactsController.this.loadingCallsInfo = 2;
+                            } else {
+                                ContactsController.this.loadingCallsInfo = 0;
+                            }
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
+                        }
+                    });
+                }
+            });
+        }
         if (this.loadingGroupInfo == 0) {
             this.loadingGroupInfo = 1;
             req = new TL_account_getPrivacy();
@@ -1758,19 +1784,28 @@ public class ContactsController {
         return this.loadingLastSeenInfo != 2;
     }
 
+    public boolean getLoadingCallsInfo() {
+        return this.loadingCallsInfo != 2;
+    }
+
     public boolean getLoadingGroupInfo() {
         return this.loadingGroupInfo != 2;
     }
 
-    public ArrayList<PrivacyRule> getPrivacyRules(boolean isGroup) {
-        if (isGroup) {
+    public ArrayList<PrivacyRule> getPrivacyRules(int type) {
+        if (type == 2) {
+            return this.callPrivacyRules;
+        }
+        if (type == 1) {
             return this.groupPrivacyRules;
         }
         return this.privacyRules;
     }
 
-    public void setPrivacyRules(ArrayList<PrivacyRule> rules, boolean isGroup) {
-        if (isGroup) {
+    public void setPrivacyRules(ArrayList<PrivacyRule> rules, int type) {
+        if (type == 2) {
+            this.callPrivacyRules = rules;
+        } else if (type == 1) {
             this.groupPrivacyRules = rules;
         } else {
             this.privacyRules = rules;

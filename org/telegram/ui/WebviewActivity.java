@@ -25,6 +25,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
@@ -49,6 +50,14 @@ public class WebviewActivity extends BaseFragment {
     private ActionBarMenuItem progressItem;
     private ContextProgressView progressView;
     private String short_param;
+    public Runnable typingRunnable = new Runnable() {
+        public void run() {
+            if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null && WebviewActivity.this.typingRunnable != null) {
+                MessagesController.getInstance().sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
+                AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
+            }
+        }
+    };
     private WebView webView;
 
     private class TelegramWebviewProxy {
@@ -103,6 +112,8 @@ public class WebviewActivity extends BaseFragment {
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        AndroidUtilities.cancelRunOnUIThread(this.typingRunnable);
+        this.typingRunnable = null;
         try {
             ViewParent parent = this.webView.getParent();
             if (parent != null) {
@@ -174,6 +185,12 @@ public class WebviewActivity extends BaseFragment {
         });
         frameLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f));
         return this.fragmentView;
+    }
+
+    public void onResume() {
+        super.onResume();
+        AndroidUtilities.cancelRunOnUIThread(this.typingRunnable);
+        this.typingRunnable.run();
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {

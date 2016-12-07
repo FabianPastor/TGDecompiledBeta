@@ -119,7 +119,7 @@
     <string name="ArchivedMasks">Máscaras archivadas</string>
     <string name="ArchivedMasksAlertInfo">Algunos de tus packs de máscaras más viejos fueron archivados. Puedes reactivarlos desde los ajustes de máscaras.</string>
     <string name="ArchivedMasksAlertTitle">Máscaras archivadas</string>
-    <string name="ArchivedMasksEmpty">Máscaras no archivadas</string>
+    <string name="ArchivedMasksEmpty">Sin máscaras archivadas</string>
     <string name="ArchivedMasksInfo">Puedes instalar hasta 200 packs de máscaras. Cuando instales más, se archivarán los que no usas.</string>
     <string name="ArchivedStickers">Stickers archivados</string>
     <string name="ArchivedStickersAlertInfo">Algunos de tus packs de stickers más viejos fueron archivados. Puedes reactivarlos desde los ajustes de Stickers.</string>
@@ -873,8 +873,8 @@
     <string name="NotificationsLed">LED</string>
     <string name="NotificationsLedColor">Color</string>
     <string name="NotificationsLedInfo">LED es una pequeña luz que parpadea en algunos dispositivos para señalar los nuevos mensajes.</string>
-    <string name="NotificationsOff">Apagadas</string>
-    <string name="NotificationsOn">Encendidas</string>
+    <string name="NotificationsOff">Desactivadas</string>
+    <string name="NotificationsOn">Activadas</string>
     <string name="NotificationsOther">Otras</string>
     <string name="NotificationsPriority">Prioridad</string>
     <string name="NotificationsPriorityDefault">Por defecto</string>
@@ -1301,6 +1301,17 @@
     <string name="messages_other">%1$d mensajes</string>
     <string name="messages_two">%1$d mensajes</string>
     <string name="messages_zero">Sin mensajes</string>
+    <string name="GifCaption">Comentario en el GIF</string>
+    <string name="InstantView">VISTA RÁPIDA</string>
+    <string name="IsSendingGame">%1$s está jugando...</string>
+    <string name="JumpToDate">Ir a la fecha</string>
+    <string name="NotificationsTurnOff">Desactivar</string>
+    <string name="NotificationsTurnOn">Activar</string>
+    <string name="PermissionNoAudioVideo">Telegram necesita acceso a tu micrófono, para que puedas grabar vídeos.</string>
+    <string name="PreviewFeedback">Enviar comentarios sobre esta vista previa</string>
+    <string name="SendStickerPreview">Enviar sticker</string>
+    <string name="SendingGame">jugando...</string>
+    <string name="ViewPackPreview">Ver pack</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Esta aplicación</string>
     <string name="hockeyapp_crash_dialog_message">¿Te gustaría enviar un informe anónimo para que podamos arreglar el problema?</string>
     <string name="hockeyapp_crash_dialog_negative_button">No enviar</string>

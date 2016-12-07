@@ -61,8 +61,10 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.ChatActivityEnterView.ChatActivityEnterViewDelegate;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PlayingGameDrawable;
 import org.telegram.ui.Components.PopupAudioView;
 import org.telegram.ui.Components.RecordStatusDrawable;
+import org.telegram.ui.Components.SendingFileExDrawable;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
@@ -91,10 +93,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private TextView nameTextView;
     private Runnable onAnimationEndRunnable = null;
     private TextView onlineTextView;
+    private PlayingGameDrawable playingGameDrawable;
     private RelativeLayout popupContainer;
     private ArrayList<MessageObject> popupMessages = new ArrayList();
     private RecordStatusDrawable recordStatusDrawable;
     private ViewGroup rightView;
+    private SendingFileExDrawable sendingFileDrawable;
     private boolean startedMoving = false;
     private ArrayList<ViewGroup> textViews = new ArrayList();
     private TypingDotsDrawable typingDotsDrawable;
@@ -167,6 +171,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.typingDotsDrawable = new TypingDotsDrawable();
         this.recordStatusDrawable = new RecordStatusDrawable();
+        this.sendingFileDrawable = new SendingFileExDrawable();
+        this.playingGameDrawable = new PlayingGameDrawable();
         SizeNotifierFrameLayout contentView = new SizeNotifierFrameLayout(this) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -997,12 +1003,32 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                         this.typingDotsDrawable.start();
                         this.recordStatusDrawable.stop();
+                        this.sendingFileDrawable.stop();
+                        this.playingGameDrawable.stop();
                         return;
                     } else if (type.intValue() == 1) {
                         this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.recordStatusDrawable, null, null, null);
                         this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                         this.recordStatusDrawable.start();
                         this.typingDotsDrawable.stop();
+                        this.sendingFileDrawable.stop();
+                        this.playingGameDrawable.stop();
+                        return;
+                    } else if (type.intValue() == 2) {
+                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.sendingFileDrawable, null, null, null);
+                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
+                        this.sendingFileDrawable.start();
+                        this.typingDotsDrawable.stop();
+                        this.recordStatusDrawable.stop();
+                        this.playingGameDrawable.stop();
+                        return;
+                    } else if (type.intValue() == 3) {
+                        this.onlineTextView.setCompoundDrawablesWithIntrinsicBounds(this.playingGameDrawable, null, null, null);
+                        this.onlineTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
+                        this.playingGameDrawable.start();
+                        this.typingDotsDrawable.stop();
+                        this.recordStatusDrawable.stop();
+                        this.sendingFileDrawable.stop();
                         return;
                     } else {
                         return;
@@ -1016,6 +1042,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             this.onlineTextView.setCompoundDrawablePadding(0);
             this.typingDotsDrawable.stop();
             this.recordStatusDrawable.stop();
+            this.recordStatusDrawable.stop();
+            this.sendingFileDrawable.stop();
         }
     }
 

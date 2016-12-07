@@ -21,6 +21,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputUserEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_getCommonChats;
 import org.telegram.tgnet.TLRPC.messages_Chats;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -40,7 +41,7 @@ public class CommonGroupsActivity extends BaseFragment {
     private boolean firstLoaded;
     private ListAdapter listViewAdapter;
     private boolean loading;
-    private int userId = this.arguments.getInt("user_id");
+    private int userId;
 
     private class ListAdapter extends BaseFragmentAdapter {
         private Context mContext;
@@ -131,8 +132,8 @@ public class CommonGroupsActivity extends BaseFragment {
         }
     }
 
-    public CommonGroupsActivity(Bundle args) {
-        super(args);
+    public CommonGroupsActivity(int uid) {
+        this.userId = uid;
     }
 
     public boolean onFragmentCreate() {
@@ -214,39 +215,41 @@ public class CommonGroupsActivity extends BaseFragment {
             }
             TL_messages_getCommonChats req = new TL_messages_getCommonChats();
             req.user_id = MessagesController.getInputUser(this.userId);
-            req.limit = count;
-            req.max_id = max_id;
-            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (error == null) {
-                                boolean z;
-                                messages_Chats res = response;
-                                MessagesController.getInstance().putChats(res.chats, false);
-                                CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
-                                if (res.chats.isEmpty() || res.chats.size() != count) {
-                                    z = true;
+            if (!(req.user_id instanceof TL_inputUserEmpty)) {
+                req.limit = count;
+                req.max_id = max_id;
+                ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(final TLObject response, final TL_error error) {
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                if (error == null) {
+                                    boolean z;
+                                    messages_Chats res = response;
+                                    MessagesController.getInstance().putChats(res.chats, false);
+                                    CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
+                                    if (res.chats.isEmpty() || res.chats.size() != count) {
+                                        z = true;
+                                    } else {
+                                        z = false;
+                                    }
+                                    commonGroupsActivity.endReached = z;
+                                    CommonGroupsActivity.this.chats.addAll(res.chats);
                                 } else {
-                                    z = false;
+                                    CommonGroupsActivity.this.endReached = true;
                                 }
-                                commonGroupsActivity.endReached = z;
-                                CommonGroupsActivity.this.chats.addAll(res.chats);
-                            } else {
-                                CommonGroupsActivity.this.endReached = true;
+                                CommonGroupsActivity.this.loading = false;
+                                CommonGroupsActivity.this.firstLoaded = true;
+                                if (CommonGroupsActivity.this.emptyView != null) {
+                                    CommonGroupsActivity.this.emptyView.showTextView();
+                                }
+                                if (CommonGroupsActivity.this.listViewAdapter != null) {
+                                    CommonGroupsActivity.this.listViewAdapter.notifyDataSetChanged();
+                                }
                             }
-                            CommonGroupsActivity.this.loading = false;
-                            CommonGroupsActivity.this.firstLoaded = true;
-                            if (CommonGroupsActivity.this.emptyView != null) {
-                                CommonGroupsActivity.this.emptyView.showTextView();
-                            }
-                            if (CommonGroupsActivity.this.listViewAdapter != null) {
-                                CommonGroupsActivity.this.listViewAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    });
-                }
-            }), this.classGuid);
+                        });
+                    }
+                }), this.classGuid);
+            }
         }
     }
 

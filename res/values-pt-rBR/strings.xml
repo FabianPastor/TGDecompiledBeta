@@ -1301,4 +1301,15 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">sem mensagens</string>
+    <string name="GifCaption">Legenda do GIF</string>
+    <string name="InstantView">LEITURA RÁPIDA</string>
+    <string name="IsSendingGame">%1$s está jogando...</string>
+    <string name="JumpToDate">Ir para Data</string>
+    <string name="NotificationsTurnOff">Desativar</string>
+    <string name="NotificationsTurnOn">Ativar</string>
+    <string name="PermissionNoAudioVideo">Telegram precisa acessar seu microfone para que você possa gravar vídeos.</string>
+    <string name="PreviewFeedback">Deixar um comentário sobre essa pré-visualização</string>
+    <string name="SendStickerPreview">Enviar Sticker</string>
+    <string name="SendingGame">jogando...</string>
+    <string name="ViewPackPreview">Ver Pacote</string>
 </resources>

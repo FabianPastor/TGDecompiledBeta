@@ -130,7 +130,7 @@ public class AlertsCreator {
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            fragment.showDialog(builder.create(), true);
+            fragment.showDialog(builder.create(), true, null);
         }
     }
 
@@ -277,7 +277,7 @@ public class AlertsCreator {
                     break;
             }
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            fragment.showDialog(builder.create(), true);
+            fragment.showDialog(builder.create(), true, null);
         }
     }
 
@@ -299,13 +299,14 @@ public class AlertsCreator {
         }
         View scrollView = new ScrollView(parentActivity);
         View linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         String[] descriptions = new String[]{LocaleController.getString("ColorRed", R.string.ColorRed), LocaleController.getString("ColorOrange", R.string.ColorOrange), LocaleController.getString("ColorYellow", R.string.ColorYellow), LocaleController.getString("ColorGreen", R.string.ColorGreen), LocaleController.getString("ColorCyan", R.string.ColorCyan), LocaleController.getString("ColorBlue", R.string.ColorBlue), LocaleController.getString("ColorViolet", R.string.ColorViolet), LocaleController.getString("ColorPink", R.string.ColorPink), LocaleController.getString("ColorWhite", R.string.ColorWhite)};
         final int[] selectedColor = new int[]{currentColor};
         for (int a = 0; a < 9; a++) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
             cell.setCheckColor(TextColorCell.colors[a], TextColorCell.colors[a]);
             cell.setTextAndValue(descriptions[a], currentColor == TextColorCell.colorsToSave[a]);
@@ -389,11 +390,21 @@ public class AlertsCreator {
     }
 
     public static Dialog createVibrationSelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        String prefix;
+        if (dialog_id != 0) {
+            prefix = "vibrate_";
+        } else {
+            prefix = globalGroup ? "vibrate_group" : "vibrate_messages";
+        }
+        return createVibrationSelectDialog(parentActivity, parentFragment, dialog_id, prefix, onSelect);
+    }
+
+    public static Dialog createVibrationSelectDialog(Activity parentActivity, BaseFragment parentFragment, long dialog_id, String prefKeyPrefix, Runnable onSelect) {
         String[] descriptions;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
         final int[] selected = new int[1];
         if (dialog_id != 0) {
-            selected[0] = preferences.getInt("vibrate_" + dialog_id, 0);
+            selected[0] = preferences.getInt(prefKeyPrefix + dialog_id, 0);
             if (selected[0] == 3) {
                 selected[0] = 2;
             } else if (selected[0] == 2) {
@@ -401,11 +412,7 @@ public class AlertsCreator {
             }
             descriptions = new String[]{LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long), LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled)};
         } else {
-            if (globalAll) {
-                selected[0] = preferences.getInt("vibrate_messages", 0);
-            } else if (globalGroup) {
-                selected[0] = preferences.getInt("vibrate_group", 0);
-            }
+            selected[0] = preferences.getInt(prefKeyPrefix, 0);
             if (selected[0] == 0) {
                 selected[0] = 1;
             } else if (selected[0] == 1) {
@@ -417,45 +424,45 @@ public class AlertsCreator {
         }
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
             cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             final long j = dialog_id;
-            final boolean z = globalGroup;
+            final String str = prefKeyPrefix;
             final BaseFragment baseFragment = parentFragment;
             final Runnable runnable = onSelect;
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
                     Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                    if (j == 0) {
-                        String param = z ? "vibrate_group" : "vibrate_messages";
+                    if (j != 0) {
                         if (selected[0] == 0) {
-                            editor.putInt(param, 2);
+                            editor.putInt(str + j, 0);
                         } else if (selected[0] == 1) {
-                            editor.putInt(param, 0);
+                            editor.putInt(str + j, 1);
                         } else if (selected[0] == 2) {
-                            editor.putInt(param, 1);
+                            editor.putInt(str + j, 3);
                         } else if (selected[0] == 3) {
-                            editor.putInt(param, 3);
-                        } else if (selected[0] == 4) {
-                            editor.putInt(param, 4);
+                            editor.putInt(str + j, 2);
                         }
                     } else if (selected[0] == 0) {
-                        editor.putInt("vibrate_" + j, 0);
+                        editor.putInt(str, 2);
                     } else if (selected[0] == 1) {
-                        editor.putInt("vibrate_" + j, 1);
+                        editor.putInt(str, 0);
                     } else if (selected[0] == 2) {
-                        editor.putInt("vibrate_" + j, 3);
+                        editor.putInt(str, 1);
                     } else if (selected[0] == 3) {
-                        editor.putInt("vibrate_" + j, 2);
+                        editor.putInt(str, 3);
+                    } else if (selected[0] == 4) {
+                        editor.putInt(str, 4);
                     }
                     editor.commit();
                     if (baseFragment != null) {
@@ -497,12 +504,13 @@ public class AlertsCreator {
         }
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
             cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
@@ -555,13 +563,14 @@ public class AlertsCreator {
         String[] descriptions = new String[]{LocaleController.getString("NoPopup", R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", R.string.AlwaysShowPopup)};
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setTag(Integer.valueOf(a));
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
@@ -584,6 +593,38 @@ public class AlertsCreator {
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
         builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
+        builder.setView(scrollView);
+        builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static Dialog createSingleChoiceDialog(Activity parentActivity, final BaseFragment parentFragment, String[] options, String title, int selected, final OnClickListener listener) {
+        ScrollView scrollView = new ScrollView(parentActivity);
+        LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        int a = 0;
+        while (a < options.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+            cell.setTextAndValue(options[a], selected == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int sel = ((Integer) v.getTag()).intValue();
+                    if (parentFragment != null) {
+                        parentFragment.dismissCurrentDialig();
+                    }
+                    listener.onClick(null, sel);
+                }
+            });
+            a++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(title);
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();

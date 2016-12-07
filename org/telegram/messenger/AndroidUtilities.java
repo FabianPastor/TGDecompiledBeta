@@ -44,6 +44,8 @@ import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Video;
 import android.support.v4.content.FileProvider;
 import android.support.v4.internal.view.SupportMenu;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.EdgeEffectCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -85,6 +87,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.ForegroundDetector;
@@ -119,6 +122,7 @@ public class AndroidUtilities {
     public static boolean usingHardwareInput;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
+    public static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})");
 
     static {
         WEB_URL = null;
@@ -905,6 +909,38 @@ public class AndroidUtilities {
         return src;
     }
 
+    public static void setViewPagerEdgeEffectColor(ViewPager viewPager, int color) {
+        if (VERSION.SDK_INT >= 21) {
+            try {
+                EdgeEffect mEdgeEffect;
+                Field field = ViewPager.class.getDeclaredField("mLeftEdge");
+                field.setAccessible(true);
+                EdgeEffectCompat mLeftEdge = (EdgeEffectCompat) field.get(viewPager);
+                if (mLeftEdge != null) {
+                    field = EdgeEffectCompat.class.getDeclaredField("mEdgeEffect");
+                    field.setAccessible(true);
+                    mEdgeEffect = (EdgeEffect) field.get(mLeftEdge);
+                    if (mEdgeEffect != null) {
+                        mEdgeEffect.setColor(color);
+                    }
+                }
+                field = ViewPager.class.getDeclaredField("mRightEdge");
+                field.setAccessible(true);
+                EdgeEffectCompat mRightEdge = (EdgeEffectCompat) field.get(viewPager);
+                if (mRightEdge != null) {
+                    field = EdgeEffectCompat.class.getDeclaredField("mEdgeEffect");
+                    field.setAccessible(true);
+                    mEdgeEffect = (EdgeEffect) field.get(mRightEdge);
+                    if (mEdgeEffect != null) {
+                        mEdgeEffect.setColor(color);
+                    }
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+    }
+
     public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int color) {
         if (VERSION.SDK_INT >= 21) {
             try {
@@ -1522,6 +1558,51 @@ public class AndroidUtilities {
                 }
             }
             activity.startActivityForResult(intent, 500);
+        }
+    }
+
+    public static void openForView(TLObject media, Activity activity) throws Exception {
+        if (media != null && activity != null) {
+            String fileName = FileLoader.getAttachFileName(media);
+            File f = FileLoader.getPathToAttach(media, true);
+            if (f != null && f.exists()) {
+                String realMimeType = null;
+                Intent intent = new Intent("android.intent.action.VIEW");
+                intent.setFlags(1);
+                MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                int idx = fileName.lastIndexOf(46);
+                if (idx != -1) {
+                    realMimeType = myMime.getMimeTypeFromExtension(fileName.substring(idx + 1).toLowerCase());
+                    if (realMimeType == null) {
+                        if (media instanceof TL_document) {
+                            realMimeType = ((TL_document) media).mime_type;
+                        }
+                        if (realMimeType == null || realMimeType.length() == 0) {
+                            realMimeType = null;
+                        }
+                    }
+                }
+                if (VERSION.SDK_INT >= 24) {
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), realMimeType != null ? realMimeType : "text/plain");
+                } else {
+                    intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
+                }
+                if (realMimeType != null) {
+                    try {
+                        activity.startActivityForResult(intent, 500);
+                        return;
+                    } catch (Exception e) {
+                        if (VERSION.SDK_INT >= 24) {
+                            intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "text/plain");
+                        } else {
+                            intent.setDataAndType(Uri.fromFile(f), "text/plain");
+                        }
+                        activity.startActivityForResult(intent, 500);
+                        return;
+                    }
+                }
+                activity.startActivityForResult(intent, 500);
+            }
         }
     }
 

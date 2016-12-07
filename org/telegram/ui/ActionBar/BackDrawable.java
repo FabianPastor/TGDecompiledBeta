@@ -13,6 +13,7 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;
     private boolean animationInProgress;
+    private float animationTime = BitmapDescriptorFactory.HUE_MAGENTA;
     private int color = -1;
     private int currentAnimationTime;
     private float currentRotation;
@@ -21,6 +22,7 @@ public class BackDrawable extends Drawable {
     private long lastFrameTime;
     private Paint paint = new Paint(1);
     private boolean reverseAngle = false;
+    private boolean rotatedColor = true;
 
     public BackDrawable(boolean close) {
         this.paint.setColor(-1);
@@ -43,9 +45,9 @@ public class BackDrawable extends Drawable {
         this.lastFrameTime = 0;
         if (animated) {
             if (this.currentRotation < rotation) {
-                this.currentAnimationTime = (int) (this.currentRotation * BitmapDescriptorFactory.HUE_MAGENTA);
+                this.currentAnimationTime = (int) (this.currentRotation * this.animationTime);
             } else {
-                this.currentAnimationTime = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentRotation) * BitmapDescriptorFactory.HUE_MAGENTA);
+                this.currentAnimationTime = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentRotation) * this.animationTime);
             }
             this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = rotation;
@@ -56,22 +58,30 @@ public class BackDrawable extends Drawable {
         invalidateSelf();
     }
 
+    public void setAnimationTime(float value) {
+        this.animationTime = value;
+    }
+
+    public void setRotatedColor(boolean value) {
+        this.rotatedColor = value;
+    }
+
     public void draw(Canvas canvas) {
         if (this.currentRotation != this.finalRotation) {
             if (this.lastFrameTime != 0) {
                 this.currentAnimationTime = (int) (((long) this.currentAnimationTime) + (System.currentTimeMillis() - this.lastFrameTime));
-                if (this.currentAnimationTime >= 300) {
+                if (((float) this.currentAnimationTime) >= this.animationTime) {
                     this.currentRotation = this.finalRotation;
                 } else if (this.currentRotation < this.finalRotation) {
-                    this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA) * this.finalRotation;
+                    this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / this.animationTime) * this.finalRotation;
                 } else {
-                    this.currentRotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA);
+                    this.currentRotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / this.animationTime);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
-        int rD = (int) (-138.0f * this.currentRotation);
+        int rD = this.rotatedColor ? (int) (-138.0f * this.currentRotation) : 0;
         this.paint.setColor(Color.rgb(Color.red(this.color) + rD, Color.green(this.color) + rD, Color.blue(this.color) + rD));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));

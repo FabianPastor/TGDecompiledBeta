@@ -31,6 +31,7 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.InputDocument;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -77,7 +78,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     public interface PhotoAlbumPickerActivityDelegate {
         void didSelectPhotos(ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<ArrayList<InputDocument>> arrayList3, ArrayList<SearchImage> arrayList4);
 
-        boolean didSelectVideo(String str);
+        void didSelectVideo(String str, VideoEditedInfo videoEditedInfo, long j, long j2, String str2);
 
         void startPhotoSelectActivity();
     }
@@ -575,9 +576,9 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
             }
 
-            public boolean didSelectVideo(String path) {
+            public void didSelectVideo(String path, VideoEditedInfo info, long estimatedSize, long estimatedDuration, String caption) {
                 PhotoAlbumPickerActivity.this.removeSelfFromStack();
-                return PhotoAlbumPickerActivity.this.delegate.didSelectVideo(path);
+                PhotoAlbumPickerActivity.this.delegate.didSelectVideo(path, info, estimatedSize, estimatedDuration, caption);
             }
         });
         presentFragment(fragment);

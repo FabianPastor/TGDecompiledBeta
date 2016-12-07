@@ -109,6 +109,10 @@ public final class TextViewCompat {
         public void setCompoundDrawablesRelativeWithIntrinsicBounds(@NonNull TextView textView, @DrawableRes int start, @DrawableRes int top, @DrawableRes int end, @DrawableRes int bottom) {
             TextViewCompatJbMr2.setCompoundDrawablesRelativeWithIntrinsicBounds(textView, start, top, end, bottom);
         }
+
+        public Drawable[] getCompoundDrawablesRelative(@NonNull TextView textView) {
+            return TextViewCompatJbMr2.getCompoundDrawablesRelative(textView);
+        }
     }
 
     static class Api23TextViewCompatImpl extends JbMr2TextViewCompatImpl {

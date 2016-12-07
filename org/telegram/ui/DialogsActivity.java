@@ -903,25 +903,26 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             if (this.dialogsSearchAdapter != null) {
                 this.dialogsSearchAdapter.notifyDataSetChanged();
             }
-            if (this.listView != null) {
-                if (MessagesController.getInstance().loadingDialogs && MessagesController.getInstance().dialogs.isEmpty()) {
-                    this.searchEmptyView.setVisibility(8);
+            if (this.listView == null) {
+                return;
+            }
+            if (MessagesController.getInstance().loadingDialogs && MessagesController.getInstance().dialogs.isEmpty()) {
+                this.searchEmptyView.setVisibility(8);
+                this.emptyView.setVisibility(8);
+                this.listView.setEmptyView(this.progressView);
+                return;
+            }
+            try {
+                this.progressView.setVisibility(8);
+                if (this.searching && this.searchWas) {
                     this.emptyView.setVisibility(8);
-                    this.listView.setEmptyView(this.progressView);
-                } else {
-                    try {
-                        this.progressView.setVisibility(8);
-                        if (this.searching && this.searchWas) {
-                            this.emptyView.setVisibility(8);
-                            this.listView.setEmptyView(this.searchEmptyView);
-                        } else {
-                            this.searchEmptyView.setVisibility(8);
-                            this.listView.setEmptyView(this.emptyView);
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
-                    }
+                    this.listView.setEmptyView(this.searchEmptyView);
+                    return;
                 }
+                this.searchEmptyView.setVisibility(8);
+                this.listView.setEmptyView(this.emptyView);
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
             }
         } else if (id == NotificationCenter.emojiDidLoaded) {
             updateVisibleRows(0);
@@ -953,8 +954,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             updateVisibleRows(4096);
         } else if (id == NotificationCenter.didSetPasscode) {
             updatePasscodeButton();
-        }
-        if (id == NotificationCenter.needReloadRecentDialogsSearch) {
+        } else if (id == NotificationCenter.needReloadRecentDialogsSearch) {
             if (this.dialogsSearchAdapter != null) {
                 this.dialogsSearchAdapter.loadRecentSearch();
             }

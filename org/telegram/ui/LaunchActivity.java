@@ -199,7 +199,6 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
 
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    int i;
                     this.inLayout = true;
                     int width = MeasureSpec.getSize(widthMeasureSpec);
                     int height = MeasureSpec.getSize(heightMeasureSpec);
@@ -219,20 +218,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                     LaunchActivity.this.backgroundTablet.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
                     LaunchActivity.this.shadowTablet.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
-                    ActionBarLayout access$600 = LaunchActivity.this.layersActionBarLayout;
-                    int makeMeasureSpec = MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530.0f), width), C.ENCODING_PCM_32BIT);
-                    int dp = AndroidUtilities.dp(528.0f);
-                    if (VERSION.SDK_INT >= 21) {
-                        i = AndroidUtilities.statusBarHeight;
-                    } else {
-                        i = 0;
-                    }
-                    access$600.measure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(dp - i, height), C.ENCODING_PCM_32BIT));
+                    LaunchActivity.this.layersActionBarLayout.measure(MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(530.0f), width), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(528.0f), height), C.ENCODING_PCM_32BIT));
                     this.inLayout = false;
                 }
 
                 protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                    int i;
                     int width = r - l;
                     int height = b - t;
                     if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
@@ -247,12 +237,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         LaunchActivity.this.rightActionBarLayout.layout(leftWidth, 0, LaunchActivity.this.rightActionBarLayout.getMeasuredWidth() + leftWidth, LaunchActivity.this.rightActionBarLayout.getMeasuredHeight());
                     }
                     int x = (width - LaunchActivity.this.layersActionBarLayout.getMeasuredWidth()) / 2;
-                    if (VERSION.SDK_INT >= 21) {
-                        i = AndroidUtilities.statusBarHeight;
-                    } else {
-                        i = 0;
-                    }
-                    int y = i + ((height - LaunchActivity.this.layersActionBarLayout.getMeasuredHeight()) / 2);
+                    int y = (height - LaunchActivity.this.layersActionBarLayout.getMeasuredHeight()) / 2;
                     LaunchActivity.this.layersActionBarLayout.layout(x, y, LaunchActivity.this.layersActionBarLayout.getMeasuredWidth() + x, LaunchActivity.this.layersActionBarLayout.getMeasuredHeight() + y);
                     LaunchActivity.this.backgroundTablet.layout(0, 0, LaunchActivity.this.backgroundTablet.getMeasuredWidth(), LaunchActivity.this.backgroundTablet.getMeasuredHeight());
                     LaunchActivity.this.shadowTablet.layout(0, 0, LaunchActivity.this.shadowTablet.getMeasuredWidth(), LaunchActivity.this.shadowTablet.getMeasuredHeight());
@@ -274,7 +259,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             launchLayout.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            this.shadowTablet.setBackgroundColor(NUM);
+            this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             launchLayout.addView(this.shadowTablet);
             this.shadowTablet.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -885,7 +870,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             if (PhotoViewer.getInstance().isVisible()) {
                 PhotoViewer.getInstance().closePhoto(false, true);
             } else if (ArticleViewer.getInstance().isVisible()) {
-                ArticleViewer.getInstance().close();
+                ArticleViewer.getInstance().close(false, true);
             }
             this.passcodeView.onShow();
             UserConfig.isWaitingForPasscodeEnter = true;
@@ -910,7 +895,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
+    public boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
         int flags = intent.getFlags();
         if (fromPassword || !(AndroidUtilities.needShowPasscode(true) || UserConfig.isWaitingForPasscodeEnter)) {
             String[] args;
@@ -1446,7 +1431,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     if (PhotoViewer.getInstance().isVisible()) {
                         PhotoViewer.getInstance().closePhoto(false, true);
                     } else if (ArticleViewer.getInstance().isVisible()) {
-                        ArticleViewer.getInstance().close();
+                        ArticleViewer.getInstance().close(false, true);
                     }
                     this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
                     if (AndroidUtilities.isTablet()) {
@@ -1587,7 +1572,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     if (PhotoViewer.getInstance().isVisible()) {
                                         PhotoViewer.getInstance().closePhoto(false, true);
                                     } else if (ArticleViewer.getInstance().isVisible()) {
-                                        ArticleViewer.getInstance().close();
+                                        ArticleViewer.getInstance().close(false, true);
                                     }
                                     LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
                                     if (AndroidUtilities.isTablet()) {
@@ -2373,7 +2358,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
         } else if (ArticleViewer.getInstance().isVisible()) {
-            ArticleViewer.getInstance().close();
+            ArticleViewer.getInstance().close(true, false);
         } else if (this.drawerLayoutContainer.isDrawerOpened()) {
             this.drawerLayoutContainer.closeDrawer(false);
         } else if (!AndroidUtilities.isTablet()) {
@@ -2429,7 +2414,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (!ArticleViewer.getInstance().isVisible()) {
             return false;
         } else {
-            ArticleViewer.getInstance().close();
+            ArticleViewer.getInstance().close(true, false);
             return true;
         }
     }
@@ -2466,6 +2451,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     public boolean needPresentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation, ActionBarLayout layout) {
         boolean z = true;
+        if (ArticleViewer.getInstance().isVisible()) {
+            ArticleViewer.getInstance().close(false, true);
+        }
         boolean z2;
         if (AndroidUtilities.isTablet()) {
             DrawerLayoutContainer drawerLayoutContainer = this.drawerLayoutContainer;
@@ -2585,7 +2573,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     this.shadowTabletSide.setVisibility(8);
                     this.shadowTablet.setBackgroundColor(0);
                 } else {
-                    this.shadowTablet.setBackgroundColor(NUM);
+                    this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
                 }
                 this.layersActionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, false);
                 return false;
@@ -2661,7 +2649,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     this.shadowTabletSide.setVisibility(8);
                     this.shadowTablet.setBackgroundColor(0);
                 } else {
-                    this.shadowTablet.setBackgroundColor(NUM);
+                    this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
                 }
                 this.layersActionBarLayout.addFragmentToStack(fragment);
                 return false;

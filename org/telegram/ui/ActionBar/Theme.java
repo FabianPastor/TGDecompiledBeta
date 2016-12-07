@@ -129,10 +129,6 @@ public class Theme {
     public static final int MSG_MEDIA_INFO_TEXT_COLOR = -1;
     public static final int MSG_MEDIA_PROGRESS_COLOR = -1;
     public static final int MSG_MEDIA_TIME_TEXT_COLOR = -1;
-    public static final int MSG_MEDIA_WEB_PREVIEW_INSTANT_BACKGROUND_COLOR = NUM;
-    public static final int MSG_MEDIA_WEB_PREVIEW_INSTANT_SELECTED_BACKGROUND_COLOR = NUM;
-    public static final int MSG_MEDIA_WEB_PREVIEW_INSTANT_SELECTED_TEXT_COLOR = -3355444;
-    public static final int MSG_MEDIA_WEB_PREVIEW_INSTANT_TEXT_COLOR = -1;
     public static final int MSG_OUT_AUDIO_DURATION_SELECTED_TEXT_COLOR = -10112933;
     public static final int MSG_OUT_AUDIO_DURATION_TEXT_COLOR = -10112933;
     public static final int MSG_OUT_AUDIO_PERFORMER_TEXT_COLOR = -13286860;
@@ -232,9 +228,9 @@ public class Theme {
     public static Drawable inlineAudioDrawable;
     public static Drawable inlineDocDrawable;
     public static Drawable inlineLocationDrawable;
-    public static Drawable insntantInDrawable;
-    public static Drawable insntantMediaDrawable;
-    public static Drawable insntantOutDrawable;
+    public static Drawable[] insntantInDrawable = new Drawable[2];
+    public static Drawable[] insntantMediaDrawable = new Drawable[2];
+    public static Drawable[] insntantOutDrawable = new Drawable[2];
     private static Paint maskPaint = new Paint(1);
     public static Drawable[][] photoStatesDrawables = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{13, 2}));
     public static Drawable shareDrawable;
@@ -353,9 +349,12 @@ public class Theme {
             inlineDocDrawable = resources.getDrawable(R.drawable.bot_file);
             inlineAudioDrawable = resources.getDrawable(R.drawable.bot_music);
             inlineLocationDrawable = resources.getDrawable(R.drawable.bot_location);
-            insntantInDrawable = resources.getDrawable(R.drawable.instant_blue);
-            insntantOutDrawable = resources.getDrawable(R.drawable.instant_green);
-            insntantMediaDrawable = resources.getDrawable(R.drawable.instant_white);
+            insntantInDrawable[0] = resources.getDrawable(R.drawable.instant_blue);
+            insntantOutDrawable[0] = resources.getDrawable(R.drawable.instant_green);
+            insntantMediaDrawable[0] = resources.getDrawable(R.drawable.instant_white);
+            insntantInDrawable[1] = resources.getDrawable(R.drawable.instant_blue_pressed);
+            insntantOutDrawable[1] = resources.getDrawable(R.drawable.instant_green_pressed);
+            insntantMediaDrawable[1] = resources.getDrawable(R.drawable.instant_white_pressed);
         }
         int color = ApplicationLoader.getServiceMessageColor();
         if (currentColor != color) {

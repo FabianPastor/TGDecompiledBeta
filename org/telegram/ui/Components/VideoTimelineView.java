@@ -15,6 +15,7 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.ui.ActionBar.Theme;
 
 @TargetApi(10)
 public class VideoTimelineView extends View {
@@ -46,7 +47,7 @@ public class VideoTimelineView extends View {
         super(context);
         this.paint.setColor(-1);
         this.paint2 = new Paint();
-        this.paint2.setColor(NUM);
+        this.paint2.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
     }
 
     public float getLeftProgress() {

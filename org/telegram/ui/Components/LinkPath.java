@@ -35,7 +35,7 @@ public class LinkPath extends Path {
             if (left < lineLeft) {
                 left = lineLeft;
             }
-            super.addRect(left, top, right, bottom, dir);
+            super.addRect(left, top, right, bottom - (bottom != ((float) this.currentLayout.getHeight()) ? this.currentLayout.getSpacingAdd() : 0.0f), dir);
         }
     }
 }

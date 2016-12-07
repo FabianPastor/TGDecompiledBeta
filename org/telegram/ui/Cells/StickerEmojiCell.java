@@ -24,10 +24,11 @@ public class StickerEmojiCell extends FrameLayout {
     private TextView emojiTextView;
     private BackupImageView imageView;
     private long lastUpdateTime;
+    private boolean recent;
     private float scale;
     private boolean scaled;
     private Document sticker;
-    private long time = 0;
+    private long time;
 
     public StickerEmojiCell(Context context) {
         super(context);
@@ -41,6 +42,14 @@ public class StickerEmojiCell extends FrameLayout {
 
     public Document getSticker() {
         return this.sticker;
+    }
+
+    public boolean isRecent() {
+        return this.recent;
+    }
+
+    public void setRecent(boolean value) {
+        this.recent = value;
     }
 
     public void setSticker(Document document, boolean showEmoji) {

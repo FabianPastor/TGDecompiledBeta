@@ -728,6 +728,7 @@ public class ActionBarLayout extends FrameLayout {
                     this.waitingForKeyboardCloseRunnable = new Runnable() {
                         public void run() {
                             if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
+                                ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
                                 ActionBarLayout.this.startLayoutAnimation(true, true);
                             }
                         }
@@ -889,6 +890,7 @@ public class ActionBarLayout extends FrameLayout {
                         this.waitingForKeyboardCloseRunnable = new Runnable() {
                             public void run() {
                                 if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
+                                    ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
                                     ActionBarLayout.this.startLayoutAnimation(false, true);
                                 }
                             }

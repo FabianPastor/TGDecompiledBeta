@@ -2,9 +2,6 @@ package com.google.android.gms;
 
 public final class R {
 
-    public static final class array {
-    }
-
     public static final class attr {
         public static final int ambientEnabled = NUM;
         public static final int buttonSize = NUM;
@@ -48,9 +45,6 @@ public final class R {
         public static final int common_google_signin_btn_text_light_disabled = NUM;
         public static final int common_google_signin_btn_text_light_focused = NUM;
         public static final int common_google_signin_btn_text_light_pressed = NUM;
-    }
-
-    public static final class dimen {
     }
 
     public static final class drawable {
@@ -97,12 +91,6 @@ public final class R {
         public static final int google_play_services_version = NUM;
     }
 
-    public static final class layout {
-    }
-
-    public static final class raw {
-    }
-
     public static final class string {
         public static final int common_google_play_services_enable_button = NUM;
         public static final int common_google_play_services_enable_text = NUM;
@@ -121,9 +109,6 @@ public final class R {
         public static final int common_open_on_phone = NUM;
         public static final int common_signin_button_text = NUM;
         public static final int common_signin_button_text_long = NUM;
-    }
-
-    public static final class style {
     }
 
     public static final class styleable {

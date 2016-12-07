@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer.text.webvtt.WebvttCue.Builder;
 import org.telegram.messenger.exoplayer.util.ParsableByteArray;
+import org.telegram.tgnet.TLRPC;
 
 public final class WebvttCueParser {
     private static final char CHAR_AMPERSAND = '&';
@@ -125,7 +126,7 @@ public final class WebvttCueParser {
                     }
                     pos = entityEnd + 1;
                     break;
-                case '<':
+                case TLRPC.LAYER /*60*/:
                     if (pos + 1 < markup.length()) {
                         int i;
                         int ltPos = pos;

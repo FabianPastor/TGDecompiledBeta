@@ -435,7 +435,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.containerView.addView(this.shadow[0], LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         this.gridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickersAlert.this.gridView, 0);
+                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickersAlert.this.gridView, 0, null);
                 if (super.onInterceptTouchEvent(event) || result) {
                     return true;
                 }
@@ -480,7 +480,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.gridView.setGlowColor(-657673);
         this.gridView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                return StickerPreviewViewer.getInstance().onTouch(event, StickersAlert.this.gridView, 0, StickersAlert.this.stickersOnItemClickListener);
+                return StickerPreviewViewer.getInstance().onTouch(event, StickersAlert.this.gridView, 0, StickersAlert.this.stickersOnItemClickListener, null);
             }
         });
         this.gridView.setOnScrollListener(new OnScrollListener() {

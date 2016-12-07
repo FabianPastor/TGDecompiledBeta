@@ -37,6 +37,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiView.Listener;
@@ -75,7 +76,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, View window) {
         super(context);
-        setBackgroundColor(NUM);
+        setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         setFocusable(true);
         setFocusableInTouchMode(true);
         this.windowView = window;
@@ -427,7 +428,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     public void onClearEmojiRecent() {
                     }
 
-                    public void onShowStickerSet(StickerSetCovered stickerSet) {
+                    public void onShowStickerSet(StickerSet stickerSet) {
                     }
 
                     public void onStickerSetAdd(StickerSetCovered stickerSet) {

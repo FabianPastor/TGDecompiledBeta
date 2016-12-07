@@ -59,6 +59,8 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 public class ProfileNotificationsActivity extends BaseFragment implements NotificationCenterDelegate {
     private ListAdapter adapter;
     private AnimatorSet animatorSet;
+    private int callsRow;
+    private int callsVibrateRow;
     private int colorRow;
     private boolean customEnabled;
     private int customInfoRow;
@@ -75,6 +77,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int popupRow;
     private int priorityInfoRow;
     private int priorityRow;
+    private int ringtoneInfoRow;
+    private int ringtoneRow;
     private int rowCount;
     private int smartRow;
     private int soundRow;
@@ -168,18 +172,29 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     } else if (position == ProfileNotificationsActivity.this.ledRow) {
                         headerCell.setText(LocaleController.getString("NotificationsLed", R.string.NotificationsLed));
                         return;
+                    } else if (position == ProfileNotificationsActivity.this.callsRow) {
+                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings));
+                        return;
                     } else {
                         return;
                     }
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
                     preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                    String value;
                     if (position == ProfileNotificationsActivity.this.soundRow) {
-                        String value = preferences.getString("sound_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("SoundDefault", R.string.SoundDefault));
+                        value = preferences.getString("sound_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("SoundDefault", R.string.SoundDefault));
                         if (value.equals("NoSound")) {
                             value = LocaleController.getString("NoSound", R.string.NoSound);
                         }
                         textCell.setTextAndValue(LocaleController.getString("Sound", R.string.Sound), value, true);
+                        return;
+                    } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
+                        value = preferences.getString("ringtone_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("SoundDefault", R.string.SoundDefault));
+                        if (value.equals("NoSound")) {
+                            value = LocaleController.getString("NoSound", R.string.NoSound);
+                        }
+                        textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), value, true);
                         return;
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
                         value = preferences.getInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
@@ -238,6 +253,23 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         String minutes = LocaleController.formatPluralString("Minutes", notifyDelay / 60);
                         textCell.setTextAndValue(LocaleController.getString("SmartNotifications", R.string.SmartNotifications), LocaleController.formatString("SmartNotificationsInfo", R.string.SmartNotificationsInfo, Integer.valueOf(notifyMaxCount), minutes), ProfileNotificationsActivity.this.priorityRow != -1);
                         return;
+                    } else if (position == ProfileNotificationsActivity.this.callsVibrateRow) {
+                        value = preferences.getInt("calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
+                        if (value == 0 || value == 4) {
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), true);
+                            return;
+                        } else if (value == 1) {
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Short", R.string.Short), true);
+                            return;
+                        } else if (value == 2) {
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), true);
+                            return;
+                        } else if (value == 3) {
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Long", R.string.Long), true);
+                            return;
+                        } else {
+                            return;
+                        }
                     } else {
                         return;
                     }
@@ -261,6 +293,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         return;
                     } else if (position == ProfileNotificationsActivity.this.customInfoRow) {
                         textCell2.setText(null);
+                        textCell2.setBackgroundResource(R.drawable.greydivider);
+                        return;
+                    } else if (position == ProfileNotificationsActivity.this.ringtoneInfoRow) {
+                        textCell2.setText(LocaleController.getString("VoipRingtoneInfo", R.string.VoipRingtoneInfo));
                         textCell2.setBackgroundResource(R.drawable.greydivider);
                         return;
                     } else {
@@ -366,13 +402,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
 
         public int getItemViewType(int position) {
-            if (position == ProfileNotificationsActivity.this.generalRow || position == ProfileNotificationsActivity.this.popupRow || position == ProfileNotificationsActivity.this.ledRow) {
+            if (position == ProfileNotificationsActivity.this.generalRow || position == ProfileNotificationsActivity.this.popupRow || position == ProfileNotificationsActivity.this.ledRow || position == ProfileNotificationsActivity.this.callsRow) {
                 return 0;
             }
-            if (position == ProfileNotificationsActivity.this.soundRow || position == ProfileNotificationsActivity.this.vibrateRow || position == ProfileNotificationsActivity.this.priorityRow || position == ProfileNotificationsActivity.this.smartRow) {
+            if (position == ProfileNotificationsActivity.this.soundRow || position == ProfileNotificationsActivity.this.vibrateRow || position == ProfileNotificationsActivity.this.priorityRow || position == ProfileNotificationsActivity.this.smartRow || position == ProfileNotificationsActivity.this.ringtoneRow || position == ProfileNotificationsActivity.this.callsVibrateRow) {
                 return 1;
             }
-            if (position == ProfileNotificationsActivity.this.popupInfoRow || position == ProfileNotificationsActivity.this.ledInfoRow || position == ProfileNotificationsActivity.this.priorityInfoRow || position == ProfileNotificationsActivity.this.customInfoRow) {
+            if (position == ProfileNotificationsActivity.this.popupInfoRow || position == ProfileNotificationsActivity.this.ledInfoRow || position == ProfileNotificationsActivity.this.priorityInfoRow || position == ProfileNotificationsActivity.this.customInfoRow || position == ProfileNotificationsActivity.this.ringtoneInfoRow) {
                 return 2;
             }
             if (position == ProfileNotificationsActivity.this.colorRow) {
@@ -459,6 +495,25 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             i = this.rowCount;
             this.rowCount = i + 1;
             this.popupInfoRow = i;
+        }
+        if (lower_id <= 0 || !MessagesController.getInstance().callsEnabled) {
+            this.callsRow = -1;
+            this.ringtoneRow = -1;
+            this.callsVibrateRow = -1;
+            this.ringtoneInfoRow = -1;
+        } else {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsVibrateRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.ringtoneRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.ringtoneInfoRow = i;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -585,20 +640,25 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     }
                 } else if (!ProfileNotificationsActivity.this.customEnabled) {
                 } else {
+                    Intent intent;
+                    Uri currentSound;
+                    String defaultPath;
+                    Uri defaultUri;
+                    String path;
                     if (position == ProfileNotificationsActivity.this.soundRow) {
                         try {
-                            Intent intent = new Intent("android.intent.action.RINGTONE_PICKER");
+                            intent = new Intent("android.intent.action.RINGTONE_PICKER");
                             intent.putExtra("android.intent.extra.ringtone.TYPE", 2);
                             intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
                             intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(2));
                             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                            Uri currentSound = null;
-                            String defaultPath = null;
-                            Uri defaultUri = System.DEFAULT_NOTIFICATION_URI;
+                            currentSound = null;
+                            defaultPath = null;
+                            defaultUri = System.DEFAULT_NOTIFICATION_URI;
                             if (defaultUri != null) {
                                 defaultPath = defaultUri.getPath();
                             }
-                            String path = preferences.getString("sound_path_" + ProfileNotificationsActivity.this.dialog_id, defaultPath);
+                            path = preferences.getString("sound_path_" + ProfileNotificationsActivity.this.dialog_id, defaultPath);
                             if (path != null) {
                                 if (!path.equals("NoSound")) {
                                     currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
@@ -609,11 +669,43 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         } catch (Throwable e) {
                             FileLog.e("tmessages", e);
                         }
+                    } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
+                        try {
+                            intent = new Intent("android.intent.action.RINGTONE_PICKER");
+                            intent.putExtra("android.intent.extra.ringtone.TYPE", 1);
+                            intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
+                            intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(1));
+                            preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                            currentSound = null;
+                            defaultPath = null;
+                            defaultUri = System.DEFAULT_NOTIFICATION_URI;
+                            if (defaultUri != null) {
+                                defaultPath = defaultUri.getPath();
+                            }
+                            path = preferences.getString("ringtone_path_" + ProfileNotificationsActivity.this.dialog_id, defaultPath);
+                            if (path != null) {
+                                if (!path.equals("NoSound")) {
+                                    currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                                }
+                            }
+                            intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
+                            ProfileNotificationsActivity.this.startActivityForResult(intent, 13);
+                        } catch (Throwable e2) {
+                            FileLog.e("tmessages", e2);
+                        }
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
                         ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new Runnable() {
                             public void run() {
                                 if (ProfileNotificationsActivity.this.adapter != null) {
                                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.vibrateRow);
+                                }
+                            }
+                        }));
+                    } else if (position == ProfileNotificationsActivity.this.callsVibrateRow) {
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new Runnable() {
+                            public void run() {
+                                if (ProfileNotificationsActivity.this.adapter != null) {
+                                    ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.callsVibrateRow);
                                 }
                             }
                         }));
@@ -737,7 +829,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             if (ringtone != null) {
                 Ringtone rng = RingtoneManager.getRingtone(ApplicationLoader.applicationContext, ringtone);
                 if (rng != null) {
-                    if (ringtone.equals(System.DEFAULT_NOTIFICATION_URI)) {
+                    if (ringtone.equals(requestCode == 13 ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI)) {
                         name = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                     } else {
                         name = rng.getTitle(getParentActivity());
@@ -754,10 +846,25 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     editor.putString("sound_" + this.dialog_id, "NoSound");
                     editor.putString("sound_path_" + this.dialog_id, "NoSound");
                 }
+            } else if (requestCode == 13) {
+                if (name != null) {
+                    editor.putString("ringtone_" + this.dialog_id, name);
+                    editor.putString("ringtone_path_" + this.dialog_id, ringtone.toString());
+                } else {
+                    editor.putString("ringtone_" + this.dialog_id, "NoSound");
+                    editor.putString("ringtone_path_" + this.dialog_id, "NoSound");
+                }
             }
             editor.commit();
             if (this.adapter != null) {
-                this.adapter.notifyItemChanged(this.soundRow);
+                int i;
+                ListAdapter listAdapter = this.adapter;
+                if (requestCode == 13) {
+                    i = this.ringtoneRow;
+                } else {
+                    i = this.soundRow;
+                }
+                listAdapter.notifyItemChanged(i);
             }
         }
     }

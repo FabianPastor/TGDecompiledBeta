@@ -80,6 +80,7 @@ import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.Peer;
+import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -1054,6 +1055,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 resizeForTopView(true);
                 if (!animated) {
                     this.topView.setTranslationY(0.0f);
+                    if (this.recordedAudioPanel.getVisibility() == 0) {
+                        return;
+                    }
+                    if (!this.forceShowSendButton || openKeyboard) {
+                        openKeyboard();
+                    }
                 } else if (this.keyboardVisible || isPopupShowing()) {
                     this.currentTopViewAnimation = new AnimatorSet();
                     AnimatorSet animatorSet = this.currentTopViewAnimation;
@@ -1205,6 +1212,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 this.topView.setVisibility(8);
+                resizeForTopView(false);
                 this.topView.setTranslationY((float) this.topView.getLayoutParams().height);
             }
         }
@@ -2333,11 +2341,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
 
-                public void onShowStickerSet(StickerSetCovered stickerSet) {
+                public void onShowStickerSet(StickerSet stickerSet) {
                     if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
                         TL_inputStickerSetID inputStickerSetID = new TL_inputStickerSetID();
-                        inputStickerSetID.access_hash = stickerSet.set.access_hash;
-                        inputStickerSetID.id = stickerSet.set.id;
+                        inputStickerSetID.access_hash = stickerSet.access_hash;
+                        inputStickerSetID.id = stickerSet.id;
                         ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSetID, null, ChatActivityEnterView.this));
                     }
                 }

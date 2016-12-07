@@ -21,4 +21,8 @@ class TextViewCompatJbMr2 {
     public static void setCompoundDrawablesRelativeWithIntrinsicBounds(@NonNull TextView textView, @DrawableRes int start, @DrawableRes int top, @DrawableRes int end, @DrawableRes int bottom) {
         textView.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, end, bottom);
     }
+
+    public static Drawable[] getCompoundDrawablesRelative(@NonNull TextView textView) {
+        return textView.getCompoundDrawablesRelative();
+    }
 }

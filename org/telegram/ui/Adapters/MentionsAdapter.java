@@ -4,6 +4,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.location.Location;
 import android.os.Build.VERSION;
 import android.text.TextUtils;
@@ -237,8 +238,10 @@ public class MentionsAdapter extends Adapter {
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
                     builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
                     builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
+                    final boolean[] buttonClicked = new boolean[1];
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            buttonClicked[0] = true;
                             if (foundContextBotFinal != null) {
                                 ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
                                 MentionsAdapter.this.checkLocationPermissionsOrStart();
@@ -247,10 +250,17 @@ public class MentionsAdapter extends Adapter {
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            buttonClicked[0] = true;
                             MentionsAdapter.this.onLocationUnavailable();
                         }
                     });
-                    this.parentFragment.showDialog(builder.create());
+                    this.parentFragment.showDialog(builder.create(), new OnDismissListener() {
+                        public void onDismiss(DialogInterface dialog) {
+                            if (!buttonClicked[0]) {
+                                MentionsAdapter.this.onLocationUnavailable();
+                            }
+                        }
+                    });
                 }
             }
         }

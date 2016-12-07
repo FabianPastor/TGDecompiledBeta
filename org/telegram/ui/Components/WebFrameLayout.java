@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -38,7 +37,6 @@ import org.telegram.ui.ActionBar.BottomSheet.BottomSheetDelegate;
 import org.telegram.ui.ActionBar.Theme;
 
 public class WebFrameLayout extends FrameLayout {
-    static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com\\/(?:[^\\/\\n\\s]+\\/\\S+\\/|(?:v|e(?:mbed)?)\\/|\\S*?[?&]v=)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})");
     private View customView;
     private CustomViewCallback customViewCallback;
     private BottomSheet dialog;
@@ -82,9 +80,7 @@ public class WebFrameLayout extends FrameLayout {
         if (VERSION.SDK_INT >= 17) {
             this.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         }
-        String userAgent = this.webView.getSettings().getUserAgentString();
-        if (userAgent != null) {
-            this.webView.getSettings().setUserAgentString(userAgent.replace("Android", ""));
+        if (this.webView.getSettings().getUserAgentString() != null) {
         }
         if (VERSION.SDK_INT >= 21) {
             this.webView.getSettings().setMixedContentMode(0);
@@ -234,7 +230,7 @@ public class WebFrameLayout extends FrameLayout {
                 try {
                     String host = Uri.parse(WebFrameLayout.this.openUrl).getHost().toLowerCase();
                     if ((host != null && host.endsWith("youtube.com")) || host.endsWith("youtu.be")) {
-                        Matcher matcher = WebFrameLayout.youtubeIdRegex.matcher(WebFrameLayout.this.openUrl);
+                        Matcher matcher = AndroidUtilities.youtubeIdRegex.matcher(WebFrameLayout.this.openUrl);
                         String id = null;
                         if (matcher.find()) {
                             id = matcher.group(1);

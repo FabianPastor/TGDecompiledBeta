@@ -524,8 +524,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 updateChatParticipants();
                 updateRowsIds();
             }
-        }
-        if (id == NotificationCenter.updateInterfaces) {
+        } else if (id == NotificationCenter.updateInterfaces) {
             int mask = ((Integer) args[0]).intValue();
             if (((mask & 2) != 0 || (mask & 1) != 0 || (mask & 4) != 0) && this.listView != null) {
                 int count = this.listView.getChildCount();

@@ -92,13 +92,26 @@
         <item>false</item>
         <item>@drawable/list_selector</item>
         <item>@style/Theme.TMessages.Dialog.Alert</item>
+        <item>@style/Theme.TMessages.DatePicker</item>
+        <item>@style/Theme.TMessages.CalendarView</item>
         <item>@drawable/bar_selector_style</item>
         <item>#4991cc</item>
         <item>#527da3</item>
         <item>#33000000</item>
+        <item>@style/Theme.TMessages.Dialog.Alert</item>
     </style>
     <style name="Theme.TMessages.BorderLessButton">
         <item>#4991cc</item>
+    </style>
+    <style name="Theme.TMessages.CalendarView">
+        <item>@style/Theme.TMessages.DayOfWeek</item>
+    </style>
+    <style name="Theme.TMessages.DatePicker">
+        <item>#408bc8</item>
+    </style>
+    <style name="Theme.TMessages.DayOfWeek">
+        <item>0dp</item>
+        <item>#00000000</item>
     </style>
     <style name="Theme.TMessages.Dialog.Alert">
         <item>#4991cc</item>

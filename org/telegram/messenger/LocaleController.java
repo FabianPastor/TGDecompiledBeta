@@ -456,13 +456,6 @@ public class LocaleController {
         this.sortedLanguages.add(localeInfo);
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         localeInfo = new LocaleInfo();
-        localeInfo.name = "Português (Portugal)";
-        localeInfo.nameEnglish = "Portuguese (Portugal)";
-        localeInfo.shortName = "pt_PT";
-        localeInfo.pathToFile = null;
-        this.sortedLanguages.add(localeInfo);
-        this.languagesDict.put(localeInfo.shortName, localeInfo);
-        localeInfo = new LocaleInfo();
         localeInfo.name = "한국어";
         localeInfo.nameEnglish = "Korean";
         localeInfo.shortName = "ko";

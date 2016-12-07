@@ -18,6 +18,7 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.tgnet.TLRPC.InputDocument;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -94,8 +95,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                     }
                 }
 
-                public boolean didSelectVideo(String path) {
-                    return true;
+                public void didSelectVideo(String path, VideoEditedInfo info, long estimatedSize, long estimatedDuration, String caption) {
                 }
             });
             this.parentFragment.presentFragment(fragment);

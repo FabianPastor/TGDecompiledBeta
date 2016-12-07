@@ -505,14 +505,16 @@ public class MessagesQuery {
                     if (endMessage.length() != 0) {
                         endMessage = TextUtils.concat(new CharSequence[]{"\n", endMessage});
                     }
-                    message[0] = TextUtils.concat(new CharSequence[]{startMessage, content, endMessage});
-                    TL_messageEntityPre entity = new TL_messageEntityPre();
-                    entity.offset = (replacedFirst ? 0 : 1) + start;
-                    entity.length = (replacedFirst ? 0 : 1) + ((index - start) - 3);
-                    entity.language = "";
-                    entities.add(entity);
-                    lastIndex -= 6;
-                } else {
+                    if (!TextUtils.isEmpty(content)) {
+                        message[0] = TextUtils.concat(new CharSequence[]{startMessage, content, endMessage});
+                        TL_messageEntityPre entity = new TL_messageEntityPre();
+                        entity.offset = (replacedFirst ? 0 : 1) + start;
+                        entity.length = (replacedFirst ? 0 : 1) + ((index - start) - 3);
+                        entity.language = "";
+                        entities.add(entity);
+                        lastIndex -= 6;
+                    }
+                } else if (start + 1 != index) {
                     message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 1, index), TextUtils.substring(message[0], index + 1, message[0].length())});
                     TL_messageEntityCode entity2 = new TL_messageEntityCode();
                     entity2.offset = start;

@@ -37,6 +37,7 @@ import org.telegram.tgnet.TLRPC.TL_account_privacyRules;
 import org.telegram.tgnet.TLRPC.TL_account_setPrivacy;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyChatInvite;
+import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyStatusTimestamp;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyValueAllowAll;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyValueAllowContacts;
@@ -64,18 +65,18 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     private int alwaysShareRow;
     private ArrayList<Integer> currentMinus;
     private ArrayList<Integer> currentPlus;
-    private int currentType = 0;
+    private int currentType;
     private int detailRow;
     private View doneButton;
     private boolean enableAnimation;
     private int everybodyRow;
-    private boolean isGroup;
     private int lastCheckedType = -1;
     private ListAdapter listAdapter;
     private int myContactsRow;
     private int neverShareRow;
     private int nobodyRow;
     private int rowCount;
+    private int rulesType;
     private int sectionRow;
     private int shareDetailRow;
     private int shareSectionRow;
@@ -142,7 +143,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         value = LocaleController.getString("EmpryUsersPlaceholder", R.string.EmpryUsersPlaceholder);
                     }
                     String string;
-                    if (PrivacyControlActivity.this.isGroup) {
+                    if (PrivacyControlActivity.this.rulesType != 0) {
                         string = LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow);
                         if (PrivacyControlActivity.this.neverShareRow == -1) {
                             z = false;
@@ -161,7 +162,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     } else {
                         value = LocaleController.getString("EmpryUsersPlaceholder", R.string.EmpryUsersPlaceholder);
                     }
-                    if (PrivacyControlActivity.this.isGroup) {
+                    if (PrivacyControlActivity.this.rulesType != 0) {
                         textCell.setTextAndValue(LocaleController.getString("NeverAllow", R.string.NeverAllow), value, false);
                     } else {
                         textCell.setTextAndValue(LocaleController.getString("NeverShareWith", R.string.NeverShareWith), value, false);
@@ -173,14 +174,18 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     view.setBackgroundColor(-1);
                 }
                 if (i == PrivacyControlActivity.this.detailRow) {
-                    if (PrivacyControlActivity.this.isGroup) {
+                    if (PrivacyControlActivity.this.rulesType == 2) {
+                        ((TextInfoPrivacyCell) view).setText(LocaleController.getString("WhoCanCallMeInfo", R.string.WhoCanCallMeInfo));
+                    } else if (PrivacyControlActivity.this.rulesType == 1) {
                         ((TextInfoPrivacyCell) view).setText(LocaleController.getString("WhoCanAddMeInfo", R.string.WhoCanAddMeInfo));
                     } else {
                         ((TextInfoPrivacyCell) view).setText(LocaleController.getString("CustomHelp", R.string.CustomHelp));
                     }
                     view.setBackgroundResource(R.drawable.greydivider);
                 } else if (i == PrivacyControlActivity.this.shareDetailRow) {
-                    if (PrivacyControlActivity.this.isGroup) {
+                    if (PrivacyControlActivity.this.rulesType == 2) {
+                        ((TextInfoPrivacyCell) view).setText(LocaleController.getString("CustomCallInfo", R.string.CustomCallInfo));
+                    } else if (PrivacyControlActivity.this.rulesType == 1) {
                         ((TextInfoPrivacyCell) view).setText(LocaleController.getString("CustomShareInfo", R.string.CustomShareInfo));
                     } else {
                         ((TextInfoPrivacyCell) view).setText(LocaleController.getString("CustomShareSettingsHelp", R.string.CustomShareSettingsHelp));
@@ -193,7 +198,9 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     view.setBackgroundColor(-1);
                 }
                 if (i == PrivacyControlActivity.this.sectionRow) {
-                    if (PrivacyControlActivity.this.isGroup) {
+                    if (PrivacyControlActivity.this.rulesType == 2) {
+                        ((HeaderCell) view).setText(LocaleController.getString("WhoCanCallMe", R.string.WhoCanCallMe));
+                    } else if (PrivacyControlActivity.this.rulesType == 1) {
                         ((HeaderCell) view).setText(LocaleController.getString("WhoCanAddMe", R.string.WhoCanAddMe));
                     } else {
                         ((HeaderCell) view).setText(LocaleController.getString("LastSeenTitle", R.string.LastSeenTitle));
@@ -264,8 +271,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         }
     }
 
-    public PrivacyControlActivity(boolean group) {
-        this.isGroup = group;
+    public PrivacyControlActivity(int type) {
+        this.rulesType = type;
     }
 
     public boolean onFragmentCreate() {
@@ -284,7 +291,9 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        if (this.isGroup) {
+        if (this.rulesType == 2) {
+            this.actionBar.setTitle(LocaleController.getString("Calls", R.string.Calls));
+        } else if (this.rulesType == 1) {
             this.actionBar.setTitle(LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels));
         } else {
             this.actionBar.setTitle(LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen));
@@ -294,11 +303,11 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 if (id == -1) {
                     PrivacyControlActivity.this.finishFragment();
                 } else if (id == 1 && PrivacyControlActivity.this.getParentActivity() != null) {
-                    if (!(PrivacyControlActivity.this.currentType == 0 || PrivacyControlActivity.this.isGroup)) {
+                    if (PrivacyControlActivity.this.currentType != 0 && PrivacyControlActivity.this.rulesType == 0) {
                         final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                         if (!preferences.getBoolean("privacyAlertShowed", false)) {
                             Builder builder = new Builder(PrivacyControlActivity.this.getParentActivity());
-                            if (PrivacyControlActivity.this.isGroup) {
+                            if (PrivacyControlActivity.this.rulesType == 1) {
                                 builder.setMessage(LocaleController.getString("WhoCanAddMeInfo", R.string.WhoCanAddMeInfo));
                             } else {
                                 builder.setMessage(LocaleController.getString("CustomHelp", R.string.CustomHelp));
@@ -339,7 +348,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         listView.setAdapter(this.listAdapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                boolean z = false;
+                boolean z = true;
                 if (i == PrivacyControlActivity.this.nobodyRow || i == PrivacyControlActivity.this.everybodyRow || i == PrivacyControlActivity.this.myContactsRow) {
                     int newType = PrivacyControlActivity.this.currentType;
                     if (i == PrivacyControlActivity.this.nobodyRow) {
@@ -363,10 +372,17 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     } else {
                         createFromArray = PrivacyControlActivity.this.currentPlus;
                     }
+                    boolean z2;
                     if (createFromArray.isEmpty()) {
                         Bundle args = new Bundle();
                         args.putBoolean(i == PrivacyControlActivity.this.neverShareRow ? "isNeverShare" : "isAlwaysShare", true);
-                        args.putBoolean("isGroup", PrivacyControlActivity.this.isGroup);
+                        String str = "isGroup";
+                        if (PrivacyControlActivity.this.rulesType != 0) {
+                            z2 = true;
+                        } else {
+                            z2 = false;
+                        }
+                        args.putBoolean(str, z2);
                         GroupCreateActivity fragment = new GroupCreateActivity(args);
                         fragment.setDelegate(new GroupCreateActivityDelegate() {
                             public void didSelectUsers(ArrayList<Integer> ids) {
@@ -390,11 +406,15 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                         PrivacyControlActivity.this.presentFragment(fragment);
                         return;
                     }
-                    boolean access$100 = PrivacyControlActivity.this.isGroup;
-                    if (i == PrivacyControlActivity.this.alwaysShareRow) {
-                        z = true;
+                    if (PrivacyControlActivity.this.rulesType != 0) {
+                        z2 = true;
+                    } else {
+                        z2 = false;
                     }
-                    PrivacyUsersActivity fragment2 = new PrivacyUsersActivity(createFromArray, access$100, z);
+                    if (i != PrivacyControlActivity.this.alwaysShareRow) {
+                        z = false;
+                    }
+                    PrivacyUsersActivity fragment2 = new PrivacyUsersActivity(createFromArray, z2, z);
                     fragment2.setDelegate(new PrivacyActivityDelegate() {
                         public void didUpdatedUserList(ArrayList<Integer> ids, boolean added) {
                             int a;
@@ -435,7 +455,9 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         User user;
         InputUser inputUser;
         TL_account_setPrivacy req = new TL_account_setPrivacy();
-        if (this.isGroup) {
+        if (this.rulesType == 2) {
+            req.key = new TL_inputPrivacyKeyPhoneCall();
+        } else if (this.rulesType == 1) {
             req.key = new TL_inputPrivacyKeyChatInvite();
         } else {
             req.key = new TL_inputPrivacyKeyStatusTimestamp();
@@ -497,7 +519,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                             PrivacyControlActivity.this.finishFragment();
                             TL_account_privacyRules rules = response;
                             MessagesController.getInstance().putUsers(rules.users, false);
-                            ContactsController.getInstance().setPrivacyRules(rules.rules, PrivacyControlActivity.this.isGroup);
+                            ContactsController.getInstance().setPrivacyRules(rules.rules, PrivacyControlActivity.this.rulesType);
                             return;
                         }
                         PrivacyControlActivity.this.showErrorAlert();
@@ -520,7 +542,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     private void checkPrivacy() {
         this.currentPlus = new ArrayList();
         this.currentMinus = new ArrayList();
-        ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance().getPrivacyRules(this.isGroup);
+        ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance().getPrivacyRules(this.rulesType);
         if (privacyRules.size() == 0) {
             this.currentType = 1;
             return;
@@ -564,7 +586,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         i = this.rowCount;
         this.rowCount = i + 1;
         this.myContactsRow = i;
-        if (this.isGroup) {
+        if (this.rulesType != 0) {
             this.nobodyRow = -1;
         } else {
             i = this.rowCount;

@@ -23,12 +23,13 @@ public class ShutterButton extends View {
     private long lastUpdateTime;
     private Runnable longPressed = new Runnable() {
         public void run() {
-            if (ShutterButton.this.delegate != null) {
-                ShutterButton.this.delegate.shutterLongPressed();
+            if (ShutterButton.this.delegate != null && !ShutterButton.this.delegate.shutterLongPressed()) {
+                ShutterButton.this.processRelease = false;
             }
         }
     };
     private boolean pressed;
+    private boolean processRelease;
     private Paint redPaint;
     private float redProgress;
     private Drawable shadowDrawable = getResources().getDrawable(R.drawable.camera_btn);
@@ -39,7 +40,7 @@ public class ShutterButton extends View {
     public interface ShutterButtonDelegate {
         void shutterCancel();
 
-        void shutterLongPressed();
+        boolean shutterLongPressed();
 
         void shutterReleased();
     }
@@ -138,12 +139,13 @@ public class ShutterButton extends View {
             case 0:
                 AndroidUtilities.runOnUIThread(this.longPressed, 220);
                 this.pressed = true;
+                this.processRelease = true;
                 setHighlighted(true);
                 break;
             case 1:
                 setHighlighted(false);
                 AndroidUtilities.cancelRunOnUIThread(this.longPressed);
-                if (x >= 0.0f && y >= 0.0f && x <= ((float) getMeasuredWidth()) && y <= ((float) getMeasuredHeight())) {
+                if (this.processRelease && x >= 0.0f && y >= 0.0f && x <= ((float) getMeasuredWidth()) && y <= ((float) getMeasuredHeight())) {
                     this.delegate.shutterReleased();
                     break;
                 }
