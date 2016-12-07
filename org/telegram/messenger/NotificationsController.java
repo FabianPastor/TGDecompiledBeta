@@ -741,7 +741,7 @@ public class NotificationsController {
                     NotificationsController.this.lastBadgeCount = count;
                     try {
                         ContentValues cv = new ContentValues();
-                        cv.put("tag", "org.telegram.messenger/org.telegram.ui.LaunchActivity");
+                        cv.put("tag", ApplicationLoader.applicationContext.getPackageName() + "/org.telegram.ui.LaunchActivity");
                         cv.put("count", Integer.valueOf(count));
                         ApplicationLoader.applicationContext.getContentResolver().insert(Uri.parse("content://com.teslacoilsw.notifier/unread_count"), cv);
                     } catch (Throwable th) {

@@ -1,11 +1,14 @@
 package org.telegram.messenger.voip;
 
 import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.Notification.Builder;
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -36,12 +39,14 @@ import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.view.InputDeviceCompat;
+import android.view.KeyEvent;
 import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -83,6 +88,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
     private static final int CALL_MAX_LAYER = 60;
     private static final int CALL_MIN_LAYER = 60;
+    private static final int ID_INCOMING_CALL_NOTIFICATION = 202;
     private static final int ID_ONGOING_CALL_NOTIFICATION = 201;
     private static final int PROXIMITY_SCREEN_OFF_WAKE_LOCK = 32;
     public static final int STATE_ENDED = 6;
@@ -131,8 +137,17 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 VoIPService.this.isProximityNear = false;
             } else if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
                 VoIPService.this.updateNetworkType();
-            } else if ((VoIPService.this.getPackageName() + ".END_CALL").equals(intent.getAction()) && intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
-                VoIPService.this.hangUp();
+            } else if ((VoIPService.this.getPackageName() + ".END_CALL").equals(intent.getAction())) {
+                if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                    VoIPService.this.hangUp();
+                }
+            } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) && intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                VoIPService.this.acceptIncomingCall();
+                try {
+                    PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
+                } catch (Exception x) {
+                    FileLog.e(VoIPService.TAG, "Error starting incall activity", x);
+                }
             }
         }
     };
@@ -149,6 +164,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private Vibrator vibrator;
 
     public interface StateListener {
+        void onAudioSettingsChanged();
+
         void onStateChanged(int i);
     }
 
@@ -195,12 +212,14 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         filter.addAction(ACTION_HEADSET_PLUG);
         filter.addAction(getPackageName() + ".END_CALL");
+        filter.addAction(getPackageName() + ".ANSWER_CALL");
         registerReceiver(this.receiver, filter);
         ConnectionsManager.getInstance().setAppPaused(false, false);
         this.soundPool = new SoundPool(1, 0, 0);
         this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
         this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
         this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
+        ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
     }
 
     public void onDestroy() {
@@ -220,6 +239,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         this.cpuWakelock.release();
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         am.setMode(0);
+        am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         if (this.haveAudioFocus) {
             am.abandonAudioFocus(this);
         }
@@ -271,7 +291,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void unregisterStateListener(StateListener l) {
-        this.stateListeners.add(l);
+        this.stateListeners.remove(l);
     }
 
     private void startOutgoingCall() {
@@ -402,9 +422,15 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             }
             this.vibrator.vibrate(new long[]{0, duration, 500}, 0);
         }
-        Intent intent = new Intent(this, VoIPActivity.class);
-        intent.addFlags(268435456);
-        startActivity(intent);
+        if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
+            try {
+                PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
+            } catch (Exception x) {
+                FileLog.e(TAG, "Error starting incall activity", x);
+            }
+        } else {
+            showIncomingNotification();
+        }
         TL_phone_receivedCall req = new TL_phone_receivedCall();
         req.peer = new TL_inputPhoneCall();
         req.peer.id = this.call.id;
@@ -625,7 +651,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         }
         FileLog.d(TAG, "InitCall: keyID=" + this.keyFingerprint);
         this.controller.setEncryptionKey(this.authKey);
-        this.controller.setRemoteEndpoints(new TL_phoneConnection[]{this.call.connection}, this.call.protocol.udp_p2p);
+        TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
+        endpoints[0] = this.call.connection;
+        for (int i = 0; i < this.call.alternative_connections.size(); i++) {
+            endpoints[i + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i);
+        }
+        this.controller.setRemoteEndpoints(endpoints, this.call.protocol.udp_p2p);
         this.controller.start();
         updateNetworkType();
         this.controller.connect();
@@ -644,6 +675,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             endIntent.putExtra("end_hash", nextInt);
             builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, C.SAMPLE_FLAG_DECODE_ONLY));
             builder.setPriority(2);
+        }
+        if (VERSION.SDK_INT >= 17) {
+            builder.setShowWhen(false);
         }
         if (VERSION.SDK_INT >= 21) {
             builder.setColor(-13851168);
@@ -674,6 +708,55 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         }
         this.ongoingCallNotification = builder.getNotification();
         startForeground(ID_ONGOING_CALL_NOTIFICATION, this.ongoingCallNotification);
+    }
+
+    private void showIncomingNotification() {
+        Intent intent = new Intent(this, VoIPActivity.class);
+        intent.addFlags(805306368);
+        Builder builder = new Builder(this).setContentTitle(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentText(ContactsController.formatName(this.user.first_name, this.user.last_name)).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
+        if (VERSION.SDK_INT >= 16) {
+            this.endHash = Utilities.random.nextInt();
+            Intent answerIntent = new Intent();
+            answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
+            answerIntent.putExtra("end_hash", this.endHash);
+            builder.addAction(R.drawable.ic_call_white_24dp, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall), PendingIntent.getBroadcast(this, 0, answerIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+            Intent endIntent = new Intent();
+            endIntent.setAction(getPackageName() + ".END_CALL");
+            endIntent.putExtra("end_hash", this.endHash);
+            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall), PendingIntent.getBroadcast(this, 0, endIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+            builder.setPriority(2);
+        }
+        if (VERSION.SDK_INT >= 17) {
+            builder.setShowWhen(false);
+        }
+        if (VERSION.SDK_INT >= 21) {
+            builder.setColor(-13851168);
+            builder.setVibrate(new long[0]);
+            builder.setCategory("call");
+            builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
+        }
+        if (this.user.photo != null) {
+            FileLocation photoPath = this.user.photo.photo_small;
+            if (photoPath != null) {
+                BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
+                if (img != null) {
+                    builder.setLargeIcon(img.getBitmap());
+                } else {
+                    try {
+                        float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
+                        Options options = new Options();
+                        options.inSampleSize = scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT ? 1 : (int) scaleFactor;
+                        Bitmap bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoPath, true).toString(), options);
+                        if (bitmap != null) {
+                            builder.setLargeIcon(bitmap);
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
+                }
+            }
+        }
+        startForeground(ID_INCOMING_CALL_NOTIFICATION, builder.getNotification());
     }
 
     private void callFailed() {
@@ -822,6 +905,48 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.haveAudioFocus = true;
         } else {
             this.haveAudioFocus = false;
+        }
+    }
+
+    public void onUIForegroundStateChanged(boolean isForeground) {
+        if (this.currentState != 10) {
+            return;
+        }
+        if (isForeground) {
+            stopForeground(true);
+        } else if (((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(VoIPService.this, VoIPActivity.class);
+                    intent.addFlags(805306368);
+                    try {
+                        PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
+                    } catch (CanceledException e) {
+                        FileLog.e(VoIPService.TAG, "error restarting activity", e);
+                    }
+                }
+            }, 500);
+        } else {
+            showIncomingNotification();
+        }
+    }
+
+    void onMediaButtonEvent(KeyEvent ev) {
+        boolean z = true;
+        if (ev.getKeyCode() != 79 || ev.getAction() != 1) {
+            return;
+        }
+        if (this.currentState == 10) {
+            acceptIncomingCall();
+            return;
+        }
+        if (isMicMute()) {
+            z = false;
+        }
+        setMicMute(z);
+        Iterator it = this.stateListeners.iterator();
+        while (it.hasNext()) {
+            ((StateListener) it.next()).onAudioSettingsChanged();
         }
     }
 }

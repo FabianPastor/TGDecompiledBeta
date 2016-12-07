@@ -300,6 +300,8 @@ public final class R {
         public static final int ic_arrow_drop_down = NUM;
         public static final int ic_call_end_white_24dp = NUM;
         public static final int ic_call_end_white_36dp = NUM;
+        public static final int ic_call_white_18dp = NUM;
+        public static final int ic_call_white_24dp = NUM;
         public static final int ic_chat_bubble_white_24dp = NUM;
         public static final int ic_close_white = NUM;
         public static final int ic_create = NUM;
@@ -1976,9 +1978,11 @@ public final class R {
         public static final int VideoCaption = NUM;
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;
+        public static final int VoipAnswerCall = NUM;
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
         public static final int VoipConnecting = NUM;
+        public static final int VoipDeclineCall = NUM;
         public static final int VoipEndCall = NUM;
         public static final int VoipExchangingKeys = NUM;
         public static final int VoipFailed = NUM;

@@ -19,14 +19,18 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
     }
 
     public void updateMeasureState(TextPaint p) {
-        p.setColor(this.textPaint.getColor());
-        p.setTypeface(this.textPaint.getTypeface());
-        p.setFlags(this.textPaint.getFlags());
+        if (this.textPaint != null) {
+            p.setColor(this.textPaint.getColor());
+            p.setTypeface(this.textPaint.getTypeface());
+            p.setFlags(this.textPaint.getFlags());
+        }
     }
 
     public void updateDrawState(TextPaint p) {
-        p.setColor(this.textPaint.getColor());
-        p.setTypeface(this.textPaint.getTypeface());
-        p.setFlags(this.textPaint.getFlags());
+        if (this.textPaint != null) {
+            p.setColor(this.textPaint.getColor());
+            p.setTypeface(this.textPaint.getTypeface());
+            p.setFlags(this.textPaint.getFlags());
+        }
     }
 }

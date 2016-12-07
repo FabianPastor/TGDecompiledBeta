@@ -808,6 +808,10 @@
     <drawable name="ic_call_end_white_36dp">res/drawable-hdpi-v4/ic_call_end_white_36dp.png</drawable>
     <drawable name="ic_call_end_white_36dp">res/drawable-xhdpi-v4/ic_call_end_white_36dp.png</drawable>
     <drawable name="ic_call_end_white_36dp">res/drawable-xxhdpi-v4/ic_call_end_white_36dp.png</drawable>
+    <drawable name="ic_call_white_18dp">res/drawable-xxhdpi-v4/ic_call_white_18dp.png</drawable>
+    <drawable name="ic_call_white_24dp">res/drawable-mdpi-v4/ic_call_white_24dp.png</drawable>
+    <drawable name="ic_call_white_24dp">res/drawable-hdpi-v4/ic_call_white_24dp.png</drawable>
+    <drawable name="ic_call_white_24dp">res/drawable-xhdpi-v4/ic_call_white_24dp.png</drawable>
     <drawable name="ic_chat_bubble_white_24dp">res/drawable-mdpi-v4/ic_chat_bubble_white_24dp.png</drawable>
     <drawable name="ic_chat_bubble_white_24dp">res/drawable-hdpi-v4/ic_chat_bubble_white_24dp.png</drawable>
     <drawable name="ic_chat_bubble_white_24dp">res/drawable-xhdpi-v4/ic_chat_bubble_white_24dp.png</drawable>

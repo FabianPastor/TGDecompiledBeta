@@ -3070,6 +3070,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new OnDateSetListener() {
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             Calendar calendar = Calendar.getInstance();
+                            calendar.clear();
                             calendar.set(year, month, dayOfMonth);
                             int date = (int) (calendar.getTime().getTime() / 1000);
                             ChatActivity.this.clearChatData();

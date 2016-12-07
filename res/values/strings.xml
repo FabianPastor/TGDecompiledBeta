@@ -1388,9 +1388,11 @@
     <string name="UseLessDataAlways">Always</string>
     <string name="UseLessDataNever">Never</string>
     <string name="UseLessDataOnMobile">Only on mobile data</string>
+    <string name="VoipAnswerCall">Answer</string>
     <string name="VoipBusy">Line busy</string>
     <string name="VoipCallEnded">Call ended</string>
     <string name="VoipConnecting">Connecting</string>
+    <string name="VoipDeclineCall">Decline</string>
     <string name="VoipEndCall">End call</string>
     <string name="VoipExchangingKeys">Exchanging encryption keys</string>
     <string name="VoipFailed">Failed to connect</string>

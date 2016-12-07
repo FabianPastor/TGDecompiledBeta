@@ -66,6 +66,7 @@ public class VoIPActivity extends Activity implements StateListener {
     private Animator currentDeclineAnim;
     private View declineBtn;
     private CallSwipeView declineSwipe;
+    private boolean didAcceptFromHere = false;
     private View endBtn;
     private FabBackgroundDrawable endBtnBg;
     private View endBtnIcon;
@@ -155,6 +156,7 @@ public class VoIPActivity extends Activity implements StateListener {
         VoIPService.getSharedInstance().registerStateListener(this);
         this.acceptSwipe.setListener(new Listener() {
             public void onDragComplete() {
+                VoIPActivity.this.didAcceptFromHere = true;
                 if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
                     VoIPService.getSharedInstance().acceptIncomingCall();
                     VoIPActivity.this.callAccepted();
@@ -208,7 +210,6 @@ public class VoIPActivity extends Activity implements StateListener {
         this.declineSwipe.setListener(new Listener() {
             public void onDragComplete() {
                 VoIPService.getSharedInstance().declineIncomingCall();
-                VoIPActivity.this.finish();
             }
 
             public void onDragStart() {
@@ -439,6 +440,20 @@ public class VoIPActivity extends Activity implements StateListener {
         }
     }
 
+    protected void onResume() {
+        super.onResume();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().onUIForegroundStateChanged(true);
+        }
+    }
+
+    protected void onPause() {
+        super.onPause();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().onUIForegroundStateChanged(false);
+        }
+    }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode != 101) {
             return;
@@ -517,13 +532,13 @@ public class VoIPActivity extends Activity implements StateListener {
                 if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
                     CharSequence format;
                     long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                    TextView access$1400 = VoIPActivity.this.stateText;
+                    TextView access$1500 = VoIPActivity.this.stateText;
                     if (duration > 3600) {
                         format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
                     } else {
                         format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                     }
-                    access$1400.setText(format);
+                    access$1500.setText(format);
                     VoIPActivity.this.stateText.postDelayed(this, 500);
                 }
             }
@@ -539,27 +554,50 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void callAccepted() {
-        ObjectAnimator colorAnim;
-        this.acceptBtn.setVisibility(8);
         this.endBtn.setVisibility(0);
         this.micToggle.setVisibility(0);
         this.spkToggle.setVisibility(0);
         this.chatBtn.setVisibility(0);
-        if (VERSION.SDK_INT >= 21) {
-            colorAnim = ObjectAnimator.ofArgb(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
-        } else {
-            colorAnim = ObjectAnimator.ofInt(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
-            colorAnim.setEvaluator(new ArgbEvaluator());
+        if (this.didAcceptFromHere) {
+            ObjectAnimator colorAnim;
+            this.acceptBtn.setVisibility(8);
+            if (VERSION.SDK_INT >= 21) {
+                colorAnim = ObjectAnimator.ofArgb(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
+            } else {
+                colorAnim = ObjectAnimator.ofInt(this.endBtnBg, TtmlNode.ATTR_TTS_COLOR, new int[]{-12207027, -1696188});
+                colorAnim.setEvaluator(new ArgbEvaluator());
+            }
+            AnimatorSet set = new AnimatorSet();
+            AnimatorSet decSet = new AnimatorSet();
+            decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
+            decSet.setInterpolator(new DecelerateInterpolator());
+            decSet.setDuration(500);
+            AnimatorSet accSet = new AnimatorSet();
+            Animator[] animatorArr = new Animator[2];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.swipeViewsWrap, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.declineBtn, "alpha", new float[]{0.0f});
+            accSet.playTogether(animatorArr);
+            accSet.setInterpolator(new AccelerateInterpolator());
+            accSet.setDuration(125);
+            set.playTogether(new Animator[]{decSet, accSet});
+            set.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    VoIPActivity.this.swipeViewsWrap.setVisibility(8);
+                    VoIPActivity.this.declineBtn.setVisibility(8);
+                }
+            });
+            set.start();
+            return;
         }
-        AnimatorSet set = new AnimatorSet();
-        AnimatorSet decSet = new AnimatorSet();
-        decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
+        set = new AnimatorSet();
+        decSet = new AnimatorSet();
+        decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
         decSet.setInterpolator(new DecelerateInterpolator());
         decSet.setDuration(500);
-        AnimatorSet accSet = new AnimatorSet();
-        Animator[] animatorArr = new Animator[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.swipeViewsWrap, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+        accSet = new AnimatorSet();
+        animatorArr = new Animator[3];
         animatorArr[1] = ObjectAnimator.ofFloat(this.declineBtn, "alpha", new float[]{0.0f});
+        animatorArr[2] = ObjectAnimator.ofFloat(this.acceptBtn, "alpha", new float[]{0.0f});
         accSet.playTogether(animatorArr);
         accSet.setInterpolator(new AccelerateInterpolator());
         accSet.setDuration(125);
@@ -568,10 +606,10 @@ public class VoIPActivity extends Activity implements StateListener {
             public void onAnimationEnd(Animator animation) {
                 VoIPActivity.this.swipeViewsWrap.setVisibility(8);
                 VoIPActivity.this.declineBtn.setVisibility(8);
+                VoIPActivity.this.acceptBtn.setVisibility(8);
             }
         });
         set.start();
-        this.isIncomingWaiting = false;
     }
 
     public void onStateChanged(final int state) {
@@ -597,6 +635,12 @@ public class VoIPActivity extends Activity implements StateListener {
                         VoIPActivity.this.keyButton.setVisibility(8);
                     }
                     VoIPActivity.this.firstStateChange = false;
+                }
+                if (VoIPActivity.this.isIncomingWaiting && state != 10) {
+                    VoIPActivity.this.isIncomingWaiting = false;
+                    if (!VoIPActivity.this.didAcceptFromHere) {
+                        VoIPActivity.this.callAccepted();
+                    }
                 }
                 if (state == 10) {
                     VoIPActivity.this.stateText.setText(LocaleController.getString("VoipIncoming", R.string.VoipIncoming));
@@ -638,5 +682,9 @@ public class VoIPActivity extends Activity implements StateListener {
                 }
             }
         });
+    }
+
+    public void onAudioSettingsChanged() {
+        this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
     }
 }
