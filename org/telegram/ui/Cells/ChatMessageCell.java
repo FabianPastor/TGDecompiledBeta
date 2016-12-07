@@ -1802,37 +1802,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject) {
         int maxWidth;
-        boolean z;
+        int linkPreviewMaxWidth;
         String description;
         Photo photo;
         TLObject document;
         String type;
-        int duration;
         boolean smallImage;
         int height;
         Throwable e;
         int restLinesCount;
         int a;
         boolean authorIsRTL;
-        boolean hasRTL;
         int maxPhotoWidth;
+        ArrayList arrayList;
+        int i;
         DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp;
+        int durationWidth;
+        float scale;
         ImageReceiver imageReceiver;
         TLObject tLObject;
         String str;
         FileLocation fileLocation;
         String fileName;
-        int seconds;
-        int mWidth;
-        int timeWidthTotal;
+        String str2;
         int rows;
         boolean fullWidth;
-        float f;
-        int maxButtonWidth;
+        int maxButtonsWidth;
         TL_keyboardButtonRow row;
+        int buttonsCount;
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
@@ -1847,9 +1847,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject)) {
             int width;
-            int i;
-            int maxButtonsWidth;
-            int buttonsCount;
+            int timeWidthTotal;
+            float f;
+            int maxButtonWidth;
             int dp2;
             this.currentMessageObject = messageObject;
             this.lastSendState = messageObject.messageOwner.send_state;
@@ -1916,9 +1916,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            float scale;
+            boolean z;
             boolean photoExist;
-            String str2;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1969,14 +1968,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview) {
-                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
                     String author;
+                    int duration;
                     int restLines;
                     int lineLeft;
-                    ArrayList arrayList;
-                    int durationWidth;
+                    boolean hasRTL;
+                    int seconds;
+                    int mWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

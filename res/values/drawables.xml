@@ -1885,6 +1885,14 @@
     <drawable name="sheet_shadow">res/drawable-xhdpi-v4/sheet_shadow.9.png</drawable>
     <drawable name="sheet_shadow">res/drawable-xxhdpi-v4/sheet_shadow.9.png</drawable>
     <drawable name="sheet_shadow">res/drawable-xxxhdpi-v4/sheet_shadow.9.png</drawable>
+    <drawable name="slide_dot_big">res/drawable-mdpi-v4/slide_dot_big.png</drawable>
+    <drawable name="slide_dot_big">res/drawable-hdpi-v4/slide_dot_big.png</drawable>
+    <drawable name="slide_dot_big">res/drawable-xhdpi-v4/slide_dot_big.png</drawable>
+    <drawable name="slide_dot_big">res/drawable-xxhdpi-v4/slide_dot_big.png</drawable>
+    <drawable name="slide_dot_small">res/drawable-mdpi-v4/slide_dot_small.png</drawable>
+    <drawable name="slide_dot_small">res/drawable-hdpi-v4/slide_dot_small.png</drawable>
+    <drawable name="slide_dot_small">res/drawable-xhdpi-v4/slide_dot_small.png</drawable>
+    <drawable name="slide_dot_small">res/drawable-xxhdpi-v4/slide_dot_small.png</drawable>
     <drawable name="slidearrow">res/drawable-mdpi-v4/slidearrow.png</drawable>
     <drawable name="slidearrow">res/drawable-hdpi-v4/slidearrow.png</drawable>
     <drawable name="slidearrow">res/drawable-xhdpi-v4/slidearrow.png</drawable>

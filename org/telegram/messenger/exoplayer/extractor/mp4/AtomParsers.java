@@ -681,13 +681,13 @@ final class AtomParsers {
 
     private static Pair<List<byte[]>, Integer> parseHvcCFromParent(ParsableByteArray parent, int position) {
         int i;
+        int j;
         parent.setPosition((position + 8) + 21);
         int lengthSizeMinusOne = parent.readUnsignedByte() & 3;
         int numberOfArrays = parent.readUnsignedByte();
         int csdLength = 0;
         int csdStartPosition = parent.getPosition();
         for (i = 0; i < numberOfArrays; i++) {
-            int j;
             parent.skipBytes(1);
             int numberOfNalUnits = parent.readUnsignedShort();
             for (j = 0; j < numberOfNalUnits; j++) {

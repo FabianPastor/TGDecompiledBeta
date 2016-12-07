@@ -594,6 +594,8 @@ public final class R {
         public static final int share_round = NUM;
         public static final int sharedmedia = NUM;
         public static final int sheet_shadow = NUM;
+        public static final int slide_dot_big = NUM;
+        public static final int slide_dot_small = NUM;
         public static final int slidearrow = NUM;
         public static final int smiles_popup = NUM;
         public static final int spinner_states = NUM;

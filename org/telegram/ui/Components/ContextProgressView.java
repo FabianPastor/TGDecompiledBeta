@@ -8,6 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 
 public class ContextProgressView extends View {
     private RectF cicleRect = new RectF();
@@ -26,10 +27,13 @@ public class ContextProgressView extends View {
         if (colorType == 0) {
             this.innerPaint.setColor(-4202506);
             this.outerPaint.setColor(-13920542);
-            return;
+        } else if (colorType == 1) {
+            this.innerPaint.setColor(-4202506);
+            this.outerPaint.setColor(-1);
+        } else if (colorType == 2) {
+            this.innerPaint.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR);
+            this.outerPaint.setColor(-1);
         }
-        this.innerPaint.setColor(-4202506);
-        this.outerPaint.setColor(-1);
     }
 
     public void setVisibility(int visibility) {
