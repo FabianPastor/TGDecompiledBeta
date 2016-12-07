@@ -416,6 +416,9 @@
     <string name="EditVideo">Editar Vídeo</string>
     <string name="EditedMessage">editado</string>
     <string name="EmailPasswordConfirmText">Por favor, siga os seguintes passos para completar a configuração da autenticação em duas etapas:\n\n1. Verifique seu e-mail ( não esqueça da pasta spam)\n%1$s\n\n2. Clique no link de validação.</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">Adicionar Usuários</string>
     <string name="EnableAnimations">Permitir Animações</string>
     <string name="Enabled">Ativado</string>

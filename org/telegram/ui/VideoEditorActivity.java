@@ -274,8 +274,11 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
 
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-                setMeasuredDimension(widthSize, MeasureSpec.getSize(heightMeasureSpec));
-                int heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
+                int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+                setMeasuredDimension(widthSize, heightSize);
+                if (!AndroidUtilities.isTablet()) {
+                    heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
+                }
                 measureChildWithMargins(VideoEditorActivity.this.captionEditText, widthMeasureSpec, 0, heightMeasureSpec, 0);
                 int inputFieldHeight = VideoEditorActivity.this.captionEditText.getMeasuredHeight();
                 int childCount = getChildCount();
@@ -283,7 +286,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     View child = getChildAt(i);
                     if (!(child.getVisibility() == 8 || child == VideoEditorActivity.this.captionEditText)) {
                         if (VideoEditorActivity.this.captionEditText.isPopupView(child)) {
-                            if (!AndroidUtilities.isInMultiwindow) {
+                            if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
                                 child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, C.ENCODING_PCM_32BIT));
                             } else if (AndroidUtilities.isTablet()) {
                                 child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight), C.ENCODING_PCM_32BIT));
@@ -314,9 +317,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             }
 
             protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                int heightSize;
                 int count = getChildCount();
-                int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) ? 0 : VideoEditorActivity.this.captionEditText.getEmojiPadding();
-                int heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
+                int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? 0 : VideoEditorActivity.this.captionEditText.getEmojiPadding();
+                if (AndroidUtilities.isTablet()) {
+                    heightSize = getMeasuredHeight();
+                } else {
+                    heightSize = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
+                }
                 for (int i = 0; i < count; i++) {
                     View child = getChildAt(i);
                     if (child.getVisibility() != 8) {
@@ -363,12 +371,8 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             if (!(VideoEditorActivity.this.captionEditText.isPopupShowing() || VideoEditorActivity.this.captionEditText.isKeyboardVisible() || VideoEditorActivity.this.captionEditText.getEmojiPadding() != 0)) {
                                 childTop += AndroidUtilities.dp(400.0f);
                             }
-                        } else if (child == VideoEditorActivity.this.pickerView) {
-                            if (VideoEditorActivity.this.captionEditText.isPopupShowing() || VideoEditorActivity.this.captionEditText.isKeyboardVisible()) {
-                                childTop += AndroidUtilities.dp(400.0f);
-                            }
                         } else if (VideoEditorActivity.this.captionEditText.isPopupView(child)) {
-                            childTop = AndroidUtilities.isInMultiwindow ? (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) : VideoEditorActivity.this.captionEditText.getBottom();
+                            childTop = (AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) : VideoEditorActivity.this.captionEditText.getBottom();
                         } else if (child == VideoEditorActivity.this.textureView) {
                             childLeft = ((r - l) - VideoEditorActivity.this.textureView.getMeasuredWidth()) / 2;
                             childTop = AndroidUtilities.dp(14.0f);
@@ -426,9 +430,11 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             public void onClick(View v) {
                 VideoEditorActivity.this.captionEditText.setFieldText(VideoEditorActivity.this.currentCaption);
                 VideoEditorActivity.this.captionDoneItem.setVisibility(0);
-                VideoEditorActivity.this.videoSeekBarView.setVisibility(8);
-                VideoEditorActivity.this.videoTimelineView.setVisibility(8);
                 VideoEditorActivity.this.pickerView.setVisibility(8);
+                if (!AndroidUtilities.isTablet()) {
+                    VideoEditorActivity.this.videoSeekBarView.setVisibility(8);
+                    VideoEditorActivity.this.videoTimelineView.setVisibility(8);
+                }
                 LayoutParams layoutParams = (LayoutParams) VideoEditorActivity.this.captionEditText.getLayoutParams();
                 layoutParams.bottomMargin = 0;
                 VideoEditorActivity.this.captionEditText.setLayoutParams(layoutParams);
@@ -638,6 +644,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.captionEditText.onDestroy();
         }
         this.captionEditText = new PhotoViewerCaptionEnterView(context, frameLayout, null);
+        this.captionEditText.setForceFloatingEmoji(AndroidUtilities.isTablet());
         this.captionEditText.setDelegate(new PhotoViewerCaptionEnterViewDelegate() {
             public void onCaptionEnter() {
                 VideoEditorActivity.this.closeCaptionEnter(true);
@@ -824,8 +831,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.actionBar.setSubtitle(this.oldTitle);
         this.captionDoneItem.setVisibility(8);
         this.pickerView.setVisibility(0);
-        this.videoSeekBarView.setVisibility(0);
-        this.videoTimelineView.setVisibility(0);
+        if (!AndroidUtilities.isTablet()) {
+            this.videoSeekBarView.setVisibility(0);
+            this.videoTimelineView.setVisibility(0);
+        }
         LayoutParams layoutParams = (LayoutParams) this.captionEditText.getLayoutParams();
         layoutParams.bottomMargin = -AndroidUtilities.dp(400.0f);
         this.captionEditText.setLayoutParams(layoutParams);
@@ -836,9 +845,8 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.captionItem.setImageResource(TextUtils.isEmpty(this.currentCaption) ? R.drawable.photo_text : R.drawable.photo_text2);
         if (this.captionEditText.isPopupShowing()) {
             this.captionEditText.hidePopup();
-        } else {
-            this.captionEditText.closeKeyboard();
         }
+        this.captionEditText.closeKeyboard();
     }
 
     public void didReceivedNotification(int id, Object... args) {

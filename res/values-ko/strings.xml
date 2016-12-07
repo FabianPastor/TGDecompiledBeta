@@ -416,6 +416,9 @@
     <string name="EditVideo">동영상 편집</string>
     <string name="EditedMessage">수정됨</string>
     <string name="EmailPasswordConfirmText">2단계 인증 설정을 완료하시려면 아래의 절차대로 진행해주세요:\n\n1.이메일 확인(스팸 폴더 확인)\n%1$s\n\n2.인증 링크 클릭</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">대화상대 추가</string>
     <string name="EnableAnimations">화면 전환 효과 사용</string>
     <string name="Enabled">켜기</string>

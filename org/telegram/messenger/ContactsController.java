@@ -1272,6 +1272,7 @@ public class ContactsController {
     private void applyContactsUpdates(ArrayList<Integer> ids, ConcurrentHashMap<Integer, User> userDict, ArrayList<TL_contact> newC, ArrayList<Integer> contactsTD) {
         int a;
         Integer uid;
+        Contact contact;
         int index;
         if (newC == null || contactsTD == null) {
             newC = new ArrayList();
@@ -1279,9 +1280,9 @@ public class ContactsController {
             for (a = 0; a < ids.size(); a++) {
                 uid = (Integer) ids.get(a);
                 if (uid.intValue() > 0) {
-                    TL_contact contact = new TL_contact();
-                    contact.user_id = uid.intValue();
-                    newC.add(contact);
+                    TL_contact contact2 = new TL_contact();
+                    contact2.user_id = uid.intValue();
+                    newC.add(contact2);
                 } else if (uid.intValue() < 0) {
                     contactsTD.add(Integer.valueOf(-uid.intValue()));
                 }
@@ -1292,7 +1293,6 @@ public class ContactsController {
         StringBuilder toDelete = new StringBuilder();
         boolean reloadContacts = false;
         for (a = 0; a < newC.size(); a++) {
-            Contact contact2;
             TL_contact newContact = (TL_contact) newC.get(a);
             User user = null;
             if (userDict != null) {
@@ -1306,11 +1306,11 @@ public class ContactsController {
             if (user == null || user.phone == null || user.phone.length() == 0) {
                 reloadContacts = true;
             } else {
-                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact2 != null) {
-                    index = contact2.shortPhones.indexOf(user.phone);
+                contact = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact != null) {
+                    index = contact.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact2.phoneDeleted.set(index, Integer.valueOf(0));
+                        contact.phoneDeleted.set(index, Integer.valueOf(0));
                     }
                 }
                 if (toAdd.length() != 0) {
@@ -1338,11 +1338,11 @@ public class ContactsController {
             if (user == null) {
                 reloadContacts = true;
             } else if (user.phone != null && user.phone.length() > 0) {
-                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact2 != null) {
-                    index = contact2.shortPhones.indexOf(user.phone);
+                contact = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact != null) {
+                    index = contact.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact2.phoneDeleted.set(index, Integer.valueOf(1));
+                        contact.phoneDeleted.set(index, Integer.valueOf(1));
                     }
                 }
                 if (toDelete.length() != 0) {

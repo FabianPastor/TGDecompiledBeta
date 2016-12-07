@@ -100,10 +100,10 @@ class zze extends zzaa {
 
         @WorkerThread
         private boolean zza(SQLiteDatabase sQLiteDatabase, String str) {
-            Cursor query;
             Object e;
             Throwable th;
             Cursor cursor = null;
+            Cursor query;
             try {
                 SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
                 query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -498,6 +498,7 @@ class zze extends zzaa {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzhz(str);
@@ -505,7 +506,6 @@ class zze extends zzaa {
         zzaax();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_measurement_internal_zze_zza = new zza();
-        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -770,69 +770,69 @@ class zze extends zzaa {
 
     public void zza(String str, long j, zzb com_google_android_gms_measurement_internal_zze_zzb) {
         Object string;
-        Cursor cursor;
         Object e;
         Throwable th;
-        Cursor cursor2 = null;
+        Cursor cursor = null;
         zzac.zzy(com_google_android_gms_measurement_internal_zze_zzb);
         zzyl();
         zzaax();
+        Cursor cursor2;
         try {
             String str2;
             SQLiteDatabase writableDatabase = getWritableDatabase();
             String string2;
             if (TextUtils.isEmpty(str)) {
-                cursor2 = writableDatabase.rawQuery("select app_id, metadata_fingerprint from raw_events where app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;", new String[]{String.valueOf(j)});
-                if (cursor2.moveToFirst()) {
-                    string = cursor2.getString(0);
-                    string2 = cursor2.getString(1);
-                    cursor2.close();
+                cursor = writableDatabase.rawQuery("select app_id, metadata_fingerprint from raw_events where app_id in (select app_id from apps where config_fetched_time >= ?) order by rowid limit 1;", new String[]{String.valueOf(j)});
+                if (cursor.moveToFirst()) {
+                    string = cursor.getString(0);
+                    string2 = cursor.getString(1);
+                    cursor.close();
                     str2 = string2;
-                    cursor = cursor2;
-                } else if (cursor2 != null) {
-                    cursor2.close();
+                    cursor2 = cursor;
+                } else if (cursor != null) {
+                    cursor.close();
                     return;
                 } else {
                     return;
                 }
             }
-            cursor2 = writableDatabase.rawQuery("select metadata_fingerprint from raw_events where app_id = ? order by rowid limit 1;", new String[]{str});
-            if (cursor2.moveToFirst()) {
-                string2 = cursor2.getString(0);
-                cursor2.close();
+            cursor = writableDatabase.rawQuery("select metadata_fingerprint from raw_events where app_id = ? order by rowid limit 1;", new String[]{str});
+            if (cursor.moveToFirst()) {
+                string2 = cursor.getString(0);
+                cursor.close();
                 str2 = string2;
-                cursor = cursor2;
-            } else if (cursor2 != null) {
-                cursor2.close();
+                cursor2 = cursor;
+            } else if (cursor != null) {
+                cursor.close();
                 return;
             } else {
                 return;
             }
             try {
-                cursor = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id=? and metadata_fingerprint=?", new String[]{string, str2}, null, null, "rowid", "2");
-                if (cursor.moveToFirst()) {
-                    zzarc zzbd = zzarc.zzbd(cursor.getBlob(0));
+                cursor2 = writableDatabase.query("raw_events_metadata", new String[]{TtmlNode.TAG_METADATA}, "app_id=? and metadata_fingerprint=?", new String[]{string, str2}, null, null, "rowid", "2");
+                if (cursor2.moveToFirst()) {
+                    zzarc zzbd = zzarc.zzbd(cursor2.getBlob(0));
                     com.google.android.gms.internal.zzvm.zze com_google_android_gms_internal_zzvm_zze = new com.google.android.gms.internal.zzvm.zze();
                     try {
                         com.google.android.gms.internal.zzvm.zze com_google_android_gms_internal_zzvm_zze2 = (com.google.android.gms.internal.zzvm.zze) com_google_android_gms_internal_zzvm_zze.zzb(zzbd);
-                        if (cursor.moveToNext()) {
+                        if (cursor2.moveToNext()) {
                             zzbvg().zzbwe().log("Get multiple raw event metadata records, expected one");
                         }
-                        cursor.close();
+                        cursor2.close();
                         com_google_android_gms_measurement_internal_zze_zzb.zzb(com_google_android_gms_internal_zzvm_zze);
-                        cursor2 = writableDatabase.query("raw_events", new String[]{"rowid", "name", "timestamp", "data"}, "app_id=? and metadata_fingerprint=?", new String[]{string, str2}, null, null, "rowid", null);
-                        if (cursor2.moveToFirst()) {
+                        cursor = writableDatabase.query("raw_events", new String[]{"rowid", "name", "timestamp", "data"}, "app_id=? and metadata_fingerprint=?", new String[]{string, str2}, null, null, "rowid", null);
+                        if (cursor.moveToFirst()) {
                             do {
-                                long j2 = cursor2.getLong(0);
-                                zzarc zzbd2 = zzarc.zzbd(cursor2.getBlob(3));
+                                long j2 = cursor.getLong(0);
+                                zzarc zzbd2 = zzarc.zzbd(cursor.getBlob(3));
                                 com.google.android.gms.internal.zzvm.zzb com_google_android_gms_internal_zzvm_zzb = new com.google.android.gms.internal.zzvm.zzb();
                                 try {
                                     com.google.android.gms.internal.zzvm.zzb com_google_android_gms_internal_zzvm_zzb2 = (com.google.android.gms.internal.zzvm.zzb) com_google_android_gms_internal_zzvm_zzb.zzb(zzbd2);
-                                    com_google_android_gms_internal_zzvm_zzb.name = cursor2.getString(1);
-                                    com_google_android_gms_internal_zzvm_zzb.atp = Long.valueOf(cursor2.getLong(2));
+                                    com_google_android_gms_internal_zzvm_zzb.name = cursor.getString(1);
+                                    com_google_android_gms_internal_zzvm_zzb.atp = Long.valueOf(cursor.getLong(2));
                                     if (!com_google_android_gms_measurement_internal_zze_zzb.zza(j2, com_google_android_gms_internal_zzvm_zzb)) {
-                                        if (cursor2 != null) {
-                                            cursor2.close();
+                                        if (cursor != null) {
+                                            cursor.close();
                                             return;
                                         }
                                         return;
@@ -844,52 +844,52 @@ class zze extends zzaa {
                                         e = e3;
                                     }
                                 }
-                            } while (cursor2.moveToNext());
-                            if (cursor2 != null) {
-                                cursor2.close();
+                            } while (cursor.moveToNext());
+                            if (cursor != null) {
+                                cursor.close();
                                 return;
                             }
                             return;
                         }
                         zzbvg().zzbwe().log("Raw event data disappeared while in transaction");
-                        if (cursor2 != null) {
-                            cursor2.close();
+                        if (cursor != null) {
+                            cursor.close();
                             return;
                         }
                         return;
                     } catch (IOException e22) {
                         zzbvg().zzbwc().zze("Data loss. Failed to merge raw event metadata", string, e22);
-                        if (cursor != null) {
-                            cursor.close();
+                        if (cursor2 != null) {
+                            cursor2.close();
                             return;
                         }
                         return;
                     }
                 }
                 zzbvg().zzbwc().log("Raw event metadata record is missing");
-                if (cursor != null) {
-                    cursor.close();
+                if (cursor2 != null) {
+                    cursor2.close();
                 }
             } catch (SQLiteException e4) {
                 e = e4;
-                cursor2 = cursor;
+                cursor = cursor2;
                 try {
                     zzbvg().zzbwc().zzj("Data loss. Error selecting raw event", e);
-                    if (cursor2 != null) {
-                        cursor2.close();
+                    if (cursor != null) {
+                        cursor.close();
                     }
                 } catch (Throwable th2) {
                     th = th2;
-                    cursor = cursor2;
-                    if (cursor != null) {
-                        cursor.close();
+                    cursor2 = cursor;
+                    if (cursor2 != null) {
+                        cursor2.close();
                     }
                     throw th;
                 }
             } catch (Throwable th3) {
                 th = th3;
-                if (cursor != null) {
-                    cursor.close();
+                if (cursor2 != null) {
+                    cursor2.close();
                 }
                 throw th;
             }
@@ -897,9 +897,9 @@ class zze extends zzaa {
             e = e32;
         } catch (Throwable th4) {
             th = th4;
-            cursor = cursor2;
-            if (cursor != null) {
-                cursor.close();
+            cursor2 = cursor;
+            if (cursor2 != null) {
+                cursor2.close();
             }
             throw th;
         }
@@ -1197,6 +1197,7 @@ class zze extends zzaa {
     }
 
     Map<Integer, List<com.google.android.gms.internal.zzvk.zze>> zzau(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzaax();
@@ -1204,7 +1205,6 @@ class zze extends zzaa {
         zzac.zzhz(str);
         zzac.zzhz(str2);
         Map<Integer, List<com.google.android.gms.internal.zzvk.zze>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1324,12 +1324,12 @@ class zze extends zzaa {
     }
 
     public String zzbl(long j) {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzyl();
         zzaax();
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1381,10 +1381,10 @@ class zze extends zzaa {
 
     @WorkerThread
     public String zzbvj() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1891,7 +1891,7 @@ class zze extends zzaa {
 
     @WorkerThread
     public List<Pair<com.google.android.gms.internal.zzvm.zze, Long>> zzn(String str, int i, int i2) {
-        List<Pair<com.google.android.gms.internal.zzvm.zze, Long>> emptyList;
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -1904,7 +1904,7 @@ class zze extends zzaa {
         }
         zzac.zzbs(z);
         zzac.zzhz(str);
-        Cursor query;
+        List<Pair<com.google.android.gms.internal.zzvm.zze, Long>> emptyList;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

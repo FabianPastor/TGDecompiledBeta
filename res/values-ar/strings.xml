@@ -416,6 +416,9 @@
     <string name="EditVideo">تحرير الفيديو</string>
     <string name="EditedMessage">معدلة</string>
     <string name="EmailPasswordConfirmText">فضلًا اتّبع هذه الخطوات لإكمال إعدادات التحقق بخطوتين:\n\n١. قم بالإطلاع على بريدة الإلكتروني بما فيه مجلد الرسائل الغير مرغوب بها\n%1$s\n\n٢. اضغط على رابط التأكيد</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">إضافة جهات اتصال</string>
     <string name="EnableAnimations">تفعيل التأثيرات المتحركة</string>
     <string name="Enabled">تمكين</string>

@@ -6090,6 +6090,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        ArrayList<Integer> arrayList3;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6143,7 +6144,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            ArrayList<Integer> arrayList3;
             Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("tmessages", "process update " + update);

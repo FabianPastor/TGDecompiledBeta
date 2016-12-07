@@ -2053,9 +2053,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             setCurrentCaption(this.captionEditText.getFieldCharSequence());
             if (this.captionEditText.isPopupShowing()) {
                 this.captionEditText.hidePopup();
-            } else {
-                this.captionEditText.closeKeyboard();
             }
+            this.captionEditText.closeKeyboard();
         }
     }
 

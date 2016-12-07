@@ -416,6 +416,9 @@
     <string name="EditVideo">Video bearbeiten</string>
     <string name="EditedMessage">bearbeitet</string>
     <string name="EmailPasswordConfirmText">Bitte folge diesen Schritten um die zweistufige Bestätigung abzuschließen:\n\n1. Überprüfe deine Mails (auch den Spam-Ordner)\n%1$s\n\n2. Auf den Link klicken.</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">Hinzufügen</string>
     <string name="EnableAnimations">Animationen aktivieren</string>
     <string name="Enabled">Aktiviert</string>

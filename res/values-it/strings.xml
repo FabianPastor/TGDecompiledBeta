@@ -416,6 +416,9 @@
     <string name="EditVideo">Modifica video</string>
     <string name="EditedMessage">modificato</string>
     <string name="EmailPasswordConfirmText">Segui questi step per completare la configurazione della verifica in due passaggi:\n\n1. Controlla la tua e-mail (anche lo spam)\n%1$s\n\n2. Clicca sul link di conferma.</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">Aggiungi utenti</string>
     <string name="EnableAnimations">Abilita animazioni</string>
     <string name="Enabled">Abilitate</string>

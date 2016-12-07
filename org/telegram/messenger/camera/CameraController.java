@@ -472,12 +472,14 @@ public class CameraController implements OnInfoListener {
                 tempRecorder.stop();
                 tempRecorder.release();
             }
-            final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
-                }
-            });
+            if (this.onVideoTakeCallback != null) {
+                final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                    }
+                });
+            }
         }
     }
 
@@ -487,22 +489,40 @@ public class CameraController implements OnInfoListener {
             if (!(camera == null || this.recorder == null)) {
                 MediaRecorder tempRecorder = this.recorder;
                 this.recorder = null;
-                tempRecorder.stop();
-                tempRecorder.release();
-                camera.reconnect();
-                camera.startPreview();
-                session.stopVideoRecording();
+                try {
+                    tempRecorder.stop();
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+                try {
+                    tempRecorder.release();
+                } catch (Throwable e2) {
+                    FileLog.e("tmessages", e2);
+                }
+                try {
+                    camera.reconnect();
+                    camera.startPreview();
+                } catch (Throwable e22) {
+                    FileLog.e("tmessages", e22);
+                }
+                try {
+                    session.stopVideoRecording();
+                } catch (Throwable e222) {
+                    FileLog.e("tmessages", e222);
+                }
             }
             if (!abandon) {
-                final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
-                    }
-                });
+                if (this.onVideoTakeCallback != null) {
+                    final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                        }
+                    });
+                }
             }
-        } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+        } catch (Throwable e2222) {
+            FileLog.e("tmessages", e2222);
         }
     }
 

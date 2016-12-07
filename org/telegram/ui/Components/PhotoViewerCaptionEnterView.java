@@ -49,6 +49,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private ImageView emojiButton;
     private int emojiPadding;
     private EmojiView emojiView;
+    private boolean forceFloatingEmoji;
     private boolean innerTextChange;
     private int keyboardHeight;
     private int keyboardHeightLand;
@@ -221,6 +222,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         });
+    }
+
+    public void setForceFloatingEmoji(boolean value) {
+        this.forceFloatingEmoji = value;
     }
 
     public boolean hideActionMode() {
@@ -432,7 +437,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             layoutParams.width = AndroidUtilities.displaySize.x;
             layoutParams.height = currentHeight;
             this.emojiView.setLayoutParams(layoutParams);
-            if (!AndroidUtilities.isInMultiwindow) {
+            if (!(AndroidUtilities.isInMultiwindow || this.forceFloatingEmoji)) {
                 AndroidUtilities.hideKeyboard(this.messageEditText);
             }
             if (this.sizeNotifierLayout != null) {
@@ -488,7 +493,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void onSizeChanged(int height, boolean isWidthGreater) {
-        if (height > AndroidUtilities.dp(50.0f) && this.keyboardVisible && !AndroidUtilities.isInMultiwindow) {
+        if (height > AndroidUtilities.dp(50.0f) && this.keyboardVisible && !AndroidUtilities.isInMultiwindow && !this.forceFloatingEmoji) {
             if (isWidthGreater) {
                 this.keyboardHeightLand = height;
                 ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0).edit().putInt("kbd_height_land3", this.keyboardHeightLand).commit();

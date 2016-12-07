@@ -416,6 +416,9 @@
     <string name="EditVideo">Video bewerken</string>
     <string name="EditedMessage">gewijzigd</string>
     <string name="EmailPasswordConfirmText">Volg deze stappen om twee-staps-verificatie in te schakelen:\n\n1.Controleer je e-mail (kijk voor de zekerheid ook in de ongewenste post)\n%1$s\n\n2.n klik op de bevestigingslink.</string>
+    <string name="Emoji">Emoji</string>
+    <string name="EmojiBigSize">Draw single big emoji</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
     <string name="EmpryUsersPlaceholder">Toevoegen</string>
     <string name="EnableAnimations">Animaties</string>
     <string name="Enabled">Inschakelen</string>
