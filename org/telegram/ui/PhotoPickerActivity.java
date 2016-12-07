@@ -469,6 +469,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         AndroidUtilities.setListViewEdgeEffectColor(this.listView, Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int i2 = 1;
                 if (PhotoPickerActivity.this.selectedAlbum == null || !PhotoPickerActivity.this.selectedAlbum.isVideo) {
                     ArrayList<Object> arrayList;
                     if (PhotoPickerActivity.this.selectedAlbum != null) {
@@ -479,15 +480,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         arrayList = PhotoPickerActivity.this.searchResult;
                     }
                     if (i >= 0 && i < arrayList.size()) {
-                        int i2;
                         if (PhotoPickerActivity.this.searchItem != null) {
                             AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
                         }
                         PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
                         PhotoViewer instance = PhotoViewer.getInstance();
-                        if (PhotoPickerActivity.this.singlePhoto) {
-                            i2 = 1;
-                        } else {
+                        if (!PhotoPickerActivity.this.singlePhoto) {
                             i2 = 0;
                         }
                         instance.openPhotoForSelect(arrayList, i, i2, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
@@ -517,12 +515,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         if (!fragment.onFragmentCreate()) {
                             PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
                             PhotoPickerActivity.this.finishFragment();
-                        }
-                        if (PhotoPickerActivity.this.parentLayout.presentFragment(fragment, false, false, true)) {
+                            return;
+                        } else if (PhotoPickerActivity.this.parentLayout.presentFragment(fragment, false, false, true)) {
                             fragment.setParentChatActivity(PhotoPickerActivity.this.chatActivity);
                             return;
+                        } else {
+                            return;
                         }
-                        return;
                     }
                     PhotoPickerActivity.this.delegate.didSelectVideo(path, null, 0, 0, null);
                     PhotoPickerActivity.this.finishFragment();

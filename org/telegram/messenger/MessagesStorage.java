@@ -238,6 +238,7 @@ public class MessagesStorage {
                 this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
+                FileLog.e("tmessages", "current db version = " + version);
                 if (version == 0) {
                     throw new Exception("malformed");
                 }
@@ -400,10 +401,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 11").stepThis().dispose();
                         version = 11;
                     }
-                    if (version == 11) {
-                        version = 12;
-                    }
-                    if (version == 12) {
+                    if (version == 11 || version == 12) {
                         MessagesStorage.this.database.executeFast("DROP INDEX IF EXISTS uid_mid_idx_media;").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("DROP INDEX IF EXISTS mid_idx_media;").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("DROP INDEX IF EXISTS uid_date_mid_idx_media;").stepThis().dispose();
@@ -507,7 +505,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 23").stepThis().dispose();
                         version = 23;
                     }
-                    if (version == 24) {
+                    if (version == 23 || version == 24) {
                         MessagesStorage.this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid != 0 AND type >= 0 AND start IN (0, 1)").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 25").stepThis().dispose();
                         version = 25;
@@ -522,11 +520,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 28").stepThis().dispose();
                         version = 28;
                     }
-                    if (version == 28) {
-                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 29").stepThis().dispose();
-                        version = 29;
-                    }
-                    if (version == 29) {
+                    if (version == 28 || version == 29) {
                         MessagesStorage.this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 30").stepThis().dispose();
@@ -5804,6 +5798,7 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                Message message;
                 messages_Dialogs dialogs = new messages_Dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -5814,7 +5809,6 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
-                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

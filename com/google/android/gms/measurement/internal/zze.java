@@ -1391,12 +1391,12 @@ class zze extends zzaa {
     }
 
     public String zzbk(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzzx();
         zzacj();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1448,10 +1448,10 @@ class zze extends zzaa {
 
     @WorkerThread
     public String zzbwe() {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1780,12 +1780,12 @@ class zze extends zzaa {
 
     @WorkerThread
     public byte[] zzmb(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzaa.zzib(str);
         zzzx();
         zzacj();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {

@@ -1911,7 +1911,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
             int offsetPosition = RecyclerView.this.mAdapterHelper.findPositionOffset(position);
             if (offsetPosition < 0 || offsetPosition >= RecyclerView.this.mAdapter.getItemCount()) {
-                throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount());
+                throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount() + " tag: " + RecyclerView.this.getTag());
             }
             LayoutParams rvLayoutParams;
             holder.mOwnerRecyclerView = RecyclerView.this;
@@ -1985,7 +1985,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (holder == null) {
                 offsetPosition = RecyclerView.this.mAdapterHelper.findPositionOffset(position);
                 if (offsetPosition < 0 || offsetPosition >= RecyclerView.this.mAdapter.getItemCount()) {
-                    throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount());
+                    throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount() + " tag: " + RecyclerView.this.getTag());
                 }
                 int type = RecyclerView.this.mAdapter.getItemViewType(offsetPosition);
                 if (RecyclerView.this.mAdapter.hasStableIds()) {
@@ -2274,11 +2274,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
             View view;
-            ViewHolder vh;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
+                ViewHolder vh;
                 int layoutIndex;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {

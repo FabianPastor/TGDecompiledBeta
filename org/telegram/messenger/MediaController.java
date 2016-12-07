@@ -3258,6 +3258,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3270,7 +3271,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 long dateTaken;
                 AlbumEntry albumEntry;
                 AlbumEntry albumEntry2;
-                Throwable e;
                 AlbumEntry allVideosAlbum;
                 PhotoEntry photoEntry;
                 Integer cameraAlbumVideoId;
@@ -3278,71 +3278,76 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 ArrayList<AlbumEntry> videoAlbumsSorted = new ArrayList();
                 HashMap<Integer, AlbumEntry> albums = new HashMap();
                 AlbumEntry albumEntry3 = null;
-                String cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                Integer cameraAlbumId = null;
+                String cameraFolder = null;
+                try {
+                    cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
+                } catch (Throwable e2) {
+                    FileLog.e("tmessages", e2);
+                }
+                Integer num = null;
                 Integer cameraAlbumVideoId2 = null;
                 Cursor cursor = null;
-                try {
-                    if (VERSION.SDK_INT < 23 || (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0)) {
-                        cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, MediaController.projectionPhotos, null, null, "datetaken DESC");
-                        if (cursor != null) {
-                            imageIdColumn = cursor.getColumnIndex("_id");
-                            bucketIdColumn = cursor.getColumnIndex("bucket_id");
-                            bucketNameColumn = cursor.getColumnIndex("bucket_display_name");
-                            dataColumn = cursor.getColumnIndex("_data");
-                            dateColumn = cursor.getColumnIndex("datetaken");
-                            int orientationColumn = cursor.getColumnIndex("orientation");
-                            AlbumEntry allPhotosAlbum = null;
-                            while (cursor.moveToNext()) {
-                                try {
-                                    imageId = cursor.getInt(imageIdColumn);
-                                    bucketId = cursor.getInt(bucketIdColumn);
-                                    bucketName = cursor.getString(bucketNameColumn);
-                                    path = cursor.getString(dataColumn);
-                                    dateTaken = cursor.getLong(dateColumn);
-                                    int orientation = cursor.getInt(orientationColumn);
-                                    if (!(path == null || path.length() == 0)) {
-                                        PhotoEntry photoEntry2 = new PhotoEntry(bucketId, imageId, dateTaken, path, orientation, false);
-                                        if (allPhotosAlbum == null) {
-                                            albumEntry = new AlbumEntry(0, LocaleController.getString("AllPhotos", R.string.AllPhotos), photoEntry2, false);
-                                            albumsSorted.add(0, albumEntry);
-                                        } else {
-                                            albumEntry3 = allPhotosAlbum;
-                                        }
-                                        if (albumEntry3 != null) {
-                                            albumEntry3.addPhoto(photoEntry2);
-                                        }
-                                        albumEntry2 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
-                                        if (albumEntry2 == null) {
-                                            albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry2, false);
-                                            albums.put(Integer.valueOf(bucketId), albumEntry);
-                                            if (cameraAlbumId != null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
-                                                albumsSorted.add(albumEntry);
-                                            } else {
-                                                albumsSorted.add(0, albumEntry);
-                                                cameraAlbumId = Integer.valueOf(bucketId);
-                                            }
-                                        }
-                                        albumEntry2.addPhoto(photoEntry2);
-                                        allPhotosAlbum = albumEntry3;
-                                    }
-                                } catch (Throwable th) {
-                                    Throwable th2 = th;
-                                    albumEntry3 = allPhotosAlbum;
-                                }
-                            }
-                            albumEntry3 = allPhotosAlbum;
-                        }
-                    }
+                if (VERSION.SDK_INT < 23 || (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0)) {
+                    cursor = Media.query(ApplicationLoader.applicationContext.getContentResolver(), Media.EXTERNAL_CONTENT_URI, MediaController.projectionPhotos, null, null, "datetaken DESC");
                     if (cursor != null) {
-                        try {
-                            cursor.close();
-                        } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                        imageIdColumn = cursor.getColumnIndex("_id");
+                        bucketIdColumn = cursor.getColumnIndex("bucket_id");
+                        bucketNameColumn = cursor.getColumnIndex("bucket_display_name");
+                        dataColumn = cursor.getColumnIndex("_data");
+                        dateColumn = cursor.getColumnIndex("datetaken");
+                        int orientationColumn = cursor.getColumnIndex("orientation");
+                        AlbumEntry allPhotosAlbum = null;
+                        while (cursor.moveToNext()) {
+                            try {
+                                imageId = cursor.getInt(imageIdColumn);
+                                bucketId = cursor.getInt(bucketIdColumn);
+                                bucketName = cursor.getString(bucketNameColumn);
+                                path = cursor.getString(dataColumn);
+                                dateTaken = cursor.getLong(dateColumn);
+                                int orientation = cursor.getInt(orientationColumn);
+                                if (!(path == null || path.length() == 0)) {
+                                    PhotoEntry photoEntry2 = new PhotoEntry(bucketId, imageId, dateTaken, path, orientation, false);
+                                    if (allPhotosAlbum == null) {
+                                        albumEntry = new AlbumEntry(0, LocaleController.getString("AllPhotos", R.string.AllPhotos), photoEntry2, false);
+                                        albumsSorted.add(0, albumEntry);
+                                    } else {
+                                        albumEntry3 = allPhotosAlbum;
+                                    }
+                                    if (albumEntry3 != null) {
+                                        albumEntry3.addPhoto(photoEntry2);
+                                    }
+                                    albumEntry2 = (AlbumEntry) albums.get(Integer.valueOf(bucketId));
+                                    if (albumEntry2 == null) {
+                                        albumEntry = new AlbumEntry(bucketId, bucketName, photoEntry2, false);
+                                        albums.put(Integer.valueOf(bucketId), albumEntry);
+                                        if (num != null || cameraFolder == null || path == null || !path.startsWith(cameraFolder)) {
+                                            try {
+                                                albumsSorted.add(albumEntry);
+                                            } catch (Throwable th) {
+                                                e2 = th;
+                                            }
+                                        } else {
+                                            albumsSorted.add(0, albumEntry);
+                                            num = Integer.valueOf(bucketId);
+                                        }
+                                    }
+                                    albumEntry2.addPhoto(photoEntry2);
+                                    allPhotosAlbum = albumEntry3;
+                                }
+                            } catch (Throwable th2) {
+                                Throwable th3 = th2;
+                                albumEntry3 = allPhotosAlbum;
+                            }
                         }
+                        albumEntry3 = allPhotosAlbum;
                     }
-                } catch (Throwable th3) {
-                    e2 = th3;
+                }
+                if (cursor != null) {
+                    try {
+                        cursor.close();
+                    } catch (Throwable e22) {
+                        FileLog.e("tmessages", e22);
+                    }
                 }
                 try {
                     if (VERSION.SDK_INT < 23 || (VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0)) {
@@ -3388,7 +3393,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                         albumEntry2.addPhoto(photoEntry);
                                         cameraAlbumVideoId2 = cameraAlbumVideoId;
                                     } catch (Throwable th4) {
-                                        e2 = th4;
+                                        e22 = th4;
                                     }
                                 }
                             }
@@ -3398,22 +3403,22 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (cursor != null) {
                         try {
                             cursor.close();
-                        } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
+                        } catch (Throwable e222) {
+                            FileLog.e("tmessages", e222);
                         }
                     }
                 } catch (Throwable th5) {
-                    th2 = th5;
+                    th3 = th5;
                     cameraAlbumVideoId = cameraAlbumVideoId2;
                 }
-                MediaController.broadcastNewPhotos(guid, albumsSorted, cameraAlbumId, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
                 try {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e("tmessages", e222);
                     if (cursor != null) {
                         try {
                             cursor.close();
-                        } catch (Throwable e222) {
-                            FileLog.e("tmessages", e222);
+                        } catch (Throwable e2222) {
+                            FileLog.e("tmessages", e2222);
                         }
                     }
                     albums.clear();
@@ -3456,20 +3461,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (cursor != null) {
                         cursor.close();
                     }
-                    MediaController.broadcastNewPhotos(guid, albumsSorted, cameraAlbumId, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
                 } catch (Throwable th6) {
-                    th2 = th6;
-                    if (cursor != null) {
-                        try {
-                            cursor.close();
-                        } catch (Throwable e2222) {
-                            FileLog.e("tmessages", e2222);
-                        }
-                    }
-                    throw th2;
-                }
-                try {
-                    FileLog.e("tmessages", e2222);
+                    th3 = th6;
                     if (cursor != null) {
                         try {
                             cursor.close();
@@ -3477,9 +3471,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             FileLog.e("tmessages", e22222);
                         }
                     }
-                    MediaController.broadcastNewPhotos(guid, albumsSorted, cameraAlbumId, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
-                } catch (Throwable th7) {
-                    th2 = th7;
+                    throw th3;
+                }
+                try {
+                    FileLog.e("tmessages", e22222);
                     if (cursor != null) {
                         try {
                             cursor.close();
@@ -3487,7 +3482,17 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             FileLog.e("tmessages", e222222);
                         }
                     }
-                    throw th2;
+                    MediaController.broadcastNewPhotos(guid, albumsSorted, num, videoAlbumsSorted, cameraAlbumVideoId, albumEntry3, 0);
+                } catch (Throwable th7) {
+                    th3 = th7;
+                    if (cursor != null) {
+                        try {
+                            cursor.close();
+                        } catch (Throwable e2222222) {
+                            FileLog.e("tmessages", e2222222);
+                        }
+                    }
+                    throw th3;
                 }
             }
         });
@@ -3765,7 +3770,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @TargetApi(16)
     private boolean convertVideo(MessageObject messageObject) {
-        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -3811,7 +3815,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         if (file.canRead() && isPreviousOk) {
             this.videoConvertFirstWrite = true;
             boolean error = false;
-            long videoStartTime2 = startTime;
+            long videoStartTime = startTime;
             long time = System.currentTimeMillis();
             if (resultWidth == 0 || resultHeight == 0) {
                 preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -3820,6 +3824,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             }
             MP4Builder mP4Builder = null;
             MediaExtractor extractor = null;
+            long videoStartTime2;
             try {
                 BufferInfo info = new BufferInfo();
                 Mp4Movie movie = new Mp4Movie();
@@ -3835,9 +3840,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0) {
                         videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                         if (videoTime != -1) {
-                            videoStartTime = videoTime;
+                            videoStartTime2 = videoTime;
                         }
-                        videoStartTime = videoStartTime2;
+                        videoStartTime2 = videoStartTime;
                     } else {
                         int videoIndex = selectTrack(extractor2, false);
                         if (videoIndex >= 0) {
@@ -3938,7 +3943,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     inputSurface = inputSurface2;
                                     FileLog.e("tmessages", e);
                                     error = true;
-                                    videoStartTime = videoStartTime2;
+                                    videoStartTime2 = videoStartTime;
                                     try {
                                         extractor2.unselectTrack(videoIndex);
                                         if (outputSurface != null) {
@@ -3956,7 +3961,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                             encoder.release();
                                         }
                                         checkConversionCanceled();
-                                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
+                                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
                                         if (extractor2 != null) {
                                             extractor2.release();
                                         }
@@ -4022,7 +4027,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 } catch (Throwable th4) {
                                     th = th4;
                                     extractor = extractor2;
-                                    videoStartTime = videoStartTime2;
+                                    videoStartTime2 = videoStartTime;
                                 }
                             }
                             boolean errorWait;
@@ -4213,9 +4218,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     }
                                 }
                                 if (videoTime != -1) {
-                                    videoStartTime = videoTime;
+                                    videoStartTime2 = videoTime;
                                 } else {
-                                    videoStartTime = videoStartTime2;
+                                    videoStartTime2 = videoStartTime;
                                 }
                                 extractor2.unselectTrack(videoIndex);
                                 if (outputSurface != null) {
@@ -4239,13 +4244,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                             } catch (Throwable th42) {
                                 th = th42;
                                 extractor = extractor2;
-                                videoStartTime = videoStartTime2;
+                                videoStartTime2 = videoStartTime;
                             }
                         }
-                        videoStartTime = videoStartTime2;
+                        videoStartTime2 = videoStartTime;
                     }
                     if (!(error || bitrate == -1)) {
-                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
+                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
                     }
                     if (extractor2 != null) {
                         extractor2.release();
@@ -4258,7 +4263,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 } catch (Exception e5) {
                     e3222 = e5;
                     extractor = extractor2;
-                    videoStartTime = videoStartTime2;
+                    videoStartTime2 = videoStartTime;
                     error = true;
                     FileLog.e("tmessages", e3222);
                     if (extractor != null) {
@@ -4274,11 +4279,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 } catch (Throwable th422) {
                     th = th422;
                     extractor = extractor2;
-                    videoStartTime = videoStartTime2;
+                    videoStartTime2 = videoStartTime;
                 }
             } catch (Exception e6) {
                 e3222 = e6;
-                videoStartTime = videoStartTime2;
+                videoStartTime2 = videoStartTime;
                 error = true;
                 FileLog.e("tmessages", e3222);
                 if (extractor != null) {
@@ -4293,7 +4298,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 return true;
             } catch (Throwable th5) {
                 th = th5;
-                videoStartTime = videoStartTime2;
+                videoStartTime2 = videoStartTime;
                 if (extractor != null) {
                     extractor.release();
                 }

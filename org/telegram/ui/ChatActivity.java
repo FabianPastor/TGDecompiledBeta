@@ -612,10 +612,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 ChatActivity.this.chatActivityEnterView.closeKeyboard();
                             }
                             ChatActivity chatActivity = ChatActivity.this;
-                            Context access$15100 = ChatActivityAdapter.this.mContext;
+                            Context access$15200 = ChatActivityAdapter.this.mContext;
                             MessageObject messageObject = cell.getMessageObject();
                             boolean z = ChatObject.isChannel(ChatActivity.this.currentChat) && !ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.username != null && ChatActivity.this.currentChat.username.length() > 0;
-                            chatActivity.showDialog(new ShareAlert(access$15100, messageObject, null, z, null, false));
+                            chatActivity.showDialog(new ShareAlert(access$15200, messageObject, null, z, null, false));
                         }
                     }
 
@@ -686,7 +686,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
 
                     public void didPressedUrl(MessageObject messageObject, ClickableSpan url, boolean longPress) {
-                        boolean z = true;
                         if (url != null) {
                             if (url instanceof URLSpanUserMention) {
                                 User user = MessagesController.getInstance().getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
@@ -707,8 +706,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     ChatActivity.this.presentFragment(fragment);
                                 } else if (str.startsWith("/") && URLSpanBotCommand.enabled) {
                                     ChatActivityEnterView chatActivityEnterView = ChatActivity.this.chatActivityEnterView;
-                                    boolean z2 = ChatActivity.this.currentChat != null && ChatActivity.this.currentChat.megagroup;
-                                    chatActivityEnterView.setCommand(messageObject, str, longPress, z2);
+                                    boolean z = ChatActivity.this.currentChat != null && ChatActivity.this.currentChat.megagroup;
+                                    chatActivityEnterView.setCommand(messageObject, str, longPress, z);
                                 }
                             } else {
                                 final String urlFinal = ((URLSpan) url).getURL();
@@ -740,11 +739,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 } else if (url instanceof URLSpanReplacement) {
                                     ChatActivity.this.showOpenUrlAlert(((URLSpanReplacement) url).getURL(), true);
                                 } else if (url instanceof URLSpan) {
-                                    Context parentActivity = ChatActivity.this.getParentActivity();
-                                    if (ChatActivity.this.inlineReturn != 0) {
-                                        z = false;
+                                    if (!(!(messageObject.messageOwner.media instanceof TL_messageMediaWebPage) || messageObject.messageOwner.media.webpage == null || messageObject.messageOwner.media.webpage.cached_page == null)) {
+                                        String lowerUrl = urlFinal.toLowerCase();
+                                        String lowerUrl2 = messageObject.messageOwner.media.webpage.url.toLowerCase();
+                                        if (lowerUrl.contains("telegra.ph") && (lowerUrl.contains(lowerUrl2) || lowerUrl2.contains(lowerUrl))) {
+                                            ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity());
+                                            ArticleViewer.getInstance().open(messageObject);
+                                            return;
+                                        }
                                     }
-                                    Browser.openUrl(parentActivity, urlFinal, z);
+                                    Browser.openUrl(ChatActivity.this.getParentActivity(), urlFinal, ChatActivity.this.inlineReturn == 0);
                                 } else {
                                     url.onClick(ChatActivity.this.fragmentView);
                                 }
@@ -1784,7 +1788,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
-                if (child == ChatActivity.this.actionBar) {
+                if (child == ChatActivity.this.actionBar && ChatActivity.this.parentLayout != null) {
                     ChatActivity.this.parentLayout.drawHeaderShadow(canvas, ChatActivity.this.actionBar.getMeasuredHeight());
                 }
                 return result;
@@ -2576,10 +2580,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                     if (ChatActivity.this.allowStickersPanel) {
                         ChatActivity.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$8100 = ChatActivity.this.mentionListAnimation;
+                        AnimatorSet access$8200 = ChatActivity.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.mentionContainer, "alpha", new float[]{0.0f});
-                        access$8100.playTogether(animatorArr);
+                        access$8200.playTogether(animatorArr);
                         ChatActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
                             public void onAnimationEnd(Animator animation) {
                                 if (ChatActivity.this.mentionListAnimation != null && ChatActivity.this.mentionListAnimation.equals(animation)) {
@@ -2858,9 +2862,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
             public void onMessageEditEnd(boolean loading) {
                 if (!loading) {
-                    MentionsAdapter access$5000 = ChatActivity.this.mentionsAdapter;
+                    MentionsAdapter access$5100 = ChatActivity.this.mentionsAdapter;
                     boolean z = ChatActivity.this.currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(ChatActivity.this.currentEncryptedChat.layer) >= 46;
-                    access$5000.setNeedBotContext(z);
+                    access$5100.setNeedBotContext(z);
                     ChatActivity.this.chatListView.setOnItemLongClickListener(ChatActivity.this.onItemLongClickListener);
                     ChatActivity.this.chatListView.setOnItemClickListener(ChatActivity.this.onItemClickListener);
                     ChatActivity.this.chatListView.setClickable(true);
@@ -2963,11 +2967,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.mentionContainer.setTranslationY(0.0f);
                     }
                     if (ChatActivity.this.pagedownButton != null) {
-                        FrameLayout access$5400 = ChatActivity.this.pagedownButton;
+                        FrameLayout access$5500 = ChatActivity.this.pagedownButton;
                         if (ChatActivity.this.pagedownButton.getTag() == null) {
                             f = (float) AndroidUtilities.dp(100.0f);
                         }
-                        access$5400.setTranslationY(f);
+                        access$5500.setTranslationY(f);
                     }
                 }
             }
@@ -3066,6 +3070,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         textView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (ChatActivity.this.getParentActivity() != null) {
+                    AndroidUtilities.hideKeyboard(ChatActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
                     DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new OnDateSetListener() {
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -3417,9 +3422,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (ChatActivity.this.stickersPanel.getVisibility() != 4) {
                                     float f2;
                                     ChatActivity.this.runningAnimation = new AnimatorSet();
-                                    AnimatorSet access$11700 = ChatActivity.this.runningAnimation;
+                                    AnimatorSet access$11800 = ChatActivity.this.runningAnimation;
                                     Animator[] animatorArr = new Animator[1];
-                                    FrameLayout access$9900 = ChatActivity.this.stickersPanel;
+                                    FrameLayout access$10000 = ChatActivity.this.stickersPanel;
                                     String str = "alpha";
                                     float[] fArr = new float[2];
                                     if (show) {
@@ -3432,8 +3437,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         f = 0.0f;
                                     }
                                     fArr[1] = f;
-                                    animatorArr[0] = ObjectAnimator.ofFloat(access$9900, str, fArr);
-                                    access$11700.playTogether(animatorArr);
+                                    animatorArr[0] = ObjectAnimator.ofFloat(access$10000, str, fArr);
+                                    access$11800.playTogether(animatorArr);
                                     ChatActivity.this.runningAnimation.setDuration(150);
                                     ChatActivity.this.runningAnimation.addListener(new AnimatorListenerAdapterProxy() {
                                         public void onAnimationEnd(Animator animation) {
@@ -7098,10 +7103,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$13400 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$13500 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$13400.playTogether(animatorArr);
+                        access$13500.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapterProxy() {
                             public void onAnimationEnd(Animator animation) {
