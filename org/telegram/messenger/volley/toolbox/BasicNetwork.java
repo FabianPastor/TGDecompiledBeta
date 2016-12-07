@@ -50,11 +50,11 @@ public class BasicNetwork implements Network {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public NetworkResponse performRequest(Request<?> request) throws VolleyError {
+        byte[] responseContents;
         IOException e;
         NetworkResponse networkResponse;
         long requestStart = SystemClock.elapsedRealtime();
         while (true) {
-            byte[] responseContents;
             HttpResponse httpResponse = null;
             Map<String, String> responseHeaders = Collections.emptyMap();
             int statusCode;

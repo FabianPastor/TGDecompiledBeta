@@ -68,6 +68,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int ledInfoRow;
     private int ledRow;
     private RecyclerListView listView;
+    private boolean notificationsEnabled;
     private int popupDisabledRow;
     private int popupEnabledRow;
     private int popupInfoRow;
@@ -153,6 +154,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             SharedPreferences preferences;
+            String string;
+            boolean z;
             switch (holder.getItemViewType()) {
                 case 0:
                     HeaderCell headerCell = holder.itemView;
@@ -180,9 +183,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         return;
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
                         value = preferences.getInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                        String string;
                         String string2;
-                        boolean z;
                         if (value == 0 || value == 4) {
                             string = LocaleController.getString("Vibrate", R.string.Vibrate);
                             string2 = LocaleController.getString("VibrationDefault", R.string.VibrationDefault);
@@ -308,7 +309,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         return;
                     }
                 case 5:
-                    holder.itemView.setTextAndCheck(LocaleController.getString("NotificationsEnableCustom", R.string.NotificationsEnableCustom), ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("custom_" + ProfileNotificationsActivity.this.dialog_id, false), false);
+                    TextCheckBoxCell cell = holder.itemView;
+                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                    string = LocaleController.getString("NotificationsEnableCustom", R.string.NotificationsEnableCustom);
+                    z = ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled;
+                    cell.setTextAndCheck(string, z, false);
                     return;
                 default:
                     return;
@@ -316,6 +321,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
 
         public void onViewAttachedToWindow(ViewHolder holder) {
+            boolean z = true;
             if (holder.getItemViewType() != 0) {
                 if (holder.getItemViewType() != 2) {
                     if (ProfileNotificationsActivity.this.customEnabled || holder.getAdapterPosition() == ProfileNotificationsActivity.this.customRow) {
@@ -326,16 +332,32 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 switch (holder.getItemViewType()) {
                     case 1:
-                        holder.itemView.setEnabled(ProfileNotificationsActivity.this.customEnabled, null);
+                        TextSettingsCell textCell = holder.itemView;
+                        if (!(ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled)) {
+                            z = false;
+                        }
+                        textCell.setEnabled(z, null);
                         return;
                     case 2:
-                        holder.itemView.setEnabled(ProfileNotificationsActivity.this.customEnabled, null);
+                        TextInfoPrivacyCell textCell2 = holder.itemView;
+                        if (!(ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled)) {
+                            z = false;
+                        }
+                        textCell2.setEnabled(z, null);
                         return;
                     case 3:
-                        holder.itemView.setEnabled(ProfileNotificationsActivity.this.customEnabled, null);
+                        TextColorCell textCell3 = holder.itemView;
+                        if (!(ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled)) {
+                            z = false;
+                        }
+                        textCell3.setEnabled(z, null);
                         return;
                     case 4:
-                        holder.itemView.setEnabled(ProfileNotificationsActivity.this.customEnabled, null);
+                        RadioCell radioCell = holder.itemView;
+                        if (!(ProfileNotificationsActivity.this.customEnabled && ProfileNotificationsActivity.this.notificationsEnabled)) {
+                            z = false;
+                        }
+                        radioCell.setEnabled(z, null);
                         return;
                     default:
                         return;
@@ -447,7 +469,25 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         i = this.rowCount;
         this.rowCount = i + 1;
         this.ledInfoRow = i;
-        this.customEnabled = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("custom_" + this.dialog_id, false);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        this.customEnabled = preferences.getBoolean("custom_" + this.dialog_id, false);
+        boolean hasOverride = preferences.contains("notify2_" + this.dialog_id);
+        int value = preferences.getInt("notify2_" + this.dialog_id, 0);
+        if (value == 0) {
+            if (hasOverride) {
+                this.notificationsEnabled = true;
+            } else if (((int) this.dialog_id) < 0) {
+                this.notificationsEnabled = preferences.getBoolean("EnableGroup", true);
+            } else {
+                this.notificationsEnabled = preferences.getBoolean("EnableAll", true);
+            }
+        } else if (value == 1) {
+            this.notificationsEnabled = true;
+        } else if (value == 2) {
+            this.notificationsEnabled = false;
+        } else {
+            this.notificationsEnabled = false;
+        }
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.notificationsSettingsUpdated);
         return super.onFragmentCreate();
     }
@@ -464,6 +504,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
+                    if (ProfileNotificationsActivity.this.notificationsEnabled && ProfileNotificationsActivity.this.customEnabled) {
+                        ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
+                    }
                     ProfileNotificationsActivity.this.finishFragment();
                 }
             }
@@ -490,6 +533,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (position == ProfileNotificationsActivity.this.customRow) {
                     preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                     ProfileNotificationsActivity.this.customEnabled = !ProfileNotificationsActivity.this.customEnabled;
+                    ProfileNotificationsActivity.this.notificationsEnabled = ProfileNotificationsActivity.this.customEnabled;
                     preferences.edit().putBoolean("custom_" + ProfileNotificationsActivity.this.dialog_id, ProfileNotificationsActivity.this.customEnabled).commit();
                     ((TextCheckBoxCell) view).setChecked(ProfileNotificationsActivity.this.customEnabled);
                     int count = ProfileNotificationsActivity.this.listView.getChildCount();

@@ -469,11 +469,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                     did = (long) (-ProfileActivity.this.chat_id);
                                 }
                                 boolean custom = preferences.getBoolean("custom_" + did, false);
+                                boolean hasOverride = preferences.contains("notify2_" + did);
                                 int value2 = preferences.getInt("notify2_" + did, 0);
                                 int delta = preferences.getInt("notifyuntil_" + did, 0);
                                 if (value2 != 3 || delta == Integer.MAX_VALUE) {
                                     if (value2 == 0) {
-                                        if (((int) did) < 0) {
+                                        if (hasOverride) {
+                                            enabled = true;
+                                        } else if (((int) did) < 0) {
                                             enabled = preferences.getBoolean("EnableGroup", true);
                                         } else {
                                             enabled = preferences.getBoolean("EnableAll", true);
@@ -1027,16 +1030,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             did = (long) (-ProfileActivity.this.chat_id);
                         }
+                        boolean hasOverride = preferences.contains("notify2_" + did);
                         int value = preferences.getInt("notify2_" + did, 0);
                         if (value == 0) {
-                            if (((int) did) < 0) {
-                                int i;
-                                if (preferences.getBoolean("EnableGroup", true)) {
-                                    i = 0;
-                                } else {
-                                    i = 4;
-                                }
-                                selected[0] = i;
+                            if (hasOverride) {
+                                selected[0] = 0;
+                            } else if (((int) did) < 0) {
+                                selected[0] = preferences.getBoolean("EnableGroup", true) ? 0 : 4;
                             } else {
                                 selected[0] = preferences.getBoolean("EnableAll", true) ? 0 : 4;
                             }

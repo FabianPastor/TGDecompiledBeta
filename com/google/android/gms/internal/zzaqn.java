@@ -443,6 +443,7 @@ public final class zzaqn {
         }
 
         public BitSet zzx(zzaqp com_google_android_gms_internal_zzaqp) throws IOException {
+            String valueOf;
             if (com_google_android_gms_internal_zzaqp.bq() == zzaqq.NULL) {
                 com_google_android_gms_internal_zzaqp.nextNull();
                 return null;
@@ -453,7 +454,6 @@ public final class zzaqn {
             int i = 0;
             while (bq != zzaqq.END_ARRAY) {
                 boolean z;
-                String valueOf;
                 switch (bq) {
                     case NUMBER:
                         if (com_google_android_gms_internal_zzaqp.nextInt() == 0) {

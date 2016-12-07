@@ -70,16 +70,16 @@ public class zzr extends zzaa {
         }
 
         public void run() {
-            HttpURLConnection zzc;
+            OutputStream outputStream;
             Throwable e;
             Map map;
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
+            Map map2;
             this.asU.zzbvo();
             int i2 = 0;
-            OutputStream outputStream;
-            Map map2;
+            HttpURLConnection zzc;
             try {
                 this.asU.zzfe(this.zzcjc);
                 zzc = this.asU.zzc(this.zzbqj);
