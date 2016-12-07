@@ -17,6 +17,7 @@ public class NotificationCenter {
     private static volatile NotificationCenter Instance = null;
     public static final int albumsDidLoaded;
     public static final int appDidLogout;
+    public static final int archivedStickersCountDidLoaded;
     public static final int audioDidReset;
     public static final int audioDidSent;
     public static final int audioDidStarted;
@@ -314,6 +315,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         didSetNewWallpapper = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        archivedStickersCountDidLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

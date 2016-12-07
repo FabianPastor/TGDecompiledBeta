@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.TextureView;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -34,6 +35,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.BottomSheet.BottomSheetDelegate;
@@ -42,19 +44,27 @@ import org.telegram.ui.Components.WebPlayerView.WebPlayerViewDelegate;
 
 @TargetApi(16)
 public class EmbedBottomSheet extends BottomSheet {
+    @SuppressLint({"StaticFieldLeak"})
+    private static EmbedBottomSheet instance;
     private View customView;
     private CustomViewCallback customViewCallback;
     private String embedUrl;
     private AspectRatioFrameLayout fullscreenAspectRatioView;
     private TextureView fullscreenTextureView;
     private FrameLayout fullscreenVideoContainer;
+    private boolean fullscreenedByButton;
     private boolean hasDescription;
     private int height;
+    private int lastOrientation;
     private String openUrl;
+    private OrientationEventListener orientationEventListener;
     private Activity parentActivity;
+    private PipVideoView pipVideoView;
     private int prevOrientation;
     private ProgressBar progressBar;
+    private boolean showingFromInline;
     private WebPlayerView videoView;
+    private boolean wasInLandscape;
     private WebView webView;
     private int width;
 
@@ -62,6 +72,8 @@ public class EmbedBottomSheet extends BottomSheet {
     public EmbedBottomSheet(Context context, String title, String descripton, String originalUrl, String url, int w, int h) {
         TextView textView;
         super(context, false);
+        this.lastOrientation = -1;
+        this.prevOrientation = -2;
         this.fullWidth = true;
         setApplyTopPadding(false);
         setApplyBottomPadding(false);
@@ -98,11 +110,15 @@ public class EmbedBottomSheet extends BottomSheet {
             protected void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
                 try {
-                    removeView(EmbedBottomSheet.this.webView);
-                    EmbedBottomSheet.this.webView.stopLoading();
-                    EmbedBottomSheet.this.webView.loadUrl("about:blank");
-                    EmbedBottomSheet.this.webView.destroy();
-                    EmbedBottomSheet.this.videoView.destroy();
+                    if (EmbedBottomSheet.this.webView.getParent() != null) {
+                        removeView(EmbedBottomSheet.this.webView);
+                        EmbedBottomSheet.this.webView.stopLoading();
+                        EmbedBottomSheet.this.webView.loadUrl("about:blank");
+                        EmbedBottomSheet.this.webView.destroy();
+                    }
+                    if (!EmbedBottomSheet.this.videoView.isInline()) {
+                        EmbedBottomSheet.this.videoView.destroy();
+                    }
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
@@ -169,10 +185,20 @@ public class EmbedBottomSheet extends BottomSheet {
             }
         });
         containerLayout.addView(this.webView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) ((this.hasDescription ? 22 : 0) + 84)));
-        this.videoView = new WebPlayerView(context, false, false);
+        this.videoView = new WebPlayerView(context, true, false);
         this.videoView.setVisibility(4);
         this.videoView.setDelegate(new WebPlayerViewDelegate() {
             public void onInitFailed() {
+                EmbedBottomSheet.this.webView.setVisibility(0);
+                EmbedBottomSheet.this.videoView.setVisibility(4);
+                EmbedBottomSheet.this.videoView.loadVideo(null, null, false);
+                HashMap<String, String> args = new HashMap();
+                args.put("Referer", "http://youtube.com");
+                try {
+                    EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
             }
 
             public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRation, int rotation, boolean byButton) {
@@ -182,6 +208,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     EmbedBottomSheet.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
                     EmbedBottomSheet.this.fullscreenVideoContainer.addView(controlsView, LayoutHelper.createFrame(-1, -1.0f));
                     EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(0);
+                    EmbedBottomSheet.this.fullscreenedByButton = byButton;
                     if (EmbedBottomSheet.this.parentActivity != null) {
                         try {
                             EmbedBottomSheet.this.prevOrientation = EmbedBottomSheet.this.parentActivity.getRequestedOrientation();
@@ -198,6 +225,7 @@ public class EmbedBottomSheet extends BottomSheet {
                         }
                     }
                 } else {
+                    EmbedBottomSheet.this.fullscreenedByButton = false;
                     EmbedBottomSheet.this.fullscreenAspectRatioView.removeView(EmbedBottomSheet.this.fullscreenTextureView);
                     EmbedBottomSheet.this.fullscreenAspectRatioView.setVisibility(8);
                     EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
@@ -217,7 +245,15 @@ public class EmbedBottomSheet extends BottomSheet {
                 EmbedBottomSheet.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
             }
 
-            public void onSwtichToInline(boolean inline) {
+            public TextureView onSwtichToInline(View controlsView, boolean inline, float aspectRation, int rotation) {
+                if (inline) {
+                    EmbedBottomSheet.this.pipVideoView = new PipVideoView();
+                    return EmbedBottomSheet.this.pipVideoView.show(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this, controlsView, aspectRation, rotation);
+                }
+                EmbedBottomSheet.this.showingFromInline = true;
+                EmbedBottomSheet.this.pipVideoView.close(true);
+                EmbedBottomSheet.this.pipVideoView = null;
+                return null;
             }
 
             public void onSharePressed() {
@@ -318,28 +354,30 @@ public class EmbedBottomSheet extends BottomSheet {
         linearLayout.addView(textView, LayoutHelper.createFrame(-2, -1, 51));
         textView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Browser.openUrl(EmbedBottomSheet.this.getContext(), EmbedBottomSheet.this.openUrl);
+                Browser.openUrl(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this.openUrl);
                 EmbedBottomSheet.this.dismiss();
             }
         });
         setDelegate(new BottomSheetDelegate() {
             public void onOpenAnimationEnd() {
-                if (EmbedBottomSheet.this.videoView.loadVideo(EmbedBottomSheet.this.embedUrl, null, true)) {
+                if (EmbedBottomSheet.this.showingFromInline) {
+                    EmbedBottomSheet.this.showingFromInline = false;
+                } else if (EmbedBottomSheet.this.videoView.loadVideo(EmbedBottomSheet.this.embedUrl, null, true)) {
                     EmbedBottomSheet.this.progressBar.setVisibility(4);
                     EmbedBottomSheet.this.webView.setVisibility(4);
                     EmbedBottomSheet.this.videoView.setVisibility(0);
-                    return;
-                }
-                EmbedBottomSheet.this.progressBar.setVisibility(0);
-                EmbedBottomSheet.this.webView.setVisibility(0);
-                EmbedBottomSheet.this.videoView.setVisibility(4);
-                EmbedBottomSheet.this.videoView.loadVideo(null, null, false);
-                HashMap<String, String> args = new HashMap();
-                args.put("Referer", "http://youtube.com");
-                try {
-                    EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
-                } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                } else {
+                    EmbedBottomSheet.this.progressBar.setVisibility(0);
+                    EmbedBottomSheet.this.webView.setVisibility(0);
+                    EmbedBottomSheet.this.videoView.setVisibility(4);
+                    EmbedBottomSheet.this.videoView.loadVideo(null, null, false);
+                    HashMap<String, String> args = new HashMap();
+                    args.put("Referer", "http://youtube.com");
+                    try {
+                        EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
                 }
             }
 
@@ -356,15 +394,68 @@ public class EmbedBottomSheet extends BottomSheet {
                 return true;
             }
         });
+        this.orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
+            public void onOrientationChanged(int orientation) {
+                if (EmbedBottomSheet.this.orientationEventListener == null || EmbedBottomSheet.this.videoView.getVisibility() != 0 || EmbedBottomSheet.this.parentActivity == null || !EmbedBottomSheet.this.videoView.isInFullscreen() || !EmbedBottomSheet.this.fullscreenedByButton) {
+                    return;
+                }
+                if (orientation >= PsExtractor.VIDEO_STREAM_MASK && orientation <= 300) {
+                    EmbedBottomSheet.this.wasInLandscape = true;
+                } else if (EmbedBottomSheet.this.wasInLandscape && orientation >= -30 && orientation <= 30) {
+                    EmbedBottomSheet.this.parentActivity.setRequestedOrientation(EmbedBottomSheet.this.prevOrientation);
+                    EmbedBottomSheet.this.fullscreenedByButton = false;
+                    EmbedBottomSheet.this.wasInLandscape = false;
+                }
+            }
+        };
+        if (this.orientationEventListener.canDetectOrientation()) {
+            this.orientationEventListener.enable();
+        } else {
+            this.orientationEventListener.disable();
+            this.orientationEventListener = null;
+        }
+        if (instance != null) {
+            instance.destroy();
+        }
+        instance = this;
+    }
+
+    protected boolean canDismissWithSwipe() {
+        return (this.videoView.getVisibility() == 0 && this.videoView.isInFullscreen()) ? false : true;
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.orientation == 2) {
-            if (!this.videoView.isInFullscreen()) {
-                this.videoView.enterFullscreen();
+        if (this.videoView.getVisibility() == 0 && this.videoView.isInitied() && !this.videoView.isInline()) {
+            if (newConfig.orientation == 2) {
+                if (!this.videoView.isInFullscreen()) {
+                    this.videoView.enterFullscreen();
+                }
+            } else if (this.videoView.isInFullscreen()) {
+                this.videoView.exitFullscreen();
             }
-        } else if (this.videoView.isInFullscreen()) {
-            this.videoView.exitFullscreen();
+        }
+        if (this.pipVideoView != null) {
+            this.pipVideoView.onConfigurationChanged();
+        }
+    }
+
+    public void destroy() {
+        if (this.pipVideoView != null) {
+            this.pipVideoView.close(false);
+            this.pipVideoView = null;
+        }
+        if (this.videoView != null) {
+            this.videoView.destroy();
+        }
+    }
+
+    public static EmbedBottomSheet getInstance() {
+        return instance;
+    }
+
+    public void pause() {
+        if (this.videoView != null && this.videoView.isInitied()) {
+            this.videoView.pause();
         }
     }
 }

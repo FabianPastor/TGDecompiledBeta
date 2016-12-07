@@ -92,6 +92,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
+import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
@@ -1245,6 +1246,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             }
                             String host = data.getHost().toLowerCase();
                             if (!host.equals("telegram.me")) {
+                                if (!host.equals("t.me")) {
+                                }
                             }
                             path = data.getPath();
                             if (path != null && path.length() > 1) {
@@ -2077,6 +2080,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         SecretPhotoViewer.getInstance().destroyPhotoViewer();
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
+        EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
+        if (embedBottomSheet != null) {
+            embedBottomSheet.destroy();
+        }
         try {
             if (this.visibleDialog != null) {
                 this.visibleDialog.dismiss();
@@ -2132,6 +2139,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         AndroidUtilities.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
         checkLayout();
+        EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
+        if (embedBottomSheet != null) {
+            embedBottomSheet.onConfigurationChanged(newConfig);
+        }
     }
 
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {

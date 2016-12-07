@@ -371,7 +371,7 @@ public class UserConfig {
         notificationsConverted = true;
         isWaitingForPasscodeEnter = false;
         allowScreenCapture = false;
-        pinnedDialogsLoaded = true;
+        pinnedDialogsLoaded = false;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;

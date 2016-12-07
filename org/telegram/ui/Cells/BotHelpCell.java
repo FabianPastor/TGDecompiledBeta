@@ -67,28 +67,38 @@ public class BotHelpCell extends View {
         if (text == null || text.length() == 0) {
             setVisibility(8);
         } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
+            int maxWidth;
+            int a;
             this.oldText = text;
             setVisibility(0);
             if (AndroidUtilities.isTablet()) {
-                this.width = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
+                maxWidth = (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.7f);
             } else {
-                this.width = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
+                maxWidth = (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.7f);
             }
+            String[] lines = text.split("\n");
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
             String help = LocaleController.getString("BotInfoTitle", R.string.BotInfoTitle);
             stringBuilder.append(help);
             stringBuilder.append("\n\n");
+            for (String trim : lines) {
+                stringBuilder.append(trim.trim());
+                stringBuilder.append("\n");
+            }
             stringBuilder.append(text);
             MessageObject.addLinks(stringBuilder);
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
             Emoji.replaceEmoji(stringBuilder, this.textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             try {
-                this.textLayout = new StaticLayout(stringBuilder, this.textPaint, this.width, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.textLayout = new StaticLayout(stringBuilder, this.textPaint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
                 this.width = 0;
                 this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
                 int count = this.textLayout.getLineCount();
-                for (int a = 0; a < count; a++) {
+                for (a = 0; a < count; a++) {
                     this.width = (int) Math.ceil((double) Math.max((float) this.width, this.textLayout.getLineWidth(a) + this.textLayout.getLineLeft(a)));
+                }
+                if (this.width > maxWidth) {
+                    this.width = maxWidth;
                 }
             } catch (Throwable e) {
                 FileLog.e("tmessage", e);

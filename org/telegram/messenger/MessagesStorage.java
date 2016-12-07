@@ -4448,12 +4448,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
+        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
-                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -6129,7 +6129,9 @@ Error: java.util.NoSuchElementException
                     ArrayList<Long> unpinnedDialogs = new ArrayList();
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE pinned != 0 AND did NOT IN (%s)", new Object[]{TextUtils.join(",", dids)}), new Object[0]);
                     while (cursor.next()) {
-                        unpinnedDialogs.add(Long.valueOf(cursor.longValue(0)));
+                        if (((int) cursor.longValue(0)) != 0) {
+                            unpinnedDialogs.add(Long.valueOf(cursor.longValue(0)));
+                        }
                     }
                     cursor.dispose();
                     if (!unpinnedDialogs.isEmpty()) {
@@ -6178,7 +6180,7 @@ Error: java.util.NoSuchElementException
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
                 try {
-                    if (pinned == 0) {
+                    if (pinned == 0 && ((int) did) != 0) {
                         int dialogDate = 0;
                         int minDate = 0;
                         SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT date FROM dialogs WHERE did = " + did, new Object[0]);

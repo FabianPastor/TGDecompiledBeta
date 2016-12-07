@@ -365,6 +365,9 @@
     <string name="CreateGroupError">Sorry, you can\'t create a group with these users because of their privacy settings.</string>
     <string name="Crop">CROP</string>
     <string name="CropImage">Crop image</string>
+    <string name="CropOriginal">Original</string>
+    <string name="CropReset">Reset</string>
+    <string name="CropSquare">Square</string>
     <string name="CurrentSession">Current session</string>
     <string name="Curves">Curves</string>
     <string name="CurvesAll">ALL</string>
@@ -1413,6 +1416,7 @@
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
     <string name="PinToTop">Pin to top</string>
     <string name="UnpinFromTop">Unpin from top</string>
+    <string name="UsernameHelpLink">This link opens a chat with you on Telegram:\n%1$s</string>
     <string name="VoipOffline">You\'re currently offline. Please connect to the Internet in order to make calls.</string>
     <string name="VoipOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi in order to make calls.</string>
     <string name="VoipOfflineAirplaneTitle">Airplane Mode</string>

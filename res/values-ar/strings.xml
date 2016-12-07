@@ -365,6 +365,9 @@
     <string name="CreateGroupError">المعذرة، لا يمكنك إنشاء مجموعة مع هؤلاء المستخدمين نظرًا لإعدادات الخصوصية المتعلقة بهم.</string>
     <string name="Crop">قطع</string>
     <string name="CropImage">قص الصورة</string>
+    <string name="CropOriginal">الأصل</string>
+    <string name="CropReset">إعادة تعيين</string>
+    <string name="CropSquare">مربع</string>
     <string name="CurrentSession">الجهاز الحالي</string>
     <string name="Curves">المنحنيات</string>
     <string name="CurvesAll">الكل</string>

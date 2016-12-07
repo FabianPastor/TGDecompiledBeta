@@ -766,7 +766,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     return ArticleViewer.this.fullscreenTextureView;
                 }
 
-                public void onSwtichToInline(boolean inline) {
+                public TextureView onSwtichToInline(View controlsView, boolean inline, float aspectRation, int rotation) {
+                    return null;
                 }
 
                 public void onSharePressed() {
@@ -972,7 +973,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            this.webView.layout(this.listX, 0, this.listX + this.webView.getMeasuredWidth(), this.webView.getMeasuredHeight() + AndroidUtilities.dp(8.0f));
+            this.webView.layout(this.listX, 0, this.listX + this.webView.getMeasuredWidth(), this.webView.getMeasuredHeight());
             if (this.videoView.getParent() == this) {
                 this.videoView.layout(this.listX, 0, this.listX + this.videoView.getMeasuredWidth(), this.videoView.getMeasuredHeight());
             }

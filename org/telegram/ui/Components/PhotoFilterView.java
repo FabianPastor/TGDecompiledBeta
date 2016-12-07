@@ -8,11 +8,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.os.Build.VERSION;
 import android.os.Looper;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
@@ -122,6 +124,7 @@ public class PhotoFilterView extends FrameLayout {
     private TextView tintShadowsButton;
     private int tintShadowsColor = 0;
     private int tintTool = 5;
+    private int toolCellWidth;
     private ToolsAdapter toolsAdapter;
     private FrameLayout toolsView;
     private PhotoEditorSeekBar valueSeekBar;
@@ -1089,7 +1092,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new Holder(new PhotoEditToolCell(this.mContext));
+            return new Holder(new PhotoEditToolCell(this.mContext, PhotoFilterView.this.toolCellWidth));
         }
 
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -1224,11 +1227,13 @@ public class PhotoFilterView extends FrameLayout {
         this.doneTextView.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
         this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
+        this.toolCellWidth = calculateMaxToolCellWidth();
         this.recyclerListView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(0);
         this.recyclerListView.setLayoutManager(layoutManager);
         this.recyclerListView.setClipToPadding(false);
+        this.recyclerListView.setPadding(AndroidUtilities.dp(14.0f), 0, 0, 0);
         this.recyclerListView.setTag(Integer.valueOf(12));
         this.recyclerListView.setOverScrollMode(2);
         RecyclerListView recyclerListView = this.recyclerListView;
@@ -1303,7 +1308,7 @@ public class PhotoFilterView extends FrameLayout {
         this.editView.setVisibility(8);
         addView(this.editView, LayoutHelper.createFrame(-1, 126, 83));
         frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-15066598);
+        frameLayout.setBackgroundColor(-16777216);
         this.editView.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.edit_cancel);
@@ -1567,6 +1572,21 @@ public class PhotoFilterView extends FrameLayout {
             ((LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
             ((LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
         }
+    }
+
+    private int calculateMaxToolCellWidth() {
+        int i = 0;
+        String[] titles = new String[]{LocaleController.getString("Enhance", R.string.Enhance), LocaleController.getString("Exposure", R.string.Exposure), LocaleController.getString("Contrast", R.string.Contrast), LocaleController.getString("Warmth", R.string.Warmth), LocaleController.getString("Saturation", R.string.Saturation), LocaleController.getString("Tint", R.string.Tint), LocaleController.getString("Fade", R.string.Fade), LocaleController.getString("Highlights", R.string.Highlights), LocaleController.getString("Shadows", R.string.Shadows), LocaleController.getString("Vignette", R.string.Vignette), LocaleController.getString("Grain", R.string.Grain), LocaleController.getString("Blur", R.string.Blur), LocaleController.getString("Sharpen", R.string.Sharpen), LocaleController.getString("Curves", R.string.Curves)};
+        Paint paint = new Paint();
+        paint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        paint.setTextSize(TypedValue.applyDimension(1, 10.0f, getResources().getDisplayMetrics()));
+        float maxWidth = 0.0f;
+        int length = titles.length;
+        while (i < length) {
+            maxWidth = Math.max(paint.measureText(titles[i]), maxWidth);
+            i++;
+        }
+        return (int) Math.max((float) AndroidUtilities.dp(56.0f), ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + maxWidth);
     }
 
     private void updateSelectedBlurType() {

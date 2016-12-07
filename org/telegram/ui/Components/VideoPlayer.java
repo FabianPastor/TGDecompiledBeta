@@ -257,6 +257,10 @@ public class VideoPlayer implements EventListener, VideoListener {
         return this.player != null && this.player.getPlayWhenReady();
     }
 
+    public boolean isBuffering() {
+        return this.player != null && this.lastReportedPlaybackState == 2;
+    }
+
     public void onLoadingChanged(boolean isLoading) {
     }
 

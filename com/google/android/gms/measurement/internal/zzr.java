@@ -76,10 +76,10 @@ public class zzr extends zzaa {
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
+            Map map2;
             this.asU.zzbvo();
             int i2 = 0;
             HttpURLConnection zzc;
-            Map map2;
             try {
                 this.asU.zzfe(this.zzcjc);
                 zzc = this.asU.zzc(this.zzbqj);

@@ -893,6 +893,13 @@ public class BottomSheet extends Dialog {
         return false;
     }
 
+    protected int getLeftInset() {
+        if (this.lastInsets == null || VERSION.SDK_INT < 21) {
+            return 0;
+        }
+        return this.lastInsets.getSystemWindowInsetLeft();
+    }
+
     public void onConfigurationChanged(Configuration newConfig) {
     }
 }

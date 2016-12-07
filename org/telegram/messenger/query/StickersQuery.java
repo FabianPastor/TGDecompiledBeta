@@ -35,8 +35,10 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputDocument;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_messages_allStickers;
+import org.telegram.tgnet.TLRPC.TL_messages_archivedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_featuredStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getAllStickers;
+import org.telegram.tgnet.TLRPC.TL_messages_getArchivedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getFeaturedStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getMaskStickers;
 import org.telegram.tgnet.TLRPC.TL_messages_getRecentStickers;
@@ -58,6 +60,7 @@ public class StickersQuery {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static HashMap<String, ArrayList<Document>> allStickers = new HashMap();
+    private static int[] archivedStickersCount = new int[2];
     private static ArrayList<StickerSetCovered> featuredStickerSets = new ArrayList();
     private static HashMap<Long, StickerSetCovered> featuredStickerSetsById = new HashMap();
     private static boolean featuredStickersLoaded;
@@ -769,9 +772,44 @@ public class StickersQuery {
         }
     }
 
+    public static int getArchivedStickersCount(int type) {
+        return archivedStickersCount[type];
+    }
+
+    public static void loadArchivedStickersCount(final int type, boolean cache) {
+        boolean z = true;
+        if (!cache) {
+            TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
+            req.limit = 0;
+            if (type != 1) {
+                z = false;
+            }
+            req.masks = z;
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (error == null) {
+                                TL_messages_archivedStickers res = response;
+                                StickersQuery.archivedStickersCount[type] = res.count;
+                                ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("archivedStickersCount" + type, res.count).commit();
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
+                            }
+                        }
+                    });
+                }
+            });
+        } else if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getInt("archivedStickersCount" + type, -1) == -1) {
+            loadArchivedStickersCount(type, false);
+        } else {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
+        }
+    }
+
     public static void loadStickers(final int type, boolean cache, boolean force) {
         int hash = 0;
         if (!loadingStickers[type]) {
+            loadArchivedStickersCount(type, cache);
             loadingStickers[type] = true;
             if (cache) {
                 MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {

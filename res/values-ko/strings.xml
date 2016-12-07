@@ -365,6 +365,9 @@
     <string name="CreateGroupError">죄송합니다, 이 이용자들의 개인 설정으로 인하여 그룹을 생성 할 수 없습니다.</string>
     <string name="Crop">자르기</string>
     <string name="CropImage">사진 자르기</string>
+    <string name="CropOriginal">원본</string>
+    <string name="CropReset">리셋</string>
+    <string name="CropSquare">정사각형</string>
     <string name="CurrentSession">현재 세션</string>
     <string name="Curves">커브</string>
     <string name="CurvesAll">모두</string>

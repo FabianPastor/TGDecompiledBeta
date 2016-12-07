@@ -365,6 +365,9 @@
     <string name="CreateGroupError">Je kan geen groep maken met deze gebruikers vanwege de privacyinstellingen van deze gebruikers.</string>
     <string name="Crop">BIJSNIJDEN</string>
     <string name="CropImage">Foto bijsnijden</string>
+    <string name="CropOriginal">Origineel</string>
+    <string name="CropReset">Herstel</string>
+    <string name="CropSquare">Vierkant</string>
     <string name="CurrentSession">Huidige sessie</string>
     <string name="Curves">Curven</string>
     <string name="CurvesAll">ALLE</string>

@@ -268,6 +268,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private float pinchStartY;
     private PhotoViewerProvider placeProvider;
     private RadialProgressView[] radialProgressViews = new RadialProgressView[3];
+    private TextView resetButton;
     private ImageReceiver rightImage = new ImageReceiver();
     private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
     private Scroller scroller;
@@ -616,7 +617,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             childLeft = ((((r - l) - width) / 2) + lp.leftMargin) - lp.rightMargin;
                             break;
                         case 5:
-                            childLeft = (r - width) - lp.rightMargin;
+                            childLeft = ((r - l) - width) - lp.rightMargin;
                             break;
                         default:
                             childLeft = lp.leftMargin;
@@ -1071,14 +1072,21 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         heightSize = AndroidUtilities.displaySize.y;
                     }
                     setMeasuredDimension(widthSize, heightSize);
+                    if (VERSION.SDK_INT >= 21 && PhotoViewer.this.lastInsets != null) {
+                        widthSize -= ((WindowInsets) PhotoViewer.this.lastInsets).getSystemWindowInsetLeft();
+                    }
                     ViewGroup.LayoutParams layoutParams = PhotoViewer.this.animatingImageView.getLayoutParams();
                     PhotoViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
                     PhotoViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
                 }
 
                 protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    PhotoViewer.this.animatingImageView.layout(0, 0, PhotoViewer.this.animatingImageView.getMeasuredWidth(), PhotoViewer.this.animatingImageView.getMeasuredHeight());
-                    PhotoViewer.this.containerView.layout(0, 0, PhotoViewer.this.containerView.getMeasuredWidth(), PhotoViewer.this.containerView.getMeasuredHeight());
+                    int x = 0;
+                    if (VERSION.SDK_INT >= 21 && PhotoViewer.this.lastInsets != null) {
+                        x = 0 + ((WindowInsets) PhotoViewer.this.lastInsets).getSystemWindowInsetLeft();
+                    }
+                    PhotoViewer.this.animatingImageView.layout(x, 0, PhotoViewer.this.animatingImageView.getMeasuredWidth() + x, PhotoViewer.this.animatingImageView.getMeasuredHeight());
+                    PhotoViewer.this.containerView.layout(x, 0, PhotoViewer.this.containerView.getMeasuredWidth() + x, PhotoViewer.this.containerView.getMeasuredHeight());
                     PhotoViewer.this.wasLayout = true;
                     if (changed) {
                         if (!PhotoViewer.this.dontResetZoomOnFirstLayout) {
@@ -1615,16 +1623,19 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     PhotoViewer.this.switchToEditMode(0);
                 }
             });
-            ImageView rotateButton = new ImageView(this.actvityContext);
-            rotateButton.setScaleType(ScaleType.CENTER);
-            rotateButton.setImageResource(R.drawable.tool_rotate);
-            rotateButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-            this.editorDoneLayout.addView(rotateButton, LayoutHelper.createFrame(48, 48, 17));
-            rotateButton.setOnClickListener(new View.OnClickListener() {
+            this.resetButton = new TextView(this.actvityContext);
+            this.resetButton.setVisibility(8);
+            this.resetButton.setTextSize(1, 14.0f);
+            this.resetButton.setTextColor(-1);
+            this.resetButton.setGravity(17);
+            this.resetButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false));
+            this.resetButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
+            this.resetButton.setText(LocaleController.getString("Reset", R.string.CropReset).toUpperCase());
+            this.resetButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.editorDoneLayout.addView(this.resetButton, LayoutHelper.createFrame(-2, -1, 49));
+            this.resetButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    PhotoViewer.this.centerImage.setOrientation(PhotoViewer.this.centerImage.getOrientation() - 90, false);
-                    PhotoViewer.this.photoCropView.setOrientation(PhotoViewer.this.centerImage.getOrientation());
-                    PhotoViewer.this.containerView.invalidate();
+                    PhotoViewer.this.photoCropView.reset();
                 }
             });
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
@@ -2216,7 +2227,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.animateToScale = newScale / scale;
                     this.animateToX = 0.0f;
                     if (this.currentEditMode == 1) {
-                        this.animateToY = (float) AndroidUtilities.dp(24.0f);
+                        this.animateToY = (float) AndroidUtilities.dp(58.0f);
                     } else if (this.currentEditMode == 2) {
                         this.animateToY = (float) AndroidUtilities.dp(62.0f);
                     } else if (this.currentEditMode == 3) {
@@ -2332,9 +2343,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     public Bitmap getBitmap() {
                         return PhotoViewer.this.centerImage.getBitmap();
                     }
+
+                    public void onChange(boolean reset) {
+                        PhotoViewer.this.resetButton.setVisibility(reset ? 8 : 0);
+                    }
                 });
             }
             this.editorDoneLayout.doneButton.setText(LocaleController.getString("Crop", R.string.Crop));
+            this.editorDoneLayout.doneButton.setTextColor(-11420173);
             this.changeModeAnimation = new AnimatorSet();
             arrayList = new ArrayList();
             arrayList.add(ObjectAnimator.ofFloat(this.pickerView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
@@ -2381,7 +2397,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         }
                         PhotoViewer.this.animateToScale = newScale / scale;
                         PhotoViewer.this.animateToX = 0.0f;
-                        PhotoViewer.this.animateToY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(24.0f)));
+                        PhotoViewer.this.animateToY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(56.0f)));
                         PhotoViewer.this.animationStartTime = System.currentTimeMillis();
                         PhotoViewer.this.zoomAnimation = true;
                     }
@@ -2402,6 +2418,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         }
 
                         public void onAnimationEnd(Animator animation) {
+                            PhotoViewer.this.photoCropView.appeared();
                             PhotoViewer.this.imageMoveAnimation = null;
                             PhotoViewer.this.currentEditMode = i;
                             PhotoViewer.this.animateToScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
@@ -4262,7 +4279,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             height += AndroidUtilities.statusBarHeight;
         }
         if (mode == 1) {
-            return height - AndroidUtilities.dp(76.0f);
+            return height - AndroidUtilities.dp(144.0f);
         }
         if (mode == 2) {
             return height - AndroidUtilities.dp(154.0f);

@@ -365,6 +365,9 @@
     <string name="CreateGroupError">No puedes crear un grupo con estos usuarios debido a sus ajustes de privacidad.</string>
     <string name="Crop">RECORTAR</string>
     <string name="CropImage">Recortar imagen</string>
+    <string name="CropOriginal">Original</string>
+    <string name="CropReset">Restablecer</string>
+    <string name="CropSquare">1:1</string>
     <string name="CurrentSession">Sesión actual</string>
     <string name="Curves">Curvas</string>
     <string name="CurvesAll">TODO</string>

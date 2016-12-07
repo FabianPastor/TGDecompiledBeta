@@ -1793,7 +1793,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private void openWebView(WebPage webPage) {
-        showDialog(new EmbedBottomSheet(getParentActivity(), webPage.site_name, webPage.description, webPage.url, webPage.embed_url, webPage.embed_width, webPage.embed_height));
+        new EmbedBottomSheet(getParentActivity(), webPage.site_name, webPage.description, webPage.url, webPage.embed_url, webPage.embed_width, webPage.embed_height).show();
     }
 
     private void fixLayoutInternal() {

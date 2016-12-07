@@ -365,6 +365,9 @@
     <string name="CreateGroupError">Du kannst mit diesen Nutzern keine Gruppe erstellen, weil sie es nicht erlauben.</string>
     <string name="Crop">SCHNEIDEN</string>
     <string name="CropImage">Bild zuschneiden</string>
+    <string name="CropOriginal">Original</string>
+    <string name="CropReset">Reset</string>
+    <string name="CropSquare">Quadrat</string>
     <string name="CurrentSession">Aktuelles Gerät</string>
     <string name="Curves">Kurven</string>
     <string name="CurvesAll">ALLE</string>

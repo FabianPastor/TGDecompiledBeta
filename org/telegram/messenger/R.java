@@ -163,6 +163,7 @@ public final class R {
         public static final int catstile = NUM;
         public static final int channelintro = NUM;
         public static final int chat_badge = NUM;
+        public static final int chats_clear = NUM;
         public static final int chats_delete = NUM;
         public static final int chats_leave = NUM;
         public static final int chats_pin = NUM;
@@ -624,6 +625,7 @@ public final class R {
         public static final int tool_brightness = NUM;
         public static final int tool_contrast = NUM;
         public static final int tool_cropfix = NUM;
+        public static final int tool_cropfix_active = NUM;
         public static final int tool_curve = NUM;
         public static final int tool_details = NUM;
         public static final int tool_enhance = NUM;
@@ -1098,6 +1100,9 @@ public final class R {
         public static final int CreateGroupError = NUM;
         public static final int Crop = NUM;
         public static final int CropImage = NUM;
+        public static final int CropOriginal = NUM;
+        public static final int CropReset = NUM;
+        public static final int CropSquare = NUM;
         public static final int CurrentSession = NUM;
         public static final int Curves = NUM;
         public static final int CurvesAll = NUM;
@@ -1967,6 +1972,7 @@ public final class R {
         public static final int UsernameChecking = NUM;
         public static final int UsernameEmpty = NUM;
         public static final int UsernameHelp = NUM;
+        public static final int UsernameHelpLink = NUM;
         public static final int UsernameInUse = NUM;
         public static final int UsernameInvalid = NUM;
         public static final int UsernameInvalidLong = NUM;

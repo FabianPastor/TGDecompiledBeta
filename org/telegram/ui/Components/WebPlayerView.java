@@ -9,7 +9,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
@@ -24,12 +29,15 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -61,6 +69,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
@@ -68,7 +77,10 @@ import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 
 @TargetApi(16)
-public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
+public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnAudioFocusChangeListener {
+    private static final int AUDIO_FOCUSED = 2;
+    private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
+    private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
     public static final Pattern coubIdRegex = Pattern.compile("(?:coub:|https?://(?:coub\\.com/(?:view|embed|coubs)/|c-cdn\\.coub\\.com/fb-player\\.swf\\?.*\\bcoub(?:ID|id)=))([\\da-z]+)");
     private static final String exprName = "[a-zA-Z_$][a-zA-Z_$0-9]*";
     private static final Pattern exprParensPattern = Pattern.compile("[()]");
@@ -81,16 +93,18 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
     public static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
     public static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
     private AspectRatioFrameLayout aspectRatioFrameLayout;
+    private int audioFocus;
     private Paint backgroundPaint = new Paint();
-    private boolean changingFullscreenState;
+    private TextureView changedTextureView;
+    private boolean changingTextureView;
     private ControlsView controlsView;
     private float currentAlpha;
     private AsyncTask currentTask;
     private WebPlayerViewDelegate delegate;
     private boolean drawImage;
     private boolean firstFrameRendered;
-    private TextureView fullScreenTextureView;
     private ImageView fullscreenButton;
+    private boolean hasAudioFocus;
     private boolean inFullscreen;
     private boolean initFailed;
     private boolean initied;
@@ -116,7 +130,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             }
         }
     };
-    private ContextProgressView progressView;
+    private RadialProgressView progressView;
+    private boolean resumeAudioOnFocusGain;
     private ImageView shareButton;
     private TextureView textureView;
     private VideoPlayer videoPlayer;
@@ -254,6 +269,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             return true;
         }
 
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+            checkNeedHide();
+        }
+
         public boolean onTouchEvent(MotionEvent event) {
             int progressLineX;
             int progressLineEndX;
@@ -276,7 +296,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             int progressX = progressLineX + i;
             int x;
             if (event.getAction() == 0) {
-                if (!this.isVisible) {
+                if (!this.isVisible || WebPlayerView.this.isInline) {
                     show(true, true);
                 } else if (this.duration != 0) {
                     x = (int) event.getX();
@@ -297,7 +317,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
                 if (this.progressPressed) {
                     this.progressPressed = false;
                     if (WebPlayerView.this.initied) {
-                        WebPlayerView.this.videoPlayer.seekTo((long) ((int) (((float) (this.duration * 1000)) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX))))));
+                        this.progress = (int) (((float) this.duration) * (((float) (this.currentProgressX - progressLineX)) / ((float) (progressLineEndX - progressLineX))));
+                        WebPlayerView.this.videoPlayer.seekTo(((long) this.progress) * 1000);
                     }
                 }
             } else if (event.getAction() == 2 && this.progressPressed) {
@@ -334,17 +355,19 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             if (WebPlayerView.this.videoPlayer.isPlayerPrepared()) {
                 int width = getMeasuredWidth();
                 int height = getMeasuredHeight();
-                if (this.durationLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp(34.0f)));
-                    this.durationLayout.draw(canvas);
-                    canvas.restore();
-                }
-                if (this.progressLayout != null) {
-                    canvas.save();
-                    canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp(34.0f)));
-                    this.progressLayout.draw(canvas);
-                    canvas.restore();
+                if (!WebPlayerView.this.isInline) {
+                    if (this.durationLayout != null) {
+                        canvas.save();
+                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp(34.0f)));
+                        this.durationLayout.draw(canvas);
+                        canvas.restore();
+                    }
+                    if (this.progressLayout != null) {
+                        canvas.save();
+                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp(34.0f)));
+                        this.progressLayout.draw(canvas);
+                        canvas.restore();
+                    }
                 }
                 if (this.duration != 0) {
                     int progressLineY;
@@ -352,7 +375,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
                     int progressLineEndX;
                     int cy;
                     int progressX;
-                    if (WebPlayerView.this.inFullscreen) {
+                    if (WebPlayerView.this.isInline) {
+                        progressLineY = height - AndroidUtilities.dp(3.0f);
+                        progressLineX = 0;
+                        progressLineEndX = width;
+                        cy = height - AndroidUtilities.dp(7.0f);
+                    } else if (WebPlayerView.this.inFullscreen) {
                         progressLineY = height - AndroidUtilities.dp(29.0f);
                         progressLineX = AndroidUtilities.dp(36.0f) + this.durationWidth;
                         progressLineEndX = (width - AndroidUtilities.dp(76.0f)) - this.durationWidth;
@@ -380,7 +408,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
                         canvas.drawRect((float) (start - additional), (float) progressLineY, (((float) ((progressLineEndX - start) * this.bufferedPercentage)) / 100.0f) + ((float) start), (float) (AndroidUtilities.dp(3.0f) + progressLineY), WebPlayerView.this.inFullscreen ? this.progressBufferedPaint : this.progressInnerPaint);
                     }
                     canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
-                    canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
+                    if (!WebPlayerView.this.isInline) {
+                        canvas.drawCircle((float) progressX, (float) cy, (float) AndroidUtilities.dp(this.progressPressed ? 7.0f : 5.0f), this.progressPaint);
+                    }
                 }
             }
         }
@@ -448,9 +478,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -638,6 +668,70 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         }
     }
 
+    private class RadialProgressView extends View {
+        private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
+        private RectF cicleRect = new RectF();
+        private float currentCircleLength;
+        private float currentProgressTime;
+        private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
+        private long lastUpdateTime;
+        private int progressColor = -1;
+        private Paint progressPaint = new Paint(1);
+        private float radOffset;
+        private boolean risingCircleLength;
+        private float risingTime = 500.0f;
+        private float rotationTime = 2000.0f;
+
+        public RadialProgressView(Context context) {
+            super(context);
+            this.progressPaint.setStyle(Style.STROKE);
+            this.progressPaint.setStrokeCap(Cap.ROUND);
+            this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+            this.progressPaint.setColor(this.progressColor);
+        }
+
+        private void updateAnimation() {
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastUpdateTime;
+            if (dt > 17) {
+                dt = 17;
+            }
+            this.lastUpdateTime = newTime;
+            this.radOffset += ((float) (360 * dt)) / this.rotationTime;
+            this.radOffset -= (float) (((int) (this.radOffset / 360.0f)) * 360);
+            this.currentProgressTime += (float) dt;
+            if (this.currentProgressTime >= this.risingTime) {
+                this.currentProgressTime = this.risingTime;
+            }
+            if (this.risingCircleLength) {
+                this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) + 4.0f;
+            } else {
+                this.currentCircleLength = 4.0f - ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) * BitmapDescriptorFactory.HUE_VIOLET);
+            }
+            if (this.currentProgressTime == this.risingTime) {
+                if (this.risingCircleLength) {
+                    this.radOffset += BitmapDescriptorFactory.HUE_VIOLET;
+                    this.currentCircleLength = -266.0f;
+                }
+                this.risingCircleLength = !this.risingCircleLength;
+                this.currentProgressTime = 0.0f;
+            }
+            invalidate();
+        }
+
+        public void setProgressColor(int color) {
+            this.progressColor = color;
+            this.progressPaint.setColor(this.progressColor);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int diff = AndroidUtilities.dp(4.0f);
+            this.cicleRect.set((float) diff, (float) diff, (float) (getMeasuredWidth() - diff), (float) (getMeasuredHeight() - diff));
+            canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
+            updateAnimation();
+        }
+    }
+
     private class VimeoVideoTask extends AsyncTask<Void, Void, String> {
         private boolean canRetry = true;
         private String[] results = new String[2];
@@ -698,7 +792,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
 
         TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
 
-        void onSwtichToInline(boolean z);
+        TextureView onSwtichToInline(View view, boolean z, float f, int i);
 
         void onVideoSizeChanged(float f, int i);
     }
@@ -1044,7 +1138,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         this.videoPlayer.setTextureView(this.textureView);
         this.controlsView = new ControlsView(context);
         addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
-        this.progressView = new ContextProgressView(context, 1);
+        this.progressView = new RadialProgressView(context);
         addView(this.progressView, LayoutHelper.createFrame(48, 48, 17));
         this.fullscreenButton = new ImageView(context);
         this.fullscreenButton.setScaleType(ScaleType.CENTER);
@@ -1082,13 +1176,32 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 51));
             this.inlineButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    WebPlayerView.this.isInline = !WebPlayerView.this.isInline;
-                    WebPlayerView.this.updatePlayButton();
-                    WebPlayerView.this.updateShareButton();
-                    WebPlayerView.this.updateFullscreenButton();
-                    WebPlayerView.this.updateInlineButton();
-                    if (WebPlayerView.this.delegate != null) {
-                        WebPlayerView.this.delegate.onSwtichToInline(WebPlayerView.this.isInline);
+                    if (WebPlayerView.this.textureView != null) {
+                        WebPlayerView.this.isInline = !WebPlayerView.this.isInline;
+                        WebPlayerView.this.updatePlayButton();
+                        WebPlayerView.this.updateShareButton();
+                        WebPlayerView.this.updateFullscreenButton();
+                        WebPlayerView.this.updateInlineButton();
+                        WebPlayerView.this.changingTextureView = true;
+                        if (WebPlayerView.this.isInline) {
+                            WebPlayerView.this.removeView(WebPlayerView.this.controlsView);
+                        } else {
+                            ViewGroup parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                            if (parent != WebPlayerView.this) {
+                                if (parent != null) {
+                                    parent.removeView(WebPlayerView.this.controlsView);
+                                }
+                                WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
+                            }
+                        }
+                        if (!WebPlayerView.this.isInline) {
+                            WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
+                        }
+                        WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwtichToInline(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+                        if (WebPlayerView.this.isInline) {
+                            WebPlayerView.this.aspectRatioFrameLayout.removeView(WebPlayerView.this.textureView);
+                        }
+                        WebPlayerView.this.controlsView.checkNeedHide();
                     }
                 }
             });
@@ -1166,12 +1279,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
     }
 
     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-        if (!this.changingFullscreenState) {
+        if (!this.changingTextureView) {
             return false;
         }
-        if (this.inFullscreen) {
-            this.fullScreenTextureView.setSurfaceTexture(surfaceTexture);
-            this.fullScreenTextureView.setSurfaceTextureListener(new SurfaceTextureListener() {
+        if (this.inFullscreen || this.isInline) {
+            this.changedTextureView.setSurfaceTexture(surfaceTexture);
+            this.changedTextureView.setSurfaceTextureListener(new SurfaceTextureListener() {
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                 }
 
@@ -1179,7 +1292,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
                 }
 
                 public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                    if (!WebPlayerView.this.changingFullscreenState) {
+                    if (!WebPlayerView.this.changingTextureView) {
                         return true;
                     }
                     WebPlayerView.this.textureView.setSurfaceTexture(surface);
@@ -1191,7 +1304,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             });
             return true;
         }
-        this.changingFullscreenState = false;
+        this.changingTextureView = false;
         return false;
     }
 
@@ -1215,7 +1328,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         if (this.controlsView.getParent() == this) {
             this.controlsView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
         }
-        this.progressView.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
+        this.progressView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
         setMeasuredDimension(width, height);
     }
 
@@ -1224,7 +1337,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
         if (this.videoPlayer.isPlaying()) {
             this.playButton.setImageResource(this.isInline ? R.drawable.ic_pauseinline : R.drawable.ic_pause);
-            AndroidUtilities.runOnUIThread(this.progressRunnable);
+            AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
+            checkAudioFocus();
         } else if (this.isCompleted) {
             this.playButton.setImageResource(this.isInline ? R.drawable.ic_againinline : R.drawable.ic_again);
         } else {
@@ -1232,18 +1346,51 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
         }
     }
 
-    private void updateFullscreenButton() {
-        if (this.videoPlayer.isPlayerPrepared()) {
-            this.fullscreenButton.setVisibility(0);
-            if (this.inFullscreen) {
-                this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
-                return;
-            } else {
-                this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
-                return;
+    private void checkAudioFocus() {
+        if (!this.hasAudioFocus) {
+            AudioManager audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            this.hasAudioFocus = true;
+            if (audioManager.requestAudioFocus(this, 3, 1) == 1) {
+                this.audioFocus = 2;
             }
         }
-        this.fullscreenButton.setVisibility(8);
+    }
+
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == -1) {
+            if (this.videoPlayer.isPlaying()) {
+                this.videoPlayer.pause();
+            }
+            this.hasAudioFocus = false;
+            this.audioFocus = 0;
+        } else if (focusChange == 1) {
+            this.audioFocus = 2;
+            if (this.resumeAudioOnFocusGain) {
+                this.resumeAudioOnFocusGain = false;
+                this.videoPlayer.play();
+            }
+        } else if (focusChange == -3) {
+            this.audioFocus = 1;
+        } else if (focusChange == -2) {
+            this.audioFocus = 0;
+            if (this.videoPlayer.isPlaying()) {
+                this.resumeAudioOnFocusGain = true;
+                this.videoPlayer.pause();
+            }
+        }
+    }
+
+    private void updateFullscreenButton() {
+        if (!this.videoPlayer.isPlayerPrepared() || this.isInline) {
+            this.fullscreenButton.setVisibility(8);
+            return;
+        }
+        this.fullscreenButton.setVisibility(0);
+        if (this.inFullscreen) {
+            this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
+        } else {
+            this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
+        }
     }
 
     private void updateShareButton() {
@@ -1264,12 +1411,15 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
 
     private void updateInlineButton() {
         if (this.inlineButton != null) {
-            if (this.videoPlayer.isPlayerPrepared()) {
-                this.inlineButton.setVisibility(8);
-                this.inlineButton.setImageResource(this.isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
-                return;
+            this.inlineButton.setImageResource(this.isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
+            ImageView imageView = this.inlineButton;
+            int i = (!this.videoPlayer.isPlayerPrepared() || this.inFullscreen) ? 8 : 0;
+            imageView.setVisibility(i);
+            if (this.isInline) {
+                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, 51));
+            } else {
+                this.inlineButton.setLayoutParams(LayoutHelper.createFrame(56, 50, 51));
             }
-            this.inlineButton.setVisibility(0);
         }
     }
 
@@ -1307,7 +1457,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
     private void updateFullscreenState(boolean byButton) {
         if (this.textureView != null) {
             updateFullscreenButton();
-            this.changingFullscreenState = true;
+            this.changingTextureView = true;
             if (this.inFullscreen) {
                 removeView(this.controlsView);
             } else {
@@ -1322,7 +1472,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             if (!this.inFullscreen) {
                 this.aspectRatioFrameLayout.addView(this.textureView);
             }
-            this.fullScreenTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
+            this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
             if (this.inFullscreen) {
                 this.aspectRatioFrameLayout.removeView(this.textureView);
             }
@@ -1333,13 +1483,23 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
     public void exitFullscreen() {
         if (this.inFullscreen) {
             this.inFullscreen = false;
+            updateInlineButton();
             updateFullscreenState(false);
         }
+    }
+
+    public boolean isInitied() {
+        return this.initied;
+    }
+
+    public boolean isInline() {
+        return this.isInline;
     }
 
     public void enterFullscreen() {
         if (!this.inFullscreen) {
             this.inFullscreen = true;
+            updateInlineButton();
             updateFullscreenState(false);
         }
     }
@@ -1451,14 +1611,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             this.progressAnimation = new AnimatorSet();
             AnimatorSet animatorSet = this.progressAnimation;
             Animator[] animatorArr = new Animator[1];
-            ContextProgressView contextProgressView = this.progressView;
+            RadialProgressView radialProgressView = this.progressView;
             String str = "alpha";
             float[] fArr = new float[1];
             if (!show) {
                 f = 0.0f;
             }
             fArr[0] = f;
-            animatorArr[0] = ObjectAnimator.ofFloat(contextProgressView, str, fArr);
+            animatorArr[0] = ObjectAnimator.ofFloat(radialProgressView, str, fArr);
             animatorSet.playTogether(animatorArr);
             this.progressAnimation.setDuration(150);
             this.progressAnimation.addListener(new AnimatorListenerAdapterProxy() {
@@ -1469,10 +1629,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate {
             this.progressAnimation.start();
             return;
         }
-        ContextProgressView contextProgressView2 = this.progressView;
+        RadialProgressView radialProgressView2 = this.progressView;
         if (!show) {
             f = 0.0f;
         }
-        contextProgressView2.setAlpha(f);
+        radialProgressView2.setAlpha(f);
     }
 }

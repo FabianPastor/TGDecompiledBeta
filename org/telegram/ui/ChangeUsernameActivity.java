@@ -2,11 +2,20 @@ package org.telegram.ui;
 
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -40,13 +50,57 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeUsernameActivity extends BaseFragment {
     private static final int done_button = 1;
-    private int checkReqId = 0;
-    private Runnable checkRunnable = null;
+    private int checkReqId;
+    private Runnable checkRunnable;
     private TextView checkTextView;
     private View doneButton;
     private EditText firstNameField;
-    private String lastCheckName = null;
-    private boolean lastNameAvailable = false;
+    private TextView helpTextView;
+    private boolean ignoreCheck;
+    private CharSequence infoText;
+    private String lastCheckName;
+    private boolean lastNameAvailable;
+
+    private static class LinkMovementMethodMy extends LinkMovementMethod {
+        private LinkMovementMethodMy() {
+        }
+
+        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+            try {
+                boolean result = super.onTouchEvent(widget, buffer, event);
+                if (event.getAction() != 1 && event.getAction() != 3) {
+                    return result;
+                }
+                Selection.removeSelection(buffer);
+                return result;
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+                return false;
+            }
+        }
+    }
+
+    public class LinkSpan extends ClickableSpan {
+        private String url;
+
+        public LinkSpan(String value) {
+            this.url = value;
+        }
+
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setUnderlineText(false);
+        }
+
+        public void onClick(View widget) {
+            try {
+                ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.url));
+                Toast.makeText(ChangeUsernameActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+    }
 
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -95,33 +149,52 @@ public class ChangeUsernameActivity extends BaseFragment {
                 return true;
             }
         });
-        ((LinearLayout) this.fragmentView).addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        if (!(user == null || user.username == null || user.username.length() <= 0)) {
-            this.firstNameField.setText(user.username);
-            this.firstNameField.setSelection(this.firstNameField.length());
-        }
-        this.checkTextView = new TextView(context);
-        this.checkTextView.setTextSize(1, 15.0f);
-        this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        ((LinearLayout) this.fragmentView).addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 12, 24, 0));
-        TextView helpTextView = new TextView(context);
-        helpTextView.setTextSize(1, 15.0f);
-        helpTextView.setTextColor(-9605774);
-        helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", R.string.UsernameHelp)));
-        ((LinearLayout) this.fragmentView).addView(helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
         this.firstNameField.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                ChangeUsernameActivity.this.checkUserName(ChangeUsernameActivity.this.firstNameField.getText().toString(), false);
+                if (!ChangeUsernameActivity.this.ignoreCheck) {
+                    ChangeUsernameActivity.this.checkUserName(ChangeUsernameActivity.this.firstNameField.getText().toString(), false);
+                }
             }
 
             public void afterTextChanged(Editable editable) {
+                if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
+                    String url = "https://telegram.me/" + ChangeUsernameActivity.this.firstNameField.getText();
+                    String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
+                    int index = text.indexOf(url);
+                    new SpannableStringBuilder(text).setSpan(new LinkSpan(url), index, url.length() + index, 33);
+                    ChangeUsernameActivity.this.helpTextView.setText(TextUtils.concat(new CharSequence[]{ChangeUsernameActivity.this.infoText, "\n\n", textSpan}));
+                    return;
+                }
+                ChangeUsernameActivity.this.helpTextView.setText(ChangeUsernameActivity.this.infoText);
             }
         });
+        ((LinearLayout) this.fragmentView).addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
+        this.checkTextView = new TextView(context);
+        this.checkTextView.setTextSize(1, 15.0f);
+        this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        ((LinearLayout) this.fragmentView).addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 12, 24, 0));
+        this.helpTextView = new TextView(context);
+        this.helpTextView.setTextSize(1, 15.0f);
+        this.helpTextView.setTextColor(-9605774);
+        this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        TextView textView = this.helpTextView;
+        CharSequence replaceTags = AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", R.string.UsernameHelp));
+        this.infoText = replaceTags;
+        textView.setText(replaceTags);
+        this.helpTextView.setLinkTextColor(Theme.MSG_LINK_TEXT_COLOR);
+        this.helpTextView.setHighlightColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
+        this.helpTextView.setMovementMethod(new LinkMovementMethodMy());
+        ((LinearLayout) this.fragmentView).addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
         this.checkTextView.setVisibility(8);
+        if (!(user == null || user.username == null || user.username.length() <= 0)) {
+            this.ignoreCheck = true;
+            this.firstNameField.setText(user.username);
+            this.firstNameField.setSelection(this.firstNameField.length());
+            this.ignoreCheck = false;
+        }
         return this.fragmentView;
     }
 

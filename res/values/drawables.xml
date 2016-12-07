@@ -316,6 +316,10 @@
     <drawable name="chat_badge">res/drawable-hdpi-v4/chat_badge.9.png</drawable>
     <drawable name="chat_badge">res/drawable-xhdpi-v4/chat_badge.9.png</drawable>
     <drawable name="chat_badge">res/drawable-xxhdpi-v4/chat_badge.9.png</drawable>
+    <drawable name="chats_clear">res/drawable-mdpi-v4/chats_clear.png</drawable>
+    <drawable name="chats_clear">res/drawable-hdpi-v4/chats_clear.png</drawable>
+    <drawable name="chats_clear">res/drawable-xhdpi-v4/chats_clear.png</drawable>
+    <drawable name="chats_clear">res/drawable-xxhdpi-v4/chats_clear.png</drawable>
     <drawable name="chats_delete">res/drawable-mdpi-v4/chats_delete.png</drawable>
     <drawable name="chats_delete">res/drawable-hdpi-v4/chats_delete.png</drawable>
     <drawable name="chats_delete">res/drawable-xhdpi-v4/chats_delete.png</drawable>
@@ -1999,6 +2003,10 @@
     <drawable name="tool_cropfix">res/drawable-hdpi-v4/tool_cropfix.png</drawable>
     <drawable name="tool_cropfix">res/drawable-xhdpi-v4/tool_cropfix.png</drawable>
     <drawable name="tool_cropfix">res/drawable-xxhdpi-v4/tool_cropfix.png</drawable>
+    <drawable name="tool_cropfix_active">res/drawable-mdpi-v4/tool_cropfix_active.png</drawable>
+    <drawable name="tool_cropfix_active">res/drawable-hdpi-v4/tool_cropfix_active.png</drawable>
+    <drawable name="tool_cropfix_active">res/drawable-xhdpi-v4/tool_cropfix_active.png</drawable>
+    <drawable name="tool_cropfix_active">res/drawable-xxhdpi-v4/tool_cropfix_active.png</drawable>
     <drawable name="tool_curve">res/drawable-mdpi-v4/tool_curve.png</drawable>
     <drawable name="tool_curve">res/drawable-hdpi-v4/tool_curve.png</drawable>
     <drawable name="tool_curve">res/drawable-xhdpi-v4/tool_curve.png</drawable>

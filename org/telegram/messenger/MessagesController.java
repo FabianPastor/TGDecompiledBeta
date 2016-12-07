@@ -2955,6 +2955,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             TL_messages_getDialogs req = new TL_messages_getDialogs();
             req.limit = count;
+            req.exclude_pinned = true;
             boolean found = false;
             for (int a = this.dialogs.size() - 1; a >= 0; a--) {
                 TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
@@ -2980,16 +2981,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {
-                                    messages_Dialogs dialogsRes = (messages_Dialogs) response;
-                                    int lastPinnedNum = 1000;
-                                    for (int a = 0; a < dialogsRes.dialogs.size(); a++) {
-                                        TL_dialog dialog = (TL_dialog) dialogsRes.dialogs.get(a);
-                                        if (dialog.pinned) {
-                                            dialog.pinnedNum = lastPinnedNum;
-                                            lastPinnedNum--;
-                                        }
-                                    }
-                                    MessagesController.this.processLoadedDialogs(dialogsRes, null, 0, count, 0, false, false);
+                                    MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false);
                                 }
                             }
                         });
@@ -3646,6 +3638,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3660,7 +3653,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -4988,16 +4980,16 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
         Throwable e;
+        long newTaskId;
+        TL_updates_getChannelDifference req;
+        final int i;
+        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
             Integer channelPts;
-            long newTaskId;
-            TL_updates_getChannelDifference req;
-            final int i;
-            final int i2;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5561,10 +5553,12 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public boolean canPinDialog() {
+    public boolean canPinDialog(boolean secret) {
         int count = 0;
         for (int a = 0; a < this.dialogs.size(); a++) {
-            if (((TL_dialog) this.dialogs.get(a)).pinned) {
+            TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
+            int lower_id = (int) dialog.id;
+            if ((!secret || lower_id == 0) && ((secret || lower_id != 0) && dialog.pinned)) {
                 count++;
             }
         }
@@ -5573,15 +5567,9 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
         int lower_id = (int) did;
-        if (lower_id == 0) {
-            return false;
-        }
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
-        if (dialog == null || dialog.pinned == pin) {
-            return dialog != null;
-        } else {
+        if (dialog != null && dialog.pinned != pin) {
             dialog.pinned = pin;
             if (pin) {
                 int maxPinnedNum = 0;
@@ -5601,7 +5589,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 this.dialogs.remove(this.dialogs.size() - 1);
             }
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-            if (taskId != -1) {
+            if (!(lower_id == 0 || taskId == -1)) {
                 TL_messages_toggleDialogPin req = new TL_messages_toggleDialogPin();
                 req.pinned = pin;
                 if (peer == null) {
@@ -5610,6 +5598,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
+                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -5652,6 +5641,10 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             MessagesStorage.getInstance().setDialogPinned(did, dialog.pinnedNum);
             return true;
+        } else if (dialog != null) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -5766,12 +5759,14 @@ public class MessagesController implements NotificationCenterDelegate {
                                         boolean added = false;
                                         for (a = 0; a < MessagesController.this.dialogs.size(); a++) {
                                             TL_dialog dialog = (TL_dialog) MessagesController.this.dialogs.get(a);
-                                            if (!dialog.pinned) {
-                                                break;
+                                            if (((int) dialog.id) != 0) {
+                                                if (!dialog.pinned) {
+                                                    break;
+                                                }
+                                                dialog.pinned = false;
+                                                dialog.pinnedNum = 0;
+                                                changed = true;
                                             }
-                                            dialog.pinned = false;
-                                            dialog.pinnedNum = 0;
-                                            changed = true;
                                         }
                                         ArrayList<Long> pinnedDialogs = new ArrayList();
                                         if (!res.dialogs.isEmpty()) {
@@ -6455,6 +6450,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        ArrayList<Integer> arrayList3;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6508,7 +6504,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            ArrayList<Integer> arrayList3;
             Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("tmessages", "process update " + update);

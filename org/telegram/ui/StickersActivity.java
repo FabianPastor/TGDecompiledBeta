@@ -335,6 +335,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             StickersQuery.checkFeaturedStickers();
         }
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.archivedStickersCountDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.featuredStickersDidLoaded);
         updateRows();
         return true;
@@ -343,6 +344,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.stickersDidLoaded);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.archivedStickersCountDidLoaded);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.featuredStickersDidLoaded);
         sendReorder();
     }
@@ -385,8 +387,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         StickersActivity.this.showDialog(new StickersAlert(StickersActivity.this.getParentActivity(), StickersActivity.this, null, stickerSet, null));
                     }
                 } else if (position == StickersActivity.this.featuredRow) {
+                    StickersActivity.this.sendReorder();
                     StickersActivity.this.presentFragment(new FeaturedStickersActivity());
                 } else if (position == StickersActivity.this.archivedRow) {
+                    StickersActivity.this.sendReorder();
                     StickersActivity.this.presentFragment(new ArchivedStickersActivity(StickersActivity.this.currentType));
                 } else if (position == StickersActivity.this.masksRow) {
                     StickersActivity.this.presentFragment(new StickersActivity(1));
@@ -401,8 +405,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (((Integer) args[0]).intValue() == this.currentType) {
                 updateRows();
             }
-        } else if (id == NotificationCenter.featuredStickersDidLoaded && this.listAdapter != null) {
-            this.listAdapter.notifyItemChanged(0);
+        } else if (id == NotificationCenter.featuredStickersDidLoaded) {
+            if (this.listAdapter != null) {
+                this.listAdapter.notifyItemChanged(0);
+            }
+        } else if (id == NotificationCenter.archivedStickersCountDidLoaded && ((Integer) args[0]).intValue() == this.currentType) {
+            updateRows();
         }
     }
 
@@ -424,10 +432,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     }
 
     private void updateRows() {
-        int i;
         this.rowCount = 0;
         if (this.currentType == 0) {
-            i = this.rowCount;
+            int i = this.rowCount;
             this.rowCount = i + 1;
             this.featuredRow = i;
             i = this.rowCount;
@@ -439,6 +446,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             i = this.rowCount;
             this.rowCount = i + 1;
             this.masksInfoRow = i;
+        } else {
+            this.featuredRow = -1;
+            this.featuredInfoRow = -1;
+            this.masksRow = -1;
+            this.masksInfoRow = -1;
+        }
+        if (StickersQuery.getArchivedStickersCount(this.currentType) != 0) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.archivedRow = i;
@@ -446,16 +460,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.rowCount = i + 1;
             this.archivedInfoRow = i;
         } else {
-            this.featuredRow = -1;
-            this.featuredInfoRow = -1;
-            this.masksRow = -1;
-            this.masksInfoRow = -1;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.archivedRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.archivedInfoRow = i;
+            this.archivedRow = -1;
+            this.archivedInfoRow = -1;
         }
         ArrayList<TL_messages_stickerSet> stickerSets = StickersQuery.getStickerSets(this.currentType);
         if (stickerSets.isEmpty()) {

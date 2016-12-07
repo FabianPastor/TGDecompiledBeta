@@ -1455,14 +1455,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 View child = this.attachPhotoRecyclerView.getChildAt(a);
                 if (child instanceof PhotoAttachCameraCell) {
                     if (VERSION.SDK_INT < 19 || child.isAttachedToWindow()) {
-                        int[] iArr;
                         child.getLocationInWindow(this.cameraViewLocation);
-                        float listViewX = this.listView.getX() + ((float) backgroundPaddingLeft);
+                        int[] iArr = this.cameraViewLocation;
+                        iArr[0] = iArr[0] - getLeftInset();
+                        float listViewX = (this.listView.getX() + ((float) backgroundPaddingLeft)) - ((float) getLeftInset());
                         if (((float) this.cameraViewLocation[0]) < listViewX) {
                             this.cameraViewOffsetX = (int) (listViewX - ((float) this.cameraViewLocation[0]));
                             if (this.cameraViewOffsetX >= AndroidUtilities.dp(80.0f)) {
                                 this.cameraViewOffsetX = 0;
-                                this.cameraViewLocation[0] = AndroidUtilities.dp(-100.0f);
+                                this.cameraViewLocation[0] = AndroidUtilities.dp(-150.0f);
                                 this.cameraViewLocation[1] = 0;
                             } else {
                                 iArr = this.cameraViewLocation;
@@ -1477,7 +1478,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             this.cameraViewOffsetY = AndroidUtilities.statusBarHeight - this.cameraViewLocation[1];
                             if (this.cameraViewOffsetY >= AndroidUtilities.dp(80.0f)) {
                                 this.cameraViewOffsetY = 0;
-                                this.cameraViewLocation[0] = AndroidUtilities.dp(-100.0f);
+                                this.cameraViewLocation[0] = AndroidUtilities.dp(-150.0f);
                                 this.cameraViewLocation[1] = 0;
                             } else {
                                 iArr = this.cameraViewLocation;
@@ -1489,14 +1490,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     }
                     this.cameraViewOffsetX = 0;
                     this.cameraViewOffsetY = 0;
-                    this.cameraViewLocation[0] = AndroidUtilities.dp(-100.0f);
+                    this.cameraViewLocation[0] = AndroidUtilities.dp(-150.0f);
                     this.cameraViewLocation[1] = 0;
                     applyCameraViewPosition();
                 }
             }
             this.cameraViewOffsetX = 0;
             this.cameraViewOffsetY = 0;
-            this.cameraViewLocation[0] = AndroidUtilities.dp(-100.0f);
+            this.cameraViewLocation[0] = AndroidUtilities.dp(-150.0f);
             this.cameraViewLocation[1] = 0;
             applyCameraViewPosition();
         }
@@ -1803,8 +1804,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         if (cell == null) {
             return null;
         }
-        int[] coords = new int[2];
+        coords = new int[2];
         cell.getImageView().getLocationInWindow(coords);
+        coords[0] = coords[0] - getLeftInset();
         PlaceProviderObject object = new PlaceProviderObject();
         object.viewX = coords[0];
         object.viewY = coords[1];
