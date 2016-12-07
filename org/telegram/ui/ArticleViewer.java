@@ -686,6 +686,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             public boolean onTouchEvent(MotionEvent event) {
                 if (BlockEmbedCell.this.currentBlock.allow_scrolling) {
                     requestDisallowInterceptTouchEvent(true);
+                } else {
+                    ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
                 }
                 return super.onTouchEvent(event);
             }
@@ -2360,7 +2362,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             float x = event.getX();
             float y = event.getY();
             if (event.getAction() == 0 && this.imageView.isInsideImage(x, y)) {
-                if (this.buttonState == -1 || x < ((float) this.buttonX) || x > ((float) (this.buttonX + AndroidUtilities.dp(48.0f))) || y < ((float) this.buttonY) || y > ((float) (this.buttonY + AndroidUtilities.dp(48.0f)))) {
+                if ((this.buttonState == -1 || x < ((float) this.buttonX) || x > ((float) (this.buttonX + AndroidUtilities.dp(48.0f))) || y < ((float) this.buttonY) || y > ((float) (this.buttonY + AndroidUtilities.dp(48.0f)))) && this.buttonState != 0) {
                     this.photoPressed = true;
                 } else {
                     this.buttonPressed = 1;
@@ -3681,6 +3683,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             ActionBarMenu menu = this.actionBar.createMenu();
             menu.addItem(2, (int) R.drawable.share);
             this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
+            this.menuItem.setLayoutInScreen(true);
             this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp), 0);
             this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
             this.bottomLayout = new FrameLayout(this.parentActivity);

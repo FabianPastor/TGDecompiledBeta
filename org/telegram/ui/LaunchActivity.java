@@ -1299,6 +1299,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 }
                             }
                         }
+                        if (message != null && message.startsWith("@")) {
+                            message = " " + message;
+                        }
                         if (phone != null || phoneHash != null) {
                             args2 = new Bundle();
                             args2.putString("phone", phone);

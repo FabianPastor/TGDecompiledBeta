@@ -21,10 +21,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
@@ -33,11 +36,13 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuItem extends FrameLayout {
+    private static Method layoutInScreenMethod;
     private boolean allowCloseAnimation = true;
     private ImageView clearButton;
     private ActionBarMenuItemDelegate delegate;
     protected ImageView iconView;
     private boolean isSearchField = false;
+    private boolean layoutInScreen;
     private ActionBarMenuItemSearchListener listener;
     private int[] location;
     private int menuHeight = AndroidUtilities.dp(16.0f);
@@ -175,6 +180,10 @@ public class ActionBarMenuItem extends FrameLayout {
         this.subMenuOpenSide = side;
     }
 
+    public void setLayoutInScreen(boolean value) {
+        this.layoutInScreen = value;
+    }
+
     public TextView addSubItem(int id, String text, int icon) {
         if (this.popupLayout == null) {
             this.rect = new Rect();
@@ -270,6 +279,17 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                     this.popupWindow.setOutsideTouchable(true);
                     this.popupWindow.setClippingEnabled(true);
+                    if (this.layoutInScreen) {
+                        try {
+                            if (layoutInScreenMethod == null) {
+                                layoutInScreenMethod = PopupWindow.class.getDeclaredMethod("setLayoutInScreenEnabled", new Class[]{Boolean.TYPE});
+                                layoutInScreenMethod.setAccessible(true);
+                            }
+                            layoutInScreenMethod.invoke(this.popupWindow, new Object[]{Boolean.valueOf(true)});
+                        } catch (Throwable e) {
+                            FileLog.e("tmessages", e);
+                        }
+                    }
                     this.popupWindow.setInputMethodMode(2);
                     this.popupWindow.setSoftInputMode(0);
                     this.popupLayout.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));

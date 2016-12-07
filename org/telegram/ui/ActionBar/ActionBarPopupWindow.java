@@ -184,6 +184,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         protected void onDraw(Canvas canvas) {
             if (backgroundDrawable != null) {
                 backgroundDrawable.setAlpha(this.backAlpha);
+                int height = getMeasuredHeight();
                 if (this.showedFromBotton) {
                     backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
                 } else {

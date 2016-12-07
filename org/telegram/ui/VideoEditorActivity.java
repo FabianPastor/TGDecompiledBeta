@@ -18,12 +18,14 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -409,6 +411,11 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.fragmentView.setBackgroundColor(-16777216);
         SizeNotifierFrameLayoutPhoto frameLayout = this.fragmentView;
         frameLayout.setWithoutWindow(true);
+        this.fragmentView.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         this.pickerView = new PickerBottomLayoutViewer(context);
         this.pickerView.setBackgroundColor(0);
         this.pickerView.updateSelectedCount(0, false);

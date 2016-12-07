@@ -83,6 +83,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 import org.telegram.ui.VoIPActivity;
+import org.telegram.ui.VoIPPermissionActivity;
 
 public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener {
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
@@ -141,12 +142,22 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
                     VoIPService.this.hangUp();
                 }
-            } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) && intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
-                VoIPService.this.acceptIncomingCall();
+            } else if (!(VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) || intent.getIntExtra("end_hash", 0) != VoIPService.this.endHash) {
+            } else {
+                if (VERSION.SDK_INT < 23 || VoIPService.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                    VoIPService.this.acceptIncomingCall();
+                    try {
+                        PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
+                        return;
+                    } catch (Exception x) {
+                        FileLog.e(VoIPService.TAG, "Error starting incall activity", x);
+                        return;
+                    }
+                }
                 try {
-                    PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
-                } catch (Exception x) {
-                    FileLog.e(VoIPService.TAG, "Error starting incall activity", x);
+                    PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPPermissionActivity.class).addFlags(268435456), 0).send();
+                } catch (Exception x2) {
+                    FileLog.e(VoIPService.TAG, "Error starting permission activity", x2);
                 }
             }
         }
@@ -203,23 +214,28 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         } else {
             VoIPController.setNativeBufferSize(AudioTrack.getMinBufferSize(48000, 4, 2) / 2);
         }
-        this.controller = new VoIPController();
-        this.controller.setConnectionStateListener(this);
-        this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0));
-        this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
-        this.cpuWakelock.acquire();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        filter.addAction(ACTION_HEADSET_PLUG);
-        filter.addAction(getPackageName() + ".END_CALL");
-        filter.addAction(getPackageName() + ".ANSWER_CALL");
-        registerReceiver(this.receiver, filter);
-        ConnectionsManager.getInstance().setAppPaused(false, false);
-        this.soundPool = new SoundPool(1, 0, 0);
-        this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
-        this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
-        this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
-        ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
+        try {
+            this.controller = new VoIPController();
+            this.controller.setConnectionStateListener(this);
+            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0));
+            this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
+            this.cpuWakelock.acquire();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            filter.addAction(ACTION_HEADSET_PLUG);
+            filter.addAction(getPackageName() + ".END_CALL");
+            filter.addAction(getPackageName() + ".ANSWER_CALL");
+            registerReceiver(this.receiver, filter);
+            ConnectionsManager.getInstance().setAppPaused(false, false);
+            this.soundPool = new SoundPool(1, 0, 0);
+            this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
+            this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
+            this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
+            ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
+        } catch (Exception x) {
+            FileLog.e(TAG, "error initializing voip controller", x);
+            callFailed();
+        }
     }
 
     public void onDestroy() {
@@ -649,17 +665,22 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
             this.timeoutRunnable = null;
         }
-        FileLog.d(TAG, "InitCall: keyID=" + this.keyFingerprint);
-        this.controller.setEncryptionKey(this.authKey);
-        TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
-        endpoints[0] = this.call.connection;
-        for (int i = 0; i < this.call.alternative_connections.size(); i++) {
-            endpoints[i + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i);
+        try {
+            FileLog.d(TAG, "InitCall: keyID=" + this.keyFingerprint);
+            this.controller.setEncryptionKey(this.authKey);
+            TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
+            endpoints[0] = this.call.connection;
+            for (int i = 0; i < this.call.alternative_connections.size(); i++) {
+                endpoints[i + 1] = (TL_phoneConnection) this.call.alternative_connections.get(i);
+            }
+            this.controller.setRemoteEndpoints(endpoints, this.call.protocol.udp_p2p);
+            this.controller.start();
+            updateNetworkType();
+            this.controller.connect();
+        } catch (Exception x) {
+            FileLog.e(TAG, "error starting call", x);
+            callFailed();
         }
-        this.controller.setRemoteEndpoints(endpoints, this.call.protocol.udp_p2p);
-        this.controller.start();
-        updateNetworkType();
-        this.controller.connect();
     }
 
     private void showNotification() {
