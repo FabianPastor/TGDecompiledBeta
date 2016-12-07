@@ -1,6 +1,6 @@
 package org.telegram.messenger.exoplayer2.trackselection;
 
-import android.os.Handler;
+import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import java.util.Arrays;
@@ -13,7 +13,8 @@ import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection.Factory;
 import org.telegram.messenger.exoplayer2.util.Util;
 
-public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo> {
+public abstract class MappingTrackSelector extends TrackSelector {
+    private MappedTrackInfo currentMappedTrackInfo;
     private final SparseBooleanArray rendererDisabledFlags = new SparseBooleanArray();
     private final SparseArray<Map<TrackGroupArray, SelectionOverride>> selectionOverrides = new SparseArray();
 
@@ -22,8 +23,8 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
         public static final int RENDERER_SUPPORT_PLAYABLE_TRACKS = 2;
         public static final int RENDERER_SUPPORT_UNPLAYABLE_TRACKS = 1;
         private final int[][][] formatSupport;
+        public final int length;
         private final int[] mixedMimeTypeAdaptiveSupport;
-        private final int rendererCount;
         private final int[] rendererTrackTypes;
         private final TrackGroupArray[] trackGroups;
         private final TrackGroupArray unassociatedTrackGroups;
@@ -34,7 +35,7 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
             this.formatSupport = formatSupport;
             this.mixedMimeTypeAdaptiveSupport = mixedMimeTypeAdaptiveSupport;
             this.unassociatedTrackGroups = unassociatedTrackGroups;
-            this.rendererCount = trackGroups.length;
+            this.length = trackGroups.length;
         }
 
         public TrackGroupArray getTrackGroups(int rendererIndex) {
@@ -109,7 +110,7 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
 
         public boolean hasOnlyUnplayableTracks(int trackType) {
             int rendererSupport = 0;
-            for (int i = 0; i < this.rendererCount; i++) {
+            for (int i = 0; i < this.length; i++) {
                 if (this.rendererTrackTypes[i] == trackType) {
                     rendererSupport = Math.max(rendererSupport, getRendererSupport(i));
                 }
@@ -139,8 +140,8 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
         }
 
         public boolean containsTrack(int track) {
-            for (int i : this.tracks) {
-                if (i == track) {
+            for (int overrideTrack : this.tracks) {
+                if (overrideTrack == track) {
                     return true;
                 }
             }
@@ -150,8 +151,8 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
 
     protected abstract TrackSelection[] selectTracks(RendererCapabilities[] rendererCapabilitiesArr, TrackGroupArray[] trackGroupArrayArr, int[][][] iArr) throws ExoPlaybackException;
 
-    public MappingTrackSelector(Handler eventHandler) {
-        super(eventHandler);
+    public final MappedTrackInfo getCurrentMappedTrackInfo() {
+        return this.currentMappedTrackInfo;
     }
 
     public final void setRendererDisabled(int rendererIndex, boolean disabled) {
@@ -213,7 +214,7 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
         }
     }
 
-    public final TrackSelections<MappedTrackInfo> selectTracks(RendererCapabilities[] rendererCapabilities, TrackGroupArray trackGroups) throws ExoPlaybackException {
+    public final Pair<TrackSelectionArray, Object> selectTracks(RendererCapabilities[] rendererCapabilities, TrackGroupArray trackGroups) throws ExoPlaybackException {
         int i;
         int[] rendererTrackGroupCounts = new int[(rendererCapabilities.length + 1)];
         TrackGroup[][] rendererTrackGroups = new TrackGroup[(rendererCapabilities.length + 1)][];
@@ -259,7 +260,11 @@ public abstract class MappingTrackSelector extends TrackSelector<MappedTrackInfo
                 }
             }
         }
-        return new TrackSelections(new MappedTrackInfo(rendererTrackTypes, rendererTrackGroupArrays, mixedMimeTypeAdaptationSupport, rendererFormatSupports, unassociatedTrackGroupArray), trackSelections);
+        return Pair.create(new TrackSelectionArray(trackSelections), new MappedTrackInfo(rendererTrackTypes, rendererTrackGroupArrays, mixedMimeTypeAdaptationSupport, rendererFormatSupports, unassociatedTrackGroupArray));
+    }
+
+    public final void onSelectionActivated(Object info) {
+        this.currentMappedTrackInfo = (MappedTrackInfo) info;
     }
 
     private static int findRenderer(RendererCapabilities[] rendererCapabilities, TrackGroup group) throws ExoPlaybackException {

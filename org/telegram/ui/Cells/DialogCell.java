@@ -64,6 +64,8 @@ public class DialogCell extends BaseCell {
     private static Drawable muteDrawable;
     private static TextPaint nameEncryptedPaint;
     private static TextPaint namePaint;
+    private static Drawable pinnedDrawable;
+    private static Paint pinnedPaint;
     private static TextPaint timePaint;
     private static Drawable verifiedDrawable;
     private AvatarDrawable avatarDrawable;
@@ -90,6 +92,7 @@ public class DialogCell extends BaseCell {
     private boolean drawNameBroadcast;
     private boolean drawNameGroup;
     private boolean drawNameLock;
+    private boolean drawPin;
     private boolean drawVerified;
     private EncryptedChat encryptedChat = null;
     private int errorLeft;
@@ -111,6 +114,8 @@ public class DialogCell extends BaseCell {
     private int nameLockLeft;
     private int nameLockTop;
     private int nameMuteLeft;
+    private int pinLeft;
+    private int pinTop = AndroidUtilities.dp(39.0f);
     private StaticLayout timeLayout;
     private int timeLeft;
     private int timeTop = AndroidUtilities.dp(17.0f);
@@ -134,6 +139,8 @@ public class DialogCell extends BaseCell {
             linePaint.setColor(Theme.GROUP_CREATE_DIVIDER_COLOR);
             backPaint = new Paint();
             backPaint.setColor(251658240);
+            pinnedPaint = new Paint();
+            pinnedPaint.setColor(134217728);
             messagePrintingPaint = new TextPaint(1);
             messagePrintingPaint.setColor(-11697229);
             timePaint = new TextPaint(1);
@@ -153,6 +160,7 @@ public class DialogCell extends BaseCell {
             muteDrawable = getResources().getDrawable(R.drawable.mute_grey);
             verifiedDrawable = getResources().getDrawable(R.drawable.check_list);
             botDrawable = getResources().getDrawable(R.drawable.bot_list);
+            pinnedDrawable = getResources().getDrawable(R.drawable.pin_round);
         }
         namePaint.setTextSize((float) AndroidUtilities.dp(17.0f));
         nameEncryptedPaint.setTextSize((float) AndroidUtilities.dp(17.0f));
@@ -589,8 +597,19 @@ public class DialogCell extends BaseCell {
             }
             this.drawCount = true;
         } else {
+            if (this.drawPin) {
+                w = pinnedDrawable.getIntrinsicWidth() + AndroidUtilities.dp(8.0f);
+                messageWidth = messageWidth2 - w;
+                if (LocaleController.isRTL) {
+                    this.pinLeft = AndroidUtilities.dp(14.0f);
+                    this.messageLeft += w;
+                } else {
+                    this.pinLeft = (getMeasuredWidth() - pinnedDrawable.getIntrinsicWidth()) - AndroidUtilities.dp(14.0f);
+                }
+            } else {
+                messageWidth = messageWidth2;
+            }
             this.drawCount = false;
-            messageWidth = messageWidth2;
         }
         if (checkMessage) {
             if (messageString == null) {
@@ -678,7 +697,7 @@ public class DialogCell extends BaseCell {
             TL_dialog dialog = (TL_dialog) getDialogsArray().get(this.index);
             DraftMessage newDraftMessage = DraftQuery.getDraft(this.currentDialogId);
             MessageObject newMessageObject = (MessageObject) MessagesController.getInstance().dialogMessage.get(Long.valueOf(dialog.id));
-            if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage)))) {
+            if (this.currentDialogId != dialog.id || ((this.message != null && this.message.getId() != dialog.top_message) || ((newMessageObject != null && newMessageObject.messageOwner.edit_date != this.currentEditDate) || this.unreadCount != dialog.unread_count || this.message != newMessageObject || ((this.message == null && newMessageObject != null) || newDraftMessage != this.draftMessage || this.drawPin != dialog.pinned)))) {
                 this.currentDialogId = dialog.id;
                 update(0);
             }
@@ -707,10 +726,13 @@ public class DialogCell extends BaseCell {
                 }
                 this.currentEditDate = i;
                 this.lastMessageDate = dialog.last_message_date;
+                this.drawPin = dialog.pinned;
                 if (this.message != null) {
                     this.lastSendState = this.message.messageOwner.send_state;
                 }
             }
+        } else {
+            this.drawPin = false;
         }
         if (mask != 0) {
             boolean continueUpdate = false;
@@ -807,6 +829,9 @@ public class DialogCell extends BaseCell {
             if (this.isSelected) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), backPaint);
             }
+            if (this.drawPin) {
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), pinnedPaint);
+            }
             if (this.drawNameLock) {
                 setDrawableBounds(lockDrawable, this.nameLockLeft, this.nameLockTop);
                 lockDrawable.draw(canvas);
@@ -878,6 +903,9 @@ public class DialogCell extends BaseCell {
                     this.countLayout.draw(canvas);
                 }
                 canvas.restore();
+            } else if (this.drawPin) {
+                setDrawableBounds(pinnedDrawable, this.pinLeft, this.pinTop);
+                pinnedDrawable.draw(canvas);
             }
             if (this.useSeparator) {
                 if (LocaleController.isRTL) {

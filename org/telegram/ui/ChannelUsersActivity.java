@@ -499,6 +499,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         args.putBoolean("returnAsResult", true);
                         args.putBoolean("needForwardCount", false);
                         args.putBoolean("allowUsernameSearch", true);
+                        args.putBoolean("addingToChannel", !ChannelUsersActivity.this.isMegagroup);
                         args.putString("selectAlertString", LocaleController.getString("ChannelAddUserAdminAlert", R.string.ChannelAddUserAdminAlert));
                         fragment = new ContactsActivity(args);
                         fragment.setDelegate(new ContactsActivityDelegate() {

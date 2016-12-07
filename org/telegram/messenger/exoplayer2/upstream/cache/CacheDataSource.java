@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import android.net.Uri;
-import android.util.Log;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.lang.annotation.Retention;
@@ -12,16 +11,14 @@ import org.telegram.messenger.exoplayer2.upstream.DataSourceException;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
 import org.telegram.messenger.exoplayer2.upstream.FileDataSource;
 import org.telegram.messenger.exoplayer2.upstream.TeeDataSource;
-import org.telegram.messenger.exoplayer2.upstream.cache.CacheDataSink.CacheDataSinkException;
+import org.telegram.messenger.exoplayer2.upstream.cache.Cache.CacheException;
 
 public final class CacheDataSource implements DataSource {
     public static final long DEFAULT_MAX_CACHE_FILE_SIZE = 2097152;
     public static final int FLAG_BLOCK_ON_CACHE = 1;
-    public static final int FLAG_CACHE_UNBOUNDED_REQUESTS = 4;
+    public static final int FLAG_IGNORE_CACHE_FOR_UNSET_LENGTH_REQUESTS = 4;
     public static final int FLAG_IGNORE_CACHE_ON_ERROR = 2;
-    private static final String TAG = "CacheDataSource";
     private final boolean blockOnCache;
-    private final boolean bypassUnboundedRequests;
     private long bytesRemaining;
     private final Cache cache;
     private final DataSource cacheReadDataSource;
@@ -31,6 +28,7 @@ public final class CacheDataSource implements DataSource {
     private boolean currentRequestUnbounded;
     private final EventListener eventListener;
     private int flags;
+    private final boolean ignoreCacheForUnsetLengthRequests;
     private final boolean ignoreCacheOnError;
     private String key;
     private CacheSpan lockedSpan;
@@ -122,10 +120,10 @@ Error: java.util.NoSuchElementException
             z = false;
         }
         this.ignoreCacheOnError = z;
-        if ((flags & 4) != 0) {
+        if ((flags & 4) == 0) {
             z2 = false;
         }
-        this.bypassUnboundedRequests = z2;
+        this.ignoreCacheForUnsetLengthRequests = z2;
         this.upstreamDataSource = upstream;
         if (cacheWriteDataSink != null) {
             this.cacheWriteDataSource = new TeeDataSource(upstream, cacheWriteDataSink);
@@ -140,9 +138,9 @@ Error: java.util.NoSuchElementException
         try {
             this.uri = dataSpec.uri;
             this.flags = dataSpec.flags;
-            this.key = dataSpec.key;
+            this.key = dataSpec.key != null ? dataSpec.key : this.uri.toString();
             this.readPosition = dataSpec.position;
-            if (!((this.ignoreCacheOnError && this.seenCacheError) || (this.bypassUnboundedRequests && dataSpec.length == -1))) {
+            if (!((this.ignoreCacheOnError && this.seenCacheError) || (dataSpec.length == -1 && this.ignoreCacheForUnsetLengthRequests))) {
                 z = false;
             }
             this.currentRequestIgnoresCache = z;
@@ -288,14 +286,12 @@ Error: java.util.NoSuchElementException
         return successful;
     }
 
-    private void setContentLength(long length) {
-        if (!this.cache.setContentLength(this.key, length)) {
-            Log.e(TAG, "cache.setContentLength(" + length + ") failed. cache.getContentLength() = " + this.cache.getContentLength(this.key));
-        }
+    private void setContentLength(long length) throws IOException {
+        this.cache.setContentLength(this.key, length);
     }
 
     private void handleBeforeThrow(IOException exception) {
-        if (this.currentDataSource == this.cacheReadDataSource || (exception instanceof CacheDataSinkException)) {
+        if (this.currentDataSource == this.cacheReadDataSource || (exception instanceof CacheException)) {
             this.seenCacheError = true;
         }
     }

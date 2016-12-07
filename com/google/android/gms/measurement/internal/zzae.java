@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public class zzae extends zzaa {
     private final zza avs;
@@ -290,7 +291,7 @@ public class zzae extends zzaa {
         } else {
             this.avx.add(runnable);
             zzx com_google_android_gms_measurement_internal_zzx = this.aqw;
-            this.avy.zzx(60000);
+            this.avy.zzx(ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
             zzadl();
         }
     }

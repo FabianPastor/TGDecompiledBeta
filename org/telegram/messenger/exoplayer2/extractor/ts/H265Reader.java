@@ -5,14 +5,14 @@ import java.util.Collections;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.ParsableNalUnitBitArray;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
-final class H265Reader extends ElementaryStreamReader {
+final class H265Reader implements ElementaryStreamReader {
     private static final int BLA_W_LP = 16;
     private static final int CRA_NUT = 21;
     private static final int PPS_NUT = 34;
@@ -143,7 +143,7 @@ final class H265Reader extends ElementaryStreamReader {
         this.totalBytesWritten = 0;
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.output = extractorOutput.track(idGenerator.getNextId());
         this.sampleReader = new SampleReader(this.output);
         this.seiReader = new SeiReader(extractorOutput.track(idGenerator.getNextId()));

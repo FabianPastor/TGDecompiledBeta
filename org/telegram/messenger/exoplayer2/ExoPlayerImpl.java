@@ -4,46 +4,61 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.util.Pair;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
 import org.telegram.messenger.exoplayer2.ExoPlayer.ExoPlayerMessage;
 import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.PlaybackInfo;
+import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.SourceInfo;
+import org.telegram.messenger.exoplayer2.ExoPlayerImplInternal.TrackInfo;
 import org.telegram.messenger.exoplayer2.Timeline.Period;
 import org.telegram.messenger.exoplayer2.Timeline.Window;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
+import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
 import org.telegram.messenger.exoplayer2.util.Assertions;
+import org.telegram.messenger.exoplayer2.util.Util;
 
 final class ExoPlayerImpl implements ExoPlayer {
     private static final String TAG = "ExoPlayerImpl";
+    private final TrackSelectionArray emptyTrackSelections;
     private final Handler eventHandler;
-    private final ExoPlayerImplInternal<?> internalPlayer;
+    private final ExoPlayerImplInternal internalPlayer;
     private boolean isLoading;
     private final CopyOnWriteArraySet<EventListener> listeners;
     private Object manifest;
     private int maskingWindowIndex;
     private long maskingWindowPositionMs;
-    private boolean pendingInitialSeek;
     private int pendingSeekAcks;
     private final Period period;
     private boolean playWhenReady;
     private PlaybackInfo playbackInfo;
     private int playbackState;
+    private final Renderer[] renderers;
     private Timeline timeline;
+    private TrackGroupArray trackGroups;
+    private TrackSelectionArray trackSelections;
+    private final TrackSelector trackSelector;
+    private boolean tracksSelected;
     private final Window window;
 
     @SuppressLint({"HandlerLeak"})
-    public ExoPlayerImpl(Renderer[] renderers, TrackSelector<?> trackSelector, LoadControl loadControl) {
-        Log.i(TAG, "Init 2.0.4");
-        Assertions.checkNotNull(renderers);
+    public ExoPlayerImpl(Renderer[] renderers, TrackSelector trackSelector, LoadControl loadControl) {
+        Log.i(TAG, "Init 2.0.4 [" + Util.DEVICE_DEBUG_INFO + "]");
         Assertions.checkState(renderers.length > 0);
+        this.renderers = (Renderer[]) Assertions.checkNotNull(renderers);
+        this.trackSelector = (TrackSelector) Assertions.checkNotNull(trackSelector);
         this.playWhenReady = false;
         this.playbackState = 1;
         this.listeners = new CopyOnWriteArraySet();
+        this.emptyTrackSelections = new TrackSelectionArray(new TrackSelection[renderers.length]);
+        this.timeline = Timeline.EMPTY;
         this.window = new Window();
         this.period = new Period();
+        this.trackGroups = TrackGroupArray.EMPTY;
+        this.trackSelections = this.emptyTrackSelections;
         this.eventHandler = new Handler() {
             public void handleMessage(Message msg) {
                 ExoPlayerImpl.this.handleEvent(msg);
@@ -69,13 +84,26 @@ final class ExoPlayerImpl implements ExoPlayer {
         prepare(mediaSource, true, true);
     }
 
-    public void prepare(MediaSource mediaSource, boolean resetPosition, boolean resetTimeline) {
-        if (resetTimeline && !(this.timeline == null && this.manifest == null)) {
-            this.timeline = null;
-            this.manifest = null;
-            Iterator it = this.listeners.iterator();
-            while (it.hasNext()) {
-                ((EventListener) it.next()).onTimelineChanged(null, null);
+    public void prepare(MediaSource mediaSource, boolean resetPosition, boolean resetState) {
+        if (resetState) {
+            Iterator it;
+            if (!(this.timeline.isEmpty() && this.manifest == null)) {
+                this.timeline = Timeline.EMPTY;
+                this.manifest = null;
+                it = this.listeners.iterator();
+                while (it.hasNext()) {
+                    ((EventListener) it.next()).onTimelineChanged(null, null);
+                }
+            }
+            if (this.tracksSelected) {
+                this.tracksSelected = false;
+                this.trackGroups = TrackGroupArray.EMPTY;
+                this.trackSelections = this.emptyTrackSelections;
+                this.trackSelector.onSelectionActivated(null);
+                it = this.listeners.iterator();
+                while (it.hasNext()) {
+                    ((EventListener) it.next()).onTracksChanged(this.trackGroups, this.trackSelections);
+                }
             }
         }
         this.internalPlayer.prepare(mediaSource, resetPosition);
@@ -105,17 +133,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public void seekToDefaultPosition(int windowIndex) {
-        if (this.timeline == null) {
-            this.maskingWindowIndex = windowIndex;
-            this.maskingWindowPositionMs = C.TIME_UNSET;
-            this.pendingInitialSeek = true;
-            return;
-        }
-        Assertions.checkIndex(windowIndex, 0, this.timeline.getWindowCount());
-        this.pendingSeekAcks++;
-        this.maskingWindowIndex = windowIndex;
-        this.maskingWindowPositionMs = 0;
-        this.internalPlayer.seekTo(this.timeline.getWindow(windowIndex, this.window).firstPeriodIndex, C.TIME_UNSET);
+        seekTo(windowIndex, C.TIME_UNSET);
     }
 
     public void seekTo(long positionMs) {
@@ -123,31 +141,21 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public void seekTo(int windowIndex, long positionMs) {
+        if (windowIndex < 0 || (!this.timeline.isEmpty() && windowIndex >= this.timeline.getWindowCount())) {
+            throw new IndexOutOfBoundsException();
+        }
+        this.pendingSeekAcks++;
+        this.maskingWindowIndex = windowIndex;
         if (positionMs == C.TIME_UNSET) {
-            seekToDefaultPosition(windowIndex);
-        } else if (this.timeline == null) {
-            this.maskingWindowIndex = windowIndex;
-            this.maskingWindowPositionMs = positionMs;
-            this.pendingInitialSeek = true;
-        } else {
-            Assertions.checkIndex(windowIndex, 0, this.timeline.getWindowCount());
-            this.pendingSeekAcks++;
-            this.maskingWindowIndex = windowIndex;
-            this.maskingWindowPositionMs = positionMs;
-            this.timeline.getWindow(windowIndex, this.window);
-            int periodIndex = this.window.firstPeriodIndex;
-            long periodPositionMs = this.window.getPositionInFirstPeriodMs() + positionMs;
-            long periodDurationMs = this.timeline.getPeriod(periodIndex, this.period).getDurationMs();
-            while (periodDurationMs != C.TIME_UNSET && periodPositionMs >= periodDurationMs && periodIndex < this.window.lastPeriodIndex) {
-                periodPositionMs -= periodDurationMs;
-                periodIndex++;
-                periodDurationMs = this.timeline.getPeriod(periodIndex, this.period).getDurationMs();
-            }
-            this.internalPlayer.seekTo(periodIndex, C.msToUs(periodPositionMs));
-            Iterator it = this.listeners.iterator();
-            while (it.hasNext()) {
-                ((EventListener) it.next()).onPositionDiscontinuity();
-            }
+            this.maskingWindowPositionMs = 0;
+            this.internalPlayer.seekTo(this.timeline, windowIndex, C.TIME_UNSET);
+            return;
+        }
+        this.maskingWindowPositionMs = positionMs;
+        this.internalPlayer.seekTo(this.timeline, windowIndex, C.msToUs(positionMs));
+        Iterator it = this.listeners.iterator();
+        while (it.hasNext()) {
+            ((EventListener) it.next()).onPositionDiscontinuity();
         }
     }
 
@@ -173,21 +181,21 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public int getCurrentWindowIndex() {
-        if (this.timeline == null || this.pendingSeekAcks > 0) {
+        if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowIndex;
         }
         return this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period).windowIndex;
     }
 
     public long getDuration() {
-        if (this.timeline == null) {
+        if (this.timeline.isEmpty()) {
             return C.TIME_UNSET;
         }
         return this.timeline.getWindow(getCurrentWindowIndex(), this.window).getDurationMs();
     }
 
     public long getCurrentPosition() {
-        if (this.timeline == null || this.pendingSeekAcks > 0) {
+        if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowPositionMs;
         }
         this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period);
@@ -195,7 +203,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     public long getBufferedPosition() {
-        if (this.timeline == null || this.pendingSeekAcks > 0) {
+        if (this.timeline.isEmpty() || this.pendingSeekAcks > 0) {
             return this.maskingWindowPositionMs;
         }
         this.timeline.getPeriod(this.playbackInfo.periodIndex, this.period);
@@ -204,7 +212,7 @@ final class ExoPlayerImpl implements ExoPlayer {
 
     public int getBufferedPercentage() {
         long j = 100;
-        if (this.timeline == null) {
+        if (this.timeline.isEmpty()) {
             return 0;
         }
         int i;
@@ -221,6 +229,22 @@ final class ExoPlayerImpl implements ExoPlayer {
         return i;
     }
 
+    public int getRendererCount() {
+        return this.renderers.length;
+    }
+
+    public int getRendererType(int index) {
+        return this.renderers[index].getTrackType();
+    }
+
+    public TrackGroupArray getCurrentTrackGroups() {
+        return this.trackGroups;
+    }
+
+    public TrackSelectionArray getCurrentTrackSelections() {
+        return this.trackSelections;
+    }
+
     public Timeline getCurrentTimeline() {
         return this.timeline;
     }
@@ -230,6 +254,7 @@ final class ExoPlayerImpl implements ExoPlayer {
     }
 
     void handleEvent(Message msg) {
+        boolean z = true;
         Iterator it;
         switch (msg.what) {
             case 1:
@@ -240,10 +265,7 @@ final class ExoPlayerImpl implements ExoPlayer {
                 }
                 return;
             case 2:
-                boolean z;
-                if (msg.arg1 != 0) {
-                    z = true;
-                } else {
+                if (msg.arg1 == 0) {
                     z = false;
                 }
                 this.isLoading = z;
@@ -253,6 +275,17 @@ final class ExoPlayerImpl implements ExoPlayer {
                 }
                 return;
             case 3:
+                TrackInfo trackInfo = msg.obj;
+                this.tracksSelected = true;
+                this.trackGroups = trackInfo.groups;
+                this.trackSelections = trackInfo.selections;
+                this.trackSelector.onSelectionActivated(trackInfo.info);
+                it = this.listeners.iterator();
+                while (it.hasNext()) {
+                    ((EventListener) it.next()).onTracksChanged(this.trackGroups, this.trackSelections);
+                }
+                return;
+            case 4:
                 int i = this.pendingSeekAcks - 1;
                 this.pendingSeekAcks = i;
                 if (i == 0) {
@@ -264,7 +297,7 @@ final class ExoPlayerImpl implements ExoPlayer {
                     return;
                 }
                 return;
-            case 4:
+            case 5:
                 if (this.pendingSeekAcks == 0) {
                     this.playbackInfo = (PlaybackInfo) msg.obj;
                     it = this.listeners.iterator();
@@ -274,20 +307,18 @@ final class ExoPlayerImpl implements ExoPlayer {
                     return;
                 }
                 return;
-            case 5:
-                Pair<Timeline, Object> timelineAndManifest = msg.obj;
-                this.timeline = (Timeline) timelineAndManifest.first;
-                this.manifest = timelineAndManifest.second;
-                if (this.pendingInitialSeek) {
-                    this.pendingInitialSeek = false;
-                    seekTo(this.maskingWindowIndex, this.maskingWindowPositionMs);
-                }
+            case 6:
+                SourceInfo sourceInfo = msg.obj;
+                this.timeline = sourceInfo.timeline;
+                this.manifest = sourceInfo.manifest;
+                this.playbackInfo = sourceInfo.playbackInfo;
+                this.pendingSeekAcks -= sourceInfo.seekAcks;
                 it = this.listeners.iterator();
                 while (it.hasNext()) {
                     ((EventListener) it.next()).onTimelineChanged(this.timeline, this.manifest);
                 }
                 return;
-            case 6:
+            case 7:
                 ExoPlaybackException exception = msg.obj;
                 it = this.listeners.iterator();
                 while (it.hasNext()) {

@@ -92,21 +92,19 @@ public abstract class SegmentBase {
     public static class SingleSegmentBase extends SegmentBase {
         final long indexLength;
         final long indexStart;
-        public final String uri;
 
-        public SingleSegmentBase(RangedUri initialization, long timescale, long presentationTimeOffset, String uri, long indexStart, long indexLength) {
+        public SingleSegmentBase(RangedUri initialization, long timescale, long presentationTimeOffset, long indexStart, long indexLength) {
             super(initialization, timescale, presentationTimeOffset);
-            this.uri = uri;
             this.indexStart = indexStart;
             this.indexLength = indexLength;
         }
 
         public SingleSegmentBase(String uri) {
-            this(null, 1, 0, uri, 0, 0);
+            this(null, 1, 0, 0, 0);
         }
 
         public RangedUri getIndex() {
-            return this.indexLength <= 0 ? null : new RangedUri(this.uri, null, this.indexStart, this.indexLength);
+            return this.indexLength <= 0 ? null : new RangedUri(null, this.indexStart, this.indexLength);
         }
     }
 
@@ -132,22 +130,20 @@ public abstract class SegmentBase {
     }
 
     public static class SegmentTemplate extends MultiSegmentBase {
-        private final String baseUrl;
         final UrlTemplate initializationTemplate;
         final UrlTemplate mediaTemplate;
 
-        public SegmentTemplate(RangedUri initialization, long timescale, long presentationTimeOffset, int startNumber, long duration, List<SegmentTimelineElement> segmentTimeline, UrlTemplate initializationTemplate, UrlTemplate mediaTemplate, String baseUrl) {
+        public SegmentTemplate(RangedUri initialization, long timescale, long presentationTimeOffset, int startNumber, long duration, List<SegmentTimelineElement> segmentTimeline, UrlTemplate initializationTemplate, UrlTemplate mediaTemplate) {
             super(initialization, timescale, presentationTimeOffset, startNumber, duration, segmentTimeline);
             this.initializationTemplate = initializationTemplate;
             this.mediaTemplate = mediaTemplate;
-            this.baseUrl = baseUrl;
         }
 
         public RangedUri getInitialization(Representation representation) {
-            if (this.initializationTemplate == null) {
-                return super.getInitialization(representation);
+            if (this.initializationTemplate != null) {
+                return new RangedUri(this.initializationTemplate.buildUri(representation.format.id, 0, representation.format.bitrate, 0), 0, -1);
             }
-            return new RangedUri(this.baseUrl, this.initializationTemplate.buildUri(representation.format.id, 0, representation.format.bitrate, 0), 0, -1);
+            return super.getInitialization(representation);
         }
 
         public RangedUri getSegmentUrl(Representation representation, int sequenceNumber) {
@@ -157,7 +153,7 @@ public abstract class SegmentBase {
             } else {
                 time = ((long) (sequenceNumber - this.startNumber)) * this.duration;
             }
-            return new RangedUri(this.baseUrl, this.mediaTemplate.buildUri(representation.format.id, sequenceNumber, representation.format.bitrate, time), 0, -1);
+            return new RangedUri(this.mediaTemplate.buildUri(representation.format.id, sequenceNumber, representation.format.bitrate, time), 0, -1);
         }
 
         public int getLastSegmentNum(long periodDurationUs) {

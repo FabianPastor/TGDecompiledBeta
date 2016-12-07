@@ -13,6 +13,8 @@ import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
+import org.telegram.messenger.exoplayer2.metadata.Metadata;
+import org.telegram.messenger.exoplayer2.metadata.id3.Id3Decoder;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -26,12 +28,14 @@ public final class Mp3Extractor implements Extractor {
     private static final int INFO_HEADER = Util.getIntegerCodeForString("Info");
     private static final int MAX_SNIFF_BYTES = 4096;
     private static final int MAX_SYNC_BYTES = 131072;
+    private static final int SCRATCH_LENGTH = 10;
     private static final int VBRI_HEADER = Util.getIntegerCodeForString("VBRI");
     private static final int XING_HEADER = Util.getIntegerCodeForString("Xing");
     private long basisTimeUs;
     private ExtractorOutput extractorOutput;
     private final long forcedFirstSampleTimestampUs;
     private final GaplessInfoHolder gaplessInfoHolder;
+    private Metadata metadata;
     private int sampleBytesRemaining;
     private long samplesRead;
     private final ParsableByteArray scratch;
@@ -50,7 +54,7 @@ public final class Mp3Extractor implements Extractor {
 
     public Mp3Extractor(long forcedFirstSampleTimestampUs) {
         this.forcedFirstSampleTimestampUs = forcedFirstSampleTimestampUs;
-        this.scratch = new ParsableByteArray(4);
+        this.scratch = new ParsableByteArray(10);
         this.synchronizedHeader = new MpegAudioHeader();
         this.gaplessInfoHolder = new GaplessInfoHolder();
         this.basisTimeUs = C.TIME_UNSET;
@@ -87,7 +91,7 @@ public final class Mp3Extractor implements Extractor {
         if (this.seeker == null) {
             this.seeker = setupSeeker(input);
             this.extractorOutput.seekMap(this.seeker);
-            this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null));
+            this.trackOutput.format(Format.createAudioSampleFormat(null, this.synchronizedHeader.mimeType, null, -1, 4096, this.synchronizedHeader.channels, this.synchronizedHeader.sampleRate, -1, this.gaplessInfoHolder.encoderDelay, this.gaplessInfoHolder.encoderPadding, null, null, 0, null, this.metadata));
         }
         return readSample(input);
     }
@@ -138,7 +142,7 @@ public final class Mp3Extractor implements Extractor {
         int searchLimitBytes = sniffing ? 4096 : 131072;
         input.resetPeekPosition();
         if (input.getPosition() == 0) {
-            Id3Util.parseId3(input, this.gaplessInfoHolder);
+            peekId3Data(input);
             peekedId3Bytes = (int) input.getPeekPosition();
             if (!sniffing) {
                 input.skipFully(peekedId3Bytes);
@@ -193,6 +197,34 @@ public final class Mp3Extractor implements Extractor {
         }
         this.synchronizedHeaderData = candidateSynchronizedHeaderData;
         return true;
+    }
+
+    private void peekId3Data(ExtractorInput input) throws IOException, InterruptedException {
+        int peekedId3Bytes = 0;
+        while (true) {
+            input.peekFully(this.scratch.data, 0, 10);
+            this.scratch.setPosition(0);
+            if (this.scratch.readUnsignedInt24() != Id3Decoder.ID3_TAG) {
+                input.resetPeekPosition();
+                input.advancePeekPosition(peekedId3Bytes);
+                return;
+            }
+            this.scratch.skipBytes(3);
+            int framesLength = this.scratch.readSynchSafeInt();
+            int tagLength = framesLength + 10;
+            if (this.metadata == null) {
+                byte[] id3Data = new byte[tagLength];
+                System.arraycopy(this.scratch.data, 0, id3Data, 0, 10);
+                input.peekFully(id3Data, 10, framesLength);
+                this.metadata = new Id3Decoder().decode(id3Data, tagLength);
+                if (this.metadata != null) {
+                    this.gaplessInfoHolder.setFromMetadata(this.metadata);
+                }
+            } else {
+                input.advancePeekPosition(framesLength);
+            }
+            peekedId3Bytes += tagLength;
+        }
     }
 
     private Seeker setupSeeker(ExtractorInput input) throws IOException, InterruptedException {

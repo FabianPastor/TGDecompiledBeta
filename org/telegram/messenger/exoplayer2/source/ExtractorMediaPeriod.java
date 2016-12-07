@@ -30,7 +30,7 @@ import org.telegram.messenger.exoplayer2.upstream.Loader.Callback;
 import org.telegram.messenger.exoplayer2.upstream.Loader.Loadable;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.ConditionVariable;
-import org.telegram.messenger.exoplayer2.util.Util;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callback<ExtractingLoadable>, UpstreamFormatChangedListener {
     private static final long DEFAULT_LAST_SAMPLE_DURATION_US = 10000;
@@ -44,6 +44,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
     private int extractedSamplesCountAtStartOfLoad;
     private final ExtractorHolder extractorHolder;
     private final Handler handler;
+    private boolean haveAudioVideoTracks;
     private long lastSeekPositionUs;
     private long length;
     private final ConditionVariable loadCondition;
@@ -61,6 +62,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
     private boolean seenFirstTrackSelection;
     private final Listener sourceListener;
     private boolean[] trackEnabledStates;
+    private boolean[] trackIsAudioVideoFlags;
     private TrackGroupArray tracks;
     private boolean tracksBuilt;
     private final Uri uri;
@@ -151,7 +153,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
                 ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
-                    this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, Util.sha1(this.uri.toString())));
+                    this.length = this.dataSource.open(new DataSpec(this.uri, position, -1, null));
                     if (this.length != -1) {
                         this.length += position;
                     }
@@ -340,7 +342,7 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
     }
 
     public boolean continueLoading(long playbackPositionUs) {
-        if (this.loadingFinished) {
+        if (this.loadingFinished || (this.prepared && this.enabledTrackCount == 0)) {
             return false;
         }
         boolean continuedLoading = this.loadCondition.open();
@@ -370,7 +372,18 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
         if (isPendingReset()) {
             return this.pendingResetPositionUs;
         }
-        long largestQueuedTimestampUs = getLargestQueuedTimestampUs();
+        long largestQueuedTimestampUs;
+        if (this.haveAudioVideoTracks) {
+            largestQueuedTimestampUs = Long.MAX_VALUE;
+            int trackCount = this.sampleQueues.size();
+            for (int i = 0; i < trackCount; i++) {
+                if (this.trackIsAudioVideoFlags[i]) {
+                    largestQueuedTimestampUs = Math.min(largestQueuedTimestampUs, ((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getLargestQueuedTimestampUs());
+                }
+            }
+        } else {
+            largestQueuedTimestampUs = getLargestQueuedTimestampUs();
+        }
         return largestQueuedTimestampUs == Long.MIN_VALUE ? this.lastSeekPositionUs : largestQueuedTimestampUs;
     }
 
@@ -502,10 +515,20 @@ final class ExtractorMediaPeriod implements MediaPeriod, ExtractorOutput, Callba
             }
             this.loadCondition.close();
             TrackGroup[] trackArray = new TrackGroup[trackCount];
+            this.trackIsAudioVideoFlags = new boolean[trackCount];
             this.trackEnabledStates = new boolean[trackCount];
             this.durationUs = this.seekMap.getDurationUs();
             for (i = 0; i < trackCount; i++) {
+                boolean isAudioVideo;
                 trackArray[i] = new TrackGroup(((DefaultTrackOutput) this.sampleQueues.valueAt(i)).getUpstreamFormat());
+                String mimeType = trackFormat.sampleMimeType;
+                if (MimeTypes.isVideo(mimeType) || MimeTypes.isAudio(mimeType)) {
+                    isAudioVideo = true;
+                } else {
+                    isAudioVideo = false;
+                }
+                this.trackIsAudioVideoFlags[i] = isAudioVideo;
+                this.haveAudioVideoTracks |= isAudioVideo;
             }
             this.tracks = new TrackGroupArray(trackArray);
             this.prepared = true;

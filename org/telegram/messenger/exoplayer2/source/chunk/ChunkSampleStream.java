@@ -163,7 +163,7 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     }
 
     public boolean continueLoading(long positionUs) {
-        if (this.loader.isLoading()) {
+        if (this.loadingFinished || this.loader.isLoading()) {
             return false;
         }
         MediaChunk mediaChunk;

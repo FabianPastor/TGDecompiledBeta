@@ -130,7 +130,8 @@ abstract class StreamReader {
         } else if (input.getLength() == -1) {
             this.oggSeeker = new UnseekableOggSeeker();
         } else {
-            this.oggSeeker = new DefaultOggSeeker(this.payloadStartPosition, input.getLength(), this);
+            OggPageHeader firstPayloadPageHeader = this.oggPacket.getPageHeader();
+            this.oggSeeker = new DefaultOggSeeker(this.payloadStartPosition, input.getLength(), this, firstPayloadPageHeader.bodySize + firstPayloadPageHeader.headerSize, firstPayloadPageHeader.granulePosition);
         }
         this.setupData = null;
         this.state = 2;

@@ -5,10 +5,10 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.MpegAudioHeader;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class MpegAudioReader extends ElementaryStreamReader {
+final class MpegAudioReader implements ElementaryStreamReader {
     private static final int HEADER_SIZE = 4;
     private static final int STATE_FINDING_HEADER = 0;
     private static final int STATE_READING_FRAME = 2;
@@ -43,7 +43,7 @@ final class MpegAudioReader extends ElementaryStreamReader {
         this.lastByteWasFF = false;
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.output = extractorOutput.track(idGenerator.getNextId());
     }
 

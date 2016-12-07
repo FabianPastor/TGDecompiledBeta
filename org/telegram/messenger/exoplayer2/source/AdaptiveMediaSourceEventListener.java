@@ -12,10 +12,20 @@ public interface AdaptiveMediaSourceEventListener {
     public static final class EventDispatcher {
         private final Handler handler;
         private final AdaptiveMediaSourceEventListener listener;
+        private final long mediaTimeOffsetMs;
 
         public EventDispatcher(Handler handler, AdaptiveMediaSourceEventListener listener) {
+            this(handler, listener, 0);
+        }
+
+        public EventDispatcher(Handler handler, AdaptiveMediaSourceEventListener listener, long mediaTimeOffsetMs) {
             this.handler = listener != null ? (Handler) Assertions.checkNotNull(handler) : null;
             this.listener = listener;
+            this.mediaTimeOffsetMs = mediaTimeOffsetMs;
+        }
+
+        public EventDispatcher copyWithMediaTimeOffsetMs(long mediaTimeOffsetMs) {
+            return new EventDispatcher(this.handler, this.listener, mediaTimeOffsetMs);
         }
 
         public void loadStarted(DataSpec dataSpec, int dataType, long elapsedRealtimeMs) {
@@ -35,7 +45,7 @@ public interface AdaptiveMediaSourceEventListener {
                 final long j3 = elapsedRealtimeMs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadStarted(dataSpec2, i, i2, format, i3, obj, C.usToMs(j), C.usToMs(j2), j3);
+                        EventDispatcher.this.listener.onLoadStarted(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3);
                     }
                 });
             }
@@ -60,7 +70,7 @@ public interface AdaptiveMediaSourceEventListener {
                 final long j5 = bytesLoaded;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadCompleted(dataSpec2, i, i2, format, i3, obj, C.usToMs(j), C.usToMs(j2), j3, j4, j5);
+                        EventDispatcher.this.listener.onLoadCompleted(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5);
                     }
                 });
             }
@@ -85,7 +95,7 @@ public interface AdaptiveMediaSourceEventListener {
                 final long j5 = bytesLoaded;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadCanceled(dataSpec2, i, i2, format, i3, obj, C.usToMs(j), C.usToMs(j2), j3, j4, j5);
+                        EventDispatcher.this.listener.onLoadCanceled(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5);
                     }
                 });
             }
@@ -112,7 +122,7 @@ public interface AdaptiveMediaSourceEventListener {
                 final boolean z = wasCanceled;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onLoadError(dataSpec2, i, i2, format, i3, obj, C.usToMs(j), C.usToMs(j2), j3, j4, j5, iOException, z);
+                        EventDispatcher.this.listener.onLoadError(dataSpec2, i, i2, format, i3, obj, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2), j3, j4, j5, iOException, z);
                     }
                 });
             }
@@ -125,7 +135,7 @@ public interface AdaptiveMediaSourceEventListener {
                 final long j2 = mediaEndTimeUs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onUpstreamDiscarded(i, C.usToMs(j), C.usToMs(j2));
+                        EventDispatcher.this.listener.onUpstreamDiscarded(i, EventDispatcher.this.adjustMediaTime(j), EventDispatcher.this.adjustMediaTime(j2));
                     }
                 });
             }
@@ -140,10 +150,18 @@ public interface AdaptiveMediaSourceEventListener {
                 final long j = mediaTimeUs;
                 this.handler.post(new Runnable() {
                     public void run() {
-                        EventDispatcher.this.listener.onDownstreamFormatChanged(i, format, i2, obj, C.usToMs(j));
+                        EventDispatcher.this.listener.onDownstreamFormatChanged(i, format, i2, obj, EventDispatcher.this.adjustMediaTime(j));
                     }
                 });
             }
+        }
+
+        private long adjustMediaTime(long mediaTimeUs) {
+            long mediaTimeMs = C.usToMs(mediaTimeUs);
+            if (mediaTimeMs == C.TIME_UNSET) {
+                return C.TIME_UNSET;
+            }
+            return this.mediaTimeOffsetMs + mediaTimeMs;
         }
     }
 

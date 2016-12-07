@@ -1,6 +1,27 @@
 package org.telegram.messenger.exoplayer2;
 
 public abstract class Timeline {
+    public static final Timeline EMPTY = new Timeline() {
+        public int getWindowCount() {
+            return 0;
+        }
+
+        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        public int getPeriodCount() {
+            return 0;
+        }
+
+        public Period getPeriod(int periodIndex, Period period, boolean setIds) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        public int getIndexOfPeriod(Object uid) {
+            return -1;
+        }
+    };
 
     public static final class Period {
         private long durationUs;
@@ -92,12 +113,20 @@ public abstract class Timeline {
 
     public abstract int getPeriodCount();
 
-    public abstract Window getWindow(int i, Window window, boolean z);
+    public abstract Window getWindow(int i, Window window, boolean z, long j);
 
     public abstract int getWindowCount();
 
+    public final boolean isEmpty() {
+        return getWindowCount() == 0;
+    }
+
     public final Window getWindow(int windowIndex, Window window) {
         return getWindow(windowIndex, window, false);
+    }
+
+    public Window getWindow(int windowIndex, Window window, boolean setIds) {
+        return getWindow(windowIndex, window, setIds, 0);
     }
 
     public final Period getPeriod(int periodIndex, Period period) {

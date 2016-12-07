@@ -61,6 +61,7 @@ import org.telegram.ui.Components.LetterSectionsListView;
 public class ContactsActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int add_button = 1;
     private static final int search_button = 0;
+    private boolean addingToChannel;
     private boolean allowBots = true;
     private boolean allowUsernameSearch = true;
     private int chat_id;
@@ -106,6 +107,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             this.allowUsernameSearch = this.arguments.getBoolean("allowUsernameSearch", true);
             this.needForwardCount = this.arguments.getBoolean("needForwardCount", true);
             this.allowBots = this.arguments.getBoolean("allowBots", true);
+            this.addingToChannel = this.arguments.getBoolean("addingToChannel", false);
             this.chat_id = this.arguments.getInt("chat_id", 0);
         } else {
             this.needPhonebook = true;
@@ -395,7 +397,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             }
             finishFragment();
         } else if (getParentActivity() != null) {
-            if (user.bot && user.bot_nochats) {
+            if (user.bot && user.bot_nochats && !this.addingToChannel) {
                 try {
                     Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups), 0).show();
                     return;

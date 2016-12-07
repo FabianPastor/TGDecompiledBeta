@@ -8,9 +8,9 @@ public class Period {
     public final String id;
     public final long startMs;
 
-    public Period(String id, long start, List<AdaptationSet> adaptationSets) {
+    public Period(String id, long startMs, List<AdaptationSet> adaptationSets) {
         this.id = id;
-        this.startMs = start;
+        this.startMs = startMs;
         this.adaptationSets = Collections.unmodifiableList(adaptationSets);
     }
 

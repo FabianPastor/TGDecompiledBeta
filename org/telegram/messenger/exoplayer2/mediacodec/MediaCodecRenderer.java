@@ -225,6 +225,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
         return this.codec == null && this.format != null;
     }
 
+    protected final MediaCodec getCodec() {
+        return this.codec;
+    }
+
     protected void onEnabled(boolean joining) throws ExoPlaybackException {
         this.decoderCounters = new DecoderCounters();
     }

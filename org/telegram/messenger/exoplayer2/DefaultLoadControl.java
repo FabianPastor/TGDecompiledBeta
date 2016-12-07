@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2;
 
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelections;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DefaultAllocator;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -42,7 +42,7 @@ public final class DefaultLoadControl implements LoadControl {
         reset(false);
     }
 
-    public void onTracksSelected(Renderer[] renderers, TrackGroupArray trackGroups, TrackSelections<?> trackSelections) {
+    public void onTracksSelected(Renderer[] renderers, TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         this.targetBufferSize = 0;
         for (int i = 0; i < renderers.length; i++) {
             if (trackSelections.get(i) != null) {

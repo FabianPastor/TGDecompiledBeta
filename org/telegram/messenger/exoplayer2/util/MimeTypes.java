@@ -7,6 +7,7 @@ import com.googlecode.mp4parser.boxes.AC3SpecificBox;
 import com.googlecode.mp4parser.boxes.EC3SpecificBox;
 
 public final class MimeTypes {
+    public static final String APPLICATION_CAMERA_MOTION = "application/x-camera-motion";
     public static final String APPLICATION_CEA608 = "application/cea-608";
     public static final String APPLICATION_CEA708 = "application/cea-708";
     public static final String APPLICATION_ID3 = "application/id3";
@@ -15,6 +16,7 @@ public final class MimeTypes {
     public static final String APPLICATION_MP4VTT = "application/x-mp4vtt";
     public static final String APPLICATION_PGS = "application/pgs";
     public static final String APPLICATION_RAWCC = "application/x-rawcc";
+    public static final String APPLICATION_SCTE35 = "application/x-scte35";
     public static final String APPLICATION_SUBRIP = "application/x-subrip";
     public static final String APPLICATION_TTML = "application/ttml+xml";
     public static final String APPLICATION_TX3G = "application/x-quicktime-tx3g";
@@ -59,19 +61,19 @@ public final class MimeTypes {
     }
 
     public static boolean isAudio(String mimeType) {
-        return getTopLevelType(mimeType).equals(BASE_TYPE_AUDIO);
+        return BASE_TYPE_AUDIO.equals(getTopLevelType(mimeType));
     }
 
     public static boolean isVideo(String mimeType) {
-        return getTopLevelType(mimeType).equals(BASE_TYPE_VIDEO);
+        return BASE_TYPE_VIDEO.equals(getTopLevelType(mimeType));
     }
 
     public static boolean isText(String mimeType) {
-        return getTopLevelType(mimeType).equals("text");
+        return "text".equals(getTopLevelType(mimeType));
     }
 
     public static boolean isApplication(String mimeType) {
-        return getTopLevelType(mimeType).equals(BASE_TYPE_APPLICATION);
+        return BASE_TYPE_APPLICATION.equals(getTopLevelType(mimeType));
     }
 
     public static String getVideoMediaMimeType(String codecs) {
@@ -151,7 +153,7 @@ public final class MimeTypes {
         if (isVideo(mimeType)) {
             return 2;
         }
-        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType)) {
+        if (isText(mimeType) || APPLICATION_CEA608.equals(mimeType) || APPLICATION_CEA708.equals(mimeType) || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType) || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType) || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType) || APPLICATION_PGS.equals(mimeType)) {
             return 3;
         }
         if (APPLICATION_ID3.equals(mimeType)) {
@@ -165,6 +167,9 @@ public final class MimeTypes {
     }
 
     private static String getTopLevelType(String mimeType) {
+        if (mimeType == null) {
+            return null;
+        }
         int indexOfSlash = mimeType.indexOf(47);
         if (indexOfSlash != -1) {
             return mimeType.substring(0, indexOfSlash);

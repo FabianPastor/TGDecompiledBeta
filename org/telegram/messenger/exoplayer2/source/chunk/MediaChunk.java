@@ -16,7 +16,7 @@ public abstract class MediaChunk extends Chunk {
         this.chunkIndex = chunkIndex;
     }
 
-    public final int getNextChunkIndex() {
+    public int getNextChunkIndex() {
         return this.chunkIndex + 1;
     }
 }

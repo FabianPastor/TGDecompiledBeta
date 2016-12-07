@@ -10,7 +10,6 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 
@@ -24,7 +23,7 @@ public final class RawCcExtractor implements Extractor {
     private static final int TIMESTAMP_SIZE_V0 = 4;
     private static final int TIMESTAMP_SIZE_V1 = 8;
     private final ParsableByteArray dataScratch = new ParsableByteArray(9);
-    private ExtractorOutput extractorOutput;
+    private final Format format;
     private int parserState = 0;
     private int remainingSampleCount;
     private int sampleBytesWritten;
@@ -32,12 +31,15 @@ public final class RawCcExtractor implements Extractor {
     private TrackOutput trackOutput;
     private int version;
 
+    public RawCcExtractor(Format format) {
+        this.format = format;
+    }
+
     public void init(ExtractorOutput output) {
-        this.extractorOutput = output;
-        this.extractorOutput.seekMap(new Unseekable(C.TIME_UNSET));
-        this.trackOutput = this.extractorOutput.track(0);
-        this.extractorOutput.endTracks();
-        this.trackOutput.format(Format.createTextSampleFormat(null, MimeTypes.APPLICATION_CEA608, null, -1, 0, null, null));
+        output.seekMap(new Unseekable(C.TIME_UNSET));
+        this.trackOutput = output.track(0);
+        output.endTracks();
+        this.trackOutput.format(this.format);
     }
 
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {

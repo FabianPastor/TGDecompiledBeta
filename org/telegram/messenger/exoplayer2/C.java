@@ -42,6 +42,8 @@ public final class C {
     public static final long MICROS_PER_SECOND = 1000000;
     public static final int MSG_CUSTOM_BASE = 10000;
     public static final int MSG_SET_PLAYBACK_PARAMS = 3;
+    public static final int MSG_SET_SCALING_MODE = 5;
+    public static final int MSG_SET_STREAM_TYPE = 4;
     public static final int MSG_SET_SURFACE = 1;
     public static final int MSG_SET_VOLUME = 2;
     public static final long NANOS_PER_SECOND = NUM;
@@ -64,6 +66,13 @@ public final class C {
     public static final int STEREO_MODE_LEFT_RIGHT = 2;
     public static final int STEREO_MODE_MONO = 0;
     public static final int STEREO_MODE_TOP_BOTTOM = 1;
+    public static final int STREAM_TYPE_ALARM = 4;
+    public static final int STREAM_TYPE_DEFAULT = 3;
+    public static final int STREAM_TYPE_MUSIC = 3;
+    public static final int STREAM_TYPE_NOTIFICATION = 5;
+    public static final int STREAM_TYPE_RING = 2;
+    public static final int STREAM_TYPE_SYSTEM = 1;
+    public static final int STREAM_TYPE_VOICE_CALL = 0;
     public static final long TIME_END_OF_SOURCE = Long.MIN_VALUE;
     public static final long TIME_UNSET = -9223372036854775807L;
     public static final int TRACK_TYPE_AUDIO = 1;
@@ -79,6 +88,9 @@ public final class C {
     public static final int TYPE_SS = 1;
     public static final String UTF8_NAME = "UTF-8";
     public static final UUID UUID_NIL = new UUID(0, 0);
+    public static final int VIDEO_SCALING_MODE_DEFAULT = 1;
+    public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT = 1;
+    public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING = 2;
     public static final UUID WIDEVINE_UUID = new UUID(-1301668207276963122L, -6645017420763422227L);
 
     @Retention(RetentionPolicy.SOURCE)
@@ -107,6 +119,14 @@ public final class C {
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface StereoMode {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface StreamType {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface VideoScalingMode {
     }
 
     private C() {

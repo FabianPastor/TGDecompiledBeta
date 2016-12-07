@@ -15,6 +15,7 @@ import com.google.android.gms.common.zzc;
 import com.google.android.gms.internal.zzrk;
 import com.google.android.gms.measurement.internal.zzl.zza;
 import java.lang.reflect.InvocationTargetException;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public class zzd extends zzz {
     static final String ari = String.valueOf(zzc.GOOGLE_PLAY_SERVICES_VERSION_CODE / 1000).replaceAll("(\\d+)(\\d)(\\d\\d)", "$1.$2.$3");
@@ -181,7 +182,7 @@ public class zzd extends zzz {
     }
 
     long zzbuq() {
-        return 60000;
+        return ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
     }
 
     long zzbur() {

@@ -30,7 +30,7 @@ public final class RawResourceDataSource implements DataSource {
         }
     }
 
-    public static final Uri buildRawResourceUri(int rawResourceId) {
+    public static Uri buildRawResourceUri(int rawResourceId) {
         return Uri.parse("rawresource:///" + rawResourceId);
     }
 

@@ -718,6 +718,14 @@ public class VoIPActivity extends Activity implements StateListener {
                             VoIPActivity.this.finish();
                         }
                     }, 200);
+                } else if (state == 12) {
+                    VoIPActivity.this.endBtn.setEnabled(false);
+                    VoIPActivity.this.stateText.setText(LocaleController.getString("VoipBusy", R.string.VoipBusy));
+                    VoIPActivity.this.stateText.postDelayed(new Runnable() {
+                        public void run() {
+                            VoIPActivity.this.finish();
+                        }
+                    }, 2000);
                 } else if (state == 3) {
                     VoIPActivity.this.startUpdatingCallDuration();
                     VoIPActivity.this.updateKeyView();

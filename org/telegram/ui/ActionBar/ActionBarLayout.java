@@ -178,7 +178,11 @@ public class ActionBarLayout extends FrameLayout {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (!this.fragmentsStack.isEmpty()) {
-            ((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onConfigurationChanged(newConfig);
+            BaseFragment lastFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
+            lastFragment.onConfigurationChanged(newConfig);
+            if (lastFragment.visibleDialog instanceof BottomSheet) {
+                ((BottomSheet) lastFragment.visibleDialog).onConfigurationChanged(newConfig);
+            }
         }
     }
 

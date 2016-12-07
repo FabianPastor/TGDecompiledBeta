@@ -71,6 +71,10 @@ import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messages_dhConfig;
 import org.telegram.tgnet.TLRPC.TL_messages_getDhConfig;
 import org.telegram.tgnet.TLRPC.TL_phoneCall;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonHangup;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscarded;
 import org.telegram.tgnet.TLRPC.TL_phoneCallProtocol;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
@@ -88,9 +92,14 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
     private static final int CALL_MAX_LAYER = 60;
     private static final int CALL_MIN_LAYER = 60;
+    public static final int DISCARD_REASON_DISCONNECT = 2;
+    public static final int DISCARD_REASON_HANGUP = 1;
+    public static final int DISCARD_REASON_LINE_BUSY = 4;
+    public static final int DISCARD_REASON_MISSED = 3;
     private static final int ID_INCOMING_CALL_NOTIFICATION = 202;
     private static final int ID_ONGOING_CALL_NOTIFICATION = 201;
     private static final int PROXIMITY_SCREEN_OFF_WAKE_LOCK = 32;
+    public static final int STATE_BUSY = 12;
     public static final int STATE_ENDED = 6;
     public static final int STATE_ESTABLISHED = 3;
     public static final int STATE_EXCHANGING_KEYS = 7;
@@ -108,6 +117,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private byte[] a_or_b;
     private byte[] authKey;
     private PhoneCall call;
+    private int callReqId;
     private VoIPController controller;
     private WakeLock cpuWakelock;
     private int currentState = 0;
@@ -163,6 +173,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     };
     private MediaPlayer ringtonePlayer;
     private SoundPool soundPool;
+    private int spBusyId;
     private int spEndId;
     private int spFailedID;
     private int spPlayID;
@@ -231,6 +242,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
             this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
             this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
+            this.spBusyId = this.soundPool.load(this, R.raw.voip_busy, 1);
             ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         } catch (Exception x) {
             FileLog.e(TAG, "error initializing voip controller", x);
@@ -292,11 +304,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void hangUp() {
-        declineIncomingCall(null);
+        declineIncomingCall(1, null);
     }
 
     public void hangUp(Runnable onDone) {
-        declineIncomingCall(onDone);
+        declineIncomingCall(1, onDone);
     }
 
     public void registerStateListener(StateListener l) {
@@ -318,8 +330,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
         req.version = MessagesStorage.lastSecretVersion;
-        int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+        this.callReqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
+                VoIPService.this.callReqId = 0;
                 if (error == null) {
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
@@ -556,16 +569,48 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void declineIncomingCall() {
-        declineIncomingCall(null);
+        declineIncomingCall(1, null);
     }
 
-    public void declineIncomingCall(final Runnable onDone) {
+    public void declineIncomingCall(int reason, final Runnable onDone) {
+        int i = 0;
         if (this.currentState != 5 && this.currentState != 6) {
             dispatchStateChanged(5);
+            if (this.call == null) {
+                if (onDone != null) {
+                    onDone.run();
+                }
+                callEnded();
+                if (this.callReqId != 0) {
+                    ConnectionsManager.getInstance().cancelRequest(this.callReqId, false);
+                    this.callReqId = 0;
+                    return;
+                }
+                return;
+            }
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
+            if (this.controller != null) {
+                i = (int) (this.controller.getCallDuration() / 1000);
+            }
+            req.duration = i;
+            req.connection_id = this.controller != null ? this.controller.getPreferredRelayID() : 0;
+            switch (reason) {
+                case 2:
+                    req.reason = new TL_phoneCallDiscardReasonDisconnect();
+                    break;
+                case 3:
+                    req.reason = new TL_phoneCallDiscardReasonMissed();
+                    break;
+                case 4:
+                    req.reason = new TL_phoneCallDiscardReasonBusy();
+                    break;
+                default:
+                    req.reason = new TL_phoneCallDiscardReasonHangup();
+                    break;
+            }
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
@@ -573,7 +618,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     } else {
                         FileLog.d(VoIPService.TAG, "phone.discardCall " + response);
                     }
-                    AndroidUtilities.runOnUIThread(onDone);
+                    if (onDone != null) {
+                        AndroidUtilities.runOnUIThread(onDone);
+                    }
                     VoIPService.this.callEnded();
                 }
             }, 2);
@@ -584,6 +631,18 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         this.call = call;
         if (call instanceof TL_phoneCallDiscarded) {
             FileLog.d(TAG, "call discarded, stopping service");
+            if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
+                dispatchStateChanged(12);
+                this.playingSound = true;
+                this.soundPool.play(this.spBusyId, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        VoIPService.this.soundPool.release();
+                    }
+                }, 2500);
+                stopSelf();
+                return;
+            }
             callEnded();
         } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
             processAcceptedCall();
@@ -598,7 +657,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             }
             this.timeoutRunnable = new Runnable() {
                 public void run() {
-                    VoIPService.this.hangUp();
+                    VoIPService.this.declineIncomingCall(3, null);
                 }
             };
             AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance().callRingTimeout);

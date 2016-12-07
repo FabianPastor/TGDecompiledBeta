@@ -1,5 +1,6 @@
 package org.telegram.messenger.exoplayer2.audio;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.media.AudioTimestamp;
 import android.media.PlaybackParams;
@@ -17,6 +18,7 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 public final class AudioTrack {
     private static final int BUFFER_MULTIPLICATION_FACTOR = 4;
     public static final long CURRENT_POSITION_NOT_SET = Long.MIN_VALUE;
+    private static final int ERROR_BAD_VALUE = -2;
     private static final long MAX_AUDIO_TIMESTAMP_OFFSET_US = 5000000;
     private static final long MAX_BUFFER_DURATION_US = 750000;
     private static final long MAX_LATENCY_US = 5000000;
@@ -24,14 +26,22 @@ public final class AudioTrack {
     private static final long MIN_BUFFER_DURATION_US = 250000;
     private static final int MIN_PLAYHEAD_OFFSET_SAMPLE_INTERVAL_US = 30000;
     private static final int MIN_TIMESTAMP_SAMPLE_INTERVAL_US = 500000;
+    private static final int MODE_STATIC = 0;
+    private static final int MODE_STREAM = 1;
     private static final long PASSTHROUGH_BUFFER_DURATION_US = 250000;
+    private static final int PLAYSTATE_PAUSED = 2;
+    private static final int PLAYSTATE_PLAYING = 3;
+    private static final int PLAYSTATE_STOPPED = 1;
     public static final int RESULT_BUFFER_CONSUMED = 2;
     public static final int RESULT_POSITION_DISCONTINUITY = 1;
     public static final int SESSION_ID_NOT_SET = 0;
     private static final int START_IN_SYNC = 1;
     private static final int START_NEED_SYNC = 2;
     private static final int START_NOT_SET = 0;
+    private static final int STATE_INITIALIZED = 1;
     private static final String TAG = "AudioTrack";
+    @SuppressLint({"InlinedApi"})
+    private static final int WRITE_NON_BLOCKING = 1;
     public static boolean enablePreV21AudioSessionWorkaround = false;
     public static boolean failOnSpuriousAudioTimestamp = false;
     private final AudioCapabilities audioCapabilities;
@@ -44,10 +54,13 @@ public final class AudioTrack {
     private ByteBuffer currentSourceBuffer;
     private int framesPerEncodedSample;
     private Method getLatencyMethod;
+    private boolean hasData;
     private android.media.AudioTrack keepSessionIdAudioTrack;
+    private long lastFeedElapsedRealtimeMs;
     private long lastPlayheadSampleTimeUs;
     private long lastTimestampSampleTimeUs;
     private long latencyUs;
+    private final Listener listener;
     private int nextPlayheadOffsetIndex;
     private boolean passthrough;
     private int pcmFrameSize;
@@ -61,7 +74,7 @@ public final class AudioTrack {
     private int sourceEncoding;
     private int startMediaTimeState;
     private long startMediaTimeUs;
-    private final int streamType;
+    private int streamType;
     private long submittedEncodedFrames;
     private long submittedPcmBytes;
     private int targetEncoding;
@@ -171,6 +184,10 @@ public final class AudioTrack {
         }
     }
 
+    public interface Listener {
+        void onUnderrun(int i, long j, long j2);
+    }
+
     public static final class WriteException extends Exception {
         public final int errorCode;
 
@@ -251,9 +268,9 @@ public final class AudioTrack {
         }
     }
 
-    public AudioTrack(AudioCapabilities audioCapabilities, int streamType) {
+    public AudioTrack(AudioCapabilities audioCapabilities, Listener listener) {
         this.audioCapabilities = audioCapabilities;
-        this.streamType = streamType;
+        this.listener = listener;
         if (Util.SDK_INT >= 18) {
             try {
                 this.getLatencyMethod = android.media.AudioTrack.class.getMethod("getLatency", (Class[]) null);
@@ -270,6 +287,7 @@ public final class AudioTrack {
         this.playheadOffsets = new long[10];
         this.volume = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         this.startMediaTimeState = 0;
+        this.streamType = 3;
     }
 
     public boolean isPassthroughSupported(String mimeType) {
@@ -399,15 +417,8 @@ public final class AudioTrack {
         }
         this.audioTrackUtil.reconfigure(this.audioTrack, needsPassthroughWorkarounds());
         setAudioTrackVolume();
+        this.hasData = false;
         return sessionId;
-    }
-
-    public int getBufferSize() {
-        return this.bufferSize;
-    }
-
-    public long getBufferSizeUs() {
-        return this.bufferSizeUs;
     }
 
     public void play() {
@@ -424,6 +435,17 @@ public final class AudioTrack {
     }
 
     public int handleBuffer(ByteBuffer buffer, long presentationTimeUs) throws WriteException {
+        boolean hadData = this.hasData;
+        this.hasData = hasPendingData();
+        if (!(!hadData || this.hasData || this.audioTrack.getPlayState() == 1)) {
+            this.listener.onUnderrun(this.bufferSize, C.usToMs(this.bufferSizeUs), SystemClock.elapsedRealtime() - this.lastFeedElapsedRealtimeMs);
+        }
+        int result = writeBuffer(buffer, presentationTimeUs);
+        this.lastFeedElapsedRealtimeMs = SystemClock.elapsedRealtime();
+        return result;
+    }
+
+    private int writeBuffer(ByteBuffer buffer, long presentationTimeUs) throws WriteException {
         int bytesRemaining;
         boolean isNewSourceBuffer = this.currentSourceBuffer == null;
         boolean z = isNewSourceBuffer || this.currentSourceBuffer == buffer;
@@ -524,6 +546,15 @@ public final class AudioTrack {
 
     public void setPlaybackParams(PlaybackParams playbackParams) {
         this.audioTrackUtil.setPlaybackParams(playbackParams);
+    }
+
+    public boolean setStreamType(int streamType) {
+        if (this.streamType == streamType) {
+            return false;
+        }
+        this.streamType = streamType;
+        reset();
+        return true;
     }
 
     public void setVolume(float volume) {

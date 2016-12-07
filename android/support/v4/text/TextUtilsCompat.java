@@ -4,7 +4,6 @@ import android.os.Build.VERSION;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import java.util.Locale;
-import org.telegram.tgnet.TLRPC;
 
 public final class TextUtilsCompat {
     static String ARAB_SCRIPT_SUBTAG = "Arab";
@@ -31,7 +30,7 @@ public final class TextUtilsCompat {
                     case '\'':
                         sb.append("&#39;");
                         break;
-                    case TLRPC.LAYER /*60*/:
+                    case '<':
                         sb.append("&lt;");
                         break;
                     case '>':

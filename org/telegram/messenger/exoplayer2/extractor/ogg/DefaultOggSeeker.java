@@ -50,12 +50,17 @@ final class DefaultOggSeeker implements OggSeeker {
         }
     }
 
-    public DefaultOggSeeker(long startPosition, long endPosition, StreamReader streamReader) {
+    public DefaultOggSeeker(long startPosition, long endPosition, StreamReader streamReader, int firstPayloadPageSize, long firstPayloadPageGranulePosition) {
         boolean z = startPosition >= 0 && endPosition > startPosition;
         Assertions.checkArgument(z);
         this.streamReader = streamReader;
         this.startPosition = startPosition;
         this.endPosition = endPosition;
+        if (((long) firstPayloadPageSize) == endPosition - startPosition) {
+            this.totalGranules = firstPayloadPageGranulePosition;
+            this.state = 3;
+            return;
+        }
         this.state = 0;
     }
 
@@ -64,9 +69,9 @@ final class DefaultOggSeeker implements OggSeeker {
             case 0:
                 this.positionBeforeSeekToEnd = input.getPosition();
                 this.state = 1;
-                long lastPagePosition = this.endPosition - 65307;
-                if (lastPagePosition > this.positionBeforeSeekToEnd) {
-                    return lastPagePosition;
+                long lastPageSearchPosition = this.endPosition - 65307;
+                if (lastPageSearchPosition > this.positionBeforeSeekToEnd) {
+                    return lastPageSearchPosition;
                 }
                 break;
             case 1:

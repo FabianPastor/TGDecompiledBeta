@@ -2,7 +2,6 @@ package org.telegram.messenger.exoplayer2.trackselection;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Handler;
 import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -155,12 +154,11 @@ public class DefaultTrackSelector extends MappingTrackSelector {
         }
     }
 
-    public DefaultTrackSelector(Handler eventHandler) {
-        this(eventHandler, null);
+    public DefaultTrackSelector() {
+        this(null);
     }
 
-    public DefaultTrackSelector(Handler eventHandler, Factory adaptiveVideoTrackSelectionFactory) {
-        super(eventHandler);
+    public DefaultTrackSelector(Factory adaptiveVideoTrackSelectionFactory) {
         this.adaptiveVideoTrackSelectionFactory = adaptiveVideoTrackSelectionFactory;
         this.params = new AtomicReference(new Parameters());
     }

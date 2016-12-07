@@ -52,6 +52,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.tgnet.TLRPC;
 
 public class ViewPager extends ViewGroup {
     private static final int CLOSE_ENOUGH = 2;
@@ -2171,7 +2172,7 @@ public class ViewPager extends ViewGroup {
                 return arrowScroll(17);
             case 22:
                 return arrowScroll(66);
-            case 61:
+            case TLRPC.LAYER /*61*/:
                 if (VERSION.SDK_INT < 11) {
                     return false;
                 }

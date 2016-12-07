@@ -2,6 +2,8 @@ package org.telegram.messenger.exoplayer2.extractor.mp4;
 
 import android.util.Log;
 import android.util.Pair;
+import com.coremedia.iso.boxes.MetaBox;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +15,8 @@ import org.telegram.messenger.exoplayer2.drm.DrmInitData;
 import org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder;
 import org.telegram.messenger.exoplayer2.extractor.mp4.FixedSampleSizeRechunker.Results;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.metadata.Metadata;
+import org.telegram.messenger.exoplayer2.metadata.Metadata.Entry;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.CodecSpecificDataUtil;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -26,6 +30,7 @@ final class AtomParsers {
     private static final String TAG = "AtomParsers";
     private static final int TYPE_cenc = Util.getIntegerCodeForString("cenc");
     private static final int TYPE_clcp = Util.getIntegerCodeForString("clcp");
+    private static final int TYPE_meta = Util.getIntegerCodeForString(MetaBox.TYPE);
     private static final int TYPE_sbtl = Util.getIntegerCodeForString("sbtl");
     private static final int TYPE_soun = Util.getIntegerCodeForString("soun");
     private static final int TYPE_subt = Util.getIntegerCodeForString("subt");
@@ -430,69 +435,48 @@ final class AtomParsers {
         throw new ParserException("The edited sample sequence does not contain a sync sample.");
     }
 
-    public static void parseUdta(LeafAtom udtaAtom, boolean isQuickTime, GaplessInfoHolder out) {
-        if (!isQuickTime) {
-            ParsableByteArray udtaData = udtaAtom.data;
-            udtaData.setPosition(8);
-            while (udtaData.bytesLeft() >= 8) {
-                int atomSize = udtaData.readInt();
-                if (udtaData.readInt() == Atom.TYPE_meta) {
-                    udtaData.setPosition(udtaData.getPosition() - 8);
-                    udtaData.setLimit(udtaData.getPosition() + atomSize);
-                    parseMetaAtom(udtaData, out);
-                    return;
-                }
-                udtaData.skipBytes(atomSize - 8);
-            }
+    public static Metadata parseUdta(LeafAtom udtaAtom, boolean isQuickTime) {
+        if (isQuickTime) {
+            return null;
         }
+        ParsableByteArray udtaData = udtaAtom.data;
+        udtaData.setPosition(8);
+        while (udtaData.bytesLeft() >= 8) {
+            int atomPosition = udtaData.getPosition();
+            int atomSize = udtaData.readInt();
+            if (udtaData.readInt() == Atom.TYPE_meta) {
+                udtaData.setPosition(atomPosition);
+                return parseMetaAtom(udtaData, atomPosition + atomSize);
+            }
+            udtaData.skipBytes(atomSize - 8);
+        }
+        return null;
     }
 
-    private static void parseMetaAtom(ParsableByteArray data, GaplessInfoHolder out) {
-        data.skipBytes(12);
-        ParsableByteArray ilst = new ParsableByteArray();
-        while (data.bytesLeft() >= 8) {
-            int payloadSize = data.readInt() - 8;
-            if (data.readInt() == Atom.TYPE_ilst) {
-                ilst.reset(data.data, data.getPosition() + payloadSize);
-                ilst.setPosition(data.getPosition());
-                parseIlst(ilst, out);
-                if (out.hasGaplessInfo()) {
-                    return;
-                }
+    private static Metadata parseMetaAtom(ParsableByteArray meta, int limit) {
+        meta.skipBytes(12);
+        while (meta.getPosition() < limit) {
+            int atomPosition = meta.getPosition();
+            int atomSize = meta.readInt();
+            if (meta.readInt() == Atom.TYPE_ilst) {
+                meta.setPosition(atomPosition);
+                return parseIlst(meta, atomPosition + atomSize);
             }
-            data.skipBytes(payloadSize);
+            meta.skipBytes(atomSize - 8);
         }
+        return null;
     }
 
-    private static void parseIlst(ParsableByteArray ilst, GaplessInfoHolder out) {
-        while (ilst.bytesLeft() > 0) {
-            int endPosition = ilst.getPosition() + ilst.readInt();
-            if (ilst.readInt() == Atom.TYPE_DASHES) {
-                String lastCommentMean = null;
-                String lastCommentName = null;
-                String lastCommentData = null;
-                while (ilst.getPosition() < endPosition) {
-                    int length = ilst.readInt() - 12;
-                    int key = ilst.readInt();
-                    ilst.skipBytes(4);
-                    if (key == Atom.TYPE_mean) {
-                        lastCommentMean = ilst.readString(length);
-                    } else if (key == Atom.TYPE_name) {
-                        lastCommentName = ilst.readString(length);
-                    } else if (key == Atom.TYPE_data) {
-                        ilst.skipBytes(4);
-                        lastCommentData = ilst.readString(length - 4);
-                    } else {
-                        ilst.skipBytes(length);
-                    }
-                }
-                if (!(lastCommentName == null || lastCommentData == null || !"com.apple.iTunes".equals(lastCommentMean))) {
-                    out.setFromComment(lastCommentName, lastCommentData);
-                    return;
-                }
+    private static Metadata parseIlst(ParsableByteArray ilst, int limit) {
+        ilst.skipBytes(8);
+        List entries = new ArrayList();
+        while (ilst.getPosition() < limit) {
+            Entry entry = MetadataUtil.parseIlstElement(ilst);
+            if (entry != null) {
+                entries.add(entry);
             }
-            ilst.setPosition(endPosition);
         }
+        return entries.isEmpty() ? null : new Metadata(entries);
     }
 
     private static long parseMvhd(ParsableByteArray mvhd) {
@@ -561,6 +545,9 @@ final class AtomParsers {
         if (trackType == TYPE_text || trackType == TYPE_sbtl || trackType == TYPE_subt || trackType == TYPE_clcp) {
             return 3;
         }
+        if (trackType == TYPE_meta) {
+            return 4;
+        }
         return -1;
     }
 
@@ -589,7 +576,7 @@ final class AtomParsers {
             int childAtomType = stsd.readInt();
             if (childAtomType == Atom.TYPE_avc1 || childAtomType == Atom.TYPE_avc3 || childAtomType == Atom.TYPE_encv || childAtomType == Atom.TYPE_mp4v || childAtomType == Atom.TYPE_hvc1 || childAtomType == Atom.TYPE_hev1 || childAtomType == Atom.TYPE_s263 || childAtomType == Atom.TYPE_vp08 || childAtomType == Atom.TYPE_vp09) {
                 parseVideoSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, rotationDegrees, drmInitData, out, i);
-            } else if (childAtomType == Atom.TYPE_mp4a || childAtomType == Atom.TYPE_enca || childAtomType == Atom.TYPE_ac_3 || childAtomType == Atom.TYPE_ec_3 || childAtomType == Atom.TYPE_dtsc || childAtomType == Atom.TYPE_dtse || childAtomType == Atom.TYPE_dtsh || childAtomType == Atom.TYPE_dtsl || childAtomType == Atom.TYPE_samr || childAtomType == Atom.TYPE_sawb || childAtomType == Atom.TYPE_lpcm || childAtomType == Atom.TYPE_sowt) {
+            } else if (childAtomType == Atom.TYPE_mp4a || childAtomType == Atom.TYPE_enca || childAtomType == Atom.TYPE_ac_3 || childAtomType == Atom.TYPE_ec_3 || childAtomType == Atom.TYPE_dtsc || childAtomType == Atom.TYPE_dtse || childAtomType == Atom.TYPE_dtsh || childAtomType == Atom.TYPE_dtsl || childAtomType == Atom.TYPE_samr || childAtomType == Atom.TYPE_sawb || childAtomType == Atom.TYPE_lpcm || childAtomType == Atom.TYPE_sowt || childAtomType == Atom.TYPE__mp3) {
                 parseAudioSampleEntry(stsd, childAtomType, childStartPosition, childAtomSize, trackId, language, isQuickTime, drmInitData, out, i);
             } else if (childAtomType == Atom.TYPE_TTML) {
                 out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_TTML, null, -1, 0, language, drmInitData);
@@ -602,6 +589,8 @@ final class AtomParsers {
             } else if (childAtomType == Atom.TYPE_c608) {
                 out.format = Format.createTextSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_CEA608, null, -1, 0, language, drmInitData);
                 out.requiredSampleTransformation = 1;
+            } else if (childAtomType == Atom.TYPE_camm) {
+                out.format = Format.createSampleFormat(Integer.toString(trackId), MimeTypes.APPLICATION_CAMERA_MOTION, null, -1, drmInitData);
             }
             stsd.setPosition(childStartPosition + childAtomSize);
         }
@@ -772,6 +761,8 @@ final class AtomParsers {
             mimeType = MimeTypes.AUDIO_AMR_WB;
         } else if (atomType == Atom.TYPE_lpcm || atomType == Atom.TYPE_sowt) {
             mimeType = MimeTypes.AUDIO_RAW;
+        } else if (atomType == Atom.TYPE__mp3) {
+            mimeType = MimeTypes.AUDIO_MPEG;
         }
         byte[] initializationData = null;
         while (childPosition - position < size) {

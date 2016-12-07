@@ -15,15 +15,11 @@ import android.view.Display;
 import android.view.Display.Mode;
 import android.view.WindowManager;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -38,15 +34,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.ExoPlayerLibraryInfo;
+import org.telegram.messenger.exoplayer2.ParserException;
 import org.telegram.messenger.exoplayer2.upstream.DataSource;
 import org.telegram.messenger.exoplayer2.upstream.DataSpec;
-import org.telegram.tgnet.TLRPC;
 
 public final class Util {
     private static final int[] CRC32_BYTES_MSBF = new int[]{0, 79764919, 159529838, 222504665, 319059676, 398814059, 445009330, 507990021, 638119352, 583659535, 797628118, 726387553, 890018660, 835552979, NUM, 944750013, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -734892656, -789352409, -575645954, -646886583, -952755380, -NUM, -827056094, -898286187, -231047128, -151282273, -71779514, -8804623, -515967244, -436212925, -390279782, -327299027, 881225847, 809987520, NUM, 969234094, 662832811, 591600412, 771767749, 717299826, 311336399, 374308984, 453813921, 533576470, 25881363, 88864420, 134795389, 214552010, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -525066777, -462094256, -382327159, -302564546, -206542021, -143559028, -97365931, -17609246, -960696225, -NUM, -817968335, -872425850, -709327229, -780559564, -600130067, -654598054, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 622672798, 568075817, 748617968, 677256519, 907627842, 853037301, NUM, 995781531, 51762726, 131386257, 177728840, 240578815, 269590778, 349224269, 429104020, 491947555, -248556018, -168932423, -122852000, -60002089, -500490030, -420856475, -341238852, -278395381, -685261898, -739858943, -559578920, -630940305, -NUM, -NUM, -845023740, -916395085, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, 295390185, 358241886, 404320391, 483945776, 43990325, 106832002, 186451547, 266083308, 932423249, 861060070, NUM, 986742920, 613929101, 542559546, 756411363, 701822548, -978770311, -NUM, -869589737, -924188512, -693284699, -764654318, -550540341, -605129092, -475935807, -413084042, -366743377, -287118056, -257573603, -194731862, -114850189, -35218492, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM, -NUM};
     public static final String DEVICE = Build.DEVICE;
+    public static final String DEVICE_DEBUG_INFO = (DEVICE + ", " + MODEL + ", " + MANUFACTURER + ", " + SDK_INT);
     private static final Pattern ESCAPED_CHARACTER_PATTERN = Pattern.compile("%([A-Fa-f0-9]{2})");
-    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
     public static final String MANUFACTURER = Build.MANUFACTURER;
     public static final String MODEL = Build.MODEL;
     public static final int SDK_INT;
@@ -125,16 +121,20 @@ public final class Util {
     }
 
     public static void closeQuietly(DataSource dataSource) {
-        try {
-            dataSource.close();
-        } catch (IOException e) {
+        if (dataSource != null) {
+            try {
+                dataSource.close();
+            } catch (IOException e) {
+            }
         }
     }
 
-    public static void closeQuietly(OutputStream outputStream) {
-        try {
-            outputStream.close();
-        } catch (IOException e) {
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
         }
     }
 
@@ -236,7 +236,7 @@ public final class Util {
         return durationMillis;
     }
 
-    public static long parseXsDateTime(String value) throws ParseException {
+    public static long parseXsDateTime(String value) throws ParserException {
         Matcher matcher = XS_DATE_TIME_PATTERN.matcher(value);
         if (matcher.matches()) {
             int timezoneShift;
@@ -262,7 +262,7 @@ public final class Util {
             }
             return time;
         }
-        throw new ParseException("Invalid date/time format: " + value, 0);
+        throw new ParserException("Invalid date/time format: " + value);
     }
 
     public static long scaleLargeTimestamp(long timestamp, long multiplier, long divisor) {
@@ -357,18 +357,6 @@ public final class Util {
             data[i] = (byte) ((Character.digit(hexString.charAt(stringOffset), 16) << 4) + Character.digit(hexString.charAt(stringOffset + 1), 16));
         }
         return data;
-    }
-
-    public static String getHexString(byte[] bytes) {
-        char[] hexChars = new char[(bytes.length * 2)];
-        int i = 0;
-        for (byte v : bytes) {
-            int i2 = i + 1;
-            hexChars[i] = HEX_DIGITS[(v >> 4) & 15];
-            i = i2 + 1;
-            hexChars[i2] = HEX_DIGITS[v & 15];
-        }
-        return new String(hexChars);
     }
 
     public static String getCommaDelimitedSimpleClassNames(Object[] objects) {
@@ -478,7 +466,7 @@ public final class Util {
             case '*':
             case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
             case ':':
-            case TLRPC.LAYER /*60*/:
+            case '<':
             case '>':
             case '?':
             case '\\':
@@ -518,27 +506,19 @@ public final class Util {
         return builder.toString();
     }
 
+    public static void sneakyThrow(Throwable t) {
+        sneakyThrowInternal(t);
+    }
+
+    private static <T extends Throwable> void sneakyThrowInternal(Throwable t) throws Throwable {
+        throw t;
+    }
+
     public static int crc(byte[] bytes, int start, int end, int initialValue) {
         for (int i = start; i < end; i++) {
             initialValue = (initialValue << 8) ^ CRC32_BYTES_MSBF[((initialValue >>> 24) ^ (bytes[i] & 255)) & 255];
         }
         return initialValue;
-    }
-
-    public static String sha1(String input) {
-        Exception e;
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            byte[] bytes = input.getBytes("UTF-8");
-            digest.update(bytes, 0, bytes.length);
-            return getHexString(digest.digest());
-        } catch (NoSuchAlgorithmException e2) {
-            e = e2;
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e3) {
-            e = e3;
-            throw new RuntimeException(e);
-        }
     }
 
     public static Point getPhysicalDisplaySize(Context context) {

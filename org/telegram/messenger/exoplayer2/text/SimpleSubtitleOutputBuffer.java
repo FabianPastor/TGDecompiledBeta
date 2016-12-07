@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.text;
 
 final class SimpleSubtitleOutputBuffer extends SubtitleOutputBuffer {
-    private SimpleSubtitleDecoder owner;
+    private final SimpleSubtitleDecoder owner;
 
     public SimpleSubtitleOutputBuffer(SimpleSubtitleDecoder owner) {
         this.owner = owner;

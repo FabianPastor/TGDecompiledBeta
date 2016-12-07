@@ -32,9 +32,17 @@ public final class SinglePeriodTimeline extends Timeline {
         return 1;
     }
 
-    public Window getWindow(int windowIndex, Window window, boolean setIds) {
+    public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
         Assertions.checkIndex(windowIndex, 0, 1);
-        return window.set(setIds ? ID : null, C.TIME_UNSET, C.TIME_UNSET, this.isSeekable, this.isDynamic, this.windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
+        Object id = setIds ? ID : null;
+        long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
+        if (this.isDynamic) {
+            windowDefaultStartPositionUs += defaultPositionProjectionUs;
+            if (windowDefaultStartPositionUs > this.windowDurationUs) {
+                windowDefaultStartPositionUs = C.TIME_UNSET;
+            }
+        }
+        return window.set(id, C.TIME_UNSET, C.TIME_UNSET, this.isSeekable, this.isDynamic, windowDefaultStartPositionUs, this.windowDurationUs, 0, 0, this.windowPositionInPeriodUs);
     }
 
     public int getPeriodCount() {

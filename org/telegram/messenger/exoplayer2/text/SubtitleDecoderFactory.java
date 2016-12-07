@@ -1,6 +1,7 @@
 package org.telegram.messenger.exoplayer2.text;
 
 import org.telegram.messenger.exoplayer2.Format;
+import org.telegram.messenger.exoplayer2.text.cea.Cea608Decoder;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public interface SubtitleDecoderFactory {
@@ -12,16 +13,22 @@ public interface SubtitleDecoderFactory {
         public SubtitleDecoder createDecoder(Format format) {
             try {
                 Class<?> clazz = getDecoderClass(format.sampleMimeType);
-                if (clazz != null) {
+                if (clazz == null) {
+                    throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
+                } else if (clazz != Cea608Decoder.class) {
                     return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[0]).newInstance(new Object[0]);
+                } else {
+                    return (SubtitleDecoder) clazz.asSubclass(SubtitleDecoder.class).getConstructor(new Class[]{Integer.TYPE}).newInstance(new Object[]{Integer.valueOf(format.accessibilityChannel)});
                 }
-                throw new IllegalArgumentException("Attempted to create decoder for unsupported format");
             } catch (Exception e) {
                 throw new IllegalStateException("Unexpected error instantiating decoder", e);
             }
         }
 
         private Class<?> getDecoderClass(String mimeType) {
+            if (mimeType == null) {
+                return null;
+            }
             Object obj = -1;
             try {
                 switch (mimeType.hashCode()) {

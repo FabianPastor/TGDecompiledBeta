@@ -37,6 +37,7 @@ public class UserConfig {
     public static String passcodeHash = "";
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
+    public static boolean pinnedDialogsLoaded = true;
     public static String pushString = "";
     public static boolean registeredForPush;
     public static boolean saveIncomingPhotos;
@@ -81,6 +82,7 @@ public class UserConfig {
                 editor.putBoolean("draftsLoaded", draftsLoaded);
                 editor.putBoolean("notificationsConverted", notificationsConverted);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
+                editor.putBoolean("pinnedDialogsLoaded", pinnedDialogsLoaded);
                 editor.putInt("migrateOffsetId", migrateOffsetId);
                 if (migrateOffsetId != -1) {
                     editor.putInt("migrateOffsetDate", migrateOffsetDate);
@@ -216,6 +218,7 @@ public class UserConfig {
                 draftsLoaded = preferences.getBoolean("draftsLoaded", false);
                 notificationsConverted = preferences.getBoolean("notificationsConverted", false);
                 allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
+                pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
                 migrateOffsetId = preferences.getInt("migrateOffsetId", 0);
                 if (migrateOffsetId != -1) {
                     migrateOffsetDate = preferences.getInt("migrateOffsetDate", 0);
@@ -368,6 +371,7 @@ public class UserConfig {
         notificationsConverted = true;
         isWaitingForPasscodeEnter = false;
         allowScreenCapture = false;
+        pinnedDialogsLoaded = true;
         lastUpdateVersion = BuildVars.BUILD_VERSION_STRING;
         lastContactsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 82800;
         lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;

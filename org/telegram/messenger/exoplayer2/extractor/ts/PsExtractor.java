@@ -11,7 +11,7 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
 import org.telegram.messenger.exoplayer2.extractor.TimestampAdjuster;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
@@ -186,7 +186,7 @@ public final class PsExtractor implements Extractor {
                         this.foundVideoTrack = true;
                     }
                     if (elementaryStreamReader != null) {
-                        elementaryStreamReader.init(this.output, new TrackIdGenerator(streamId, 256));
+                        elementaryStreamReader.createTracks(this.output, new TrackIdGenerator(streamId, 256));
                         payloadReader = new PesReader(elementaryStreamReader, this.timestampAdjuster);
                         this.psPayloadReaders.put(streamId, payloadReader);
                     }

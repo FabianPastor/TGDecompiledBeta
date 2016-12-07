@@ -20,6 +20,7 @@ import org.telegram.messenger.exoplayer2.source.TrackGroup;
 import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.source.chunk.Chunk;
 import org.telegram.messenger.exoplayer2.source.hls.HlsChunkSource.HlsChunkHolder;
+import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMasterPlaylist.HlsUrl;
 import org.telegram.messenger.exoplayer2.trackselection.TrackSelection;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.Loader;
@@ -63,7 +64,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     private int upstreamChunkUid;
 
     public interface Callback extends org.telegram.messenger.exoplayer2.source.SequenceableLoader.Callback<HlsSampleStreamWrapper> {
-        void onContinueLoadingRequiredInMs(HlsSampleStreamWrapper hlsSampleStreamWrapper, long j);
+        void onPlaylistRefreshRequired(HlsUrl hlsUrl);
 
         void onPrepared();
     }
@@ -95,14 +96,6 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
 
     public void maybeThrowPrepareError() throws IOException {
         maybeThrowError();
-    }
-
-    public long getDurationUs() {
-        return this.chunkSource.getDurationUs();
-    }
-
-    public boolean isLive() {
-        return this.chunkSource.isLive();
     }
 
     public TrackGroupArray getTrackGroups() {
@@ -209,6 +202,14 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         return largestQueuedTimestampUs;
     }
 
+    public void setIsTimestampMaster(boolean isTimestampMaster) {
+        this.chunkSource.setIsTimestampMaster(isTimestampMaster);
+    }
+
+    public void onPlaylistLoadError(HlsUrl url, IOException error) {
+        this.chunkSource.onPlaylistLoadError(url, error);
+    }
+
     boolean isReady(int group) {
         return this.loadingFinished || !(isPendingReset() || ((DefaultTrackOutput) this.sampleQueues.valueAt(group)).isEmpty());
     }
@@ -251,7 +252,7 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
     }
 
     public boolean continueLoading(long positionUs) {
-        if (this.loader.isLoading()) {
+        if (this.loadingFinished || this.loader.isLoading()) {
             return false;
         }
         HlsMediaChunk hlsMediaChunk;
@@ -267,15 +268,14 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
         hlsChunkSource.getNextChunk(hlsMediaChunk, positionUs, this.nextChunkHolder);
         boolean endOfStream = this.nextChunkHolder.endOfStream;
         Chunk loadable = this.nextChunkHolder.chunk;
-        long retryInMs = this.nextChunkHolder.retryInMs;
+        HlsUrl playlistToLoad = this.nextChunkHolder.playlist;
         this.nextChunkHolder.clear();
         if (endOfStream) {
             this.loadingFinished = true;
             return true;
         } else if (loadable == null) {
-            if (retryInMs != C.TIME_UNSET) {
-                Assertions.checkState(this.chunkSource.isLive());
-                this.callback.onContinueLoadingRequiredInMs(this, retryInMs);
+            if (playlistToLoad != null) {
+                this.callback.onPlaylistRefreshRequired(playlistToLoad);
             }
             return false;
         } else {
@@ -284,8 +284,6 @@ final class HlsSampleStreamWrapper implements org.telegram.messenger.exoplayer2.
                 HlsMediaChunk mediaChunk = (HlsMediaChunk) loadable;
                 mediaChunk.init(this);
                 this.mediaChunks.add(mediaChunk);
-            } else if (loadable instanceof HlsInitializationChunk) {
-                ((HlsInitializationChunk) loadable).init(this);
             }
             this.eventDispatcher.loadStarted(loadable.dataSpec, loadable.type, this.trackType, loadable.trackFormat, loadable.trackSelectionReason, loadable.trackSelectionData, loadable.startTimeUs, loadable.endTimeUs, this.loader.startLoading(loadable, this, this.minLoadableRetryCount));
             return true;

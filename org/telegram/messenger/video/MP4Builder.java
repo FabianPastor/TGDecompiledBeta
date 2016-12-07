@@ -159,11 +159,11 @@ public class MP4Builder {
         this.mdat.setContentSize(this.mdat.getContentSize() + ((long) bufferInfo.size));
         this.writedSinceLastMdat += (long) bufferInfo.size;
         boolean flush = false;
-        if (this.writedSinceLastMdat >= 327647232) {
+        if (this.writedSinceLastMdat >= 32768) {
             flushCurrentMdat();
             this.writeNewMdat = true;
             flush = true;
-            this.writedSinceLastMdat -= 327647232;
+            this.writedSinceLastMdat -= 32768;
         }
         this.currentMp4Movie.addSample(trackIndex, this.dataOffset, bufferInfo);
         byteBuf.position((!writeLength ? 0 : 4) + bufferInfo.offset);

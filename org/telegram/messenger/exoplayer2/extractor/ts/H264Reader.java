@@ -7,14 +7,14 @@ import java.util.List;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil.PpsData;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil.SpsData;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.ParsableNalUnitBitArray;
 
-final class H264Reader extends ElementaryStreamReader {
+final class H264Reader implements ElementaryStreamReader {
     private static final int NAL_UNIT_TYPE_PPS = 8;
     private static final int NAL_UNIT_TYPE_SEI = 6;
     private static final int NAL_UNIT_TYPE_SPS = 7;
@@ -326,7 +326,7 @@ final class H264Reader extends ElementaryStreamReader {
         this.totalBytesWritten = 0;
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.output = extractorOutput.track(idGenerator.getNextId());
         this.sampleReader = new SampleReader(this.output, this.allowNonIdrKeyframes, this.detectAccessUnits);
         this.seiReader = new SeiReader(extractorOutput.track(idGenerator.getNextId()));

@@ -5,11 +5,9 @@ import org.telegram.messenger.exoplayer2.source.dash.manifest.RangedUri;
 
 final class DashWrappingSegmentIndex implements DashSegmentIndex {
     private final ChunkIndex chunkIndex;
-    private final String uri;
 
     public DashWrappingSegmentIndex(ChunkIndex chunkIndex, String uri) {
         this.chunkIndex = chunkIndex;
-        this.uri = uri;
     }
 
     public int getFirstSegmentNum() {
@@ -29,7 +27,7 @@ final class DashWrappingSegmentIndex implements DashSegmentIndex {
     }
 
     public RangedUri getSegmentUrl(int segmentNum) {
-        return new RangedUri(this.uri, null, this.chunkIndex.offsets[segmentNum], (long) this.chunkIndex.sizes[segmentNum]);
+        return new RangedUri(null, this.chunkIndex.offsets[segmentNum], (long) this.chunkIndex.sizes[segmentNum]);
     }
 
     public int getSegmentNum(long timeUs, long periodDurationUs) {

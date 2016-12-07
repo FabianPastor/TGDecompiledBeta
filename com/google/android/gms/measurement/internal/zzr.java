@@ -70,7 +70,6 @@ public class zzr extends zzaa {
         }
 
         public void run() {
-            HttpURLConnection zzc;
             OutputStream outputStream;
             Throwable e;
             Map map;
@@ -79,6 +78,7 @@ public class zzr extends zzaa {
             Throwable th;
             this.asU.zzbvo();
             int i2 = 0;
+            HttpURLConnection zzc;
             Map map2;
             try {
                 this.asU.zzfe(this.zzcjc);

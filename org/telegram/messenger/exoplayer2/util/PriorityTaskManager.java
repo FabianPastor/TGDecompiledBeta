@@ -15,9 +15,6 @@ public final class PriorityTaskManager {
         }
     }
 
-    private PriorityTaskManager() {
-    }
-
     public void add(int priority) {
         synchronized (this.lock) {
             this.queue.add(Integer.valueOf(priority));

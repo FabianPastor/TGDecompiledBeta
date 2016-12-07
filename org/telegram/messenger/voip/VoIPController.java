@@ -37,6 +37,8 @@ public class VoIPController {
 
     private native String nativeGetDebugString(long j);
 
+    private native long nativeGetPreferredRelayID(long j);
+
     private static native String nativeGetVersion();
 
     private native long nativeInit();
@@ -153,6 +155,11 @@ public class VoIPController {
     public void debugCtl(int request, int param) {
         ensureNativeInstance();
         nativeDebugCtl(this.nativeInst, request, param);
+    }
+
+    public long getPreferredRelayID() {
+        ensureNativeInstance();
+        return nativeGetPreferredRelayID(this.nativeInst);
     }
 
     public static String getVersion() {

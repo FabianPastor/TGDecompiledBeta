@@ -1959,6 +1959,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void onOpenAnimationStart() {
     }
 
+    public boolean canDismiss() {
+        return true;
+    }
+
     public void setAllowDrawContent(boolean value) {
         super.setAllowDrawContent(value);
         checkCameraViewPosition();

@@ -84,7 +84,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListen
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.BaseFragmentAdapter;
 import org.telegram.ui.Adapters.BaseSectionsAdapter;
@@ -97,11 +96,11 @@ import org.telegram.ui.Cells.SharedMediaSectionCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell.SharedPhotoVideoCellDelegate;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.PlayerView;
 import org.telegram.ui.Components.SectionsListView;
-import org.telegram.ui.Components.WebFrameLayout;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
@@ -1794,10 +1793,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private void openWebView(WebPage webPage) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-        builder.setCustomView(new WebFrameLayout(getParentActivity(), builder.create(), webPage.site_name, webPage.description, webPage.url, webPage.embed_url, webPage.embed_width, webPage.embed_height));
-        builder.setUseFullWidth(true);
-        showDialog(builder.create());
+        showDialog(new EmbedBottomSheet(getParentActivity(), webPage.site_name, webPage.description, webPage.url, webPage.embed_url, webPage.embed_width, webPage.embed_height));
     }
 
     private void fixLayoutInternal() {

@@ -9,7 +9,7 @@ public final class ChunkedTrackBlacklistUtil {
     private static final String TAG = "ChunkedTrackBlacklist";
 
     public static boolean maybeBlacklistTrack(TrackSelection trackSelection, int trackSelectionIndex, Exception e) {
-        return maybeBlacklistTrack(trackSelection, trackSelectionIndex, e, 60000);
+        return maybeBlacklistTrack(trackSelection, trackSelectionIndex, e, DEFAULT_TRACK_BLACKLIST_MS);
     }
 
     public static boolean maybeBlacklistTrack(TrackSelection trackSelection, int trackSelectionIndex, Exception e, long blacklistDurationMs) {

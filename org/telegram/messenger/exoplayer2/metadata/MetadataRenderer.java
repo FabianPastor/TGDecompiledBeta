@@ -12,22 +12,22 @@ import org.telegram.messenger.exoplayer2.FormatHolder;
 import org.telegram.messenger.exoplayer2.decoder.DecoderInputBuffer;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class MetadataRenderer<T> extends BaseRenderer implements Callback {
+public final class MetadataRenderer extends BaseRenderer implements Callback {
     private static final int MSG_INVOKE_RENDERER = 0;
     private final DecoderInputBuffer buffer;
     private final FormatHolder formatHolder;
     private boolean inputStreamEnded;
-    private final MetadataDecoder<T> metadataDecoder;
-    private final Output<T> output;
+    private final MetadataDecoder metadataDecoder;
+    private final Output output;
     private final Handler outputHandler;
-    private T pendingMetadata;
+    private Metadata pendingMetadata;
     private long pendingMetadataTimestamp;
 
-    public interface Output<T> {
-        void onMetadata(T t);
+    public interface Output {
+        void onMetadata(Metadata metadata);
     }
 
-    public MetadataRenderer(Output<T> output, Looper outputLooper, MetadataDecoder<T> metadataDecoder) {
+    public MetadataRenderer(Output output, Looper outputLooper, MetadataDecoder metadataDecoder) {
         super(4);
         this.output = (Output) Assertions.checkNotNull(output);
         this.outputHandler = outputLooper == null ? null : new Handler(outputLooper, this);
@@ -82,7 +82,7 @@ public final class MetadataRenderer<T> extends BaseRenderer implements Callback 
         return true;
     }
 
-    private void invokeRenderer(T metadata) {
+    private void invokeRenderer(Metadata metadata) {
         if (this.outputHandler != null) {
             this.outputHandler.obtainMessage(0, metadata).sendToTarget();
         } else {
@@ -93,14 +93,14 @@ public final class MetadataRenderer<T> extends BaseRenderer implements Callback 
     public boolean handleMessage(Message msg) {
         switch (msg.what) {
             case 0:
-                invokeRendererInternal(msg.obj);
+                invokeRendererInternal((Metadata) msg.obj);
                 return true;
             default:
                 return false;
         }
     }
 
-    private void invokeRendererInternal(T metadata) {
+    private void invokeRendererInternal(Metadata metadata) {
         this.output.onMetadata(metadata);
     }
 }

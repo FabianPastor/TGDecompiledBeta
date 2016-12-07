@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.messenger.exoplayer2.text.webvtt.WebvttCue.Builder;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-import org.telegram.tgnet.TLRPC;
 
 final class WebvttCueParser {
     private static final char CHAR_AMPERSAND = '&';
@@ -163,7 +162,7 @@ final class WebvttCueParser {
                     }
                     pos = entityEndIndex + 1;
                     break;
-                case TLRPC.LAYER /*60*/:
+                case '<':
                     if (pos + 1 < markup.length()) {
                         int i;
                         int ltPos = pos;
@@ -562,20 +561,18 @@ final class WebvttCueParser {
             if (style.getTextAlign() != null) {
                 spannedText.setSpan(new Standard(style.getTextAlign()), start, end, 33);
             }
-            if (style.getFontSizeUnit() != -1) {
-                switch (style.getFontSizeUnit()) {
-                    case 1:
-                        spannedText.setSpan(new AbsoluteSizeSpan((int) style.getFontSize(), true), start, end, 33);
-                        return;
-                    case 2:
-                        spannedText.setSpan(new RelativeSizeSpan(style.getFontSize()), start, end, 33);
-                        return;
-                    case 3:
-                        spannedText.setSpan(new RelativeSizeSpan(style.getFontSize() / 100.0f), start, end, 33);
-                        return;
-                    default:
-                        return;
-                }
+            switch (style.getFontSizeUnit()) {
+                case 1:
+                    spannedText.setSpan(new AbsoluteSizeSpan((int) style.getFontSize(), true), start, end, 33);
+                    return;
+                case 2:
+                    spannedText.setSpan(new RelativeSizeSpan(style.getFontSize()), start, end, 33);
+                    return;
+                case 3:
+                    spannedText.setSpan(new RelativeSizeSpan(style.getFontSize() / 100.0f), start, end, 33);
+                    return;
+                default:
+                    return;
             }
         }
     }

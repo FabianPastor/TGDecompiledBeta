@@ -187,7 +187,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS type_date_idx_download_queue ON download_queue(type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_phones_v6(uid INTEGER, phone TEXT, sphone TEXT, deleted INTEGER, PRIMARY KEY (uid, phone))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS sphone_deleted_idx_user_phones ON user_phones_v6(sphone, deleted);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE dialogs(did INTEGER PRIMARY KEY, date INTEGER, unread_count INTEGER, last_mid INTEGER, inbox_max INTEGER, outbox_max INTEGER, last_mid_i INTEGER, unread_count_i INTEGER, pts INTEGER, date_i INTEGER, pinned INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS date_idx_dialogs ON dialogs(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS last_mid_idx_dialogs ON dialogs(last_mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
@@ -236,7 +236,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE bot_info(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("tmessages", "current db version = " + version);
@@ -271,7 +271,7 @@ public class MessagesStorage {
                         FileLog.e("tmessages", e2);
                     }
                 }
-                if (version < 38) {
+                if (version < 39) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -573,6 +573,11 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("CREATE TABLE IF NOT EXISTS botcache(id TEXT PRIMARY KEY, date INTEGER, data BLOB)").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS botcache_date_idx ON botcache(date);").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 38").stepThis().dispose();
+                        version = 38;
+                    }
+                    if (version == 38) {
+                        MessagesStorage.this.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
@@ -690,7 +695,8 @@ public class MessagesStorage {
                         final long taskId = cursor.longValue(0);
                         AbstractSerializedData data = cursor.byteBufferValue(1);
                         if (data != null) {
-                            switch (data.readInt32(false)) {
+                            int type = data.readInt32(false);
+                            switch (type) {
                                 case 0:
                                     Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
                                     if (chat != null) {
@@ -713,6 +719,7 @@ public class MessagesStorage {
                                     });
                                     break;
                                 case 2:
+                                case 5:
                                     final TL_dialog dialog = new TL_dialog();
                                     dialog.id = data.readInt64(false);
                                     dialog.top_message = data.readInt32(false);
@@ -722,6 +729,10 @@ public class MessagesStorage {
                                     dialog.last_message_date = data.readInt32(false);
                                     dialog.pts = data.readInt32(false);
                                     dialog.flags = data.readInt32(false);
+                                    if (type == 5) {
+                                        dialog.pinned = data.readBool(false);
+                                        dialog.pinnedNum = data.readInt32(false);
+                                    }
                                     final InputPeer peer = InputPeer.TLdeserialize(data, data.readInt32(false), false);
                                     final long j = taskId;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -733,6 +744,17 @@ public class MessagesStorage {
                                 case 3:
                                     long random_id = data.readInt64(false);
                                     SendMessagesHelper.getInstance().sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
+                                    break;
+                                case 4:
+                                    final long did = data.readInt64(false);
+                                    final boolean pin = data.readBool(false);
+                                    final InputPeer TLdeserialize = InputPeer.TLdeserialize(data, data.readInt32(false), false);
+                                    final long j2 = taskId;
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            MessagesController.getInstance().pinDialog(did, pin, TLdeserialize, j2);
+                                        }
+                                    });
                                     break;
                             }
                             data.reuse();
@@ -1876,7 +1898,7 @@ public class MessagesStorage {
                     state.dispose();
                     data.reuse();
                     if (info instanceof TL_channelFull) {
-                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max FROM dialogs WHERE did = " + (-info.id), new Object[0]);
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned FROM dialogs WHERE did = " + (-info.id), new Object[0]);
                         if (cursor.next()) {
                             int inbox_max = cursor.intValue(3);
                             if (inbox_max <= info.read_inbox_max_id) {
@@ -1888,7 +1910,8 @@ public class MessagesStorage {
                                 int pts = cursor.intValue(1);
                                 long last_mid = cursor.longValue(2);
                                 int outbox_max = cursor.intValue(4);
-                                state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                int pinned = cursor.intValue(5);
+                                state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 state.bindLong(1, (long) (-info.id));
                                 state.bindInteger(2, dialog_date);
                                 state.bindInteger(3, info.unread_count);
@@ -1899,6 +1922,7 @@ public class MessagesStorage {
                                 state.bindInteger(8, 0);
                                 state.bindInteger(9, pts);
                                 state.bindInteger(10, 0);
+                                state.bindInteger(11, pinned);
                                 state.step();
                                 state.dispose();
                             }
@@ -3888,7 +3912,7 @@ Error: java.util.NoSuchElementException
                         data4.reuse();
                         data5.reuse();
                         if (dialog != null) {
-                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            state = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             state.bindLong(1, dialog.id);
                             state.bindInteger(2, dialog.last_message_date);
                             state.bindInteger(3, dialog.unread_count);
@@ -3899,6 +3923,7 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(8, 0);
                             state.bindInteger(9, dialog.pts);
                             state.bindInteger(10, 0);
+                            state.bindInteger(11, 0);
                             state.step();
                             state.dispose();
                         }
@@ -4324,16 +4349,18 @@ Error: java.util.NoSuchElementException
     public void overwriteChannel(final int channel_id, final TL_updates_channelDifferenceTooLong difference, final int newDialogType) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
+                boolean z = false;
                 boolean checkInvite = false;
                 try {
                     final long did = (long) (-channel_id);
-                    if (newDialogType != 0) {
-                        SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT pts FROM dialogs WHERE did = " + did, new Object[0]);
-                        if (!cursor.next()) {
-                            checkInvite = true;
-                        }
-                        cursor.dispose();
+                    int pinned = 0;
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT pts, pinned FROM dialogs WHERE did = " + did, new Object[0]);
+                    if (cursor.next()) {
+                        pinned = cursor.intValue(1);
+                    } else if (newDialogType != 0) {
+                        checkInvite = true;
                     }
+                    cursor.dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM messages WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM bot_keyboard WHERE uid = " + did).stepThis().dispose();
                     MessagesStorage.this.database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did).stepThis().dispose();
@@ -4355,9 +4382,14 @@ Error: java.util.NoSuchElementException
                     dialog.read_outbox_max_id = difference.read_outbox_max_id;
                     dialog.unread_count = difference.unread_count;
                     dialog.notify_settings = null;
+                    if (pinned != 0) {
+                        z = true;
+                    }
+                    dialog.pinned = z;
+                    dialog.pinnedNum = pinned;
                     dialog.pts = difference.pts;
                     dialogs.dialogs.add(dialog);
-                    MessagesStorage.this.putDialogsInternal(dialogs);
+                    MessagesStorage.this.putDialogsInternal(dialogs, false);
                     MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), false, channel_id);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -4416,12 +4448,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
-        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
+                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -4679,7 +4711,7 @@ Error: java.util.NoSuchElementException
         state3.dispose();
         state4.dispose();
         state5.dispose();
-        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         HashMap<Long, Message> dids = new HashMap();
         dids.putAll(messagesMap);
         for (Entry<Long, Message> pair : dids.entrySet()) {
@@ -4690,13 +4722,14 @@ Error: java.util.NoSuchElementException
                 if (message != null) {
                     channelId = message.to_id.channel_id;
                 }
-                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max FROM dialogs WHERE did = " + key, new Object[0]);
+                cursor = this.database.queryFinalized("SELECT date, unread_count, pts, last_mid, inbox_max, outbox_max, pinned FROM dialogs WHERE did = " + key, new Object[0]);
                 int dialog_date = 0;
                 int last_mid = 0;
                 int old_unread_count = 0;
                 int pts = channelId != 0 ? 1 : 0;
                 int inbox_max = 0;
                 int outbox_max = 0;
+                int pinned = 0;
                 if (cursor.next()) {
                     dialog_date = cursor.intValue(0);
                     old_unread_count = cursor.intValue(1);
@@ -4704,6 +4737,7 @@ Error: java.util.NoSuchElementException
                     last_mid = cursor.intValue(3);
                     inbox_max = cursor.intValue(4);
                     outbox_max = cursor.intValue(5);
+                    pinned = cursor.intValue(6);
                 } else if (channelId != 0) {
                     MessagesController.getInstance().checkChannelInviter(channelId);
                 }
@@ -4740,6 +4774,7 @@ Error: java.util.NoSuchElementException
                 state.bindInteger(8, 0);
                 state.bindInteger(9, pts);
                 state.bindInteger(10, 0);
+                state.bindInteger(11, pinned);
                 state.step();
             }
         }
@@ -5184,7 +5219,6 @@ Error: java.util.NoSuchElementException
 
     private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         String ids;
-        long did;
         int unread_count = 0;
         if (channelId != 0) {
             try {
@@ -5206,6 +5240,7 @@ Error: java.util.NoSuchElementException
         SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
         ArrayList<File> filesToDelete = new ArrayList();
         while (cursor.next()) {
+            long did;
             try {
                 did = cursor.longValue(0);
                 if (channelId != 0 && cursor.intValue(2) == 0) {
@@ -5306,7 +5341,7 @@ Error: java.util.NoSuchElementException
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<Integer> chatsToLoad = new ArrayList();
             ArrayList<Integer> encryptedToLoad = new ArrayList();
-            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
+            cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
                 dialog.id = cursor.longValue(0);
@@ -5317,6 +5352,8 @@ Error: java.util.NoSuchElementException
                 dialog.last_message_date = cursor.intValue(3);
                 dialog.pts = cursor.intValue(9);
                 dialog.flags = channelId == 0 ? 0 : 1;
+                dialog.pinnedNum = cursor.intValue(12);
+                dialog.pinned = dialog.pinnedNum != 0;
                 dialogs.dialogs.add(dialog);
                 NativeByteBuffer data = cursor.byteBufferValue(4);
                 if (data != null) {
@@ -5402,12 +5439,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 60;
+                    message.media.bytes[0] = (byte) 61;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 60;
+                message.media.bytes[0] = (byte) 61;
                 message.flags |= 512;
             }
         }
@@ -5629,6 +5666,7 @@ Error: java.util.NoSuchElementException
                         Message botKeyboard = null;
                         int channelId = 0;
                         for (int a = 0; a < count; a++) {
+                            SQLiteCursor cursor;
                             Message message = (Message) org_telegram_tgnet_TLRPC_messages_Messages.messages.get(a);
                             long messageId = (long) message.id;
                             if (channelId == 0) {
@@ -5638,7 +5676,7 @@ Error: java.util.NoSuchElementException
                                 messageId |= ((long) channelId) << 32;
                             }
                             if (i == -2) {
-                                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data, ttl FROM messages WHERE mid = %d", new Object[]{Long.valueOf(messageId)}), new Object[0]);
                                 boolean exist = cursor.next();
                                 if (exist) {
                                     AbstractSerializedData data = cursor.byteBufferValue(1);
@@ -5656,7 +5694,13 @@ Error: java.util.NoSuchElementException
                                 }
                             }
                             if (a == 0 && z) {
-                                SQLitePreparedStatement state3 = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                                int pinned = 0;
+                                cursor = MessagesStorage.this.database.queryFinalized("SELECT pinned FROM dialogs WHERE did = " + j, new Object[0]);
+                                if (cursor.next()) {
+                                    pinned = cursor.intValue(0);
+                                }
+                                cursor.dispose();
+                                SQLitePreparedStatement state3 = MessagesStorage.this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                                 state3.bindLong(1, j);
                                 state3.bindInteger(2, message.date);
                                 state3.bindInteger(3, 0);
@@ -5667,6 +5711,7 @@ Error: java.util.NoSuchElementException
                                 state3.bindInteger(8, message.ttl);
                                 state3.bindInteger(9, org_telegram_tgnet_TLRPC_messages_Messages.pts);
                                 state3.bindInteger(10, message.date);
+                                state3.bindInteger(11, pinned);
                                 state3.step();
                                 state3.dispose();
                             }
@@ -5807,7 +5852,7 @@ Error: java.util.NoSuchElementException
                 ArrayList<Integer> encryptedToLoad = new ArrayList();
                 ArrayList<Long> replyMessages = new ArrayList();
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
-                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
+                SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
                     Message message;
                     TL_dialog dialog = new TL_dialog();
@@ -5820,6 +5865,8 @@ Error: java.util.NoSuchElementException
                     dialog.flags = i;
                     dialog.read_inbox_max_id = cursor.intValue(11);
                     dialog.read_outbox_max_id = cursor.intValue(12);
+                    dialog.pinnedNum = cursor.intValue(14);
+                    dialog.pinned = dialog.pinnedNum != 0;
                     long flags = cursor.longValue(8);
                     int low_flags = (int) flags;
                     dialog.notify_settings = new TL_peerNotifySettings();
@@ -5963,7 +6010,7 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    private void putDialogsInternal(messages_Dialogs dialogs) {
+    private void putDialogsInternal(messages_Dialogs dialogs, boolean check) {
         try {
             int a;
             Message message;
@@ -5975,7 +6022,7 @@ Error: java.util.NoSuchElementException
             }
             if (!dialogs.dialogs.isEmpty()) {
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)");
-                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                SQLitePreparedStatement state2 = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state3 = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
                 SQLitePreparedStatement state4 = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
                 SQLitePreparedStatement state5 = this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
@@ -5989,6 +6036,13 @@ Error: java.util.NoSuchElementException
                             dialog.id = (long) (-dialog.peer.chat_id);
                         } else {
                             dialog.id = (long) (-dialog.peer.channel_id);
+                        }
+                    }
+                    if (check) {
+                        SQLiteCursor cursor = this.database.queryFinalized("SELECT did FROM dialogs WHERE did = " + dialog.id, new Object[0]);
+                        boolean exists = cursor.next();
+                        cursor.dispose();
+                        if (exists) {
                         }
                     }
                     int messageDate = 0;
@@ -6044,6 +6098,7 @@ Error: java.util.NoSuchElementException
                     state2.bindInteger(8, 0);
                     state2.bindInteger(9, dialog.pts);
                     state2.bindInteger(10, 0);
+                    state2.bindInteger(11, dialog.pinnedNum);
                     state2.step();
                     if (dialog.notify_settings != null) {
                         state4.requery();
@@ -6067,11 +6122,97 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    public void putDialogs(final messages_Dialogs dialogs) {
+    public void unpinAllDialogsExceptNew(final ArrayList<Long> dids) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    ArrayList<Long> unpinnedDialogs = new ArrayList();
+                    SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE pinned != 0 AND did NOT IN (%s)", new Object[]{TextUtils.join(",", dids)}), new Object[0]);
+                    while (cursor.next()) {
+                        unpinnedDialogs.add(Long.valueOf(cursor.longValue(0)));
+                    }
+                    cursor.dispose();
+                    if (!unpinnedDialogs.isEmpty()) {
+                        int minDate = 0;
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT min(date), min(date_i) FROM dialogs WHERE (date != 0 OR date_i != 0) AND pinned = 0", new Object[0]);
+                        if (cursor.next()) {
+                            int date = cursor.intValue(0);
+                            int date_i = cursor.intValue(1);
+                            if (date != 0 && date_i != 0) {
+                                minDate = Math.min(date, date_i);
+                            } else if (date == 0) {
+                                minDate = date_i;
+                            } else {
+                                minDate = date;
+                            }
+                        }
+                        cursor.dispose();
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
+                        for (int a = 0; a < unpinnedDialogs.size(); a++) {
+                            long did = ((Long) unpinnedDialogs.get(a)).longValue();
+                            int dialogDate = 0;
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT date FROM dialogs WHERE did = " + did, new Object[0]);
+                            if (cursor.next()) {
+                                dialogDate = cursor.intValue(0);
+                            }
+                            cursor.dispose();
+                            if (dialogDate <= minDate) {
+                                MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did = " + did).stepThis().dispose();
+                            } else {
+                                state.requery();
+                                state.bindInteger(1, 0);
+                                state.bindLong(2, did);
+                                state.step();
+                            }
+                        }
+                        state.dispose();
+                    }
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+            }
+        });
+    }
+
+    public void setDialogPinned(final long did, final int pinned) {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    if (pinned == 0) {
+                        int dialogDate = 0;
+                        int minDate = 0;
+                        SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT date FROM dialogs WHERE did = " + did, new Object[0]);
+                        if (cursor.next()) {
+                            dialogDate = cursor.intValue(0);
+                        }
+                        cursor.dispose();
+                        cursor = MessagesStorage.this.database.queryFinalized("SELECT min(date) FROM dialogs WHERE date != 0 AND pinned = 0", new Object[0]);
+                        if (cursor.next()) {
+                            minDate = cursor.intValue(0);
+                        }
+                        cursor.dispose();
+                        if (dialogDate <= minDate) {
+                            MessagesStorage.this.database.executeFast("DELETE FROM dialogs WHERE did = " + did).stepThis().dispose();
+                            return;
+                        }
+                    }
+                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
+                    state.bindInteger(1, pinned);
+                    state.bindLong(2, did);
+                    state.step();
+                    state.dispose();
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+            }
+        });
+    }
+
+    public void putDialogs(final messages_Dialogs dialogs, final boolean check) {
         if (!dialogs.dialogs.isEmpty()) {
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
-                    MessagesStorage.this.putDialogsInternal(dialogs);
+                    MessagesStorage.this.putDialogsInternal(dialogs, check);
                     MessagesStorage.this.loadUnreadMessages();
                 }
             });

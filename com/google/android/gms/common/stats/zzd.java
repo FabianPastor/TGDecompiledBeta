@@ -1,6 +1,7 @@
 package com.google.android.gms.common.stats;
 
 import android.support.v4.util.SimpleArrayMap;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public class zzd {
     private final long FX;
@@ -8,7 +9,7 @@ public class zzd {
     private final SimpleArrayMap<String, Long> FZ;
 
     public zzd() {
-        this.FX = 60000;
+        this.FX = ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
         this.FY = 10;
         this.FZ = new SimpleArrayMap(10);
     }

@@ -3,6 +3,7 @@ package com.google.android.gms.measurement.internal;
 import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.internal.zzsi;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public final class zzl {
@@ -31,7 +32,7 @@ public final class zzl {
     public static zza<Long> asi = zza.zzf("measurement.upload.interval", 3600000);
     public static zza<Long> asj = zza.zzf("measurement.upload.realtime_upload_interval", 10000);
     public static zza<Long> ask = zza.zzf("measurement.upload.minimum_delay", 500);
-    public static zza<Long> asl = zza.zzf("measurement.alarm_manager.minimum_interval", 60000);
+    public static zza<Long> asl = zza.zzf("measurement.alarm_manager.minimum_interval", ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
     public static zza<Long> asm = zza.zzf("measurement.upload.stale_data_deletion_interval", 86400000);
     public static zza<Long> asn = zza.zzf("measurement.upload.refresh_blacklisted_config_interval", 604800000);
     public static zza<Long> aso = zza.zzf("measurement.upload.initial_upload_delay_time", 15000);

@@ -71,13 +71,14 @@ abstract class Atom {
     public static final int HEADER_SIZE = 8;
     public static final int LONG_HEADER_SIZE = 16;
     public static final int LONG_SIZE_PREFIX = 1;
-    public static final int TYPE_DASHES = Util.getIntegerCodeForString("----");
     public static final int TYPE_TTML = Util.getIntegerCodeForString("TTML");
+    public static final int TYPE__mp3 = Util.getIntegerCodeForString(".mp3");
     public static final int TYPE_ac_3 = Util.getIntegerCodeForString(AudioSampleEntry.TYPE8);
     public static final int TYPE_avc1 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE3);
     public static final int TYPE_avc3 = Util.getIntegerCodeForString(VisualSampleEntry.TYPE4);
     public static final int TYPE_avcC = Util.getIntegerCodeForString(AvcConfigurationBox.TYPE);
     public static final int TYPE_c608 = Util.getIntegerCodeForString("c608");
+    public static final int TYPE_camm = Util.getIntegerCodeForString("camm");
     public static final int TYPE_co64 = Util.getIntegerCodeForString(ChunkOffset64BitBox.TYPE);
     public static final int TYPE_ctts = Util.getIntegerCodeForString(CompositionTimeToSample.TYPE);
     public static final int TYPE_d263 = Util.getIntegerCodeForString("d263");
@@ -252,6 +253,6 @@ abstract class Atom {
     }
 
     public static String getAtomTypeString(int type) {
-        return "" + ((char) (type >> 24)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
+        return "" + ((char) ((type >> 24) & 255)) + ((char) ((type >> 16) & 255)) + ((char) ((type >> 8) & 255)) + ((char) (type & 255));
     }
 }

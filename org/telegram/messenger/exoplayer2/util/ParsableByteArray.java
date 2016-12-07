@@ -385,6 +385,17 @@ public final class ParsableByteArray {
         return readString(length, Charset.defaultCharset());
     }
 
+    public String readNullTerminatedString(int length) {
+        int stringLength = length;
+        int lastIndex = (this.position + length) - 1;
+        if (lastIndex < this.limit && this.data[lastIndex] == (byte) 0) {
+            stringLength--;
+        }
+        String result = new String(this.data, this.position, stringLength, Charset.defaultCharset());
+        this.position += length;
+        return result;
+    }
+
     public String readString(int length, Charset charset) {
         String result = new String(this.data, this.position, length, charset);
         this.position += length;
@@ -421,10 +432,10 @@ public final class ParsableByteArray {
     }
 
     public long readUtf8EncodedLong() {
-        int x;
         int length = 0;
         long value = (long) this.data[this.position];
         for (int j = 7; j >= 0; j--) {
+            int x;
             if ((((long) (1 << j)) & value) == 0) {
                 if (j < 6) {
                     value &= (long) ((1 << j) - 1);

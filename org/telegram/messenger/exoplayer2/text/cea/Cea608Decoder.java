@@ -13,10 +13,13 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public final class Cea608Decoder extends CeaDecoder {
     private static final int[] BASIC_CHARACTER_SET = new int[]{32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 225, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 233, 93, 237, 243, Callback.DEFAULT_SWIPE_ANIMATION_DURATION, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 231, 247, 209, 241, 9632};
+    private static final int CC_FIELD_FLAG = 1;
     private static final int CC_MODE_PAINT_ON = 3;
     private static final int CC_MODE_POP_ON = 2;
     private static final int CC_MODE_ROLL_UP = 1;
     private static final int CC_MODE_UNKNOWN = 0;
+    private static final int CC_TYPE_FLAG = 2;
+    private static final int CC_VALID_608_ID = 4;
     private static final int CC_VALID_FLAG = 4;
     private static final int COUNTRY_CODE = 181;
     private static final byte CTRL_BACKSPACE = (byte) 33;
@@ -33,11 +36,13 @@ public final class Cea608Decoder extends CeaDecoder {
     private static final byte CTRL_ROLL_UP_CAPTIONS_4_ROWS = (byte) 39;
     private static final int DEFAULT_CAPTIONS_ROW_COUNT = 4;
     private static final int NTSC_CC_FIELD_1 = 0;
+    private static final int NTSC_CC_FIELD_2 = 1;
     private static final int PAYLOAD_TYPE_CC = 4;
     private static final int PROVIDER_CODE = 49;
     private static final int[] SPECIAL_CHARACTER_SET = new int[]{174, 176, PsExtractor.PRIVATE_STREAM_1, 191, 8482, 162, 163, 9834, 224, 32, 232, 226, 234, 238, 244, 251};
     private static final int[] SPECIAL_ES_FR_CHARACTER_SET = new int[]{193, 201, 211, 218, 220, 252, 8216, 161, 42, 39, 8212, 169, 8480, 8226, 8220, 8221, PsExtractor.AUDIO_STREAM, 194, 199, Callback.DEFAULT_DRAG_ANIMATION_DURATION, 202, 203, 235, 206, 207, 239, 212, 217, 249, 219, 171, 187};
     private static final int[] SPECIAL_PT_DE_CHARACTER_SET = new int[]{195, 227, 205, 204, 236, 210, 242, 213, 245, 123, 125, 92, 94, 95, 124, 126, 196, 228, 214, 246, 223, 165, 164, 9474, 197, 229, 216, 248, 9484, 9488, 9492, 9496};
+    private static final String TAG = "Cea608Decoder";
     private static final int USER_DATA_TYPE_CODE = 3;
     private static final int USER_ID = NUM;
     private int captionMode;
@@ -49,6 +54,7 @@ public final class Cea608Decoder extends CeaDecoder {
     private byte repeatableControlCc1;
     private byte repeatableControlCc2;
     private boolean repeatableControlSet;
+    private final int selectedField;
 
     public /* bridge */ /* synthetic */ SubtitleInputBuffer dequeueInputBuffer() throws SubtitleDecoderException {
         return super.dequeueInputBuffer();
@@ -66,13 +72,22 @@ public final class Cea608Decoder extends CeaDecoder {
         super.setPositionUs(j);
     }
 
-    public Cea608Decoder() {
+    public Cea608Decoder(int accessibilityChannel) {
+        switch (accessibilityChannel) {
+            case 3:
+            case 4:
+                this.selectedField = 2;
+                break;
+            default:
+                this.selectedField = 1;
+                break;
+        }
         setCaptionMode(0);
         this.captionRowCount = 4;
     }
 
     public String getName() {
-        return "Cea608Decoder";
+        return TAG;
     }
 
     public void flush() {
@@ -104,9 +119,10 @@ public final class Cea608Decoder extends CeaDecoder {
         boolean captionDataProcessed = false;
         boolean isRepeatableControl = false;
         while (this.ccData.bytesLeft() > 0) {
+            byte ccDataHeader = (byte) this.ccData.readUnsignedByte();
             byte ccData1 = (byte) (this.ccData.readUnsignedByte() & 127);
             byte ccData2 = (byte) (this.ccData.readUnsignedByte() & 127);
-            if (((byte) (this.ccData.readUnsignedByte() & 7)) == (byte) 4 && !(ccData1 == (byte) 0 && ccData2 == (byte) 0)) {
+            if ((ccDataHeader & 6) == 4 && ((this.selectedField != 1 || (ccDataHeader & 1) == 0) && ((this.selectedField != 2 || (ccDataHeader & 1) == 1) && !(ccData1 == (byte) 0 && ccData2 == (byte) 0)))) {
                 captionDataProcessed = true;
                 if ((ccData1 == (byte) 17 || ccData1 == (byte) 25) && (ccData2 & 112) == 48) {
                     this.captionStringBuilder.append(getSpecialChar(ccData2));

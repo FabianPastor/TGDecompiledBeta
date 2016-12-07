@@ -8,7 +8,7 @@ import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorsFactory;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap.Unseekable;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
@@ -87,7 +87,7 @@ public final class AdtsExtractor implements Extractor {
 
     public void init(ExtractorOutput output) {
         this.reader = new AdtsReader(true);
-        this.reader.init(output, new TrackIdGenerator(0, 1));
+        this.reader.createTracks(output, new TrackIdGenerator(0, 1));
         output.endTracks();
         output.seekMap(new Unseekable(C.TIME_UNSET));
     }

@@ -10,6 +10,7 @@ import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.util.SparseIntArray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,8 +23,8 @@ import org.telegram.messenger.exoplayer2.util.Util;
 @SuppressLint({"InlinedApi"})
 @TargetApi(16)
 public final class MediaCodecUtil {
-    private static final Map<Integer, Integer> AVC_LEVEL_NUMBER_TO_CONST = new HashMap();
-    private static final Map<Integer, Integer> AVC_PROFILE_NUMBER_TO_CONST = new HashMap();
+    private static final SparseIntArray AVC_LEVEL_NUMBER_TO_CONST = new SparseIntArray();
+    private static final SparseIntArray AVC_PROFILE_NUMBER_TO_CONST = new SparseIntArray();
     private static final String CODEC_ID_AVC1 = "avc1";
     private static final String CODEC_ID_AVC2 = "avc2";
     private static final String CODEC_ID_HEV1 = "hev1";
@@ -135,26 +136,26 @@ public final class MediaCodecUtil {
     }
 
     static {
-        AVC_PROFILE_NUMBER_TO_CONST.put(Integer.valueOf(66), Integer.valueOf(1));
-        AVC_PROFILE_NUMBER_TO_CONST.put(Integer.valueOf(77), Integer.valueOf(2));
-        AVC_PROFILE_NUMBER_TO_CONST.put(Integer.valueOf(88), Integer.valueOf(4));
-        AVC_PROFILE_NUMBER_TO_CONST.put(Integer.valueOf(100), Integer.valueOf(8));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(10), Integer.valueOf(1));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(11), Integer.valueOf(4));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(12), Integer.valueOf(8));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(13), Integer.valueOf(16));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(20), Integer.valueOf(32));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(21), Integer.valueOf(64));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(22), Integer.valueOf(128));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(30), Integer.valueOf(256));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(31), Integer.valueOf(512));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(32), Integer.valueOf(1024));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(40), Integer.valueOf(2048));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(41), Integer.valueOf(4096));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(42), Integer.valueOf(8192));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(50), Integer.valueOf(16384));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(51), Integer.valueOf(32768));
-        AVC_LEVEL_NUMBER_TO_CONST.put(Integer.valueOf(52), Integer.valueOf(65536));
+        AVC_PROFILE_NUMBER_TO_CONST.put(66, 1);
+        AVC_PROFILE_NUMBER_TO_CONST.put(77, 2);
+        AVC_PROFILE_NUMBER_TO_CONST.put(88, 4);
+        AVC_PROFILE_NUMBER_TO_CONST.put(100, 8);
+        AVC_LEVEL_NUMBER_TO_CONST.put(10, 1);
+        AVC_LEVEL_NUMBER_TO_CONST.put(11, 4);
+        AVC_LEVEL_NUMBER_TO_CONST.put(12, 8);
+        AVC_LEVEL_NUMBER_TO_CONST.put(13, 16);
+        AVC_LEVEL_NUMBER_TO_CONST.put(20, 32);
+        AVC_LEVEL_NUMBER_TO_CONST.put(21, 64);
+        AVC_LEVEL_NUMBER_TO_CONST.put(22, 128);
+        AVC_LEVEL_NUMBER_TO_CONST.put(30, 256);
+        AVC_LEVEL_NUMBER_TO_CONST.put(31, 512);
+        AVC_LEVEL_NUMBER_TO_CONST.put(32, 1024);
+        AVC_LEVEL_NUMBER_TO_CONST.put(40, 2048);
+        AVC_LEVEL_NUMBER_TO_CONST.put(41, 4096);
+        AVC_LEVEL_NUMBER_TO_CONST.put(42, 8192);
+        AVC_LEVEL_NUMBER_TO_CONST.put(50, 16384);
+        AVC_LEVEL_NUMBER_TO_CONST.put(51, 32768);
+        AVC_LEVEL_NUMBER_TO_CONST.put(52, 65536);
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L30", Integer.valueOf(1));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L60", Integer.valueOf(4));
         HEVC_CODEC_STRING_TO_PROFILE_LEVEL.put("L63", Integer.valueOf(16));
@@ -279,7 +280,7 @@ public final class MediaCodecUtil {
         if (!secureDecodersExplicit && name.endsWith(".secure")) {
             return false;
         }
-        if (Util.SDK_INT < 21 && ("CIPAACDecoder".equals(name) || "CIPMP3Decoder".equals(name) || "CIPVorbisDecoder".equals(name) || "AACDecoder".equals(name) || "MP3Decoder".equals(name))) {
+        if (Util.SDK_INT < 21 && ("CIPAACDecoder".equals(name) || "CIPMP3Decoder".equals(name) || "CIPVorbisDecoder".equals(name) || "CIPAMRNBDecoder".equals(name) || "AACDecoder".equals(name) || "MP3Decoder".equals(name))) {
             return false;
         }
         if (Util.SDK_INT < 18 && "OMX.SEC.MP3.Decoder".equals(name)) {
@@ -315,7 +316,7 @@ public final class MediaCodecUtil {
                     result = Math.max(avcLevelToMaxFrameSize(profileLevels[i].level), result);
                     i++;
                 }
-                result = Math.max(result, 172800);
+                result = Math.max(result, Util.SDK_INT >= 21 ? 345600 : 172800);
             }
             maxH264DecodableFrameSize = result;
         }
@@ -413,12 +414,12 @@ public final class MediaCodecUtil {
                 Log.w(TAG, "Ignoring malformed AVC codec string: " + codec);
                 return null;
             }
-            Integer profile = (Integer) AVC_PROFILE_NUMBER_TO_CONST.get(profileInteger);
+            Integer profile = Integer.valueOf(AVC_PROFILE_NUMBER_TO_CONST.get(profileInteger.intValue()));
             if (profile == null) {
                 Log.w(TAG, "Unknown AVC profile: " + profileInteger);
                 return null;
             }
-            Integer level = (Integer) AVC_LEVEL_NUMBER_TO_CONST.get(levelInteger);
+            Integer level = Integer.valueOf(AVC_LEVEL_NUMBER_TO_CONST.get(levelInteger.intValue()));
             if (level != null) {
                 return new Pair(profile, level);
             }

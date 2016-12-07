@@ -5,11 +5,11 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.audio.Ac3Util;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class Ac3Reader extends ElementaryStreamReader {
+final class Ac3Reader implements ElementaryStreamReader {
     private static final int HEADER_SIZE = 8;
     private static final int STATE_FINDING_SYNC = 0;
     private static final int STATE_READING_HEADER = 1;
@@ -44,7 +44,7 @@ final class Ac3Reader extends ElementaryStreamReader {
         this.lastByteWas0B = false;
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator generator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator generator) {
         this.output = extractorOutput.track(generator.getNextId());
     }
 

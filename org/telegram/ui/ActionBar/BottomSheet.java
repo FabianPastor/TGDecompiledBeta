@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -131,6 +132,8 @@ public class BottomSheet extends Dialog {
     }
 
     public interface BottomSheetDelegateInterface {
+        boolean canDismiss();
+
         void onOpenAnimationEnd();
 
         void onOpenAnimationStart();
@@ -210,6 +213,10 @@ public class BottomSheet extends Dialog {
         }
 
         public void onOpenAnimationEnd() {
+        }
+
+        public boolean canDismiss() {
+            return true;
         }
     }
 
@@ -397,10 +404,12 @@ public class BottomSheet extends Dialog {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = MeasureSpec.getSize(heightMeasureSpec);
             if (BottomSheet.this.lastInsets != null && VERSION.SDK_INT >= 21) {
-                width -= BottomSheet.this.lastInsets.getSystemWindowInsetRight() + BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
                 height -= BottomSheet.this.lastInsets.getSystemWindowInsetBottom();
             }
             setMeasuredDimension(width, height);
+            if (BottomSheet.this.lastInsets != null && VERSION.SDK_INT >= 21) {
+                width -= BottomSheet.this.lastInsets.getSystemWindowInsetRight() + BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+            }
             if (width < height) {
                 isPortrait = true;
             } else {
@@ -431,12 +440,15 @@ public class BottomSheet extends Dialog {
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             BottomSheet.this.layoutCount = BottomSheet.this.layoutCount - 1;
             if (BottomSheet.this.containerView != null) {
-                int t = (bottom - top) - BottomSheet.this.containerView.getMeasuredHeight();
                 if (BottomSheet.this.lastInsets != null && VERSION.SDK_INT >= 21) {
                     left += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
-                    right += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+                    right -= BottomSheet.this.lastInsets.getSystemWindowInsetRight();
                 }
+                int t = (bottom - top) - BottomSheet.this.containerView.getMeasuredHeight();
                 int l = ((right - left) - BottomSheet.this.containerView.getMeasuredWidth()) / 2;
+                if (BottomSheet.this.lastInsets != null && VERSION.SDK_INT >= 21) {
+                    l += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+                }
                 BottomSheet.this.containerView.layout(l, t, BottomSheet.this.containerView.getMeasuredWidth() + l, BottomSheet.this.containerView.getMeasuredHeight() + t);
             }
             int count = getChildCount();
@@ -477,6 +489,9 @@ public class BottomSheet extends Dialog {
                         default:
                             childTop = lp.topMargin;
                             break;
+                    }
+                    if (BottomSheet.this.lastInsets != null && VERSION.SDK_INT >= 21) {
+                        childLeft += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
                     }
                     child.layout(childLeft, childTop, childLeft + width, childTop + height);
                 }
@@ -560,7 +575,7 @@ public class BottomSheet extends Dialog {
             this.containerView.setBackgroundDrawable(this.shadowDrawable);
             ViewGroup viewGroup = this.containerView;
             int i = backgroundPaddingLeft;
-            int dp2 = backgroundPaddingTop + (this.applyTopPadding ? AndroidUtilities.dp(8.0f) : 0);
+            int dp2 = ((this.applyTopPadding ? AndroidUtilities.dp(8.0f) : 0) + backgroundPaddingTop) - 1;
             int i2 = backgroundPaddingLeft;
             if (this.applyBottomPadding) {
                 dp = AndroidUtilities.dp(8.0f);
@@ -602,17 +617,19 @@ public class BottomSheet extends Dialog {
             if (this.items != null) {
                 int a = 0;
                 while (a < this.items.length) {
-                    BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
-                    cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
-                    this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
-                    topOffset += 48;
-                    cell.setTag(Integer.valueOf(a));
-                    cell.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            BottomSheet.this.dismissWithButtonClick(((Integer) v.getTag()).intValue());
-                        }
-                    });
-                    this.itemViews.add(cell);
+                    if (this.items[a] != null) {
+                        BottomSheetCell cell = new BottomSheetCell(getContext(), 0);
+                        cell.setTextAndIcon(this.items[a], this.itemIcons != null ? this.itemIcons[a] : 0);
+                        this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
+                        topOffset += 48;
+                        cell.setTag(Integer.valueOf(a));
+                        cell.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                BottomSheet.this.dismissWithButtonClick(((Integer) v.getTag()).intValue());
+                            }
+                        });
+                        this.itemViews.add(cell);
+                    }
                     a++;
                 }
             }
@@ -815,7 +832,7 @@ public class BottomSheet extends Dialog {
     }
 
     public void dismiss() {
-        if (!this.dismissed) {
+        if ((this.delegate == null || this.delegate.canDismiss()) && !this.dismissed) {
             this.dismissed = true;
             cancelSheetAnimation();
             if (!this.allowCustomAnimation || !onCustomCloseAnimation()) {
@@ -874,5 +891,8 @@ public class BottomSheet extends Dialog {
 
     protected boolean onCustomOpenAnimation() {
         return false;
+    }
+
+    public void onConfigurationChanged(Configuration newConfig) {
     }
 }

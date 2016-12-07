@@ -7,13 +7,13 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
-final class H262Reader extends ElementaryStreamReader {
+final class H262Reader implements ElementaryStreamReader {
     private static final double[] FRAME_RATE_VALUES = new double[]{23.976023976023978d, 24.0d, 25.0d, 29.97002997002997d, 30.0d, 50.0d, 59.94005994005994d, 60.0d};
     private static final int START_EXTENSION = 181;
     private static final int START_GROUP = 184;
@@ -83,7 +83,7 @@ final class H262Reader extends ElementaryStreamReader {
         this.totalBytesWritten = 0;
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.output = extractorOutput.track(idGenerator.getNextId());
     }
 

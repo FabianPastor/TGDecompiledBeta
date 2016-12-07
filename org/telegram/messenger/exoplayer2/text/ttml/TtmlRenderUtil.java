@@ -61,20 +61,18 @@ final class TtmlRenderUtil {
         if (style.getTextAlign() != null) {
             builder.setSpan(new Standard(style.getTextAlign()), start, end, 33);
         }
-        if (style.getFontSizeUnit() != -1) {
-            switch (style.getFontSizeUnit()) {
-                case 1:
-                    builder.setSpan(new AbsoluteSizeSpan((int) style.getFontSize(), true), start, end, 33);
-                    return;
-                case 2:
-                    builder.setSpan(new RelativeSizeSpan(style.getFontSize()), start, end, 33);
-                    return;
-                case 3:
-                    builder.setSpan(new RelativeSizeSpan(style.getFontSize() / 100.0f), start, end, 33);
-                    return;
-                default:
-                    return;
-            }
+        switch (style.getFontSizeUnit()) {
+            case 1:
+                builder.setSpan(new AbsoluteSizeSpan((int) style.getFontSize(), true), start, end, 33);
+                return;
+            case 2:
+                builder.setSpan(new RelativeSizeSpan(style.getFontSize()), start, end, 33);
+                return;
+            case 3:
+                builder.setSpan(new RelativeSizeSpan(style.getFontSize() / 100.0f), start, end, 33);
+                return;
+            default:
+                return;
         }
     }
 

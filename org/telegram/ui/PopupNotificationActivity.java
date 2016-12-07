@@ -302,7 +302,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_COLOR);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_SELECTOR_COLOR);
         this.popupContainer.addView(this.actionBar);

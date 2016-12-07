@@ -3,6 +3,7 @@ package org.telegram.messenger.exoplayer2.source;
 import java.util.Arrays;
 
 public final class TrackGroupArray {
+    public static final TrackGroupArray EMPTY = new TrackGroupArray(new TrackGroup[0]);
     private int hashCode;
     public final int length;
     private final TrackGroup[] trackGroups;

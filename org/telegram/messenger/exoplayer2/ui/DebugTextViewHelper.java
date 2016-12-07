@@ -8,6 +8,8 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.SimpleExoPlayer;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.decoder.DecoderCounters;
+import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 
 public final class DebugTextViewHelper implements Runnable, EventListener {
     private static final int REFRESH_INTERVAL_MS = 1000;
@@ -51,6 +53,9 @@ public final class DebugTextViewHelper implements Runnable, EventListener {
     }
 
     public void onPlayerError(ExoPlaybackException error) {
+    }
+
+    public void onTracksChanged(TrackGroupArray tracks, TrackSelectionArray selections) {
     }
 
     public void run() {

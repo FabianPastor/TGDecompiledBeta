@@ -47,8 +47,8 @@ public final class ParsingLoadable<T> implements Loadable {
             inputStream.open();
             this.result = this.parser.parse(this.dataSource.getUri(), inputStream);
         } finally {
-            inputStream.close();
             this.bytesLoaded = inputStream.bytesRead();
+            inputStream.close();
         }
     }
 }

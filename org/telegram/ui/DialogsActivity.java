@@ -146,6 +146,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (!dialogsLoaded) {
             MessagesController.getInstance().loadDialogs(0, 100, true);
             ContactsController.getInstance().checkInviteText();
+            MessagesController.getInstance().loadPinnedDialogs();
             StickersQuery.checkFeaturedStickers();
             dialogsLoaded = true;
         }
@@ -430,33 +431,54 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     TL_dialog dialog = (TL_dialog) dialogs.get(position);
                     DialogsActivity.this.selectedDialog = dialog.id;
+                    boolean pinned = dialog.pinned;
                     Builder builder = new Builder(DialogsActivity.this.getParentActivity());
                     int lower_id = (int) DialogsActivity.this.selectedDialog;
                     int high_id = (int) (DialogsActivity.this.selectedDialog >> 32);
                     String string;
+                    final boolean z;
                     if (DialogObject.isChannel(dialog)) {
                         CharSequence[] items;
                         final Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                        int[] icons = new int[3];
+                        icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
+                        icons[1] = R.drawable.chats_delete;
+                        icons[2] = R.drawable.chats_leave;
                         if (chat == null || !chat.megagroup) {
-                            items = new CharSequence[2];
-                            items[0] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
+                            items = new CharSequence[3];
+                            string = (dialog.pinned || MessagesController.getInstance().canPinDialog()) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                            items[0] = string;
+                            items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             if (chat == null || !chat.creator) {
                                 string = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
                             } else {
                                 string = LocaleController.getString("ChannelDeleteMenu", R.string.ChannelDeleteMenu);
                             }
-                            items[1] = string;
+                            items[2] = string;
                         } else {
-                            items = new CharSequence[2];
-                            items[0] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
+                            items = new CharSequence[3];
+                            string = (dialog.pinned || MessagesController.getInstance().canPinDialog()) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                            items[0] = string;
+                            items[1] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                             string = (chat == null || !chat.creator) ? LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu) : LocaleController.getString("DeleteMegaMenu", R.string.DeleteMegaMenu);
-                            items[1] = string;
+                            items[2] = string;
                         }
-                        builder.setItems(items, new OnClickListener() {
+                        z = pinned;
+                        builder.setItems(items, icons, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                boolean z = true;
+                                if (which == 0) {
+                                    MessagesController instance = MessagesController.getInstance();
+                                    long access$2300 = DialogsActivity.this.selectedDialog;
+                                    if (z) {
+                                        z = false;
+                                    }
+                                    instance.pinDialog(access$2300, z, null, 0);
+                                    return;
+                                }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                if (which == 0) {
+                                if (which == 1) {
                                     if (chat == null || !chat.megagroup) {
                                         builder.setMessage(LocaleController.getString("AreYouSureClearHistoryChannel", R.string.AreYouSureClearHistoryChannel));
                                     } else {
@@ -500,51 +522,105 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             user = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
                         }
                         final boolean isBot = user != null && user.bot;
-                        CharSequence[] charSequenceArr = new CharSequence[2];
-                        charSequenceArr[0] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                        string = isChat ? LocaleController.getString("DeleteChat", R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", R.string.DeleteAndStop) : LocaleController.getString("Delete", R.string.Delete);
-                        charSequenceArr[1] = string;
-                        builder.setItems(charSequenceArr, new OnClickListener() {
-                            public void onClick(DialogInterface dialog, final int which) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                if (which == 0) {
-                                    builder.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
-                                } else if (isChat) {
-                                    builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
-                                } else {
-                                    builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
-                                }
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (which != 0) {
-                                            if (isChat) {
-                                                Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
-                                                if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {
-                                                    MessagesController.getInstance().deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null);
+                        if (lower_id != 0) {
+                            int i;
+                            CharSequence[] charSequenceArr = new CharSequence[3];
+                            string = (dialog.pinned || MessagesController.getInstance().canPinDialog()) ? dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop) : null;
+                            charSequenceArr[0] = string;
+                            charSequenceArr[1] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
+                            string = isChat ? LocaleController.getString("DeleteChat", R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", R.string.DeleteAndStop) : LocaleController.getString("Delete", R.string.Delete);
+                            charSequenceArr[2] = string;
+                            int[] iArr = new int[3];
+                            if (dialog.pinned) {
+                                i = R.drawable.chats_unpin;
+                            } else {
+                                i = R.drawable.chats_pin;
+                            }
+                            iArr[0] = i;
+                            iArr[1] = R.drawable.chats_delete;
+                            iArr[2] = R.drawable.chats_leave;
+                            z = pinned;
+                            builder.setItems(charSequenceArr, iArr, new OnClickListener() {
+                                public void onClick(DialogInterface dialog, final int which) {
+                                    boolean z = true;
+                                    if (which == 0) {
+                                        MessagesController instance = MessagesController.getInstance();
+                                        long access$2300 = DialogsActivity.this.selectedDialog;
+                                        if (z) {
+                                            z = false;
+                                        }
+                                        instance.pinDialog(access$2300, z, null, 0);
+                                        return;
+                                    }
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                    if (which == 1) {
+                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
+                                    } else if (isChat) {
+                                        builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", R.string.AreYouSureDeleteAndExit));
+                                    } else {
+                                        builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
+                                    }
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            if (which != 1) {
+                                                if (isChat) {
+                                                    Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
+                                                    if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {
+                                                        MessagesController.getInstance().deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())), null);
+                                                    } else {
+                                                        MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                                                    }
                                                 } else {
                                                     MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
                                                 }
-                                            } else {
-                                                MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
-                                            }
-                                            if (isBot) {
-                                                MessagesController.getInstance().blockUser((int) DialogsActivity.this.selectedDialog);
-                                            }
-                                            if (AndroidUtilities.isTablet()) {
-                                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                                                if (isBot) {
+                                                    MessagesController.getInstance().blockUser((int) DialogsActivity.this.selectedDialog);
+                                                }
+                                                if (AndroidUtilities.isTablet()) {
+                                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                                                    return;
+                                                }
                                                 return;
                                             }
-                                            return;
+                                            MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
                                         }
-                                        MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                                    });
+                                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                    DialogsActivity.this.showDialog(builder.create());
+                                }
+                            });
+                            DialogsActivity.this.showDialog(builder.create());
+                        } else {
+                            int[] iArr2 = new int[2];
+                            builder.setItems(new CharSequence[]{LocaleController.getString("ClearHistory", R.string.ClearHistory), LocaleController.getString("Delete", R.string.Delete)}, new int[]{R.drawable.chats_delete, R.drawable.chats_leave}, new OnClickListener() {
+                                public void onClick(DialogInterface dialog, final int which) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                    if (which == 0) {
+                                        builder.setMessage(LocaleController.getString("AreYouSureClearHistory", R.string.AreYouSureClearHistory));
+                                    } else {
+                                        builder.setMessage(LocaleController.getString("AreYouSureDeleteThisChat", R.string.AreYouSureDeleteThisChat));
                                     }
-                                });
-                                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                                DialogsActivity.this.showDialog(builder.create());
-                            }
-                        });
-                        DialogsActivity.this.showDialog(builder.create());
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            if (which != 0) {
+                                                MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                                                if (AndroidUtilities.isTablet()) {
+                                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                                                    return;
+                                                }
+                                                return;
+                                            }
+                                            MessagesController.getInstance().deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                                        }
+                                    });
+                                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                    DialogsActivity.this.showDialog(builder.create());
+                                }
+                            });
+                            DialogsActivity.this.showDialog(builder.create());
+                        }
                     }
                     return true;
                 } else if (((!DialogsActivity.this.searchWas || !DialogsActivity.this.searching) && !DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) || DialogsActivity.this.listView.getAdapter() != DialogsActivity.this.dialogsSearchAdapter || (!(DialogsActivity.this.dialogsSearchAdapter.getItem(position) instanceof String) && !DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed())) {
@@ -1070,14 +1146,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     private void didSelectResult(final long dialog_id, boolean useAlert, boolean param) {
-        AlertDialog.Builder builder;
-        if (this.addToGroupAlertString == null && ((int) dialog_id) < 0 && ChatObject.isChannel(-((int) dialog_id)) && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id)))) {
-            builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("ChannelCantSendMessage", R.string.ChannelCantSendMessage));
-            builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
-            showDialog(builder.create());
-        } else if (!useAlert || ((this.selectAlertString == null || this.selectAlertStringGroup == null) && this.addToGroupAlertString == null)) {
+        Chat chat;
+        if (this.addToGroupAlertString == null && ((int) dialog_id) < 0) {
+            chat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) dialog_id)));
+            if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id)))) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.getString("ChannelCantSendMessage", R.string.ChannelCantSendMessage));
+                builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                showDialog(builder.create());
+                return;
+            }
+        }
+        if (!useAlert || ((this.selectAlertString == null || this.selectAlertStringGroup == null) && this.addToGroupAlertString == null)) {
             if (this.delegate != null) {
                 this.delegate.didSelectDialog(this, dialog_id, param);
                 this.delegate = null;

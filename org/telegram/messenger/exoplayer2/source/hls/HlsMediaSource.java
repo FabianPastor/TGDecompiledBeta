@@ -2,6 +2,8 @@ package org.telegram.messenger.exoplayer2.source.hls;
 
 import android.net.Uri;
 import android.os.Handler;
+import java.io.IOException;
+import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import org.telegram.messenger.exoplayer2.source.AdaptiveMediaSourceEventListener.EventDispatcher;
@@ -9,16 +11,21 @@ import org.telegram.messenger.exoplayer2.source.MediaPeriod;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource.Listener;
 import org.telegram.messenger.exoplayer2.source.SinglePeriodTimeline;
+import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist;
+import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment;
+import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistTracker;
+import org.telegram.messenger.exoplayer2.source.hls.playlist.HlsPlaylistTracker.PrimaryPlaylistListener;
 import org.telegram.messenger.exoplayer2.upstream.Allocator;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 
-public final class HlsMediaSource implements MediaSource {
+public final class HlsMediaSource implements MediaSource, PrimaryPlaylistListener {
     public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 3;
     private final Factory dataSourceFactory;
     private final EventDispatcher eventDispatcher;
     private final Uri manifestUri;
     private final int minLoadableRetryCount;
+    private HlsPlaylistTracker playlistTracker;
     private Listener sourceListener;
 
     public HlsMediaSource(Uri manifestUri, Factory dataSourceFactory, Handler eventHandler, AdaptiveMediaSourceEventListener eventListener) {
@@ -33,16 +40,19 @@ public final class HlsMediaSource implements MediaSource {
     }
 
     public void prepareSource(Listener listener) {
+        Assertions.checkState(this.playlistTracker == null);
+        this.playlistTracker = new HlsPlaylistTracker(this.manifestUri, this.dataSourceFactory, this.eventDispatcher, this.minLoadableRetryCount, this);
         this.sourceListener = listener;
-        listener.onSourceInfoRefreshed(new SinglePeriodTimeline(C.TIME_UNSET, false), null);
+        this.playlistTracker.start();
     }
 
-    public void maybeThrowSourceInfoRefreshError() {
+    public void maybeThrowSourceInfoRefreshError() throws IOException {
+        this.playlistTracker.maybeThrowPrimaryPlaylistRefreshError();
     }
 
     public MediaPeriod createPeriod(int index, Allocator allocator, long positionUs) {
         Assertions.checkArgument(index == 0);
-        return new HlsMediaPeriod(this.manifestUri, this.dataSourceFactory, this.minLoadableRetryCount, this.eventDispatcher, this.sourceListener, allocator, positionUs);
+        return new HlsMediaPeriod(this.playlistTracker, this.dataSourceFactory, this.minLoadableRetryCount, this.eventDispatcher, allocator, positionUs);
     }
 
     public void releasePeriod(MediaPeriod mediaPeriod) {
@@ -50,6 +60,26 @@ public final class HlsMediaSource implements MediaSource {
     }
 
     public void releaseSource() {
+        this.playlistTracker.release();
+        this.playlistTracker = null;
         this.sourceListener = null;
+    }
+
+    public void onPrimaryPlaylistRefreshed(HlsMediaPlaylist playlist) {
+        SinglePeriodTimeline timeline;
+        if (this.playlistTracker.isLive()) {
+            long windowDefaultStartPositionUs;
+            long windowPositionInPeriodUs = playlist.getStartTimeUs();
+            List<Segment> segments = playlist.segments;
+            if (segments.isEmpty()) {
+                windowDefaultStartPositionUs = 0;
+            } else {
+                windowDefaultStartPositionUs = ((Segment) segments.get(Math.max(0, segments.size() - 3))).startTimeUs - windowPositionInPeriodUs;
+            }
+            timeline = new SinglePeriodTimeline(C.TIME_UNSET, playlist.durationUs, windowPositionInPeriodUs, windowDefaultStartPositionUs, true, !playlist.hasEndTag);
+        } else {
+            SinglePeriodTimeline singlePeriodTimeline = new SinglePeriodTimeline(playlist.durationUs, playlist.durationUs, 0, 0, true, false);
+        }
+        this.sourceListener.onSourceInfoRefreshed(timeline, playlist);
     }
 }

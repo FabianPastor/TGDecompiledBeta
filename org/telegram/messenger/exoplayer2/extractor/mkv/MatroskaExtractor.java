@@ -762,7 +762,7 @@ public final class MatroskaExtractor implements Extractor {
             case ID_DEFAULT_DURATION /*2352003*/:
             case ID_TIMECODE_SCALE /*2807729*/:
                 return 2;
-            case ID_CODEC_ID /*134*/:
+            case 134:
             case ID_DOC_TYPE /*17026*/:
             case ID_LANGUAGE /*2274716*/:
                 return 3;
@@ -1069,7 +1069,7 @@ public final class MatroskaExtractor implements Extractor {
 
     void stringElement(int id, String value) throws ParserException {
         switch (id) {
-            case ID_CODEC_ID /*134*/:
+            case 134:
                 this.currentTrack.codecId = value;
                 return;
             case ID_DOC_TYPE /*17026*/:

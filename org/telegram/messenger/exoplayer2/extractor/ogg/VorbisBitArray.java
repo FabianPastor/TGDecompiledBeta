@@ -6,7 +6,7 @@ final class VorbisBitArray {
     private int bitOffset;
     private int byteOffset;
     public final byte[] data;
-    private int limit;
+    private final int limit;
 
     public VorbisBitArray(byte[] data) {
         this(data, data.length);

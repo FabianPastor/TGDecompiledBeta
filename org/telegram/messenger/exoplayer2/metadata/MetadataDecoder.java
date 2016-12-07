@@ -1,7 +1,7 @@
 package org.telegram.messenger.exoplayer2.metadata;
 
-public interface MetadataDecoder<T> {
+public interface MetadataDecoder {
     boolean canDecode(String str);
 
-    T decode(byte[] bArr, int i) throws MetadataDecoderException;
+    Metadata decode(byte[] bArr, int i) throws MetadataDecoderException;
 }

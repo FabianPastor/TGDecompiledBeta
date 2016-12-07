@@ -2,6 +2,9 @@ package org.telegram.messenger.exoplayer2.extractor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.messenger.exoplayer2.metadata.Metadata;
+import org.telegram.messenger.exoplayer2.metadata.Metadata.Entry;
+import org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame;
 
 public final class GaplessInfoHolder {
     private static final String GAPLESS_COMMENT_ID = "iTunSMPB";
@@ -20,7 +23,20 @@ public final class GaplessInfoHolder {
         return true;
     }
 
-    public boolean setFromComment(String name, String data) {
+    public boolean setFromMetadata(Metadata metadata) {
+        for (int i = 0; i < metadata.length(); i++) {
+            Entry entry = metadata.get(i);
+            if (entry instanceof CommentFrame) {
+                CommentFrame commentFrame = (CommentFrame) entry;
+                if (setFromComment(commentFrame.description, commentFrame.text)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean setFromComment(String name, String data) {
         if (!GAPLESS_COMMENT_ID.equals(name)) {
             return false;
         }

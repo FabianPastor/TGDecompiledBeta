@@ -41,11 +41,11 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
 
     public long selectTracks(TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams, boolean[] streamResetFlags, long positionUs) {
         int i;
-        int j;
         int[] streamChildIndices = new int[selections.length];
         int[] selectionChildIndices = new int[selections.length];
         for (i = 0; i < selections.length; i++) {
             int i2;
+            int j;
             if (streams[i] == null) {
                 i2 = -1;
             } else {
@@ -114,18 +114,20 @@ final class MergingMediaPeriod implements MediaPeriod, Callback {
     }
 
     public long readDiscontinuity() {
-        int i;
         long positionUs = this.periods[0].readDiscontinuity();
-        for (i = 1; i < this.periods.length; i++) {
+        for (int i = 1; i < this.periods.length; i++) {
             if (this.periods[i].readDiscontinuity() != C.TIME_UNSET) {
                 throw new IllegalStateException("Child reported discontinuity");
             }
         }
         if (positionUs != C.TIME_UNSET) {
-            i = 0;
-            while (i < this.enabledPeriods.length) {
-                if (this.enabledPeriods[i] == this.periods[0] || this.enabledPeriods[i].seekToUs(positionUs) == positionUs) {
-                    i++;
+            MediaPeriod[] mediaPeriodArr = this.enabledPeriods;
+            int length = mediaPeriodArr.length;
+            int i2 = 0;
+            while (i2 < length) {
+                MediaPeriod enabledPeriod = mediaPeriodArr[i2];
+                if (enabledPeriod == this.periods[0] || enabledPeriod.seekToUs(positionUs) == positionUs) {
+                    i2++;
                 } else {
                     throw new IllegalStateException("Children seeked to different positions");
                 }

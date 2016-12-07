@@ -1,6 +1,8 @@
 package org.telegram.messenger.exoplayer2;
 
 import org.telegram.messenger.exoplayer2.source.MediaSource;
+import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 
 public interface ExoPlayer {
     public static final int STATE_BUFFERING = 2;
@@ -18,6 +20,8 @@ public interface ExoPlayer {
         void onPositionDiscontinuity();
 
         void onTimelineChanged(Timeline timeline, Object obj);
+
+        void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray);
     }
 
     public interface ExoPlayerComponent {
@@ -52,6 +56,10 @@ public interface ExoPlayer {
 
     Timeline getCurrentTimeline();
 
+    TrackGroupArray getCurrentTrackGroups();
+
+    TrackSelectionArray getCurrentTrackSelections();
+
     int getCurrentWindowIndex();
 
     long getDuration();
@@ -59,6 +67,10 @@ public interface ExoPlayer {
     boolean getPlayWhenReady();
 
     int getPlaybackState();
+
+    int getRendererCount();
+
+    int getRendererType(int i);
 
     boolean isLoading();
 

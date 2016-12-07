@@ -71,7 +71,8 @@ public final class SubtitleView extends View implements Output {
     }
 
     public void setUserDefaultTextSize() {
-        setFractionalTextSize(DEFAULT_TEXT_SIZE_FRACTION * (Util.SDK_INT >= 19 ? getUserCaptionFontScaleV19() : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        float fontScale = (Util.SDK_INT < 19 || isInEditMode()) ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : getUserCaptionFontScaleV19();
+        setFractionalTextSize(DEFAULT_TEXT_SIZE_FRACTION * fontScale);
     }
 
     public void setFractionalTextSize(float fractionOfHeight) {
@@ -98,7 +99,8 @@ public final class SubtitleView extends View implements Output {
     }
 
     public void setUserDefaultStyle() {
-        setStyle(Util.SDK_INT >= 19 ? getUserCaptionStyleV19() : CaptionStyleCompat.DEFAULT);
+        CaptionStyleCompat userCaptionStyleV19 = (Util.SDK_INT < 19 || isInEditMode()) ? CaptionStyleCompat.DEFAULT : getUserCaptionStyleV19();
+        setStyle(userCaptionStyleV19);
     }
 
     public void setStyle(CaptionStyleCompat style) {

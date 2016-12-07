@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 
 public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
     private static final String DEFAULT_CLASS_NAME = "android.view.View";
@@ -157,7 +158,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
                 }
                 clickKeyboardFocusedVirtualView();
                 return true;
-            case 61:
+            case TLRPC.LAYER /*61*/:
                 if (KeyEventCompat.hasNoModifiers(event)) {
                     return moveFocus(2, null);
                 }

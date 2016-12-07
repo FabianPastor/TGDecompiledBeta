@@ -15,6 +15,7 @@ import org.telegram.messenger.exoplayer2.extractor.GaplessInfoHolder;
 import org.telegram.messenger.exoplayer2.extractor.PositionHolder;
 import org.telegram.messenger.exoplayer2.extractor.SeekMap;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
+import org.telegram.messenger.exoplayer2.metadata.Metadata;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
@@ -245,10 +246,14 @@ public final class Mp4Extractor implements Extractor, SeekMap {
         long durationUs = C.TIME_UNSET;
         List<Mp4Track> tracks = new ArrayList();
         long earliestSampleOffset = Long.MAX_VALUE;
+        Metadata metadata = null;
         GaplessInfoHolder gaplessInfoHolder = new GaplessInfoHolder();
         LeafAtom udta = moov.getLeafAtomOfType(Atom.TYPE_udta);
         if (udta != null) {
-            AtomParsers.parseUdta(udta, this.isQuickTime, gaplessInfoHolder);
+            metadata = AtomParsers.parseUdta(udta, this.isQuickTime);
+            if (metadata != null) {
+                gaplessInfoHolder.setFromMetadata(metadata);
+            }
         }
         for (int i = 0; i < moov.containerChildren.size(); i++) {
             ContainerAtom atom = (ContainerAtom) moov.containerChildren.get(i);
@@ -259,8 +264,13 @@ public final class Mp4Extractor implements Extractor, SeekMap {
                     if (trackSampleTable.sampleCount != 0) {
                         Mp4Track mp4Track = new Mp4Track(track, trackSampleTable, this.extractorOutput.track(i));
                         Format format = track.format.copyWithMaxInputSize(trackSampleTable.maximumSize + 30);
-                        if (track.type == 1 && gaplessInfoHolder.hasGaplessInfo()) {
-                            format = format.copyWithGaplessInfo(gaplessInfoHolder.encoderDelay, gaplessInfoHolder.encoderPadding);
+                        if (track.type == 1) {
+                            if (gaplessInfoHolder.hasGaplessInfo()) {
+                                format = format.copyWithGaplessInfo(gaplessInfoHolder.encoderDelay, gaplessInfoHolder.encoderPadding);
+                            }
+                            if (metadata != null) {
+                                format = format.copyWithMetadata(metadata);
+                            }
                         }
                         mp4Track.trackOutput.format(format);
                         durationUs = Math.max(durationUs, track.durationUs);

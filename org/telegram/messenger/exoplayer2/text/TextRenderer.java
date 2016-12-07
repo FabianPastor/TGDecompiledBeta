@@ -59,19 +59,11 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
 
     protected void onPositionReset(long positionUs, boolean joining) {
+        clearOutput();
+        resetBuffers();
+        this.decoder.flush();
         this.inputStreamEnded = false;
         this.outputStreamEnded = false;
-        if (this.subtitle != null) {
-            this.subtitle.release();
-            this.subtitle = null;
-        }
-        if (this.nextSubtitle != null) {
-            this.nextSubtitle.release();
-            this.nextSubtitle = null;
-        }
-        this.nextInputBuffer = null;
-        clearOutput();
-        this.decoder.flush();
     }
 
     public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
@@ -149,18 +141,10 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
 
     protected void onDisabled() {
-        if (this.subtitle != null) {
-            this.subtitle.release();
-            this.subtitle = null;
-        }
-        if (this.nextSubtitle != null) {
-            this.nextSubtitle.release();
-            this.nextSubtitle = null;
-        }
+        clearOutput();
+        resetBuffers();
         this.decoder.release();
         this.decoder = null;
-        this.nextInputBuffer = null;
-        clearOutput();
         super.onDisabled();
     }
 
@@ -170,6 +154,19 @@ public final class TextRenderer extends BaseRenderer implements Callback {
 
     public boolean isReady() {
         return true;
+    }
+
+    private void resetBuffers() {
+        this.nextInputBuffer = null;
+        this.nextSubtitleEventIndex = -1;
+        if (this.subtitle != null) {
+            this.subtitle.release();
+            this.subtitle = null;
+        }
+        if (this.nextSubtitle != null) {
+            this.nextSubtitle.release();
+            this.nextSubtitle = null;
+        }
     }
 
     private long getNextEventTime() {

@@ -7,10 +7,13 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class AspectRatioFrameLayout extends FrameLayout {
     private static final float MAX_ASPECT_RATIO_DEFORMATION_FRACTION = 0.01f;
+    public static final int RESIZE_MODE_FILL = 3;
     public static final int RESIZE_MODE_FIT = 0;
     public static final int RESIZE_MODE_FIXED_HEIGHT = 2;
     public static final int RESIZE_MODE_FIXED_WIDTH = 1;
@@ -18,6 +21,10 @@ public final class AspectRatioFrameLayout extends FrameLayout {
     private int resizeMode;
     private int rotation;
     private float videoAspectRatio;
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ResizeMode {
+    }
 
     public AspectRatioFrameLayout(Context context) {
         this(context, null);
@@ -37,6 +44,14 @@ public final class AspectRatioFrameLayout extends FrameLayout {
         }
     }
 
+    public float getAspectRatio() {
+        return this.videoAspectRatio;
+    }
+
+    public int getVideoRotation() {
+        return this.rotation;
+    }
+
     public void setResizeMode(int resizeMode) {
         if (this.resizeMode != resizeMode) {
             this.resizeMode = resizeMode;
@@ -46,7 +61,7 @@ public final class AspectRatioFrameLayout extends FrameLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (this.videoAspectRatio != 0.0f) {
+        if (this.resizeMode != 3 && this.videoAspectRatio > 0.0f) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
             float aspectDeformation = (this.videoAspectRatio / (((float) width) / ((float) height))) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;

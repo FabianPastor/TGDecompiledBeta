@@ -13,17 +13,23 @@ import org.telegram.messenger.exoplayer2.util.Util;
 
 public class ContainerMediaChunk extends BaseMediaChunk implements SingleTrackMetadataOutput {
     private volatile int bytesLoaded;
+    private final int chunkCount;
     private final ChunkExtractorWrapper extractorWrapper;
     private volatile boolean loadCanceled;
     private volatile boolean loadCompleted;
     private final Format sampleFormat;
     private final long sampleOffsetUs;
 
-    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, long sampleOffsetUs, ChunkExtractorWrapper extractorWrapper, Format sampleFormat) {
+    public ContainerMediaChunk(DataSource dataSource, DataSpec dataSpec, Format trackFormat, int trackSelectionReason, Object trackSelectionData, long startTimeUs, long endTimeUs, int chunkIndex, int chunkCount, long sampleOffsetUs, ChunkExtractorWrapper extractorWrapper, Format sampleFormat) {
         super(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, chunkIndex);
-        this.extractorWrapper = extractorWrapper;
+        this.chunkCount = chunkCount;
         this.sampleOffsetUs = sampleOffsetUs;
+        this.extractorWrapper = extractorWrapper;
         this.sampleFormat = sampleFormat;
+    }
+
+    public int getNextChunkIndex() {
+        return this.chunkIndex + this.chunkCount;
     }
 
     public boolean isLoadCompleted() {

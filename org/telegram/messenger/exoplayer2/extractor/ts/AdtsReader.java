@@ -8,13 +8,13 @@ import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.extractor.DummyTrackOutput;
 import org.telegram.messenger.exoplayer2.extractor.ExtractorOutput;
 import org.telegram.messenger.exoplayer2.extractor.TrackOutput;
-import org.telegram.messenger.exoplayer2.extractor.ts.ElementaryStreamReader.TrackIdGenerator;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGenerator;
 import org.telegram.messenger.exoplayer2.util.CodecSpecificDataUtil;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableBitArray;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 
-final class AdtsReader extends ElementaryStreamReader {
+final class AdtsReader implements ElementaryStreamReader {
     private static final int CRC_SIZE = 2;
     private static final int HEADER_SIZE = 5;
     private static final int ID3_HEADER_SIZE = 10;
@@ -63,7 +63,7 @@ final class AdtsReader extends ElementaryStreamReader {
         setFindingSampleState();
     }
 
-    public void init(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
+    public void createTracks(ExtractorOutput extractorOutput, TrackIdGenerator idGenerator) {
         this.output = extractorOutput.track(idGenerator.getNextId());
         if (this.exposeId3) {
             this.id3Output = extractorOutput.track(idGenerator.getNextId());

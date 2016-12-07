@@ -1,56 +1,49 @@
 package org.telegram.messenger.exoplayer2.source.dash.manifest;
 
 import android.net.Uri;
-import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.UriUtil;
 
 public final class RangedUri {
-    private final String baseUri;
     private int hashCode;
     public final long length;
     private final String referenceUri;
     public final long start;
 
-    public RangedUri(String baseUri, String referenceUri, long start, long length) {
-        boolean z = (baseUri == null && referenceUri == null) ? false : true;
-        Assertions.checkArgument(z);
-        this.baseUri = baseUri;
+    public RangedUri(String referenceUri, long start, long length) {
+        if (referenceUri == null) {
+            referenceUri = "";
+        }
         this.referenceUri = referenceUri;
         this.start = start;
         this.length = length;
     }
 
-    public Uri getUri() {
-        return UriUtil.resolveToUri(this.baseUri, this.referenceUri);
+    public Uri resolveUri(String baseUri) {
+        return UriUtil.resolveToUri(baseUri, this.referenceUri);
     }
 
-    public String getUriString() {
-        return UriUtil.resolve(this.baseUri, this.referenceUri);
+    public String resolveUriString(String baseUri) {
+        return UriUtil.resolve(baseUri, this.referenceUri);
     }
 
-    public RangedUri attemptMerge(RangedUri other) {
+    public RangedUri attemptMerge(RangedUri other, String baseUri) {
         RangedUri rangedUri = null;
         long j = -1;
-        if (other != null && getUriString().equals(other.getUriString())) {
-            String str;
-            String str2;
+        String resolvedUri = resolveUriString(baseUri);
+        if (other != null && resolvedUri.equals(other.resolveUriString(baseUri))) {
             long j2;
             if (this.length != -1 && this.start + this.length == other.start) {
-                str = this.baseUri;
-                str2 = this.referenceUri;
                 j2 = this.start;
                 if (other.length != -1) {
                     j = this.length + other.length;
                 }
-                rangedUri = new RangedUri(str, str2, j2, j);
+                rangedUri = new RangedUri(resolvedUri, j2, j);
             } else if (other.length != -1 && other.start + other.length == this.start) {
-                str = this.baseUri;
-                str2 = this.referenceUri;
                 j2 = other.start;
                 if (this.length != -1) {
                     j = other.length + this.length;
                 }
-                rangedUri = new RangedUri(str, str2, j2, j);
+                rangedUri = new RangedUri(resolvedUri, j2, j);
             }
         }
         return rangedUri;
@@ -58,7 +51,7 @@ public final class RangedUri {
 
     public int hashCode() {
         if (this.hashCode == 0) {
-            this.hashCode = ((((((int) this.start) + 527) * 31) + ((int) this.length)) * 31) + getUriString().hashCode();
+            this.hashCode = ((((((int) this.start) + 527) * 31) + ((int) this.length)) * 31) + this.referenceUri.hashCode();
         }
         return this.hashCode;
     }
@@ -71,7 +64,7 @@ public final class RangedUri {
             return false;
         }
         RangedUri other = (RangedUri) obj;
-        if (this.start == other.start && this.length == other.length && getUriString().equals(other.getUriString())) {
+        if (this.start == other.start && this.length == other.length && this.referenceUri.equals(other.referenceUri)) {
             return true;
         }
         return false;

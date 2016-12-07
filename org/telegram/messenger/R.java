@@ -163,6 +163,10 @@ public final class R {
         public static final int catstile = NUM;
         public static final int channelintro = NUM;
         public static final int chat_badge = NUM;
+        public static final int chats_delete = NUM;
+        public static final int chats_leave = NUM;
+        public static final int chats_pin = NUM;
+        public static final int chats_unpin = NUM;
         public static final int check_blue = NUM;
         public static final int check_list = NUM;
         public static final int check_profile = NUM;
@@ -336,7 +340,6 @@ public final class R {
         public static final int ic_msg_panel_kb = NUM;
         public static final int ic_msg_panel_smiles = NUM;
         public static final int ic_msg_panel_stickers = NUM;
-        public static final int ic_next = NUM;
         public static final int ic_outfullscreen = NUM;
         public static final int ic_outinline = NUM;
         public static final int ic_pause = NUM;
@@ -344,7 +347,6 @@ public final class R {
         public static final int ic_play = NUM;
         public static final int ic_player = NUM;
         public static final int ic_playinline = NUM;
-        public static final int ic_previous = NUM;
         public static final int ic_reply_icon = NUM;
         public static final int ic_send = NUM;
         public static final int ic_share_article = NUM;
@@ -525,6 +527,7 @@ public final class R {
         public static final int phototime2_b = NUM;
         public static final int photoview_placeholder = NUM;
         public static final int pin = NUM;
+        public static final int pin_round = NUM;
         public static final int pl_back = NUM;
         public static final int pl_next = NUM;
         public static final int pl_next_pressed = NUM;
@@ -1708,6 +1711,7 @@ public final class R {
         public static final int PinMessage = NUM;
         public static final int PinMessageAlert = NUM;
         public static final int PinNotify = NUM;
+        public static final int PinToTop = NUM;
         public static final int PinnedMessage = NUM;
         public static final int PinnedMessages = NUM;
         public static final int PleaseDownload = NUM;
@@ -1945,6 +1949,7 @@ public final class R {
         public static final int UnlockFingerprint = NUM;
         public static final int UnmuteNotifications = NUM;
         public static final int UnofficialApp = NUM;
+        public static final int UnpinFromTop = NUM;
         public static final int UnpinMessage = NUM;
         public static final int UnpinMessageAlert = NUM;
         public static final int UnsupportedAttachment = NUM;
@@ -1992,6 +1997,11 @@ public final class R {
         public static final int VoipInCallBranding = NUM;
         public static final int VoipIncoming = NUM;
         public static final int VoipNotificationSettings = NUM;
+        public static final int VoipOffline = NUM;
+        public static final int VoipOfflineAirplane = NUM;
+        public static final int VoipOfflineAirplaneTitle = NUM;
+        public static final int VoipOfflineOpenSettings = NUM;
+        public static final int VoipOfflineTitle = NUM;
         public static final int VoipOngoingAlert = NUM;
         public static final int VoipOngoingAlertTitle = NUM;
         public static final int VoipOutgoingCall = NUM;

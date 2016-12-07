@@ -55,7 +55,7 @@ final class OpusReader extends StreamReader {
         initializationData.add(metadata);
         putNativeOrderLong(initializationData, preskip);
         putNativeOrderLong(initializationData, DEFAULT_SEEK_PRE_ROLL_SAMPLES);
-        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_OPUS, null, -1, -1, channelCount, SAMPLE_RATE, initializationData, null, 0, "und");
+        setupData.format = Format.createAudioSampleFormat(null, MimeTypes.AUDIO_OPUS, null, -1, -1, channelCount, SAMPLE_RATE, initializationData, null, 0, null);
         this.headerRead = true;
         return true;
     }

@@ -39,6 +39,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
     private IOException fatalError;
     private DashManifest manifest;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
+    private final int maxSegmentsPerLoad;
     private boolean missingLastSegment;
     private int periodIndex;
     private final RepresentationHolder[] representationHolders;
@@ -62,7 +63,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
                 Extractor extractor;
                 boolean resendFormatOnInit = false;
                 if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
-                    extractor = new RawCcExtractor();
+                    extractor = new RawCcExtractor(representation.format);
                     resendFormatOnInit = true;
                 } else if (mimeTypeIsWebm(containerMimeType)) {
                     extractor = new MatroskaExtractor();
@@ -140,17 +141,23 @@ public class DefaultDashChunkSource implements DashChunkSource {
 
     public static final class Factory implements org.telegram.messenger.exoplayer2.source.dash.DashChunkSource.Factory {
         private final org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory;
+        private final int maxSegmentsPerLoad;
 
         public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory) {
+            this(dataSourceFactory, 1);
+        }
+
+        public Factory(org.telegram.messenger.exoplayer2.upstream.DataSource.Factory dataSourceFactory, int maxSegmentsPerLoad) {
             this.dataSourceFactory = dataSourceFactory;
+            this.maxSegmentsPerLoad = maxSegmentsPerLoad;
         }
 
         public DashChunkSource createDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int adaptationSetIndex, TrackSelection trackSelection, long elapsedRealtimeOffsetMs) {
-            return new DefaultDashChunkSource(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndex, trackSelection, this.dataSourceFactory.createDataSource(), elapsedRealtimeOffsetMs);
+            return new DefaultDashChunkSource(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndex, trackSelection, this.dataSourceFactory.createDataSource(), elapsedRealtimeOffsetMs, this.maxSegmentsPerLoad);
         }
     }
 
-    public DefaultDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int adaptationSetIndex, TrackSelection trackSelection, DataSource dataSource, long elapsedRealtimeOffsetMs) {
+    public DefaultDashChunkSource(LoaderErrorThrower manifestLoaderErrorThrower, DashManifest manifest, int periodIndex, int adaptationSetIndex, TrackSelection trackSelection, DataSource dataSource, long elapsedRealtimeOffsetMs, int maxSegmentsPerLoad) {
         this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
         this.manifest = manifest;
         this.adaptationSetIndex = adaptationSetIndex;
@@ -158,6 +165,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         this.dataSource = dataSource;
         this.periodIndex = periodIndex;
         this.elapsedRealtimeOffsetMs = elapsedRealtimeOffsetMs;
+        this.maxSegmentsPerLoad = maxSegmentsPerLoad;
         long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
         List<Representation> representations = getRepresentations();
         this.representationHolders = new RepresentationHolder[trackSelection.length()];
@@ -240,7 +248,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
                     out.endOfStream = z;
                     return;
                 }
-                out.chunk = newMediaChunk(representationHolder, this.dataSource, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), sampleFormat, segmentNum);
+                out.chunk = newMediaChunk(representationHolder, this.dataSource, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), sampleFormat, segmentNum, Math.min(this.maxSegmentsPerLoad, (lastAvailableSegmentNum - segmentNum) + 1));
                 return;
             }
             out.chunk = newInitializationChunk(representationHolder, this.dataSource, this.trackSelection.getSelectedFormat(), this.trackSelection.getSelectionReason(), this.trackSelection.getSelectionData(), pendingInitializationUri, pendingIndexUri);
@@ -268,7 +276,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         if (!cancelable) {
             return false;
         }
-        if (this.manifest.dynamic || !(chunk instanceof MediaChunk) || !(e instanceof InvalidResponseCodeException) || ((InvalidResponseCodeException) e).responseCode != 404 || ((MediaChunk) chunk).chunkIndex < this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)].getLastSegmentNum()) {
+        if (this.manifest.dynamic || !(chunk instanceof MediaChunk) || !(e instanceof InvalidResponseCodeException) || ((InvalidResponseCodeException) e).responseCode != 404 || ((MediaChunk) chunk).getNextChunkIndex() <= this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)].getLastSegmentNum()) {
             return ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), e);
         }
         this.missingLastSegment = true;
@@ -286,28 +294,38 @@ public class DefaultDashChunkSource implements DashChunkSource {
         return System.currentTimeMillis() * 1000;
     }
 
-    private Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, RangedUri initializationUri, RangedUri indexUri) {
+    private static Chunk newInitializationChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, RangedUri initializationUri, RangedUri indexUri) {
         RangedUri requestUri;
+        String baseUrl = representationHolder.representation.baseUrl;
         if (initializationUri != null) {
-            requestUri = initializationUri.attemptMerge(indexUri);
+            requestUri = initializationUri.attemptMerge(indexUri, baseUrl);
             if (requestUri == null) {
                 requestUri = initializationUri;
             }
         } else {
             requestUri = indexUri;
         }
-        return new InitializationChunk(dataSource, new DataSpec(requestUri.getUri(), requestUri.start, requestUri.length, representationHolder.representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
+        return new InitializationChunk(dataSource, new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start, requestUri.length, representationHolder.representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
 
-    private Chunk newMediaChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, Format sampleFormat, int segmentNum) {
+    private static Chunk newMediaChunk(RepresentationHolder representationHolder, DataSource dataSource, Format trackFormat, int trackSelectionReason, Object trackSelectionData, Format sampleFormat, int firstSegmentNum, int maxSegmentCount) {
         Representation representation = representationHolder.representation;
-        long startTimeUs = representationHolder.getSegmentStartTimeUs(segmentNum);
-        long endTimeUs = representationHolder.getSegmentEndTimeUs(segmentNum);
-        RangedUri segmentUri = representationHolder.getSegmentUrl(segmentNum);
-        DataSpec dataSpec = new DataSpec(segmentUri.getUri(), segmentUri.start, segmentUri.length, representation.getCacheKey());
+        long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
+        RangedUri segmentUri = representationHolder.getSegmentUrl(firstSegmentNum);
+        String baseUrl = representation.baseUrl;
         if (representationHolder.extractorWrapper == null) {
-            return new SingleSampleMediaChunk(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, segmentNum, trackFormat);
+            return new SingleSampleMediaChunk(dataSource, new DataSpec(segmentUri.resolveUri(baseUrl), segmentUri.start, segmentUri.length, representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, representationHolder.getSegmentEndTimeUs(firstSegmentNum), firstSegmentNum, trackFormat);
         }
-        return new ContainerMediaChunk(dataSource, dataSpec, trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, segmentNum, -representation.presentationTimeOffsetUs, representationHolder.extractorWrapper, sampleFormat);
+        int segmentCount = 1;
+        for (int i = 1; i < maxSegmentCount; i++) {
+            RangedUri mergedSegmentUri = segmentUri.attemptMerge(representationHolder.getSegmentUrl(firstSegmentNum + i), baseUrl);
+            if (mergedSegmentUri == null) {
+                break;
+            }
+            segmentUri = mergedSegmentUri;
+            segmentCount++;
+        }
+        long endTimeUs = representationHolder.getSegmentEndTimeUs((firstSegmentNum + segmentCount) - 1);
+        return new ContainerMediaChunk(dataSource, new DataSpec(segmentUri.resolveUri(baseUrl), segmentUri.start, segmentUri.length, representation.getCacheKey()), trackFormat, trackSelectionReason, trackSelectionData, startTimeUs, endTimeUs, firstSegmentNum, segmentCount, -representation.presentationTimeOffsetUs, representationHolder.extractorWrapper, sampleFormat);
     }
 }

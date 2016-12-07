@@ -42,8 +42,8 @@ public final class LoopingMediaSource implements MediaSource {
             return this.childWindowCount * this.loopCount;
         }
 
-        public Window getWindow(int windowIndex, Window window, boolean setIds) {
-            this.childTimeline.getWindow(windowIndex % this.childWindowCount, window, setIds);
+        public Window getWindow(int windowIndex, Window window, boolean setIds, long defaultPositionProjectionUs) {
+            this.childTimeline.getWindow(windowIndex % this.childWindowCount, window, setIds, defaultPositionProjectionUs);
             int periodIndexOffset = (windowIndex / this.childWindowCount) * this.childPeriodCount;
             window.firstPeriodIndex += periodIndexOffset;
             window.lastPeriodIndex += periodIndexOffset;

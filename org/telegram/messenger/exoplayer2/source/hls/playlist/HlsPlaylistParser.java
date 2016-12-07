@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -247,12 +246,11 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
 
     private static HlsMediaPlaylist parseMediaPlaylist(LineIterator iterator, String baseUri) throws IOException {
         int mediaSequence = 0;
-        int targetDurationSecs = 0;
         int version = 1;
-        boolean live = true;
+        boolean hasEndTag = false;
         Segment initializationSegment = null;
         List<Segment> segments = new ArrayList();
-        double segmentDurationSecs = 0.0d;
+        long segmentDurationUs = 0;
         int discontinuitySequenceNumber = 0;
         long segmentStartTimeUs = 0;
         long segmentByteRangeOffset = 0;
@@ -278,16 +276,16 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 segmentByteRangeOffset = 0;
                 segmentByteRangeLength = -1;
             } else if (line.startsWith(TAG_TARGET_DURATION)) {
-                targetDurationSecs = parseIntAttr(line, REGEX_TARGET_DURATION);
+                int targetDurationSecs = parseIntAttr(line, REGEX_TARGET_DURATION);
             } else if (line.startsWith(TAG_MEDIA_SEQUENCE)) {
                 mediaSequence = parseIntAttr(line, REGEX_MEDIA_SEQUENCE);
                 segmentMediaSequence = mediaSequence;
             } else if (line.startsWith(TAG_VERSION)) {
                 version = parseIntAttr(line, REGEX_VERSION);
             } else if (line.startsWith(TAG_MEDIA_DURATION)) {
-                segmentDurationSecs = parseDoubleAttr(line, REGEX_MEDIA_DURATION);
+                segmentDurationUs = (long) (parseDoubleAttr(line, REGEX_MEDIA_DURATION) * 1000000.0d);
             } else if (line.startsWith(TAG_KEY)) {
-                isEncrypted = "AES-128".equals(parseStringAttr(line, REGEX_METHOD));
+                isEncrypted = METHOD_AES128.equals(parseStringAttr(line, REGEX_METHOD));
                 if (isEncrypted) {
                     encryptionKeyUri = parseStringAttr(line, REGEX_URI);
                     encryptionIV = parseOptionalStringAttr(line, REGEX_IV);
@@ -318,18 +316,18 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 if (segmentByteRangeLength == -1) {
                     segmentByteRangeOffset = 0;
                 }
-                segments.add(new Segment(line, segmentDurationSecs, discontinuitySequenceNumber, segmentStartTimeUs, isEncrypted, encryptionKeyUri, segmentEncryptionIV, segmentByteRangeOffset, segmentByteRangeLength));
-                segmentStartTimeUs += (long) (1000000.0d * segmentDurationSecs);
-                segmentDurationSecs = 0.0d;
+                segments.add(new Segment(line, segmentDurationUs, discontinuitySequenceNumber, segmentStartTimeUs, isEncrypted, encryptionKeyUri, segmentEncryptionIV, segmentByteRangeOffset, segmentByteRangeLength));
+                segmentStartTimeUs += segmentDurationUs;
+                segmentDurationUs = 0;
                 if (segmentByteRangeLength != -1) {
                     segmentByteRangeOffset += segmentByteRangeLength;
                 }
                 segmentByteRangeLength = -1;
             } else if (line.equals(TAG_ENDLIST)) {
-                live = false;
+                hasEndTag = true;
             }
         }
-        return new HlsMediaPlaylist(baseUri, mediaSequence, targetDurationSecs, version, live, initializationSegment, Collections.unmodifiableList(segments));
+        return new HlsMediaPlaylist(baseUri, mediaSequence, version, hasEndTag, initializationSegment, segments);
     }
 
     private static String parseStringAttr(String line, Pattern pattern) throws ParserException {

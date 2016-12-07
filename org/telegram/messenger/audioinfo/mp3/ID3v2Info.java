@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.exoplayer2.metadata.id3.ApicFrame;
+import org.telegram.messenger.exoplayer2.metadata.id3.CommentFrame;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class ID3v2Info extends AudioInfo {
@@ -316,7 +317,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
                 }
                 break;
             case 2074380:
-                if (frameId.equals("COMM")) {
+                if (frameId.equals(CommentFrame.ID)) {
                     obj = 3;
                     break;
                 }

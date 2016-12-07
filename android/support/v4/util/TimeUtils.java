@@ -82,9 +82,9 @@ public final class TimeUtils {
             hours = seconds / SECONDS_PER_HOUR;
             seconds -= hours * SECONDS_PER_HOUR;
         }
-        if (seconds > 60) {
-            minutes = seconds / 60;
-            seconds -= minutes * 60;
+        if (seconds > SECONDS_PER_MINUTE) {
+            minutes = seconds / SECONDS_PER_MINUTE;
+            seconds -= minutes * SECONDS_PER_MINUTE;
         }
         int pos = 0;
         if (fieldLen != 0) {

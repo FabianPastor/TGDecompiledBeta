@@ -1,10 +1,21 @@
 package org.telegram.messenger.exoplayer2.upstream.cache;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.NavigableSet;
 import java.util.Set;
 
 public interface Cache {
+
+    public static class CacheException extends IOException {
+        public CacheException(String message) {
+            super(message);
+        }
+
+        public CacheException(IOException cause) {
+            super(cause);
+        }
+    }
 
     public interface Listener {
         void onSpanAdded(Cache cache, CacheSpan cacheSpan);
@@ -16,7 +27,7 @@ public interface Cache {
 
     NavigableSet<CacheSpan> addListener(String str, Listener listener);
 
-    void commitFile(File file);
+    void commitFile(File file) throws CacheException;
 
     long getCacheSpace();
 
@@ -32,13 +43,13 @@ public interface Cache {
 
     void removeListener(String str, Listener listener);
 
-    void removeSpan(CacheSpan cacheSpan);
+    void removeSpan(CacheSpan cacheSpan) throws CacheException;
 
-    boolean setContentLength(String str, long j);
+    void setContentLength(String str, long j) throws CacheException;
 
-    File startFile(String str, long j, long j2);
+    File startFile(String str, long j, long j2) throws CacheException;
 
-    CacheSpan startReadWrite(String str, long j) throws InterruptedException;
+    CacheSpan startReadWrite(String str, long j) throws InterruptedException, CacheException;
 
-    CacheSpan startReadWriteNonBlocking(String str, long j);
+    CacheSpan startReadWriteNonBlocking(String str, long j) throws CacheException;
 }

@@ -23,6 +23,7 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -36,6 +37,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
+import android.text.Spannable.Factory;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -60,7 +62,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebChromeClient.CustomViewCallback;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -184,8 +185,8 @@ import org.telegram.ui.Components.TextPaintSpan;
 import org.telegram.ui.Components.TextPaintUrlSpan;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
-import org.telegram.ui.Components.youtube.YouTubeView2;
-import org.telegram.ui.Components.youtube.YouTubeView2.YouTubeViewDelegate;
+import org.telegram.ui.Components.WebPlayerView;
+import org.telegram.ui.Components.WebPlayerView.WebPlayerViewDelegate;
 
 @TargetApi(16)
 public class ArticleViewer implements NotificationCenterDelegate, OnGestureListener, OnDoubleTapListener {
@@ -270,6 +271,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private PageBlock currentMedia;
     private WebPage currentPage;
     private PlaceProviderObject currentPlaceObject;
+    private WebPlayerView currentPlayingVideo;
     private int currentRotation;
     private Bitmap currentThumb;
     private View customView;
@@ -280,7 +282,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private boolean doubleTap;
     private float dragY;
     private boolean draggingDown;
+    private AspectRatioFrameLayout fullscreenAspectRatioView;
+    private TextureView fullscreenTextureView;
     private FrameLayout fullscreenVideoContainer;
+    private WebPlayerView fullscreenedVideo;
     private GestureDetector gestureDetector;
     private FrameLayout headerView;
     private PlaceProviderObject hideAfterAnimation;
@@ -379,6 +384,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         private TL_pageBlockAuthorDate currentBlock;
         private int lastCreatedWidth;
         private StaticLayout textLayout;
+        private int textX = AndroidUtilities.dp(18.0f);
+        private int textY = AndroidUtilities.dp(8.0f);
 
         public BlockAuthorDateCell(Context context) {
             super(context);
@@ -390,19 +397,52 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             requestLayout();
         }
 
+        public boolean onTouchEvent(MotionEvent event) {
+            return ArticleViewer.this.checkLayoutForLinks(event, this, this.textLayout, this.textX, this.textY) || super.onTouchEvent(event);
+        }
+
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
             if (this.currentBlock == null) {
                 height = 1;
             } else if (this.lastCreatedWidth != width) {
-                String text;
-                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(this.currentBlock.author)) {
-                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000), this.currentBlock.author);
-                } else if (TextUtils.isEmpty(this.currentBlock.author)) {
+                Spannable spannableAuthor;
+                MetricAffectingSpan[] spans;
+                CharSequence text;
+                CharSequence author = ArticleViewer.this.getText(this.currentBlock.author, this.currentBlock.author, this.currentBlock);
+                if (author instanceof Spannable) {
+                    spannableAuthor = (Spannable) author;
+                    spans = (MetricAffectingSpan[]) spannableAuthor.getSpans(0, author.length(), MetricAffectingSpan.class);
+                } else {
+                    spannableAuthor = null;
+                    spans = null;
+                }
+                if (this.currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
+                    r16 = new Object[2];
+                    r16[0] = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
+                    r16[1] = author;
+                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, r16);
+                } else if (TextUtils.isEmpty(author)) {
                     text = LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.published_date) * 1000);
                 } else {
-                    text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, this.currentBlock.author);
+                    text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
+                }
+                if (spans != null) {
+                    try {
+                        if (spans.length > 0) {
+                            int idx = TextUtils.indexOf(text, author);
+                            if (idx != -1) {
+                                Spannable spannable = Factory.getInstance().newSpannable(author);
+                                text = spannable;
+                                for (int a = 0; a < spans.length; a++) {
+                                    spannable.setSpan(spans[a], spannableAuthor.getSpanStart(spans[a]) + idx, spannableAuthor.getSpanEnd(spans[a]) + idx, 33);
+                                }
+                            }
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
                 }
                 this.textLayout = ArticleViewer.this.createLayoutForText(text, null, width - AndroidUtilities.dp(36.0f), this.currentBlock);
                 if (this.textLayout != null) {
@@ -415,7 +455,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         protected void onDraw(Canvas canvas) {
             if (this.currentBlock != null && this.textLayout != null) {
                 canvas.save();
-                canvas.translate((float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(8.0f));
+                canvas.translate((float) this.textX, (float) this.textY);
                 ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
                 this.textLayout.draw(canvas);
                 canvas.restore();
@@ -671,7 +711,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         private StaticLayout textLayout;
         private int textX;
         private int textY;
-        private YouTubeView2 videoView;
+        private WebPlayerView videoView;
         private TouchyWebView webView;
 
         public class TouchyWebView extends WebView {
@@ -694,27 +734,36 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public BlockEmbedCell(Context context) {
             super(context);
             setWillNotDraw(false);
-            this.videoView = new YouTubeView2(context, false);
-            this.videoView.setDelegate(new YouTubeViewDelegate(ArticleViewer.this) {
+            this.videoView = new WebPlayerView(context, false, false);
+            this.videoView.setDelegate(new WebPlayerViewDelegate(ArticleViewer.this) {
                 public void onInitFailed() {
                     BlockEmbedCell.this.webView.setVisibility(0);
                     BlockEmbedCell.this.videoView.setVisibility(4);
-                    BlockEmbedCell.this.videoView.loadVideo(null, false);
+                    BlockEmbedCell.this.videoView.loadVideo(null, null, false);
                     HashMap<String, String> args = new HashMap();
                     args.put("Referer", "http://youtube.com");
                     BlockEmbedCell.this.webView.loadUrl(BlockEmbedCell.this.currentBlock.url, args);
                 }
 
-                public void onSwithToFullscreen(boolean fullscreen) {
+                public void onVideoSizeChanged(float aspectRation, int rotation) {
+                    ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
+                }
+
+                public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRation, int rotation, boolean byButton) {
                     if (fullscreen) {
-                        BlockEmbedCell.this.removeView(BlockEmbedCell.this.videoView);
-                        ArticleViewer.this.fullscreenVideoContainer.addView(BlockEmbedCell.this.videoView, LayoutHelper.createFrame(-1, -1.0f));
+                        ArticleViewer.this.fullscreenAspectRatioView.addView(ArticleViewer.this.fullscreenTextureView, LayoutHelper.createFrame(-1, -1.0f));
+                        ArticleViewer.this.fullscreenAspectRatioView.setVisibility(0);
+                        ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
+                        ArticleViewer.this.fullscreenedVideo = BlockEmbedCell.this.videoView;
+                        ArticleViewer.this.fullscreenVideoContainer.addView(controlsView, LayoutHelper.createFrame(-1, -1.0f));
                         ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
-                        return;
+                    } else {
+                        ArticleViewer.this.fullscreenAspectRatioView.removeView(ArticleViewer.this.fullscreenTextureView);
+                        ArticleViewer.this.fullscreenedVideo = null;
+                        ArticleViewer.this.fullscreenAspectRatioView.setVisibility(8);
+                        ArticleViewer.this.fullscreenVideoContainer.setVisibility(4);
                     }
-                    ArticleViewer.this.fullscreenVideoContainer.setVisibility(4);
-                    ArticleViewer.this.fullscreenVideoContainer.removeView(BlockEmbedCell.this.videoView);
-                    BlockEmbedCell.this.addView(BlockEmbedCell.this.videoView);
+                    return ArticleViewer.this.fullscreenTextureView;
                 }
 
                 public void onSwtichToInline(boolean inline) {
@@ -723,6 +772,30 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 public void onSharePressed() {
                     if (ArticleViewer.this.parentActivity != null) {
                         ArticleViewer.this.showDialog(new ShareAlert(ArticleViewer.this.parentActivity, null, BlockEmbedCell.this.currentBlock.url, false, BlockEmbedCell.this.currentBlock.url, true));
+                    }
+                }
+
+                public void onPlayStateChanged(WebPlayerView playerView, boolean playing) {
+                    if (playing) {
+                        if (!(ArticleViewer.this.currentPlayingVideo == null || ArticleViewer.this.currentPlayingVideo == playerView)) {
+                            ArticleViewer.this.currentPlayingVideo.pause();
+                        }
+                        ArticleViewer.this.currentPlayingVideo = playerView;
+                        try {
+                            ArticleViewer.this.parentActivity.getWindow().addFlags(128);
+                            return;
+                        } catch (Throwable e) {
+                            FileLog.e("tmessages", e);
+                            return;
+                        }
+                    }
+                    if (ArticleViewer.this.currentPlayingVideo == playerView) {
+                        ArticleViewer.this.currentPlayingVideo = null;
+                    }
+                    try {
+                        ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
                     }
                 }
             });
@@ -734,8 +807,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.webView.getSettings().setAllowContentAccess(true);
             if (VERSION.SDK_INT >= 17) {
                 this.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-            }
-            if (this.webView.getSettings().getUserAgentString() != null) {
             }
             if (VERSION.SDK_INT >= 21) {
                 this.webView.getSettings().setMixedContentMode(0);
@@ -777,17 +848,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
                 }
-
-                @TargetApi(21)
-                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    Browser.openUrl(ArticleViewer.this.parentActivity, request.getUrl());
-                    return true;
-                }
-
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    Browser.openUrl(ArticleViewer.this.parentActivity, url);
-                    return true;
-                }
             });
             addView(this.webView);
         }
@@ -803,9 +863,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             } catch (Throwable e) {
                 FileLog.e("tmessages", e);
             }
+            this.videoView.destroy();
         }
 
         public void setBlock(TL_pageBlockEmbed block) {
+            Photo thumb = null;
             TL_pageBlockEmbed previousBlock = this.currentBlock;
             this.currentBlock = block;
             this.lastCreatedWidth = 0;
@@ -818,13 +880,21 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 try {
                     if (this.currentBlock.html != null) {
                         this.webView.loadData(this.currentBlock.html, "text/html", "UTF-8");
-                    } else if (!false) {
-                        this.webView.setVisibility(0);
-                        this.videoView.setVisibility(4);
-                        this.videoView.loadVideo(null, false);
-                        HashMap<String, String> args = new HashMap();
-                        args.put("Referer", "http://youtube.com");
-                        this.webView.loadUrl(this.currentBlock.url, args);
+                    } else {
+                        if (this.currentBlock.poster_photo_id != 0) {
+                            thumb = ArticleViewer.this.getPhotoWithId(this.currentBlock.poster_photo_id);
+                        }
+                        if (this.videoView.loadVideo(block.url, thumb, this.currentBlock.autoplay)) {
+                            this.webView.setVisibility(4);
+                            this.videoView.setVisibility(0);
+                        } else {
+                            this.webView.setVisibility(0);
+                            this.videoView.setVisibility(4);
+                            this.videoView.loadVideo(null, null, false);
+                            HashMap<String, String> args = new HashMap();
+                            args.put("Referer", "http://youtube.com");
+                            this.webView.loadUrl(this.currentBlock.url, args);
+                        }
                     }
                 } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
@@ -889,6 +959,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         height += AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
                     }
                 }
+                height += AndroidUtilities.dp(5.0f);
                 if (this.currentBlock.level > 0 && !this.currentBlock.bottom) {
                     height += AndroidUtilities.dp(8.0f);
                 } else if (this.currentBlock.level == 0 && this.textLayout != null) {
@@ -3255,7 +3326,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         return paint;
     }
 
-    private StaticLayout createLayoutForText(String plainText, RichText richText, int width, PageBlock parentBlock) {
+    private StaticLayout createLayoutForText(CharSequence plainText, RichText richText, int width, PageBlock parentBlock) {
         if (plainText == null && (richText == null || (richText instanceof TL_textEmpty))) {
             return null;
         }
@@ -3557,6 +3628,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.fullscreenVideoContainer.setBackgroundColor(-16777216);
             this.fullscreenVideoContainer.setVisibility(4);
             this.windowView.addView(this.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
+            this.fullscreenAspectRatioView = new AspectRatioFrameLayout(activity);
+            this.fullscreenAspectRatioView.setVisibility(8);
+            this.fullscreenVideoContainer.addView(this.fullscreenAspectRatioView, LayoutHelper.createFrame(-1, -1, 17));
+            this.fullscreenTextureView = new TextureView(activity);
             if (VERSION.SDK_INT >= 21) {
                 this.barBackground = new View(activity);
                 this.barBackground.setBackgroundColor(-16777216);
@@ -4219,11 +4294,15 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     public void collapse() {
         if (this.parentActivity != null && this.isVisible && !checkAnimation()) {
             int i;
-            if (this.customView != null && this.fullscreenVideoContainer.getVisibility() == 0) {
-                this.fullscreenVideoContainer.setVisibility(4);
-                this.customViewCallback.onCustomViewHidden();
-                this.fullscreenVideoContainer.removeView(this.customView);
-                this.customView = null;
+            if (this.fullscreenVideoContainer.getVisibility() == 0) {
+                if (this.customView != null) {
+                    this.fullscreenVideoContainer.setVisibility(4);
+                    this.customViewCallback.onCustomViewHidden();
+                    this.fullscreenVideoContainer.removeView(this.customView);
+                    this.customView = null;
+                } else if (this.fullscreenedVideo != null) {
+                    this.fullscreenedVideo.exitFullscreen();
+                }
             }
             if (this.isPhotoVisible) {
                 closePhoto(false);
@@ -4367,80 +4446,85 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     public void close(boolean byBackPress, boolean force) {
         if (this.parentActivity != null && this.isVisible && !checkAnimation()) {
-            if (this.customView == null || this.fullscreenVideoContainer.getVisibility() != 0) {
-                if (this.isPhotoVisible) {
-                    boolean z;
-                    if (force) {
-                        z = false;
-                    } else {
-                        z = true;
-                    }
-                    closePhoto(z);
-                    if (!force) {
-                        return;
-                    }
+            if (this.fullscreenVideoContainer.getVisibility() == 0) {
+                if (this.customView != null) {
+                    this.fullscreenVideoContainer.setVisibility(4);
+                    this.customViewCallback.onCustomViewHidden();
+                    this.fullscreenVideoContainer.removeView(this.customView);
+                    this.customView = null;
+                } else if (this.fullscreenedVideo != null) {
+                    this.fullscreenedVideo.exitFullscreen();
                 }
-                if (this.openUrlReqId != 0) {
-                    ConnectionsManager.getInstance().cancelRequest(this.openUrlReqId, true);
-                    this.openUrlReqId = 0;
-                    showProgressView(false);
-                }
-                if (this.previewsReqId != 0) {
-                    ConnectionsManager.getInstance().cancelRequest(this.previewsReqId, true);
-                    this.previewsReqId = 0;
-                    showProgressView(false);
-                }
-                saveCurrentPagePosition();
-                if (!byBackPress || force || !removeLastPageFromStack()) {
-                    try {
-                        if (this.visibleDialog != null) {
-                            this.visibleDialog.dismiss();
-                            this.visibleDialog = null;
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
-                    }
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    r2 = new Animator[3];
-                    r2[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f});
-                    r2[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
-                    r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)});
-                    animatorSet.playTogether(r2);
-                    this.animationInProgress = 2;
-                    this.animationEndRunnable = new Runnable() {
-                        public void run() {
-                            if (ArticleViewer.this.containerView != null) {
-                                if (VERSION.SDK_INT >= 18) {
-                                    ArticleViewer.this.containerView.setLayerType(0, null);
-                                }
-                                ArticleViewer.this.animationInProgress = 0;
-                                ArticleViewer.this.onClosed();
-                            }
-                        }
-                    };
-                    animatorSet.setDuration(150);
-                    animatorSet.setInterpolator(this.interpolator);
-                    animatorSet.addListener(new AnimatorListenerAdapterProxy() {
-                        public void onAnimationEnd(Animator animation) {
-                            if (ArticleViewer.this.animationEndRunnable != null) {
-                                ArticleViewer.this.animationEndRunnable.run();
-                                ArticleViewer.this.animationEndRunnable = null;
-                            }
-                        }
-                    });
-                    this.transitionAnimationStartTime = System.currentTimeMillis();
-                    if (VERSION.SDK_INT >= 18) {
-                        this.containerView.setLayerType(2, null);
-                    }
-                    animatorSet.start();
+                if (!force) {
                     return;
                 }
-                return;
             }
-            this.fullscreenVideoContainer.setVisibility(4);
-            this.customViewCallback.onCustomViewHidden();
-            this.fullscreenVideoContainer.removeView(this.customView);
-            this.customView = null;
+            if (this.isPhotoVisible) {
+                boolean z;
+                if (force) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                closePhoto(z);
+                if (!force) {
+                    return;
+                }
+            }
+            if (this.openUrlReqId != 0) {
+                ConnectionsManager.getInstance().cancelRequest(this.openUrlReqId, true);
+                this.openUrlReqId = 0;
+                showProgressView(false);
+            }
+            if (this.previewsReqId != 0) {
+                ConnectionsManager.getInstance().cancelRequest(this.previewsReqId, true);
+                this.previewsReqId = 0;
+                showProgressView(false);
+            }
+            saveCurrentPagePosition();
+            if (!byBackPress || force || !removeLastPageFromStack()) {
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.dismiss();
+                        this.visibleDialog = null;
+                    }
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+                AnimatorSet animatorSet = new AnimatorSet();
+                r2 = new Animator[3];
+                r2[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f});
+                r2[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
+                r2[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)});
+                animatorSet.playTogether(r2);
+                this.animationInProgress = 2;
+                this.animationEndRunnable = new Runnable() {
+                    public void run() {
+                        if (ArticleViewer.this.containerView != null) {
+                            if (VERSION.SDK_INT >= 18) {
+                                ArticleViewer.this.containerView.setLayerType(0, null);
+                            }
+                            ArticleViewer.this.animationInProgress = 0;
+                            ArticleViewer.this.onClosed();
+                        }
+                    }
+                };
+                animatorSet.setDuration(150);
+                animatorSet.setInterpolator(this.interpolator);
+                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                    public void onAnimationEnd(Animator animation) {
+                        if (ArticleViewer.this.animationEndRunnable != null) {
+                            ArticleViewer.this.animationEndRunnable.run();
+                            ArticleViewer.this.animationEndRunnable = null;
+                        }
+                    }
+                });
+                this.transitionAnimationStartTime = System.currentTimeMillis();
+                if (VERSION.SDK_INT >= 18) {
+                    this.containerView.setLayerType(2, null);
+                }
+                animatorSet.start();
+            }
         }
     }
 
@@ -4450,6 +4534,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.blocks.clear();
         this.photoBlocks.clear();
         this.adapter.notifyDataSetChanged();
+        try {
+            this.parentActivity.getWindow().clearFlags(128);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
         for (int a = 0; a < this.createdWebViews.size(); a++) {
             ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(false);
         }
@@ -4495,6 +4584,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(true);
             }
             this.createdWebViews.clear();
+            try {
+                this.parentActivity.getWindow().clearFlags(128);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
+            }
             Instance = null;
         }
     }
@@ -4665,6 +4759,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             ArticleViewer.this.containerView.invalidate();
                         }
                     }
+
+                    public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+                        return false;
+                    }
                 });
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
@@ -4677,7 +4775,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 duration /= 1000;
                 int ceil = (int) Math.ceil((double) this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})));
             }
-            this.videoPlayer.preparePlayer(Uri.fromFile(file));
+            this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             this.bottomLayout.setVisibility(0);
             this.videoPlayer.setPlayWhenReady(playWhenReady);
         }
@@ -5073,11 +5171,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int i = 4;
                 ArticleViewer.this.captionTextViewOld.setTag(null);
                 ArticleViewer.this.captionTextViewOld.setVisibility(4);
-                TextView access$10300 = ArticleViewer.this.captionTextViewNew;
+                TextView access$10800 = ArticleViewer.this.captionTextViewNew;
                 if (ArticleViewer.this.actionBar.getVisibility() == 0) {
                     i = 0;
                 }
-                access$10300.setVisibility(i);
+                access$10800.setVisibility(i);
             }
         });
     }

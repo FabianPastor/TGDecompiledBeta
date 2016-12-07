@@ -1,11 +1,11 @@
 package org.telegram.ui.Components;
 
 import android.annotation.SuppressLint;
+import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.TextureView;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
@@ -15,35 +15,40 @@ import org.telegram.messenger.exoplayer2.SimpleExoPlayer.VideoListener;
 import org.telegram.messenger.exoplayer2.Timeline;
 import org.telegram.messenger.exoplayer2.extractor.DefaultExtractorsFactory;
 import org.telegram.messenger.exoplayer2.source.ExtractorMediaSource;
+import org.telegram.messenger.exoplayer2.source.LoopingMediaSource;
 import org.telegram.messenger.exoplayer2.source.MediaSource;
+import org.telegram.messenger.exoplayer2.source.MergingMediaSource;
+import org.telegram.messenger.exoplayer2.source.TrackGroupArray;
 import org.telegram.messenger.exoplayer2.source.dash.DashMediaSource;
 import org.telegram.messenger.exoplayer2.source.dash.DefaultDashChunkSource;
+import org.telegram.messenger.exoplayer2.source.hls.HlsMediaSource;
+import org.telegram.messenger.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import org.telegram.messenger.exoplayer2.source.smoothstreaming.SsMediaSource;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import org.telegram.messenger.exoplayer2.trackselection.DefaultTrackSelector;
 import org.telegram.messenger.exoplayer2.trackselection.MappingTrackSelector;
-import org.telegram.messenger.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelections;
-import org.telegram.messenger.exoplayer2.trackselection.TrackSelector;
+import org.telegram.messenger.exoplayer2.trackselection.TrackSelectionArray;
 import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultBandwidthMeter;
 import org.telegram.messenger.exoplayer2.upstream.DefaultDataSourceFactory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @SuppressLint({"NewApi"})
-public class VideoPlayer implements EventListener, TrackSelector.EventListener<MappedTrackInfo>, VideoListener {
+public class VideoPlayer implements EventListener, VideoListener {
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final int RENDERER_BUILDING_STATE_BUILDING = 2;
     private static final int RENDERER_BUILDING_STATE_BUILT = 3;
     private static final int RENDERER_BUILDING_STATE_IDLE = 1;
+    private boolean autoplay;
     private VideoPlayerDelegate delegate;
     private boolean lastReportedPlayWhenReady;
-    private int lastReportedPlaybackState;
+    private int lastReportedPlaybackState = 1;
     private Handler mainHandler = new Handler();
-    private Factory mediaDataSourceFactory = new DefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory(Util.getUserAgent(ApplicationLoader.applicationContext, "Telegram"), BANDWIDTH_METER));
+    private Factory mediaDataSourceFactory = new DefaultDataSourceFactory(ApplicationLoader.applicationContext, BANDWIDTH_METER, new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", BANDWIDTH_METER));
     private SimpleExoPlayer player;
-    private MappingTrackSelector trackSelector = new DefaultTrackSelector(this.mainHandler, new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER));
+    private TextureView textureView;
+    private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER));
 
     public interface RendererBuilder {
         void buildRenderers(VideoPlayer videoPlayer);
@@ -58,70 +63,182 @@ public class VideoPlayer implements EventListener, TrackSelector.EventListener<M
 
         void onStateChanged(boolean z, int i);
 
+        boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture);
+
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
-    public VideoPlayer() {
-        this.trackSelector.addListener(this);
-        this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, false);
-        this.player.addListener(this);
-        this.player.setVideoListener(this);
-        this.lastReportedPlaybackState = 1;
+    private void ensurePleyaerCreated() {
+        if (this.player == null) {
+            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 0);
+            this.player.addListener(this);
+            this.player.setVideoListener(this);
+            this.player.setVideoTextureView(this.textureView);
+            this.player.setPlayWhenReady(this.autoplay);
+        }
     }
 
-    public void preparePlayer(Uri uri) {
+    public void preparePlayerLoop(Uri videoUri, String videoType, Uri audioUri, String audioType) {
+        ensurePleyaerCreated();
+        MediaSource mediaSource1 = null;
+        MediaSource mediaSource2 = null;
+        for (int a = 0; a < 2; a++) {
+            String type;
+            Uri uri;
+            MediaSource mediaSource;
+            if (a == 0) {
+                type = videoType;
+                uri = videoUri;
+            } else {
+                type = audioType;
+                uri = audioUri;
+            }
+            Object obj = -1;
+            switch (type.hashCode()) {
+                case 3680:
+                    if (type.equals("ss")) {
+                        obj = 2;
+                        break;
+                    }
+                    break;
+                case 103407:
+                    if (type.equals("hls")) {
+                        obj = 1;
+                        break;
+                    }
+                    break;
+                case 3075986:
+                    if (type.equals("dash")) {
+                        obj = null;
+                        break;
+                    }
+                    break;
+            }
+            switch (obj) {
+                case null:
+                    mediaSource = new DashMediaSource(uri, this.mediaDataSourceFactory, new DefaultDashChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
+                    break;
+                case 1:
+                    mediaSource = new HlsMediaSource(uri, this.mediaDataSourceFactory, this.mainHandler, null);
+                    break;
+                case 2:
+                    mediaSource = new SsMediaSource(uri, this.mediaDataSourceFactory, new DefaultSsChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
+                    break;
+                default:
+                    mediaSource = new ExtractorMediaSource(uri, this.mediaDataSourceFactory, new DefaultExtractorsFactory(), this.mainHandler, null);
+                    break;
+            }
+            MediaSource mediaSource3 = new LoopingMediaSource(mediaSource);
+            if (a == 0) {
+                mediaSource1 = mediaSource3;
+            } else {
+                mediaSource2 = mediaSource3;
+            }
+        }
+        MergingMediaSource mergingMediaSource = new MergingMediaSource(mediaSource1, mediaSource2);
+        this.player.prepare(mediaSource1, true, true);
+    }
+
+    public void preparePlayer(Uri uri, String type) {
         MediaSource mediaSource;
-        FileLog.e("tmessages", "open url " + uri);
-        if (uri.getScheme().startsWith("http")) {
-            mediaSource = new DashMediaSource(uri, this.mediaDataSourceFactory, new DefaultDashChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
-        } else {
-            mediaSource = new ExtractorMediaSource(uri, this.mediaDataSourceFactory, new DefaultExtractorsFactory(), this.mainHandler, null);
+        ensurePleyaerCreated();
+        boolean z = true;
+        switch (type.hashCode()) {
+            case 3680:
+                if (type.equals("ss")) {
+                    z = true;
+                    break;
+                }
+                break;
+            case 103407:
+                if (type.equals("hls")) {
+                    z = true;
+                    break;
+                }
+                break;
+            case 3075986:
+                if (type.equals("dash")) {
+                    z = false;
+                    break;
+                }
+                break;
+        }
+        switch (z) {
+            case false:
+                mediaSource = new DashMediaSource(uri, this.mediaDataSourceFactory, new DefaultDashChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
+                break;
+            case true:
+                mediaSource = new HlsMediaSource(uri, this.mediaDataSourceFactory, this.mainHandler, null);
+                break;
+            case true:
+                mediaSource = new SsMediaSource(uri, this.mediaDataSourceFactory, new DefaultSsChunkSource.Factory(this.mediaDataSourceFactory), this.mainHandler, null);
+                break;
+            default:
+                mediaSource = new ExtractorMediaSource(uri, this.mediaDataSourceFactory, new DefaultExtractorsFactory(), this.mainHandler, null);
+                break;
         }
         this.player.prepare(mediaSource, true, true);
+    }
+
+    public boolean isPlayerPrepared() {
+        return this.player != null;
     }
 
     public void releasePlayer() {
         if (this.player != null) {
             this.player.release();
             this.player = null;
-            this.trackSelector = null;
         }
     }
 
-    public void setTextureView(TextureView textureView) {
-        this.player.setVideoTextureView(textureView);
+    public void setTextureView(TextureView texture) {
+        this.textureView = texture;
+        if (this.player != null) {
+            this.player.setVideoTextureView(this.textureView);
+        }
     }
 
     public void play() {
-        this.player.setPlayWhenReady(true);
+        if (this.player != null) {
+            this.player.setPlayWhenReady(true);
+        }
     }
 
     public void pause() {
-        this.player.setPlayWhenReady(false);
+        if (this.player != null) {
+            this.player.setPlayWhenReady(false);
+        }
     }
 
     public void setPlayWhenReady(boolean playWhenReady) {
-        this.player.setPlayWhenReady(playWhenReady);
+        this.autoplay = playWhenReady;
+        if (this.player != null) {
+            this.player.setPlayWhenReady(playWhenReady);
+        }
     }
 
     public long getDuration() {
-        return this.player.getDuration();
+        return this.player != null ? this.player.getDuration() : 0;
     }
 
     public long getCurrentPosition() {
-        return this.player.getCurrentPosition();
+        return this.player != null ? this.player.getCurrentPosition() : 0;
     }
 
     public void setMute(boolean value) {
-        if (value) {
-            this.player.setVolume(0.0f);
-        } else {
-            this.player.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        if (this.player != null) {
+            if (value) {
+                this.player.setVolume(0.0f);
+            } else {
+                this.player.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            }
         }
     }
 
     public void seekTo(long positionMs) {
-        this.player.seekTo(positionMs);
+        if (this.player != null) {
+            this.player.seekTo(positionMs);
+        }
     }
 
     public void setDelegate(VideoPlayerDelegate videoPlayerDelegate) {
@@ -129,15 +246,15 @@ public class VideoPlayer implements EventListener, TrackSelector.EventListener<M
     }
 
     public int getBufferedPercentage() {
-        return this.player.getBufferedPercentage();
+        return this.player != null ? this.player.getBufferedPercentage() : 0;
     }
 
     public long getBufferedPosition() {
-        return this.player.getBufferedPosition();
+        return this.player != null ? this.player.getBufferedPosition() : 0;
     }
 
     public boolean isPlaying() {
-        return this.player.getPlayWhenReady();
+        return this.player != null && this.player.getPlayWhenReady();
     }
 
     public void onLoadingChanged(boolean isLoading) {
@@ -157,7 +274,7 @@ public class VideoPlayer implements EventListener, TrackSelector.EventListener<M
     public void onPositionDiscontinuity() {
     }
 
-    public void onTrackSelectionsChanged(TrackSelections<? extends MappedTrackInfo> trackSelections) {
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
     }
 
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -168,7 +285,8 @@ public class VideoPlayer implements EventListener, TrackSelector.EventListener<M
         this.delegate.onRenderedFirstFrame();
     }
 
-    public void onVideoTracksDisabled() {
+    public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+        return this.delegate.onSurfaceDestroyed(surfaceTexture);
     }
 
     private void maybeReportPlayerState() {

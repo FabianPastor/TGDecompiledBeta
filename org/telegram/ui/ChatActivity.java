@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
+import android.provider.Settings.System;
 import android.support.v4.content.FileProvider;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -219,6 +220,7 @@ import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.ChatAttachAlert.ChatAttachViewDelegate;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.ChatBigEmptyView;
+import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.ExtendedGridLayoutManager;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
@@ -235,7 +237,6 @@ import org.telegram.ui.Components.URLSpanBotCommand;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
-import org.telegram.ui.Components.WebFrameLayout;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 import org.telegram.ui.DocumentSelectActivity.DocumentSelectActivityDelegate;
 import org.telegram.ui.LocationActivity.LocationActivityDelegate;
@@ -756,10 +757,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
 
                     public void needOpenWebView(String url, String title, String description, String originalUrl, int w, int h) {
-                        Builder builder = new Builder(ChatActivityAdapter.this.mContext);
-                        builder.setCustomView(new WebFrameLayout(ChatActivityAdapter.this.mContext, builder.create(), title, description, originalUrl, url, w, h));
-                        builder.setUseFullWidth(true);
-                        ChatActivity.this.showDialog(builder.create());
+                        ChatActivity.this.showDialog(new EmbedBottomSheet(ChatActivityAdapter.this.mContext, title, description, originalUrl, url, w, h));
                     }
 
                     public void didPressedReplyMessage(ChatMessageCell cell, int id) {
@@ -1587,7 +1585,29 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     ChatActivity.this.openSearchWithText(null);
                 } else if (id != 32) {
                 } else {
-                    if (VERSION.SDK_INT < 23 || ChatActivity.this.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                    if (ConnectionsManager.getInstance().getConnectionState() != 3) {
+                        CharSequence string;
+                        boolean isAirplaneMode = System.getInt(ChatActivity.this.getParentActivity().getContentResolver(), "airplane_mode_on", 0) != 0;
+                        AlertDialog.Builder title = new AlertDialog.Builder(ChatActivity.this.getParentActivity()).setTitle(isAirplaneMode ? LocaleController.getString("VoipOfflineAirplaneTitle", R.string.VoipOfflineAirplaneTitle) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle));
+                        if (isAirplaneMode) {
+                            string = LocaleController.getString("VoipOfflineAirplane", R.string.VoipOfflineAirplane);
+                        } else {
+                            string = LocaleController.getString("VoipOffline", R.string.VoipOffline);
+                        }
+                        AlertDialog.Builder bldr = title.setMessage(string).setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        if (isAirplaneMode) {
+                            Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
+                            if (intent.resolveActivity(ChatActivity.this.getParentActivity().getPackageManager()) != null) {
+                                final Intent intent2 = intent;
+                                bldr.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", R.string.VoipOfflineOpenSettings), new OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ChatActivity.this.getParentActivity().startActivity(intent2);
+                                    }
+                                });
+                            }
+                        }
+                        bldr.show();
+                    } else if (VERSION.SDK_INT < 23 || ChatActivity.this.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
                         ChatActivity.this.initiateCall();
                     } else {
                         ChatActivity.this.getParentActivity().requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
@@ -2615,13 +2635,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 public void onContextClick(BotInlineResult result) {
                     if (ChatActivity.this.getParentActivity() != null && result.content_url != null) {
                         if (result.type.equals(MimeTypes.BASE_TYPE_VIDEO) || result.type.equals("web_player_video")) {
-                            Builder builder = new Builder(ChatActivity.this.getParentActivity());
-                            builder.setCustomView(new WebFrameLayout(ChatActivity.this.getParentActivity(), builder.create(), result.title != null ? result.title : "", result.description, result.content_url, result.content_url, result.w, result.h));
-                            builder.setUseFullWidth(true);
-                            ChatActivity.this.showDialog(builder.create());
-                            return;
+                            ChatActivity.this.showDialog(new EmbedBottomSheet(ChatActivity.this.getParentActivity(), result.title != null ? result.title : "", result.description, result.content_url, result.content_url, result.w, result.h));
+                        } else {
+                            Browser.openUrl(ChatActivity.this.getParentActivity(), result.content_url);
                         }
-                        Browser.openUrl(ChatActivity.this.getParentActivity(), result.content_url);
                     }
                 }
             });

@@ -19,6 +19,7 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -1989,6 +1990,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             PhotoViewer.this.containerView.invalidate();
                         }
                     }
+
+                    public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
+                        return false;
+                    }
                 });
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
@@ -2001,7 +2006,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 duration /= 1000;
                 int ceil = (int) Math.ceil((double) this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})));
             }
-            this.videoPlayer.preparePlayer(Uri.fromFile(file));
+            this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
             if (this.videoPlayerControlFrameLayout != null) {
                 if (this.currentBotInlineResult != null && (this.currentBotInlineResult.type.equals(MimeTypes.BASE_TYPE_VIDEO) || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
                     this.bottomLayout.setVisibility(0);
