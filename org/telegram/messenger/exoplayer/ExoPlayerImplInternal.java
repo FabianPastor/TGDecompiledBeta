@@ -227,10 +227,10 @@ final class ExoPlayerImplInternal implements Callback {
 
     private void incrementalPrepareInternal() throws ExoPlaybackException {
         int rendererIndex;
+        TrackRenderer renderer;
         long operationStartTimeMs = SystemClock.elapsedRealtime();
         boolean prepared = true;
-        for (TrackRenderer renderer : this.renderers) {
-            TrackRenderer renderer2;
+        for (TrackRenderer renderer2 : this.renderers) {
             if (renderer2.getState() == 0 && renderer2.prepare(this.positionUs) == 0) {
                 renderer2.maybeThrowError();
                 prepared = false;
