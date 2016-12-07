@@ -405,7 +405,7 @@ public class MentionsAdapter extends Adapter {
         if (query == null || user == null) {
             this.searchingContextQuery = null;
         } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-            StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append(offset).append(this.dialog_id).append(user.id);
+            StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.id).append("_");
             Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? "" : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
             final String key = append.append(valueOf).toString();
             final String str = query;

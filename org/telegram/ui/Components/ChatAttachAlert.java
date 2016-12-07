@@ -939,7 +939,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
 
                 public void shutterReleased() {
-                    if (!ChatAttachAlert.this.takingPhoto) {
+                    if (!ChatAttachAlert.this.takingPhoto && ChatAttachAlert.this.cameraView != null) {
                         if (ChatAttachAlert.this.shutterButton.getState() == ShutterButton.State.RECORDING) {
                             ChatAttachAlert.this.resetRecordState();
                             CameraController.getInstance().stopVideoRecording(ChatAttachAlert.this.cameraView.getCameraSession(), false);
@@ -1270,22 +1270,24 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     public void onPause() {
-        if (this.shutterButton.getState() == ShutterButton.State.RECORDING) {
-            resetRecordState();
-            CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), false);
-            this.shutterButton.setState(ShutterButton.State.DEFAULT, true);
+        if (this.shutterButton != null) {
+            if (this.cameraView != null && this.shutterButton.getState() == ShutterButton.State.RECORDING) {
+                resetRecordState();
+                CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), false);
+                this.shutterButton.setState(ShutterButton.State.DEFAULT, true);
+            }
+            if (this.cameraOpened) {
+                closeCamera(false);
+            }
+            hideCamera(true);
+            this.paused = true;
         }
-        if (this.cameraOpened) {
-            closeCamera(false);
-        }
-        hideCamera(true);
-        this.paused = true;
     }
 
     public void onResume() {
         this.paused = false;
-        if (isShowing()) {
-            showCamera();
+        if (isShowing() && !isDismissed()) {
+            checkCamera(true);
         }
     }
 

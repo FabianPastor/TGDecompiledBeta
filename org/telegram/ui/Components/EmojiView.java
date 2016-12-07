@@ -2116,39 +2116,39 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     private void updateVisibleTrendingSets() {
-        int count = this.trendingGridView.getChildCount();
-        for (int a = 0; a < count; a++) {
-            View child = this.trendingGridView.getChildAt(a);
-            if (child instanceof FeaturedStickerSetInfoCell) {
-                Holder holder = (Holder) this.trendingGridView.getChildViewHolder(child);
-                if (holder != null) {
-                    boolean z;
-                    FeaturedStickerSetInfoCell cell = (FeaturedStickerSetInfoCell) child;
-                    ArrayList<Long> unreadStickers = StickersQuery.getUnreadStickerSets();
-                    StickerSetCovered stickerSetCovered = (StickerSetCovered) this.trendingGridAdapter.sets.get(((Integer) this.trendingGridAdapter.cache.get(Integer.valueOf(holder.getAdapterPosition()))).intValue());
-                    boolean unread = unreadStickers != null && unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id));
-                    cell.setStickerSet(stickerSetCovered, unread);
-                    if (unread) {
-                        StickersQuery.markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
-                    }
-                    boolean installing = this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
-                    boolean removing = this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
-                    if (installing || removing) {
-                        if (installing && cell.isInstalled()) {
-                            this.installingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
-                            installing = false;
-                        } else if (removing && !cell.isInstalled()) {
-                            this.removingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
-                            removing = false;
+        if (this.trendingGridAdapter != null && this.trendingGridAdapter != null) {
+            try {
+                int count = this.trendingGridView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = this.trendingGridView.getChildAt(a);
+                    if ((child instanceof FeaturedStickerSetInfoCell) && ((Holder) this.trendingGridView.getChildViewHolder(child)) != null) {
+                        FeaturedStickerSetInfoCell cell = (FeaturedStickerSetInfoCell) child;
+                        ArrayList<Long> unreadStickers = StickersQuery.getUnreadStickerSets();
+                        StickerSetCovered stickerSetCovered = cell.getStickerSet();
+                        boolean unread = unreadStickers != null && unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id));
+                        cell.setStickerSet(stickerSetCovered, unread);
+                        if (unread) {
+                            StickersQuery.markFaturedStickersByIdAsRead(stickerSetCovered.set.id);
                         }
+                        boolean installing = this.installingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
+                        boolean removing = this.removingStickerSets.containsKey(Long.valueOf(stickerSetCovered.set.id));
+                        if (installing || removing) {
+                            if (installing && cell.isInstalled()) {
+                                this.installingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                                installing = false;
+                            } else if (removing) {
+                                if (!cell.isInstalled()) {
+                                    this.removingStickerSets.remove(Long.valueOf(stickerSetCovered.set.id));
+                                    removing = false;
+                                }
+                            }
+                        }
+                        boolean z = installing || removing;
+                        cell.setDrawProgress(z);
                     }
-                    if (installing || removing) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
-                    cell.setDrawProgress(z);
                 }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
             }
         }
     }

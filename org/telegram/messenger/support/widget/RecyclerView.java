@@ -2273,11 +2273,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
+            View view;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
-                View view;
                 ViewHolder vh;
                 int layoutIndex;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);

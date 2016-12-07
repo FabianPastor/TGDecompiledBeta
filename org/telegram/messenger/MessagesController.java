@@ -3101,7 +3101,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3118,6 +3117,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -4812,8 +4812,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
-        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
+            long newTaskId;
             this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
             TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
             inputPeer.channel_id = channel.id;
@@ -6094,8 +6094,6 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
-        ArrayList<Integer> arrayList3;
-        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6149,6 +6147,8 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
+            ArrayList<Integer> arrayList3;
+            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("tmessages", "process update " + update);
             Message message;

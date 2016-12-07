@@ -257,9 +257,9 @@ public final class zzaos {
     }
 
     public <T> zzapk<T> zza(zzaqo<T> com_google_android_gms_internal_zzaqo_T) {
+        Map map;
         zzapk<T> com_google_android_gms_internal_zzapk_T = (zzapk) this.bob.get(com_google_android_gms_internal_zzaqo_T);
         if (com_google_android_gms_internal_zzapk_T == null) {
-            Map map;
             Map map2 = (Map) this.boa.get();
             Object obj = null;
             if (map2 == null) {

@@ -1054,7 +1054,7 @@
     <string name="SaveToGallerySettings">Salva nella galleria</string>
     <string name="SaveToMusic">Salva nella musica</string>
     <string name="ScreenCapture">Consenti cattura schermo</string>
-    <string name="ScreenCaptureInfo">Se attivata, puoi fare screenshot dell\'app, ma il sistema mostrerà le tue chat nel task switcher anche quando il codice di blocco è attivo./n/nPotresti dover riavviare l\'app per rendere effettive le modifiche.</string>
+    <string name="ScreenCaptureInfo">Se attivata, puoi fare screenshot dell\'app, ma il sistema mostrerà le tue chat nel task switcher anche quando il codice di blocco è attivo.\n\nPotresti dover riavviare l\'app per rendere effettive le modifiche.</string>
     <string name="SdCard">Scheda SD</string>
     <string name="Search">Cerca</string>
     <string name="SearchGifs">CERCA GIF</string>
