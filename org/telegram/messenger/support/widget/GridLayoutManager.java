@@ -496,7 +496,6 @@ public class GridLayoutManager extends LinearLayoutManager {
     }
 
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
-        View view;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean flexibleInOtherDir = otherDirSpecMode != NUM;
         int currentOtherDirSize = getChildCount() > 0 ? this.mCachedBorders[this.mSpanCount] : 0;
@@ -513,6 +512,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
             int pos = layoutState.mCurrentPosition;
             int spanSize = getSpanSize(recycler, state, pos);
+            View view;
             if (spanSize <= this.mSpanCount) {
                 remainingSpan -= spanSize;
                 if (remainingSpan >= 0) {

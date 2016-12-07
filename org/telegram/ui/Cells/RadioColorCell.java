@@ -21,7 +21,8 @@ public class RadioColorCell extends FrameLayout {
 
     public RadioColorCell(Context context) {
         int i;
-        int i2 = 5;
+        int i2 = 0;
+        int i3 = 5;
         super(context);
         if (paint == null) {
             paint = new Paint();
@@ -31,7 +32,13 @@ public class RadioColorCell extends FrameLayout {
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
         this.radioButton.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
-        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 18), 13.0f, (float) (LocaleController.isRTL ? 18 : 0), 0.0f));
+        View view = this.radioButton;
+        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+        float f = (float) (LocaleController.isRTL ? 0 : 18);
+        if (LocaleController.isRTL) {
+            i2 = 18;
+        }
+        addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(-14606047);
         this.textView.setTextSize(1, 16.0f);
@@ -45,11 +52,11 @@ public class RadioColorCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 16);
-        View view = this.textView;
+        view = this.textView;
         if (!LocaleController.isRTL) {
-            i2 = 3;
+            i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 51), 13.0f, (float) (LocaleController.isRTL ? 51 : 17), 0.0f));
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, (float) (LocaleController.isRTL ? 17 : 51), 12.0f, (float) (LocaleController.isRTL ? 51 : 17), 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

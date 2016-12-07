@@ -1357,6 +1357,8 @@
     <string name="NotificationsOff">Off</string>
     <string name="NotificationsOn">On</string>
     <string name="NotificationsPrioritySettings">Settings value</string>
+    <string name="PopupDisabled">Disabled</string>
+    <string name="PopupEnabled">Enabled</string>
     <string name="PriorityInfo">Maximum Priority notifications will work even when your phone is in Do no Disturbe mode.</string>
     <string name="ProfilePopupNotification">Popup notifications</string>
     <string name="ProfilePopupNotificationInfo">New messages from this contact will appear on your screen when you are not using Telegram.</string>

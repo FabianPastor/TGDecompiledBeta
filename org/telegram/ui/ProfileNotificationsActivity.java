@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -31,16 +30,12 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.C;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.TL_dialog;
-import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -52,6 +47,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.LayoutHelper;
 
 public class ProfileNotificationsActivity extends BaseFragment implements NotificationCenterDelegate {
     private int colorRow;
@@ -329,12 +325,12 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     }
                     if (i != ProfileNotificationsActivity.this.popupEnabledRow) {
                         if (i == ProfileNotificationsActivity.this.popupDisabledRow) {
-                            radioCell.setText(LocaleController.getString("Disabled", R.string.Disabled), popup == 2, false);
+                            radioCell.setText(LocaleController.getString("PopupDisabled", R.string.PopupDisabled), popup == 2, false);
                             radioCell.setTag(Integer.valueOf(2));
                             break;
                         }
                     }
-                    radioCell.setText(LocaleController.getString("Enabled", R.string.Enabled), popup == 1, true);
+                    radioCell.setText(LocaleController.getString("PopupEnabled", R.string.PopupEnabled), popup == 1, true);
                     radioCell.setTag(Integer.valueOf(1));
                     break;
                     break;
@@ -467,43 +463,19 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.listView.setDividerHeight(0);
         this.listView.setVerticalScrollBarEnabled(false);
         AndroidUtilities.setListViewEdgeEffectColor(this.listView, AvatarDrawable.getProfileBackColorForId(5));
-        frameLayout.addView(this.listView);
-        LayoutParams layoutParams = (LayoutParams) this.listView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        this.listView.setLayoutParams(layoutParams);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(new ListAdapter(context));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Builder builder;
                 if (i == ProfileNotificationsActivity.this.notificationsRow) {
                     if (ProfileNotificationsActivity.this.getParentActivity() != null) {
-                        builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setItems(new CharSequence[]{LocaleController.getString("Default", R.string.Default), LocaleController.getString("Enabled", R.string.Enabled), LocaleController.getString("NotificationsDisabled", R.string.NotificationsDisabled)}, new OnClickListener() {
-                            public void onClick(DialogInterface d, int which) {
-                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                                editor.putInt("notify2_" + ProfileNotificationsActivity.this.dialog_id, which);
-                                if (which == 2) {
-                                    NotificationsController.getInstance().removeNotificationsForDialog(ProfileNotificationsActivity.this.dialog_id);
-                                }
-                                MessagesStorage.getInstance().setDialogFlags(ProfileNotificationsActivity.this.dialog_id, which == 2 ? 1 : 0);
-                                editor.commit();
-                                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(ProfileNotificationsActivity.this.dialog_id));
-                                if (dialog != null) {
-                                    dialog.notify_settings = new TL_peerNotifySettings();
-                                    if (which == 2) {
-                                        dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
-                                    }
-                                }
+                        ProfileNotificationsActivity.this.showDialog(AlertsCreator.createNotificationsSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, new Runnable() {
+                            public void run() {
                                 if (ProfileNotificationsActivity.this.listView != null) {
                                     ProfileNotificationsActivity.this.listView.invalidateViews();
                                 }
-                                NotificationsController.updateServerNotificationsSettings(ProfileNotificationsActivity.this.dialog_id);
                             }
-                        });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        ProfileNotificationsActivity.this.showDialog(builder.create());
+                        }));
                     }
                 } else if (i == ProfileNotificationsActivity.this.soundRow) {
                     try {
@@ -530,50 +502,21 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         FileLog.e("tmessages", e);
                     }
                 } else if (i == ProfileNotificationsActivity.this.vibrateRow) {
-                    builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
-                    builder.setItems(new CharSequence[]{LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long)}, new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                            if (which == 0) {
-                                editor.putInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 0);
-                            } else if (which == 1) {
-                                editor.putInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 1);
-                            } else if (which == 2) {
-                                editor.putInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 3);
-                            }
-                            editor.commit();
+                    ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new Runnable() {
+                        public void run() {
                             if (ProfileNotificationsActivity.this.listView != null) {
                                 ProfileNotificationsActivity.this.listView.invalidateViews();
                             }
                         }
-                    });
-                    builder.setNeutralButton(LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("vibrate_" + ProfileNotificationsActivity.this.dialog_id, 2).commit();
-                            ProfileNotificationsActivity.this.listView.invalidateViews();
-                        }
-                    });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    ProfileNotificationsActivity.this.showDialog(builder.create());
+                    }));
                 } else if (i == ProfileNotificationsActivity.this.priorityRow) {
-                    builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
-                    builder.setItems(new CharSequence[]{LocaleController.getString("NotificationsPrioritySettings", R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)}, new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which == 0) {
-                                which = 3;
-                            } else {
-                                which--;
-                            }
-                            ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("priority_" + ProfileNotificationsActivity.this.dialog_id, which).commit();
+                    ProfileNotificationsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, false, false, new Runnable() {
+                        public void run() {
                             if (ProfileNotificationsActivity.this.listView != null) {
                                 ProfileNotificationsActivity.this.listView.invalidateViews();
                             }
                         }
-                    });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    ProfileNotificationsActivity.this.showDialog(builder.create());
+                    }));
                 } else if (i == ProfileNotificationsActivity.this.smartRow) {
                     if (ProfileNotificationsActivity.this.getParentActivity() != null) {
                         final Context context1 = ProfileNotificationsActivity.this.getParentActivity();
@@ -633,7 +576,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
                             }
                         });
-                        builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
+                        Builder builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("SmartNotificationsAlert", R.string.SmartNotificationsAlert));
                         builder.setView(list);
                         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);

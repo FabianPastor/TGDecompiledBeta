@@ -162,13 +162,6 @@ public class CameraController implements OnInfoListener {
     public void close(final CameraSession session, final Semaphore semaphore) {
         session.destroy();
         final Camera camera = session.cameraInfo.camera;
-        if (camera != null) {
-            try {
-                camera.unlock();
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-            }
-        }
         this.threadPool.execute(new Runnable() {
             public void run() {
                 session.cameraInfo.camera = null;
@@ -188,8 +181,8 @@ public class CameraController implements OnInfoListener {
         if (semaphore != null) {
             try {
                 semaphore.acquire();
-            } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
             }
         }
     }

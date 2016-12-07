@@ -1659,6 +1659,8 @@ public final class R {
         public static final int Points_other = NUM;
         public static final int Points_two = NUM;
         public static final int Points_zero = NUM;
+        public static final int PopupDisabled = NUM;
+        public static final int PopupEnabled = NUM;
         public static final int PopupNotification = NUM;
         public static final int PriorityInfo = NUM;
         public static final int PrivacyFloodControlError = NUM;

@@ -302,7 +302,7 @@ public class AlertsCreator {
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         String[] descriptions = new String[]{LocaleController.getString("ColorRed", R.string.ColorRed), LocaleController.getString("ColorOrange", R.string.ColorOrange), LocaleController.getString("ColorYellow", R.string.ColorYellow), LocaleController.getString("ColorGreen", R.string.ColorGreen), LocaleController.getString("ColorCyan", R.string.ColorCyan), LocaleController.getString("ColorBlue", R.string.ColorBlue), LocaleController.getString("ColorViolet", R.string.ColorViolet), LocaleController.getString("ColorPink", R.string.ColorPink), LocaleController.getString("ColorWhite", R.string.ColorWhite)};
-        final int[] selectedColor = new int[1];
+        final int[] selectedColor = new int[]{currentColor};
         for (int a = 0; a < 9; a++) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setTag(Integer.valueOf(a));
@@ -384,6 +384,312 @@ public class AlertsCreator {
                 }
             });
         }
+        return builder.create();
+    }
+
+    public static Dialog createNotificationsSelectDialog(Activity parentActivity, long dialog_id, Runnable onSelect) {
+        final int[] selected = new int[]{ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getInt("notify2_" + dialog_id, 0)};
+        String[] descriptions = new String[]{LocaleController.getString("Default", R.string.Default), LocaleController.getString("Enabled", R.string.Enabled), LocaleController.getString("NotificationsDisabled", R.string.NotificationsDisabled)};
+        ScrollView scrollView = new ScrollView(parentActivity);
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(-13129232);
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                }
+            });
+            a++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
+        builder.setView(scrollView);
+        final long j = dialog_id;
+        final Runnable runnable = onSelect;
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                editor.putInt("notify2_" + j, selected[0]);
+                if (selected[0] == 2) {
+                    NotificationsController.getInstance().removeNotificationsForDialog(j);
+                }
+                MessagesStorage.getInstance().setDialogFlags(j, selected[0] == 2 ? 1 : 0);
+                editor.commit();
+                TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(j));
+                if (dialog != null) {
+                    dialog.notify_settings = new TL_peerNotifySettings();
+                    if (selected[0] == 2) {
+                        dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                    }
+                }
+                NotificationsController.updateServerNotificationsSettings(j);
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        });
+        return builder.create();
+    }
+
+    public static Dialog createVibrationSelectDialog(Activity parentActivity, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        String[] descriptions;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        final int[] selected = new int[1];
+        if (dialog_id != 0) {
+            selected[0] = preferences.getInt("vibrate_" + dialog_id, 0);
+            if (selected[0] == 3) {
+                selected[0] = 2;
+            } else if (selected[0] == 2) {
+                selected[0] = 3;
+            }
+            descriptions = new String[]{LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long)};
+        } else {
+            if (globalAll) {
+                selected[0] = preferences.getInt("vibrate_messages", 0);
+            } else if (globalGroup) {
+                selected[0] = preferences.getInt("vibrate_group", 0);
+            }
+            if (selected[0] == 0) {
+                selected[0] = 1;
+            } else if (selected[0] == 1) {
+                selected[0] = 2;
+            } else if (selected[0] == 2) {
+                selected[0] = 0;
+            }
+            descriptions = new String[]{LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long), LocaleController.getString("OnlyIfSilent", R.string.OnlyIfSilent)};
+        }
+        View scrollView = new ScrollView(parentActivity);
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(-13129232);
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                }
+            });
+            a++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
+        builder.setView(scrollView);
+        final long j = dialog_id;
+        final boolean z = globalGroup;
+        final Runnable runnable = onSelect;
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int a) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                if (j == 0) {
+                    String param = z ? "vibrate_group" : "vibrate_messages";
+                    if (selected[0] == 0) {
+                        editor.putInt(param, 2);
+                    } else if (selected[0] == 1) {
+                        editor.putInt(param, 0);
+                    } else if (selected[0] == 2) {
+                        editor.putInt(param, 1);
+                    } else if (selected[0] == 3) {
+                        editor.putInt(param, 3);
+                    } else if (selected[0] == 4) {
+                        editor.putInt(param, 4);
+                    }
+                } else if (selected[0] == 0) {
+                    editor.putInt("vibrate_" + j, 0);
+                } else if (selected[0] == 1) {
+                    editor.putInt("vibrate_" + j, 1);
+                } else if (selected[0] == 2) {
+                    editor.putInt("vibrate_" + j, 3);
+                } else if (selected[0] == 3) {
+                    editor.putInt("vibrate_" + j, 2);
+                }
+                editor.commit();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        });
+        if (dialog_id != 0) {
+            final long j2 = dialog_id;
+            final Runnable runnable2 = onSelect;
+            builder.setNeutralButton(LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("vibrate_" + j2, 2).commit();
+                    if (runnable2 != null) {
+                        runnable2.run();
+                    }
+                }
+            });
+        }
+        return builder.create();
+    }
+
+    public static Dialog createPrioritySelectDialog(Activity parentActivity, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        String[] descriptions;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        final int[] selected = new int[1];
+        if (dialog_id != 0) {
+            selected[0] = preferences.getInt("priority_" + dialog_id, 3);
+            if (selected[0] == 3) {
+                selected[0] = 0;
+            } else {
+                selected[0] = selected[0] + 1;
+            }
+            descriptions = new String[]{LocaleController.getString("NotificationsPrioritySettings", R.string.NotificationsPrioritySettings), LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)};
+        } else {
+            if (globalAll) {
+                selected[0] = preferences.getInt("priority_messages", 1);
+            } else if (globalGroup) {
+                selected[0] = preferences.getInt("priority_group", 1);
+            }
+            descriptions = new String[]{LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)};
+        }
+        ScrollView scrollView = new ScrollView(parentActivity);
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(-13129232);
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                }
+            });
+            a++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
+        builder.setView(scrollView);
+        final long j = dialog_id;
+        final boolean z = globalGroup;
+        final Runnable runnable = onSelect;
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                if (j != 0) {
+                    if (selected[0] == 0) {
+                        selected[0] = 3;
+                    } else {
+                        int[] iArr = selected;
+                        iArr[0] = iArr[0] - 1;
+                    }
+                    editor.putInt("priority_" + j, selected[0]);
+                } else {
+                    editor.putInt(z ? "priority_group" : "priority_messages", selected[0]);
+                }
+                editor.commit();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        });
+        return builder.create();
+    }
+
+    public static Dialog createPopupSelectDialog(Activity parentActivity, final boolean globalGroup, boolean globalAll, final Runnable onSelect) {
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        final int[] selected = new int[1];
+        if (globalAll) {
+            selected[0] = preferences.getInt("popupAll", 0);
+        } else if (globalGroup) {
+            selected[0] = preferences.getInt("popupGroup", 0);
+        }
+        String[] descriptions = new String[]{LocaleController.getString("NoPopup", R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", R.string.AlwaysShowPopup)};
+        ScrollView scrollView = new ScrollView(parentActivity);
+        final LinearLayout linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        int a = 0;
+        while (a < descriptions.length) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(-13129232);
+            cell.setTextAndValue(descriptions[a], selected[0] == a);
+            linearLayout.addView(cell);
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selected[0] = ((Integer) v.getTag()).intValue();
+                }
+            });
+            a++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
+        builder.setView(scrollView);
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                editor.putInt(globalGroup ? "popupGroup" : "popupAll", selected[0]);
+                editor.commit();
+                if (onSelect != null) {
+                    onSelect.run();
+                }
+            }
+        });
         return builder.create();
     }
 }
