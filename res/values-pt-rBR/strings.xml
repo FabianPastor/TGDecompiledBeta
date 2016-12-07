@@ -545,6 +545,7 @@
     <string name="GalleryInfo">Para enviar imagens sem compressão</string>
     <string name="General">Geral</string>
     <string name="GettingLinkInfo">Obtendo informações...</string>
+    <string name="GifCaption">Legenda do GIF</string>
     <string name="GlobalSearch">BUSCA GLOBAL</string>
     <string name="GotAQuestion">Tem alguma dúvida\nsobre o Telegram?</string>
     <string name="Grain">Granulado</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">Sons no Chat</string>
     <string name="IncorrectLocalization">Arquivo de localização incorreto</string>
     <string name="Info">Info</string>
+    <string name="InstantView">LEITURA RÁPIDA</string>
     <string name="InternalStorage">Armazenamento Interno</string>
     <string name="InvalidCode">Código inválido</string>
     <string name="InvalidFirstName">Nome inválido</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s está gravando uma mensagem de voz...</string>
     <string name="IsSendingAudio">%1$s está enviando um áudio...</string>
     <string name="IsSendingFile">%1$s está enviando um arquivo...</string>
+    <string name="IsSendingGame">%1$s está jogando...</string>
     <string name="IsSendingPhoto">%1$s está enviando uma foto...</string>
     <string name="IsSendingVideo">%1$s está enviando um vídeo...</string>
     <string name="IsTyping">está escrevendo...</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">Você deseja entrar no chat \'%1$s\'?</string>
     <string name="JoinToGroupErrorFull">Desculpe, este grupo já está lotado.</string>
     <string name="JoinToGroupErrorNotExist">Desculpe, esse chat não existe.</string>
+    <string name="JumpToDate">Ir para Data</string>
     <string name="KMetersAway">km de distância</string>
     <string name="KeepMedia">Manter Mídias</string>
     <string name="KeepMediaForever">Permanentemente</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">Conexão em Segundo Plano</string>
     <string name="NotificationsServiceConnectionInfo">Manter uma conexão de baixo impacto para o Telegram receber notificações. Habilite para notificações mais confiáveis.</string>
     <string name="NotificationsServiceInfo">Reiniciar o app quando desligado pelo usuário ou pelo sistema. Isso irá garantir que o app mostre as notificações.</string>
+    <string name="NotificationsTurnOff">Desativar</string>
+    <string name="NotificationsTurnOn">Ativar</string>
     <string name="NumberUnknown">Desconhecido</string>
     <string name="OK">OK</string>
     <string name="Of">%1$d de %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">O seu e-mail de recuperação %1$s ainda não está ativo e aguarda confirmação.</string>
     <string name="PermissionContacts">Telegram precisa acessar seus contatos para que você possa se conectar aos seus amigos em todos os seus dispositivos.</string>
     <string name="PermissionNoAudio">Telegram precisa acessar seu microfone para que você possa enviar mensagens de voz.</string>
+    <string name="PermissionNoAudioVideo">Telegram precisa acessar seu microfone para que você possa gravar vídeos.</string>
     <string name="PermissionNoCamera">Telegram precisa acessar sua câmera para que você possa capturar fotos e vídeos.</string>
     <string name="PermissionNoLocation">Telegram precisa acessar sua localização para que você possa compartilhar com seus amigos.</string>
     <string name="PermissionNoLocationPosition">O Telegram precisa acessar sua localização</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">Desativado</string>
     <string name="PopupEnabled">Ativado</string>
     <string name="PopupNotification">Notificações Pop-up</string>
+    <string name="PreviewFeedback">Deixar um comentário sobre essa pré-visualização</string>
     <string name="PriorityInfo">Nas prioridades mais altas as notificações irão funcionar mesmo que o seu celular esteja no modo Não Perturbe.</string>
     <string name="PrivacyFloodControlError">Desculpe, muitas solicitações. Impossível alterar os ajustes de privacidade agora, por favor aguarde.</string>
     <string name="PrivacyLastSeen">Último Acesso</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">Enviar mensagens para %1$s?</string>
     <string name="SendSelectedLocation">Enviar localização selecionada</string>
     <string name="SendSticker">ENVIAR STICKER</string>
+    <string name="SendStickerPreview">Enviar Sticker</string>
     <string name="SendingAudio">enviando áudio...</string>
     <string name="SendingFile">enviando arquivo...</string>
+    <string name="SendingGame">jogando...</string>
     <string name="SendingGif">Enviando gif...</string>
     <string name="SendingPhoto">enviando foto...</string>
     <string name="SendingVideo">Enviando vídeo...</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">Padrão</string>
     <string name="VibrationDisabled">Desativado</string>
     <string name="VideoCaption">Legenda do Vídeo</string>
+    <string name="ViewPackPreview">Ver Pacote</string>
     <string name="Vignette">Vignette</string>
     <string name="WaitingForNetwork">Aguardando rede...</string>
     <string name="Warmth">Calor</string>
@@ -1301,15 +1312,4 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">sem mensagens</string>
-    <string name="GifCaption">Legenda do GIF</string>
-    <string name="InstantView">LEITURA RÁPIDA</string>
-    <string name="IsSendingGame">%1$s está jogando...</string>
-    <string name="JumpToDate">Ir para Data</string>
-    <string name="NotificationsTurnOff">Desativar</string>
-    <string name="NotificationsTurnOn">Ativar</string>
-    <string name="PermissionNoAudioVideo">Telegram precisa acessar seu microfone para que você possa gravar vídeos.</string>
-    <string name="PreviewFeedback">Deixar um comentário sobre essa pré-visualização</string>
-    <string name="SendStickerPreview">Enviar Sticker</string>
-    <string name="SendingGame">jogando...</string>
-    <string name="ViewPackPreview">Ver Pacote</string>
 </resources>

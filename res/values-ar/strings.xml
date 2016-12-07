@@ -545,6 +545,7 @@
     <string name="GalleryInfo">أرسل الصورة بدون ضغطها</string>
     <string name="General">عام</string>
     <string name="GettingLinkInfo">جاري جلب معلومات الرابط...</string>
+    <string name="GifCaption">تعليق الصورة المتحركة</string>
     <string name="GlobalSearch">بحث شامل</string>
     <string name="GotAQuestion">هل يوجد لديك سؤال\nحول تيليجرام؟</string>
     <string name="Grain">الحبوب</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">الأصوات داخل المحادثات</string>
     <string name="IncorrectLocalization">ملف التعريب غير صحيح</string>
     <string name="Info">معلومات</string>
+    <string name="InstantView">استعراض لحظي</string>
     <string name="InternalStorage">الذاكرة الداخلية</string>
     <string name="InvalidCode">الرمز غير صحيح</string>
     <string name="InvalidFirstName">الاسم الأول غير صحيح</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s يقوم بتسجيل رسالة صوتية...</string>
     <string name="IsSendingAudio">%1$s يقوم بإرسال مقطع صوتي...</string>
     <string name="IsSendingFile">%1$s يقوم بإرسال ملف...</string>
+    <string name="IsSendingGame">%1$s يلعب لعبة...</string>
     <string name="IsSendingPhoto">%1$s يقوم بإرسال صورة...</string>
     <string name="IsSendingVideo">%1$s يقوم بإرسال مقطع مرئي...</string>
     <string name="IsTyping">يكتب…</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">هل ترغب في الدخول للمحادثة \'%1$s\'؟</string>
     <string name="JoinToGroupErrorFull">المعذرة، هذه المجموعة ممتلئة.</string>
     <string name="JoinToGroupErrorNotExist">المعذرة، هذه المحادثة غير موجودة.</string>
+    <string name="JumpToDate">اذهب لهذا التاريخ</string>
     <string name="KMetersAway">كيلومتر يبعد</string>
     <string name="KeepMedia">الإحتفاظ بالوسائط</string>
     <string name="KeepMediaForever">إلى الأبد</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">الاتصال في الخلفية</string>
     <string name="NotificationsServiceConnectionInfo">استخدام اتصال طفيف في الخلفية للتأكد من وصول إشعارات تيليجرام. قم بالتفعيل لإشعارات أقوى.</string>
     <string name="NotificationsServiceInfo">إعادة تشغيل التطبيق في حال تم إقفاله من المستخدم أو النظام. هذا سيساعد في إظهار التطبيق للإشعارات.</string>
+    <string name="NotificationsTurnOff">إيقاف</string>
+    <string name="NotificationsTurnOn">تشغيل</string>
     <string name="NumberUnknown">غير معروف</string>
     <string name="OK">موافق</string>
     <string name="Of">%1$d من %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">البريد الإلكتروني لإسترداد الحساب %1$s غير فعّال بعد ويلزم تفعيله</string>
     <string name="PermissionContacts">تيليجرام يحتاج للسماح له بالوصول لجهات الاتصال الخاصة بك لتتمكن من محادثة أصدقائك من كافة أجهزتك.</string>
     <string name="PermissionNoAudio">تيليجرام يحتاج للسماح له بالوصول للمايكروفون الخاص بك لتتمكن من إرسال رسائل صوتية.</string>
+    <string name="PermissionNoAudioVideo">تيليجرام يحتاج للسماح له بالوصول للمايكروفون الخاص بك لتتمكن من إرسال فيديوهات.</string>
     <string name="PermissionNoCamera">تيليجرام يحتاج للسماح له بالوصول للكاميرا لتتمكن من التقاط صور ومقاطع مرئية.</string>
     <string name="PermissionNoLocation">تيليجرام يحتاج للسماح له بالوصول لمكانك لتتمكن من مشاركته مع أصدقائك من خلاله.</string>
     <string name="PermissionNoLocationPosition">تيليجرام يحتاج صلاحية الحصول على موقعك.</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">معطل</string>
     <string name="PopupEnabled">مفعل</string>
     <string name="PopupNotification">الإشعارات المنبثقة</string>
+    <string name="PreviewFeedback">اكتب رأيك بخصوص هذا الإستعراض</string>
     <string name="PriorityInfo">الإشعارات الأكثر أهمية ستعمل حتى عندما يكون جهازك في وضعية عدم الإزعاج.</string>
     <string name="PrivacyFloodControlError">المعذرة، يوجد الكثير من الطلبات حاليًا. لا نستطيع تغيير إعدادات الخصوصية الآن، يرجى الإنتظار.</string>
     <string name="PrivacyLastSeen">آخر ظهور</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">هل ترغب في إرسال رسالة إلى %1$s؟</string>
     <string name="SendSelectedLocation">أرسل المكان المختار</string>
     <string name="SendSticker">أرسل ملصق</string>
+    <string name="SendStickerPreview">أرسل ملصق</string>
     <string name="SendingAudio">جاري إرسال المقطع الصوتي...</string>
     <string name="SendingFile">جاري إرسال الملف...</string>
+    <string name="SendingGame">يلعب لعبة...</string>
     <string name="SendingGif">جاري إرسال الصورة المتحركة...</string>
     <string name="SendingPhoto">جاري إرسال الصورة...</string>
     <string name="SendingVideo">جارٍ إرسال المقطع المرئي...</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">تلقائي</string>
     <string name="VibrationDisabled">تعطيل</string>
     <string name="VideoCaption">تعليق المقطع المرئي</string>
+    <string name="ViewPackPreview">استعرض الحزمة</string>
     <string name="Vignette">النقش</string>
     <string name="WaitingForNetwork">في إنتظار الشبكة...</string>
     <string name="Warmth">الدفء</string>

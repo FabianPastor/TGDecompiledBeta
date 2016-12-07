@@ -259,6 +259,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private AnimatorSet currentActionBarAnimation;
     private AnimatedFileDrawable currentAnimation;
     private String[] currentFileNames = new String[3];
+    private int currentHeaderHeight;
     private int currentIndex;
     private PageBlock currentMedia;
     private WebPage currentPage;
@@ -3309,14 +3310,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.listView.setOnScrollListener(new OnScrollListener() {
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     if (ArticleViewer.this.listView.getChildCount() != 0) {
-                        View child = ArticleViewer.this.listView.getChildAt(0);
-                        Holder holder = (Holder) ArticleViewer.this.listView.findContainingViewHolder(child);
-                        int top = child.getTop();
-                        int newOffset = 0;
-                        if (top >= 0 && holder != null && holder.getAdapterPosition() == 0) {
-                            newOffset = top;
-                        }
-                        ArticleViewer.this.checkScroll(newOffset);
+                        ArticleViewer.this.checkScroll(dy);
                     }
                 }
             });
@@ -3557,21 +3551,27 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
-    private void checkScroll(int top) {
+    private void checkScroll(int dy) {
         int maxHeight = AndroidUtilities.dp(56.0f);
         int minHeight = Math.max(AndroidUtilities.statusBarHeight, AndroidUtilities.dp(24.0f));
         float heightDiff = (float) (maxHeight - minHeight);
-        int height = Math.max(minHeight, top);
-        float scale = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD + ((((float) (height - minHeight)) / heightDiff) * DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD);
+        int newHeight = this.currentHeaderHeight - dy;
+        if (newHeight < minHeight) {
+            newHeight = minHeight;
+        } else if (newHeight > maxHeight) {
+            newHeight = maxHeight;
+        }
+        this.currentHeaderHeight = newHeight;
+        float scale = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD + ((((float) (this.currentHeaderHeight - minHeight)) / heightDiff) * DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD);
         int scaledHeight = (int) (((float) maxHeight) * scale);
         this.backButton.setScaleX(scale);
         this.backButton.setScaleY(scale);
-        this.backButton.setTranslationY((float) ((maxHeight - height) / 2));
+        this.backButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
         this.shareButton.setScaleX(scale);
         this.shareButton.setScaleY(scale);
-        this.shareButton.setTranslationY((float) ((maxHeight - height) / 2));
-        this.headerView.setTranslationY((float) (height - maxHeight));
-        this.listView.setTopGlowOffset(height);
+        this.shareButton.setTranslationY((float) ((maxHeight - this.currentHeaderHeight) / 2));
+        this.headerView.setTranslationY((float) (this.currentHeaderHeight - maxHeight));
+        this.listView.setTopGlowOffset(this.currentHeaderHeight);
     }
 
     private void addAllMediaFromBlock(PageBlock block) {
@@ -3653,7 +3653,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.shareButton.setAlpha(0.0f);
         this.backButton.setAlpha(0.0f);
         this.layoutManager.scrollToPositionWithOffset(0, 0);
-        checkScroll(AndroidUtilities.dp(56.0f));
+        checkScroll(-AndroidUtilities.dp(56.0f));
         addPageToStack(messageObject.messageOwner.media.webpage);
         this.lastInsets = null;
         LayoutParams layoutParams;
@@ -3916,7 +3916,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         z = true;
                     }
                     closePhoto(z);
-                    if (force) {
+                    if (!force) {
                         return;
                     }
                 }
@@ -3978,6 +3978,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private void onClosed() {
         this.isVisible = false;
+        this.currentPage = null;
         this.blocks.clear();
         this.photoBlocks.clear();
         this.adapter.notifyDataSetChanged();

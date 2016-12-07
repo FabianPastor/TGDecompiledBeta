@@ -545,6 +545,7 @@
     <string name="GalleryInfo">To send images without compression</string>
     <string name="General">General</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
+    <string name="GifCaption">GIF Caption</string>
     <string name="GlobalSearch">GLOBAL SEARCH</string>
     <string name="GotAQuestion">Got a question\nabout Telegram?</string>
     <string name="Grain">Grain</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">In-Chat Sounds</string>
     <string name="IncorrectLocalization">Incorrect localization file</string>
     <string name="Info">Info</string>
+    <string name="InstantView">INSTANT VIEW</string>
     <string name="InternalStorage">Internal Storage</string>
     <string name="InvalidCode">Invalid code</string>
     <string name="InvalidFirstName">Invalid first name</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s is recording voice message...</string>
     <string name="IsSendingAudio">%1$s is sending audio...</string>
     <string name="IsSendingFile">%1$s is sending file...</string>
+    <string name="IsSendingGame">%1$s is playing a game...</string>
     <string name="IsSendingPhoto">%1$s is sending photo...</string>
     <string name="IsSendingVideo">%1$s is sending video...</string>
     <string name="IsTyping">is typing...</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">Do you want to join the chat \'%1$s\'?</string>
     <string name="JoinToGroupErrorFull">Sorry, this group is already full.</string>
     <string name="JoinToGroupErrorNotExist">Sorry, this chat does not seem to exist.</string>
+    <string name="JumpToDate">Jump to Date</string>
     <string name="KMetersAway">km away</string>
     <string name="KeepMedia">Keep Media</string>
     <string name="KeepMediaForever">Forever</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">Background Connection</string>
     <string name="NotificationsServiceConnectionInfo">Keep a low impact background connection to Telegram to receive notifications. Enable for reliable notifications.</string>
     <string name="NotificationsServiceInfo">Relaunch app when shut down by user or system. This will ensure app can show notifications.</string>
+    <string name="NotificationsTurnOff">Turn Off</string>
+    <string name="NotificationsTurnOn">Turn On</string>
     <string name="NumberUnknown">Unknown</string>
     <string name="OK">OK</string>
     <string name="Of">%1$d of %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">Your recovery e-mail %1$s is not yet active and pending confirmation.</string>
     <string name="PermissionContacts">Telegram needs access to your contacts so that you can connect with your friends across all your devices.</string>
     <string name="PermissionNoAudio">Telegram needs access to your microphone so that you can send voice messages.</string>
+    <string name="PermissionNoAudioVideo">Telegram needs access to your microphone so that you can record videos.</string>
     <string name="PermissionNoCamera">Telegram needs access to your camera so that you can capture photos and videos.</string>
     <string name="PermissionNoLocation">Telegram needs access to your location so that you can share it with your friends.</string>
     <string name="PermissionNoLocationPosition">Telegram needs access to your location.</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">Disabled</string>
     <string name="PopupEnabled">Enabled</string>
     <string name="PopupNotification">Popup Notifications</string>
+    <string name="PreviewFeedback">Leave feedback about this preview</string>
     <string name="PriorityInfo">Higher priority notifications will work even if your phone is in Do Not Disturb mode.</string>
     <string name="PrivacyFloodControlError">Sorry, too many requests. Unable to change privacy settings now, please wait.</string>
     <string name="PrivacyLastSeen">Last Seen</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">Send messages to %1$s?</string>
     <string name="SendSelectedLocation">Send selected location</string>
     <string name="SendSticker">SEND STICKER</string>
+    <string name="SendStickerPreview">Send Sticker</string>
     <string name="SendingAudio">sending audio...</string>
     <string name="SendingFile">sending file...</string>
+    <string name="SendingGame">playing a game...</string>
     <string name="SendingGif">Sending gif...</string>
     <string name="SendingPhoto">sending photo...</string>
     <string name="SendingVideo">Sending video...</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">Default</string>
     <string name="VibrationDisabled">Disabled</string>
     <string name="VideoCaption">Video Caption</string>
+    <string name="ViewPackPreview">View Pack</string>
     <string name="Vignette">Vignette</string>
     <string name="WaitingForNetwork">Waiting for network...</string>
     <string name="Warmth">Warmth</string>
@@ -1301,17 +1312,6 @@
     <string name="messages_other">%1$d messages</string>
     <string name="messages_two">%1$d messages</string>
     <string name="messages_zero">no messages</string>
-    <string name="GifCaption">GIF Caption</string>
-    <string name="InstantView">INSTANT VIEW</string>
-    <string name="IsSendingGame">%1$s is playing a game...</string>
-    <string name="JumpToDate">Jump to Date</string>
-    <string name="NotificationsTurnOff">Turn Off</string>
-    <string name="NotificationsTurnOn">Turn On</string>
-    <string name="PermissionNoAudioVideo">Telegram needs access to your microphone so that you can record videos.</string>
-    <string name="PreviewFeedback">Leave feedback about this preview</string>
-    <string name="SendStickerPreview">Send Sticker</string>
-    <string name="SendingGame">playing a game...</string>
-    <string name="ViewPackPreview">View Pack</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">This app</string>
     <string name="hockeyapp_crash_dialog_message">Would you like to send an anonymous report so we can fix the problem?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Don\'t Send</string>

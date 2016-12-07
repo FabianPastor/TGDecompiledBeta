@@ -3449,11 +3449,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         public void run() {
             try {
                 TraceCompat.beginSection(RecyclerView.TRACE_PREFETCH_TAG);
-                int prefetchCount = RecyclerView.this.mLayout.getItemPrefetchCount();
-                if (RecyclerView.this.mAdapter == null || RecyclerView.this.mLayout == null || !RecyclerView.this.mLayout.isItemPrefetchEnabled() || prefetchCount < 1 || RecyclerView.this.hasPendingAdapterUpdates()) {
+                if (RecyclerView.this.mAdapter == null || RecyclerView.this.mLayout == null || !RecyclerView.this.mLayout.isItemPrefetchEnabled() || RecyclerView.this.mLayout.getItemPrefetchCount() < 1 || RecyclerView.this.hasPendingAdapterUpdates()) {
                     TraceCompat.endSection();
                     return;
                 }
+                int prefetchCount = RecyclerView.this.mLayout.getItemPrefetchCount();
                 long lastFrameVsyncNanos = TimeUnit.MILLISECONDS.toNanos(RecyclerView.this.getDrawingTime());
                 if (lastFrameVsyncNanos == RecyclerView.MIN_PREFETCH_TIME_NANOS || RecyclerView.sFrameIntervalNanos == RecyclerView.MIN_PREFETCH_TIME_NANOS) {
                     TraceCompat.endSection();
@@ -4328,6 +4328,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (this.mAdapterHelper.hasAnyUpdateTypes(4) && !this.mAdapterHelper.hasAnyUpdateTypes(11)) {
                 TraceCompat.beginSection(TRACE_HANDLE_ADAPTER_UPDATES_TAG);
                 eatRequestLayout();
+                onEnterLayoutOrScroll();
                 this.mAdapterHelper.preProcess();
                 if (!this.mLayoutRequestEaten) {
                     if (hasUpdatedView()) {
@@ -4337,6 +4338,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     }
                 }
                 resumeRequestLayout(true);
+                onExitLayoutOrScroll();
                 TraceCompat.endSection();
             } else if (this.mAdapterHelper.hasPendingUpdates()) {
                 TraceCompat.beginSection(TRACE_ON_DATA_SET_CHANGE_LAYOUT_TAG);
@@ -4922,8 +4924,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         if (ALLOW_PREFETCHING && sFrameIntervalNanos == MIN_PREFETCH_TIME_NANOS) {
             float refreshRate = BitmapDescriptorFactory.HUE_YELLOW;
             Display display = ViewCompat.getDisplay(this);
-            if (display != null && display.getRefreshRate() >= BitmapDescriptorFactory.HUE_ORANGE) {
-                refreshRate = display.getRefreshRate();
+            if (!(isInEditMode() || display == null)) {
+                float displayRefreshRate = display.getRefreshRate();
+                if (displayRefreshRate >= BitmapDescriptorFactory.HUE_ORANGE) {
+                    refreshRate = displayRefreshRate;
+                }
             }
             sFrameIntervalNanos = (long) (1.0E9f / refreshRate);
         }

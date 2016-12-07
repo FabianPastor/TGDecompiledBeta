@@ -545,6 +545,7 @@
     <string name="GalleryInfo">Bilder ohne Komprimierung senden</string>
     <string name="General">Allgemein</string>
     <string name="GettingLinkInfo">Lade Linkvorschau...</string>
+    <string name="GifCaption">GIF Beschriftung</string>
     <string name="GlobalSearch">GLOBALE SUCHE</string>
     <string name="GotAQuestion">Hast du eine Frage\nzu Telegram?</string>
     <string name="Grain">Körnung</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">In-Chat-Töne</string>
     <string name="IncorrectLocalization">Falsche Sprachdatei</string>
     <string name="Info">Info</string>
+    <string name="InstantView">SCHNELLANSICHT</string>
     <string name="InternalStorage">Interner Speicher</string>
     <string name="InvalidCode">Ungültiger Code</string>
     <string name="InvalidFirstName">Ungültiger Vorname</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s nimmt etwas auf...</string>
     <string name="IsSendingAudio">%1$s schickt Audio...</string>
     <string name="IsSendingFile">%1$s schickt Datei...</string>
+    <string name="IsSendingGame">%1$s spielt ein Spiel...</string>
     <string name="IsSendingPhoto">%1$s schickt Bild...</string>
     <string name="IsSendingVideo">%1$s schickt Video...</string>
     <string name="IsTyping">tippt...</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">Möchtest du dem Chat \'%1$s\' beitreten?</string>
     <string name="JoinToGroupErrorFull">Leider ist diese Gruppe schon voll.</string>
     <string name="JoinToGroupErrorNotExist">Leider gibt es diesen Chat nicht.</string>
+    <string name="JumpToDate">Gehe zu Datum</string>
     <string name="KMetersAway">km entfernt</string>
     <string name="KeepMedia">Medien behalten</string>
     <string name="KeepMediaForever">Dauerhaft</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">Hintergrundverbindung</string>
     <string name="NotificationsServiceConnectionInfo">Nutzt eine batterieschonende Hintergrundverbindung zu Telegram, um Benachrichtigungen zu gewährleisten.</string>
     <string name="NotificationsServiceInfo">Sofern die App beendet wurde, diese automatisch neu starten, um Benachrichtigungen zu gewährleisten.</string>
+    <string name="NotificationsTurnOff">Ausschalten</string>
+    <string name="NotificationsTurnOn">Einschalten</string>
     <string name="NumberUnknown">Unbekannt</string>
     <string name="OK">OK</string>
     <string name="Of">%1$d von %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">Deine E-Mail Adresse %1$s wurde noch verifiziert und ist daher noch nicht aktiv.</string>
     <string name="PermissionContacts">Telegram benötigt Zugriff auf deine Kontakte um dich auf all denen Geräten mit deinen Freunden zu verbinden.</string>
     <string name="PermissionNoAudio">Telegram benötigt Zugriff auf dein Mikrofon, damit du Sprachnachrichten senden kannst.</string>
+    <string name="PermissionNoAudioVideo">Telegram benötigt Zugriff auf dein Mikrofon, damit du Videos aufnehmen kannst.</string>
     <string name="PermissionNoCamera">Telegram benötigt Zugriff auf deine Kamera, damit du Bilder und Videos aufnehmen kannst.</string>
     <string name="PermissionNoLocation">Telegram benötigt Zugriff auf deinen Standort, damit du ihn mit Freunden teilen kannst.</string>
     <string name="PermissionNoLocationPosition">Telegram benötigt Zugriff auf deinen Standort.</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">Deaktiviert</string>
     <string name="PopupEnabled">Aktiviert</string>
     <string name="PopupNotification">Popup Mitteilungen</string>
+    <string name="PreviewFeedback">Rückmeldung zu dieser Vorschau hinterlassen</string>
     <string name="PriorityInfo">Mitteilungen höherer Priorität funktionieren auch, wenn sich dein Telefon im \"Bitte nicht stören\"-Modus befindet.</string>
     <string name="PrivacyFloodControlError">Du hast zu oft probiert, deine Einstellungen zu ändern; bitte warte kurz.</string>
     <string name="PrivacyLastSeen">Zuletzt gesehen</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">Nachricht an %1$s senden?</string>
     <string name="SendSelectedLocation">Diesen Standort senden</string>
     <string name="SendSticker">STICKER SENDEN</string>
+    <string name="SendStickerPreview">Sticker senden</string>
     <string name="SendingAudio">schickt Audio...</string>
     <string name="SendingFile">schickt Datei...</string>
+    <string name="SendingGame">spielt ein Spiel...</string>
     <string name="SendingGif">Sende gif...</string>
     <string name="SendingPhoto">schickt Bild...</string>
     <string name="SendingVideo">Sende Video...</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">Standard</string>
     <string name="VibrationDisabled">Deaktiviert</string>
     <string name="VideoCaption">Videobeschriftung</string>
+    <string name="ViewPackPreview">Paket anzeigen</string>
     <string name="Vignette">Vignette</string>
     <string name="WaitingForNetwork">Warte auf Netzwerk...</string>
     <string name="Warmth">Wärme</string>
@@ -1301,17 +1312,6 @@
     <string name="messages_other">%1$d Nachrichten</string>
     <string name="messages_two">%1$d Nachrichten</string>
     <string name="messages_zero">keine Nachrichten</string>
-    <string name="GifCaption">GIF Beschriftung</string>
-    <string name="InstantView">SCHNELLANSICHT</string>
-    <string name="IsSendingGame">%1$s spielt ein Spiel...</string>
-    <string name="JumpToDate">Gehe zu Datum</string>
-    <string name="NotificationsTurnOff">Ausschalten</string>
-    <string name="NotificationsTurnOn">Einschalten</string>
-    <string name="PermissionNoAudioVideo">Telegram benötigt Zugriff auf dein Mikrofon, damit du Videos aufnehmen kannst.</string>
-    <string name="PreviewFeedback">Rückmeldung zu dieser Vorschau hinterlassen</string>
-    <string name="SendStickerPreview">Sticker senden</string>
-    <string name="SendingGame">spielt ein Spiel...</string>
-    <string name="ViewPackPreview">Paket anzeigen</string>
     <string name="hockeyapp_crash_dialog_app_name_fallback">Die App</string>
     <string name="hockeyapp_crash_dialog_message">Möchten Sie einen anonymen Bericht senden, sodass wir das Problem beheben können?</string>
     <string name="hockeyapp_crash_dialog_negative_button">Nicht senden</string>

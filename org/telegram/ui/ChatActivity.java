@@ -5550,7 +5550,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         if (this.messages.get(this.messages.size() - 1) == this.scrollToMessage || this.messages.get(this.messages.size() - 2) == this.scrollToMessage) {
                                             this.chatLayoutManager.scrollToPositionWithOffset(this.chatAdapter.isBot ? 1 : 0, ((-this.chatListView.getPaddingTop()) - AndroidUtilities.dp(7.0f)) + yOffset);
                                         } else {
-                                            this.chatLayoutManager.scrollToPositionWithOffset(((this.chatAdapter.messagesStartRow + this.messages.size()) - this.messages.indexOf(this.scrollToMessage)) - 1, (-AndroidUtilities.dp(7.0f)) + yOffset);
+                                            this.chatLayoutManager.scrollToPositionWithOffset(((this.chatAdapter.messagesStartRow + this.messages.size()) - this.messages.indexOf(this.scrollToMessage)) - 1, ((-AndroidUtilities.dp(7.0f)) + yOffset) - (this.scrollToMessage == this.unreadMessageObject ? this.chatListView.getPaddingTop() : 0));
                                         }
                                     }
                                     this.chatListView.invalidate();
@@ -7442,6 +7442,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 moveScrollToLastMessage();
             } else if (this.chatListView != null) {
                 int yOffset;
+                int paddingTop;
                 if (this.scrollToMessagePosition == -9000) {
                     yOffset = Math.max(0, (this.chatListView.getHeight() - this.scrollToMessage.getApproximateHeight()) / 2);
                 } else if (this.scrollToMessagePosition == -10000) {
@@ -7449,7 +7450,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 } else {
                     yOffset = this.scrollToMessagePosition;
                 }
-                this.chatLayoutManager.scrollToPositionWithOffset(this.messages.size() - this.messages.indexOf(this.scrollToMessage), (-AndroidUtilities.dp(7.0f)) + yOffset);
+                LinearLayoutManager linearLayoutManager = this.chatLayoutManager;
+                int size = this.messages.size() - this.messages.indexOf(this.scrollToMessage);
+                int i = (-AndroidUtilities.dp(7.0f)) + yOffset;
+                if (this.scrollToMessage == this.unreadMessageObject) {
+                    paddingTop = this.chatListView.getPaddingTop();
+                } else {
+                    paddingTop = 0;
+                }
+                linearLayoutManager.scrollToPositionWithOffset(size, i - paddingTop);
             }
             this.scrollToTopUnReadOnResume = false;
             this.scrollToTopOnResume = false;
@@ -8106,6 +8115,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             String path;
             AlertDialog.Builder builder;
             Intent intent;
+            int i;
             switch (option) {
                 case 0:
                     if (SendMessagesHelper.getInstance().retrySendMessage(this.selectedObject, false)) {
@@ -8219,9 +8229,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     break;
                 case 10:
                     if (VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
+                        String str;
                         String fileName = FileLoader.getDocumentFileName(this.selectedObject.getDocument());
-                        if (fileName == null || fileName.length() == 0) {
+                        if (TextUtils.isEmpty(fileName)) {
                             fileName = this.selectedObject.getFileName();
+                        }
+                        if (fileName != null) {
+                            int idx = fileName.lastIndexOf(46);
+                            if (idx != -1) {
+                                fileName = fileName.substring(0, idx) + "_" + Utilities.random.nextInt() + fileName.substring(idx);
+                            } else {
+                                fileName = fileName + "_" + Utilities.random.nextInt();
+                            }
                         }
                         path = this.selectedObject.messageOwner.attachPath;
                         if (!(path == null || path.length() <= 0 || new File(path).exists())) {
@@ -8230,12 +8249,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         if (path == null || path.length() == 0) {
                             path = FileLoader.getPathToMessage(this.selectedObject.messageOwner).toString();
                         }
-                        MediaController.saveFile(path, getParentActivity(), this.selectedObject.isMusic() ? 3 : 2, fileName, this.selectedObject.getDocument() != null ? this.selectedObject.getDocument().mime_type : "");
+                        Context parentActivity = getParentActivity();
+                        if (this.selectedObject.isMusic()) {
+                            i = 3;
+                        } else {
+                            i = 2;
+                        }
+                        if (this.selectedObject.getDocument() != null) {
+                            str = this.selectedObject.getDocument().mime_type;
+                        } else {
+                            str = "";
+                        }
+                        MediaController.saveFile(path, parentActivity, i, fileName, str);
                         break;
                     }
                     getParentActivity().requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
                     this.selectedObject = null;
                     return;
+                    break;
                 case 11:
                     Document document = this.selectedObject.getDocument();
                     MessagesController.getInstance().saveGif(document);
@@ -8298,7 +8329,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.selectedObject = null;
                     return;
                 case 13:
-                    int i;
+                    int i2;
                     int mid = this.selectedObject.getId();
                     builder = new AlertDialog.Builder(getParentActivity());
                     builder.setMessage(LocaleController.getString("PinMessageAlert", R.string.PinMessageAlert));
@@ -8310,13 +8341,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     CheckBoxCell cell = new CheckBoxCell(getParentActivity());
                     cell.setBackgroundResource(R.drawable.list_selector);
                     cell.setText(LocaleController.getString("PinNotify", R.string.PinNotify), "", true, false);
-                    int dp = LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : 0;
+                    i = LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : 0;
                     if (LocaleController.isRTL) {
-                        i = 0;
+                        i2 = 0;
                     } else {
-                        i = AndroidUtilities.dp(8.0f);
+                        i2 = AndroidUtilities.dp(8.0f);
                     }
-                    cell.setPadding(dp, 0, i, 0);
+                    cell.setPadding(i, 0, i2, 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 8.0f, 0.0f, 8.0f, 0.0f));
                     cell.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -8333,10 +8364,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         }
                     });
                     builder.setView(frameLayout);
-                    final int i2 = mid;
+                    final int i3 = mid;
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            MessagesController.getInstance().pinChannelMessage(ChatActivity.this.currentChat, i2, checks[0]);
+                            MessagesController.getInstance().pinChannelMessage(ChatActivity.this.currentChat, i3, checks[0]);
                         }
                     });
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

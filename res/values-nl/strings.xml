@@ -545,6 +545,7 @@
     <string name="GalleryInfo">Om bestanden ongecomprimeerd te versturen</string>
     <string name="General">Algemeen</string>
     <string name="GettingLinkInfo">Link-preview ophalen...</string>
+    <string name="GifCaption">GIF-Onderschrift</string>
     <string name="GlobalSearch">WERELDWIJD ZOEKEN</string>
     <string name="GotAQuestion">Heb je een vraag\nover Telegram?</string>
     <string name="Grain">Korrel</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">Chatgeluiden</string>
     <string name="IncorrectLocalization">Ongeldig vertalingsbestand</string>
     <string name="Info">Info</string>
+    <string name="InstantView">SNELLE WEERGAVE</string>
     <string name="InternalStorage">Interne opslag</string>
     <string name="InvalidCode">Ongeldige code</string>
     <string name="InvalidFirstName">Ongeldige voornaam</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s neemt een spraakbericht op...</string>
     <string name="IsSendingAudio">%1$s verstuurt een geluid...</string>
     <string name="IsSendingFile">%1$s verstuurt een bestand</string>
+    <string name="IsSendingGame">%1$s speelt een spel</string>
     <string name="IsSendingPhoto">%1$s verstuurt een foto</string>
     <string name="IsSendingVideo">%1$s verstuurt een video</string>
     <string name="IsTyping">is aan het typen</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">Wil je lid worden van de groep \"%1$s\"?</string>
     <string name="JoinToGroupErrorFull">Sorry, deze groep is al vol.</string>
     <string name="JoinToGroupErrorNotExist">Sorry, deze groep bestaat niet.</string>
+    <string name="JumpToDate">Ga naar datum</string>
     <string name="KMetersAway">km hiervandaan</string>
     <string name="KeepMedia">Media bewaren</string>
     <string name="KeepMediaForever">Voor altijd</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">Achtergrondverbinding</string>
     <string name="NotificationsServiceConnectionInfo">Achtergrondverbinding voor meldingen. Inschakelen voor betrouwbare meldingen.</string>
     <string name="NotificationsServiceInfo">App automatisch herstarten bij afsluiten om meldingen weer te kunnen blijven geven.</string>
+    <string name="NotificationsTurnOff">Uitschakelen</string>
+    <string name="NotificationsTurnOn">Inschakelen</string>
     <string name="NumberUnknown">Onbekend</string>
     <string name="OK">OK</string>
     <string name="Of">%1$d van %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">Je herstel-e-mailadres %1$s is nog niet actief en in afwachting van bevestiging.</string>
     <string name="PermissionContacts">Telegram heeft toegang tot je contacten nodig zodat je kan chatten met je vrienden vanaf al je apparaten.</string>
     <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
+    <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
     <string name="PermissionNoCamera">Telegram heeft toegang tot je camera nodig zodat je foto\'s en video\'s kunt maken.</string>
     <string name="PermissionNoLocation">Telegram heeft toegang tot je locatie nodig om deze te kunnen delen met je vrienden.</string>
     <string name="PermissionNoLocationPosition">Telegram heeft toegang tot je locatie nodig.</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">Uitgeschakeld</string>
     <string name="PopupEnabled">Ingeschakeld</string>
     <string name="PopupNotification">Pop-up meldingen</string>
+    <string name="PreviewFeedback">Feedback over deze voorvertoning</string>
     <string name="PriorityInfo">Meldingen met hoge prioriteit werken ook als je telefoon op \"Niet storen\" staat.</string>
     <string name="PrivacyFloodControlError">Sorry, te veel verzoeken. Momenteel is het niet mogelijk om de privacyinstellingen te wijzigen, even geduld alsjeblieft.</string>
     <string name="PrivacyLastSeen">Laatst gezien</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">Berichten naar %1$s versturen?</string>
     <string name="SendSelectedLocation">Geselecteerde locatie sturen</string>
     <string name="SendSticker">STICKER STUREN</string>
+    <string name="SendStickerPreview">Sticker sturen</string>
     <string name="SendingAudio">audio versturen...</string>
     <string name="SendingFile">bestand versturen</string>
+    <string name="SendingGame">speelt een spel</string>
     <string name="SendingGif">Gif versturen...</string>
     <string name="SendingPhoto">foto versturen</string>
     <string name="SendingVideo">Video versturen</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">Standaard</string>
     <string name="VibrationDisabled">Uitgeschakeld</string>
     <string name="VideoCaption">Video-onderschrift</string>
+    <string name="ViewPackPreview">Bundel bekijken</string>
     <string name="Vignette">Vignet</string>
     <string name="WaitingForNetwork">Wachten op netwerk</string>
     <string name="Warmth">Warmte</string>
@@ -1301,15 +1312,4 @@
     <string name="messages_other">%1$d berichten</string>
     <string name="messages_two">%1$d berichten</string>
     <string name="messages_zero">geen berichten</string>
-    <string name="GifCaption">GIF-Onderschrift</string>
-    <string name="InstantView">SNELLE WEERGAVE</string>
-    <string name="IsSendingGame">%1$s speelt een spel</string>
-    <string name="JumpToDate">Ga naar datum</string>
-    <string name="NotificationsTurnOff">Uitschakelen</string>
-    <string name="NotificationsTurnOn">Inschakelen</string>
-    <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
-    <string name="PreviewFeedback">Feedback over deze voorvertoning</string>
-    <string name="SendStickerPreview">Sticker sturen</string>
-    <string name="SendingGame">speelt een spel</string>
-    <string name="ViewPackPreview">Bundel bekijken</string>
 </resources>

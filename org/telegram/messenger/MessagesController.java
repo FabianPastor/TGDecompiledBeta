@@ -3168,7 +3168,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3212,6 +3211,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -4882,8 +4882,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
+        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
-            long newTaskId;
             this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
             TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
             inputPeer.channel_id = channel.id;
@@ -4957,7 +4957,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -4968,6 +4967,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));

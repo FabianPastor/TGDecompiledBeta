@@ -1801,35 +1801,35 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject) {
-        String author;
+        int maxWidth;
+        int linkPreviewMaxWidth;
         String description;
         Photo photo;
         TLObject document;
         String type;
-        int duration;
+        boolean smallImage;
         int height;
+        int width;
         Throwable e;
         int restLinesCount;
+        int a;
+        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
         int maxPhotoWidth;
-        DocumentAttribute attribute;
+        PhotoSize photoSize;
+        PhotoSize photoSize2;
+        int dp;
         int durationWidth;
-        ArrayList arrayList;
-        int i;
+        float scale;
         ImageReceiver imageReceiver;
         TLObject tLObject;
         String str;
         FileLocation fileLocation;
         String fileName;
-        int seconds;
-        String str2;
         int mWidth;
-        int timeWidthTotal;
-        int rows;
         boolean fullWidth;
         int maxButtonWidth;
-        int maxButtonsWidth;
         TL_keyboardButtonRow row;
         int buttonWidth;
         int b;
@@ -1844,11 +1844,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject)) {
-            int width;
-            int a;
+            int i;
+            int timeWidthTotal;
+            int rows;
             float f;
+            int maxButtonsWidth;
             int buttonsCount;
-            int dp;
+            int dp2;
             this.currentMessageObject = messageObject;
             this.lastSendState = messageObject.messageOwner.send_state;
             this.lastDeleteDate = messageObject.messageOwner.destroyTime;
@@ -1914,10 +1916,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxWidth;
             boolean z;
-            float scale;
+            DocumentAttribute attribute;
             boolean photoExist;
+            String str2;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1968,15 +1970,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview) {
-                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    boolean smallImage;
+                    String author;
+                    int duration;
                     int restLines;
-                    int lineLeft;
-                    PhotoSize photoSize;
-                    PhotoSize photoSize2;
-                    int dp2;
+                    ArrayList arrayList;
+                    int seconds;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -2224,9 +2224,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 }
                                                 photoSize = this.currentPhotoObject;
                                                 photoSize2 = this.currentPhotoObject;
-                                                dp2 = AndroidUtilities.dp(150.0f);
-                                                photoSize2.h = dp2;
-                                                photoSize.w = dp2;
+                                                dp = AndroidUtilities.dp(150.0f);
+                                                photoSize2.h = dp;
+                                                photoSize.w = dp;
                                                 this.documentAttachType = 2;
                                             } else if (!MessageObject.isVideoDocument(document)) {
                                                 this.currentPhotoObject = document.thumb;
@@ -2240,9 +2240,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 }
                                                 photoSize = this.currentPhotoObject;
                                                 photoSize2 = this.currentPhotoObject;
-                                                dp2 = AndroidUtilities.dp(150.0f);
-                                                photoSize2.h = dp2;
-                                                photoSize.w = dp2;
+                                                dp = AndroidUtilities.dp(150.0f);
+                                                photoSize2.h = dp;
+                                                photoSize.w = dp;
                                                 createDocumentLayout(0, messageObject);
                                             } else if (MessageObject.isStickerDocument(document)) {
                                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -2293,9 +2293,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 }
                                                 photoSize = this.currentPhotoObject;
                                                 photoSize2 = this.currentPhotoObject;
-                                                dp2 = AndroidUtilities.dp(150.0f);
-                                                photoSize2.h = dp2;
-                                                photoSize.w = dp2;
+                                                dp = AndroidUtilities.dp(150.0f);
+                                                photoSize2.h = dp;
+                                                photoSize.w = dp;
                                                 this.documentAttach = document;
                                                 this.documentAttachType = 6;
                                             }
@@ -2569,10 +2569,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                                 buttonsCount = row.buttons.size();
                                                 if (buttonsCount != 0) {
-                                                    dp = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
+                                                    dp2 = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
                                                     if (!fullWidth) {
                                                     }
-                                                    buttonWidth = ((dp - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
+                                                    buttonWidth = ((dp2 - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
                                                     for (b = 0; b < row.buttons.size(); b++) {
                                                         chatMessageCell = this;
                                                         botButton = new BotButton();
@@ -2716,9 +2716,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         this.documentAttachType = 2;
                                     } else if (!MessageObject.isVideoDocument(document)) {
                                         this.currentPhotoObject = document.thumb;
@@ -2732,9 +2732,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         createDocumentLayout(0, messageObject);
                                     } else if (MessageObject.isStickerDocument(document)) {
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -2785,9 +2785,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         }
                                         photoSize = this.currentPhotoObject;
                                         photoSize2 = this.currentPhotoObject;
-                                        dp2 = AndroidUtilities.dp(150.0f);
-                                        photoSize2.h = dp2;
-                                        photoSize.w = dp2;
+                                        dp = AndroidUtilities.dp(150.0f);
+                                        photoSize2.h = dp;
+                                        photoSize.w = dp;
                                         this.documentAttach = document;
                                         this.documentAttachType = 6;
                                     }
@@ -3031,10 +3031,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                             buttonsCount = row.buttons.size();
                                             if (buttonsCount != 0) {
-                                                dp = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
+                                                dp2 = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
                                                 if (fullWidth) {
                                                 }
-                                                buttonWidth = ((dp - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
+                                                buttonWidth = ((dp2 - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
                                                 for (b = 0; b < row.buttons.size(); b++) {
                                                     chatMessageCell = this;
                                                     botButton = new BotButton();
@@ -3175,9 +3175,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttachType = 2;
                             } else if (!MessageObject.isVideoDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
@@ -3191,9 +3191,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 createDocumentLayout(0, messageObject);
                             } else if (MessageObject.isStickerDocument(document)) {
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -3244,9 +3244,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 photoSize = this.currentPhotoObject;
                                 photoSize2 = this.currentPhotoObject;
-                                dp2 = AndroidUtilities.dp(150.0f);
-                                photoSize2.h = dp2;
-                                photoSize.w = dp2;
+                                dp = AndroidUtilities.dp(150.0f);
+                                photoSize2.h = dp;
+                                photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 6;
                             }
@@ -3494,10 +3494,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                     buttonsCount = row.buttons.size();
                                     if (buttonsCount != 0) {
-                                        dp = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
+                                        dp2 = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
                                         if (fullWidth) {
                                         }
-                                        buttonWidth = ((dp - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
+                                        buttonWidth = ((dp2 - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
                                         for (b = 0; b < row.buttons.size(); b++) {
                                             chatMessageCell = this;
                                             botButton = new BotButton();
@@ -3642,9 +3642,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             this.documentAttachType = 2;
@@ -3662,9 +3662,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             createDocumentLayout(0, messageObject);
@@ -3682,9 +3682,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 if (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0) {
                                     photoSize = this.currentPhotoObject;
                                     photoSize2 = this.currentPhotoObject;
-                                    dp2 = AndroidUtilities.dp(150.0f);
-                                    photoSize2.h = dp2;
-                                    photoSize.w = dp2;
+                                    dp = AndroidUtilities.dp(150.0f);
+                                    photoSize2.h = dp;
+                                    photoSize.w = dp;
                                 }
                             }
                             this.documentAttach = document;
@@ -3997,13 +3997,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.drawPhotoImage = true;
                 this.photoImage.setRoundRadius(AndroidUtilities.dp(22.0f));
                 if (AndroidUtilities.isTablet()) {
-                    dp = AndroidUtilities.getMinTabletSide();
+                    dp2 = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
-                    dp = AndroidUtilities.displaySize.x;
+                    dp2 = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 this.availableTimeWidth = this.backgroundWidth - AndroidUtilities.dp(31.0f);
                 User user = MessagesController.getInstance().getUser(Integer.valueOf(messageObject.messageOwner.media.user_id));
@@ -4053,26 +4053,26 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             } else if (messageObject.type == 2) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
-                    dp = AndroidUtilities.getMinTabletSide();
+                    dp2 = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
-                    dp = AndroidUtilities.displaySize.x;
+                    dp2 = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
                 setMessageObjectInternal(messageObject);
                 this.totalHeight = AndroidUtilities.dp(70.0f) + this.namesOffset;
             } else if (messageObject.type == 14) {
                 if (AndroidUtilities.isTablet()) {
-                    dp = AndroidUtilities.getMinTabletSide();
+                    dp2 = AndroidUtilities.getMinTabletSide();
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 } else {
-                    dp = AndroidUtilities.displaySize.x;
+                    dp2 = AndroidUtilities.displaySize.x;
                     f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                    this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                    this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                 }
                 createDocumentLayout(this.backgroundWidth, messageObject);
                 setMessageObjectInternal(messageObject);
@@ -4093,13 +4093,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.photoImage.setForcePreview(messageObject.isSecretPhoto());
                 if (messageObject.type == 9) {
                     if (AndroidUtilities.isTablet()) {
-                        dp = AndroidUtilities.getMinTabletSide();
+                        dp2 = AndroidUtilities.getMinTabletSide();
                         f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                        this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                        this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                     } else {
-                        dp = AndroidUtilities.displaySize.x;
+                        dp2 = AndroidUtilities.displaySize.x;
                         f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                        this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                        this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                     }
                     if (checkNeedDrawShareButton(messageObject)) {
                         this.backgroundWidth -= AndroidUtilities.dp(20.0f);
@@ -4136,13 +4136,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.currentUrl = String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=200x100&maptype=roadmap&scale=%d&markers=color:red|size:mid|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)});
                     } else {
                         if (AndroidUtilities.isTablet()) {
-                            dp = AndroidUtilities.getMinTabletSide();
+                            dp2 = AndroidUtilities.getMinTabletSide();
                             f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                            this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                         } else {
-                            dp = AndroidUtilities.displaySize.x;
+                            dp2 = AndroidUtilities.displaySize.x;
                             f = (this.isChat && messageObject.isFromUser() && !messageObject.isOutOwner()) ? 102.0f : 50.0f;
-                            this.backgroundWidth = Math.min(dp - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
+                            this.backgroundWidth = Math.min(dp2 - AndroidUtilities.dp(f), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_VIOLET));
                         }
                         if (checkNeedDrawShareButton(messageObject)) {
                             this.backgroundWidth -= AndroidUtilities.dp(20.0f);
@@ -4477,9 +4477,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                     buttonsCount = row.buttons.size();
                     if (buttonsCount != 0) {
-                        dp = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
+                        dp2 = this.widthForButtons - (AndroidUtilities.dp(5.0f) * (buttonsCount - 1));
                         f = (fullWidth || !this.mediaBackground) ? 9.0f : 0.0f;
-                        buttonWidth = ((dp - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
+                        buttonWidth = ((dp2 - AndroidUtilities.dp(f)) - AndroidUtilities.dp(2.0f)) / buttonsCount;
                         for (b = 0; b < row.buttons.size(); b++) {
                             chatMessageCell = this;
                             botButton = new BotButton();

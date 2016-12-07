@@ -545,6 +545,7 @@
     <string name="GalleryInfo">압축 없이 사진 보내기</string>
     <string name="General">일반</string>
     <string name="GettingLinkInfo">링크 정보를 가져오는 중...</string>
+    <string name="GifCaption">GIF 설명</string>
     <string name="GlobalSearch">전체 검색</string>
     <string name="GotAQuestion">텔레그램에 관해\n궁금한 사항이 있나요?</string>
     <string name="Grain">그레인</string>
@@ -585,6 +586,7 @@
     <string name="InChatSound">채팅중 소리 설정</string>
     <string name="IncorrectLocalization">언어 파일이 올바르지 않습니다.</string>
     <string name="Info">정보</string>
+    <string name="InstantView">즉시 보기</string>
     <string name="InternalStorage">내부 저장소</string>
     <string name="InvalidCode">올바른 코드를 입력해 주세요</string>
     <string name="InvalidFirstName">올바른 이름을 입력해 주세요</string>
@@ -603,6 +605,7 @@
     <string name="IsRecordingAudio">%1$s님이 음성메시지를 녹음중입니다...</string>
     <string name="IsSendingAudio">%1$s님이 음성파일을 전송중입니다...</string>
     <string name="IsSendingFile">%1$s님이 파일 보내는 중...</string>
+    <string name="IsSendingGame">%1$s님이 게임을 플레이중입니다.</string>
     <string name="IsSendingPhoto">%1$s님이 사진 보내는 중...</string>
     <string name="IsSendingVideo">%1$s님이 동영상 보내는 중...</string>
     <string name="IsTyping">님이 입력 중...</string>
@@ -610,6 +613,7 @@
     <string name="JoinToGroup">\'%1$s\' 채널에 참여하시겠습니까?</string>
     <string name="JoinToGroupErrorFull">죄송합니다, 그룹방의 인원이 최대치입니다.</string>
     <string name="JoinToGroupErrorNotExist">죄송합니다, 채팅방이 더이상 존재하지 않습니다.</string>
+    <string name="JumpToDate">날자로 이동</string>
     <string name="KMetersAway">km 떨어짐</string>
     <string name="KeepMedia">미디어 저장</string>
     <string name="KeepMediaForever">영원히</string>
@@ -886,6 +890,8 @@
     <string name="NotificationsServiceConnection">백그라운드 연결</string>
     <string name="NotificationsServiceConnectionInfo">알림을 받기 위하여 텔레그램 백그라운드 연결을 최소화로 유지합니다. 안정적인 알림을 유지합니다.</string>
     <string name="NotificationsServiceInfo">시스템이나 사용자에 의하여 닫힌 앱을 재시작합니다. 해당 작업은 알림을 보여지게 합니다.</string>
+    <string name="NotificationsTurnOff">끄기</string>
+    <string name="NotificationsTurnOn">켜기</string>
     <string name="NumberUnknown">알 수 없음</string>
     <string name="OK">확인</string>
     <string name="Of">%1$d / %2$d</string>
@@ -941,6 +947,7 @@
     <string name="PendingEmailText">복구 이메일 %1$s 이 아직 활성화 되지 않았으며 미승인 상태입니다.</string>
     <string name="PermissionContacts">Telegram은 여러 기기에서 친구와 메시지를 주고받을 수 있도록 회원님의 연락처 접근이 필요합니다.</string>
     <string name="PermissionNoAudio">Telegram이 음성 메시지를 보내기 위하여 마이크에 대한 접근이 필요합니다.</string>
+    <string name="PermissionNoAudioVideo">Telegram이 비디오 녹화를 위하여 마이크에 대한 접근이 필요합니다.</string>
     <string name="PermissionNoCamera">Telegram이 사진 및 비디오 촬영을 하기 위하여 카메라 접근 권한을 필요로 합니다.</string>
     <string name="PermissionNoLocation">Telegram이 위치를 친구분들과 공유하기 위해 위치에 대한 접근 권한을 필요로 합니다.</string>
     <string name="PermissionNoLocationPosition">텔레그램이 위치에 대한 권한이 필요합니다.</string>
@@ -984,6 +991,7 @@
     <string name="PopupDisabled">비활성화</string>
     <string name="PopupEnabled">활성화</string>
     <string name="PopupNotification">알림 팝업</string>
+    <string name="PreviewFeedback">미리보기에 대한 의견 남기기</string>
     <string name="PriorityInfo">우선수위가 높은 알림은 휴대폰 기기가 무음이더라도 알림이 작동합니다.</string>
     <string name="PrivacyFloodControlError">죄송합니다. 너무 많이 변경하셨습니다. 개인정보 설정을 변경할 수 없으니 잠시 기다려 주세요.</string>
     <string name="PrivacyLastSeen">마지막 접속</string>
@@ -1096,8 +1104,10 @@
     <string name="SendMessagesToGroup">%1$s 그룹에 메시지를 보낼까요?</string>
     <string name="SendSelectedLocation">선택한 위치 전송</string>
     <string name="SendSticker">스티커 전송</string>
+    <string name="SendStickerPreview">스티커 전송</string>
     <string name="SendingAudio">음성파일 전송 중..</string>
     <string name="SendingFile">파일 전송 중...</string>
+    <string name="SendingGame">게임 플레이중...</string>
     <string name="SendingGif">gif 전송 중...</string>
     <string name="SendingPhoto">사진 전송 중..</string>
     <string name="SendingVideo">동영상 보내는 중...</string>
@@ -1232,6 +1242,7 @@
     <string name="VibrationDefault">기본값</string>
     <string name="VibrationDisabled">비활성화됨</string>
     <string name="VideoCaption">동영상 설명</string>
+    <string name="ViewPackPreview">팩 보기</string>
     <string name="Vignette">비네팅</string>
     <string name="WaitingForNetwork">연결 대기 중...</string>
     <string name="Warmth">온기</string>
@@ -1301,15 +1312,4 @@
     <string name="messages_other">메시지 %1$d건</string>
     <string name="messages_two">메시지 %1$d건</string>
     <string name="messages_zero">메시지 없음</string>
-    <string name="GifCaption">GIF 설명</string>
-    <string name="InstantView">즉시 보기</string>
-    <string name="IsSendingGame">%1$s님이 게임을 플레이중입니다.</string>
-    <string name="JumpToDate">날자로 이동</string>
-    <string name="NotificationsTurnOff">끄기</string>
-    <string name="NotificationsTurnOn">켜기</string>
-    <string name="PermissionNoAudioVideo">Telegram이 비디오 녹화를 위하여 마이크에 대한 접근이 필요합니다.</string>
-    <string name="PreviewFeedback">미리보기에 대한 의견 남기기</string>
-    <string name="SendStickerPreview">스티커 전송</string>
-    <string name="SendingGame">게임 플레이중...</string>
-    <string name="ViewPackPreview">팩 보기</string>
 </resources>
