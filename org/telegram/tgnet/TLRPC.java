@@ -943,6 +943,7 @@ public class TLRPC {
         public byte[] g_a;
         public byte[] g_a_or_b;
         public int id;
+        public int in_seq_no;
         public int key_create_date;
         public long key_fingerprint;
         public byte[] key_hash;

@@ -128,7 +128,7 @@ public class ActionBar extends FrameLayout {
         }
         if (this.subtitleTextView != null) {
             SimpleTextView simpleTextView = this.subtitleTextView;
-            int i = (value == null || this.isSearchFieldVisible) ? 4 : 0;
+            int i = (value == null || this.isSearchFieldVisible) ? 8 : 0;
             simpleTextView.setVisibility(i);
             this.subtitleTextView.setText(value);
         }
@@ -177,6 +177,13 @@ public class ActionBar extends FrameLayout {
             return null;
         }
         return this.titleTextView.getText().toString();
+    }
+
+    public String getSubtitle() {
+        if (this.subtitleTextView == null) {
+            return null;
+        }
+        return this.subtitleTextView.getText().toString();
     }
 
     public ActionBarMenu createMenu() {

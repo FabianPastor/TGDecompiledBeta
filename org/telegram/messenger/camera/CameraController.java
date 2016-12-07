@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -14,6 +15,7 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.Size;
 import android.media.MediaRecorder;
 import android.media.MediaRecorder.OnInfoListener;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -28,7 +31,9 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CameraController implements OnInfoListener {
@@ -39,7 +44,8 @@ public class CameraController implements OnInfoListener {
     protected ArrayList<String> availableFlashModes = new ArrayList();
     protected ArrayList<CameraInfo> cameraInfos = null;
     private boolean cameraInitied;
-    private Runnable onVideoTakeCallback;
+    private VideoTakeCallback onVideoTakeCallback;
+    private String recordedFile;
     private MediaRecorder recorder;
     private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, MAX_POOL_SIZE, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
@@ -50,6 +56,10 @@ public class CameraController implements OnInfoListener {
         public int compare(Size lhs, Size rhs) {
             return Long.signum((((long) lhs.getWidth()) * ((long) lhs.getHeight())) - (((long) rhs.getWidth()) * ((long) rhs.getHeight())));
         }
+    }
+
+    public interface VideoTakeCallback {
+        void onFinishVideoRecording(Bitmap bitmap);
     }
 
     public static CameraController getInstance() {
@@ -287,6 +297,16 @@ public class CameraController implements OnInfoListener {
         try {
             info.camera.takePicture(null, null, new PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
+                    Bitmap bitmap = null;
+                    int size = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
+                    String key = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(path.getAbsolutePath()), Integer.valueOf(size), Integer.valueOf(size)});
+                    try {
+                        Options options = new Options();
+                        options.inPurgeable = true;
+                        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
                     try {
                         FileOutputStream outputStream;
                         if (info.frontCamera != 0) {
@@ -294,9 +314,6 @@ public class CameraController implements OnInfoListener {
                                 Matrix matrix = new Matrix();
                                 matrix.setRotate((float) CameraController.getOrientation(data));
                                 matrix.postScale(-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                                Options options = new Options();
-                                options.inPurgeable = true;
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                                 Bitmap scaled = Bitmaps.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
                                 bitmap.recycle();
                                 outputStream = new FileOutputStream(path);
@@ -304,14 +321,16 @@ public class CameraController implements OnInfoListener {
                                 outputStream.flush();
                                 outputStream.getFD().sync();
                                 outputStream.close();
-                                scaled.recycle();
+                                if (scaled != null) {
+                                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(scaled), key);
+                                }
                                 if (callback != null) {
                                     callback.run();
                                     return;
                                 }
                                 return;
-                            } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                            } catch (Throwable e2) {
+                                FileLog.e("tmessages", e2);
                             }
                         }
                         outputStream = new FileOutputStream(path);
@@ -319,8 +338,11 @@ public class CameraController implements OnInfoListener {
                         outputStream.flush();
                         outputStream.getFD().sync();
                         outputStream.close();
-                    } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        if (bitmap != null) {
+                            ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), key);
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.e("tmessages", e22);
                     }
                     if (callback != null) {
                         callback.run();
@@ -404,7 +426,7 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    public void recordVideo(CameraSession session, File path, Runnable callback) {
+    public void recordVideo(CameraSession session, File path, VideoTakeCallback callback) {
         if (session != null) {
             try {
                 CameraInfo info = session.cameraInfo;
@@ -429,6 +451,7 @@ public class CameraController implements OnInfoListener {
                         this.recorder.prepare();
                         this.recorder.start();
                         this.onVideoTakeCallback = callback;
+                        this.recordedFile = path.getAbsolutePath();
                     } catch (Throwable e) {
                         this.recorder.release();
                         this.recorder = null;
@@ -449,7 +472,12 @@ public class CameraController implements OnInfoListener {
                 tempRecorder.stop();
                 tempRecorder.release();
             }
-            AndroidUtilities.runOnUIThread(this.onVideoTakeCallback);
+            final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                }
+            });
         }
     }
 
@@ -466,7 +494,12 @@ public class CameraController implements OnInfoListener {
                 session.stopVideoRecording();
             }
             if (!abandon) {
-                AndroidUtilities.runOnUIThread(this.onVideoTakeCallback);
+                final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                    }
+                });
             }
         } catch (Throwable e) {
             FileLog.e("tmessages", e);

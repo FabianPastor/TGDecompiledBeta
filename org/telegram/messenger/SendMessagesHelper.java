@@ -1163,8 +1163,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 public void run(final TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            TL_game game = null;
-                            boolean z = true;
+                            SendMessagesHelper.this.waitingForCallback.remove(key);
                             if (response != null) {
                                 TL_messages_botCallbackAnswer res = response;
                                 int uid;
@@ -1175,57 +1174,56 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         if (messageObject2.messageOwner.via_bot_id != 0) {
                                             uid = messageObject2.messageOwner.via_bot_id;
                                         }
-                                        user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
-                                        if (user != null) {
-                                            chatActivity.showAlert(user, res.message);
+                                        String name = null;
+                                        if (uid > 0) {
+                                            user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+                                            if (user != null) {
+                                                name = ContactsController.formatName(user.first_name, user.last_name);
+                                            }
                                         } else {
-                                            return;
+                                            Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(-uid));
+                                            if (chat != null) {
+                                                name = chat.title;
+                                            }
                                         }
+                                        if (name == null) {
+                                            name = "bot";
+                                        }
+                                        chatActivity.showAlert(name, res.message);
                                     } else if (chatActivity.getParentActivity() != null) {
                                         Builder builder = new Builder(chatActivity.getParentActivity());
                                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                         builder.setMessage(res.message);
                                         chatActivity.showDialog(builder.create());
-                                    } else {
-                                        return;
                                     }
-                                } else if (res.url != null) {
-                                    if (chatActivity.getParentActivity() != null) {
-                                        boolean verified;
-                                        uid = messageObject2.messageOwner.from_id;
-                                        if (messageObject2.messageOwner.via_bot_id != 0) {
-                                            uid = messageObject2.messageOwner.via_bot_id;
-                                        }
-                                        user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
-                                        if (user == null || !user.verified) {
-                                            verified = false;
-                                        } else {
-                                            verified = true;
-                                        }
-                                        if (keyboardButton instanceof TL_keyboardButtonGame) {
-                                            if (messageObject2.messageOwner.media instanceof TL_messageMediaGame) {
-                                                game = messageObject2.messageOwner.media.game;
-                                            }
-                                            if (game != null) {
-                                                ChatActivity chatActivity = chatActivity;
-                                                MessageObject messageObject = messageObject2;
-                                                String str = res.url;
-                                                if (verified || !ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("askgame_" + uid, true)) {
-                                                    z = false;
-                                                }
-                                                chatActivity.showOpenGameAlert(game, messageObject, str, z, uid);
+                                } else if (res.url != null && chatActivity.getParentActivity() != null) {
+                                    uid = messageObject2.messageOwner.from_id;
+                                    if (messageObject2.messageOwner.via_bot_id != 0) {
+                                        uid = messageObject2.messageOwner.via_bot_id;
+                                    }
+                                    user = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+                                    boolean verified = user != null && user.verified;
+                                    if (keyboardButton instanceof TL_keyboardButtonGame) {
+                                        TL_game game = messageObject2.messageOwner.media instanceof TL_messageMediaGame ? messageObject2.messageOwner.media.game : null;
+                                        if (game != null) {
+                                            boolean z;
+                                            ChatActivity chatActivity = chatActivity;
+                                            MessageObject messageObject = messageObject2;
+                                            String str = res.url;
+                                            if (verified || !ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("askgame_" + uid, true)) {
+                                                z = false;
                                             } else {
-                                                return;
+                                                z = true;
                                             }
+                                            chatActivity.showOpenGameAlert(game, messageObject, str, z, uid);
+                                            return;
                                         }
-                                        chatActivity.showOpenUrlAlert(res.url, false);
-                                    } else {
                                         return;
                                     }
+                                    chatActivity.showOpenUrlAlert(res.url, false);
                                 }
                             }
-                            SendMessagesHelper.this.waitingForCallback.remove(key);
                         }
                     });
                 }
@@ -1239,8 +1237,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
+        long newTaskId;
         if (peer != null && game != null) {
-            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -3866,6 +3864,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3914,7 +3913,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;
@@ -4177,7 +4175,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo videoEditedInfo, long dialog_id, MessageObject reply_to_msg) {
+    public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo videoEditedInfo, long dialog_id, MessageObject reply_to_msg, String caption) {
         if (videoPath != null && videoPath.length() != 0) {
             final long j = dialog_id;
             final VideoEditedInfo videoEditedInfo2 = videoEditedInfo;
@@ -4186,6 +4184,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             final int i = height;
             final int i2 = width;
             final long j3 = estimatedSize;
+            final String str2 = caption;
             final MessageObject messageObject = reply_to_msg;
             new Thread(new Runnable() {
                 public void run() {
@@ -4269,6 +4268,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             originalPathFinal = originalPath;
                             finalPath = path;
                             params = new HashMap();
+                            videoFinal.caption = str2;
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
                             }
@@ -4337,6 +4337,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         originalPathFinal = originalPath;
                         finalPath = path;
                         params = new HashMap();
+                        videoFinal.caption = str2;
                         if (originalPath != null) {
                             params.put("originalPath", originalPath);
                         }
@@ -4346,7 +4347,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                         return;
                     }
-                    SendMessagesHelper.prepareSendingDocumentInternal(str, str, null, null, j, messageObject, null);
+                    SendMessagesHelper.prepareSendingDocumentInternal(str, str, null, null, j, messageObject, str2);
                 }
             }).start();
         }

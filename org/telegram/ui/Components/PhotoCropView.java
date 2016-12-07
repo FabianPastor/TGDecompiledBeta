@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
+import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -133,8 +134,8 @@ public class PhotoCropView extends FrameLayout {
             float diffY = y - this.oldY;
             float bitmapScaledWidth = ((float) this.bitmapWidth) * this.bitmapGlobalScale;
             float bitmapScaledHeight = ((float) this.bitmapHeight) * this.bitmapGlobalScale;
-            float bitmapStartX = (((((float) (getWidth() - AndroidUtilities.dp(28.0f))) - bitmapScaledWidth) / 2.0f) + this.bitmapGlobalX) + ((float) AndroidUtilities.dp(14.0f));
-            float bitmapStartY = (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - bitmapScaledHeight) / 2.0f) + this.bitmapGlobalY) + ((float) AndroidUtilities.dp(14.0f));
+            float bitmapStartX = ((((float) getWidth()) - bitmapScaledWidth) / 2.0f) + this.bitmapGlobalX;
+            float bitmapStartY = (((((float) getHeight()) - bitmapScaledHeight) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f) + this.bitmapGlobalY;
             float bitmapEndX = bitmapStartX + bitmapScaledWidth;
             float bitmapEndY = bitmapStartY + bitmapScaledHeight;
             float minSide = AndroidUtilities.getPixelsInCM(0.9f, true);
@@ -314,7 +315,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getRectY() {
-        return this.rectY - ((float) AndroidUtilities.dp(14.0f));
+        return (this.rectY - ((float) AndroidUtilities.dp(14.0f))) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
     }
 
     public float getRectSizeX() {
@@ -330,15 +331,15 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getBitmapY() {
-        return (float) (this.bitmapY - AndroidUtilities.dp(14.0f));
+        return ((float) (this.bitmapY - AndroidUtilities.dp(14.0f))) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
     }
 
     public float getLimitX() {
-        return this.rectX - ((float) (((int) Math.max(0.0d, Math.ceil((double) ((((float) (getWidth() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapWidth) * this.bitmapGlobalScale)) / 2.0f)))) + AndroidUtilities.dp(14.0f)));
+        return this.rectX - Math.max(0.0f, (float) Math.ceil((double) ((((float) getWidth()) - (((float) this.bitmapWidth) * this.bitmapGlobalScale)) / 2.0f)));
     }
 
     public float getLimitY() {
-        return this.rectY - ((float) (((int) Math.max(0.0d, Math.ceil((double) ((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) / 2.0f)))) + AndroidUtilities.dp(14.0f)));
+        return this.rectY - Math.max(0.0f, (float) Math.ceil((double) (((((float) getHeight()) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)));
     }
 
     public float getLimitWidth() {
@@ -346,7 +347,8 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getLimitHeight() {
-        return ((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) ((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) / 2.0f)))))) - this.rectSizeY;
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        return (((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - additionalY) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) - additionalY) / 2.0f)))))) - this.rectSizeY;
     }
 
     private Bitmap createBitmap(int x, int y, int w, int h) {
@@ -382,8 +384,8 @@ public class PhotoCropView extends FrameLayout {
         }
         float bitmapScaledWidth = ((float) this.bitmapWidth) * this.bitmapGlobalScale;
         float bitmapScaledHeight = ((float) this.bitmapHeight) * this.bitmapGlobalScale;
-        float percX = (this.rectX - ((((((float) (getWidth() - AndroidUtilities.dp(28.0f))) - bitmapScaledWidth) / 2.0f) + this.bitmapGlobalX) + ((float) AndroidUtilities.dp(14.0f)))) / bitmapScaledWidth;
-        float percY = (this.rectY - ((((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - bitmapScaledHeight) / 2.0f) + this.bitmapGlobalY) + ((float) AndroidUtilities.dp(14.0f)))) / bitmapScaledHeight;
+        float percX = (this.rectX - (((((float) getWidth()) - bitmapScaledWidth) / 2.0f) + this.bitmapGlobalX)) / bitmapScaledWidth;
+        float percY = (this.rectY - ((((((float) getHeight()) - bitmapScaledHeight) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f) + this.bitmapGlobalY)) / bitmapScaledHeight;
         float percSizeX = this.rectSizeX / bitmapScaledWidth;
         float percSizeY = this.rectSizeY / bitmapScaledHeight;
         if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
@@ -522,11 +524,12 @@ public class PhotoCropView extends FrameLayout {
         }
         float newSizeX = this.rectSizeX * scaleTo;
         float newSizeY = this.rectSizeY * scaleTo;
-        float newX = ((((float) (getWidth() - AndroidUtilities.dp(28.0f))) - newSizeX) / 2.0f) + ((float) AndroidUtilities.dp(14.0f));
-        float newY = ((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - newSizeY) / 2.0f) + ((float) AndroidUtilities.dp(14.0f));
+        float additionalY = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float newX = (((float) getWidth()) - newSizeX) / 2.0f;
+        float newY = ((((float) getHeight()) - newSizeY) + additionalY) / 2.0f;
         this.animationStartValues = new RectF(this.rectX, this.rectY, this.rectSizeX, this.rectSizeY);
         this.animationEndValues = new RectF(newX, newY, newSizeX, newSizeY);
-        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((float) (getHeight() / 2)) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
+        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
     }
 
     public void setDelegate(PhotoCropViewDelegate delegate) {
@@ -543,7 +546,7 @@ public class PhotoCropView extends FrameLayout {
             float bitmapW;
             float bitmapH;
             int viewWidth = getWidth() - AndroidUtilities.dp(28.0f);
-            int viewHeight = getHeight() - AndroidUtilities.dp(28.0f);
+            int viewHeight = (getHeight() - AndroidUtilities.dp(28.0f)) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
             if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                 bitmapW = (float) this.bitmapToEdit.getHeight();
                 bitmapH = (float) this.bitmapToEdit.getWidth();
@@ -567,7 +570,7 @@ public class PhotoCropView extends FrameLayout {
             this.bitmapWidth = (int) bitmapW;
             this.bitmapHeight = (int) bitmapH;
             this.bitmapX = (int) Math.ceil((double) (((viewWidth - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f)));
-            this.bitmapY = (int) Math.ceil((double) (((viewHeight - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f)));
+            this.bitmapY = (int) Math.ceil((double) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + (AndroidUtilities.dp(14.0f) + ((viewHeight - this.bitmapHeight) / 2))));
             if (this.rectX != -1.0f || this.rectY != -1.0f) {
                 this.rectX = (((float) this.bitmapWidth) * percX) + ((float) this.bitmapX);
                 this.rectY = (((float) this.bitmapHeight) * percY) + ((float) this.bitmapY);
@@ -585,7 +588,7 @@ public class PhotoCropView extends FrameLayout {
                 this.rectSizeY = (float) this.bitmapHeight;
             } else {
                 this.rectX = (float) this.bitmapX;
-                this.rectY = (float) (((viewHeight - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f));
+                this.rectY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + (AndroidUtilities.dp(14.0f) + ((viewHeight - this.bitmapWidth) / 2)));
                 this.rectSizeX = (float) this.bitmapWidth;
                 this.rectSizeY = (float) this.bitmapWidth;
             }

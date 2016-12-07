@@ -3,6 +3,8 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -12,8 +14,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -27,6 +27,7 @@ import org.telegram.ui.ActionBar.ActionBarLayout.ActionBarLayoutDelegate;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.LayoutHelper;
 
 public class ManageSpaceActivity extends Activity implements ActionBarLayoutDelegate {
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList();
@@ -61,26 +62,15 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             layoutParams1.width = -1;
             layoutParams1.height = -1;
             launchLayout.setLayoutParams(layoutParams1);
-            ImageView backgroundTablet = new ImageView(this);
-            backgroundTablet.setScaleType(ScaleType.CENTER_CROP);
-            backgroundTablet.setImageResource(R.drawable.cats);
-            launchLayout.addView(backgroundTablet);
-            RelativeLayout.LayoutParams relativeLayoutParams = (RelativeLayout.LayoutParams) backgroundTablet.getLayoutParams();
-            relativeLayoutParams.width = -1;
-            relativeLayoutParams.height = -1;
-            backgroundTablet.setLayoutParams(relativeLayoutParams);
-            launchLayout.addView(this.actionBarLayout);
-            relativeLayoutParams = (RelativeLayout.LayoutParams) this.actionBarLayout.getLayoutParams();
-            relativeLayoutParams.width = -1;
-            relativeLayoutParams.height = -1;
-            this.actionBarLayout.setLayoutParams(relativeLayoutParams);
+            View backgroundTablet = new View(this);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+            backgroundTablet.setBackgroundDrawable(drawable);
+            launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(-1, -1));
+            launchLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
             FrameLayout shadowTablet = new FrameLayout(this);
             shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-            launchLayout.addView(shadowTablet);
-            relativeLayoutParams = (RelativeLayout.LayoutParams) shadowTablet.getLayoutParams();
-            relativeLayoutParams.width = -1;
-            relativeLayoutParams.height = -1;
-            shadowTablet.setLayoutParams(relativeLayoutParams);
+            launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
             shadowTablet.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     if (ManageSpaceActivity.this.actionBarLayout.fragmentsStack.isEmpty() || event.getAction() != 1) {
@@ -115,11 +105,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             this.layersActionBarLayout.setBackgroundView(shadowTablet);
             this.layersActionBarLayout.setUseAlphaAnimations(true);
             this.layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
-            launchLayout.addView(this.layersActionBarLayout);
-            relativeLayoutParams = (RelativeLayout.LayoutParams) this.layersActionBarLayout.getLayoutParams();
-            relativeLayoutParams.width = AndroidUtilities.dp(530.0f);
-            relativeLayoutParams.height = AndroidUtilities.dp(528.0f);
-            this.layersActionBarLayout.setLayoutParams(relativeLayoutParams);
+            launchLayout.addView(this.layersActionBarLayout, LayoutHelper.createRelative(530, 528));
             this.layersActionBarLayout.init(layerFragmentsStack);
             this.layersActionBarLayout.setDelegate(this);
             this.layersActionBarLayout.setDrawerLayoutContainer(this.drawerLayoutContainer);

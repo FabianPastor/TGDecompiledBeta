@@ -12,7 +12,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Point;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -26,12 +29,11 @@ import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -104,7 +106,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private static ArrayList<BaseFragment> mainFragmentsStack = new ArrayList();
     private static ArrayList<BaseFragment> rightFragmentsStack = new ArrayList();
     private ActionBarLayout actionBarLayout;
-    private ImageView backgroundTablet;
+    private View backgroundTablet;
     private ArrayList<User> contactsToSend;
     private int currentConnectionState;
     private String documentsMimeType;
@@ -144,7 +146,6 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* Code decompiled incorrectly, please refer to instructions dump. */
     protected void onCreate(Bundle savedInstanceState) {
         int dp;
-        boolean z;
         ApplicationLoader.postInitApplication();
         NativeCrashManager.handleDumpFiles(this);
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
@@ -251,9 +252,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             };
             this.drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(-1, -1.0f));
-            this.backgroundTablet = new ImageView(this);
-            this.backgroundTablet.setScaleType(ScaleType.CENTER_CROP);
-            this.backgroundTablet.setImageResource(R.drawable.cats);
+            this.backgroundTablet = new View(this);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+            this.backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
             launchLayout.addView(this.actionBarLayout);
             this.rightActionBarLayout = new ActionBarLayout(this);
@@ -324,7 +326,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         this.listView.setDividerHeight(0);
         this.listView.setVerticalScrollBarEnabled(false);
         this.drawerLayoutContainer.setDrawerLayout(this.listView);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
+        LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
         Point screenSize = AndroidUtilities.getRealScreenSize();
         if (AndroidUtilities.isTablet()) {
             dp = AndroidUtilities.dp(320.0f);
@@ -768,13 +770,43 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             this.drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
         checkLayout();
-        Intent intent2 = getIntent();
-        if (savedInstanceState != null) {
-            z = true;
-        } else {
-            z = false;
+        handleIntent(getIntent(), false, savedInstanceState != null, false);
+        try {
+            String os1 = Build.DISPLAY;
+            String os2 = Build.USER;
+            if (os1 != null) {
+                os1 = os1.toLowerCase();
+            } else {
+                os1 = "";
+            }
+            if (os2 != null) {
+                os2 = os1.toLowerCase();
+            } else {
+                os2 = "";
+            }
+            if (os1.contains("flyme") || os2.contains("flyme")) {
+                AndroidUtilities.incorrectDisplaySizeFix = true;
+                View view = getWindow().getDecorView().getRootView();
+                ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+                final View view2 = view;
+                OnGlobalLayoutListener anonymousClass6 = new OnGlobalLayoutListener() {
+                    public void onGlobalLayout() {
+                        int height = view2.getMeasuredHeight();
+                        if (VERSION.SDK_INT >= 21) {
+                            height -= AndroidUtilities.statusBarHeight;
+                        }
+                        if (height > AndroidUtilities.dp(100.0f) && height < AndroidUtilities.displaySize.y && AndroidUtilities.dp(100.0f) + height > AndroidUtilities.displaySize.y) {
+                            AndroidUtilities.displaySize.y = height;
+                            FileLog.e("tmessages", "fix display size y to " + AndroidUtilities.displaySize.y);
+                        }
+                    }
+                };
+                this.onGlobalLayoutListener = anonymousClass6;
+                viewTreeObserver.addOnGlobalLayoutListener(anonymousClass6);
+            }
+        } catch (Throwable e2) {
+            FileLog.e("tmessages", e2);
         }
-        handleIntent(intent2, false, z, false);
     }
 
     private void checkLayout() {
@@ -801,11 +833,11 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             }
             this.shadowTabletSide.setVisibility(8);
             this.rightActionBarLayout.setVisibility(8);
-            ImageView imageView = this.backgroundTablet;
+            View view = this.backgroundTablet;
             if (this.actionBarLayout.fragmentsStack.isEmpty()) {
                 i2 = 0;
             }
-            imageView.setVisibility(i2);
+            view.setVisibility(i2);
             return;
         }
         int i3;
@@ -829,13 +861,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             i3 = 0;
         }
         actionBarLayout.setVisibility(i3);
-        ImageView imageView2 = this.backgroundTablet;
+        View view2 = this.backgroundTablet;
         if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
             i3 = 0;
         } else {
             i3 = 8;
         }
-        imageView2.setVisibility(i3);
+        view2.setVisibility(i3);
         FrameLayout frameLayout = this.shadowTabletSide;
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             i = 8;
@@ -1890,7 +1922,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                 } else {
                     this.actionBarLayout.presentFragment(chatActivity, dialogsFragment != null, dialogsFragment == null, true);
-                    SendMessagesHelper.prepareSendingVideo(this.videoPath, 0, 0, 0, 0, null, dialog_id, null);
+                    SendMessagesHelper.prepareSendingVideo(this.videoPath, 0, 0, 0, 0, null, dialog_id, null, null);
                 }
                 this.photoPathsArray = null;
                 this.videoPath = null;

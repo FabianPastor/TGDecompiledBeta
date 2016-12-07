@@ -8,7 +8,6 @@ import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
@@ -100,7 +99,7 @@ public class RenderView extends TextureView {
             this.egl10 = (EGL10) EGLContext.getEGL();
             this.eglDisplay = this.egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             if (this.eglDisplay == EGL10.EGL_NO_DISPLAY) {
-                Log.e("tmessages", "eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                FileLog.e("tmessages", "eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 finish();
                 return false;
             }
@@ -108,20 +107,20 @@ public class RenderView extends TextureView {
                 int[] configsCount = new int[1];
                 EGLConfig[] configs = new EGLConfig[1];
                 if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 0, 12326, 0, 12344}, configs, 1, configsCount)) {
-                    Log.e("tmessages", "eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.e("tmessages", "eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     finish();
                     return false;
                 } else if (configsCount[0] > 0) {
                     this.eglConfig = configs[0];
                     this.eglContext = this.egl10.eglCreateContext(this.eglDisplay, this.eglConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                     if (this.eglContext == null) {
-                        Log.e("tmessages", "eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                        FileLog.e("tmessages", "eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         finish();
                         return false;
                     } else if (this.surfaceTexture instanceof SurfaceTexture) {
                         this.eglSurface = this.egl10.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surfaceTexture, null);
                         if (this.eglSurface == null || this.eglSurface == EGL10.EGL_NO_SURFACE) {
-                            Log.e("tmessages", "createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.e("tmessages", "createWindowSurface failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             finish();
                             return false;
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
@@ -135,7 +134,7 @@ public class RenderView extends TextureView {
                             Utils.HasGLError();
                             return true;
                         } else {
-                            Log.e("tmessages", "eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                            FileLog.e("tmessages", "eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                             finish();
                             return false;
                         }
@@ -144,12 +143,12 @@ public class RenderView extends TextureView {
                         return false;
                     }
                 } else {
-                    Log.e("tmessages", "eglConfig not initialized");
+                    FileLog.e("tmessages", "eglConfig not initialized");
                     finish();
                     return false;
                 }
             }
-            Log.e("tmessages", "eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+            FileLog.e("tmessages", "eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
             finish();
             return false;
         }
@@ -192,24 +191,7 @@ public class RenderView extends TextureView {
         public void requestRender() {
             postRunnable(new Runnable() {
                 public void run() {
-                    long newTime = System.currentTimeMillis();
-                    if (Math.abs(CanvasInternal.this.lastRenderCallTime - newTime) > 30) {
-                        CanvasInternal.this.lastRenderCallTime = newTime;
-                        CanvasInternal.this.drawRunnable.run();
-                    }
-                }
-            });
-        }
-
-        public void onSizeChanged() {
-            postRunnable(new Runnable() {
-                public void run() {
-                    long newTime = System.currentTimeMillis();
-                    if (Math.abs(CanvasInternal.this.lastRenderCallTime - newTime) > 30) {
-                        CanvasInternal.this.lastRenderCallTime = newTime;
-                        CanvasInternal.this.drawRunnable.run();
-                        CanvasInternal.this.drawRunnable.run();
-                    }
+                    CanvasInternal.this.drawRunnable.run();
                 }
             });
         }
@@ -300,7 +282,14 @@ public class RenderView extends TextureView {
                 if (RenderView.this.internal != null) {
                     RenderView.this.internal.setBufferSize(width, height);
                     RenderView.this.updateTransform();
-                    RenderView.this.internal.onSizeChanged();
+                    RenderView.this.internal.requestRender();
+                    RenderView.this.internal.postRunnable(new Runnable() {
+                        public void run() {
+                            if (RenderView.this.internal != null) {
+                                RenderView.this.internal.requestRender();
+                            }
+                        }
+                    });
                 }
             }
 
@@ -341,7 +330,6 @@ public class RenderView extends TextureView {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d("a", "b");
     }
 
     public boolean onTouchEvent(MotionEvent event) {

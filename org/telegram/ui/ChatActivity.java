@@ -282,34 +282,41 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private MessageObject botButtons;
     private PhotoViewerProvider botContextProvider = new PhotoViewerProvider() {
         public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            if (index < 0 || index >= ChatActivity.this.botContextResults.size()) {
-                return null;
-            }
-            int count = ChatActivity.this.mentionListView.getChildCount();
-            BotInlineResult result = ChatActivity.this.botContextResults.get(index);
-            for (int a = 0; a < count; a++) {
-                ImageReceiver imageReceiver = null;
-                View view = ChatActivity.this.mentionListView.getChildAt(a);
-                if (view instanceof ContextLinkCell) {
-                    ContextLinkCell cell = (ContextLinkCell) view;
-                    if (cell.getResult() == result) {
-                        imageReceiver = cell.getPhotoImage();
+            PlaceProviderObject placeProviderObject = null;
+            int i = 0;
+            if (index >= 0 && index < ChatActivity.this.botContextResults.size()) {
+                int count = ChatActivity.this.mentionListView.getChildCount();
+                BotInlineResult result = ChatActivity.this.botContextResults.get(index);
+                int a = 0;
+                while (a < count) {
+                    ImageReceiver imageReceiver = null;
+                    View view = ChatActivity.this.mentionListView.getChildAt(a);
+                    if (view instanceof ContextLinkCell) {
+                        ContextLinkCell cell = (ContextLinkCell) view;
+                        if (cell.getResult() == result) {
+                            imageReceiver = cell.getPhotoImage();
+                        }
+                    }
+                    if (imageReceiver != null) {
+                        int[] coords = new int[2];
+                        view.getLocationInWindow(coords);
+                        placeProviderObject = new PlaceProviderObject();
+                        placeProviderObject.viewX = coords[0];
+                        int i2 = coords[1];
+                        if (VERSION.SDK_INT < 21) {
+                            i = AndroidUtilities.statusBarHeight;
+                        }
+                        placeProviderObject.viewY = i2 - i;
+                        placeProviderObject.parentView = ChatActivity.this.mentionListView;
+                        placeProviderObject.imageReceiver = imageReceiver;
+                        placeProviderObject.thumb = imageReceiver.getBitmap();
+                        placeProviderObject.radius = imageReceiver.getRoundRadius();
+                    } else {
+                        a++;
                     }
                 }
-                if (imageReceiver != null) {
-                    int[] coords = new int[2];
-                    view.getLocationInWindow(coords);
-                    PlaceProviderObject object = new PlaceProviderObject();
-                    object.viewX = coords[0];
-                    object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
-                    object.parentView = ChatActivity.this.mentionListView;
-                    object.imageReceiver = imageReceiver;
-                    object.thumb = imageReceiver.getBitmap();
-                    object.radius = imageReceiver.getRoundRadius();
-                    return object;
-                }
             }
-            return null;
+            return placeProviderObject;
         }
 
         public Bitmap getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
@@ -344,6 +351,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         public void updatePhotoAtIndex(int index) {
+        }
+
+        public boolean scaleToFill() {
+            return false;
         }
 
         public boolean allowCaption() {
@@ -3721,7 +3732,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
                     public boolean didSelectVideo(String path) {
                         if (VERSION.SDK_INT < 16) {
-                            SendMessagesHelper.prepareSendingVideo(path, 0, 0, 0, 0, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject);
+                            SendMessagesHelper.prepareSendingVideo(path, 0, 0, 0, 0, null, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, null);
                             ChatActivity.this.showReplyPanel(false, null, null, null, false, true);
                             DraftQuery.cleanDraft(ChatActivity.this.dialog_id, true);
                             return true;
@@ -4954,9 +4965,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     public boolean openVideoEditor(String videoPath, boolean removeLast, boolean animated) {
         Bundle args = new Bundle();
         args.putString("videoPath", videoPath);
-        VideoEditorActivity fragment = new VideoEditorActivity(args);
-        fragment.setDelegate(new VideoEditorActivityDelegate() {
-            public void didFinishEditVideo(String videoPath, long startTime, long endTime, int resultWidth, int resultHeight, int rotationValue, int originalWidth, int originalHeight, int bitrate, long estimatedSize, long estimatedDuration) {
+        BaseFragment videoEditorActivity = new VideoEditorActivity(args);
+        videoEditorActivity.setDelegate(new VideoEditorActivityDelegate() {
+            public void didFinishEditVideo(String videoPath, long startTime, long endTime, int resultWidth, int resultHeight, int rotationValue, int originalWidth, int originalHeight, int bitrate, long estimatedSize, long estimatedDuration, String caption) {
                 VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
                 videoEditedInfo.startTime = startTime;
                 videoEditedInfo.endTime = endTime;
@@ -4967,18 +4978,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 videoEditedInfo.resultWidth = resultWidth;
                 videoEditedInfo.resultHeight = resultHeight;
                 videoEditedInfo.originalPath = videoPath;
-                SendMessagesHelper.prepareSendingVideo(videoPath, estimatedSize, estimatedDuration, resultWidth, resultHeight, videoEditedInfo, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject);
+                SendMessagesHelper.prepareSendingVideo(videoPath, estimatedSize, estimatedDuration, resultWidth, resultHeight, videoEditedInfo, ChatActivity.this.dialog_id, ChatActivity.this.replyingMessageObject, caption);
                 ChatActivity.this.showReplyPanel(false, null, null, null, false, true);
                 DraftQuery.cleanDraft(ChatActivity.this.dialog_id, true);
             }
         });
-        if (this.parentLayout == null || !fragment.onFragmentCreate()) {
-            SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject);
+        if (this.parentLayout == null || !videoEditorActivity.onFragmentCreate()) {
+            SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null);
             showReplyPanel(false, null, null, null, false, true);
             DraftQuery.cleanDraft(this.dialog_id, true);
             return false;
         }
-        this.parentLayout.presentFragment(fragment, removeLast, !animated, true);
+        if (this.parentLayout.presentFragment(videoEditorActivity, removeLast, !animated, true)) {
+            videoEditorActivity.setParentChatActivity(this);
+        }
         return true;
     }
 
@@ -5037,7 +5050,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     showAttachmentError();
                 }
                 if (VERSION.SDK_INT < 16) {
-                    SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject);
+                    SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null);
                 } else if (this.paused) {
                     this.startVideoEdit = videoPath;
                 } else {
@@ -5076,7 +5089,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 this.currentPicturePath = null;
             }
             if (VERSION.SDK_INT < 16) {
-                SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject);
+                SendMessagesHelper.prepareSendingVideo(videoPath, 0, 0, 0, 0, null, this.dialog_id, this.replyingMessageObject, null);
                 showReplyPanel(false, null, null, null, false, true);
                 DraftQuery.cleanDraft(this.dialog_id, true);
             } else if (this.paused) {
@@ -5820,6 +5833,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 }
                             }
                             dayArray.add(0, obj);
+                            if (placeToPaste > this.messages.size()) {
+                                placeToPaste = this.messages.size();
+                            }
                             this.messages.add(placeToPaste, obj);
                             addedCount++;
                             this.newUnreadMessageCount++;
@@ -6938,8 +6954,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
-    public void showAlert(User user, String message) {
-        if (this.alertView != null && user != null && message != null) {
+    public void showAlert(String name, String message) {
+        if (this.alertView != null && name != null && message != null) {
             if (this.alertView.getTag() != null) {
                 this.alertView.setTag(null);
                 if (this.alertViewAnimator != null) {
@@ -6968,7 +6984,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 });
                 this.alertViewAnimator.start();
             }
-            this.alertNameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
+            this.alertNameTextView.setText(name);
             this.alertTextView.setText(Emoji.replaceEmoji(message.replace('\n', ' '), this.alertTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
             if (this.hideAlertViewRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.hideAlertViewRunnable);
@@ -8411,7 +8427,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     public boolean onBackPressed() {
-        if (this.actionBar.isActionModeShowed()) {
+        if (this.actionBar != null && this.actionBar.isActionModeShowed()) {
             for (int a = 1; a >= 0; a--) {
                 this.selectedMessagesIds[a].clear();
                 this.selectedMessagesCanCopyIds[a].clear();
@@ -8422,7 +8438,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.cantDeleteMessagesCount = 0;
             updateVisibleRows();
             return false;
-        } else if (!this.chatActivityEnterView.isPopupShowing()) {
+        } else if (this.chatActivityEnterView == null || !this.chatActivityEnterView.isPopupShowing()) {
             return true;
         } else {
             this.chatActivityEnterView.hidePopup(true);
@@ -8580,6 +8596,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         return true;
     }
 
+    public boolean scaleToFill() {
+        return false;
+    }
+
     public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
         int count = this.chatListView.getChildCount();
         for (int a = 0; a < count; a++) {
@@ -8618,7 +8638,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 view.getLocationInWindow(coords);
                 PlaceProviderObject object = new PlaceProviderObject();
                 object.viewX = coords[0];
-                object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
+                object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
                 object.parentView = this.chatListView;
                 object.imageReceiver = imageReceiver;
                 object.thumb = imageReceiver.getBitmap();
@@ -8666,6 +8686,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public void sendMedia(PhotoEntry photoEntry, boolean mutedVideo) {
         if (photoEntry.isVideo) {
+            String charSequence;
             VideoEditedInfo videoEditedInfo = null;
             long size = 0;
             if (mutedVideo) {
@@ -8676,7 +8697,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 videoEditedInfo.startTime = -1;
                 size = new File(photoEntry.path).length();
             }
-            SendMessagesHelper.prepareSendingVideo(photoEntry.path, size, 0, 0, 0, videoEditedInfo, this.dialog_id, this.replyingMessageObject);
+            String str = photoEntry.path;
+            long j = this.dialog_id;
+            MessageObject messageObject = this.replyingMessageObject;
+            if (photoEntry.caption != null) {
+                charSequence = photoEntry.caption.toString();
+            } else {
+                charSequence = null;
+            }
+            SendMessagesHelper.prepareSendingVideo(str, size, 0, 0, 0, videoEditedInfo, j, messageObject, charSequence);
         } else if (photoEntry.imagePath != null) {
             SendMessagesHelper.prepareSendingPhoto(photoEntry.imagePath, null, this.dialog_id, this.replyingMessageObject, photoEntry.caption, photoEntry.stickers);
             showReplyPanel(false, null, null, null, false, true);

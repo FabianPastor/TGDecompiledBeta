@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
@@ -114,6 +115,9 @@ public class MessageObject {
     private static TextPaint botButtonPaint;
     private static TextPaint gameTextPaint;
     private static TextPaint textPaint;
+    private static TextPaint textPaintOneEmoji;
+    private static TextPaint textPaintThreeEmoji;
+    private static TextPaint textPaintTwoEmoji;
     public static Pattern urlPattern;
     public boolean attachPathExists;
     public float audioProgress;
@@ -166,6 +170,18 @@ public class MessageObject {
             gameTextPaint = new TextPaint(1);
             gameTextPaint.setColor(-16777216);
             gameTextPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
+        }
+        if (textPaintOneEmoji == null) {
+            textPaintOneEmoji = new TextPaint(1);
+            textPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
+        }
+        if (textPaintTwoEmoji == null) {
+            textPaintTwoEmoji = new TextPaint(1);
+            textPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
+        }
+        if (textPaintThreeEmoji == null) {
+            textPaintThreeEmoji = new TextPaint(1);
+            textPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
         }
         textPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getInstance().fontSize));
         gameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -428,7 +444,32 @@ public class MessageObject {
             } else {
                 paint = textPaint;
             }
-            this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            int[] emojiOnly = MessagesController.getInstance().allowBigEmoji ? new int[1] : null;
+            this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
+            if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
+                TextPaint emojiPaint;
+                int size;
+                switch (emojiOnly[0]) {
+                    case 1:
+                        emojiPaint = textPaintOneEmoji;
+                        size = AndroidUtilities.dp(32.0f);
+                        break;
+                    case 2:
+                        emojiPaint = textPaintTwoEmoji;
+                        size = AndroidUtilities.dp(28.0f);
+                        break;
+                    default:
+                        emojiPaint = textPaintThreeEmoji;
+                        size = AndroidUtilities.dp(24.0f);
+                        break;
+                }
+                EmojiSpan[] spans = (EmojiSpan[]) ((Spannable) this.messageText).getSpans(0, this.messageText.length(), EmojiSpan.class);
+                if (spans != null && spans.length > 0) {
+                    for (EmojiSpan replaceFontMetrics : spans) {
+                        replaceFontMetrics.replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
+                    }
+                }
+            }
             generateLayout(fromUser);
         }
         this.layoutCreated = generateLayout;
@@ -464,6 +505,18 @@ public class MessageObject {
             gameTextPaint = new TextPaint(1);
             gameTextPaint.setColor(-16777216);
             gameTextPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
+        }
+        if (textPaintOneEmoji == null) {
+            textPaintOneEmoji = new TextPaint(1);
+            textPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
+        }
+        if (textPaintTwoEmoji == null) {
+            textPaintTwoEmoji = new TextPaint(1);
+            textPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
+        }
+        if (textPaintThreeEmoji == null) {
+            textPaintThreeEmoji = new TextPaint(1);
+            textPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
         }
         textPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getInstance().fontSize));
         gameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -1174,7 +1227,7 @@ public class MessageObject {
                     }
                 }
             }
-            boolean needShare = this.messageOwner.from_id > 0 && !((this.messageOwner.to_id.channel_id == 0 && this.messageOwner.to_id.chat_id == 0) || isOut());
+            boolean needShare = this.messageOwner.from_id > 0 && !((this.messageOwner.to_id.channel_id == 0 && this.messageOwner.to_id.chat_id == 0 && !(this.messageOwner.media instanceof TL_messageMediaGame)) || isOut());
             this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
             int maxWidth = this.generatedWithMinSize - AndroidUtilities.dp(needShare ? 122.0f : 80.0f);
             if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {

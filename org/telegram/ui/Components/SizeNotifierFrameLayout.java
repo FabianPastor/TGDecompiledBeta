@@ -3,12 +3,13 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.FileLog;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     private Drawable backgroundDrawable;
@@ -24,14 +25,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public SizeNotifierFrameLayout(Context context) {
         super(context);
         setWillNotDraw(false);
-    }
-
-    public void setBackgroundImage(int resourceId) {
-        try {
-            this.backgroundDrawable = getResources().getDrawable(resourceId);
-        } catch (Throwable e) {
-            FileLog.e("tmessages", e);
-        }
     }
 
     public void setBackgroundImage(Drawable bitmap) {
@@ -88,8 +81,18 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             if (this.bottomClip != 0) {
                 canvas.restore();
             }
+        } else if (!(this.backgroundDrawable instanceof BitmapDrawable)) {
         } else {
             float scale;
+            if (this.backgroundDrawable.getTileModeX() == TileMode.REPEAT) {
+                canvas.save();
+                scale = 2.0f / AndroidUtilities.density;
+                canvas.scale(scale, scale);
+                this.backgroundDrawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / scale)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / scale)));
+                this.backgroundDrawable.draw(canvas);
+                canvas.restore();
+                return;
+            }
             float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
             float scaleY = ((float) (getMeasuredHeight() + this.keyboardHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
             if (scaleX < scaleY) {

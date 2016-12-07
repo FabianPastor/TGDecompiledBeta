@@ -154,9 +154,11 @@ public final class R {
         public static final int btn_send_location_up = NUM;
         public static final int btnshadow = NUM;
         public static final int burn = NUM;
-        public static final int camswitch = NUM;
+        public static final int camera_btn = NUM;
+        public static final int camera_revert1 = NUM;
+        public static final int camera_revert2 = NUM;
         public static final int cancel_big = NUM;
-        public static final int cats = NUM;
+        public static final int catstile = NUM;
         public static final int channelintro = NUM;
         public static final int chat_badge = NUM;
         public static final int check_blue = NUM;
@@ -243,6 +245,9 @@ public final class R {
         public static final int file_g_load = NUM;
         public static final int file_g_load_s = NUM;
         public static final int file_g_s = NUM;
+        public static final int flash_auto = NUM;
+        public static final int flash_off = NUM;
+        public static final int flash_on = NUM;
         public static final int floating = NUM;
         public static final int floating3_profile = NUM;
         public static final int floating3_profile_m = NUM;
@@ -298,9 +303,6 @@ public final class R {
         public static final int ic_emoji_symbol = NUM;
         public static final int ic_external_storage = NUM;
         public static final int ic_fingerprint_error = NUM;
-        public static final int ic_flash_auto = NUM;
-        public static final int ic_flash_off = NUM;
-        public static final int ic_flash_on = NUM;
         public static final int ic_fp_40px = NUM;
         public static final int ic_gallery_background = NUM;
         public static final int ic_keyboard_w = NUM;
@@ -396,7 +398,6 @@ public final class R {
         public static final int menu_shadow = NUM;
         public static final int mic = NUM;
         public static final int mic_pressed = NUM;
-        public static final int mid_shadow = NUM;
         public static final int miniplayer_close = NUM;
         public static final int miniplayer_pause = NUM;
         public static final int miniplayer_play = NUM;
@@ -552,7 +553,6 @@ public final class R {
         public static final int share_round = NUM;
         public static final int sharedmedia = NUM;
         public static final int sheet_shadow = NUM;
-        public static final int shutter_shadow = NUM;
         public static final int slidearrow = NUM;
         public static final int smiles_popup = NUM;
         public static final int spinner_states = NUM;
@@ -607,6 +607,7 @@ public final class R {
         public static final int adjust_width = NUM;
         public static final int audio_container = NUM;
         public static final int auto = NUM;
+        public static final int background_image_intro = NUM;
         public static final int bottom_pages = NUM;
         public static final int bubble_text_view = NUM;
         public static final int button_add_response = NUM;
@@ -1097,6 +1098,9 @@ public final class R {
         public static final int EditVideo = NUM;
         public static final int EditedMessage = NUM;
         public static final int EmailPasswordConfirmText = NUM;
+        public static final int Emoji = NUM;
+        public static final int EmojiBigSize = NUM;
+        public static final int EmojiUseDefault = NUM;
         public static final int EmpryUsersPlaceholder = NUM;
         public static final int EnableAnimations = NUM;
         public static final int Enabled = NUM;

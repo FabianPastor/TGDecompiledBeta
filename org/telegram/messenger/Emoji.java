@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
+import android.text.TextPaint;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,20 +36,23 @@ public class Emoji {
     private static final int splitCount = 4;
 
     private static class DrawableInfo {
+        public int emojiIndex;
         public byte page;
         public byte page2;
         public Rect rect;
 
-        public DrawableInfo(Rect r, byte p, byte p2) {
+        public DrawableInfo(Rect r, byte p, byte p2, int index) {
             this.rect = r;
             this.page = p;
             this.page2 = p2;
+            this.emojiIndex = index;
         }
     }
 
     public static class EmojiDrawable extends Drawable {
         private static Paint paint = new Paint(2);
         private static Rect rect = new Rect();
+        private static TextPaint textPaint = new TextPaint(1);
         private boolean fullSize = false;
         private DrawableInfo info;
 
@@ -171,7 +175,7 @@ public class Emoji {
                 int position = i - (page * count2);
                 int row = position % cols[j][page];
                 int col = position / cols[j][page];
-                rects.put(EmojiData.data[j][i], new DrawableInfo(new Rect((row * emojiFullSize) + (row * add), (col * emojiFullSize) + (col * add), ((row + 1) * emojiFullSize) + (row * add), ((col + 1) * emojiFullSize) + (col * add)), (byte) j, (byte) page));
+                rects.put(EmojiData.data[j][i], new DrawableInfo(new Rect((row * emojiFullSize) + (row * add), (col * emojiFullSize) + (col * add), ((row + 1) * emojiFullSize) + (row * add), ((col + 1) * emojiFullSize) + (col * add)), (byte) j, (byte) page, i));
             }
         }
         placeholderPaint.setColor(0);
@@ -309,7 +313,11 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew) {
-        if (cs == null || cs.length() == 0) {
+        return replaceEmoji(cs, fontMetrics, size, createNew, null);
+    }
+
+    public static CharSequence replaceEmoji(CharSequence cs, FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
+        if (MessagesController.getInstance().useSystemEmoji || cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -370,6 +378,9 @@ public class Emoji {
                     startIndex = -1;
                     startLength = 0;
                     doneEmoji = false;
+                } else if (!(c == '️' || emojiOnly == null)) {
+                    emojiOnly[0] = 0;
+                    emojiOnly = null;
                 }
                 previousGoodIndex = i;
                 for (int a = 0; a < 3; a++) {
@@ -389,6 +400,9 @@ public class Emoji {
                     }
                 }
                 if (doneEmoji) {
+                    if (emojiOnly != null) {
+                        emojiOnly[0] = emojiOnly[0] + 1;
+                    }
                     if (i + 2 < length && cs.charAt(i + 1) == '?' && cs.charAt(i + 2) >= '?' && cs.charAt(i + 2) <= '?') {
                         emojiCode.append(cs.subSequence(i + 1, i + 3));
                         startLength += 2;

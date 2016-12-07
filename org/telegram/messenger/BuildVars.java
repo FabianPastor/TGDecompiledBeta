@@ -4,7 +4,7 @@ public class BuildVars {
     public static String APP_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e";
     public static int APP_ID = 6;
     public static String BING_SEARCH_KEY = "dKYt6BjhkmFnJABZI/nWs++mx7owYEKZLcdA3DTOO1s";
-    public static int BUILD_VERSION = 849;
+    public static int BUILD_VERSION = 851;
     public static String BUILD_VERSION_STRING = "3.13";
     public static boolean DEBUG_VERSION = true;
     public static String FOURSQUARE_API_ID = "WQFF4AJFCITFSTBAU2H2UPLCBNPP3TMAZH5XLR1AHZ0AN3EH";

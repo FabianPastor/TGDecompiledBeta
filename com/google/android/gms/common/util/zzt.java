@@ -22,10 +22,10 @@ public class zzt {
     }
 
     private static String zzhl(int i) {
+        BufferedReader bufferedReader;
         Throwable e;
         Throwable th;
         String str = null;
-        BufferedReader bufferedReader;
         try {
             bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));
             try {

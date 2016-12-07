@@ -1965,8 +1965,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         return true;
     }
 
+    public boolean scaleToFill() {
+        return false;
+    }
+
     public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
         PlaceProviderObject placeProviderObject = null;
+        int i = 0;
         if (fileLocation != null) {
             FileLocation photoBig = null;
             if (this.user_id != 0) {
@@ -1985,7 +1990,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.avatarImage.getLocationInWindow(coords);
                 placeProviderObject = new PlaceProviderObject();
                 placeProviderObject.viewX = coords[0];
-                placeProviderObject.viewY = coords[1] - AndroidUtilities.statusBarHeight;
+                int i2 = coords[1];
+                if (VERSION.SDK_INT < 21) {
+                    i = AndroidUtilities.statusBarHeight;
+                }
+                placeProviderObject.viewY = i2 - i;
                 placeProviderObject.parentView = this.avatarImage;
                 placeProviderObject.imageReceiver = this.avatarImage.getImageReceiver();
                 if (this.user_id != 0) {

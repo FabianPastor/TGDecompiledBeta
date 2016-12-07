@@ -39,7 +39,6 @@ public final class TsChunk extends MediaChunk {
     public void load() throws IOException, InterruptedException {
         DataSpec loadDataSpec;
         boolean skipLoadedBytes;
-        ExtractorInput input;
         if (this.isEncrypted) {
             loadDataSpec = this.dataSpec;
             skipLoadedBytes = this.bytesLoaded != 0;
@@ -47,6 +46,7 @@ public final class TsChunk extends MediaChunk {
             loadDataSpec = Util.getRemainderDataSpec(this.dataSpec, this.bytesLoaded);
             skipLoadedBytes = false;
         }
+        ExtractorInput input;
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (skipLoadedBytes) {

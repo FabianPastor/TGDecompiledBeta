@@ -61,7 +61,6 @@ public final class zzapw {
         }
 
         public BitSet zzx(zzapy com_google_android_gms_internal_zzapy) throws IOException {
-            String valueOf;
             if (com_google_android_gms_internal_zzapy.bn() == zzapz.NULL) {
                 com_google_android_gms_internal_zzapy.nextNull();
                 return null;
@@ -72,6 +71,7 @@ public final class zzapw {
             int i = 0;
             while (bn != zzapz.END_ARRAY) {
                 boolean z;
+                String valueOf;
                 switch (bn) {
                     case NUMBER:
                         if (com_google_android_gms_internal_zzapy.nextInt() == 0) {

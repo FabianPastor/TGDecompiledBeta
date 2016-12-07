@@ -597,7 +597,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                             cursor.dispose();
                         }
                         if (!encryptedToLoad.isEmpty()) {
-                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
+                            cursor = MessagesStorage.getInstance().getDatabase().queryFinalized(String.format(Locale.US, "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)", new Object[]{TextUtils.join(",", encryptedToLoad)}), new Object[0]);
                             while (cursor.next()) {
                                 name = cursor.stringValue(1);
                                 tName = LocaleController.getInstance().getTranslitString(name);
@@ -648,6 +648,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                                             chat2.future_key_fingerprint = cursor.longValue(14);
                                             chat2.future_auth_key = cursor.byteArrayValue(15);
                                             chat2.key_hash = cursor.byteArrayValue(16);
+                                            chat2.in_seq_no = cursor.intValue(17);
                                             if (user.status != null) {
                                                 user.status.expires = cursor.intValue(7);
                                             }

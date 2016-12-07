@@ -5,6 +5,8 @@ import android.animation.StateListAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -99,6 +101,10 @@ public class IntroActivity extends Activity {
         requestWindowFeature(1);
         if (AndroidUtilities.isTablet()) {
             setContentView(R.layout.intro_layout_tablet);
+            View imageView = findViewById(R.id.background_image_intro);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+            imageView.setBackgroundDrawable(drawable);
         } else {
             setRequestedOrientation(1);
             setContentView(R.layout.intro_layout);

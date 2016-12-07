@@ -396,13 +396,13 @@ public final class Util {
         } catch (NameNotFoundException e) {
             versionName = "?";
         }
-        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") " + "ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
+        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
     }
 
     public static byte[] executePost(String url, byte[] data, Map<String, String> requestProperties) throws IOException {
+        InputStream inputStream;
         HttpURLConnection urlConnection = null;
         OutputStream out;
-        InputStream inputStream;
         try {
             urlConnection = (HttpURLConnection) new URL(url).openConnection();
             urlConnection.setRequestMethod("POST");

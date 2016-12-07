@@ -136,12 +136,12 @@ public class zzz {
     }
 
     public static WorkSource zzy(Context context, String str) {
-        String str2;
-        String str3;
-        String valueOf;
         if (context == null || context.getPackageManager() == null) {
             return null;
         }
+        String str2;
+        String str3;
+        String valueOf;
         try {
             ApplicationInfo applicationInfo = zzsi.zzcr(context).getApplicationInfo(str, 0);
             if (applicationInfo != null) {

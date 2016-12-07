@@ -113,12 +113,12 @@ public class zzt implements zzf {
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
         HttpResponse zza;
         int statusCode;
+        byte[] zza2;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
-            byte[] zza2;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzk_.zzh());

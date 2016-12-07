@@ -12,6 +12,7 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     private int keyboardHeight;
     private Rect rect = new Rect();
     private WindowManager windowManager;
+    private boolean withoutWindow;
 
     public interface SizeNotifierFrameLayoutPhotoDelegate {
         void onSizeChanged(int i, boolean z);
@@ -21,8 +22,12 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
         super(context);
     }
 
-    public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate) {
+        this.delegate = sizeNotifierFrameLayoutPhotoDelegate;
+    }
+
+    public void setWithoutWindow(boolean value) {
+        this.withoutWindow = value;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -32,9 +37,11 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
 
     public int getKeyboardHeight() {
         View rootView = getRootView();
-        int usableViewHeight = rootView.getHeight() - AndroidUtilities.getViewInset(rootView);
         getWindowVisibleDisplayFrame(this.rect);
-        int size = (AndroidUtilities.displaySize.y - this.rect.top) - usableViewHeight;
+        if (this.withoutWindow) {
+            return ((rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView)) - (this.rect.bottom - this.rect.top);
+        }
+        int size = (AndroidUtilities.displaySize.y - this.rect.top) - (rootView.getHeight() - AndroidUtilities.getViewInset(rootView));
         if (size <= AndroidUtilities.dp(10.0f)) {
             return 0;
         }

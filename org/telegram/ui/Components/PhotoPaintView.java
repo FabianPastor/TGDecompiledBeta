@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Build.VERSION;
 import android.os.Looper;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -296,7 +297,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         });
         this.actionBar = new ActionBar(context);
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.actionBar.setOccupyStatusBar(false);
+        this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.getString("PaintDraw", R.string.PaintDraw));
@@ -595,14 +596,14 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(width, height);
         this.actionBar.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
-        int fullHeight = AndroidUtilities.displaySize.y - this.actionBar.getMeasuredHeight();
+        int fullHeight = AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight();
         int maxHeight = fullHeight - AndroidUtilities.dp(48.0f);
         if (this.bitmapToEdit != null) {
             bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
             bitmapH = isSidewardOrientation() ? (float) this.bitmapToEdit.getWidth() : (float) this.bitmapToEdit.getHeight();
         } else {
             bitmapW = (float) width;
-            bitmapH = (float) ((height - this.actionBar.getMeasuredHeight()) - AndroidUtilities.dp(48.0f));
+            bitmapH = (float) ((height - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f));
         }
         float renderWidth = (float) width;
         float renderHeight = (float) Math.floor((double) ((renderWidth * bitmapH) / bitmapW));
@@ -626,8 +627,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         float bitmapH;
         int width = right - left;
         int height = bottom - top;
-        int actionBarHeight = this.actionBar.getMeasuredHeight();
-        this.actionBar.layout(0, 0, this.actionBar.getMeasuredWidth(), actionBarHeight);
+        int actionBarHeight = ActionBar.getCurrentActionBarHeight();
+        int actionBarHeight2 = this.actionBar.getMeasuredHeight();
+        this.actionBar.layout(0, 0, this.actionBar.getMeasuredWidth(), actionBarHeight2);
         int maxHeight = (AndroidUtilities.displaySize.y - actionBarHeight) - AndroidUtilities.dp(48.0f);
         if (this.bitmapToEdit != null) {
             bitmapW = isSidewardOrientation() ? (float) this.bitmapToEdit.getHeight() : (float) this.bitmapToEdit.getWidth();
@@ -641,19 +643,19 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             renderWidth = (float) Math.floor((double) ((((float) maxHeight) * bitmapW) / bitmapH));
         }
         int x = (int) Math.ceil((double) ((width - this.renderView.getMeasuredWidth()) / 2));
-        int y = actionBarHeight + ((((height - actionBarHeight) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2);
+        int y = actionBarHeight2 + ((((height - actionBarHeight2) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2);
         this.renderView.layout(x, y, this.renderView.getMeasuredWidth() + x, this.renderView.getMeasuredHeight() + y);
         float scale = renderWidth / this.paintingSize.width;
         this.entitiesView.setScaleX(scale);
         this.entitiesView.setScaleY(scale);
         this.entitiesView.layout(x, y, this.entitiesView.getMeasuredWidth() + x, this.entitiesView.getMeasuredHeight() + y);
-        this.dimView.layout(0, actionBarHeight, this.dimView.getMeasuredWidth(), this.dimView.getMeasuredHeight() + actionBarHeight);
-        this.selectionContainerView.layout(0, actionBarHeight, this.selectionContainerView.getMeasuredWidth(), this.selectionContainerView.getMeasuredHeight() + actionBarHeight);
-        this.colorPicker.layout(0, actionBarHeight, this.colorPicker.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + actionBarHeight);
+        this.dimView.layout(0, actionBarHeight2, this.dimView.getMeasuredWidth(), this.dimView.getMeasuredHeight() + actionBarHeight2);
+        this.selectionContainerView.layout(0, actionBarHeight2, this.selectionContainerView.getMeasuredWidth(), this.selectionContainerView.getMeasuredHeight() + actionBarHeight2);
+        this.colorPicker.layout(0, actionBarHeight2, this.colorPicker.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + actionBarHeight2);
         this.toolsView.layout(0, height - this.toolsView.getMeasuredHeight(), this.toolsView.getMeasuredWidth(), height);
         this.curtainView.layout(0, 0, width, maxHeight);
         if (this.stickersView != null) {
-            this.stickersView.layout(0, actionBarHeight, this.stickersView.getMeasuredWidth(), this.stickersView.getMeasuredHeight() + actionBarHeight);
+            this.stickersView.layout(0, actionBarHeight2, this.stickersView.getMeasuredWidth(), this.stickersView.getMeasuredHeight() + actionBarHeight2);
         }
         if (this.currentEntityView != null) {
             this.currentEntityView.updateSelectionView();

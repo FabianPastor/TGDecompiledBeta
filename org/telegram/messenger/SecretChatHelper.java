@@ -1300,6 +1300,12 @@ public class SecretChatHelper {
                     if (!(serviceMessage.action instanceof TL_decryptedMessageActionResend)) {
                         return null;
                     }
+                    if (serviceMessage.action.end_seq_no < chat.in_seq_no || serviceMessage.action.end_seq_no < serviceMessage.action.start_seq_no) {
+                        return null;
+                    }
+                    if (serviceMessage.action.start_seq_no < chat.in_seq_no) {
+                        serviceMessage.action.start_seq_no = chat.in_seq_no;
+                    }
                     resendMessages(serviceMessage.action.start_seq_no, serviceMessage.action.end_seq_no, chat);
                 }
             } else {
@@ -1338,7 +1344,7 @@ public class SecretChatHelper {
     }
 
     private void resendMessages(final int startSeq, final int endSeq, final EncryptedChat encryptedChat) {
-        if (encryptedChat != null) {
+        if (encryptedChat != null && endSeq - startSeq >= 0) {
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     try {
@@ -1440,6 +1446,7 @@ public class SecretChatHelper {
                 }
                 applyPeerLayer(chat, holder.layer.layer);
                 chat.seq_in = holder.layer.out_seq_no;
+                chat.in_seq_no = holder.layer.in_seq_no;
                 holes.remove(a);
                 a--;
                 update = true;
@@ -1514,6 +1521,7 @@ public class SecretChatHelper {
                     if (chat.seq_in == layer.out_seq_no || chat.seq_in == layer.out_seq_no - 2) {
                         applyPeerLayer(chat, layer.layer);
                         chat.seq_in = layer.out_seq_no;
+                        chat.in_seq_no = layer.in_seq_no;
                         MessagesStorage.getInstance().updateEncryptedChatSeq(chat);
                         object = layer.message;
                     } else {

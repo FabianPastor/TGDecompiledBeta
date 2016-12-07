@@ -1420,6 +1420,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     public void updatePhotoAtIndex(int index) {
     }
 
+    public boolean scaleToFill() {
+        return false;
+    }
+
     public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
         if (messageObject == null || this.listView == null || this.selectedMode != 0) {
             return null;
@@ -1441,7 +1445,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         imageView.getLocationInWindow(coords);
                         PlaceProviderObject object = new PlaceProviderObject();
                         object.viewX = coords[0];
-                        object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
+                        object.viewY = coords[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
                         object.parentView = this.listView;
                         object.imageReceiver = imageView.getImageReceiver();
                         object.thumb = object.imageReceiver.getBitmap();

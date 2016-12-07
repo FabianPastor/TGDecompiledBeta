@@ -1768,9 +1768,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject) {
-        boolean z;
         int linkPreviewMaxWidth;
+        String author;
+        Photo photo;
         TLObject document;
+        String type;
         int duration;
         boolean smallImage;
         int height;
@@ -1778,8 +1780,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
-        ArrayList arrayList;
-        int i;
+        int maxPhotoWidth;
         int maxWidth;
         DocumentAttribute attribute;
         PhotoSize photoSize;
@@ -1792,11 +1793,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int seconds;
         String str2;
         int timeWidthTotal;
-        int rows;
         boolean fullWidth;
+        float f;
         int maxButtonWidth;
-        int maxButtonsWidth;
-        TL_keyboardButtonRow row;
         int buttonsCount;
         BotButton oldButton;
         if (messageObject.checkLayout()) {
@@ -1808,7 +1807,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject)) {
             int width;
             int a;
-            float f;
+            int i;
+            int rows;
+            int maxButtonsWidth;
+            TL_keyboardButtonRow row;
             int dp2;
             int buttonWidth;
             int b;
@@ -1879,7 +1881,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             int maxWidth2;
-            int maxPhotoWidth;
+            boolean z;
             float scale;
             boolean photoExist;
             String fileName;
@@ -1933,12 +1935,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview) {
                     String site_name;
                     String title;
-                    String author;
                     String description;
-                    Photo photo;
-                    String type;
                     int restLines;
                     int restLinesCount;
+                    ArrayList arrayList;
                     int durationWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
@@ -5677,12 +5677,17 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             if (user != null && user.bot) {
                 return true;
             }
-            if (messageObject.isMegagroup() && !messageObject.isOut()) {
-                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(messageObject.messageOwner.to_id.channel_id));
-                if (chat == null || chat.username == null || chat.username.length() <= 0 || (messageObject.messageOwner.media instanceof TL_messageMediaContact) || (messageObject.messageOwner.media instanceof TL_messageMediaGeo)) {
-                    return false;
+            if (!messageObject.isOut()) {
+                if (messageObject.messageOwner.media instanceof TL_messageMediaGame) {
+                    return true;
                 }
-                return true;
+                if (messageObject.isMegagroup()) {
+                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(messageObject.messageOwner.to_id.channel_id));
+                    if (chat == null || chat.username == null || chat.username.length() <= 0 || (messageObject.messageOwner.media instanceof TL_messageMediaContact) || (messageObject.messageOwner.media instanceof TL_messageMediaGeo)) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         } else if ((messageObject.messageOwner.from_id < 0 || messageObject.messageOwner.post) && messageObject.messageOwner.to_id.channel_id != 0 && ((messageObject.messageOwner.via_bot_id == 0 && messageObject.messageOwner.reply_to_msg_id == 0) || messageObject.type != 13)) {
             return true;

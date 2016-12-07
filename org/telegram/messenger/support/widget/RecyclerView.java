@@ -1820,7 +1820,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
             int offsetPosition = RecyclerView.this.mAdapterHelper.findPositionOffset(position);
             if (offsetPosition < 0 || offsetPosition >= RecyclerView.this.mAdapter.getItemCount()) {
-                throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ")." + "state:" + RecyclerView.this.mState.getItemCount());
+                throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount());
             }
             LayoutParams rvLayoutParams;
             holder.mOwnerRecyclerView = RecyclerView.this;
@@ -1851,7 +1851,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (position >= 0 && position < RecyclerView.this.mState.getItemCount()) {
                 return !RecyclerView.this.mState.isPreLayout() ? position : RecyclerView.this.mAdapterHelper.findPositionOffset(position);
             } else {
-                throw new IndexOutOfBoundsException("invalid position " + position + ". State " + "item count is " + RecyclerView.this.mState.getItemCount());
+                throw new IndexOutOfBoundsException("invalid position " + position + ". State item count is " + RecyclerView.this.mState.getItemCount());
             }
         }
 
@@ -1894,7 +1894,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (holder == null) {
                 offsetPosition = RecyclerView.this.mAdapterHelper.findPositionOffset(position);
                 if (offsetPosition < 0 || offsetPosition >= RecyclerView.this.mAdapter.getItemCount()) {
-                    throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ")." + "state:" + RecyclerView.this.mState.getItemCount() + " tag " + RecyclerView.this.getTag() + " adapter " + RecyclerView.this.getAdapter());
+                    throw new IndexOutOfBoundsException("Inconsistency detected. Invalid item position " + position + "(offset:" + offsetPosition + ").state:" + RecyclerView.this.mState.getItemCount() + " tag " + RecyclerView.this.getTag() + " adapter " + RecyclerView.this.getAdapter());
                 }
                 int type = RecyclerView.this.mAdapter.getItemViewType(offsetPosition);
                 if (RecyclerView.this.mAdapter.hasStableIds()) {
@@ -2169,13 +2169,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
-            View view;
-            ViewHolder vh;
             int layoutIndex;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
+                View view;
+                ViewHolder vh;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {
                     i++;
@@ -2183,7 +2183,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     holder.addFlags(32);
                     return holder;
                 } else {
-                    Log.e(RecyclerView.TAG, "Scrap view for position " + position + " isn't dirty but has" + " wrong view type! (found " + holder.getItemViewType() + " but expected " + type + ")");
+                    Log.e(RecyclerView.TAG, "Scrap view for position " + position + " isn't dirty but has wrong view type! (found " + holder.getItemViewType() + " but expected " + type + ")");
                     if (!dryRun) {
                         view = RecyclerView.this.mChildHelper.findHiddenNonRemovedView(position, type);
                         if (view != null) {

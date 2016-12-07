@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.Build.VERSION;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -663,7 +664,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         return null;
     }
 
+    public boolean scaleToFill() {
+        return false;
+    }
+
     public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+        int i = 0;
         PhotoPickerPhotoCell cell = getCellForIndex(index);
         if (cell == null) {
             return null;
@@ -672,7 +678,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         cell.photoImage.getLocationInWindow(coords);
         PlaceProviderObject object = new PlaceProviderObject();
         object.viewX = coords[0];
-        object.viewY = coords[1] - AndroidUtilities.statusBarHeight;
+        int i2 = coords[1];
+        if (VERSION.SDK_INT < 21) {
+            i = AndroidUtilities.statusBarHeight;
+        }
+        object.viewY = i2 - i;
         object.parentView = this.listView;
         object.imageReceiver = cell.photoImage.getImageReceiver();
         object.thumb = object.imageReceiver.getBitmap();

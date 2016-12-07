@@ -320,6 +320,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public static final int UPDATE_MASK_STATUS = 4;
     public static final int UPDATE_MASK_USER_PHONE = 128;
     public static final int UPDATE_MASK_USER_PRINT = 64;
+    public boolean allowBigEmoji = false;
     public ArrayList<Integer> blockedUsers = new ArrayList();
     private SparseArray<ArrayList<Integer>> channelViewsToReload = new SparseArray();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
@@ -439,6 +440,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private long updatesStartWaitTimeSeq = 0;
     public boolean updatingState = false;
     private String uploadingAvatar = null;
+    public boolean useSystemEmoji = false;
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
     private ConcurrentHashMap<String, User> usersByUsernames = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
 
@@ -504,6 +506,8 @@ public class MessagesController implements NotificationCenterDelegate {
         this.groupBigSize = preferences.getInt("groupBigSize", 10);
         this.ratingDecay = preferences.getInt("ratingDecay", 2419200);
         this.fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+        this.allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
+        this.useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         String disabledFeaturesString = preferences.getString("disabledFeatures", null);
         if (disabledFeaturesString != null && disabledFeaturesString.length() != 0) {
             try {
@@ -3100,6 +3104,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3144,7 +3149,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3443,6 +3447,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -3454,8 +3460,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -4886,7 +4890,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -4897,6 +4900,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));

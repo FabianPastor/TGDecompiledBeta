@@ -107,7 +107,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
         };
-        if (VERSION.SDK_INT >= 23) {
+        if (VERSION.SDK_INT >= 23 && this.windowView != null) {
             this.messageEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                     PhotoViewerCaptionEnterView.this.currentActionMode = mode;
@@ -172,7 +172,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == 4) {
-                    if (PhotoViewerCaptionEnterView.this.hideActionMode()) {
+                    if (PhotoViewerCaptionEnterView.this.windowView != null && PhotoViewerCaptionEnterView.this.hideActionMode()) {
                         return true;
                     }
                     if (!PhotoViewerCaptionEnterView.this.keyboardVisible && PhotoViewerCaptionEnterView.this.isPopupShowing()) {
