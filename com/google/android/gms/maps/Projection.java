@@ -9,15 +9,15 @@ import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.maps.model.VisibleRegion;
 
 public final class Projection {
-    private final IProjectionDelegate aoW;
+    private final IProjectionDelegate zzbob;
 
     Projection(IProjectionDelegate iProjectionDelegate) {
-        this.aoW = iProjectionDelegate;
+        this.zzbob = iProjectionDelegate;
     }
 
     public LatLng fromScreenLocation(Point point) {
         try {
-            return this.aoW.fromScreenLocation(zze.zzac(point));
+            return this.zzbob.fromScreenLocation(zze.zzA(point));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -25,7 +25,7 @@ public final class Projection {
 
     public VisibleRegion getVisibleRegion() {
         try {
-            return this.aoW.getVisibleRegion();
+            return this.zzbob.getVisibleRegion();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -33,7 +33,7 @@ public final class Projection {
 
     public Point toScreenLocation(LatLng latLng) {
         try {
-            return (Point) zze.zzae(this.aoW.toScreenLocation(latLng));
+            return (Point) zze.zzE(this.zzbob.toScreenLocation(latLng));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

@@ -11,10 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.common.zzc;
 import com.google.android.gms.common.zze;
-import com.google.android.gms.internal.zzcl;
+import com.google.android.gms.internal.zzcn;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
@@ -22,63 +22,63 @@ import java.util.concurrent.TimeUnit;
 
 public class AdvertisingIdClient {
     private final Context mContext;
-    com.google.android.gms.common.zza zzalf;
-    zzcl zzalg;
-    boolean zzalh;
-    Object zzali;
-    zza zzalj;
-    final long zzalk;
+    com.google.android.gms.common.zza zzse;
+    zzcn zzsf;
+    boolean zzsg;
+    Object zzsh;
+    zza zzsi;
+    final long zzsj;
 
     public static final class Info {
-        private final String zzalr;
-        private final boolean zzals;
+        private final String zzsp;
+        private final boolean zzsq;
 
         public Info(String str, boolean z) {
-            this.zzalr = str;
-            this.zzals = z;
+            this.zzsp = str;
+            this.zzsq = z;
         }
 
         public String getId() {
-            return this.zzalr;
+            return this.zzsp;
         }
 
         public boolean isLimitAdTrackingEnabled() {
-            return this.zzals;
+            return this.zzsq;
         }
 
         public String toString() {
-            String str = this.zzalr;
-            return new StringBuilder(String.valueOf(str).length() + 7).append("{").append(str).append("}").append(this.zzals).toString();
+            String str = this.zzsp;
+            return new StringBuilder(String.valueOf(str).length() + 7).append("{").append(str).append("}").append(this.zzsq).toString();
         }
     }
 
     static class zza extends Thread {
-        private WeakReference<AdvertisingIdClient> zzaln;
-        private long zzalo;
-        CountDownLatch zzalp = new CountDownLatch(1);
-        boolean zzalq = false;
+        private WeakReference<AdvertisingIdClient> zzsl;
+        private long zzsm;
+        CountDownLatch zzsn = new CountDownLatch(1);
+        boolean zzso = false;
 
         public zza(AdvertisingIdClient advertisingIdClient, long j) {
-            this.zzaln = new WeakReference(advertisingIdClient);
-            this.zzalo = j;
+            this.zzsl = new WeakReference(advertisingIdClient);
+            this.zzsm = j;
             start();
         }
 
         private void disconnect() {
-            AdvertisingIdClient advertisingIdClient = (AdvertisingIdClient) this.zzaln.get();
+            AdvertisingIdClient advertisingIdClient = (AdvertisingIdClient) this.zzsl.get();
             if (advertisingIdClient != null) {
                 advertisingIdClient.finish();
-                this.zzalq = true;
+                this.zzso = true;
             }
         }
 
         public void cancel() {
-            this.zzalp.countDown();
+            this.zzsn.countDown();
         }
 
         public void run() {
             try {
-                if (!this.zzalp.await(this.zzalo, TimeUnit.MILLISECONDS)) {
+                if (!this.zzsn.await(this.zzsm, TimeUnit.MILLISECONDS)) {
                     disconnect();
                 }
             } catch (InterruptedException e) {
@@ -86,8 +86,8 @@ public class AdvertisingIdClient {
             }
         }
 
-        public boolean zzeb() {
-            return this.zzalq;
+        public boolean zzby() {
+            return this.zzso;
         }
     }
 
@@ -96,8 +96,8 @@ public class AdvertisingIdClient {
     }
 
     public AdvertisingIdClient(Context context, long j, boolean z) {
-        this.zzali = new Object();
-        zzaa.zzy(context);
+        this.zzsh = new Object();
+        zzac.zzw(context);
         if (z) {
             Context applicationContext = context.getApplicationContext();
             if (applicationContext != null) {
@@ -107,8 +107,8 @@ public class AdvertisingIdClient {
         } else {
             this.mContext = context;
         }
-        this.zzalh = false;
-        this.zzalk = j;
+        this.zzsg = false;
+        this.zzsj = j;
     }
 
     public static Info getAdvertisingIdInfo(Context context) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
@@ -143,9 +143,9 @@ public class AdvertisingIdClient {
     public static void setShouldSkipGmsCoreVersionCheck(boolean z) {
     }
 
-    static zzcl zza(Context context, com.google.android.gms.common.zza com_google_android_gms_common_zza) throws IOException {
+    static zzcn zza(Context context, com.google.android.gms.common.zza com_google_android_gms_common_zza) throws IOException {
         try {
-            return com.google.android.gms.internal.zzcl.zza.zzf(com_google_android_gms_common_zza.zza(10000, TimeUnit.MILLISECONDS));
+            return com.google.android.gms.internal.zzcn.zza.zzf(com_google_android_gms_common_zza.zza(10000, TimeUnit.MILLISECONDS));
         } catch (InterruptedException e) {
             throw new IOException("Interrupted exception");
         } catch (Throwable th) {
@@ -157,26 +157,24 @@ public class AdvertisingIdClient {
         if (Math.random() <= ((double) f)) {
             final String uri = zza(info, z, th).toString();
             new Thread(this) {
-                final /* synthetic */ AdvertisingIdClient zzalm;
-
                 public void run() {
-                    new zza().zzv(uri);
+                    new zza().zzu(uri);
                 }
             }.start();
         }
     }
 
-    private void zzea() {
-        synchronized (this.zzali) {
-            if (this.zzalj != null) {
-                this.zzalj.cancel();
+    private void zzbx() {
+        synchronized (this.zzsh) {
+            if (this.zzsi != null) {
+                this.zzsi.cancel();
                 try {
-                    this.zzalj.join();
+                    this.zzsi.join();
                 } catch (InterruptedException e) {
                 }
             }
-            if (this.zzalk > 0) {
-                this.zzalj = new zza(this, this.zzalk);
+            if (this.zzsj > 0) {
+                this.zzsi = new zza(this, this.zzsj);
             }
         }
     }
@@ -184,14 +182,14 @@ public class AdvertisingIdClient {
     static com.google.android.gms.common.zza zzf(Context context) throws IOException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         try {
             context.getPackageManager().getPackageInfo("com.android.vending", 0);
-            switch (zzc.zzaql().isGooglePlayServicesAvailable(context)) {
+            switch (zzc.zzuz().isGooglePlayServicesAvailable(context)) {
                 case 0:
                 case 2:
                     ServiceConnection com_google_android_gms_common_zza = new com.google.android.gms.common.zza();
                     Intent intent = new Intent("com.google.android.gms.ads.identifier.service.START");
                     intent.setPackage("com.google.android.gms");
                     try {
-                        if (com.google.android.gms.common.stats.zza.zzaxr().zza(context, intent, com_google_android_gms_common_zza, 1)) {
+                        if (com.google.android.gms.common.stats.zza.zzyc().zza(context, intent, com_google_android_gms_common_zza, 1)) {
                             return com_google_android_gms_common_zza;
                         }
                         throw new IOException("Connection failure");
@@ -214,39 +212,39 @@ public class AdvertisingIdClient {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void finish() {
-        zzaa.zzht("Calling this from your main thread can lead to deadlock");
+        zzac.zzdo("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (this.mContext == null || this.zzalf == null) {
+            if (this.mContext == null || this.zzse == null) {
             } else {
                 try {
-                    if (this.zzalh) {
-                        com.google.android.gms.common.stats.zza.zzaxr().zza(this.mContext, this.zzalf);
+                    if (this.zzsg) {
+                        com.google.android.gms.common.stats.zza.zzyc().zza(this.mContext, this.zzse);
                     }
                 } catch (Throwable e) {
                     Log.i("AdvertisingIdClient", "AdvertisingIdClient unbindService failed.", e);
                 } catch (Throwable e2) {
                     Log.i("AdvertisingIdClient", "AdvertisingIdClient unbindService failed.", e2);
                 }
-                this.zzalh = false;
-                this.zzalg = null;
-                this.zzalf = null;
+                this.zzsg = false;
+                this.zzsf = null;
+                this.zzse = null;
             }
         }
     }
 
     public Info getInfo() throws IOException {
         Info info;
-        zzaa.zzht("Calling this from your main thread can lead to deadlock");
+        zzac.zzdo("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (!this.zzalh) {
-                synchronized (this.zzali) {
-                    if (this.zzalj == null || !this.zzalj.zzeb()) {
+            if (!this.zzsg) {
+                synchronized (this.zzsh) {
+                    if (this.zzsi == null || !this.zzsi.zzby()) {
                         throw new IOException("AdvertisingIdClient is not connected.");
                     }
                 }
                 try {
                     zze(false);
-                    if (!this.zzalh) {
+                    if (!this.zzsg) {
                         throw new IOException("AdvertisingIdClient cannot reconnect.");
                     }
                 } catch (Throwable e) {
@@ -256,11 +254,11 @@ public class AdvertisingIdClient {
                     throw new IOException("AdvertisingIdClient cannot reconnect.", e2);
                 }
             }
-            zzaa.zzy(this.zzalf);
-            zzaa.zzy(this.zzalg);
-            info = new Info(this.zzalg.getId(), this.zzalg.zzf(true));
+            zzac.zzw(this.zzse);
+            zzac.zzw(this.zzsf);
+            info = new Info(this.zzsf.getId(), this.zzsf.zzf(true));
         }
-        zzea();
+        zzbx();
         return info;
     }
 
@@ -288,16 +286,16 @@ public class AdvertisingIdClient {
     }
 
     protected void zze(boolean z) throws IOException, IllegalStateException, GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
-        zzaa.zzht("Calling this from your main thread can lead to deadlock");
+        zzac.zzdo("Calling this from your main thread can lead to deadlock");
         synchronized (this) {
-            if (this.zzalh) {
+            if (this.zzsg) {
                 finish();
             }
-            this.zzalf = zzf(this.mContext);
-            this.zzalg = zza(this.mContext, this.zzalf);
-            this.zzalh = true;
+            this.zzse = zzf(this.mContext);
+            this.zzsf = zza(this.mContext, this.zzse);
+            this.zzsg = true;
             if (z) {
-                zzea();
+                zzbx();
             }
         }
     }

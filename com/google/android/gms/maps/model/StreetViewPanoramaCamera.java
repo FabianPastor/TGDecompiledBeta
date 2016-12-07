@@ -2,17 +2,17 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.zzac;
 
-public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
+public class StreetViewPanoramaCamera extends zza {
     public static final Creator<StreetViewPanoramaCamera> CREATOR = new zzk();
-    private StreetViewPanoramaOrientation aqo;
     public final float bearing;
     private final int mVersionCode;
     public final float tilt;
     public final float zoom;
+    private StreetViewPanoramaOrientation zzbpo;
 
     public static final class Builder {
         public float bearing;
@@ -57,7 +57,7 @@ public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
 
     StreetViewPanoramaCamera(int i, float f, float f2, float f3) {
         boolean z = -90.0f <= f2 && f2 <= 90.0f;
-        zzaa.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
+        zzac.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
         this.mVersionCode = i;
         if (((double) f) <= 0.0d) {
             f = 0.0f;
@@ -65,7 +65,7 @@ public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
         this.zoom = f;
         this.tilt = f2 + 0.0f;
         this.bearing = (((double) f3) <= 0.0d ? (f3 % 360.0f) + 360.0f : f3) % 360.0f;
-        this.aqo = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
+        this.zzbpo = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
     }
 
     public static Builder builder() {
@@ -88,7 +88,7 @@ public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
     }
 
     public StreetViewPanoramaOrientation getOrientation() {
-        return this.aqo;
+        return this.zzbpo;
     }
 
     int getVersionCode() {
@@ -96,11 +96,11 @@ public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
     }
 
     public int hashCode() {
-        return zzz.hashCode(Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing));
+        return zzaa.hashCode(Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing));
     }
 
     public String toString() {
-        return zzz.zzx(this).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+        return zzaa.zzv(this).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

@@ -1,221 +1,165 @@
 package com.google.firebase.iid;
 
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.text.TextUtils;
-import android.util.Base64;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.content.WakefulBroadcastReceiver;
+import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
-import com.google.android.gms.common.util.zzw;
-import java.io.File;
-import java.io.IOException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.concurrent.TimeUnit;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.LinkedList;
+import java.util.Queue;
 
-class zzg {
-    SharedPreferences aiG;
-    Context zzahs;
+public class zzg {
+    private static zzg zzcje;
+    private final SimpleArrayMap<String, String> zzcjf = new SimpleArrayMap();
+    private Boolean zzcjg = null;
+    @VisibleForTesting
+    final Queue<Intent> zzcjh = new LinkedList();
+    @VisibleForTesting
+    final Queue<Intent> zzcji = new LinkedList();
 
-    static class zza {
-        private static final long bkQ = TimeUnit.DAYS.toMillis(7);
-        final String aii;
-        final String axH;
-        final long timestamp;
+    private zzg() {
+    }
 
-        private zza(String str, String str2, long j) {
-            this.axH = str;
-            this.aii = str2;
-            this.timestamp = j;
+    public static PendingIntent zza(Context context, int i, Intent intent, int i2) {
+        return zza(context, i, "com.google.firebase.INSTANCE_ID_EVENT", intent, i2);
+    }
+
+    private static PendingIntent zza(Context context, int i, String str, Intent intent, int i2) {
+        Intent intent2 = new Intent(context, FirebaseInstanceIdInternalReceiver.class);
+        intent2.setAction(str);
+        intent2.putExtra("wrapped_intent", intent);
+        return PendingIntent.getBroadcast(context, i, intent2, i2);
+    }
+
+    public static synchronized zzg zzaaj() {
+        zzg com_google_firebase_iid_zzg;
+        synchronized (zzg.class) {
+            if (zzcje == null) {
+                zzcje = new zzg();
+            }
+            com_google_firebase_iid_zzg = zzcje;
         }
+        return com_google_firebase_iid_zzg;
+    }
 
-        static String zzc(String str, String str2, long j) {
-            try {
-                JSONObject jSONObject = new JSONObject();
-                jSONObject.put("token", str);
-                jSONObject.put("appVersion", str2);
-                jSONObject.put("timestamp", j);
-                return jSONObject.toString();
-            } catch (JSONException e) {
-                String valueOf = String.valueOf(e);
-                Log.w("InstanceID/Store", new StringBuilder(String.valueOf(valueOf).length() + 24).append("Failed to encode token: ").append(valueOf).toString());
-                return null;
+    public static PendingIntent zzb(Context context, int i, Intent intent, int i2) {
+        return zza(context, i, "com.google.firebase.MESSAGING_EVENT", intent, i2);
+    }
+
+    private boolean zzbY(Context context) {
+        if (this.zzcjg == null) {
+            this.zzcjg = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+        }
+        return this.zzcjg.booleanValue();
+    }
+
+    private void zze(Context context, Intent intent) {
+        String str;
+        synchronized (this.zzcjf) {
+            str = (String) this.zzcjf.get(intent.getAction());
+        }
+        if (str == null) {
+            ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
+            if (resolveService == null || resolveService.serviceInfo == null) {
+                Log.e("FirebaseInstanceId", "Failed to resolve target intent service, skipping classname enforcement");
+                return;
+            }
+            ServiceInfo serviceInfo = resolveService.serviceInfo;
+            if (!context.getPackageName().equals(serviceInfo.packageName) || serviceInfo.name == null) {
+                String valueOf = String.valueOf(serviceInfo.packageName);
+                str = String.valueOf(serviceInfo.name);
+                Log.e("FirebaseInstanceId", new StringBuilder((String.valueOf(valueOf).length() + 94) + String.valueOf(str).length()).append("Error resolving target intent service, skipping classname enforcement. Resolved service was: ").append(valueOf).append("/").append(str).toString());
+                return;
+            }
+            str = serviceInfo.name;
+            if (str.startsWith(".")) {
+                String valueOf2 = String.valueOf(context.getPackageName());
+                str = String.valueOf(str);
+                str = str.length() != 0 ? valueOf2.concat(str) : new String(valueOf2);
+            }
+            synchronized (this.zzcjf) {
+                this.zzcjf.put(intent.getAction(), str);
             }
         }
-
-        static zza zztx(String str) {
-            if (TextUtils.isEmpty(str)) {
-                return null;
-            }
-            if (!str.startsWith("{")) {
-                return new zza(str, null, 0);
-            }
-            try {
-                JSONObject jSONObject = new JSONObject(str);
-                return new zza(jSONObject.getString("token"), jSONObject.getString("appVersion"), jSONObject.getLong("timestamp"));
-            } catch (JSONException e) {
-                String valueOf = String.valueOf(e);
-                Log.w("InstanceID/Store", new StringBuilder(String.valueOf(valueOf).length() + 23).append("Failed to parse token: ").append(valueOf).toString());
-                return null;
-            }
+        if (Log.isLoggable("FirebaseInstanceId", 3)) {
+            valueOf = "FirebaseInstanceId";
+            String str2 = "Restricting intent to a specific service: ";
+            valueOf2 = String.valueOf(str);
+            Log.d(valueOf, valueOf2.length() != 0 ? str2.concat(valueOf2) : new String(str2));
         }
+        intent.setClassName(context.getPackageName(), str);
+    }
 
-        boolean zzty(String str) {
-            return System.currentTimeMillis() > this.timestamp + bkQ || !str.equals(this.aii);
+    private int zzg(Context context, Intent intent) {
+        zze(context, intent);
+        try {
+            ComponentName startWakefulService;
+            if (zzbY(context)) {
+                startWakefulService = WakefulBroadcastReceiver.startWakefulService(context, intent);
+            } else {
+                startWakefulService = context.startService(intent);
+                Log.d("FirebaseInstanceId", "Missing wake lock permission, service start may be delayed");
+            }
+            if (startWakefulService != null) {
+                return -1;
+            }
+            Log.e("FirebaseInstanceId", "Error while delivering the message: ServiceIntent not found.");
+            return 404;
+        } catch (Throwable e) {
+            Log.e("FirebaseInstanceId", "Error while delivering the message to the serviceIntent", e);
+            return 401;
         }
     }
 
-    public zzg(Context context) {
-        this(context, "com.google.android.gms.appid");
+    public Intent zzaak() {
+        return (Intent) this.zzcjh.poll();
     }
 
-    public zzg(Context context, String str) {
-        this.zzahs = context;
-        this.aiG = context.getSharedPreferences(str, 4);
-        String valueOf = String.valueOf(str);
-        String valueOf2 = String.valueOf("-no-backup");
-        zzkq(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
+    public Intent zzaal() {
+        return (Intent) this.zzcji.poll();
     }
 
-    private String zzbu(String str, String str2) {
-        String valueOf = String.valueOf("|S|");
-        return new StringBuilder(((String.valueOf(str).length() + 0) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()).append(str).append(valueOf).append(str2).toString();
-    }
-
-    private void zzkq(String str) {
-        File file = new File(zzw.getNoBackupFilesDir(this.zzahs), str);
-        if (!file.exists()) {
-            try {
-                if (file.createNewFile() && !isEmpty()) {
-                    Log.i("InstanceID/Store", "App restored, clearing state");
-                    FirebaseInstanceId.zza(this.zzahs, this);
+    public int zzb(Context context, String str, Intent intent) {
+        Object obj = -1;
+        switch (str.hashCode()) {
+            case -842411455:
+                if (str.equals("com.google.firebase.INSTANCE_ID_EVENT")) {
+                    obj = null;
+                    break;
                 }
-            } catch (IOException e) {
-                if (Log.isLoggable("InstanceID/Store", 3)) {
-                    String str2 = "InstanceID/Store";
-                    String str3 = "Error creating file in no backup dir: ";
-                    String valueOf = String.valueOf(e.getMessage());
-                    Log.d(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
+                break;
+            case 41532704:
+                if (str.equals("com.google.firebase.MESSAGING_EVENT")) {
+                    obj = 1;
+                    break;
                 }
-            }
+                break;
         }
-    }
-
-    private void zzkr(String str) {
-        Editor edit = this.aiG.edit();
-        for (String str2 : this.aiG.getAll().keySet()) {
-            if (str2.startsWith(str)) {
-                edit.remove(str2);
-            }
+        switch (obj) {
+            case null:
+                this.zzcjh.offer(intent);
+                break;
+            case 1:
+                this.zzcji.offer(intent);
+                break;
+            default:
+                String str2 = "FirebaseInstanceId";
+                String str3 = "Unknown service action: ";
+                String valueOf = String.valueOf(str);
+                Log.w(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
+                return 500;
         }
-        edit.commit();
+        Intent intent2 = new Intent(str);
+        intent2.setPackage(context.getPackageName());
+        return zzg(context, intent2);
     }
 
-    private String zzp(String str, String str2, String str3) {
-        String valueOf = String.valueOf("|T|");
-        return new StringBuilder((((String.valueOf(str).length() + 1) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()) + String.valueOf(str3).length()).append(str).append(valueOf).append(str2).append("|").append(str3).toString();
-    }
-
-    public SharedPreferences M() {
-        return this.aiG;
-    }
-
-    public synchronized boolean isEmpty() {
-        return this.aiG.getAll().isEmpty();
-    }
-
-    public synchronized void zza(String str, String str2, String str3, String str4, String str5) {
-        String zzc = zza.zzc(str4, str5, System.currentTimeMillis());
-        if (zzc != null) {
-            Editor edit = this.aiG.edit();
-            edit.putString(zzp(str, str2, str3), zzc);
-            edit.commit();
-        }
-    }
-
-    public synchronized void zzbop() {
-        this.aiG.edit().clear().commit();
-    }
-
-    public synchronized void zzi(String str, String str2, String str3) {
-        String zzp = zzp(str, str2, str3);
-        Editor edit = this.aiG.edit();
-        edit.remove(zzp);
-        edit.commit();
-    }
-
-    public synchronized KeyPair zzks(String str) {
-        KeyPair keyPair;
-        Object e;
-        String string = this.aiG.getString(zzbu(str, "|P|"), null);
-        String string2 = this.aiG.getString(zzbu(str, "|K|"), null);
-        if (string == null || string2 == null) {
-            keyPair = null;
-        } else {
-            try {
-                byte[] decode = Base64.decode(string, 8);
-                byte[] decode2 = Base64.decode(string2, 8);
-                KeyFactory instance = KeyFactory.getInstance("RSA");
-                keyPair = new KeyPair(instance.generatePublic(new X509EncodedKeySpec(decode)), instance.generatePrivate(new PKCS8EncodedKeySpec(decode2)));
-            } catch (InvalidKeySpecException e2) {
-                e = e2;
-                string = String.valueOf(e);
-                Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzahs, this);
-                keyPair = null;
-                return keyPair;
-            } catch (NoSuchAlgorithmException e3) {
-                e = e3;
-                string = String.valueOf(e);
-                Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzahs, this);
-                keyPair = null;
-                return keyPair;
-            }
-        }
-        return keyPair;
-    }
-
-    synchronized void zzkt(String str) {
-        zzkr(String.valueOf(str).concat("|"));
-    }
-
-    public synchronized void zzku(String str) {
-        zzkr(String.valueOf(str).concat("|T|"));
-    }
-
-    public synchronized zza zzq(String str, String str2, String str3) {
-        return zza.zztx(this.aiG.getString(zzp(str, str2, str3), null));
-    }
-
-    public synchronized long zztv(String str) {
-        long parseLong;
-        String string = this.aiG.getString(zzbu(str, "cre"), null);
-        if (string != null) {
-            try {
-                parseLong = Long.parseLong(string);
-            } catch (NumberFormatException e) {
-            }
-        }
-        parseLong = 0;
-        return parseLong;
-    }
-
-    synchronized KeyPair zztw(String str) {
-        KeyPair zzboh;
-        zzboh = zza.zzboh();
-        long currentTimeMillis = System.currentTimeMillis();
-        Editor edit = this.aiG.edit();
-        edit.putString(zzbu(str, "|P|"), FirebaseInstanceId.zzv(zzboh.getPublic().getEncoded()));
-        edit.putString(zzbu(str, "|K|"), FirebaseInstanceId.zzv(zzboh.getPrivate().getEncoded()));
-        edit.putString(zzbu(str, "cre"), Long.toString(currentTimeMillis));
-        edit.commit();
-        return zzboh;
+    public void zzf(Context context, Intent intent) {
+        zzb(context, "com.google.firebase.INSTANCE_ID_EVENT", intent);
     }
 }

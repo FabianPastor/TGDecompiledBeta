@@ -1,59 +1,76 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
+import android.util.Log;
 
-public interface zzq extends IInterface {
+public final class zzq {
+    public static final int zzaES = (23 - " PII_LOG".length());
+    private static final String zzaET = null;
+    private final String zzaEU;
+    private final String zzaEV;
 
-    public static abstract class zza extends Binder implements zzq {
+    public zzq(String str) {
+        this(str, null);
+    }
 
-        private static class zza implements zzq {
-            private IBinder zzajq;
-
-            zza(IBinder iBinder) {
-                this.zzajq = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzajq;
-            }
-
-            public void cancel() throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.ICancelToken");
-                    this.zzajq.transact(2, obtain, null, 1);
-                } finally {
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public static zzq zzds(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.ICancelToken");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzq)) ? new zza(iBinder) : (zzq) queryLocalInterface;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.ICancelToken");
-                    cancel();
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.common.internal.ICancelToken");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
+    public zzq(String str, String str2) {
+        zzac.zzb((Object) str, (Object) "log tag cannot be null");
+        zzac.zzb(str.length() <= 23, "tag \"%s\" is longer than the %d character maximum", str, Integer.valueOf(23));
+        this.zzaEU = str;
+        if (str2 == null || str2.length() <= 0) {
+            this.zzaEV = null;
+        } else {
+            this.zzaEV = str2;
         }
     }
 
-    void cancel() throws RemoteException;
+    private String zzdu(String str) {
+        return this.zzaEV == null ? str : this.zzaEV.concat(str);
+    }
+
+    public void zzD(String str, String str2) {
+        if (zzcQ(3)) {
+            Log.d(str, zzdu(str2));
+        }
+    }
+
+    public void zzE(String str, String str2) {
+        if (zzcQ(5)) {
+            Log.w(str, zzdu(str2));
+        }
+    }
+
+    public void zzF(String str, String str2) {
+        if (zzcQ(6)) {
+            Log.e(str, zzdu(str2));
+        }
+    }
+
+    public void zzb(String str, String str2, Throwable th) {
+        if (zzcQ(4)) {
+            Log.i(str, zzdu(str2), th);
+        }
+    }
+
+    public void zzc(String str, String str2, Throwable th) {
+        if (zzcQ(5)) {
+            Log.w(str, zzdu(str2), th);
+        }
+    }
+
+    public boolean zzcQ(int i) {
+        return Log.isLoggable(this.zzaEU, i);
+    }
+
+    public void zzd(String str, String str2, Throwable th) {
+        if (zzcQ(6)) {
+            Log.e(str, zzdu(str2), th);
+        }
+    }
+
+    public void zze(String str, String str2, Throwable th) {
+        if (zzcQ(7)) {
+            Log.e(str, zzdu(str2), th);
+            Log.wtf(str, zzdu(str2), th);
+        }
+    }
 }

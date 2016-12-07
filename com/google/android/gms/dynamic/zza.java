@@ -16,44 +16,44 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.internal.zzg;
+import com.google.android.gms.common.internal.zzh;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public abstract class zza<T extends LifecycleDelegate> {
-    private T PT;
-    private Bundle PU;
-    private LinkedList<zza> PV;
-    private final zzf<T> PW = new zzf<T>(this) {
-        final /* synthetic */ zza PX;
+    private T zzaQd;
+    private Bundle zzaQe;
+    private LinkedList<zza> zzaQf;
+    private final zzf<T> zzaQg = new zzf<T>(this) {
+        final /* synthetic */ zza zzaQh;
 
         {
-            this.PX = r1;
+            this.zzaQh = r1;
         }
 
         public void zza(T t) {
-            this.PX.PT = t;
-            Iterator it = this.PX.PV.iterator();
+            this.zzaQh.zzaQd = t;
+            Iterator it = this.zzaQh.zzaQf.iterator();
             while (it.hasNext()) {
-                ((zza) it.next()).zzb(this.PX.PT);
+                ((zza) it.next()).zzb(this.zzaQh.zzaQd);
             }
-            this.PX.PV.clear();
-            this.PX.PU = null;
+            this.zzaQh.zzaQf.clear();
+            this.zzaQh.zzaQe = null;
         }
     };
 
     class AnonymousClass5 implements OnClickListener {
-        final /* synthetic */ Intent Qc;
-        final /* synthetic */ Context zzang;
+        final /* synthetic */ Intent zzaQm;
+        final /* synthetic */ Context zztd;
 
         AnonymousClass5(Context context, Intent intent) {
-            this.zzang = context;
-            this.Qc = intent;
+            this.zztd = context;
+            this.zzaQm = intent;
         }
 
         public void onClick(View view) {
             try {
-                this.zzang.startActivity(this.Qc);
+                this.zztd.startActivity(this.zzaQm);
             } catch (Throwable e) {
                 Log.e("DeferredLifecycleHelper", "Failed to start resolution intent", e);
             }
@@ -67,30 +67,30 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     private void zza(Bundle bundle, zza com_google_android_gms_dynamic_zza_zza) {
-        if (this.PT != null) {
-            com_google_android_gms_dynamic_zza_zza.zzb(this.PT);
+        if (this.zzaQd != null) {
+            com_google_android_gms_dynamic_zza_zza.zzb(this.zzaQd);
             return;
         }
-        if (this.PV == null) {
-            this.PV = new LinkedList();
+        if (this.zzaQf == null) {
+            this.zzaQf = new LinkedList();
         }
-        this.PV.add(com_google_android_gms_dynamic_zza_zza);
+        this.zzaQf.add(com_google_android_gms_dynamic_zza_zza);
         if (bundle != null) {
-            if (this.PU == null) {
-                this.PU = (Bundle) bundle.clone();
+            if (this.zzaQe == null) {
+                this.zzaQe = (Bundle) bundle.clone();
             } else {
-                this.PU.putAll(bundle);
+                this.zzaQe.putAll(bundle);
             }
         }
-        zza(this.PW);
+        zza(this.zzaQg);
     }
 
     @VisibleForTesting
     static void zza(FrameLayout frameLayout, GoogleApiAvailability googleApiAvailability) {
         Context context = frameLayout.getContext();
         int isGooglePlayServicesAvailable = googleApiAvailability.isGooglePlayServicesAvailable(context);
-        CharSequence zzi = zzg.zzi(context, isGooglePlayServicesAvailable);
-        CharSequence zzk = zzg.zzk(context, isGooglePlayServicesAvailable);
+        CharSequence zzi = zzh.zzi(context, isGooglePlayServicesAvailable);
+        CharSequence zzk = zzh.zzk(context, isGooglePlayServicesAvailable);
         View linearLayout = new LinearLayout(frameLayout.getContext());
         linearLayout.setOrientation(1);
         linearLayout.setLayoutParams(new LayoutParams(-2, -2));
@@ -114,22 +114,22 @@ public abstract class zza<T extends LifecycleDelegate> {
         zza(frameLayout, GoogleApiAvailability.getInstance());
     }
 
-    private void zznj(int i) {
-        while (!this.PV.isEmpty() && ((zza) this.PV.getLast()).getState() >= i) {
-            this.PV.removeLast();
+    private void zzgk(int i) {
+        while (!this.zzaQf.isEmpty() && ((zza) this.zzaQf.getLast()).getState() >= i) {
+            this.zzaQf.removeLast();
         }
     }
 
     public void onCreate(final Bundle bundle) {
         zza(bundle, new zza(this) {
-            final /* synthetic */ zza PX;
+            final /* synthetic */ zza zzaQh;
 
             public int getState() {
                 return 1;
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.PX.PT.onCreate(bundle);
+                this.zzaQh.zzaQd.onCreate(bundle);
             }
         });
     }
@@ -140,7 +140,7 @@ public abstract class zza<T extends LifecycleDelegate> {
         final ViewGroup viewGroup2 = viewGroup;
         final Bundle bundle2 = bundle;
         zza(bundle, new zza(this) {
-            final /* synthetic */ zza PX;
+            final /* synthetic */ zza zzaQh;
 
             public int getState() {
                 return 2;
@@ -148,65 +148,65 @@ public abstract class zza<T extends LifecycleDelegate> {
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
                 frameLayout.removeAllViews();
-                frameLayout.addView(this.PX.PT.onCreateView(layoutInflater2, viewGroup2, bundle2));
+                frameLayout.addView(this.zzaQh.zzaQd.onCreateView(layoutInflater2, viewGroup2, bundle2));
             }
         });
-        if (this.PT == null) {
+        if (this.zzaQd == null) {
             zza(frameLayout);
         }
         return frameLayout;
     }
 
     public void onDestroy() {
-        if (this.PT != null) {
-            this.PT.onDestroy();
+        if (this.zzaQd != null) {
+            this.zzaQd.onDestroy();
         } else {
-            zznj(1);
+            zzgk(1);
         }
     }
 
     public void onDestroyView() {
-        if (this.PT != null) {
-            this.PT.onDestroyView();
+        if (this.zzaQd != null) {
+            this.zzaQd.onDestroyView();
         } else {
-            zznj(2);
+            zzgk(2);
         }
     }
 
     public void onInflate(final Activity activity, final Bundle bundle, final Bundle bundle2) {
         zza(bundle2, new zza(this) {
-            final /* synthetic */ zza PX;
+            final /* synthetic */ zza zzaQh;
 
             public int getState() {
                 return 0;
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.PX.PT.onInflate(activity, bundle, bundle2);
+                this.zzaQh.zzaQd.onInflate(activity, bundle, bundle2);
             }
         });
     }
 
     public void onLowMemory() {
-        if (this.PT != null) {
-            this.PT.onLowMemory();
+        if (this.zzaQd != null) {
+            this.zzaQd.onLowMemory();
         }
     }
 
     public void onPause() {
-        if (this.PT != null) {
-            this.PT.onPause();
+        if (this.zzaQd != null) {
+            this.zzaQd.onPause();
         } else {
-            zznj(5);
+            zzgk(5);
         }
     }
 
     public void onResume() {
         zza(null, new zza(this) {
-            final /* synthetic */ zza PX;
+            final /* synthetic */ zza zzaQh;
 
             {
-                this.PX = r1;
+                this.zzaQh = r1;
             }
 
             public int getState() {
@@ -214,25 +214,25 @@ public abstract class zza<T extends LifecycleDelegate> {
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.PX.PT.onResume();
+                this.zzaQh.zzaQd.onResume();
             }
         });
     }
 
     public void onSaveInstanceState(Bundle bundle) {
-        if (this.PT != null) {
-            this.PT.onSaveInstanceState(bundle);
-        } else if (this.PU != null) {
-            bundle.putAll(this.PU);
+        if (this.zzaQd != null) {
+            this.zzaQd.onSaveInstanceState(bundle);
+        } else if (this.zzaQe != null) {
+            bundle.putAll(this.zzaQe);
         }
     }
 
     public void onStart() {
         zza(null, new zza(this) {
-            final /* synthetic */ zza PX;
+            final /* synthetic */ zza zzaQh;
 
             {
-                this.PX = r1;
+                this.zzaQh = r1;
             }
 
             public int getState() {
@@ -240,17 +240,21 @@ public abstract class zza<T extends LifecycleDelegate> {
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.PX.PT.onStart();
+                this.zzaQh.zzaQd.onStart();
             }
         });
     }
 
     public void onStop() {
-        if (this.PT != null) {
-            this.PT.onStop();
+        if (this.zzaQd != null) {
+            this.zzaQd.onStop();
         } else {
-            zznj(4);
+            zzgk(4);
         }
+    }
+
+    public T zzAY() {
+        return this.zzaQd;
     }
 
     protected void zza(FrameLayout frameLayout) {
@@ -258,8 +262,4 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     protected abstract void zza(zzf<T> com_google_android_gms_dynamic_zzf_T);
-
-    public T zzbdo() {
-        return this.PT;
-    }
 }

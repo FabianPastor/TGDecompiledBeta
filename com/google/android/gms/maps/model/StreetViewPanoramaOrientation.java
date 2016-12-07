@@ -2,11 +2,11 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.zzac;
 
-public class StreetViewPanoramaOrientation extends AbstractSafeParcelable {
+public class StreetViewPanoramaOrientation extends zza {
     public static final Creator<StreetViewPanoramaOrientation> CREATOR = new zzn();
     public final float bearing;
     private final int mVersionCode;
@@ -42,7 +42,7 @@ public class StreetViewPanoramaOrientation extends AbstractSafeParcelable {
 
     StreetViewPanoramaOrientation(int i, float f, float f2) {
         boolean z = -90.0f <= f && f <= 90.0f;
-        zzaa.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
+        zzac.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
         this.mVersionCode = i;
         this.tilt = 0.0f + f;
         if (((double) f2) <= 0.0d) {
@@ -75,11 +75,11 @@ public class StreetViewPanoramaOrientation extends AbstractSafeParcelable {
     }
 
     public int hashCode() {
-        return zzz.hashCode(Float.valueOf(this.tilt), Float.valueOf(this.bearing));
+        return zzaa.hashCode(Float.valueOf(this.tilt), Float.valueOf(this.bearing));
     }
 
     public String toString() {
-        return zzz.zzx(this).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+        return zzaa.zzv(this).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

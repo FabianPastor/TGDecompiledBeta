@@ -21,8 +21,8 @@ import org.apache.http.message.BasicStatusLine;
 import org.telegram.messenger.volley.toolbox.HttpClientStack.HttpPatch;
 
 public class zzz implements zzy {
-    private final zza zzce;
-    private final SSLSocketFactory zzcf;
+    private final zza zzaD;
+    private final SSLSocketFactory zzaE;
 
     public interface zza {
         String zzh(String str);
@@ -37,19 +37,19 @@ public class zzz implements zzy {
     }
 
     public zzz(zza com_google_android_gms_internal_zzz_zza, SSLSocketFactory sSLSocketFactory) {
-        this.zzce = com_google_android_gms_internal_zzz_zza;
-        this.zzcf = sSLSocketFactory;
+        this.zzaD = com_google_android_gms_internal_zzz_zza;
+        this.zzaE = sSLSocketFactory;
     }
 
     private HttpURLConnection zza(URL url, zzk<?> com_google_android_gms_internal_zzk_) throws IOException {
         HttpURLConnection zza = zza(url);
-        int zzr = com_google_android_gms_internal_zzk_.zzr();
-        zza.setConnectTimeout(zzr);
-        zza.setReadTimeout(zzr);
+        int zzp = com_google_android_gms_internal_zzk_.zzp();
+        zza.setConnectTimeout(zzp);
+        zza.setReadTimeout(zzp);
         zza.setUseCaches(false);
         zza.setDoInput(true);
-        if ("https".equals(url.getProtocol()) && this.zzcf != null) {
-            ((HttpsURLConnection) zza).setSSLSocketFactory(this.zzcf);
+        if ("https".equals(url.getProtocol()) && this.zzaE != null) {
+            ((HttpsURLConnection) zza).setSSLSocketFactory(this.zzaE);
         }
         return zza;
     }
@@ -72,13 +72,13 @@ public class zzz implements zzy {
     static void zza(HttpURLConnection httpURLConnection, zzk<?> com_google_android_gms_internal_zzk_) throws IOException, zza {
         switch (com_google_android_gms_internal_zzk_.getMethod()) {
             case -1:
-                byte[] zzl = com_google_android_gms_internal_zzk_.zzl();
-                if (zzl != null) {
+                byte[] zzj = com_google_android_gms_internal_zzk_.zzj();
+                if (zzj != null) {
                     httpURLConnection.setDoOutput(true);
                     httpURLConnection.setRequestMethod("POST");
-                    httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzk());
+                    httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzi());
                     DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
-                    dataOutputStream.write(zzl);
+                    dataOutputStream.write(zzj);
                     dataOutputStream.close();
                     return;
                 }
@@ -116,12 +116,12 @@ public class zzz implements zzy {
     }
 
     private static void zzb(HttpURLConnection httpURLConnection, zzk<?> com_google_android_gms_internal_zzk_) throws IOException, zza {
-        byte[] zzo = com_google_android_gms_internal_zzk_.zzo();
-        if (zzo != null) {
+        byte[] zzm = com_google_android_gms_internal_zzk_.zzm();
+        if (zzm != null) {
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzn());
+            httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzl());
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
-            dataOutputStream.write(zzo);
+            dataOutputStream.write(zzm);
             dataOutputStream.close();
         }
     }
@@ -136,8 +136,8 @@ public class zzz implements zzy {
         HashMap hashMap = new HashMap();
         hashMap.putAll(com_google_android_gms_internal_zzk_.getHeaders());
         hashMap.putAll(map);
-        if (this.zzce != null) {
-            zzh = this.zzce.zzh(url);
+        if (this.zzaD != null) {
+            zzh = this.zzaD.zzh(url);
             if (zzh == null) {
                 String str = "URL blocked by rewriter: ";
                 zzh = String.valueOf(url);

@@ -2,6 +2,7 @@ package com.google.android.gms.common.api;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
@@ -9,191 +10,169 @@ import android.support.annotation.WorkerThread;
 import com.google.android.gms.common.api.Api.ApiOptions;
 import com.google.android.gms.common.api.Api.zzb;
 import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.Api.zzh;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzag;
-import com.google.android.gms.common.internal.zzf;
-import com.google.android.gms.internal.zzqk;
-import com.google.android.gms.internal.zzql;
-import com.google.android.gms.internal.zzqo.zza;
-import com.google.android.gms.internal.zzqr;
-import com.google.android.gms.internal.zzqw;
-import com.google.android.gms.internal.zzrh;
-import com.google.android.gms.internal.zzri;
-import com.google.android.gms.internal.zzrr;
-import com.google.android.gms.internal.zzrs;
-import com.google.android.gms.internal.zzrw;
-import com.google.android.gms.internal.zzsb;
-import com.google.android.gms.internal.zzse;
-import com.google.android.gms.internal.zzsh;
+import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzg;
+import com.google.android.gms.internal.zzaae;
+import com.google.android.gms.internal.zzaap;
+import com.google.android.gms.internal.zzaaq;
+import com.google.android.gms.internal.zzaaz;
+import com.google.android.gms.internal.zzaba;
+import com.google.android.gms.internal.zzabe;
+import com.google.android.gms.internal.zzabj;
+import com.google.android.gms.internal.zzabk;
+import com.google.android.gms.internal.zzabn;
+import com.google.android.gms.internal.zzabr;
+import com.google.android.gms.internal.zzzr;
+import com.google.android.gms.internal.zzzs;
+import com.google.android.gms.internal.zzzv.zza;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
 public abstract class zzc<O extends ApiOptions> {
     private final Context mContext;
     private final int mId;
-    private final Api<O> vS;
-    private final zzsb xA;
-    private final zze xB;
-    private final zzqr xC;
-    private final O xw;
-    private final zzql<O> xx;
-    private final zzrh xy;
-    private final GoogleApiClient xz;
-    private final Looper zzajy;
+    private final Api<O> zzawb;
+    private final O zzaxG;
+    private final zzzs<O> zzaxH;
+    private final GoogleApiClient zzaxI;
+    private final zzabk zzaxJ;
+    protected final zzaap zzaxK;
+    private final Looper zzrx;
 
     @MainThread
-    public zzc(@NonNull Activity activity, Api<O> api, O o, Looper looper, zzsb com_google_android_gms_internal_zzsb) {
-        zzaa.zzb((Object) activity, (Object) "Null activity is not permitted.");
-        zzaa.zzb((Object) api, (Object) "Api must not be null.");
-        zzaa.zzb((Object) looper, (Object) "Looper must not be null.");
+    public zzc(@NonNull Activity activity, Api<O> api, O o, Looper looper, zzabk com_google_android_gms_internal_zzabk) {
+        zzac.zzb((Object) activity, (Object) "Null activity is not permitted.");
+        zzac.zzb((Object) api, (Object) "Api must not be null.");
+        zzac.zzb((Object) looper, (Object) "Looper must not be null.");
         this.mContext = activity.getApplicationContext();
-        this.vS = api;
-        this.xw = o;
-        this.zzajy = looper;
-        this.xx = zzql.zza(this.vS, this.xw);
-        this.xz = new zzri(this);
-        this.xy = zzrh.zzbx(this.mContext);
-        this.mId = this.xy.zzath();
-        this.xA = com_google_android_gms_internal_zzsb;
-        this.xB = null;
-        this.xC = null;
-        zzqw.zza(activity, this.xy, this.xx);
-        this.xy.zza(this);
+        this.zzawb = api;
+        this.zzaxG = o;
+        this.zzrx = looper;
+        this.zzaxH = zzzs.zza(this.zzawb, this.zzaxG);
+        this.zzaxI = new zzaaq(this);
+        this.zzaxK = zzaap.zzax(this.mContext);
+        this.mId = this.zzaxK.zzvU();
+        this.zzaxJ = com_google_android_gms_internal_zzabk;
+        zzaae.zza(activity, this.zzaxK, this.zzaxH);
+        this.zzaxK.zza(this);
     }
 
-    public zzc(@NonNull Activity activity, Api<O> api, O o, zzsb com_google_android_gms_internal_zzsb) {
-        this(activity, (Api) api, (ApiOptions) o, activity.getMainLooper(), com_google_android_gms_internal_zzsb);
+    public zzc(@NonNull Activity activity, Api<O> api, O o, zzabk com_google_android_gms_internal_zzabk) {
+        this(activity, (Api) api, (ApiOptions) o, activity.getMainLooper(), com_google_android_gms_internal_zzabk);
     }
 
-    protected zzc(@NonNull Context context, Api<O> api, Looper looper, zze com_google_android_gms_common_api_Api_zze, zzqr com_google_android_gms_internal_zzqr) {
-        zzaa.zzb((Object) context, (Object) "Null context is not permitted.");
-        zzaa.zzb((Object) api, (Object) "Api must not be null.");
-        zzaa.zzb((Object) looper, (Object) "Looper must not be null.");
+    protected zzc(@NonNull Context context, Api<O> api, Looper looper) {
+        zzac.zzb((Object) context, (Object) "Null context is not permitted.");
+        zzac.zzb((Object) api, (Object) "Api must not be null.");
+        zzac.zzb((Object) looper, (Object) "Looper must not be null.");
         this.mContext = context.getApplicationContext();
-        this.vS = api;
-        this.xw = null;
-        this.zzajy = looper;
-        this.xx = zzql.zzb(api);
-        this.xz = new zzri(this);
-        this.xy = zzrh.zzbx(this.mContext);
-        this.mId = this.xy.zzath();
-        this.xA = new zzqk();
-        this.xB = com_google_android_gms_common_api_Api_zze;
-        this.xC = com_google_android_gms_internal_zzqr;
-        this.xy.zza(this);
+        this.zzawb = api;
+        this.zzaxG = null;
+        this.zzrx = looper;
+        this.zzaxH = zzzs.zzb(api);
+        this.zzaxI = new zzaaq(this);
+        this.zzaxK = zzaap.zzax(this.mContext);
+        this.mId = this.zzaxK.zzvU();
+        this.zzaxJ = new zzzr();
     }
 
-    public zzc(@NonNull Context context, Api<O> api, O o, Looper looper, zzsb com_google_android_gms_internal_zzsb) {
-        zzaa.zzb((Object) context, (Object) "Null context is not permitted.");
-        zzaa.zzb((Object) api, (Object) "Api must not be null.");
-        zzaa.zzb((Object) looper, (Object) "Looper must not be null.");
+    public zzc(@NonNull Context context, Api<O> api, O o, Looper looper, zzabk com_google_android_gms_internal_zzabk) {
+        zzac.zzb((Object) context, (Object) "Null context is not permitted.");
+        zzac.zzb((Object) api, (Object) "Api must not be null.");
+        zzac.zzb((Object) looper, (Object) "Looper must not be null.");
         this.mContext = context.getApplicationContext();
-        this.vS = api;
-        this.xw = o;
-        this.zzajy = looper;
-        this.xx = zzql.zza(this.vS, this.xw);
-        this.xz = new zzri(this);
-        this.xy = zzrh.zzbx(this.mContext);
-        this.mId = this.xy.zzath();
-        this.xA = com_google_android_gms_internal_zzsb;
-        this.xB = null;
-        this.xC = null;
-        this.xy.zza(this);
+        this.zzawb = api;
+        this.zzaxG = o;
+        this.zzrx = looper;
+        this.zzaxH = zzzs.zza(this.zzawb, this.zzaxG);
+        this.zzaxI = new zzaaq(this);
+        this.zzaxK = zzaap.zzax(this.mContext);
+        this.mId = this.zzaxK.zzvU();
+        this.zzaxJ = com_google_android_gms_internal_zzabk;
+        this.zzaxK.zza(this);
     }
 
-    public zzc(@NonNull Context context, Api<O> api, O o, zzsb com_google_android_gms_internal_zzsb) {
-        this(context, (Api) api, (ApiOptions) o, Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper(), com_google_android_gms_internal_zzsb);
+    public zzc(@NonNull Context context, Api<O> api, O o, zzabk com_google_android_gms_internal_zzabk) {
+        this(context, (Api) api, (ApiOptions) o, Looper.myLooper() != null ? Looper.myLooper() : Looper.getMainLooper(), com_google_android_gms_internal_zzabk);
     }
 
     private <A extends zzb, T extends zza<? extends Result, A>> T zza(int i, @NonNull T t) {
-        t.zzarv();
-        this.xy.zza(this, i, (zza) t);
+        t.zzvf();
+        this.zzaxK.zza(this, i, (zza) t);
         return t;
     }
 
-    private <TResult, A extends zzb> Task<TResult> zza(int i, @NonNull zzse<A, TResult> com_google_android_gms_internal_zzse_A__TResult) {
+    private <TResult, A extends zzb> Task<TResult> zza(int i, @NonNull zzabn<A, TResult> com_google_android_gms_internal_zzabn_A__TResult) {
         TaskCompletionSource taskCompletionSource = new TaskCompletionSource();
-        this.xy.zza(this, i, com_google_android_gms_internal_zzse_A__TResult, taskCompletionSource, this.xA);
+        this.zzaxK.zza(this, i, com_google_android_gms_internal_zzabn_A__TResult, taskCompletionSource, this.zzaxJ);
         return taskCompletionSource.getTask();
     }
 
     public GoogleApiClient asGoogleApiClient() {
-        return this.xz;
+        return this.zzaxI;
     }
 
     @WorkerThread
-    public zze buildApiClient(Looper looper, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        zzaa.zza(this.xB == null, (Object) "Client is already built, use getClient(). getClientCallbacks() should also be provided with a helper.");
-        if (this.vS.zzaqw()) {
-            zzh zzaqu = this.vS.zzaqu();
-            return new zzag(this.mContext, looper, zzaqu.zzaqz(), connectionCallbacks, onConnectionFailedListener, zzf.zzca(this.mContext), zzaqu.zzr(this.xw));
-        }
-        return this.vS.zzaqt().zza(this.mContext, looper, zzf.zzca(this.mContext), this.xw, connectionCallbacks, onConnectionFailedListener);
+    public zze buildApiClient(Looper looper, zzaap.zza<O> com_google_android_gms_internal_zzaap_zza_O) {
+        return this.zzawb.zzuG().zza(this.mContext, looper, zzg.zzaA(this.mContext), this.zzaxG, com_google_android_gms_internal_zzaap_zza_O, com_google_android_gms_internal_zzaap_zza_O);
+    }
+
+    public zzabj createSignInCoordinator(Context context, Handler handler) {
+        return new zzabj(context, handler);
     }
 
     public <A extends zzb, T extends zza<? extends Result, A>> T doBestEffortWrite(@NonNull T t) {
         return zza(2, (zza) t);
     }
 
-    public <TResult, A extends zzb> Task<TResult> doBestEffortWrite(zzse<A, TResult> com_google_android_gms_internal_zzse_A__TResult) {
-        return zza(2, (zzse) com_google_android_gms_internal_zzse_A__TResult);
+    public <TResult, A extends zzb> Task<TResult> doBestEffortWrite(zzabn<A, TResult> com_google_android_gms_internal_zzabn_A__TResult) {
+        return zza(2, (zzabn) com_google_android_gms_internal_zzabn_A__TResult);
     }
 
     public <A extends zzb, T extends zza<? extends Result, A>> T doRead(@NonNull T t) {
         return zza(0, (zza) t);
     }
 
-    public <TResult, A extends zzb> Task<TResult> doRead(zzse<A, TResult> com_google_android_gms_internal_zzse_A__TResult) {
-        return zza(0, (zzse) com_google_android_gms_internal_zzse_A__TResult);
+    public <TResult, A extends zzb> Task<TResult> doRead(zzabn<A, TResult> com_google_android_gms_internal_zzabn_A__TResult) {
+        return zza(0, (zzabn) com_google_android_gms_internal_zzabn_A__TResult);
     }
 
-    public <A extends zzb, T extends zzrw<A>, U extends zzsh<A>> Task<Void> doRegisterEventListener(@NonNull T t, U u) {
-        zzaa.zzy(t);
-        zzaa.zzy(u);
-        zzaa.zzb(t.zzatz(), (Object) "Listener has already been released.");
-        zzaa.zzb(u.zzatz(), (Object) "Listener has already been released.");
-        zzaa.zzb(t.zzatz().equals(u.zzatz()), (Object) "Listener registration and unregistration methods must be constructed with the same ListenerHolder.");
-        return this.xy.zza(this, (zzrw) t, (zzsh) u);
+    public <A extends zzb, T extends zzabe<A, ?>, U extends zzabr<A, ?>> Task<Void> doRegisterEventListener(@NonNull T t, U u) {
+        zzac.zzw(t);
+        zzac.zzw(u);
+        zzac.zzb(t.zzwp(), (Object) "Listener has already been released.");
+        zzac.zzb(u.zzwp(), (Object) "Listener has already been released.");
+        zzac.zzb(t.zzwp().equals(u.zzwp()), (Object) "Listener registration and unregistration methods must be constructed with the same ListenerHolder.");
+        return this.zzaxK.zza(this, (zzabe) t, (zzabr) u);
     }
 
-    public Task<Void> doUnregisterEventListener(@NonNull zzrr.zzb<?> com_google_android_gms_internal_zzrr_zzb_) {
-        zzaa.zzb((Object) com_google_android_gms_internal_zzrr_zzb_, (Object) "Listener key cannot be null.");
-        return this.xy.zza(this, (zzrr.zzb) com_google_android_gms_internal_zzrr_zzb_);
+    public Task<Void> doUnregisterEventListener(@NonNull zzaaz.zzb<?> com_google_android_gms_internal_zzaaz_zzb_) {
+        zzac.zzb((Object) com_google_android_gms_internal_zzaaz_zzb_, (Object) "Listener key cannot be null.");
+        return this.zzaxK.zza(this, (zzaaz.zzb) com_google_android_gms_internal_zzaaz_zzb_);
     }
 
     public <A extends zzb, T extends zza<? extends Result, A>> T doWrite(@NonNull T t) {
         return zza(1, (zza) t);
     }
 
-    public <TResult, A extends zzb> Task<TResult> doWrite(zzse<A, TResult> com_google_android_gms_internal_zzse_A__TResult) {
-        return zza(1, (zzse) com_google_android_gms_internal_zzse_A__TResult);
+    public <TResult, A extends zzb> Task<TResult> doWrite(zzabn<A, TResult> com_google_android_gms_internal_zzabn_A__TResult) {
+        return zza(1, (zzabn) com_google_android_gms_internal_zzabn_A__TResult);
     }
 
     public Api<O> getApi() {
-        return this.vS;
+        return this.zzawb;
     }
 
-    public zzql<O> getApiKey() {
-        return this.xx;
+    public zzzs<O> getApiKey() {
+        return this.zzaxH;
     }
 
     public O getApiOptions() {
-        return this.xw;
+        return this.zzaxG;
     }
 
     public Context getApplicationContext() {
         return this.mContext;
-    }
-
-    public zze getClient() {
-        return (zze) zzaa.zzb(this.xB, (Object) "Client is null, buildApiClient() should be used.");
-    }
-
-    public zzqr getClientCallbacks() {
-        return (zzqr) zzaa.zzb(this.xC, (Object) "ClientCallbacks is null.");
     }
 
     public int getInstanceId() {
@@ -201,14 +180,10 @@ public abstract class zzc<O extends ApiOptions> {
     }
 
     public Looper getLooper() {
-        return this.zzajy;
+        return this.zzrx;
     }
 
-    public boolean isConnectionlessGoogleApiClient() {
-        return (this.xB == null || this.xC == null) ? false : true;
-    }
-
-    public <L> zzrr<L> registerListener(@NonNull L l, String str) {
-        return zzrs.zzb(l, this.zzajy, str);
+    public <L> zzaaz<L> registerListener(@NonNull L l, String str) {
+        return zzaba.zzb(l, this.zzrx, str);
     }
 }

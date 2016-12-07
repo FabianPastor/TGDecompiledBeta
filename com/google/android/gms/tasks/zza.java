@@ -4,14 +4,14 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zza<TResult, TContinuationResult> implements zzf<TResult> {
-    private final Executor aEQ;
-    private final Continuation<TResult, TContinuationResult> aMF;
-    private final zzh<TContinuationResult> aMG;
+    private final Executor zzbDK;
+    private final Continuation<TResult, TContinuationResult> zzbLs;
+    private final zzh<TContinuationResult> zzbLt;
 
     public zza(@NonNull Executor executor, @NonNull Continuation<TResult, TContinuationResult> continuation, @NonNull zzh<TContinuationResult> com_google_android_gms_tasks_zzh_TContinuationResult) {
-        this.aEQ = executor;
-        this.aMF = continuation;
-        this.aMG = com_google_android_gms_tasks_zzh_TContinuationResult;
+        this.zzbDK = executor;
+        this.zzbLs = continuation;
+        this.zzbLt = com_google_android_gms_tasks_zzh_TContinuationResult;
     }
 
     public void cancel() {
@@ -19,20 +19,20 @@ class zza<TResult, TContinuationResult> implements zzf<TResult> {
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
-        this.aEQ.execute(new Runnable(this) {
-            final /* synthetic */ zza aMI;
+        this.zzbDK.execute(new Runnable(this) {
+            final /* synthetic */ zza zzbLv;
 
             public void run() {
                 try {
-                    this.aMI.aMG.setResult(this.aMI.aMF.then(task));
+                    this.zzbLv.zzbLt.setResult(this.zzbLv.zzbLs.then(task));
                 } catch (Exception e) {
                     if (e.getCause() instanceof Exception) {
-                        this.aMI.aMG.setException((Exception) e.getCause());
+                        this.zzbLv.zzbLt.setException((Exception) e.getCause());
                     } else {
-                        this.aMI.aMG.setException(e);
+                        this.zzbLv.zzbLt.setException(e);
                     }
                 } catch (Exception e2) {
-                    this.aMI.aMG.setException(e2);
+                    this.zzbLv.zzbLt.setException(e2);
                 }
             }
         });

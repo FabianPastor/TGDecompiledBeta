@@ -9,17 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class zzt {
-    private static String GE = null;
-    private static final int GF = Process.myPid();
+    private static String zzaGZ = null;
+    private static final int zzaHa = Process.myPid();
 
-    public static String zzayz() {
-        if (GE == null) {
-            GE = zzhi(GF);
-        }
-        return GE;
-    }
-
-    static String zzhi(int i) {
+    static String zzdk(int i) {
         Closeable bufferedReader;
         Throwable th;
         String str = null;
@@ -53,5 +46,12 @@ public class zzt {
             }
         }
         return str;
+    }
+
+    public static String zzyK() {
+        if (zzaGZ == null) {
+            zzaGZ = zzdk(zzaHa);
+        }
+        return zzaGZ;
     }
 }

@@ -34,7 +34,7 @@ public abstract class PendingResult<R extends Result> {
     }
 
     @Nullable
-    public Integer zzarh() {
+    public Integer zzuR() {
         throw new UnsupportedOperationException();
     }
 }

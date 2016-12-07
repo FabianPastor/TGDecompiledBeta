@@ -7,43 +7,35 @@ public class zze implements zzn {
     private final Executor zzr;
 
     private class zza implements Runnable {
-        final /* synthetic */ zze zzt;
-        private final zzk zzu;
-        private final zzm zzv;
-        private final Runnable zzw;
+        private final zzk zzt;
+        private final zzm zzu;
+        private final Runnable zzv;
 
         public zza(zze com_google_android_gms_internal_zze, zzk com_google_android_gms_internal_zzk, zzm com_google_android_gms_internal_zzm, Runnable runnable) {
-            this.zzt = com_google_android_gms_internal_zze;
-            this.zzu = com_google_android_gms_internal_zzk;
-            this.zzv = com_google_android_gms_internal_zzm;
-            this.zzw = runnable;
+            this.zzt = com_google_android_gms_internal_zzk;
+            this.zzu = com_google_android_gms_internal_zzm;
+            this.zzv = runnable;
         }
 
         public void run() {
-            if (this.zzu.isCanceled()) {
-                this.zzu.zzd("canceled-at-delivery");
-                return;
-            }
-            if (this.zzv.isSuccess()) {
-                this.zzu.zza(this.zzv.result);
+            if (this.zzu.isSuccess()) {
+                this.zzt.zza(this.zzu.result);
             } else {
-                this.zzu.zzc(this.zzv.zzbg);
+                this.zzt.zzc(this.zzu.zzaf);
             }
-            if (this.zzv.zzbh) {
-                this.zzu.zzc("intermediate-response");
+            if (this.zzu.zzag) {
+                this.zzt.zzc("intermediate-response");
             } else {
-                this.zzu.zzd("done");
+                this.zzt.zzd("done");
             }
-            if (this.zzw != null) {
-                this.zzw.run();
+            if (this.zzv != null) {
+                this.zzv.run();
             }
         }
     }
 
     public zze(final Handler handler) {
         this.zzr = new Executor(this) {
-            final /* synthetic */ zze zzt;
-
             public void execute(Runnable runnable) {
                 handler.post(runnable);
             }
@@ -55,7 +47,7 @@ public class zze implements zzn {
     }
 
     public void zza(zzk<?> com_google_android_gms_internal_zzk_, zzm<?> com_google_android_gms_internal_zzm_, Runnable runnable) {
-        com_google_android_gms_internal_zzk_.zzt();
+        com_google_android_gms_internal_zzk_.zzr();
         com_google_android_gms_internal_zzk_.zzc("post-response");
         this.zzr.execute(new zza(this, com_google_android_gms_internal_zzk_, com_google_android_gms_internal_zzm_, runnable));
     }

@@ -2,50 +2,51 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzf implements Creator<MapStyleOptions> {
     static void zza(MapStyleOptions mapStyleOptions, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, mapStyleOptions.getVersionCode());
-        zzb.zza(parcel, 2, mapStyleOptions.zzbsy(), false);
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, mapStyleOptions.getVersionCode());
+        zzc.zza(parcel, 2, mapStyleOptions.zzIU(), false);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpk(parcel);
+        return zzhy(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwo(i);
+        return zzlc(i);
     }
 
-    public MapStyleOptions zzpk(Parcel parcel) {
-        int zzcr = zza.zzcr(parcel);
+    public MapStyleOptions zzhy(Parcel parcel) {
+        int zzaU = zzb.zzaU(parcel);
         int i = 0;
         String str = null;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    str = zza.zzq(parcel, zzcq);
+                    str = zzb.zzq(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new MapStyleOptions(i, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public MapStyleOptions[] zzwo(int i) {
+    public MapStyleOptions[] zzlc(int i) {
         return new MapStyleOptions[i];
     }
 }

@@ -5,17 +5,17 @@ import com.google.android.gms.internal.zzm.zzb;
 import java.io.UnsupportedEncodingException;
 
 public class zzab extends zzk<String> {
-    private final zzb<String> zzcg;
+    private final zzb<String> zzaF;
 
     public zzab(int i, String str, zzb<String> com_google_android_gms_internal_zzm_zzb_java_lang_String, zza com_google_android_gms_internal_zzm_zza) {
         super(i, str, com_google_android_gms_internal_zzm_zza);
-        this.zzcg = com_google_android_gms_internal_zzm_zzb_java_lang_String;
+        this.zzaF = com_google_android_gms_internal_zzm_zzb_java_lang_String;
     }
 
     protected zzm<String> zza(zzi com_google_android_gms_internal_zzi) {
         Object str;
         try {
-            str = new String(com_google_android_gms_internal_zzi.data, zzx.zza(com_google_android_gms_internal_zzi.zzz));
+            str = new String(com_google_android_gms_internal_zzi.data, zzx.zza(com_google_android_gms_internal_zzi.zzy));
         } catch (UnsupportedEncodingException e) {
             str = new String(com_google_android_gms_internal_zzi.data);
         }
@@ -27,6 +27,6 @@ public class zzab extends zzk<String> {
     }
 
     protected void zzi(String str) {
-        this.zzcg.zzb(str);
+        this.zzaF.zzb(str);
     }
 }

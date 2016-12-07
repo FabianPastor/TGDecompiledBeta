@@ -8,7 +8,7 @@ import java.io.File;
 public class zzw {
     @TargetApi(21)
     public static File getNoBackupFilesDir(Context context) {
-        return zzs.zzayx() ? context.getNoBackupFilesDir() : zze(new File(context.getApplicationInfo().dataDir, "no_backup"));
+        return zzs.zzyI() ? context.getNoBackupFilesDir() : zze(new File(context.getApplicationInfo().dataDir, "no_backup"));
     }
 
     private static synchronized File zze(File file) {

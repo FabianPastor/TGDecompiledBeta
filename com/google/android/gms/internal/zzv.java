@@ -19,17 +19,17 @@ import java.util.Map.Entry;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 
 public class zzv implements zzb {
-    private final Map<String, zza> zzbw;
-    private long zzbx;
-    private final File zzby;
-    private final int zzbz;
+    private final Map<String, zza> zzav;
+    private long zzaw;
+    private final File zzax;
+    private final int zzay;
 
     static class zza {
         public String zza;
+        public String zzaA;
+        public long zzaz;
         public long zzb;
         public long zzc;
-        public long zzca;
-        public String zzcb;
         public long zzd;
         public long zze;
         public Map<String, String> zzf;
@@ -38,8 +38,8 @@ public class zzv implements zzb {
         }
 
         public zza(String str, com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza) {
-            this.zzcb = str;
-            this.zzca = (long) com_google_android_gms_internal_zzb_zza.data.length;
+            this.zzaA = str;
+            this.zzaz = (long) com_google_android_gms_internal_zzb_zza.data.length;
             this.zza = com_google_android_gms_internal_zzb_zza.zza;
             this.zzb = com_google_android_gms_internal_zzb_zza.zzb;
             this.zzc = com_google_android_gms_internal_zzb_zza.zzc;
@@ -53,7 +53,7 @@ public class zzv implements zzb {
             if (zzv.zzb(inputStream) != 538247942) {
                 throw new IOException();
             }
-            com_google_android_gms_internal_zzv_zza.zzcb = zzv.zzd(inputStream);
+            com_google_android_gms_internal_zzv_zza.zzaA = zzv.zzd(inputStream);
             com_google_android_gms_internal_zzv_zza.zza = zzv.zzd(inputStream);
             if (com_google_android_gms_internal_zzv_zza.zza.equals("")) {
                 com_google_android_gms_internal_zzv_zza.zza = null;
@@ -69,7 +69,7 @@ public class zzv implements zzb {
         public boolean zza(OutputStream outputStream) {
             try {
                 zzv.zza(outputStream, 538247942);
-                zzv.zza(outputStream, this.zzcb);
+                zzv.zza(outputStream, this.zzaA);
                 zzv.zza(outputStream, this.zza == null ? "" : this.zza);
                 zzv.zza(outputStream, this.zzb);
                 zzv.zza(outputStream, this.zzc);
@@ -98,17 +98,17 @@ public class zzv implements zzb {
     }
 
     private static class zzb extends FilterInputStream {
-        private int zzcc;
+        private int zzaB;
 
         private zzb(InputStream inputStream) {
             super(inputStream);
-            this.zzcc = 0;
+            this.zzaB = 0;
         }
 
         public int read() throws IOException {
             int read = super.read();
             if (read != -1) {
-                this.zzcc++;
+                this.zzaB++;
             }
             return read;
         }
@@ -116,7 +116,7 @@ public class zzv implements zzb {
         public int read(byte[] bArr, int i, int i2) throws IOException {
             int read = super.read(bArr, i, i2);
             if (read != -1) {
-                this.zzcc += read;
+                this.zzaB += read;
             }
             return read;
         }
@@ -127,17 +127,17 @@ public class zzv implements zzb {
     }
 
     public zzv(File file, int i) {
-        this.zzbw = new LinkedHashMap(16, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
-        this.zzbx = 0;
-        this.zzby = file;
-        this.zzbz = i;
+        this.zzav = new LinkedHashMap(16, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
+        this.zzaw = 0;
+        this.zzax = file;
+        this.zzay = i;
     }
 
     private void removeEntry(String str) {
-        zza com_google_android_gms_internal_zzv_zza = (zza) this.zzbw.get(str);
+        zza com_google_android_gms_internal_zzv_zza = (zza) this.zzav.get(str);
         if (com_google_android_gms_internal_zzv_zza != null) {
-            this.zzbx -= com_google_android_gms_internal_zzv_zza.zzca;
-            this.zzbw.remove(str);
+            this.zzaw -= com_google_android_gms_internal_zzv_zza.zzaz;
+            this.zzav.remove(str);
         }
     }
 
@@ -174,13 +174,13 @@ public class zzv implements zzb {
     }
 
     private void zza(String str, zza com_google_android_gms_internal_zzv_zza) {
-        if (this.zzbw.containsKey(str)) {
-            zza com_google_android_gms_internal_zzv_zza2 = (zza) this.zzbw.get(str);
-            this.zzbx = (com_google_android_gms_internal_zzv_zza.zzca - com_google_android_gms_internal_zzv_zza2.zzca) + this.zzbx;
+        if (this.zzav.containsKey(str)) {
+            zza com_google_android_gms_internal_zzv_zza2 = (zza) this.zzav.get(str);
+            this.zzaw = (com_google_android_gms_internal_zzv_zza.zzaz - com_google_android_gms_internal_zzv_zza2.zzaz) + this.zzaw;
         } else {
-            this.zzbx += com_google_android_gms_internal_zzv_zza.zzca;
+            this.zzaw += com_google_android_gms_internal_zzv_zza.zzaz;
         }
-        this.zzbw.put(str, com_google_android_gms_internal_zzv_zza);
+        this.zzav.put(str, com_google_android_gms_internal_zzv_zza);
     }
 
     static void zza(Map<String, String> map, OutputStream outputStream) throws IOException {
@@ -220,32 +220,32 @@ public class zzv implements zzb {
     }
 
     private void zzc(int i) {
-        if (this.zzbx + ((long) i) >= ((long) this.zzbz)) {
+        if (this.zzaw + ((long) i) >= ((long) this.zzay)) {
             int i2;
             if (zzs.DEBUG) {
                 zzs.zza("Pruning old cache entries.", new Object[0]);
             }
-            long j = this.zzbx;
+            long j = this.zzaw;
             long elapsedRealtime = SystemClock.elapsedRealtime();
-            Iterator it = this.zzbw.entrySet().iterator();
+            Iterator it = this.zzav.entrySet().iterator();
             int i3 = 0;
             while (it.hasNext()) {
                 zza com_google_android_gms_internal_zzv_zza = (zza) ((Entry) it.next()).getValue();
-                if (zzf(com_google_android_gms_internal_zzv_zza.zzcb).delete()) {
-                    this.zzbx -= com_google_android_gms_internal_zzv_zza.zzca;
+                if (zzf(com_google_android_gms_internal_zzv_zza.zzaA).delete()) {
+                    this.zzaw -= com_google_android_gms_internal_zzv_zza.zzaz;
                 } else {
-                    zzs.zzb("Could not delete cache entry for key=%s, filename=%s", com_google_android_gms_internal_zzv_zza.zzcb, zze(com_google_android_gms_internal_zzv_zza.zzcb));
+                    zzs.zzb("Could not delete cache entry for key=%s, filename=%s", com_google_android_gms_internal_zzv_zza.zzaA, zze(com_google_android_gms_internal_zzv_zza.zzaA));
                 }
                 it.remove();
                 i2 = i3 + 1;
-                if (((float) (this.zzbx + ((long) i))) < ((float) this.zzbz) * 0.9f) {
+                if (((float) (this.zzaw + ((long) i))) < ((float) this.zzay) * 0.9f) {
                     break;
                 }
                 i3 = i2;
             }
             i2 = i3;
             if (zzs.DEBUG) {
-                zzs.zza("pruned %d files, %d bytes, %d ms", Integer.valueOf(i2), Long.valueOf(this.zzbx - j), Long.valueOf(SystemClock.elapsedRealtime() - elapsedRealtime));
+                zzs.zza("pruned %d files, %d bytes, %d ms", Integer.valueOf(i2), Long.valueOf(this.zzaw - j), Long.valueOf(SystemClock.elapsedRealtime() - elapsedRealtime));
             }
         }
     }
@@ -271,24 +271,22 @@ public class zzv implements zzb {
     }
 
     public synchronized void initialize() {
-        BufferedInputStream bufferedInputStream;
         Throwable th;
-        if (this.zzby.exists()) {
-            File[] listFiles = this.zzby.listFiles();
+        if (this.zzax.exists()) {
+            File[] listFiles = this.zzax.listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
-                    BufferedInputStream bufferedInputStream2 = null;
+                    BufferedInputStream bufferedInputStream = null;
+                    BufferedInputStream bufferedInputStream2;
                     try {
-                        bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                        bufferedInputStream2 = new BufferedInputStream(new FileInputStream(file));
                         try {
-                            zza zzf = zza.zzf(bufferedInputStream);
-                            zzf.zzca = file.length();
-                            zza(zzf.zzcb, zzf);
-                            if (bufferedInputStream != null) {
-                                try {
-                                    bufferedInputStream.close();
-                                } catch (IOException e) {
-                                }
+                            zza zzf = zza.zzf(bufferedInputStream2);
+                            zzf.zzaz = file.length();
+                            zza(zzf.zzaA, zzf);
+                            try {
+                                bufferedInputStream2.close();
+                            } catch (IOException e) {
                             }
                         } catch (IOException e2) {
                             if (file != null) {
@@ -296,37 +294,37 @@ public class zzv implements zzb {
                                     file.delete();
                                 } catch (Throwable th2) {
                                     Throwable th3 = th2;
-                                    bufferedInputStream2 = bufferedInputStream;
+                                    bufferedInputStream = bufferedInputStream2;
                                     th = th3;
                                 }
                             }
-                            if (bufferedInputStream != null) {
+                            if (bufferedInputStream2 != null) {
                                 try {
-                                    bufferedInputStream.close();
+                                    bufferedInputStream2.close();
                                 } catch (IOException e3) {
                                 }
                             }
                         }
                     } catch (IOException e4) {
-                        bufferedInputStream = null;
+                        bufferedInputStream2 = null;
                         if (file != null) {
                             file.delete();
                         }
-                        if (bufferedInputStream != null) {
-                            bufferedInputStream.close();
+                        if (bufferedInputStream2 != null) {
+                            bufferedInputStream2.close();
                         }
                     } catch (Throwable th4) {
                         th = th4;
                     }
                 }
             }
-        } else if (!this.zzby.mkdirs()) {
-            zzs.zzc("Unable to create cache dir %s", this.zzby.getAbsolutePath());
+        } else if (!this.zzax.mkdirs()) {
+            zzs.zzc("Unable to create cache dir %s", this.zzax.getAbsolutePath());
         }
         return;
-        if (bufferedInputStream2 != null) {
+        if (bufferedInputStream != null) {
             try {
-                bufferedInputStream2.close();
+                bufferedInputStream.close();
             } catch (IOException e5) {
             }
         }
@@ -347,7 +345,7 @@ public class zzv implements zzb {
         zzb com_google_android_gms_internal_zzv_zzb;
         IOException e;
         Throwable th;
-        zza com_google_android_gms_internal_zzv_zza = (zza) this.zzbw.get(str);
+        zza com_google_android_gms_internal_zzv_zza = (zza) this.zzav.get(str);
         if (com_google_android_gms_internal_zzv_zza == null) {
             com_google_android_gms_internal_zzb_zza = null;
         } else {
@@ -356,13 +354,11 @@ public class zzv implements zzb {
                 com_google_android_gms_internal_zzv_zzb = new zzb(new FileInputStream(zzf));
                 try {
                     zza.zzf(com_google_android_gms_internal_zzv_zzb);
-                    com_google_android_gms_internal_zzb_zza = com_google_android_gms_internal_zzv_zza.zzb(zza((InputStream) com_google_android_gms_internal_zzv_zzb, (int) (zzf.length() - ((long) com_google_android_gms_internal_zzv_zzb.zzcc))));
-                    if (com_google_android_gms_internal_zzv_zzb != null) {
-                        try {
-                            com_google_android_gms_internal_zzv_zzb.close();
-                        } catch (IOException e2) {
-                            com_google_android_gms_internal_zzb_zza = null;
-                        }
+                    com_google_android_gms_internal_zzb_zza = com_google_android_gms_internal_zzv_zza.zzb(zza((InputStream) com_google_android_gms_internal_zzv_zzb, (int) (zzf.length() - ((long) com_google_android_gms_internal_zzv_zzb.zzaB))));
+                    try {
+                        com_google_android_gms_internal_zzv_zzb.close();
+                    } catch (IOException e2) {
+                        com_google_android_gms_internal_zzb_zza = null;
                     }
                 } catch (IOException e3) {
                     e = e3;
@@ -435,6 +431,6 @@ public class zzv implements zzb {
     }
 
     public File zzf(String str) {
-        return new File(this.zzby, zze(str));
+        return new File(this.zzax, zze(str));
     }
 }

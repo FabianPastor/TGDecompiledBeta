@@ -3,8 +3,8 @@ package com.google.android.gms.vision.text;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.SparseArray;
-import com.google.android.gms.vision.text.internal.client.BoundingBoxParcel;
-import com.google.android.gms.vision.text.internal.client.LineBoxParcel;
+import com.google.android.gms.internal.zzbhg;
+import com.google.android.gms.internal.zzbhk;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,24 +14,24 @@ import java.util.Map.Entry;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class TextBlock implements Text {
-    private LineBoxParcel[] aOI;
-    private List<Line> aOJ;
-    private String aOK;
-    private Rect aOL;
     private Point[] cornerPoints;
+    private zzbhk[] zzbNu;
+    private List<Line> zzbNv;
+    private String zzbNw;
+    private Rect zzbNx;
 
-    TextBlock(SparseArray<LineBoxParcel> sparseArray) {
-        this.aOI = new LineBoxParcel[sparseArray.size()];
-        for (int i = 0; i < this.aOI.length; i++) {
-            this.aOI[i] = (LineBoxParcel) sparseArray.valueAt(i);
+    TextBlock(SparseArray<zzbhk> sparseArray) {
+        this.zzbNu = new zzbhk[sparseArray.size()];
+        for (int i = 0; i < this.zzbNu.length; i++) {
+            this.zzbNu[i] = (zzbhk) sparseArray.valueAt(i);
         }
     }
 
-    private static Point[] zza(int i, int i2, int i3, int i4, BoundingBoxParcel boundingBoxParcel) {
-        int i5 = boundingBoxParcel.left;
-        int i6 = boundingBoxParcel.top;
-        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel.aOP));
-        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel.aOP));
+    private static Point[] zza(int i, int i2, int i3, int i4, zzbhg com_google_android_gms_internal_zzbhg) {
+        int i5 = com_google_android_gms_internal_zzbhg.left;
+        int i6 = com_google_android_gms_internal_zzbhg.top;
+        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbhg.zzbNA));
+        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbhg.zzbNA));
         Point[] pointArr = new Point[]{new Point(i, i2), new Point(i3, i2), new Point(i3, i4), new Point(i, i4)};
         for (int i7 = 0; i7 < 4; i7++) {
             int i8 = (int) ((((double) pointArr[i7].x) * sin) + (((double) pointArr[i7].y) * cos));
@@ -42,57 +42,51 @@ public class TextBlock implements Text {
         return pointArr;
     }
 
-    private static Point[] zza(BoundingBoxParcel boundingBoxParcel, BoundingBoxParcel boundingBoxParcel2) {
-        int i = -boundingBoxParcel2.left;
-        int i2 = -boundingBoxParcel2.top;
-        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel2.aOP));
-        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel2.aOP));
+    private static Point[] zza(zzbhg com_google_android_gms_internal_zzbhg, zzbhg com_google_android_gms_internal_zzbhg2) {
+        int i = -com_google_android_gms_internal_zzbhg2.left;
+        int i2 = -com_google_android_gms_internal_zzbhg2.top;
+        double sin = Math.sin(Math.toRadians((double) com_google_android_gms_internal_zzbhg2.zzbNA));
+        double cos = Math.cos(Math.toRadians((double) com_google_android_gms_internal_zzbhg2.zzbNA));
         Point[] pointArr = new Point[4];
-        pointArr[0] = new Point(boundingBoxParcel.left, boundingBoxParcel.top);
+        pointArr[0] = new Point(com_google_android_gms_internal_zzbhg.left, com_google_android_gms_internal_zzbhg.top);
         pointArr[0].offset(i, i2);
         i = (int) ((((double) pointArr[0].x) * cos) + (((double) pointArr[0].y) * sin));
         i2 = (int) ((sin * ((double) (-pointArr[0].x))) + (cos * ((double) pointArr[0].y)));
         pointArr[0].x = i;
         pointArr[0].y = i2;
-        pointArr[1] = new Point(boundingBoxParcel.width + i, i2);
-        pointArr[2] = new Point(boundingBoxParcel.width + i, boundingBoxParcel.height + i2);
-        pointArr[3] = new Point(i, i2 + boundingBoxParcel.height);
+        pointArr[1] = new Point(com_google_android_gms_internal_zzbhg.width + i, i2);
+        pointArr[2] = new Point(com_google_android_gms_internal_zzbhg.width + i, com_google_android_gms_internal_zzbhg.height + i2);
+        pointArr[3] = new Point(i, i2 + com_google_android_gms_internal_zzbhg.height);
         return pointArr;
     }
 
     public Rect getBoundingBox() {
-        if (this.aOL == null) {
-            this.aOL = zza.zza((Text) this);
+        if (this.zzbNx == null) {
+            this.zzbNx = zza.zza((Text) this);
         }
-        return this.aOL;
+        return this.zzbNx;
     }
 
     public List<? extends Text> getComponents() {
-        return zzclv();
+        return zzSt();
     }
 
     public Point[] getCornerPoints() {
         if (this.cornerPoints == null) {
-            zzclu();
+            zzSs();
         }
         return this.cornerPoints;
     }
 
     public String getLanguage() {
-        if (this.aOK != null) {
-            return this.aOK;
+        if (this.zzbNw != null) {
+            return this.zzbNw;
         }
         HashMap hashMap = new HashMap();
-        for (LineBoxParcel lineBoxParcel : this.aOI) {
-            hashMap.put(lineBoxParcel.aOK, Integer.valueOf((hashMap.containsKey(lineBoxParcel.aOK) ? ((Integer) hashMap.get(lineBoxParcel.aOK)).intValue() : 0) + 1));
+        for (zzbhk com_google_android_gms_internal_zzbhk : this.zzbNu) {
+            hashMap.put(com_google_android_gms_internal_zzbhk.zzbNw, Integer.valueOf((hashMap.containsKey(com_google_android_gms_internal_zzbhk.zzbNw) ? ((Integer) hashMap.get(com_google_android_gms_internal_zzbhk.zzbNw)).intValue() : 0) + 1));
         }
-        this.aOK = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
-            final /* synthetic */ TextBlock aOM;
-
-            {
-                this.aOM = r1;
-            }
-
+        this.zzbNw = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
             public /* synthetic */ int compare(Object obj, Object obj2) {
                 return zza((Entry) obj, (Entry) obj2);
             }
@@ -101,26 +95,26 @@ public class TextBlock implements Text {
                 return ((Integer) entry.getValue()).compareTo((Integer) entry2.getValue());
             }
         })).getKey();
-        if (this.aOK == null || this.aOK.isEmpty()) {
-            this.aOK = "und";
+        if (this.zzbNw == null || this.zzbNw.isEmpty()) {
+            this.zzbNw = "und";
         }
-        return this.aOK;
+        return this.zzbNw;
     }
 
     public String getValue() {
-        if (this.aOI.length == 0) {
+        if (this.zzbNu.length == 0) {
             return "";
         }
-        StringBuilder stringBuilder = new StringBuilder(this.aOI[0].aOU);
-        for (int i = 1; i < this.aOI.length; i++) {
+        StringBuilder stringBuilder = new StringBuilder(this.zzbNu[0].zzbNF);
+        for (int i = 1; i < this.zzbNu.length; i++) {
             stringBuilder.append("\n");
-            stringBuilder.append(this.aOI[i].aOU);
+            stringBuilder.append(this.zzbNu[i].zzbNF);
         }
         return stringBuilder.toString();
     }
 
-    void zzclu() {
-        if (this.aOI.length == 0) {
+    void zzSs() {
+        if (this.zzbNu.length == 0) {
             this.cornerPoints = new Point[0];
             return;
         }
@@ -128,8 +122,8 @@ public class TextBlock implements Text {
         int i2 = Integer.MIN_VALUE;
         int i3 = ConnectionsManager.DEFAULT_DATACENTER_ID;
         int i4 = Integer.MIN_VALUE;
-        for (LineBoxParcel lineBoxParcel : this.aOI) {
-            Point[] zza = zza(lineBoxParcel.aOR, this.aOI[0].aOR);
+        for (zzbhk com_google_android_gms_internal_zzbhk : this.zzbNu) {
+            Point[] zza = zza(com_google_android_gms_internal_zzbhk.zzbNC, this.zzbNu[0].zzbNC);
             int i5 = 0;
             while (i5 < 4) {
                 Point point = zza[i5];
@@ -143,19 +137,19 @@ public class TextBlock implements Text {
                 i3 = min;
             }
         }
-        this.cornerPoints = zza(i3, i, i2, i4, this.aOI[0].aOR);
+        this.cornerPoints = zza(i3, i, i2, i4, this.zzbNu[0].zzbNC);
     }
 
-    List<Line> zzclv() {
-        if (this.aOI.length == 0) {
+    List<Line> zzSt() {
+        if (this.zzbNu.length == 0) {
             return new ArrayList(0);
         }
-        if (this.aOJ == null) {
-            this.aOJ = new ArrayList(this.aOI.length);
-            for (LineBoxParcel line : this.aOI) {
-                this.aOJ.add(new Line(line));
+        if (this.zzbNv == null) {
+            this.zzbNv = new ArrayList(this.zzbNu.length);
+            for (zzbhk line : this.zzbNu) {
+                this.zzbNv.add(new Line(line));
             }
         }
-        return this.aOJ;
+        return this.zzbNv;
     }
 }

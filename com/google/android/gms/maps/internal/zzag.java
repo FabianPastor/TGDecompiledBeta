@@ -13,14 +13,14 @@ public interface zzag extends IInterface {
     public static abstract class zza extends Binder implements zzag {
 
         private static class zza implements zzag {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onSnapshotReady(Bitmap bitmap) throws RemoteException {
@@ -34,7 +34,7 @@ public interface zzag extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -42,13 +42,13 @@ public interface zzag extends IInterface {
                 }
             }
 
-            public void zzag(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public void zzG(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ISnapshotReadyCallback");
                     obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzajq.transact(2, obtain, obtain2, 0);
+                    this.zzrp.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -61,7 +61,7 @@ public interface zzag extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.ISnapshotReadyCallback");
         }
 
-        public static zzag zzja(IBinder iBinder) {
+        public static zzag zzec(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -82,7 +82,7 @@ public interface zzag extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.ISnapshotReadyCallback");
-                    zzag(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()));
+                    zzG(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -96,5 +96,5 @@ public interface zzag extends IInterface {
 
     void onSnapshotReady(Bitmap bitmap) throws RemoteException;
 
-    void zzag(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    void zzG(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
 }

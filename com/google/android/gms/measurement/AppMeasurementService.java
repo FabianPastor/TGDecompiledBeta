@@ -6,17 +6,17 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.MainThread;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import com.google.android.gms.measurement.internal.zzaf;
-import com.google.android.gms.measurement.internal.zzaf.zza;
+import com.google.android.gms.internal.zzatx;
+import com.google.android.gms.internal.zzatx.zza;
 
 public final class AppMeasurementService extends Service implements zza {
-    private zzaf aqE;
+    private zzatx zzbpE;
 
-    private zzaf zzbtf() {
-        if (this.aqE == null) {
-            this.aqE = new zzaf(this);
+    private zzatx zzJb() {
+        if (this.zzbpE == null) {
+            this.zzbpE = new zzatx(this);
         }
-        return this.aqE;
+        return this.zzbpE;
     }
 
     public boolean callServiceStopSelfResult(int i) {
@@ -29,35 +29,35 @@ public final class AppMeasurementService extends Service implements zza {
 
     @MainThread
     public IBinder onBind(Intent intent) {
-        return zzbtf().onBind(intent);
+        return zzJb().onBind(intent);
     }
 
     @MainThread
     public void onCreate() {
         super.onCreate();
-        zzbtf().onCreate();
+        zzJb().onCreate();
     }
 
     @MainThread
     public void onDestroy() {
-        zzbtf().onDestroy();
+        zzJb().onDestroy();
         super.onDestroy();
     }
 
     @MainThread
     public void onRebind(Intent intent) {
-        zzbtf().onRebind(intent);
+        zzJb().onRebind(intent);
     }
 
     @MainThread
     public int onStartCommand(Intent intent, int i, int i2) {
-        zzbtf().onStartCommand(intent, i, i2);
+        zzJb().onStartCommand(intent, i, i2);
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
         return 2;
     }
 
     @MainThread
     public boolean onUnbind(Intent intent) {
-        return zzbtf().onUnbind(intent);
+        return zzJb().onUnbind(intent);
     }
 }

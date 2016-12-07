@@ -1,11 +1,11 @@
 package com.google.android.gms.common.api;
 
-import java.util.Map;
-import java.util.WeakHashMap;
+import android.support.annotation.NonNull;
 
-public abstract class zze {
-    private static final Map<Object, zze> xX = new WeakHashMap();
-    private static final Object zzaox = new Object();
+public class zze<T extends Result> {
+    private T zzayd;
 
-    public abstract void remove(int i);
+    public void zzb(@NonNull T t) {
+        this.zzayd = t;
+    }
 }

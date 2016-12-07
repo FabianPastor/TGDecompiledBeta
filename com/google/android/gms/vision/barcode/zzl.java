@@ -2,56 +2,57 @@ package com.google.android.gms.vision.barcode;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
 
 public class zzl implements Creator<UrlBookmark> {
     static void zza(UrlBookmark urlBookmark, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, urlBookmark.versionCode);
-        zzb.zza(parcel, 2, urlBookmark.title, false);
-        zzb.zza(parcel, 3, urlBookmark.url, false);
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, urlBookmark.versionCode);
+        zzc.zza(parcel, 2, urlBookmark.title, false);
+        zzc.zza(parcel, 3, urlBookmark.url, false);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsp(parcel);
+        return zzje(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabe(i);
+        return zznt(i);
     }
 
-    public UrlBookmark[] zzabe(int i) {
-        return new UrlBookmark[i];
-    }
-
-    public UrlBookmark zzsp(Parcel parcel) {
+    public UrlBookmark zzje(Parcel parcel) {
         String str = null;
-        int zzcr = zza.zzcr(parcel);
+        int zzaU = zzb.zzaU(parcel);
         int i = 0;
         String str2 = null;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    str2 = zza.zzq(parcel, zzcq);
+                    str2 = zzb.zzq(parcel, zzaT);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcq);
+                    str = zzb.zzq(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new UrlBookmark(i, str2, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
+    }
+
+    public UrlBookmark[] zznt(int i) {
+        return new UrlBookmark[i];
     }
 }

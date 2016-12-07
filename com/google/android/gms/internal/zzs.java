@@ -11,18 +11,18 @@ public class zzs {
     public static String TAG = "Volley";
 
     static class zza {
-        public static final boolean zzbj = zzs.DEBUG;
-        private final List<zza> zzbk = new ArrayList();
-        private boolean zzbl = false;
+        public static final boolean zzai = zzs.DEBUG;
+        private final List<zza> zzaj = new ArrayList();
+        private boolean zzak = false;
 
         private static class zza {
             public final String name;
             public final long time;
-            public final long zzbm;
+            public final long zzal;
 
             public zza(String str, long j, long j2) {
                 this.name = str;
-                this.zzbm = j;
+                this.zzal = j;
                 this.time = j2;
             }
         }
@@ -31,34 +31,34 @@ public class zzs {
         }
 
         private long getTotalDuration() {
-            if (this.zzbk.size() == 0) {
+            if (this.zzaj.size() == 0) {
                 return 0;
             }
-            return ((zza) this.zzbk.get(this.zzbk.size() - 1)).time - ((zza) this.zzbk.get(0)).time;
+            return ((zza) this.zzaj.get(this.zzaj.size() - 1)).time - ((zza) this.zzaj.get(0)).time;
         }
 
         protected void finalize() throws Throwable {
-            if (!this.zzbl) {
+            if (!this.zzak) {
                 zzd("Request on the loose");
                 zzs.zzc("Marker log finalized without finish() - uncaught exit point for request", new Object[0]);
             }
         }
 
         public synchronized void zza(String str, long j) {
-            if (this.zzbl) {
+            if (this.zzak) {
                 throw new IllegalStateException("Marker added to finished log");
             }
-            this.zzbk.add(new zza(str, j, SystemClock.elapsedRealtime()));
+            this.zzaj.add(new zza(str, j, SystemClock.elapsedRealtime()));
         }
 
         public synchronized void zzd(String str) {
-            this.zzbl = true;
+            this.zzak = true;
             if (getTotalDuration() > 0) {
-                long j = ((zza) this.zzbk.get(0)).time;
+                long j = ((zza) this.zzaj.get(0)).time;
                 zzs.zzb("(%-4d ms) %s", Long.valueOf(r2), str);
                 long j2 = j;
-                for (zza com_google_android_gms_internal_zzs_zza_zza : this.zzbk) {
-                    zzs.zzb("(+%-4d) [%2d] %s", Long.valueOf(com_google_android_gms_internal_zzs_zza_zza.time - j2), Long.valueOf(com_google_android_gms_internal_zzs_zza_zza.zzbm), com_google_android_gms_internal_zzs_zza_zza.name);
+                for (zza com_google_android_gms_internal_zzs_zza_zza : this.zzaj) {
+                    zzs.zzb("(+%-4d) [%2d] %s", Long.valueOf(com_google_android_gms_internal_zzs_zza_zza.time - j2), Long.valueOf(com_google_android_gms_internal_zzs_zza_zza.zzal), com_google_android_gms_internal_zzs_zza_zza.name);
                     j2 = com_google_android_gms_internal_zzs_zza_zza.time;
                 }
             }

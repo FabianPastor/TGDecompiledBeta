@@ -2,35 +2,36 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzb implements Creator<CircleOptions> {
     static void zza(CircleOptions circleOptions, Parcel parcel, int i) {
-        int zzcs = com.google.android.gms.common.internal.safeparcel.zzb.zzcs(parcel);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 1, circleOptions.getVersionCode());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 2, circleOptions.getCenter(), i, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 3, circleOptions.getRadius());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 4, circleOptions.getStrokeWidth());
-        com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 5, circleOptions.getStrokeColor());
-        com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 6, circleOptions.getFillColor());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 7, circleOptions.getZIndex());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 8, circleOptions.isVisible());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 9, circleOptions.isClickable());
-        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, circleOptions.getVersionCode());
+        zzc.zza(parcel, 2, circleOptions.getCenter(), i, false);
+        zzc.zza(parcel, 3, circleOptions.getRadius());
+        zzc.zza(parcel, 4, circleOptions.getStrokeWidth());
+        zzc.zzc(parcel, 5, circleOptions.getStrokeColor());
+        zzc.zzc(parcel, 6, circleOptions.getFillColor());
+        zzc.zza(parcel, 7, circleOptions.getZIndex());
+        zzc.zza(parcel, 8, circleOptions.isVisible());
+        zzc.zza(parcel, 9, circleOptions.isClickable());
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpg(parcel);
+        return zzhu(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwk(i);
+        return zzkY(i);
     }
 
-    public CircleOptions zzpg(Parcel parcel) {
+    public CircleOptions zzhu(Parcel parcel) {
         float f = 0.0f;
         boolean z = false;
-        int zzcr = zza.zzcr(parcel);
+        int zzaU = com.google.android.gms.common.internal.safeparcel.zzb.zzaU(parcel);
         LatLng latLng = null;
         double d = 0.0d;
         boolean z2 = false;
@@ -38,48 +39,48 @@ public class zzb implements Creator<CircleOptions> {
         int i2 = 0;
         float f2 = 0.0f;
         int i3 = 0;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzaT(parcel);
+            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzcW(zzaT)) {
                 case 1:
-                    i3 = zza.zzg(parcel, zzcq);
+                    i3 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    latLng = (LatLng) zza.zza(parcel, zzcq, LatLng.CREATOR);
+                    latLng = (LatLng) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaT, LatLng.CREATOR);
                     break;
                 case 3:
-                    d = zza.zzn(parcel, zzcq);
+                    d = com.google.android.gms.common.internal.safeparcel.zzb.zzn(parcel, zzaT);
                     break;
                 case 4:
-                    f2 = zza.zzl(parcel, zzcq);
+                    f2 = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, zzaT);
                     break;
                 case 5:
-                    i2 = zza.zzg(parcel, zzcq);
+                    i2 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
                     break;
                 case 6:
-                    i = zza.zzg(parcel, zzcq);
+                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
                     break;
                 case 7:
-                    f = zza.zzl(parcel, zzcq);
+                    f = com.google.android.gms.common.internal.safeparcel.zzb.zzl(parcel, zzaT);
                     break;
                 case 8:
-                    z2 = zza.zzc(parcel, zzcq);
+                    z2 = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT);
                     break;
                 case 9:
-                    z = zza.zzc(parcel, zzcq);
+                    z = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new CircleOptions(i3, latLng, d, f2, i2, i, f, z2, z);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public CircleOptions[] zzwk(int i) {
+    public CircleOptions[] zzkY(int i) {
         return new CircleOptions[i];
     }
 }

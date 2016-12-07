@@ -10,8 +10,54 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class zzp {
-    private static final Pattern GC = Pattern.compile("\\\\.");
-    private static final Pattern GD = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
+    private static final Pattern zzaGX = Pattern.compile("\\\\.");
+    private static final Pattern zzaGY = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
+
+    public static String zzdC(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        Matcher matcher = zzaGY.matcher(str);
+        StringBuffer stringBuffer = null;
+        while (matcher.find()) {
+            if (stringBuffer == null) {
+                stringBuffer = new StringBuffer();
+            }
+            switch (matcher.group().charAt(0)) {
+                case '\b':
+                    matcher.appendReplacement(stringBuffer, "\\\\b");
+                    break;
+                case '\t':
+                    matcher.appendReplacement(stringBuffer, "\\\\t");
+                    break;
+                case '\n':
+                    matcher.appendReplacement(stringBuffer, "\\\\n");
+                    break;
+                case '\f':
+                    matcher.appendReplacement(stringBuffer, "\\\\f");
+                    break;
+                case '\r':
+                    matcher.appendReplacement(stringBuffer, "\\\\r");
+                    break;
+                case '\"':
+                    matcher.appendReplacement(stringBuffer, "\\\\\\\"");
+                    break;
+                case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
+                    matcher.appendReplacement(stringBuffer, "\\\\/");
+                    break;
+                case '\\':
+                    matcher.appendReplacement(stringBuffer, "\\\\\\\\");
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (stringBuffer == null) {
+            return str;
+        }
+        matcher.appendTail(stringBuffer);
+        return stringBuffer.toString();
+    }
 
     public static boolean zzf(Object obj, Object obj2) {
         if (obj == null && obj2 == null) {
@@ -62,51 +108,5 @@ public final class zzp {
             }
             return true;
         }
-    }
-
-    public static String zzii(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        Matcher matcher = GD.matcher(str);
-        StringBuffer stringBuffer = null;
-        while (matcher.find()) {
-            if (stringBuffer == null) {
-                stringBuffer = new StringBuffer();
-            }
-            switch (matcher.group().charAt(0)) {
-                case '\b':
-                    matcher.appendReplacement(stringBuffer, "\\\\b");
-                    break;
-                case '\t':
-                    matcher.appendReplacement(stringBuffer, "\\\\t");
-                    break;
-                case '\n':
-                    matcher.appendReplacement(stringBuffer, "\\\\n");
-                    break;
-                case '\f':
-                    matcher.appendReplacement(stringBuffer, "\\\\f");
-                    break;
-                case '\r':
-                    matcher.appendReplacement(stringBuffer, "\\\\r");
-                    break;
-                case '\"':
-                    matcher.appendReplacement(stringBuffer, "\\\\\\\"");
-                    break;
-                case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
-                    matcher.appendReplacement(stringBuffer, "\\\\/");
-                    break;
-                case '\\':
-                    matcher.appendReplacement(stringBuffer, "\\\\\\\\");
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (stringBuffer == null) {
-            return str;
-        }
-        matcher.appendTail(stringBuffer);
-        return stringBuffer.toString();
     }
 }

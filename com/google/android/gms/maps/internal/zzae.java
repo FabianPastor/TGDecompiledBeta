@@ -12,14 +12,14 @@ public interface zzae extends IInterface {
     public static abstract class zza extends Binder implements zzae {
 
         private static class zza implements zzae {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onStreetViewPanoramaLongClick(StreetViewPanoramaOrientation streetViewPanoramaOrientation) throws RemoteException {
@@ -33,7 +33,7 @@ public interface zzae extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -46,7 +46,7 @@ public interface zzae extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnStreetViewPanoramaLongClickListener");
         }
 
-        public static zzae zzix(IBinder iBinder) {
+        public static zzae zzdZ(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

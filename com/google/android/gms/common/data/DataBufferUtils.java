@@ -24,12 +24,12 @@ public final class DataBufferUtils {
     }
 
     public static boolean hasNextPage(DataBuffer<?> dataBuffer) {
-        Bundle zzaui = dataBuffer.zzaui();
-        return (zzaui == null || zzaui.getString("next_page_token") == null) ? false : true;
+        Bundle zzwy = dataBuffer.zzwy();
+        return (zzwy == null || zzwy.getString("next_page_token") == null) ? false : true;
     }
 
     public static boolean hasPrevPage(DataBuffer<?> dataBuffer) {
-        Bundle zzaui = dataBuffer.zzaui();
-        return (zzaui == null || zzaui.getString("prev_page_token") == null) ? false : true;
+        Bundle zzwy = dataBuffer.zzwy();
+        return (zzwy == null || zzwy.getString("prev_page_token") == null) ? false : true;
     }
 }

@@ -1,29 +1,29 @@
 package com.google.android.gms.common.data;
 
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class zzb<T> implements Iterator<T> {
-    protected final DataBuffer<T> BR;
-    protected int BS = -1;
+    protected final DataBuffer<T> zzaCj;
+    protected int zzaCk = -1;
 
     public zzb(DataBuffer<T> dataBuffer) {
-        this.BR = (DataBuffer) zzaa.zzy(dataBuffer);
+        this.zzaCj = (DataBuffer) zzac.zzw(dataBuffer);
     }
 
     public boolean hasNext() {
-        return this.BS < this.BR.getCount() + -1;
+        return this.zzaCk < this.zzaCj.getCount() + -1;
     }
 
     public T next() {
         if (hasNext()) {
-            DataBuffer dataBuffer = this.BR;
-            int i = this.BS + 1;
-            this.BS = i;
+            DataBuffer dataBuffer = this.zzaCj;
+            int i = this.zzaCk + 1;
+            this.zzaCk = i;
             return dataBuffer.get(i);
         }
-        throw new NoSuchElementException("Cannot advance the iterator beyond " + this.BS);
+        throw new NoSuchElementException("Cannot advance the iterator beyond " + this.zzaCk);
     }
 
     public void remove() {

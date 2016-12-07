@@ -5,64 +5,64 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.dynamic.zzd.zza;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.dynamic.zzd;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
-public final class MarkerOptions extends AbstractSafeParcelable {
+public final class MarkerOptions extends zza {
     public static final Creator<MarkerOptions> CREATOR = new zzg();
-    private String JB;
-    private float apJ;
-    private boolean apK;
-    private float apS;
-    private float apT;
-    private LatLng apk;
-    private String aqc;
-    private BitmapDescriptor aqd;
-    private boolean aqe;
-    private boolean aqf;
-    private float aqg;
-    private float aqh;
-    private float aqi;
     private float mAlpha;
     private final int mVersionCode;
+    private String zzalD;
+    private float zzboJ;
+    private boolean zzboK;
+    private float zzboS;
+    private float zzboT;
+    private LatLng zzbon;
+    private String zzbpc;
+    private BitmapDescriptor zzbpd;
+    private boolean zzbpe;
+    private boolean zzbpf;
+    private float zzbpg;
+    private float zzbph;
+    private float zzbpi;
 
     public MarkerOptions() {
-        this.apS = 0.5f;
-        this.apT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        this.apK = true;
-        this.aqf = false;
-        this.aqg = 0.0f;
-        this.aqh = 0.5f;
-        this.aqi = 0.0f;
+        this.zzboS = 0.5f;
+        this.zzboT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.zzboK = true;
+        this.zzbpf = false;
+        this.zzbpg = 0.0f;
+        this.zzbph = 0.5f;
+        this.zzbpi = 0.0f;
         this.mAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         this.mVersionCode = 1;
     }
 
     MarkerOptions(int i, LatLng latLng, String str, String str2, IBinder iBinder, float f, float f2, boolean z, boolean z2, boolean z3, float f3, float f4, float f5, float f6, float f7) {
-        this.apS = 0.5f;
-        this.apT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        this.apK = true;
-        this.aqf = false;
-        this.aqg = 0.0f;
-        this.aqh = 0.5f;
-        this.aqi = 0.0f;
+        this.zzboS = 0.5f;
+        this.zzboT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.zzboK = true;
+        this.zzbpf = false;
+        this.zzbpg = 0.0f;
+        this.zzbph = 0.5f;
+        this.zzbpi = 0.0f;
         this.mAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         this.mVersionCode = i;
-        this.apk = latLng;
-        this.JB = str;
-        this.aqc = str2;
-        this.aqd = iBinder == null ? null : new BitmapDescriptor(zza.zzfd(iBinder));
-        this.apS = f;
-        this.apT = f2;
-        this.aqe = z;
-        this.apK = z2;
-        this.aqf = z3;
-        this.aqg = f3;
-        this.aqh = f4;
-        this.aqi = f5;
+        this.zzbon = latLng;
+        this.zzalD = str;
+        this.zzbpc = str2;
+        this.zzbpd = iBinder == null ? null : new BitmapDescriptor(zzd.zza.zzcd(iBinder));
+        this.zzboS = f;
+        this.zzboT = f2;
+        this.zzbpe = z;
+        this.zzboK = z2;
+        this.zzbpf = z3;
+        this.zzbpg = f3;
+        this.zzbph = f4;
+        this.zzbpi = f5;
         this.mAlpha = f6;
-        this.apJ = f7;
+        this.zzboJ = f7;
     }
 
     public MarkerOptions alpha(float f) {
@@ -71,18 +71,18 @@ public final class MarkerOptions extends AbstractSafeParcelable {
     }
 
     public MarkerOptions anchor(float f, float f2) {
-        this.apS = f;
-        this.apT = f2;
+        this.zzboS = f;
+        this.zzboT = f2;
         return this;
     }
 
     public MarkerOptions draggable(boolean z) {
-        this.aqe = z;
+        this.zzbpe = z;
         return this;
     }
 
     public MarkerOptions flat(boolean z) {
-        this.aqf = z;
+        this.zzbpf = z;
         return this;
     }
 
@@ -91,39 +91,39 @@ public final class MarkerOptions extends AbstractSafeParcelable {
     }
 
     public float getAnchorU() {
-        return this.apS;
+        return this.zzboS;
     }
 
     public float getAnchorV() {
-        return this.apT;
+        return this.zzboT;
     }
 
     public BitmapDescriptor getIcon() {
-        return this.aqd;
+        return this.zzbpd;
     }
 
     public float getInfoWindowAnchorU() {
-        return this.aqh;
+        return this.zzbph;
     }
 
     public float getInfoWindowAnchorV() {
-        return this.aqi;
+        return this.zzbpi;
     }
 
     public LatLng getPosition() {
-        return this.apk;
+        return this.zzbon;
     }
 
     public float getRotation() {
-        return this.aqg;
+        return this.zzbpg;
     }
 
     public String getSnippet() {
-        return this.aqc;
+        return this.zzbpc;
     }
 
     public String getTitle() {
-        return this.JB;
+        return this.zzalD;
     }
 
     int getVersionCode() {
@@ -131,57 +131,57 @@ public final class MarkerOptions extends AbstractSafeParcelable {
     }
 
     public float getZIndex() {
-        return this.apJ;
+        return this.zzboJ;
     }
 
     public MarkerOptions icon(@Nullable BitmapDescriptor bitmapDescriptor) {
-        this.aqd = bitmapDescriptor;
+        this.zzbpd = bitmapDescriptor;
         return this;
     }
 
     public MarkerOptions infoWindowAnchor(float f, float f2) {
-        this.aqh = f;
-        this.aqi = f2;
+        this.zzbph = f;
+        this.zzbpi = f2;
         return this;
     }
 
     public boolean isDraggable() {
-        return this.aqe;
+        return this.zzbpe;
     }
 
     public boolean isFlat() {
-        return this.aqf;
+        return this.zzbpf;
     }
 
     public boolean isVisible() {
-        return this.apK;
+        return this.zzboK;
     }
 
     public MarkerOptions position(@NonNull LatLng latLng) {
         if (latLng == null) {
             throw new IllegalArgumentException("latlng cannot be null - a position is required.");
         }
-        this.apk = latLng;
+        this.zzbon = latLng;
         return this;
     }
 
     public MarkerOptions rotation(float f) {
-        this.aqg = f;
+        this.zzbpg = f;
         return this;
     }
 
     public MarkerOptions snippet(@Nullable String str) {
-        this.aqc = str;
+        this.zzbpc = str;
         return this;
     }
 
     public MarkerOptions title(@Nullable String str) {
-        this.JB = str;
+        this.zzalD = str;
         return this;
     }
 
     public MarkerOptions visible(boolean z) {
-        this.apK = z;
+        this.zzboK = z;
         return this;
     }
 
@@ -190,11 +190,11 @@ public final class MarkerOptions extends AbstractSafeParcelable {
     }
 
     public MarkerOptions zIndex(float f) {
-        this.apJ = f;
+        this.zzboJ = f;
         return this;
     }
 
-    IBinder zzbsz() {
-        return this.aqd == null ? null : this.aqd.zzbsc().asBinder();
+    IBinder zzIV() {
+        return this.zzbpd == null ? null : this.zzbpd.zzIy().asBinder();
     }
 }

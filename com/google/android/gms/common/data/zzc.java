@@ -3,16 +3,16 @@ package com.google.android.gms.common.data;
 import android.database.CharArrayBuffer;
 import android.net.Uri;
 import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.zzac;
 
 public abstract class zzc {
-    protected int BU;
-    private int BV;
-    protected final DataHolder zy;
+    protected int zzaCm;
+    private int zzaCn;
+    protected final DataHolder zzazI;
 
     public zzc(DataHolder dataHolder, int i) {
-        this.zy = (DataHolder) zzaa.zzy(dataHolder);
-        zzfy(i);
+        this.zzazI = (DataHolder) zzac.zzw(dataHolder);
+        zzcA(i);
     }
 
     public boolean equals(Object obj) {
@@ -20,65 +20,65 @@ public abstract class zzc {
             return false;
         }
         zzc com_google_android_gms_common_data_zzc = (zzc) obj;
-        return zzz.equal(Integer.valueOf(com_google_android_gms_common_data_zzc.BU), Integer.valueOf(this.BU)) && zzz.equal(Integer.valueOf(com_google_android_gms_common_data_zzc.BV), Integer.valueOf(this.BV)) && com_google_android_gms_common_data_zzc.zy == this.zy;
+        return zzaa.equal(Integer.valueOf(com_google_android_gms_common_data_zzc.zzaCm), Integer.valueOf(this.zzaCm)) && zzaa.equal(Integer.valueOf(com_google_android_gms_common_data_zzc.zzaCn), Integer.valueOf(this.zzaCn)) && com_google_android_gms_common_data_zzc.zzazI == this.zzazI;
     }
 
     protected boolean getBoolean(String str) {
-        return this.zy.zze(str, this.BU, this.BV);
+        return this.zzazI.zze(str, this.zzaCm, this.zzaCn);
     }
 
     protected byte[] getByteArray(String str) {
-        return this.zy.zzg(str, this.BU, this.BV);
+        return this.zzazI.zzg(str, this.zzaCm, this.zzaCn);
     }
 
     protected float getFloat(String str) {
-        return this.zy.zzf(str, this.BU, this.BV);
+        return this.zzazI.zzf(str, this.zzaCm, this.zzaCn);
     }
 
     protected int getInteger(String str) {
-        return this.zy.zzc(str, this.BU, this.BV);
+        return this.zzazI.zzc(str, this.zzaCm, this.zzaCn);
     }
 
     protected long getLong(String str) {
-        return this.zy.zzb(str, this.BU, this.BV);
+        return this.zzazI.zzb(str, this.zzaCm, this.zzaCn);
     }
 
     protected String getString(String str) {
-        return this.zy.zzd(str, this.BU, this.BV);
+        return this.zzazI.zzd(str, this.zzaCm, this.zzaCn);
     }
 
     public int hashCode() {
-        return zzz.hashCode(Integer.valueOf(this.BU), Integer.valueOf(this.BV), this.zy);
+        return zzaa.hashCode(Integer.valueOf(this.zzaCm), Integer.valueOf(this.zzaCn), this.zzazI);
     }
 
     public boolean isDataValid() {
-        return !this.zy.isClosed();
+        return !this.zzazI.isClosed();
     }
 
     protected void zza(String str, CharArrayBuffer charArrayBuffer) {
-        this.zy.zza(str, this.BU, this.BV, charArrayBuffer);
+        this.zzazI.zza(str, this.zzaCm, this.zzaCn, charArrayBuffer);
     }
 
-    protected int zzaul() {
-        return this.BU;
+    protected void zzcA(int i) {
+        boolean z = i >= 0 && i < this.zzazI.getCount();
+        zzac.zzar(z);
+        this.zzaCm = i;
+        this.zzaCn = this.zzazI.zzcC(this.zzaCm);
     }
 
-    protected void zzfy(int i) {
-        boolean z = i >= 0 && i < this.zy.getCount();
-        zzaa.zzbs(z);
-        this.BU = i;
-        this.BV = this.zy.zzga(this.BU);
+    public boolean zzdj(String str) {
+        return this.zzazI.zzdj(str);
     }
 
-    public boolean zzho(String str) {
-        return this.zy.zzho(str);
+    protected Uri zzdk(String str) {
+        return this.zzazI.zzh(str, this.zzaCm, this.zzaCn);
     }
 
-    protected Uri zzhp(String str) {
-        return this.zy.zzh(str, this.BU, this.BV);
+    protected boolean zzdl(String str) {
+        return this.zzazI.zzi(str, this.zzaCm, this.zzaCn);
     }
 
-    protected boolean zzhq(String str) {
-        return this.zy.zzi(str, this.BU, this.BV);
+    protected int zzwB() {
+        return this.zzaCm;
     }
 }

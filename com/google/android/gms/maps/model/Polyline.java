@@ -1,15 +1,15 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 import java.util.List;
 
 public final class Polyline {
-    private final IPolylineDelegate aqn;
+    private final IPolylineDelegate zzbpn;
 
     public Polyline(IPolylineDelegate iPolylineDelegate) {
-        this.aqn = (IPolylineDelegate) zzaa.zzy(iPolylineDelegate);
+        this.zzbpn = (IPolylineDelegate) zzac.zzw(iPolylineDelegate);
     }
 
     public boolean equals(Object obj) {
@@ -17,7 +17,7 @@ public final class Polyline {
             return false;
         }
         try {
-            return this.aqn.equalsRemote(((Polyline) obj).aqn);
+            return this.zzbpn.equalsRemote(((Polyline) obj).zzbpn);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -25,7 +25,7 @@ public final class Polyline {
 
     public int getColor() {
         try {
-            return this.aqn.getColor();
+            return this.zzbpn.getColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -33,7 +33,7 @@ public final class Polyline {
 
     public String getId() {
         try {
-            return this.aqn.getId();
+            return this.zzbpn.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -41,7 +41,7 @@ public final class Polyline {
 
     public List<LatLng> getPoints() {
         try {
-            return this.aqn.getPoints();
+            return this.zzbpn.getPoints();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -49,7 +49,7 @@ public final class Polyline {
 
     public float getWidth() {
         try {
-            return this.aqn.getWidth();
+            return this.zzbpn.getWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -57,7 +57,7 @@ public final class Polyline {
 
     public float getZIndex() {
         try {
-            return this.aqn.getZIndex();
+            return this.zzbpn.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -65,7 +65,7 @@ public final class Polyline {
 
     public int hashCode() {
         try {
-            return this.aqn.hashCodeRemote();
+            return this.zzbpn.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -73,7 +73,7 @@ public final class Polyline {
 
     public boolean isClickable() {
         try {
-            return this.aqn.isClickable();
+            return this.zzbpn.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -81,7 +81,7 @@ public final class Polyline {
 
     public boolean isGeodesic() {
         try {
-            return this.aqn.isGeodesic();
+            return this.zzbpn.isGeodesic();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -89,7 +89,7 @@ public final class Polyline {
 
     public boolean isVisible() {
         try {
-            return this.aqn.isVisible();
+            return this.zzbpn.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -97,7 +97,7 @@ public final class Polyline {
 
     public void remove() {
         try {
-            this.aqn.remove();
+            this.zzbpn.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -105,7 +105,7 @@ public final class Polyline {
 
     public void setClickable(boolean z) {
         try {
-            this.aqn.setClickable(z);
+            this.zzbpn.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -113,7 +113,7 @@ public final class Polyline {
 
     public void setColor(int i) {
         try {
-            this.aqn.setColor(i);
+            this.zzbpn.setColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -121,7 +121,7 @@ public final class Polyline {
 
     public void setGeodesic(boolean z) {
         try {
-            this.aqn.setGeodesic(z);
+            this.zzbpn.setGeodesic(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -129,7 +129,7 @@ public final class Polyline {
 
     public void setPoints(List<LatLng> list) {
         try {
-            this.aqn.setPoints(list);
+            this.zzbpn.setPoints(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -137,7 +137,7 @@ public final class Polyline {
 
     public void setVisible(boolean z) {
         try {
-            this.aqn.setVisible(z);
+            this.zzbpn.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -145,7 +145,7 @@ public final class Polyline {
 
     public void setWidth(float f) {
         try {
-            this.aqn.setWidth(f);
+            this.zzbpn.setWidth(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -153,7 +153,7 @@ public final class Polyline {
 
     public void setZIndex(float f) {
         try {
-            this.aqn.setZIndex(f);
+            this.zzbpn.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

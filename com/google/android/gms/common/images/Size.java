@@ -1,12 +1,12 @@
 package com.google.android.gms.common.images;
 
 public final class Size {
-    private final int zzakh;
-    private final int zzaki;
+    private final int zzrG;
+    private final int zzrH;
 
     public Size(int i, int i2) {
-        this.zzakh = i;
-        this.zzaki = i2;
+        this.zzrG = i;
+        this.zzrH = i2;
     }
 
     public static Size parseSize(String str) throws NumberFormatException {
@@ -18,16 +18,16 @@ public final class Size {
             indexOf = str.indexOf(120);
         }
         if (indexOf < 0) {
-            throw zzhr(str);
+            throw zzdm(str);
         }
         try {
             return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
         } catch (NumberFormatException e) {
-            throw zzhr(str);
+            throw zzdm(str);
         }
     }
 
-    private static NumberFormatException zzhr(String str) {
+    private static NumberFormatException zzdm(String str) {
         throw new NumberFormatException(new StringBuilder(String.valueOf(str).length() + 16).append("Invalid Size: \"").append(str).append("\"").toString());
     }
 
@@ -43,26 +43,26 @@ public final class Size {
             return false;
         }
         Size size = (Size) obj;
-        if (!(this.zzakh == size.zzakh && this.zzaki == size.zzaki)) {
+        if (!(this.zzrG == size.zzrG && this.zzrH == size.zzrH)) {
             z = false;
         }
         return z;
     }
 
     public int getHeight() {
-        return this.zzaki;
+        return this.zzrH;
     }
 
     public int getWidth() {
-        return this.zzakh;
+        return this.zzrG;
     }
 
     public int hashCode() {
-        return this.zzaki ^ ((this.zzakh << 16) | (this.zzakh >>> 16));
+        return this.zzrH ^ ((this.zzrG << 16) | (this.zzrG >>> 16));
     }
 
     public String toString() {
-        int i = this.zzakh;
-        return i + "x" + this.zzaki;
+        int i = this.zzrG;
+        return i + "x" + this.zzrH;
     }
 }

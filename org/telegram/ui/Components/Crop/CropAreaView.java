@@ -20,7 +20,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CropAreaView extends View {
-    private static final float MIN_WIDTH = 32.0f;
     private Control activeControl;
     private RectF actualRect = new RectF();
     private RectF bottomEdge = new RectF();
@@ -30,6 +29,7 @@ public class CropAreaView extends View {
     Paint dimPaint = new Paint();
     private boolean dimVisibile;
     Paint framePaint;
+    private boolean frameVisible;
     private Animator gridAnimator;
     private float gridProgress;
     private GridType gridType = GridType.NONE;
@@ -39,6 +39,7 @@ public class CropAreaView extends View {
     Paint linePaint;
     private AreaViewListener listener;
     private float lockAspectRatio;
+    private float minWidth = ((float) AndroidUtilities.dp(32.0f));
     private GridType previousGridType;
     private int previousX;
     private int previousY;
@@ -99,6 +100,10 @@ public class CropAreaView extends View {
         this.dimVisibile = visible;
     }
 
+    public void setFrameVisibility(boolean visible) {
+        this.frameVisible = visible;
+    }
+
     public void setBottomPadding(float value) {
         this.bottomPadding = value;
     }
@@ -153,48 +158,50 @@ public class CropAreaView extends View {
             canvas.drawRect((float) ((originX + width) - lineThickness), (float) (originY + lineThickness), (float) getWidth(), (float) ((originY + height) - lineThickness), this.dimPaint);
             canvas.drawRect(0.0f, (float) ((originY + height) - lineThickness), (float) getWidth(), (float) getHeight(), this.dimPaint);
         }
-        int inset = handleThickness - lineThickness;
-        int gridWidth = width - (handleThickness * 2);
-        int gridHeight = height - (handleThickness * 2);
-        GridType type = this.gridType;
-        if (type == GridType.NONE && this.gridProgress > 0.0f) {
-            type = this.previousGridType;
-        }
-        this.shadowPaint.setAlpha((int) (this.gridProgress * 26.0f));
-        this.linePaint.setAlpha((int) (this.gridProgress * 178.0f));
-        int i = 0;
-        while (i < 3) {
-            if (type == GridType.MINOR) {
-                int j = 1;
-                while (j < 4) {
-                    if (i != 2 || j != 3) {
-                        canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
-                        canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
-                        canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.shadowPaint);
-                        canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.linePaint);
-                    }
-                    j++;
-                }
-            } else if (type == GridType.MAJOR && i > 0) {
-                canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
-                canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
-                canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.shadowPaint);
-                canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.linePaint);
+        if (this.frameVisible) {
+            int inset = handleThickness - lineThickness;
+            int gridWidth = width - (handleThickness * 2);
+            int gridHeight = height - (handleThickness * 2);
+            GridType type = this.gridType;
+            if (type == GridType.NONE && this.gridProgress > 0.0f) {
+                type = this.previousGridType;
             }
-            i++;
+            this.shadowPaint.setAlpha((int) (this.gridProgress * 26.0f));
+            this.linePaint.setAlpha((int) (this.gridProgress * 178.0f));
+            int i = 0;
+            while (i < 3) {
+                if (type == GridType.MINOR) {
+                    int j = 1;
+                    while (j < 4) {
+                        if (i != 2 || j != 3) {
+                            canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
+                            canvas.drawLine((float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) (((originX + handleThickness) + (((gridWidth / 3) / 3) * j)) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
+                            canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.shadowPaint);
+                            canvas.drawLine((float) (originX + handleThickness), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) (((originY + handleThickness) + (((gridHeight / 3) / 3) * j)) + ((gridHeight / 3) * i)), this.linePaint);
+                        }
+                        j++;
+                    }
+                } else if (type == GridType.MAJOR && i > 0) {
+                    canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.shadowPaint);
+                    canvas.drawLine((float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) (originY + handleThickness), (float) ((originX + handleThickness) + ((gridWidth / 3) * i)), (float) ((originY + handleThickness) + gridHeight), this.linePaint);
+                    canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.shadowPaint);
+                    canvas.drawLine((float) (originX + handleThickness), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), (float) ((originX + handleThickness) + gridWidth), (float) ((originY + handleThickness) + ((gridHeight / 3) * i)), this.linePaint);
+                }
+                i++;
+            }
+            canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + inset) + lineThickness), this.framePaint);
+            canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + inset) + lineThickness), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) (originX + inset), (float) (((originY + height) - inset) - lineThickness), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) (((originX + width) - inset) - lineThickness), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
+            canvas.drawRect((float) originX, (float) originY, (float) (originX + handleSize), (float) (originY + handleThickness), this.handlePaint);
+            canvas.drawRect((float) originX, (float) originY, (float) (originX + handleThickness), (float) (originY + handleSize), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleSize), (float) originY, (float) (originX + width), (float) (originY + handleThickness), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleThickness), (float) originY, (float) (originX + width), (float) (originY + handleSize), this.handlePaint);
+            canvas.drawRect((float) originX, (float) ((originY + height) - handleThickness), (float) (originX + handleSize), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) originX, (float) ((originY + height) - handleSize), (float) (originX + handleThickness), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleSize), (float) ((originY + height) - handleThickness), (float) (originX + width), (float) (originY + height), this.handlePaint);
+            canvas.drawRect((float) ((originX + width) - handleThickness), (float) ((originY + height) - handleSize), (float) (originX + width), (float) (originY + height), this.handlePaint);
         }
-        canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + inset) + lineThickness), this.framePaint);
-        canvas.drawRect((float) (originX + inset), (float) (originY + inset), (float) ((originX + inset) + lineThickness), (float) ((originY + height) - inset), this.framePaint);
-        canvas.drawRect((float) (originX + inset), (float) (((originY + height) - inset) - lineThickness), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
-        canvas.drawRect((float) (((originX + width) - inset) - lineThickness), (float) (originY + inset), (float) ((originX + width) - inset), (float) ((originY + height) - inset), this.framePaint);
-        canvas.drawRect((float) originX, (float) originY, (float) (originX + handleSize), (float) (originY + handleThickness), this.handlePaint);
-        canvas.drawRect((float) originX, (float) originY, (float) (originX + handleThickness), (float) (originY + handleSize), this.handlePaint);
-        canvas.drawRect((float) ((originX + width) - handleSize), (float) originY, (float) (originX + width), (float) (originY + handleThickness), this.handlePaint);
-        canvas.drawRect((float) ((originX + width) - handleThickness), (float) originY, (float) (originX + width), (float) (originY + handleSize), this.handlePaint);
-        canvas.drawRect((float) originX, (float) ((originY + height) - handleThickness), (float) (originX + handleSize), (float) (originY + height), this.handlePaint);
-        canvas.drawRect((float) originX, (float) ((originY + height) - handleSize), (float) (originX + handleThickness), (float) (originY + height), this.handlePaint);
-        canvas.drawRect((float) ((originX + width) - handleSize), (float) ((originY + height) - handleThickness), (float) (originX + width), (float) (originY + height), this.handlePaint);
-        canvas.drawRect((float) ((originX + width) - handleThickness), (float) ((originY + height) - handleSize), (float) (originX + width), (float) (originY + height), this.handlePaint);
     }
 
     private void updateTouchAreas() {
@@ -376,15 +383,9 @@ public class CropAreaView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        int i;
         int x = (int) (event.getX() - ((ViewGroup) getParent()).getX());
         int y = (int) (event.getY() - ((ViewGroup) getParent()).getY());
-        if (VERSION.SDK_INT >= 21) {
-            i = AndroidUtilities.statusBarHeight;
-        } else {
-            i = 0;
-        }
-        float statusBarHeight = (float) i;
+        float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         int action = event.getActionMasked();
         if (action == 0) {
             if (this.topLeftCorner.contains((float) x, (float) y)) {
@@ -423,9 +424,12 @@ public class CropAreaView extends View {
                 this.listener.onAreaChangeEnded();
             }
             return true;
-        } else if (action != 2 || this.activeControl == Control.NONE) {
+        } else if (action != 2) {
             return false;
         } else {
+            if (this.activeControl == Control.NONE) {
+                return false;
+            }
             this.tempRect.set(this.actualRect);
             float translationX = (float) (x - this.previousX);
             float translationY = (float) (y - this.previousY);
@@ -536,25 +540,45 @@ public class CropAreaView extends View {
                     }
                     break;
             }
-            this.tempRect.left = Math.max(this.sidePadding, this.tempRect.left);
-            this.tempRect.top = Math.max(this.sidePadding + statusBarHeight, this.tempRect.top);
-            this.tempRect.right = Math.min(((float) getWidth()) - this.sidePadding, this.tempRect.right);
-            this.tempRect.bottom = Math.min((((float) getHeight()) - this.sidePadding) - this.bottomPadding, this.tempRect.bottom);
-            if (this.tempRect.width() < MIN_WIDTH) {
-                this.tempRect.right = this.tempRect.left + MIN_WIDTH;
+            if (this.tempRect.left < this.sidePadding) {
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.bottom = this.tempRect.top + ((this.tempRect.right - this.sidePadding) / this.lockAspectRatio);
+                }
+                this.tempRect.left = this.sidePadding;
+            } else if (this.tempRect.right > ((float) getWidth()) - this.sidePadding) {
+                this.tempRect.right = ((float) getWidth()) - this.sidePadding;
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);
+                }
             }
-            if (this.tempRect.height() < MIN_WIDTH) {
-                this.tempRect.bottom = this.tempRect.top + MIN_WIDTH;
+            float topPadding = statusBarHeight + this.sidePadding;
+            float finalBottomPadidng = this.bottomPadding + this.sidePadding;
+            if (this.tempRect.top < topPadding) {
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.right = this.tempRect.left + ((this.tempRect.bottom - topPadding) * this.lockAspectRatio);
+                }
+                this.tempRect.top = topPadding;
+            } else if (this.tempRect.bottom > ((float) getHeight()) - finalBottomPadidng) {
+                this.tempRect.bottom = ((float) getHeight()) - finalBottomPadidng;
+                if (this.lockAspectRatio > 0.0f) {
+                    this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
+                }
+            }
+            if (this.tempRect.width() < this.minWidth) {
+                this.tempRect.right = this.tempRect.left + this.minWidth;
+            }
+            if (this.tempRect.height() < this.minWidth) {
+                this.tempRect.bottom = this.tempRect.top + this.minWidth;
             }
             if (this.lockAspectRatio > 0.0f) {
-                if (this.lockAspectRatio > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    if (this.tempRect.height() <= MIN_WIDTH) {
-                        this.tempRect.right = this.tempRect.left + MIN_WIDTH;
-                        this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() * this.lockAspectRatio);
+                if (this.lockAspectRatio < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    if (this.tempRect.width() <= this.minWidth) {
+                        this.tempRect.right = this.tempRect.left + this.minWidth;
+                        this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);
                     }
-                } else if (this.tempRect.height() <= MIN_WIDTH) {
-                    this.tempRect.bottom = this.tempRect.top + MIN_WIDTH;
-                    this.tempRect.right = this.tempRect.left + (this.tempRect.height() / this.lockAspectRatio);
+                } else if (this.tempRect.height() <= this.minWidth) {
+                    this.tempRect.bottom = this.tempRect.top + this.minWidth;
+                    this.tempRect.right = this.tempRect.left + (this.tempRect.height() * this.lockAspectRatio);
                 }
             }
             setActualRect(this.tempRect);

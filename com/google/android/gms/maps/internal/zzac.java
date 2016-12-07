@@ -12,14 +12,14 @@ public interface zzac extends IInterface {
     public static abstract class zza extends Binder implements zzac {
 
         private static class zza implements zzac {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onStreetViewPanoramaChange(StreetViewPanoramaLocation streetViewPanoramaLocation) throws RemoteException {
@@ -33,7 +33,7 @@ public interface zzac extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -46,7 +46,7 @@ public interface zzac extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnStreetViewPanoramaChangeListener");
         }
 
-        public static zzac zziv(IBinder iBinder) {
+        public static zzac zzdX(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

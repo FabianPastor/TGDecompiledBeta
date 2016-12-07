@@ -6,11 +6,11 @@ import android.content.IntentSender.SendIntentException;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.support.annotation.Nullable;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.iid.InstanceID;
 
-public final class ConnectionResult extends AbstractSafeParcelable {
+public final class ConnectionResult extends zza {
     public static final int API_UNAVAILABLE = 16;
     public static final int CANCELED = 13;
     public static final Creator<ConnectionResult> CREATOR = new zzb();
@@ -34,11 +34,11 @@ public final class ConnectionResult extends AbstractSafeParcelable {
     public static final int SIGN_IN_REQUIRED = 4;
     public static final int SUCCESS = 0;
     public static final int TIMEOUT = 14;
-    public static final ConnectionResult wO = new ConnectionResult(0);
+    public static final ConnectionResult zzawX = new ConnectionResult(0);
     private final PendingIntent mPendingIntent;
     final int mVersionCode;
-    private final int uo;
-    private final String wP;
+    private final int zzauz;
+    private final String zzawY;
 
     public ConnectionResult(int i) {
         this(i, null, null);
@@ -46,9 +46,9 @@ public final class ConnectionResult extends AbstractSafeParcelable {
 
     ConnectionResult(int i, int i2, PendingIntent pendingIntent, String str) {
         this.mVersionCode = i;
-        this.uo = i2;
+        this.zzauz = i2;
         this.mPendingIntent = pendingIntent;
-        this.wP = str;
+        this.zzawY = str;
     }
 
     public ConnectionResult(int i, PendingIntent pendingIntent) {
@@ -122,16 +122,16 @@ public final class ConnectionResult extends AbstractSafeParcelable {
             return false;
         }
         ConnectionResult connectionResult = (ConnectionResult) obj;
-        return this.uo == connectionResult.uo && zzz.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzz.equal(this.wP, connectionResult.wP);
+        return this.zzauz == connectionResult.zzauz && zzaa.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzaa.equal(this.zzawY, connectionResult.zzawY);
     }
 
     public int getErrorCode() {
-        return this.uo;
+        return this.zzauz;
     }
 
     @Nullable
     public String getErrorMessage() {
-        return this.wP;
+        return this.zzawY;
     }
 
     @Nullable
@@ -140,15 +140,15 @@ public final class ConnectionResult extends AbstractSafeParcelable {
     }
 
     public boolean hasResolution() {
-        return (this.uo == 0 || this.mPendingIntent == null) ? false : true;
+        return (this.zzauz == 0 || this.mPendingIntent == null) ? false : true;
     }
 
     public int hashCode() {
-        return zzz.hashCode(Integer.valueOf(this.uo), this.mPendingIntent, this.wP);
+        return zzaa.hashCode(Integer.valueOf(this.zzauz), this.mPendingIntent, this.zzawY);
     }
 
     public boolean isSuccess() {
-        return this.uo == 0;
+        return this.zzauz == 0;
     }
 
     public void startResolutionForResult(Activity activity, int i) throws SendIntentException {
@@ -158,7 +158,7 @@ public final class ConnectionResult extends AbstractSafeParcelable {
     }
 
     public String toString() {
-        return zzz.zzx(this).zzg("statusCode", getStatusString(this.uo)).zzg("resolution", this.mPendingIntent).zzg("message", this.wP).toString();
+        return zzaa.zzv(this).zzg("statusCode", getStatusString(this.zzauz)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzawY).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

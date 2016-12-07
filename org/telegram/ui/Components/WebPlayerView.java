@@ -96,7 +96,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private int audioFocus;
     private Paint backgroundPaint = new Paint();
     private TextureView changedTextureView;
-    private boolean changingTextureView;
+    private int changingTextureView;
     private ControlsView controlsView;
     private float currentAlpha;
     private AsyncTask currentTask;
@@ -133,6 +133,29 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private RadialProgressView progressView;
     private boolean resumeAudioOnFocusGain;
     private ImageView shareButton;
+    SurfaceTextureListener surfaceTextureListener = new SurfaceTextureListener() {
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        }
+
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        }
+
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            if (WebPlayerView.this.changingTextureView == 1) {
+                WebPlayerView.this.textureView.setSurfaceTexture(surface);
+                return false;
+            } else if (WebPlayerView.this.changingTextureView != 2) {
+                return true;
+            } else {
+                WebPlayerView.this.changedTextureView.setSurfaceTexture(surface);
+                WebPlayerView.this.changedTextureView.setSurfaceTextureListener(WebPlayerView.this.surfaceTextureListener);
+                return false;
+            }
+        }
+
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        }
+    };
     private TextureView textureView;
     private VideoPlayer videoPlayer;
     private WebView webView;
@@ -286,7 +309,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             } else {
                 progressLineX = 0;
                 progressLineEndX = getMeasuredWidth();
-                progressY = getMeasuredHeight() - AndroidUtilities.dp(7.0f);
+                progressY = getMeasuredHeight() - AndroidUtilities.dp(12.0f);
             }
             if (this.duration != 0) {
                 i = (int) (((float) (progressLineEndX - progressLineX)) * (((float) this.progress) / ((float) this.duration)));
@@ -358,13 +381,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 if (!WebPlayerView.this.isInline) {
                     if (this.durationLayout != null) {
                         canvas.save();
-                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp(34.0f)));
+                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp(39.0f)));
                         this.durationLayout.draw(canvas);
                         canvas.restore();
                     }
                     if (this.progressLayout != null) {
                         canvas.save();
-                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp(34.0f)));
+                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp(39.0f)));
                         this.progressLayout.draw(canvas);
                         canvas.restore();
                     }
@@ -386,10 +409,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         progressLineEndX = (width - AndroidUtilities.dp(76.0f)) - this.durationWidth;
                         cy = height - AndroidUtilities.dp(28.0f);
                     } else {
-                        progressLineY = height - AndroidUtilities.dp(8.0f);
+                        progressLineY = height - AndroidUtilities.dp(13.0f);
                         progressLineX = 0;
                         progressLineEndX = width;
-                        cy = height - AndroidUtilities.dp(7.0f);
+                        cy = height - AndroidUtilities.dp(12.0f);
                     }
                     if (WebPlayerView.this.inFullscreen) {
                         canvas.drawRect((float) progressLineX, (float) progressLineY, (float) progressLineEndX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
@@ -784,6 +807,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     public interface WebPlayerViewDelegate {
+        boolean checkInlinePermissons();
+
         void onInitFailed();
 
         void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
@@ -792,7 +817,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
 
         TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
 
-        TextureView onSwtichToInline(View view, boolean z, float f, int i);
+        TextureView onSwtichToInline(View view, boolean z, float f, int i, Rect rect, boolean z2);
 
         void onVideoSizeChanged(float f, int i);
     }
@@ -1176,15 +1201,29 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 51));
             this.inlineButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (WebPlayerView.this.textureView != null) {
+                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons()) {
+                        Rect rect;
+                        int[] location = new int[2];
+                        if (WebPlayerView.this.inFullscreen) {
+                            WebPlayerView.this.changedTextureView.getLocationOnScreen(location);
+                            WebPlayerView.this.changingTextureView = 2;
+                            WebPlayerView.this.inFullscreen = false;
+                            rect = new Rect((float) location[0], (float) location[1], (float) WebPlayerView.this.changedTextureView.getMeasuredWidth(), (float) WebPlayerView.this.changedTextureView.getMeasuredHeight());
+                        } else {
+                            WebPlayerView.this.changingTextureView = 1;
+                            WebPlayerView.this.textureView.getLocationOnScreen(location);
+                            rect = new Rect((float) location[0], (float) location[1], (float) WebPlayerView.this.textureView.getMeasuredWidth(), (float) WebPlayerView.this.textureView.getMeasuredHeight());
+                        }
                         WebPlayerView.this.isInline = !WebPlayerView.this.isInline;
                         WebPlayerView.this.updatePlayButton();
                         WebPlayerView.this.updateShareButton();
                         WebPlayerView.this.updateFullscreenButton();
                         WebPlayerView.this.updateInlineButton();
-                        WebPlayerView.this.changingTextureView = true;
                         if (WebPlayerView.this.isInline) {
-                            WebPlayerView.this.removeView(WebPlayerView.this.controlsView);
+                            ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                            if (viewGroup != null) {
+                                viewGroup.removeView(WebPlayerView.this.controlsView);
+                            }
                         } else {
                             ViewGroup parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
                             if (parent != WebPlayerView.this) {
@@ -1197,7 +1236,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         if (!WebPlayerView.this.isInline) {
                             WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
                         }
-                        WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwtichToInline(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+                        WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwtichToInline(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), rect, WebPlayerView.this.changingTextureView == 2);
+                        if (WebPlayerView.this.changingTextureView == 2) {
+                            WebPlayerView.this.delegate.onSwitchToFullscreen(null, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), false);
+                        }
                         if (WebPlayerView.this.isInline) {
                             WebPlayerView.this.aspectRatioFrameLayout.removeView(WebPlayerView.this.textureView);
                         }
@@ -1250,7 +1292,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(5.0f)), this.backgroundPaint);
+        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(10.0f)), this.backgroundPaint);
     }
 
     public void onError(Exception e) {
@@ -1279,38 +1321,21 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-        if (!this.changingTextureView) {
+        if (this.changingTextureView == 0) {
             return false;
         }
         if (this.inFullscreen || this.isInline) {
             this.changedTextureView.setSurfaceTexture(surfaceTexture);
-            this.changedTextureView.setSurfaceTextureListener(new SurfaceTextureListener() {
-                public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                }
-
-                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                }
-
-                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                    if (!WebPlayerView.this.changingTextureView) {
-                        return true;
-                    }
-                    WebPlayerView.this.textureView.setSurfaceTexture(surface);
-                    return false;
-                }
-
-                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-                }
-            });
+            this.changedTextureView.setSurfaceTextureListener(this.surfaceTextureListener);
             return true;
         }
-        this.changingTextureView = false;
+        this.changingTextureView = 0;
         return false;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int x = ((r - l) - this.aspectRatioFrameLayout.getMeasuredWidth()) / 2;
-        int y = (((b - t) - AndroidUtilities.dp(5.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
+        int y = (((b - t) - AndroidUtilities.dp(10.0f)) - this.aspectRatioFrameLayout.getMeasuredHeight()) / 2;
         this.aspectRatioFrameLayout.layout(x, y, this.aspectRatioFrameLayout.getMeasuredWidth() + x, this.aspectRatioFrameLayout.getMeasuredHeight() + y);
         if (this.controlsView.getParent() == this) {
             this.controlsView.layout(0, 0, this.controlsView.getMeasuredWidth(), this.controlsView.getMeasuredHeight());
@@ -1318,13 +1343,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         x = ((r - l) - this.progressView.getMeasuredWidth()) / 2;
         y = ((b - t) - this.progressView.getMeasuredHeight()) / 2;
         this.progressView.layout(x, y, this.progressView.getMeasuredWidth() + x, this.progressView.getMeasuredHeight() + y);
-        this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(5.0f));
+        this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(10.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - AndroidUtilities.dp(5.0f), NUM));
+        this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - AndroidUtilities.dp(10.0f), NUM));
         if (this.controlsView.getParent() == this) {
             this.controlsView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
         }
@@ -1360,6 +1385,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         if (focusChange == -1) {
             if (this.videoPlayer.isPlaying()) {
                 this.videoPlayer.pause();
+                updatePlayButton();
             }
             this.hasAudioFocus = false;
             this.audioFocus = 0;
@@ -1376,6 +1402,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             if (this.videoPlayer.isPlaying()) {
                 this.resumeAudioOnFocusGain = true;
                 this.videoPlayer.pause();
+                updatePlayButton();
             }
         }
     }
@@ -1412,9 +1439,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private void updateInlineButton() {
         if (this.inlineButton != null) {
             this.inlineButton.setImageResource(this.isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
-            ImageView imageView = this.inlineButton;
-            int i = (!this.videoPlayer.isPlayerPrepared() || this.inFullscreen) ? 8 : 0;
-            imageView.setVisibility(i);
+            this.inlineButton.setVisibility(this.videoPlayer.isPlayerPrepared() ? 0 : 8);
             if (this.isInline) {
                 this.inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, 51));
             } else {
@@ -1457,9 +1482,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private void updateFullscreenState(boolean byButton) {
         if (this.textureView != null) {
             updateFullscreenButton();
-            this.changingTextureView = true;
+            this.changingTextureView = 1;
             if (this.inFullscreen) {
-                removeView(this.controlsView);
+                ViewGroup viewGroup = (ViewGroup) this.controlsView.getParent();
+                if (viewGroup != null) {
+                    viewGroup.removeView(this.controlsView);
+                }
             } else {
                 ViewGroup parent = (ViewGroup) this.controlsView.getParent();
                 if (parent != this) {

@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import com.google.android.gms.R;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.zzae;
-import com.google.android.gms.common.internal.zzaf;
+import com.google.android.gms.common.internal.zzaj;
+import com.google.android.gms.common.internal.zzak;
 import com.google.android.gms.dynamic.zzg.zza;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,8 +25,8 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public static final int SIZE_WIDE = 1;
     private int mColor;
     private int mSize;
-    private View xi;
-    private OnClickListener xj;
+    private View zzaxs;
+    private OnClickListener zzaxt;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface ButtonSize {
@@ -46,15 +46,24 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public SignInButton(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.xj = null;
+        this.zzaxt = null;
         zzb(context, attributeSet);
         setStyle(this.mSize, this.mColor);
     }
 
-    private static Button zza(Context context, int i, int i2) {
-        Button com_google_android_gms_common_internal_zzaf = new zzaf(context);
-        com_google_android_gms_common_internal_zzaf.zza(context.getResources(), i, i2);
-        return com_google_android_gms_common_internal_zzaf;
+    private void zzaw(Context context) {
+        if (this.zzaxs != null) {
+            removeView(this.zzaxs);
+        }
+        try {
+            this.zzaxs = zzaj.zzd(context, this.mSize, this.mColor);
+        } catch (zza e) {
+            Log.w("SignInButton", "Sign in button not found, using placeholder instead");
+            this.zzaxs = zzc(context, this.mSize, this.mColor);
+        }
+        addView(this.zzaxs);
+        this.zzaxs.setEnabled(isEnabled());
+        this.zzaxs.setOnClickListener(this);
     }
 
     private void zzb(Context context, AttributeSet attributeSet) {
@@ -67,24 +76,15 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
         }
     }
 
-    private void zzbw(Context context) {
-        if (this.xi != null) {
-            removeView(this.xi);
-        }
-        try {
-            this.xi = zzae.zzb(context, this.mSize, this.mColor);
-        } catch (zza e) {
-            Log.w("SignInButton", "Sign in button not found, using placeholder instead");
-            this.xi = zza(context, this.mSize, this.mColor);
-        }
-        addView(this.xi);
-        this.xi.setEnabled(isEnabled());
-        this.xi.setOnClickListener(this);
+    private static Button zzc(Context context, int i, int i2) {
+        Button com_google_android_gms_common_internal_zzak = new zzak(context);
+        com_google_android_gms_common_internal_zzak.zza(context.getResources(), i, i2);
+        return com_google_android_gms_common_internal_zzak;
     }
 
     public void onClick(View view) {
-        if (this.xj != null && view == this.xi) {
-            this.xj.onClick(this);
+        if (this.zzaxt != null && view == this.zzaxs) {
+            this.zzaxt.onClick(this);
         }
     }
 
@@ -94,13 +94,13 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public void setEnabled(boolean z) {
         super.setEnabled(z);
-        this.xi.setEnabled(z);
+        this.zzaxs.setEnabled(z);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
-        this.xj = onClickListener;
-        if (this.xi != null) {
-            this.xi.setOnClickListener(this);
+        this.zzaxt = onClickListener;
+        if (this.zzaxs != null) {
+            this.zzaxs.setOnClickListener(this);
         }
     }
 
@@ -116,7 +116,7 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public void setStyle(int i, int i2) {
         this.mSize = i;
         this.mColor = i2;
-        zzbw(getContext());
+        zzaw(getContext());
     }
 
     @Deprecated

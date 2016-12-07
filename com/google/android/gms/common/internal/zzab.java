@@ -1,91 +1,78 @@
 package com.google.android.gms.common.internal;
 
-import android.accounts.Account;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.zze;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import java.util.concurrent.TimeUnit;
 
-public class zzab implements Creator<ResolveAccountRequest> {
-    static void zza(ResolveAccountRequest resolveAccountRequest, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, resolveAccountRequest.mVersionCode);
-        zzb.zza(parcel, 2, resolveAccountRequest.getAccount(), i, false);
-        zzb.zzc(parcel, 3, resolveAccountRequest.getSessionId());
-        zzb.zza(parcel, 4, resolveAccountRequest.zzawl(), i, false);
-        zzb.zzaj(parcel, zzcs);
+public class zzab {
+    private static final zzb zzaEZ = new zzb() {
+        public com.google.android.gms.common.api.zza zzG(Status status) {
+            return zzb.zzF(status);
+        }
+    };
+
+    public interface zza<R extends Result, T> {
+        T zzf(R r);
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcm(parcel);
+    public interface zzb {
+        com.google.android.gms.common.api.zza zzG(Status status);
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzgq(i);
-    }
+    class AnonymousClass2 implements com.google.android.gms.common.api.PendingResult.zza {
+        final /* synthetic */ PendingResult zzaFa;
+        final /* synthetic */ TaskCompletionSource zzaFb;
+        final /* synthetic */ zza zzaFc;
+        final /* synthetic */ zzb zzaFd;
 
-    public ResolveAccountRequest zzcm(Parcel parcel) {
-        GoogleSignInAccount googleSignInAccount = null;
-        int i = 0;
-        int zzcr = zza.zzcr(parcel);
-        Account account = null;
-        int i2 = 0;
-        while (parcel.dataPosition() < zzcr) {
-            int i3;
-            Account account2;
-            int zzg;
-            GoogleSignInAccount googleSignInAccount2;
-            int zzcq = zza.zzcq(parcel);
-            GoogleSignInAccount googleSignInAccount3;
-            switch (zza.zzgu(zzcq)) {
-                case 1:
-                    googleSignInAccount3 = googleSignInAccount;
-                    i3 = i;
-                    account2 = account;
-                    zzg = zza.zzg(parcel, zzcq);
-                    googleSignInAccount2 = googleSignInAccount3;
-                    break;
-                case 2:
-                    zzg = i2;
-                    int i4 = i;
-                    account2 = (Account) zza.zza(parcel, zzcq, Account.CREATOR);
-                    googleSignInAccount2 = googleSignInAccount;
-                    i3 = i4;
-                    break;
-                case 3:
-                    account2 = account;
-                    zzg = i2;
-                    googleSignInAccount3 = googleSignInAccount;
-                    i3 = zza.zzg(parcel, zzcq);
-                    googleSignInAccount2 = googleSignInAccount3;
-                    break;
-                case 4:
-                    googleSignInAccount2 = (GoogleSignInAccount) zza.zza(parcel, zzcq, GoogleSignInAccount.CREATOR);
-                    i3 = i;
-                    account2 = account;
-                    zzg = i2;
-                    break;
-                default:
-                    zza.zzb(parcel, zzcq);
-                    googleSignInAccount2 = googleSignInAccount;
-                    i3 = i;
-                    account2 = account;
-                    zzg = i2;
-                    break;
+        AnonymousClass2(PendingResult pendingResult, TaskCompletionSource taskCompletionSource, zza com_google_android_gms_common_internal_zzab_zza, zzb com_google_android_gms_common_internal_zzab_zzb) {
+            this.zzaFa = pendingResult;
+            this.zzaFb = taskCompletionSource;
+            this.zzaFc = com_google_android_gms_common_internal_zzab_zza;
+            this.zzaFd = com_google_android_gms_common_internal_zzab_zzb;
+        }
+
+        public void zzx(Status status) {
+            if (status.isSuccess()) {
+                this.zzaFb.setResult(this.zzaFc.zzf(this.zzaFa.await(0, TimeUnit.MILLISECONDS)));
+                return;
             }
-            i2 = zzg;
-            account = account2;
-            i = i3;
-            googleSignInAccount = googleSignInAccount2;
+            this.zzaFb.setException(this.zzaFd.zzG(status));
         }
-        if (parcel.dataPosition() == zzcr) {
-            return new ResolveAccountRequest(i2, account, i, googleSignInAccount);
-        }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public ResolveAccountRequest[] zzgq(int i) {
-        return new ResolveAccountRequest[i];
+    class AnonymousClass3 implements zza<R, T> {
+        final /* synthetic */ zze zzaFe;
+
+        AnonymousClass3(zze com_google_android_gms_common_api_zze) {
+            this.zzaFe = com_google_android_gms_common_api_zze;
+        }
+
+        public T zze(R r) {
+            this.zzaFe.zzb(r);
+            return this.zzaFe;
+        }
+
+        public /* synthetic */ Object zzf(Result result) {
+            return zze(result);
+        }
+    }
+
+    public static <R extends Result, T extends zze<R>> Task<T> zza(PendingResult<R> pendingResult, T t) {
+        return zza((PendingResult) pendingResult, new AnonymousClass3(t));
+    }
+
+    public static <R extends Result, T> Task<T> zza(PendingResult<R> pendingResult, zza<R, T> com_google_android_gms_common_internal_zzab_zza_R__T) {
+        return zza(pendingResult, com_google_android_gms_common_internal_zzab_zza_R__T, zzaEZ);
+    }
+
+    public static <R extends Result, T> Task<T> zza(PendingResult<R> pendingResult, zza<R, T> com_google_android_gms_common_internal_zzab_zza_R__T, zzb com_google_android_gms_common_internal_zzab_zzb) {
+        TaskCompletionSource taskCompletionSource = new TaskCompletionSource();
+        pendingResult.zza(new AnonymousClass2(pendingResult, taskCompletionSource, com_google_android_gms_common_internal_zzab_zza_R__T, com_google_android_gms_common_internal_zzab_zzb));
+        return taskCompletionSource.getTask();
     }
 }

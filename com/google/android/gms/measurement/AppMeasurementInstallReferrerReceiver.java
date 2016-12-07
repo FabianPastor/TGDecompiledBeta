@@ -4,17 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.MainThread;
-import com.google.android.gms.measurement.internal.zzu;
-import com.google.android.gms.measurement.internal.zzu.zza;
+import com.google.android.gms.internal.zzatm;
+import com.google.android.gms.internal.zzatm.zza;
 
 public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiver implements zza {
-    private zzu aqD;
+    private zzatm zzbpD;
 
-    private zzu zzbte() {
-        if (this.aqD == null) {
-            this.aqD = new zzu(this);
+    private zzatm zzJa() {
+        if (this.zzbpD == null) {
+            this.zzbpD = new zzatm(this);
         }
-        return this.aqD;
+        return this.zzbpD;
     }
 
     public void doStartService(Context context, Intent intent) {
@@ -22,6 +22,6 @@ public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiv
 
     @MainThread
     public void onReceive(Context context, Intent intent) {
-        zzbte().onReceive(context, intent);
+        zzJa().onReceive(context, intent);
     }
 }

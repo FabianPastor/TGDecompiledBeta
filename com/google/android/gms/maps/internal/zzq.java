@@ -12,14 +12,14 @@ public interface zzq extends IInterface {
     public static abstract class zza extends Binder implements zzq {
 
         private static class zza implements zzq {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onMapClick(LatLng latLng) throws RemoteException {
@@ -33,7 +33,7 @@ public interface zzq extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -46,7 +46,7 @@ public interface zzq extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnMapClickListener");
         }
 
-        public static zzq zzij(IBinder iBinder) {
+        public static zzq zzdL(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

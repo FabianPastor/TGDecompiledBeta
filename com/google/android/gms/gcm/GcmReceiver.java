@@ -11,7 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
-    private static String agS = "gcm.googleapis.com/refresh";
+    private static String zzbfQ = "gcm.googleapis.com/refresh";
 
     private void doStartService(Context context, Intent intent) {
         if (isOrderedBroadcast()) {
@@ -77,7 +77,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeCategory(context.getPackageName());
         }
         String stringExtra = intent.getStringExtra("from");
-        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || agS.equals(stringExtra)) {
+        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || zzbfQ.equals(stringExtra)) {
             intent.setAction("com.google.android.gms.iid.InstanceID");
         }
         stringExtra = intent.getStringExtra("gcm.rawData64");

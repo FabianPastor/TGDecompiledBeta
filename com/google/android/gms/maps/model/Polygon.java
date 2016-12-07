@@ -1,15 +1,15 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.maps.model.internal.zzg;
 import java.util.List;
 
 public final class Polygon {
-    private final zzg aqj;
+    private final zzg zzbpj;
 
     public Polygon(zzg com_google_android_gms_maps_model_internal_zzg) {
-        this.aqj = (zzg) zzaa.zzy(com_google_android_gms_maps_model_internal_zzg);
+        this.zzbpj = (zzg) zzac.zzw(com_google_android_gms_maps_model_internal_zzg);
     }
 
     public boolean equals(Object obj) {
@@ -17,7 +17,7 @@ public final class Polygon {
             return false;
         }
         try {
-            return this.aqj.zzb(((Polygon) obj).aqj);
+            return this.zzbpj.zzb(((Polygon) obj).zzbpj);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -25,7 +25,7 @@ public final class Polygon {
 
     public int getFillColor() {
         try {
-            return this.aqj.getFillColor();
+            return this.zzbpj.getFillColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -33,7 +33,7 @@ public final class Polygon {
 
     public List<List<LatLng>> getHoles() {
         try {
-            return this.aqj.getHoles();
+            return this.zzbpj.getHoles();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -41,7 +41,7 @@ public final class Polygon {
 
     public String getId() {
         try {
-            return this.aqj.getId();
+            return this.zzbpj.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -49,7 +49,7 @@ public final class Polygon {
 
     public List<LatLng> getPoints() {
         try {
-            return this.aqj.getPoints();
+            return this.zzbpj.getPoints();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -57,7 +57,7 @@ public final class Polygon {
 
     public int getStrokeColor() {
         try {
-            return this.aqj.getStrokeColor();
+            return this.zzbpj.getStrokeColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -65,7 +65,7 @@ public final class Polygon {
 
     public float getStrokeWidth() {
         try {
-            return this.aqj.getStrokeWidth();
+            return this.zzbpj.getStrokeWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -73,7 +73,7 @@ public final class Polygon {
 
     public float getZIndex() {
         try {
-            return this.aqj.getZIndex();
+            return this.zzbpj.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -81,7 +81,7 @@ public final class Polygon {
 
     public int hashCode() {
         try {
-            return this.aqj.hashCodeRemote();
+            return this.zzbpj.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -89,7 +89,7 @@ public final class Polygon {
 
     public boolean isClickable() {
         try {
-            return this.aqj.isClickable();
+            return this.zzbpj.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -97,7 +97,7 @@ public final class Polygon {
 
     public boolean isGeodesic() {
         try {
-            return this.aqj.isGeodesic();
+            return this.zzbpj.isGeodesic();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -105,7 +105,7 @@ public final class Polygon {
 
     public boolean isVisible() {
         try {
-            return this.aqj.isVisible();
+            return this.zzbpj.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -113,7 +113,7 @@ public final class Polygon {
 
     public void remove() {
         try {
-            this.aqj.remove();
+            this.zzbpj.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -121,7 +121,7 @@ public final class Polygon {
 
     public void setClickable(boolean z) {
         try {
-            this.aqj.setClickable(z);
+            this.zzbpj.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -129,7 +129,7 @@ public final class Polygon {
 
     public void setFillColor(int i) {
         try {
-            this.aqj.setFillColor(i);
+            this.zzbpj.setFillColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -137,7 +137,7 @@ public final class Polygon {
 
     public void setGeodesic(boolean z) {
         try {
-            this.aqj.setGeodesic(z);
+            this.zzbpj.setGeodesic(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -145,7 +145,7 @@ public final class Polygon {
 
     public void setHoles(List<? extends List<LatLng>> list) {
         try {
-            this.aqj.setHoles(list);
+            this.zzbpj.setHoles(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -153,7 +153,7 @@ public final class Polygon {
 
     public void setPoints(List<LatLng> list) {
         try {
-            this.aqj.setPoints(list);
+            this.zzbpj.setPoints(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -161,7 +161,7 @@ public final class Polygon {
 
     public void setStrokeColor(int i) {
         try {
-            this.aqj.setStrokeColor(i);
+            this.zzbpj.setStrokeColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -169,7 +169,7 @@ public final class Polygon {
 
     public void setStrokeWidth(float f) {
         try {
-            this.aqj.setStrokeWidth(f);
+            this.zzbpj.setStrokeWidth(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -177,7 +177,7 @@ public final class Polygon {
 
     public void setVisible(boolean z) {
         try {
-            this.aqj.setVisible(z);
+            this.zzbpj.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -185,7 +185,7 @@ public final class Polygon {
 
     public void setZIndex(float f) {
         try {
-            this.aqj.setZIndex(f);
+            this.zzbpj.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

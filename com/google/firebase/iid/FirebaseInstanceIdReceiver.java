@@ -33,10 +33,14 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
         }
         int i = -1;
         if (stringExtra != null) {
-            i = FirebaseInstanceIdInternalReceiver.zzb(context, stringExtra, intent);
+            i = zza(context, stringExtra, intent);
         }
         if (isOrderedBroadcast()) {
             setResultCode(i);
         }
+    }
+
+    public int zza(Context context, String str, Intent intent) {
+        return zzg.zzaaj().zzb(context, str, intent);
     }
 }

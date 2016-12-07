@@ -146,7 +146,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (!dialogsLoaded) {
             MessagesController.getInstance().loadDialogs(0, 100, true);
             ContactsController.getInstance().checkInviteText();
-            MessagesController.getInstance().loadPinnedDialogs();
+            MessagesController.getInstance().loadPinnedDialogs(0, null);
             StickersQuery.checkFeaturedStickers();
             dialogsLoaded = true;
         }

@@ -2,40 +2,41 @@ package com.google.android.gms.common.stats;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 import java.util.List;
 
 public class zzf implements Creator<WakeLockEvent> {
     static void zza(WakeLockEvent wakeLockEvent, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, wakeLockEvent.mVersionCode);
-        zzb.zza(parcel, 2, wakeLockEvent.getTimeMillis());
-        zzb.zza(parcel, 4, wakeLockEvent.zzaxv(), false);
-        zzb.zzc(parcel, 5, wakeLockEvent.zzaxy());
-        zzb.zzb(parcel, 6, wakeLockEvent.zzaxz(), false);
-        zzb.zza(parcel, 8, wakeLockEvent.zzayb());
-        zzb.zza(parcel, 10, wakeLockEvent.zzaxw(), false);
-        zzb.zzc(parcel, 11, wakeLockEvent.getEventType());
-        zzb.zza(parcel, 12, wakeLockEvent.zzaya(), false);
-        zzb.zza(parcel, 13, wakeLockEvent.zzayd(), false);
-        zzb.zzc(parcel, 14, wakeLockEvent.zzayc());
-        zzb.zza(parcel, 15, wakeLockEvent.zzaye());
-        zzb.zza(parcel, 16, wakeLockEvent.zzayf());
-        zzb.zza(parcel, 17, wakeLockEvent.zzaxx(), false);
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, wakeLockEvent.mVersionCode);
+        zzc.zza(parcel, 2, wakeLockEvent.getTimeMillis());
+        zzc.zza(parcel, 4, wakeLockEvent.zzyg(), false);
+        zzc.zzc(parcel, 5, wakeLockEvent.zzyj());
+        zzc.zzb(parcel, 6, wakeLockEvent.zzyk(), false);
+        zzc.zza(parcel, 8, wakeLockEvent.zzym());
+        zzc.zza(parcel, 10, wakeLockEvent.zzyh(), false);
+        zzc.zzc(parcel, 11, wakeLockEvent.getEventType());
+        zzc.zza(parcel, 12, wakeLockEvent.zzyl(), false);
+        zzc.zza(parcel, 13, wakeLockEvent.zzyo(), false);
+        zzc.zzc(parcel, 14, wakeLockEvent.zzyn());
+        zzc.zza(parcel, 15, wakeLockEvent.zzyp());
+        zzc.zza(parcel, 16, wakeLockEvent.zzyq());
+        zzc.zza(parcel, 17, wakeLockEvent.zzyi(), false);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzdc(parcel);
+        return zzbf(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzhf(i);
+        return zzdh(i);
     }
 
-    public WakeLockEvent zzdc(Parcel parcel) {
-        int zzcr = zza.zzcr(parcel);
+    public WakeLockEvent zzbf(Parcel parcel) {
+        int zzaU = zzb.zzaU(parcel);
         int i = 0;
         long j = 0;
         int i2 = 0;
@@ -50,63 +51,63 @@ public class zzf implements Creator<WakeLockEvent> {
         float f = 0.0f;
         long j3 = 0;
         String str5 = null;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    j = zza.zzi(parcel, zzcq);
+                    j = zzb.zzi(parcel, zzaT);
                     break;
                 case 4:
-                    str = zza.zzq(parcel, zzcq);
+                    str = zzb.zzq(parcel, zzaT);
                     break;
                 case 5:
-                    i3 = zza.zzg(parcel, zzcq);
+                    i3 = zzb.zzg(parcel, zzaT);
                     break;
                 case 6:
-                    list = zza.zzae(parcel, zzcq);
+                    list = zzb.zzE(parcel, zzaT);
                     break;
                 case 8:
-                    j2 = zza.zzi(parcel, zzcq);
+                    j2 = zzb.zzi(parcel, zzaT);
                     break;
                 case 10:
-                    str3 = zza.zzq(parcel, zzcq);
+                    str3 = zzb.zzq(parcel, zzaT);
                     break;
                 case 11:
-                    i2 = zza.zzg(parcel, zzcq);
+                    i2 = zzb.zzg(parcel, zzaT);
                     break;
                 case 12:
-                    str2 = zza.zzq(parcel, zzcq);
+                    str2 = zzb.zzq(parcel, zzaT);
                     break;
                 case 13:
-                    str4 = zza.zzq(parcel, zzcq);
+                    str4 = zzb.zzq(parcel, zzaT);
                     break;
                 case 14:
-                    i4 = zza.zzg(parcel, zzcq);
+                    i4 = zzb.zzg(parcel, zzaT);
                     break;
                 case 15:
-                    f = zza.zzl(parcel, zzcq);
+                    f = zzb.zzl(parcel, zzaT);
                     break;
                 case 16:
-                    j3 = zza.zzi(parcel, zzcq);
+                    j3 = zzb.zzi(parcel, zzaT);
                     break;
                 case 17:
-                    str5 = zza.zzq(parcel, zzcq);
+                    str5 = zzb.zzq(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new WakeLockEvent(i, j, i2, str, i3, list, str2, j2, i4, str3, str4, f, j3, str5);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public WakeLockEvent[] zzhf(int i) {
+    public WakeLockEvent[] zzdh(int i) {
         return new WakeLockEvent[i];
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_google_play_services_enable_button">Lubamine</string>
+    <string name="common_google_play_services_enable_button">Luba</string>
     <string name="common_google_play_services_enable_text">Rakendus %1$s töötab ainult siis, kui lubate Google Play teenused.</string>
     <string name="common_google_play_services_enable_title">Google Play teenuste lubamine</string>
     <string name="common_google_play_services_install_button">Installi</string>

@@ -9,7 +9,7 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class zza {
     @WorkerThread
-    public void zzv(String str) {
+    public void zzu(String str) {
         HttpURLConnection httpURLConnection;
         String valueOf;
         Throwable e;

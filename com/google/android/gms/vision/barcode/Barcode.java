@@ -4,10 +4,10 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.zza;
 import org.telegram.tgnet.ConnectionsManager;
 
-public class Barcode extends AbstractSafeParcelable {
+public class Barcode extends zza {
     public static final int ALL_FORMATS = 0;
     public static final int AZTEC = 4096;
     public static final int CALENDAR_EVENT = 11;
@@ -51,7 +51,7 @@ public class Barcode extends AbstractSafeParcelable {
     final int versionCode;
     public WiFi wifi;
 
-    public static class Address extends AbstractSafeParcelable {
+    public static class Address extends zza {
         public static final Creator<Address> CREATOR = new zza();
         public static final int HOME = 2;
         public static final int UNKNOWN = 0;
@@ -75,7 +75,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class CalendarDateTime extends AbstractSafeParcelable {
+    public static class CalendarDateTime extends zza {
         public static final Creator<CalendarDateTime> CREATOR = new zzc();
         public int day;
         public int hours;
@@ -108,7 +108,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class CalendarEvent extends AbstractSafeParcelable {
+    public static class CalendarEvent extends zza {
         public static final Creator<CalendarEvent> CREATOR = new zzd();
         public String description;
         public CalendarDateTime end;
@@ -139,7 +139,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class ContactInfo extends AbstractSafeParcelable {
+    public static class ContactInfo extends zza {
         public static final Creator<ContactInfo> CREATOR = new zze();
         public Address[] addresses;
         public Email[] emails;
@@ -170,7 +170,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class DriverLicense extends AbstractSafeParcelable {
+    public static class DriverLicense extends zza {
         public static final Creator<DriverLicense> CREATOR = new zzf();
         public String addressCity;
         public String addressState;
@@ -215,7 +215,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class Email extends AbstractSafeParcelable {
+    public static class Email extends zza {
         public static final Creator<Email> CREATOR = new zzg();
         public static final int HOME = 2;
         public static final int UNKNOWN = 0;
@@ -243,7 +243,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class GeoPoint extends AbstractSafeParcelable {
+    public static class GeoPoint extends zza {
         public static final Creator<GeoPoint> CREATOR = new zzh();
         public double lat;
         public double lng;
@@ -264,7 +264,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class PersonName extends AbstractSafeParcelable {
+    public static class PersonName extends zza {
         public static final Creator<PersonName> CREATOR = new zzi();
         public String first;
         public String formattedName;
@@ -295,7 +295,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class Phone extends AbstractSafeParcelable {
+    public static class Phone extends zza {
         public static final Creator<Phone> CREATOR = new zzj();
         public static final int FAX = 3;
         public static final int HOME = 2;
@@ -321,7 +321,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class Sms extends AbstractSafeParcelable {
+    public static class Sms extends zza {
         public static final Creator<Sms> CREATOR = new zzk();
         public String message;
         public String phoneNumber;
@@ -342,7 +342,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class UrlBookmark extends AbstractSafeParcelable {
+    public static class UrlBookmark extends zza {
         public static final Creator<UrlBookmark> CREATOR = new zzl();
         public String title;
         public String url;
@@ -363,7 +363,7 @@ public class Barcode extends AbstractSafeParcelable {
         }
     }
 
-    public static class WiFi extends AbstractSafeParcelable {
+    public static class WiFi extends zza {
         public static final Creator<WiFi> CREATOR = new zzm();
         public static final int OPEN = 1;
         public static final int WEP = 3;

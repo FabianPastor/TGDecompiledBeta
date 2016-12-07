@@ -5,9 +5,9 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 class zzg<TResult> {
-    private Queue<zzf<TResult>> aMQ;
-    private boolean aMR;
-    private final Object zzako = new Object();
+    private Queue<zzf<TResult>> zzbLD;
+    private boolean zzbLE;
+    private final Object zzrN = new Object();
 
     zzg() {
     }
@@ -15,20 +15,20 @@ class zzg<TResult> {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void zza(@NonNull Task<TResult> task) {
-        synchronized (this.zzako) {
-            if (this.aMQ == null || this.aMR) {
+        synchronized (this.zzrN) {
+            if (this.zzbLD == null || this.zzbLE) {
             } else {
-                this.aMR = true;
+                this.zzbLE = true;
             }
         }
     }
 
     public void zza(@NonNull zzf<TResult> com_google_android_gms_tasks_zzf_TResult) {
-        synchronized (this.zzako) {
-            if (this.aMQ == null) {
-                this.aMQ = new ArrayDeque();
+        synchronized (this.zzrN) {
+            if (this.zzbLD == null) {
+                this.zzbLD = new ArrayDeque();
             }
-            this.aMQ.add(com_google_android_gms_tasks_zzf_TResult);
+            this.zzbLD.add(com_google_android_gms_tasks_zzf_TResult);
         }
     }
 }

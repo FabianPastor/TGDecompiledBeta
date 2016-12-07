@@ -5,23 +5,23 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.WorkSource;
 import android.util.Log;
-import com.google.android.gms.internal.zzsz;
+import com.google.android.gms.internal.zzacx;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class zzy {
-    private static final Method GH = zzaza();
-    private static final Method GI = zzazb();
-    private static final Method GJ = zzazc();
-    private static final Method GK = zzazd();
-    private static final Method GL = zzaze();
+    private static final Method zzaHc = zzyL();
+    private static final Method zzaHd = zzyM();
+    private static final Method zzaHe = zzyN();
+    private static final Method zzaHf = zzyO();
+    private static final Method zzaHg = zzyP();
 
     public static int zza(WorkSource workSource) {
-        if (GJ != null) {
+        if (zzaHe != null) {
             try {
-                return ((Integer) GJ.invoke(workSource, new Object[0])).intValue();
+                return ((Integer) zzaHe.invoke(workSource, new Object[0])).intValue();
             } catch (Throwable e) {
                 Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
             }
@@ -30,9 +30,9 @@ public class zzy {
     }
 
     public static String zza(WorkSource workSource, int i) {
-        if (GL != null) {
+        if (zzaHg != null) {
             try {
-                return (String) GL.invoke(workSource, new Object[]{Integer.valueOf(i)});
+                return (String) zzaHg.invoke(workSource, new Object[]{Integer.valueOf(i)});
             } catch (Throwable e) {
                 Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
             }
@@ -41,71 +41,26 @@ public class zzy {
     }
 
     public static void zza(WorkSource workSource, int i, String str) {
-        if (GI != null) {
+        if (zzaHd != null) {
             if (str == null) {
                 str = "";
             }
             try {
-                GI.invoke(workSource, new Object[]{Integer.valueOf(i), str});
+                zzaHd.invoke(workSource, new Object[]{Integer.valueOf(i), str});
             } catch (Throwable e) {
                 Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
             }
-        } else if (GH != null) {
+        } else if (zzaHc != null) {
             try {
-                GH.invoke(workSource, new Object[]{Integer.valueOf(i)});
+                zzaHc.invoke(workSource, new Object[]{Integer.valueOf(i)});
             } catch (Throwable e2) {
                 Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e2);
             }
         }
     }
 
-    private static Method zzaza() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE});
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzazb() {
-        Method method = null;
-        if (zzs.zzayt()) {
-            try {
-                method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE, String.class});
-            } catch (Exception e) {
-            }
-        }
-        return method;
-    }
-
-    private static Method zzazc() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("size", new Class[0]);
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzazd() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("get", new Class[]{Integer.TYPE});
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzaze() {
-        Method method = null;
-        if (zzs.zzayt()) {
-            try {
-                method = WorkSource.class.getMethod("getName", new Class[]{Integer.TYPE});
-            } catch (Exception e) {
-            }
-        }
-        return method;
+    public static boolean zzaO(Context context) {
+        return (context == null || context.getPackageManager() == null || zzacx.zzaQ(context).checkPermission("android.permission.UPDATE_DEVICE_STATS", context.getPackageName()) != 0) ? false : true;
     }
 
     public static List<String> zzb(WorkSource workSource) {
@@ -117,16 +72,12 @@ public class zzy {
         List<String> arrayList = new ArrayList();
         while (i < zza) {
             String zza2 = zza(workSource, i);
-            if (!zzv.zzij(zza2)) {
+            if (!zzv.zzdD(zza2)) {
                 arrayList.add(zza2);
             }
             i++;
         }
         return arrayList;
-    }
-
-    public static boolean zzcm(Context context) {
-        return (context == null || context.getPackageManager() == null || zzsz.zzco(context).checkPermission("android.permission.UPDATE_DEVICE_STATS", context.getPackageName()) != 0) ? false : true;
     }
 
     public static WorkSource zzf(int i, String str) {
@@ -136,14 +87,14 @@ public class zzy {
     }
 
     public static WorkSource zzy(Context context, String str) {
-        if (context == null || context.getPackageManager() == null) {
-            return null;
-        }
         String str2;
         String str3;
         String valueOf;
+        if (context == null || context.getPackageManager() == null) {
+            return null;
+        }
         try {
-            ApplicationInfo applicationInfo = zzsz.zzco(context).getApplicationInfo(str, 0);
+            ApplicationInfo applicationInfo = zzacx.zzaQ(context).getApplicationInfo(str, 0);
             if (applicationInfo != null) {
                 return zzf(applicationInfo.uid, str);
             }
@@ -159,5 +110,54 @@ public class zzy {
             Log.e(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
             return null;
         }
+    }
+
+    private static Method zzyL() {
+        Method method = null;
+        try {
+            method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE});
+        } catch (Exception e) {
+        }
+        return method;
+    }
+
+    private static Method zzyM() {
+        Method method = null;
+        if (zzs.zzyE()) {
+            try {
+                method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE, String.class});
+            } catch (Exception e) {
+            }
+        }
+        return method;
+    }
+
+    private static Method zzyN() {
+        Method method = null;
+        try {
+            method = WorkSource.class.getMethod("size", new Class[0]);
+        } catch (Exception e) {
+        }
+        return method;
+    }
+
+    private static Method zzyO() {
+        Method method = null;
+        try {
+            method = WorkSource.class.getMethod("get", new Class[]{Integer.TYPE});
+        } catch (Exception e) {
+        }
+        return method;
+    }
+
+    private static Method zzyP() {
+        Method method = null;
+        if (zzs.zzyE()) {
+            try {
+                method = WorkSource.class.getMethod("getName", new Class[]{Integer.TYPE});
+            } catch (Exception e) {
+            }
+        }
+        return method;
     }
 }

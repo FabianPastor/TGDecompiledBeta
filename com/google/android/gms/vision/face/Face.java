@@ -7,52 +7,52 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Face {
     public static final float UNCOMPUTED_PROBABILITY = -1.0f;
-    private PointF aOa;
-    private float aOb;
-    private float aOc;
-    private List<Landmark> aOd;
-    private float aOe;
-    private float aOf;
-    private float aOg;
-    private float apP;
-    private float apQ;
     private int mId;
+    private PointF zzbMM;
+    private float zzbMN;
+    private float zzbMO;
+    private List<Landmark> zzbMP;
+    private float zzbMQ;
+    private float zzbMR;
+    private float zzbMS;
+    private float zzboP;
+    private float zzboQ;
 
     public Face(int i, PointF pointF, float f, float f2, float f3, float f4, Landmark[] landmarkArr, float f5, float f6, float f7) {
         this.mId = i;
-        this.aOa = pointF;
-        this.apP = f;
-        this.apQ = f2;
-        this.aOb = f3;
-        this.aOc = f4;
-        this.aOd = Arrays.asList(landmarkArr);
+        this.zzbMM = pointF;
+        this.zzboP = f;
+        this.zzboQ = f2;
+        this.zzbMN = f3;
+        this.zzbMO = f4;
+        this.zzbMP = Arrays.asList(landmarkArr);
         if (f5 < 0.0f || f5 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aOe = -1.0f;
+            this.zzbMQ = -1.0f;
         } else {
-            this.aOe = f5;
+            this.zzbMQ = f5;
         }
         if (f6 < 0.0f || f6 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aOf = -1.0f;
+            this.zzbMR = -1.0f;
         } else {
-            this.aOf = f6;
+            this.zzbMR = f6;
         }
         if (f7 < 0.0f || f7 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aOg = -1.0f;
+            this.zzbMS = -1.0f;
         } else {
-            this.aOg = f7;
+            this.zzbMS = f7;
         }
     }
 
     public float getEulerY() {
-        return this.aOb;
+        return this.zzbMN;
     }
 
     public float getEulerZ() {
-        return this.aOc;
+        return this.zzbMO;
     }
 
     public float getHeight() {
-        return this.apQ;
+        return this.zzboQ;
     }
 
     public int getId() {
@@ -60,26 +60,26 @@ public class Face {
     }
 
     public float getIsLeftEyeOpenProbability() {
-        return this.aOe;
+        return this.zzbMQ;
     }
 
     public float getIsRightEyeOpenProbability() {
-        return this.aOf;
+        return this.zzbMR;
     }
 
     public float getIsSmilingProbability() {
-        return this.aOg;
+        return this.zzbMS;
     }
 
     public List<Landmark> getLandmarks() {
-        return this.aOd;
+        return this.zzbMP;
     }
 
     public PointF getPosition() {
-        return new PointF(this.aOa.x - (this.apP / 2.0f), this.aOa.y - (this.apQ / 2.0f));
+        return new PointF(this.zzbMM.x - (this.zzboP / 2.0f), this.zzbMM.y - (this.zzboQ / 2.0f));
     }
 
     public float getWidth() {
-        return this.apP;
+        return this.zzboP;
     }
 }

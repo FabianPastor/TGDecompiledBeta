@@ -6,16 +6,16 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 public class zzi {
     public final byte[] data;
     public final int statusCode;
-    public final boolean zzaa;
-    public final long zzab;
-    public final Map<String, String> zzz;
+    public final long zzA;
+    public final Map<String, String> zzy;
+    public final boolean zzz;
 
     public zzi(int i, byte[] bArr, Map<String, String> map, boolean z, long j) {
         this.statusCode = i;
         this.data = bArr;
-        this.zzz = map;
-        this.zzaa = z;
-        this.zzab = j;
+        this.zzy = map;
+        this.zzz = z;
+        this.zzA = j;
     }
 
     public zzi(byte[] bArr, Map<String, String> map) {

@@ -1,6 +1,6 @@
 package com.google.android.gms.common.util;
 
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,7 +9,7 @@ public final class zzb {
         int i = 0;
         int length = tArr != null ? tArr.length : 0;
         while (i < length) {
-            if (zzz.equal(tArr[i], t)) {
+            if (zzaa.equal(tArr[i], t)) {
                 return i;
             }
             i++;
@@ -118,10 +118,6 @@ public final class zzb {
         return numArr;
     }
 
-    public static <T> ArrayList<T> zzayh() {
-        return new ArrayList();
-    }
-
     public static <T> ArrayList<T> zzb(T[] tArr) {
         ArrayList<T> arrayList = new ArrayList(r1);
         for (Object add : tArr) {
@@ -132,5 +128,9 @@ public final class zzb {
 
     public static <T> boolean zzb(T[] tArr, T t) {
         return zza((Object[]) tArr, (Object) t) >= 0;
+    }
+
+    public static <T> ArrayList<T> zzys() {
+        return new ArrayList();
     }
 }

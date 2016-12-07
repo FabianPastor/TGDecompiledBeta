@@ -1,38 +1,69 @@
 package com.google.android.gms.common.internal;
 
-import android.content.Context;
 import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Looper;
-import com.google.android.gms.common.api.Api.zzg;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzag<T extends IInterface> extends zzj<T> {
-    private final zzg<T> EO;
-
-    public zzag(Context context, Looper looper, int i, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener, zzf com_google_android_gms_common_internal_zzf, zzg<T> com_google_android_gms_common_api_Api_zzg_T) {
-        super(context, looper, i, com_google_android_gms_common_internal_zzf, connectionCallbacks, onConnectionFailedListener);
-        this.EO = com_google_android_gms_common_api_Api_zzg_T;
+public class zzag implements Creator<zzaf> {
+    static void zza(zzaf com_google_android_gms_common_internal_zzaf, Parcel parcel, int i) {
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzaf.mVersionCode);
+        zzc.zza(parcel, 2, com_google_android_gms_common_internal_zzaf.zzaDx, false);
+        zzc.zza(parcel, 3, com_google_android_gms_common_internal_zzaf.zzxA(), i, false);
+        zzc.zza(parcel, 4, com_google_android_gms_common_internal_zzaf.zzxB());
+        zzc.zza(parcel, 5, com_google_android_gms_common_internal_zzaf.zzxC());
+        zzc.zzJ(parcel, zzaV);
     }
 
-    public zzg<T> zzawt() {
-        return this.EO;
+    public /* synthetic */ Object createFromParcel(Parcel parcel) {
+        return zzaQ(parcel);
     }
 
-    protected void zzc(int i, T t) {
-        this.EO.zza(i, t);
+    public /* synthetic */ Object[] newArray(int i) {
+        return zzcT(i);
     }
 
-    protected T zzh(IBinder iBinder) {
-        return this.EO.zzh(iBinder);
+    public zzaf zzaQ(Parcel parcel) {
+        ConnectionResult connectionResult = null;
+        boolean z = false;
+        int zzaU = zzb.zzaU(parcel);
+        boolean z2 = false;
+        IBinder iBinder = null;
+        int i = 0;
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
+                case 1:
+                    i = zzb.zzg(parcel, zzaT);
+                    break;
+                case 2:
+                    iBinder = zzb.zzr(parcel, zzaT);
+                    break;
+                case 3:
+                    connectionResult = (ConnectionResult) zzb.zza(parcel, zzaT, ConnectionResult.CREATOR);
+                    break;
+                case 4:
+                    z2 = zzb.zzc(parcel, zzaT);
+                    break;
+                case 5:
+                    z = zzb.zzc(parcel, zzaT);
+                    break;
+                default:
+                    zzb.zzb(parcel, zzaT);
+                    break;
+            }
+        }
+        if (parcel.dataPosition() == zzaU) {
+            return new zzaf(i, iBinder, connectionResult, z2, z);
+        }
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    protected String zzjx() {
-        return this.EO.zzjx();
-    }
-
-    protected String zzjy() {
-        return this.EO.zzjy();
+    public zzaf[] zzcT(int i) {
+        return new zzaf[i];
     }
 }

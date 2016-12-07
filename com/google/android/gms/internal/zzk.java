@@ -5,25 +5,23 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public abstract class zzk<T> implements Comparable<zzk<T>> {
-    private final zza zzac;
-    private final int zzad;
-    private final String zzae;
-    private final int zzaf;
-    private final com.google.android.gms.internal.zzm.zza zzag;
-    private Integer zzah;
-    private zzl zzai;
-    private boolean zzaj;
-    private boolean zzak;
-    private boolean zzal;
-    private long zzam;
-    private zzo zzan;
-    private com.google.android.gms.internal.zzb.zza zzao;
+    private final zza zzB;
+    private final int zzC;
+    private final String zzD;
+    private final int zzE;
+    private final com.google.android.gms.internal.zzm.zza zzF;
+    private Integer zzG;
+    private zzl zzH;
+    private boolean zzI;
+    private boolean zzJ;
+    private boolean zzK;
+    private long zzL;
+    private zzo zzM;
+    private com.google.android.gms.internal.zzb.zza zzN;
 
     public enum zza {
         LOW,
@@ -33,35 +31,17 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
     }
 
     public zzk(int i, String str, com.google.android.gms.internal.zzm.zza com_google_android_gms_internal_zzm_zza) {
-        this.zzac = zza.zzbj ? new zza() : null;
-        this.zzaj = true;
-        this.zzak = false;
-        this.zzal = false;
-        this.zzam = 0;
-        this.zzao = null;
-        this.zzad = i;
-        this.zzae = str;
-        this.zzag = com_google_android_gms_internal_zzm_zza;
+        this.zzB = zza.zzai ? new zza() : null;
+        this.zzI = true;
+        this.zzJ = false;
+        this.zzK = false;
+        this.zzL = 0;
+        this.zzN = null;
+        this.zzC = i;
+        this.zzD = str;
+        this.zzF = com_google_android_gms_internal_zzm_zza;
         zza(new zzd());
-        this.zzaf = zzb(str);
-    }
-
-    private byte[] zza(Map<String, String> map, String str) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            for (Entry entry : map.entrySet()) {
-                stringBuilder.append(URLEncoder.encode((String) entry.getKey(), str));
-                stringBuilder.append('=');
-                stringBuilder.append(URLEncoder.encode((String) entry.getValue(), str));
-                stringBuilder.append('&');
-            }
-            return stringBuilder.toString().getBytes(str);
-        } catch (Throwable e) {
-            Throwable th = e;
-            String str2 = "Encoding not supported: ";
-            String valueOf = String.valueOf(str);
-            throw new RuntimeException(valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2), th);
-        }
+        this.zzE = zzb(str);
     }
 
     private static int zzb(String str) {
@@ -86,15 +66,11 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
     }
 
     public int getMethod() {
-        return this.zzad;
+        return this.zzC;
     }
 
     public String getUrl() {
-        return this.zzae;
-    }
-
-    public boolean isCanceled() {
-        return false;
+        return this.zzD;
     }
 
     public String toString() {
@@ -103,28 +79,28 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
         valueOf = valueOf.length() != 0 ? str.concat(valueOf) : new String(str);
         str = "[ ] ";
         String valueOf2 = String.valueOf(getUrl());
-        String valueOf3 = String.valueOf(zzq());
-        String valueOf4 = String.valueOf(this.zzah);
+        String valueOf3 = String.valueOf(zzo());
+        String valueOf4 = String.valueOf(this.zzG);
         return new StringBuilder(((((String.valueOf(str).length() + 3) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()).append(str).append(valueOf2).append(" ").append(valueOf).append(" ").append(valueOf3).append(" ").append(valueOf4).toString();
     }
 
     public final zzk<?> zza(int i) {
-        this.zzah = Integer.valueOf(i);
+        this.zzG = Integer.valueOf(i);
         return this;
     }
 
     public zzk<?> zza(com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza) {
-        this.zzao = com_google_android_gms_internal_zzb_zza;
+        this.zzN = com_google_android_gms_internal_zzb_zza;
         return this;
     }
 
     public zzk<?> zza(zzl com_google_android_gms_internal_zzl) {
-        this.zzai = com_google_android_gms_internal_zzl;
+        this.zzH = com_google_android_gms_internal_zzl;
         return this;
     }
 
     public zzk<?> zza(zzo com_google_android_gms_internal_zzo) {
-        this.zzan = com_google_android_gms_internal_zzo;
+        this.zzM = com_google_android_gms_internal_zzo;
         return this;
     }
 
@@ -137,53 +113,53 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
     }
 
     public int zzc(zzk<T> com_google_android_gms_internal_zzk_T) {
-        zza zzq = zzq();
-        zza zzq2 = com_google_android_gms_internal_zzk_T.zzq();
-        return zzq == zzq2 ? this.zzah.intValue() - com_google_android_gms_internal_zzk_T.zzah.intValue() : zzq2.ordinal() - zzq.ordinal();
+        zza zzo = zzo();
+        zza zzo2 = com_google_android_gms_internal_zzk_T.zzo();
+        return zzo == zzo2 ? this.zzG.intValue() - com_google_android_gms_internal_zzk_T.zzG.intValue() : zzo2.ordinal() - zzo.ordinal();
     }
 
     public void zzc(zzr com_google_android_gms_internal_zzr) {
-        if (this.zzag != null) {
-            this.zzag.zze(com_google_android_gms_internal_zzr);
+        if (this.zzF != null) {
+            this.zzF.zze(com_google_android_gms_internal_zzr);
         }
     }
 
     public void zzc(String str) {
-        if (zza.zzbj) {
-            this.zzac.zza(str, Thread.currentThread().getId());
-        } else if (this.zzam == 0) {
-            this.zzam = SystemClock.elapsedRealtime();
+        if (zza.zzai) {
+            this.zzB.zza(str, Thread.currentThread().getId());
+        } else if (this.zzL == 0) {
+            this.zzL = SystemClock.elapsedRealtime();
         }
     }
 
     void zzd(final String str) {
-        if (this.zzai != null) {
-            this.zzai.zzf(this);
+        if (this.zzH != null) {
+            this.zzH.zzf(this);
         }
-        if (zza.zzbj) {
+        if (zza.zzai) {
             final long id = Thread.currentThread().getId();
             if (Looper.myLooper() != Looper.getMainLooper()) {
                 new Handler(Looper.getMainLooper()).post(new Runnable(this) {
-                    final /* synthetic */ zzk zzar;
+                    final /* synthetic */ zzk zzQ;
 
                     public void run() {
-                        this.zzar.zzac.zza(str, id);
-                        this.zzar.zzac.zzd(toString());
+                        this.zzQ.zzB.zza(str, id);
+                        this.zzQ.zzB.zzd(toString());
                     }
                 });
                 return;
             }
-            this.zzac.zza(str, id);
-            this.zzac.zzd(toString());
+            this.zzB.zza(str, id);
+            this.zzB.zzd(toString());
             return;
         }
-        if (SystemClock.elapsedRealtime() - this.zzam >= 3000) {
-            zzs.zzb("%d ms: %s", Long.valueOf(SystemClock.elapsedRealtime() - this.zzam), toString());
+        if (SystemClock.elapsedRealtime() - this.zzL >= 3000) {
+            zzs.zzb("%d ms: %s", Long.valueOf(SystemClock.elapsedRealtime() - this.zzL), toString());
         }
     }
 
     public int zzf() {
-        return this.zzaf;
+        return this.zzE;
     }
 
     public String zzg() {
@@ -191,65 +167,54 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
     }
 
     public com.google.android.gms.internal.zzb.zza zzh() {
-        return this.zzao;
+        return this.zzN;
     }
 
     @Deprecated
-    protected Map<String, String> zzi() throws zza {
+    public String zzi() {
+        return zzl();
+    }
+
+    @Deprecated
+    public byte[] zzj() throws zza {
         return null;
     }
 
-    @Deprecated
-    protected String zzj() {
-        return zzm();
-    }
-
-    @Deprecated
-    public String zzk() {
-        return zzn();
-    }
-
-    @Deprecated
-    public byte[] zzl() throws zza {
-        Map zzi = zzi();
-        return (zzi == null || zzi.size() <= 0) ? null : zza(zzi, zzj());
-    }
-
-    protected String zzm() {
+    protected String zzk() {
         return "UTF-8";
     }
 
-    public String zzn() {
+    public String zzl() {
         String str = "application/x-www-form-urlencoded; charset=";
-        String valueOf = String.valueOf(zzm());
+        String valueOf = String.valueOf(zzk());
         return valueOf.length() != 0 ? str.concat(valueOf) : new String(str);
     }
 
-    public byte[] zzo() throws zza {
+    public byte[] zzm() throws zza {
         return null;
     }
 
-    public final boolean zzp() {
-        return this.zzaj;
+    public final boolean zzn() {
+        return this.zzI;
     }
 
-    public zza zzq() {
+    public zza zzo() {
         return zza.NORMAL;
     }
 
-    public final int zzr() {
-        return this.zzan.zzc();
+    public final int zzp() {
+        return this.zzM.zzc();
     }
 
-    public zzo zzs() {
-        return this.zzan;
+    public zzo zzq() {
+        return this.zzM;
     }
 
-    public void zzt() {
-        this.zzal = true;
+    public void zzr() {
+        this.zzK = true;
     }
 
-    public boolean zzu() {
-        return this.zzal;
+    public boolean zzs() {
+        return this.zzK;
     }
 }

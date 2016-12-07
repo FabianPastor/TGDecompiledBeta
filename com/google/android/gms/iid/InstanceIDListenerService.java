@@ -16,21 +16,21 @@ import android.util.Log;
 
 public class InstanceIDListenerService extends Service {
     static String ACTION = "action";
-    private static String agS = "gcm.googleapis.com/refresh";
-    private static String ail = "google.com/iid";
-    private static String aim = "CMD";
-    MessengerCompat aij = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
-        final /* synthetic */ InstanceIDListenerService aip;
+    private static String zzbfQ = "gcm.googleapis.com/refresh";
+    private static String zzbhj = "google.com/iid";
+    private static String zzbhk = "CMD";
+    MessengerCompat zzbhh = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
+        final /* synthetic */ InstanceIDListenerService zzbhn;
 
         public void handleMessage(Message message) {
-            this.aip.zza(message, MessengerCompat.zzc(message));
+            this.zzbhn.zza(message, MessengerCompat.zzc(message));
         }
     });
-    BroadcastReceiver aik = new BroadcastReceiver(this) {
-        final /* synthetic */ InstanceIDListenerService aip;
+    BroadcastReceiver zzbhi = new BroadcastReceiver(this) {
+        final /* synthetic */ InstanceIDListenerService zzbhn;
 
         {
-            this.aip = r1;
+            this.zzbhn = r1;
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -39,55 +39,55 @@ public class InstanceIDListenerService extends Service {
                 String valueOf = String.valueOf(intent.getExtras());
                 Log.d("InstanceID", new StringBuilder(String.valueOf(valueOf).length() + 46).append("Received GSF callback using dynamic receiver: ").append(valueOf).toString());
             }
-            this.aip.zzn(intent);
-            this.aip.stop();
+            this.zzbhn.zzn(intent);
+            this.zzbhn.stop();
         }
     };
-    int ain;
-    int aio;
+    int zzbhl;
+    int zzbhm;
 
     static void zza(Context context, zzd com_google_android_gms_iid_zzd) {
-        com_google_android_gms_iid_zzd.zzbop();
+        com_google_android_gms_iid_zzd.zzGA();
         Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
-        intent.putExtra(aim, "RST");
+        intent.putExtra(zzbhk, "RST");
         intent.setPackage(context.getPackageName());
         context.startService(intent);
     }
 
     private void zza(Message message, int i) {
-        zzc.zzdg(this);
+        zzc.zzbi(this);
         getPackageManager();
-        if (i == zzc.aiv || i == zzc.aiu) {
+        if (i == zzc.zzbhs || i == zzc.zzbhr) {
             zzn((Intent) message.obj);
             return;
         }
-        int i2 = zzc.aiu;
-        Log.w("InstanceID", "Message from unexpected caller " + i + " mine=" + i2 + " appid=" + zzc.aiv);
+        int i2 = zzc.zzbhr;
+        Log.w("InstanceID", "Message from unexpected caller " + i + " mine=" + i2 + " appid=" + zzc.zzbhs);
     }
 
-    static void zzdf(Context context) {
+    static void zzbh(Context context) {
         Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
         intent.setPackage(context.getPackageName());
-        intent.putExtra(aim, "SYNC");
+        intent.putExtra(zzbhk, "SYNC");
         context.startService(intent);
     }
 
     public IBinder onBind(Intent intent) {
-        return (intent == null || !"com.google.android.gms.iid.InstanceID".equals(intent.getAction())) ? null : this.aij.getBinder();
+        return (intent == null || !"com.google.android.gms.iid.InstanceID".equals(intent.getAction())) ? null : this.zzbhh.getBinder();
     }
 
     public void onCreate() {
         IntentFilter intentFilter = new IntentFilter("com.google.android.c2dm.intent.REGISTRATION");
         intentFilter.addCategory(getPackageName());
-        registerReceiver(this.aik, intentFilter, "com.google.android.c2dm.permission.RECEIVE", null);
+        registerReceiver(this.zzbhi, intentFilter, "com.google.android.c2dm.permission.RECEIVE", null);
     }
 
     public void onDestroy() {
-        unregisterReceiver(this.aik);
+        unregisterReceiver(this.zzbhi);
     }
 
     public int onStartCommand(Intent intent, int i, int i2) {
-        zztu(i2);
+        zzjA(i2);
         if (intent == null) {
             stop();
             return 2;
@@ -118,19 +118,28 @@ public class InstanceIDListenerService extends Service {
 
     void stop() {
         synchronized (this) {
-            this.ain--;
-            if (this.ain == 0) {
-                stopSelf(this.aio);
+            this.zzbhl--;
+            if (this.zzbhl == 0) {
+                stopSelf(this.zzbhm);
             }
             if (Log.isLoggable("InstanceID", 3)) {
-                int i = this.ain;
-                Log.d("InstanceID", "Stop " + i + " " + this.aio);
+                int i = this.zzbhl;
+                Log.d("InstanceID", "Stop " + i + " " + this.zzbhm);
             }
         }
     }
 
-    public void zzcc(boolean z) {
+    public void zzaB(boolean z) {
         onTokenRefresh();
+    }
+
+    void zzjA(int i) {
+        synchronized (this) {
+            this.zzbhl++;
+            if (i > this.zzbhm) {
+                this.zzbhm = i;
+            }
+        }
     }
 
     public void zzn(Intent intent) {
@@ -143,42 +152,41 @@ public class InstanceIDListenerService extends Service {
             bundle.putString("subtype", stringExtra);
             instance = InstanceID.zza(this, bundle);
         }
-        String stringExtra2 = intent.getStringExtra(aim);
+        String stringExtra2 = intent.getStringExtra(zzbhk);
         if (intent.getStringExtra("error") == null && intent.getStringExtra("registration_id") == null) {
             if (Log.isLoggable("InstanceID", 3)) {
                 String valueOf = String.valueOf(intent.getExtras());
                 Log.d("InstanceID", new StringBuilder(((String.valueOf(stringExtra).length() + 18) + String.valueOf(stringExtra2).length()) + String.valueOf(valueOf).length()).append("Service command ").append(stringExtra).append(" ").append(stringExtra2).append(" ").append(valueOf).toString());
             }
             if (intent.getStringExtra("unregistered") != null) {
-                zzd zzbok = instance.zzbok();
+                zzd zzGv = instance.zzGv();
                 if (stringExtra == null) {
                     stringExtra = "";
                 }
-                zzbok.zzku(stringExtra);
-                instance.zzbol().zzv(intent);
+                zzGv.zzeO(stringExtra);
+                instance.zzGw().zzv(intent);
                 return;
-            } else if (agS.equals(intent.getStringExtra("from"))) {
-                instance.zzbok().zzku(stringExtra);
-                zzcc(false);
+            } else if (zzbfQ.equals(intent.getStringExtra("from"))) {
+                instance.zzGv().zzeO(stringExtra);
+                zzaB(false);
                 return;
             } else if ("RST".equals(stringExtra2)) {
-                instance.zzboj();
-                zzcc(true);
+                instance.zzGu();
+                zzaB(true);
                 return;
             } else if ("RST_FULL".equals(stringExtra2)) {
-                if (!instance.zzbok().isEmpty()) {
-                    instance.zzbok().zzbop();
-                    zzcc(true);
+                if (!instance.zzGv().isEmpty()) {
+                    instance.zzGv().zzGA();
+                    zzaB(true);
                     return;
                 }
                 return;
             } else if ("SYNC".equals(stringExtra2)) {
-                instance.zzbok().zzku(stringExtra);
-                zzcc(false);
-                return;
-            } else if (!"PING".equals(stringExtra2)) {
+                instance.zzGv().zzeO(stringExtra);
+                zzaB(false);
                 return;
             } else {
+                "PING".equals(stringExtra2);
                 return;
             }
         }
@@ -188,15 +196,6 @@ public class InstanceIDListenerService extends Service {
             stringExtra = String.valueOf(stringExtra);
             Log.d(stringExtra2, stringExtra.length() != 0 ? str.concat(stringExtra) : new String(str));
         }
-        instance.zzbol().zzv(intent);
-    }
-
-    void zztu(int i) {
-        synchronized (this) {
-            this.ain++;
-            if (i > this.aio) {
-                this.aio = i;
-            }
-        }
+        instance.zzGw().zzv(intent);
     }
 }

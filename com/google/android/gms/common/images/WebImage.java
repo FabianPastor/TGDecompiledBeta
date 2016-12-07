@@ -3,24 +3,24 @@ package com.google.android.gms.common.images;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public final class WebImage extends AbstractSafeParcelable {
+public final class WebImage extends zza {
     public static final Creator<WebImage> CREATOR = new zzb();
     final int mVersionCode;
-    private final Uri sa;
-    private final int zzakh;
-    private final int zzaki;
+    private final Uri zzarW;
+    private final int zzrG;
+    private final int zzrH;
 
     WebImage(int i, Uri uri, int i2, int i3) {
         this.mVersionCode = i;
-        this.sa = uri;
-        this.zzakh = i2;
-        this.zzaki = i3;
+        this.zzarW = uri;
+        this.zzrG = i2;
+        this.zzrH = i3;
     }
 
     public WebImage(Uri uri) throws IllegalArgumentException {
@@ -37,10 +37,10 @@ public final class WebImage extends AbstractSafeParcelable {
     }
 
     public WebImage(JSONObject jSONObject) throws IllegalArgumentException {
-        this(zzp(jSONObject), jSONObject.optInt("width", 0), jSONObject.optInt("height", 0));
+        this(zzs(jSONObject), jSONObject.optInt("width", 0), jSONObject.optInt("height", 0));
     }
 
-    private static Uri zzp(JSONObject jSONObject) {
+    private static Uri zzs(JSONObject jSONObject) {
         Uri uri = null;
         if (jSONObject.has("url")) {
             try {
@@ -59,38 +59,38 @@ public final class WebImage extends AbstractSafeParcelable {
             return false;
         }
         WebImage webImage = (WebImage) obj;
-        return zzz.equal(this.sa, webImage.sa) && this.zzakh == webImage.zzakh && this.zzaki == webImage.zzaki;
+        return zzaa.equal(this.zzarW, webImage.zzarW) && this.zzrG == webImage.zzrG && this.zzrH == webImage.zzrH;
     }
 
     public int getHeight() {
-        return this.zzaki;
+        return this.zzrH;
     }
 
     public Uri getUrl() {
-        return this.sa;
+        return this.zzarW;
     }
 
     public int getWidth() {
-        return this.zzakh;
+        return this.zzrG;
     }
 
     public int hashCode() {
-        return zzz.hashCode(this.sa, Integer.valueOf(this.zzakh), Integer.valueOf(this.zzaki));
+        return zzaa.hashCode(this.zzarW, Integer.valueOf(this.zzrG), Integer.valueOf(this.zzrH));
     }
 
     public JSONObject toJson() {
         JSONObject jSONObject = new JSONObject();
         try {
-            jSONObject.put("url", this.sa.toString());
-            jSONObject.put("width", this.zzakh);
-            jSONObject.put("height", this.zzaki);
+            jSONObject.put("url", this.zzarW.toString());
+            jSONObject.put("width", this.zzrG);
+            jSONObject.put("height", this.zzrH);
         } catch (JSONException e) {
         }
         return jSONObject;
     }
 
     public String toString() {
-        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzakh), Integer.valueOf(this.zzaki), this.sa.toString()});
+        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzrG), Integer.valueOf(this.zzrH), this.zzarW.toString()});
     }
 
     public void writeToParcel(Parcel parcel, int i) {

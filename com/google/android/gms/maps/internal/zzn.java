@@ -12,14 +12,14 @@ public interface zzn extends IInterface {
     public static abstract class zza extends Binder implements zzn {
 
         private static class zza implements zzn {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void zzg(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException {
@@ -28,7 +28,7 @@ public interface zzn extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnInfoWindowCloseListener");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzf != null ? com_google_android_gms_maps_model_internal_zzf.asBinder() : null);
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -41,7 +41,7 @@ public interface zzn extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnInfoWindowCloseListener");
         }
 
-        public static zzn zzig(IBinder iBinder) {
+        public static zzn zzdI(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -57,7 +57,7 @@ public interface zzn extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IOnInfoWindowCloseListener");
-                    zzg(com.google.android.gms.maps.model.internal.zzf.zza.zzjk(parcel.readStrongBinder()));
+                    zzg(com.google.android.gms.maps.model.internal.zzf.zza.zzem(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:

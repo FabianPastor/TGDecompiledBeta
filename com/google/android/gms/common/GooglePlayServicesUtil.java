@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
-import com.google.android.gms.common.internal.zzh;
+import com.google.android.gms.common.internal.zzi;
 
 public final class GooglePlayServicesUtil extends zze {
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
@@ -84,7 +84,7 @@ public final class GooglePlayServicesUtil extends zze {
         if (fragment == null) {
             return instance.showErrorDialogFragment(activity, i, i2, onCancelListener);
         }
-        Dialog zza = instance.zza((Context) activity, i, zzh.zza(fragment, GoogleApiAvailability.getInstance().zzb(activity, i, "d"), i2), onCancelListener);
+        Dialog zza = instance.zza((Context) activity, i, zzi.zza(fragment, GoogleApiAvailability.getInstance().zzb(activity, i, "d"), i2), onCancelListener);
         if (zza == null) {
             return false;
         }
@@ -96,7 +96,7 @@ public final class GooglePlayServicesUtil extends zze {
     public static void showErrorNotification(int i, Context context) {
         GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
         if (zzd(context, i) || zze(context, i)) {
-            instance.zzbl(context);
+            instance.zzal(context);
         } else {
             instance.showErrorNotification(context, i);
         }

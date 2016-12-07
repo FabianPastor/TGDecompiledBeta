@@ -3,41 +3,42 @@ package com.google.android.gms.maps.model;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class zzg implements Creator<MarkerOptions> {
     static void zza(MarkerOptions markerOptions, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, markerOptions.getVersionCode());
-        zzb.zza(parcel, 2, markerOptions.getPosition(), i, false);
-        zzb.zza(parcel, 3, markerOptions.getTitle(), false);
-        zzb.zza(parcel, 4, markerOptions.getSnippet(), false);
-        zzb.zza(parcel, 5, markerOptions.zzbsz(), false);
-        zzb.zza(parcel, 6, markerOptions.getAnchorU());
-        zzb.zza(parcel, 7, markerOptions.getAnchorV());
-        zzb.zza(parcel, 8, markerOptions.isDraggable());
-        zzb.zza(parcel, 9, markerOptions.isVisible());
-        zzb.zza(parcel, 10, markerOptions.isFlat());
-        zzb.zza(parcel, 11, markerOptions.getRotation());
-        zzb.zza(parcel, 12, markerOptions.getInfoWindowAnchorU());
-        zzb.zza(parcel, 13, markerOptions.getInfoWindowAnchorV());
-        zzb.zza(parcel, 14, markerOptions.getAlpha());
-        zzb.zza(parcel, 15, markerOptions.getZIndex());
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, markerOptions.getVersionCode());
+        zzc.zza(parcel, 2, markerOptions.getPosition(), i, false);
+        zzc.zza(parcel, 3, markerOptions.getTitle(), false);
+        zzc.zza(parcel, 4, markerOptions.getSnippet(), false);
+        zzc.zza(parcel, 5, markerOptions.zzIV(), false);
+        zzc.zza(parcel, 6, markerOptions.getAnchorU());
+        zzc.zza(parcel, 7, markerOptions.getAnchorV());
+        zzc.zza(parcel, 8, markerOptions.isDraggable());
+        zzc.zza(parcel, 9, markerOptions.isVisible());
+        zzc.zza(parcel, 10, markerOptions.isFlat());
+        zzc.zza(parcel, 11, markerOptions.getRotation());
+        zzc.zza(parcel, 12, markerOptions.getInfoWindowAnchorU());
+        zzc.zza(parcel, 13, markerOptions.getInfoWindowAnchorV());
+        zzc.zza(parcel, 14, markerOptions.getAlpha());
+        zzc.zza(parcel, 15, markerOptions.getZIndex());
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpl(parcel);
+        return zzhz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwp(i);
+        return zzld(i);
     }
 
-    public MarkerOptions zzpl(Parcel parcel) {
-        int zzcr = zza.zzcr(parcel);
+    public MarkerOptions zzhz(Parcel parcel) {
+        int zzaU = zzb.zzaU(parcel);
         int i = 0;
         LatLng latLng = null;
         String str = null;
@@ -53,66 +54,66 @@ public class zzg implements Creator<MarkerOptions> {
         float f5 = 0.0f;
         float f6 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         float f7 = 0.0f;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    latLng = (LatLng) zza.zza(parcel, zzcq, LatLng.CREATOR);
+                    latLng = (LatLng) zzb.zza(parcel, zzaT, LatLng.CREATOR);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcq);
+                    str = zzb.zzq(parcel, zzaT);
                     break;
                 case 4:
-                    str2 = zza.zzq(parcel, zzcq);
+                    str2 = zzb.zzq(parcel, zzaT);
                     break;
                 case 5:
-                    iBinder = zza.zzr(parcel, zzcq);
+                    iBinder = zzb.zzr(parcel, zzaT);
                     break;
                 case 6:
-                    f = zza.zzl(parcel, zzcq);
+                    f = zzb.zzl(parcel, zzaT);
                     break;
                 case 7:
-                    f2 = zza.zzl(parcel, zzcq);
+                    f2 = zzb.zzl(parcel, zzaT);
                     break;
                 case 8:
-                    z = zza.zzc(parcel, zzcq);
+                    z = zzb.zzc(parcel, zzaT);
                     break;
                 case 9:
-                    z2 = zza.zzc(parcel, zzcq);
+                    z2 = zzb.zzc(parcel, zzaT);
                     break;
                 case 10:
-                    z3 = zza.zzc(parcel, zzcq);
+                    z3 = zzb.zzc(parcel, zzaT);
                     break;
                 case 11:
-                    f3 = zza.zzl(parcel, zzcq);
+                    f3 = zzb.zzl(parcel, zzaT);
                     break;
                 case 12:
-                    f4 = zza.zzl(parcel, zzcq);
+                    f4 = zzb.zzl(parcel, zzaT);
                     break;
                 case 13:
-                    f5 = zza.zzl(parcel, zzcq);
+                    f5 = zzb.zzl(parcel, zzaT);
                     break;
                 case 14:
-                    f6 = zza.zzl(parcel, zzcq);
+                    f6 = zzb.zzl(parcel, zzaT);
                     break;
                 case 15:
-                    f7 = zza.zzl(parcel, zzcq);
+                    f7 = zzb.zzl(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new MarkerOptions(i, latLng, str, str2, iBinder, f, f2, z, z2, z3, f3, f4, f5, f6, f7);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public MarkerOptions[] zzwp(int i) {
+    public MarkerOptions[] zzld(int i) {
         return new MarkerOptions[i];
     }
 }

@@ -4,80 +4,81 @@ import android.accounts.Account;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 import java.util.ArrayList;
 
 public class zzb implements Creator<GoogleSignInOptions> {
     static void zza(GoogleSignInOptions googleSignInOptions, Parcel parcel, int i) {
-        int zzcs = com.google.android.gms.common.internal.safeparcel.zzb.zzcs(parcel);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 1, googleSignInOptions.versionCode);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 2, googleSignInOptions.zzait(), false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 3, googleSignInOptions.getAccount(), i, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 4, googleSignInOptions.zzaiu());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 5, googleSignInOptions.zzaiv());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 6, googleSignInOptions.zzaiw());
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 7, googleSignInOptions.zzaix(), false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 8, googleSignInOptions.zzaiy(), false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, googleSignInOptions.versionCode);
+        zzc.zzc(parcel, 2, googleSignInOptions.zzqJ(), false);
+        zzc.zza(parcel, 3, googleSignInOptions.getAccount(), i, false);
+        zzc.zza(parcel, 4, googleSignInOptions.zzqK());
+        zzc.zza(parcel, 5, googleSignInOptions.zzqL());
+        zzc.zza(parcel, 6, googleSignInOptions.zzqM());
+        zzc.zza(parcel, 7, googleSignInOptions.zzqN(), false);
+        zzc.zza(parcel, 8, googleSignInOptions.zzqO(), false);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaw(parcel);
+        return zzW(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzdk(i);
+        return zzbk(i);
     }
 
-    public GoogleSignInOptions zzaw(Parcel parcel) {
+    public GoogleSignInOptions zzW(Parcel parcel) {
         String str = null;
         boolean z = false;
-        int zzcr = zza.zzcr(parcel);
+        int zzaU = com.google.android.gms.common.internal.safeparcel.zzb.zzaU(parcel);
         String str2 = null;
         boolean z2 = false;
         boolean z3 = false;
         Account account = null;
         ArrayList arrayList = null;
         int i = 0;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzaT(parcel);
+            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    arrayList = zza.zzc(parcel, zzcq, Scope.CREATOR);
+                    arrayList = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT, Scope.CREATOR);
                     break;
                 case 3:
-                    account = (Account) zza.zza(parcel, zzcq, Account.CREATOR);
+                    account = (Account) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaT, Account.CREATOR);
                     break;
                 case 4:
-                    z3 = zza.zzc(parcel, zzcq);
+                    z3 = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT);
                     break;
                 case 5:
-                    z2 = zza.zzc(parcel, zzcq);
+                    z2 = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT);
                     break;
                 case 6:
-                    z = zza.zzc(parcel, zzcq);
+                    z = com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, zzaT);
                     break;
                 case 7:
-                    str2 = zza.zzq(parcel, zzcq);
+                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaT);
                     break;
                 case 8:
-                    str = zza.zzq(parcel, zzcq);
+                    str = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new GoogleSignInOptions(i, arrayList, account, z3, z2, z, str2, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public GoogleSignInOptions[] zzdk(int i) {
+    public GoogleSignInOptions[] zzbk(int i) {
         return new GoogleSignInOptions[i];
     }
 }

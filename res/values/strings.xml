@@ -1414,6 +1414,7 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
+    <string name="PermissionDrawAboveOtherApps">Telegram needs access to draw above other apps to play videos in Picture-in-Picture mode.</string>
     <string name="PinToTop">Pin to top</string>
     <string name="UnpinFromTop">Unpin from top</string>
     <string name="UsernameHelpLink">This link opens a chat with you on Telegram:\n%1$s</string>

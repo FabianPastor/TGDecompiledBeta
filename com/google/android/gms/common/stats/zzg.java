@@ -5,36 +5,27 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
-import com.google.android.gms.common.stats.zzb.zzb;
-import com.google.android.gms.common.util.zzd;
 import com.google.android.gms.common.util.zzj;
 import java.util.List;
 
 public class zzg {
-    private static zzg Gn = new zzg();
-    private static Boolean Go;
     private static String TAG = "WakeLockTracker";
+    private static zzg zzaGH = new zzg();
+    private static Boolean zzaGI;
 
-    public static zzg zzayg() {
-        return Gn;
+    private static boolean zzaG(Context context) {
+        if (zzaGI == null) {
+            zzaGI = Boolean.valueOf(zzaH(context));
+        }
+        return zzaGI.booleanValue();
     }
 
-    private static boolean zzcg(Context context) {
-        if (Go == null) {
-            Go = Boolean.valueOf(zzch(context));
-        }
-        return Go.booleanValue();
+    private static boolean zzaH(Context context) {
+        return false;
     }
 
-    private static boolean zzch(Context context) {
-        try {
-            if (!zzd.zzayi()) {
-                return false;
-            }
-            return ((Integer) zzb.FJ.get()).intValue() != zzc.LOG_LEVEL_OFF;
-        } catch (SecurityException e) {
-            return false;
-        }
+    public static zzg zzyr() {
+        return zzaGH;
     }
 
     public void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list) {
@@ -42,7 +33,7 @@ public class zzg {
     }
 
     public void zza(Context context, String str, int i, String str2, String str3, String str4, int i2, List<String> list, long j) {
-        if (!zzcg(context)) {
+        if (!zzaG(context)) {
             return;
         }
         if (TextUtils.isEmpty(str)) {
@@ -55,7 +46,7 @@ public class zzg {
         long currentTimeMillis = System.currentTimeMillis();
         if (7 == i || 8 == i || 10 == i || 11 == i) {
             try {
-                context.startService(new Intent().setComponent(zzc.FP).putExtra("com.google.android.gms.common.stats.EXTRA_LOG_EVENT", new WakeLockEvent(currentTimeMillis, i, str2, i2, zze.zzz(list), str, SystemClock.elapsedRealtime(), zzj.zzck(context), str3, zze.zzih(context.getPackageName()), zzj.zzcl(context), j, str4)));
+                context.startService(new Intent().setComponent(zzc.zzaGj).putExtra("com.google.android.gms.common.stats.EXTRA_LOG_EVENT", new WakeLockEvent(currentTimeMillis, i, str2, i2, zze.zzz(list), str, SystemClock.elapsedRealtime(), zzj.zzaM(context), str3, zze.zzdB(context.getPackageName()), zzj.zzaN(context), j, str4)));
             } catch (Throwable e) {
                 Log.wtf(TAG, e);
             }

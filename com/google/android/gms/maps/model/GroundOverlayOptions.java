@@ -3,111 +3,111 @@ package com.google.android.gms.maps.model;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.dynamic.zzd.zza;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.dynamic.zzd;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
-public final class GroundOverlayOptions extends AbstractSafeParcelable {
+public final class GroundOverlayOptions extends zza {
     public static final Creator<GroundOverlayOptions> CREATOR = new zzc();
     public static final float NO_DIMENSION = -1.0f;
-    private LatLngBounds anI;
-    private float apF;
-    private float apJ;
-    private boolean apK;
-    private boolean apL;
-    private BitmapDescriptor apN;
-    private LatLng apO;
-    private float apP;
-    private float apQ;
-    private float apR;
-    private float apS;
-    private float apT;
     private final int mVersionCode;
+    private LatLngBounds zzbmR;
+    private float zzboF;
+    private float zzboJ;
+    private boolean zzboK;
+    private boolean zzboL;
+    private BitmapDescriptor zzboN;
+    private LatLng zzboO;
+    private float zzboP;
+    private float zzboQ;
+    private float zzboR;
+    private float zzboS;
+    private float zzboT;
 
     public GroundOverlayOptions() {
-        this.apK = true;
-        this.apR = 0.0f;
-        this.apS = 0.5f;
-        this.apT = 0.5f;
-        this.apL = false;
+        this.zzboK = true;
+        this.zzboR = 0.0f;
+        this.zzboS = 0.5f;
+        this.zzboT = 0.5f;
+        this.zzboL = false;
         this.mVersionCode = 1;
     }
 
     GroundOverlayOptions(int i, IBinder iBinder, LatLng latLng, float f, float f2, LatLngBounds latLngBounds, float f3, float f4, boolean z, float f5, float f6, float f7, boolean z2) {
-        this.apK = true;
-        this.apR = 0.0f;
-        this.apS = 0.5f;
-        this.apT = 0.5f;
-        this.apL = false;
+        this.zzboK = true;
+        this.zzboR = 0.0f;
+        this.zzboS = 0.5f;
+        this.zzboT = 0.5f;
+        this.zzboL = false;
         this.mVersionCode = i;
-        this.apN = new BitmapDescriptor(zza.zzfd(iBinder));
-        this.apO = latLng;
-        this.apP = f;
-        this.apQ = f2;
-        this.anI = latLngBounds;
-        this.apF = f3;
-        this.apJ = f4;
-        this.apK = z;
-        this.apR = f5;
-        this.apS = f6;
-        this.apT = f7;
-        this.apL = z2;
+        this.zzboN = new BitmapDescriptor(zzd.zza.zzcd(iBinder));
+        this.zzboO = latLng;
+        this.zzboP = f;
+        this.zzboQ = f2;
+        this.zzbmR = latLngBounds;
+        this.zzboF = f3;
+        this.zzboJ = f4;
+        this.zzboK = z;
+        this.zzboR = f5;
+        this.zzboS = f6;
+        this.zzboT = f7;
+        this.zzboL = z2;
     }
 
     private GroundOverlayOptions zza(LatLng latLng, float f, float f2) {
-        this.apO = latLng;
-        this.apP = f;
-        this.apQ = f2;
+        this.zzboO = latLng;
+        this.zzboP = f;
+        this.zzboQ = f2;
         return this;
     }
 
     public GroundOverlayOptions anchor(float f, float f2) {
-        this.apS = f;
-        this.apT = f2;
+        this.zzboS = f;
+        this.zzboT = f2;
         return this;
     }
 
     public GroundOverlayOptions bearing(float f) {
-        this.apF = ((f % 360.0f) + 360.0f) % 360.0f;
+        this.zzboF = ((f % 360.0f) + 360.0f) % 360.0f;
         return this;
     }
 
     public GroundOverlayOptions clickable(boolean z) {
-        this.apL = z;
+        this.zzboL = z;
         return this;
     }
 
     public float getAnchorU() {
-        return this.apS;
+        return this.zzboS;
     }
 
     public float getAnchorV() {
-        return this.apT;
+        return this.zzboT;
     }
 
     public float getBearing() {
-        return this.apF;
+        return this.zzboF;
     }
 
     public LatLngBounds getBounds() {
-        return this.anI;
+        return this.zzbmR;
     }
 
     public float getHeight() {
-        return this.apQ;
+        return this.zzboQ;
     }
 
     public BitmapDescriptor getImage() {
-        return this.apN;
+        return this.zzboN;
     }
 
     public LatLng getLocation() {
-        return this.apO;
+        return this.zzboO;
     }
 
     public float getTransparency() {
-        return this.apR;
+        return this.zzboR;
     }
 
     int getVersionCode() {
@@ -115,66 +115,66 @@ public final class GroundOverlayOptions extends AbstractSafeParcelable {
     }
 
     public float getWidth() {
-        return this.apP;
+        return this.zzboP;
     }
 
     public float getZIndex() {
-        return this.apJ;
+        return this.zzboJ;
     }
 
     public GroundOverlayOptions image(BitmapDescriptor bitmapDescriptor) {
-        this.apN = bitmapDescriptor;
+        this.zzboN = bitmapDescriptor;
         return this;
     }
 
     public boolean isClickable() {
-        return this.apL;
+        return this.zzboL;
     }
 
     public boolean isVisible() {
-        return this.apK;
+        return this.zzboK;
     }
 
     public GroundOverlayOptions position(LatLng latLng, float f) {
         boolean z = true;
-        zzaa.zza(this.anI == null, (Object) "Position has already been set using positionFromBounds");
-        zzaa.zzb(latLng != null, (Object) "Location must be specified");
+        zzac.zza(this.zzbmR == null, (Object) "Position has already been set using positionFromBounds");
+        zzac.zzb(latLng != null, (Object) "Location must be specified");
         if (f < 0.0f) {
             z = false;
         }
-        zzaa.zzb(z, (Object) "Width must be non-negative");
+        zzac.zzb(z, (Object) "Width must be non-negative");
         return zza(latLng, f, -1.0f);
     }
 
     public GroundOverlayOptions position(LatLng latLng, float f, float f2) {
         boolean z = true;
-        zzaa.zza(this.anI == null, (Object) "Position has already been set using positionFromBounds");
-        zzaa.zzb(latLng != null, (Object) "Location must be specified");
-        zzaa.zzb(f >= 0.0f, (Object) "Width must be non-negative");
+        zzac.zza(this.zzbmR == null, (Object) "Position has already been set using positionFromBounds");
+        zzac.zzb(latLng != null, (Object) "Location must be specified");
+        zzac.zzb(f >= 0.0f, (Object) "Width must be non-negative");
         if (f2 < 0.0f) {
             z = false;
         }
-        zzaa.zzb(z, (Object) "Height must be non-negative");
+        zzac.zzb(z, (Object) "Height must be non-negative");
         return zza(latLng, f, f2);
     }
 
     public GroundOverlayOptions positionFromBounds(LatLngBounds latLngBounds) {
-        boolean z = this.apO == null;
-        String valueOf = String.valueOf(this.apO);
-        zzaa.zza(z, new StringBuilder(String.valueOf(valueOf).length() + 46).append("Position has already been set using position: ").append(valueOf).toString());
-        this.anI = latLngBounds;
+        boolean z = this.zzboO == null;
+        String valueOf = String.valueOf(this.zzboO);
+        zzac.zza(z, new StringBuilder(String.valueOf(valueOf).length() + 46).append("Position has already been set using position: ").append(valueOf).toString());
+        this.zzbmR = latLngBounds;
         return this;
     }
 
     public GroundOverlayOptions transparency(float f) {
         boolean z = f >= 0.0f && f <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        zzaa.zzb(z, (Object) "Transparency must be in the range [0..1]");
-        this.apR = f;
+        zzac.zzb(z, (Object) "Transparency must be in the range [0..1]");
+        this.zzboR = f;
         return this;
     }
 
     public GroundOverlayOptions visible(boolean z) {
-        this.apK = z;
+        this.zzboK = z;
         return this;
     }
 
@@ -183,11 +183,11 @@ public final class GroundOverlayOptions extends AbstractSafeParcelable {
     }
 
     public GroundOverlayOptions zIndex(float f) {
-        this.apJ = f;
+        this.zzboJ = f;
         return this;
     }
 
-    IBinder zzbsx() {
-        return this.apN.zzbsc().asBinder();
+    IBinder zzIT() {
+        return this.zzboN.zzIy().asBinder();
     }
 }

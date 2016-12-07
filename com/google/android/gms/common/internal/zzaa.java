@@ -1,107 +1,51 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Looper;
-import android.text.TextUtils;
+import android.support.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public final class zzaa {
-    public static int zza(int i, Object obj) {
-        if (i != 0) {
-            return i;
+
+    public static final class zza {
+        private final Object zzXN;
+        private final List<String> zzaEY;
+
+        private zza(Object obj) {
+            this.zzXN = zzac.zzw(obj);
+            this.zzaEY = new ArrayList();
         }
-        throw new IllegalArgumentException(String.valueOf(obj));
-    }
 
-    public static long zza(long j, Object obj) {
-        if (j != 0) {
-            return j;
+        public String toString() {
+            StringBuilder append = new StringBuilder(100).append(this.zzXN.getClass().getSimpleName()).append('{');
+            int size = this.zzaEY.size();
+            for (int i = 0; i < size; i++) {
+                append.append((String) this.zzaEY.get(i));
+                if (i < size - 1) {
+                    append.append(", ");
+                }
+            }
+            return append.append('}').toString();
         }
-        throw new IllegalArgumentException(String.valueOf(obj));
-    }
 
-    public static void zza(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalStateException(String.valueOf(obj));
-        }
-    }
-
-    public static void zza(boolean z, String str, Object... objArr) {
-        if (!z) {
-            throw new IllegalStateException(String.format(str, objArr));
-        }
-    }
-
-    public static void zzawk() {
-        zzht("Must not be called on the main application thread");
-    }
-
-    public static <T> T zzb(T t, Object obj) {
-        if (t != null) {
-            return t;
-        }
-        throw new NullPointerException(String.valueOf(obj));
-    }
-
-    public static void zzb(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalArgumentException(String.valueOf(obj));
+        public zza zzg(String str, Object obj) {
+            List list = this.zzaEY;
+            String str2 = (String) zzac.zzw(str);
+            String valueOf = String.valueOf(String.valueOf(obj));
+            list.add(new StringBuilder((String.valueOf(str2).length() + 1) + String.valueOf(valueOf).length()).append(str2).append("=").append(valueOf).toString());
+            return this;
         }
     }
 
-    public static void zzb(boolean z, String str, Object... objArr) {
-        if (!z) {
-            throw new IllegalArgumentException(String.format(str, objArr));
-        }
+    public static boolean equal(@Nullable Object obj, @Nullable Object obj2) {
+        return obj == obj2 || (obj != null && obj.equals(obj2));
     }
 
-    public static void zzbs(boolean z) {
-        if (!z) {
-            throw new IllegalStateException();
-        }
+    public static int hashCode(Object... objArr) {
+        return Arrays.hashCode(objArr);
     }
 
-    public static void zzbt(boolean z) {
-        if (!z) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public static int zzgp(int i) {
-        if (i != 0) {
-            return i;
-        }
-        throw new IllegalArgumentException("Given Integer is zero");
-    }
-
-    public static String zzh(String str, Object obj) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
-        }
-        throw new IllegalArgumentException(String.valueOf(obj));
-    }
-
-    public static void zzhs(String str) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            throw new IllegalStateException(str);
-        }
-    }
-
-    public static void zzht(String str) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException(str);
-        }
-    }
-
-    public static String zzib(String str) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
-        }
-        throw new IllegalArgumentException("Given String is empty or null");
-    }
-
-    public static <T> T zzy(T t) {
-        if (t != null) {
-            return t;
-        }
-        throw new NullPointerException("null reference");
+    public static zza zzv(Object obj) {
+        return new zza(obj);
     }
 }

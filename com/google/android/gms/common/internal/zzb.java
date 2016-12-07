@@ -8,12 +8,12 @@ import com.google.android.gms.common.api.zzd;
 
 public class zzb {
     @NonNull
-    public static zza zzaf(@NonNull Status status) {
+    public static zza zzF(@NonNull Status status) {
         return status.hasResolution() ? new zzd(status) : new zza(status);
     }
 
     @NonNull
-    public static zza zzk(@NonNull ConnectionResult connectionResult) {
-        return zzaf(new Status(connectionResult.getErrorCode(), connectionResult.getErrorMessage(), connectionResult.getResolution()));
+    public static zza zzl(@NonNull ConnectionResult connectionResult) {
+        return zzF(new Status(connectionResult.getErrorCode(), connectionResult.getErrorMessage(), connectionResult.getResolution()));
     }
 }

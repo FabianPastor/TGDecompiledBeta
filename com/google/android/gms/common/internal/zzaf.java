@@ -1,80 +1,55 @@
 package com.google.android.gms.common.internal;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Typeface;
-import android.util.AttributeSet;
-import android.widget.Button;
-import com.google.android.gms.R;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.internal.safeparcel.zza;
 
-public final class zzaf extends Button {
-    public zzaf(Context context) {
-        this(context, null);
+public class zzaf extends zza {
+    public static final Creator<zzaf> CREATOR = new zzag();
+    final int mVersionCode;
+    IBinder zzaDx;
+    private ConnectionResult zzaFh;
+    private boolean zzaFi;
+    private boolean zzazX;
+
+    zzaf(int i, IBinder iBinder, ConnectionResult connectionResult, boolean z, boolean z2) {
+        this.mVersionCode = i;
+        this.zzaDx = iBinder;
+        this.zzaFh = connectionResult;
+        this.zzazX = z;
+        this.zzaFi = z2;
     }
 
-    public zzaf(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet, 16842824);
-    }
-
-    private void zza(Resources resources) {
-        setTypeface(Typeface.DEFAULT_BOLD);
-        setTextSize(14.0f);
-        float f = resources.getDisplayMetrics().density;
-        setMinHeight((int) ((f * 48.0f) + 0.5f));
-        setMinWidth((int) ((f * 48.0f) + 0.5f));
-    }
-
-    private void zzb(Resources resources, int i, int i2) {
-        setBackgroundDrawable(resources.getDrawable(zze(i, zzg(i2, R.drawable.common_google_signin_btn_icon_dark, R.drawable.common_google_signin_btn_icon_light, R.drawable.common_google_signin_btn_icon_light), zzg(i2, R.drawable.common_google_signin_btn_text_dark, R.drawable.common_google_signin_btn_text_light, R.drawable.common_google_signin_btn_text_light))));
-    }
-
-    private void zzc(Resources resources, int i, int i2) {
-        setTextColor((ColorStateList) zzaa.zzy(resources.getColorStateList(zzg(i2, R.color.common_google_signin_btn_text_dark, R.color.common_google_signin_btn_text_light, R.color.common_google_signin_btn_text_light))));
-        switch (i) {
-            case 0:
-                setText(resources.getString(R.string.common_signin_button_text));
-                break;
-            case 1:
-                setText(resources.getString(R.string.common_signin_button_text_long));
-                break;
-            case 2:
-                setText(null);
-                break;
-            default:
-                throw new IllegalStateException("Unknown button size: " + i);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-        setTransformationMethod(null);
-    }
-
-    private int zze(int i, int i2, int i3) {
-        switch (i) {
-            case 0:
-            case 1:
-                return i3;
-            case 2:
-                return i2;
-            default:
-                throw new IllegalStateException("Unknown button size: " + i);
+        if (!(obj instanceof zzaf)) {
+            return false;
         }
+        zzaf com_google_android_gms_common_internal_zzaf = (zzaf) obj;
+        return this.zzaFh.equals(com_google_android_gms_common_internal_zzaf.zzaFh) && zzxz().equals(com_google_android_gms_common_internal_zzaf.zzxz());
     }
 
-    private int zzg(int i, int i2, int i3, int i4) {
-        switch (i) {
-            case 0:
-                return i2;
-            case 1:
-                return i3;
-            case 2:
-                return i4;
-            default:
-                throw new IllegalStateException("Unknown color scheme: " + i);
-        }
+    public void writeToParcel(Parcel parcel, int i) {
+        zzag.zza(this, parcel, i);
     }
 
-    public void zza(Resources resources, int i, int i2) {
-        zza(resources);
-        zzb(resources, i, i2);
-        zzc(resources, i, i2);
+    public ConnectionResult zzxA() {
+        return this.zzaFh;
+    }
+
+    public boolean zzxB() {
+        return this.zzazX;
+    }
+
+    public boolean zzxC() {
+        return this.zzaFi;
+    }
+
+    public zzr zzxz() {
+        return zzr.zza.zzbr(this.zzaDx);
     }
 }

@@ -107,6 +107,9 @@ public class PhotoCropView extends FrameLayout {
 
                 public void onChange(float angle) {
                     PhotoCropView.this.cropView.setRotation(angle);
+                    if (PhotoCropView.this.delegate != null) {
+                        PhotoCropView.this.delegate.onChange(false);
+                    }
                 }
 
                 public void onEnd(float angle) {
@@ -125,7 +128,7 @@ public class PhotoCropView extends FrameLayout {
             addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         this.cropView.setVisibility(0);
-        this.cropView.setBitmap(bitmap, freeform);
+        this.cropView.setBitmap(bitmap, rotation, freeform);
         this.wheelView.setFreeform(freeform);
         this.wheelView.reset();
         this.delegate.needMoveImageTo(0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, false);
@@ -146,8 +149,12 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.reset();
     }
 
-    public void appeared() {
+    public void onAppeared() {
         this.cropView.show();
+    }
+
+    public void onDisappear() {
+        this.cropView.hide();
     }
 
     public boolean onTouch(MotionEvent motionEvent) {
@@ -158,11 +165,11 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getRectX() {
-        return this.cropView.getCropLeft();
+        return this.cropView.getCropLeft() - ((float) AndroidUtilities.dp(14.0f));
     }
 
     public float getRectY() {
-        return this.cropView.getCropTop();
+        return this.cropView.getCropTop() - ((float) AndroidUtilities.dp(14.0f));
     }
 
     public float getRectSizeX() {

@@ -3,9 +3,9 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
-import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.zza;
 
-public final class LatLng extends AbstractSafeParcelable implements ReflectedParcelable {
+public final class LatLng extends zza implements ReflectedParcelable {
     public static final Creator<LatLng> CREATOR = new zze();
     public final double latitude;
     public final double longitude;

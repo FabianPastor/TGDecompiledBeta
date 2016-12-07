@@ -2,55 +2,56 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzn implements Creator<StreetViewPanoramaOrientation> {
     static void zza(StreetViewPanoramaOrientation streetViewPanoramaOrientation, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, streetViewPanoramaOrientation.getVersionCode());
-        zzb.zza(parcel, 2, streetViewPanoramaOrientation.tilt);
-        zzb.zza(parcel, 3, streetViewPanoramaOrientation.bearing);
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, streetViewPanoramaOrientation.getVersionCode());
+        zzc.zza(parcel, 2, streetViewPanoramaOrientation.tilt);
+        zzc.zza(parcel, 3, streetViewPanoramaOrientation.bearing);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzps(parcel);
+        return zzhG(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzww(i);
+        return zzlk(i);
     }
 
-    public StreetViewPanoramaOrientation zzps(Parcel parcel) {
+    public StreetViewPanoramaOrientation zzhG(Parcel parcel) {
         float f = 0.0f;
-        int zzcr = zza.zzcr(parcel);
+        int zzaU = zzb.zzaU(parcel);
         int i = 0;
         float f2 = 0.0f;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    f2 = zza.zzl(parcel, zzcq);
+                    f2 = zzb.zzl(parcel, zzaT);
                     break;
                 case 3:
-                    f = zza.zzl(parcel, zzcq);
+                    f = zzb.zzl(parcel, zzaT);
                     break;
                 default:
-                    zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new StreetViewPanoramaOrientation(i, f2, f);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public StreetViewPanoramaOrientation[] zzww(int i) {
+    public StreetViewPanoramaOrientation[] zzlk(int i) {
         return new StreetViewPanoramaOrientation[i];
     }
 }

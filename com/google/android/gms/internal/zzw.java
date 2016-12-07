@@ -21,7 +21,7 @@ import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.volley.toolbox.HttpClientStack.HttpPatch;
 
 public class zzw implements zzy {
-    protected final HttpClient zzcd;
+    protected final HttpClient zzaC;
 
     public static final class zza extends HttpEntityEnclosingRequestBase {
         public zza(String str) {
@@ -34,13 +34,13 @@ public class zzw implements zzy {
     }
 
     public zzw(HttpClient httpClient) {
-        this.zzcd = httpClient;
+        this.zzaC = httpClient;
     }
 
     private static void zza(HttpEntityEnclosingRequestBase httpEntityEnclosingRequestBase, zzk<?> com_google_android_gms_internal_zzk_) throws zza {
-        byte[] zzo = com_google_android_gms_internal_zzk_.zzo();
-        if (zzo != null) {
-            httpEntityEnclosingRequestBase.setEntity(new ByteArrayEntity(zzo));
+        byte[] zzm = com_google_android_gms_internal_zzk_.zzm();
+        if (zzm != null) {
+            httpEntityEnclosingRequestBase.setEntity(new ByteArrayEntity(zzm));
         }
     }
 
@@ -54,24 +54,24 @@ public class zzw implements zzy {
         HttpEntityEnclosingRequestBase httpPost;
         switch (com_google_android_gms_internal_zzk_.getMethod()) {
             case -1:
-                byte[] zzl = com_google_android_gms_internal_zzk_.zzl();
-                if (zzl == null) {
+                byte[] zzj = com_google_android_gms_internal_zzk_.zzj();
+                if (zzj == null) {
                     return new HttpGet(com_google_android_gms_internal_zzk_.getUrl());
                 }
                 HttpUriRequest httpPost2 = new HttpPost(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost2.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzk());
-                httpPost2.setEntity(new ByteArrayEntity(zzl));
+                httpPost2.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzi());
+                httpPost2.setEntity(new ByteArrayEntity(zzj));
                 return httpPost2;
             case 0:
                 return new HttpGet(com_google_android_gms_internal_zzk_.getUrl());
             case 1:
                 httpPost = new HttpPost(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzl());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             case 2:
                 httpPost = new HttpPut(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzl());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             case 3:
@@ -84,7 +84,7 @@ public class zzw implements zzy {
                 return new HttpTrace(com_google_android_gms_internal_zzk_.getUrl());
             case 7:
                 httpPost = new zza(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzl());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             default:
@@ -96,14 +96,10 @@ public class zzw implements zzy {
         HttpUriRequest zzb = zzb(com_google_android_gms_internal_zzk_, map);
         zza(zzb, (Map) map);
         zza(zzb, com_google_android_gms_internal_zzk_.getHeaders());
-        zza(zzb);
         HttpParams params = zzb.getParams();
-        int zzr = com_google_android_gms_internal_zzk_.zzr();
+        int zzp = com_google_android_gms_internal_zzk_.zzp();
         HttpConnectionParams.setConnectionTimeout(params, DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
-        HttpConnectionParams.setSoTimeout(params, zzr);
-        return this.zzcd.execute(zzb);
-    }
-
-    protected void zza(HttpUriRequest httpUriRequest) throws IOException {
+        HttpConnectionParams.setSoTimeout(params, zzp);
+        return this.zzaC.execute(zzb);
     }
 }

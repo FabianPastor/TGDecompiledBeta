@@ -1,14 +1,14 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.maps.model.internal.zzb;
 
 public final class Circle {
-    private final zzb apG;
+    private final zzb zzboG;
 
     public Circle(zzb com_google_android_gms_maps_model_internal_zzb) {
-        this.apG = (zzb) zzaa.zzy(com_google_android_gms_maps_model_internal_zzb);
+        this.zzboG = (zzb) zzac.zzw(com_google_android_gms_maps_model_internal_zzb);
     }
 
     public boolean equals(Object obj) {
@@ -16,7 +16,7 @@ public final class Circle {
             return false;
         }
         try {
-            return this.apG.zzb(((Circle) obj).apG);
+            return this.zzboG.zzb(((Circle) obj).zzboG);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -24,7 +24,7 @@ public final class Circle {
 
     public LatLng getCenter() {
         try {
-            return this.apG.getCenter();
+            return this.zzboG.getCenter();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -32,7 +32,7 @@ public final class Circle {
 
     public int getFillColor() {
         try {
-            return this.apG.getFillColor();
+            return this.zzboG.getFillColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -40,7 +40,7 @@ public final class Circle {
 
     public String getId() {
         try {
-            return this.apG.getId();
+            return this.zzboG.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -48,7 +48,7 @@ public final class Circle {
 
     public double getRadius() {
         try {
-            return this.apG.getRadius();
+            return this.zzboG.getRadius();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -56,7 +56,7 @@ public final class Circle {
 
     public int getStrokeColor() {
         try {
-            return this.apG.getStrokeColor();
+            return this.zzboG.getStrokeColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -64,7 +64,7 @@ public final class Circle {
 
     public float getStrokeWidth() {
         try {
-            return this.apG.getStrokeWidth();
+            return this.zzboG.getStrokeWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -72,7 +72,7 @@ public final class Circle {
 
     public float getZIndex() {
         try {
-            return this.apG.getZIndex();
+            return this.zzboG.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -80,7 +80,7 @@ public final class Circle {
 
     public int hashCode() {
         try {
-            return this.apG.hashCodeRemote();
+            return this.zzboG.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -88,7 +88,7 @@ public final class Circle {
 
     public boolean isClickable() {
         try {
-            return this.apG.isClickable();
+            return this.zzboG.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -96,7 +96,7 @@ public final class Circle {
 
     public boolean isVisible() {
         try {
-            return this.apG.isVisible();
+            return this.zzboG.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -104,7 +104,7 @@ public final class Circle {
 
     public void remove() {
         try {
-            this.apG.remove();
+            this.zzboG.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -112,7 +112,7 @@ public final class Circle {
 
     public void setCenter(LatLng latLng) {
         try {
-            this.apG.setCenter(latLng);
+            this.zzboG.setCenter(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -120,7 +120,7 @@ public final class Circle {
 
     public void setClickable(boolean z) {
         try {
-            this.apG.setClickable(z);
+            this.zzboG.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -128,7 +128,7 @@ public final class Circle {
 
     public void setFillColor(int i) {
         try {
-            this.apG.setFillColor(i);
+            this.zzboG.setFillColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -136,7 +136,7 @@ public final class Circle {
 
     public void setRadius(double d) {
         try {
-            this.apG.setRadius(d);
+            this.zzboG.setRadius(d);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -144,7 +144,7 @@ public final class Circle {
 
     public void setStrokeColor(int i) {
         try {
-            this.apG.setStrokeColor(i);
+            this.zzboG.setStrokeColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -152,7 +152,7 @@ public final class Circle {
 
     public void setStrokeWidth(float f) {
         try {
-            this.apG.setStrokeWidth(f);
+            this.zzboG.setStrokeWidth(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -160,7 +160,7 @@ public final class Circle {
 
     public void setVisible(boolean z) {
         try {
-            this.apG.setVisible(z);
+            this.zzboG.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -168,7 +168,7 @@ public final class Circle {
 
     public void setZIndex(float f) {
         try {
-            this.apG.setZIndex(f);
+            this.zzboG.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

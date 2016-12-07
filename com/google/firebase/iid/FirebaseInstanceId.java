@@ -19,19 +19,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 public class FirebaseInstanceId {
-    private static Map<String, FirebaseInstanceId> aic = new ArrayMap();
-    private static zze bkA;
-    private final FirebaseApp bkB;
-    private final zzd bkC;
-    private final String bkD = D();
+    private static Map<String, FirebaseInstanceId> zzbha = new ArrayMap();
+    private static zze zzciQ;
+    private final FirebaseApp zzciR;
+    private final zzd zzciS;
+    private final String zzciT = zzaac();
 
     private FirebaseInstanceId(FirebaseApp firebaseApp, zzd com_google_firebase_iid_zzd) {
-        this.bkB = firebaseApp;
-        this.bkC = com_google_firebase_iid_zzd;
-        if (this.bkD == null) {
+        this.zzciR = firebaseApp;
+        this.zzciS = com_google_firebase_iid_zzd;
+        if (this.zzciT == null) {
             throw new IllegalStateException("IID failing to initialize, FirebaseApp is missing project ID");
         }
-        FirebaseInstanceIdService.zza(this.bkB.getApplicationContext(), this);
+        FirebaseInstanceIdService.zza(this.zzciR.getApplicationContext(), this);
     }
 
     public static FirebaseInstanceId getInstance() {
@@ -42,17 +42,28 @@ public class FirebaseInstanceId {
     public static synchronized FirebaseInstanceId getInstance(@NonNull FirebaseApp firebaseApp) {
         FirebaseInstanceId firebaseInstanceId;
         synchronized (FirebaseInstanceId.class) {
-            firebaseInstanceId = (FirebaseInstanceId) aic.get(firebaseApp.getOptions().getApplicationId());
+            firebaseInstanceId = (FirebaseInstanceId) zzbha.get(firebaseApp.getOptions().getApplicationId());
             if (firebaseInstanceId == null) {
                 zzd zzb = zzd.zzb(firebaseApp.getApplicationContext(), null);
-                if (bkA == null) {
-                    bkA = new zze(zzb.J());
+                if (zzciQ == null) {
+                    zzciQ = new zze(zzb.zzaag());
                 }
                 firebaseInstanceId = new FirebaseInstanceId(firebaseApp, zzb);
-                aic.put(firebaseApp.getOptions().getApplicationId(), firebaseInstanceId);
+                zzbha.put(firebaseApp.getOptions().getApplicationId(), firebaseInstanceId);
             }
         }
         return firebaseInstanceId;
+    }
+
+    static int zzK(Context context, String str) {
+        int i = 0;
+        try {
+            return context.getPackageManager().getPackageInfo(str, 0).versionCode;
+        } catch (NameNotFoundException e) {
+            String valueOf = String.valueOf(e);
+            Log.w("FirebaseInstanceId", new StringBuilder(String.valueOf(valueOf).length() + 23).append("Failed to find package ").append(valueOf).toString());
+            return i;
+        }
     }
 
     static String zza(KeyPair keyPair) {
@@ -66,25 +77,22 @@ public class FirebaseInstanceId {
         }
     }
 
-    static void zza(Context context, zzg com_google_firebase_iid_zzg) {
-        com_google_firebase_iid_zzg.zzbop();
+    static void zza(Context context, zzh com_google_firebase_iid_zzh) {
+        com_google_firebase_iid_zzh.zzGA();
         Intent intent = new Intent();
         intent.putExtra("CMD", "RST");
-        context.sendBroadcast(FirebaseInstanceIdInternalReceiver.zzf(context, intent));
+        zzg.zzaaj().zzf(context, intent);
     }
 
-    static int zzaj(Context context, String str) {
-        int i = 0;
-        try {
-            return context.getPackageManager().getPackageInfo(str, 0).versionCode;
-        } catch (NameNotFoundException e) {
-            String valueOf = String.valueOf(e);
-            Log.w("FirebaseInstanceId", new StringBuilder(String.valueOf(valueOf).length() + 23).append("Failed to find package ").append(valueOf).toString());
-            return i;
-        }
+    static String zzbT(Context context) {
+        return getInstance().zzciR.getOptions().getApplicationId();
     }
 
-    static String zzde(Context context) {
+    static int zzbU(Context context) {
+        return zzK(context, context.getPackageName());
+    }
+
+    static String zzbg(Context context) {
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (NameNotFoundException e) {
@@ -94,31 +102,54 @@ public class FirebaseInstanceId {
         }
     }
 
-    static void zzdf(Context context) {
+    static void zzbh(Context context) {
         Intent intent = new Intent();
-        intent.setPackage(context.getPackageName());
         intent.putExtra("CMD", "SYNC");
-        context.sendBroadcast(FirebaseInstanceIdInternalReceiver.zzf(context, intent));
-    }
-
-    static String zzep(Context context) {
-        return getInstance().bkB.getOptions().getApplicationId();
-    }
-
-    static int zzeq(Context context) {
-        return zzaj(context, context.getPackageName());
+        zzg.zzaaj().zzf(context, intent);
     }
 
     static String zzv(byte[] bArr) {
         return Base64.encodeToString(bArr, 11);
     }
 
-    String D() {
-        String gcmSenderId = this.bkB.getOptions().getGcmSenderId();
+    public void deleteInstanceId() throws IOException {
+        this.zzciS.zzb("*", "*", null);
+        this.zzciS.zzGu();
+    }
+
+    @WorkerThread
+    public void deleteToken(String str, String str2) throws IOException {
+        this.zzciS.zzb(str, str2, null);
+    }
+
+    public long getCreationTime() {
+        return this.zzciS.getCreationTime();
+    }
+
+    public String getId() {
+        return zza(this.zzciS.zzGt());
+    }
+
+    @Nullable
+    public String getToken() {
+        zza zzaad = zzaad();
+        if (zzaad == null || zzaad.zzjC(zzd.zzbhg)) {
+            FirebaseInstanceIdService.zzbV(this.zzciR.getApplicationContext());
+        }
+        return zzaad != null ? zzaad.zzbwP : null;
+    }
+
+    @WorkerThread
+    public String getToken(String str, String str2) throws IOException {
+        return this.zzciS.getToken(str, str2, null);
+    }
+
+    String zzaac() {
+        String gcmSenderId = this.zzciR.getOptions().getGcmSenderId();
         if (gcmSenderId != null) {
             return gcmSenderId;
         }
-        gcmSenderId = this.bkB.getOptions().getApplicationId();
+        gcmSenderId = this.zzciR.getOptions().getApplicationId();
         if (!gcmSenderId.startsWith("1:")) {
             return gcmSenderId;
         }
@@ -131,57 +162,26 @@ public class FirebaseInstanceId {
     }
 
     @Nullable
-    zza E() {
-        return this.bkC.J().zzq("", this.bkD, "*");
+    zza zzaad() {
+        return this.zzciS.zzaag().zzq("", this.zzciT, "*");
     }
 
-    String F() throws IOException {
-        return getToken(this.bkD, "*");
+    String zzaae() throws IOException {
+        return getToken(this.zzciT, "*");
     }
 
-    zze G() {
-        return bkA;
+    zze zzaaf() {
+        return zzciQ;
     }
 
-    public void deleteInstanceId() throws IOException {
-        this.bkC.zzb("*", "*", null);
-        this.bkC.zzboj();
+    public void zzju(String str) {
+        zzciQ.zzju(str);
+        FirebaseInstanceIdService.zzbV(this.zzciR.getApplicationContext());
     }
 
-    @WorkerThread
-    public void deleteToken(String str, String str2) throws IOException {
-        this.bkC.zzb(str, str2, null);
-    }
-
-    public long getCreationTime() {
-        return this.bkC.getCreationTime();
-    }
-
-    public String getId() {
-        return zza(this.bkC.zzboi());
-    }
-
-    @Nullable
-    public String getToken() {
-        zza E = E();
-        if (E == null || E.zzty(zzd.aii)) {
-            FirebaseInstanceIdService.zzer(this.bkB.getApplicationContext());
-        }
-        return E != null ? E.axH : null;
-    }
-
-    @WorkerThread
-    public String getToken(String str, String str2) throws IOException {
-        return this.bkC.getToken(str, str2, null);
-    }
-
-    public void zztq(String str) {
-        bkA.zztq(str);
-        FirebaseInstanceIdService.zzer(this.bkB.getApplicationContext());
-    }
-
-    void zztr(String str) throws IOException {
-        if (getToken() == null) {
+    void zzjv(String str) throws IOException {
+        zza zzaad = zzaad();
+        if (zzaad == null || zzaad.zzjC(zzd.zzbhg)) {
             throw new IOException("token not available");
         }
         Bundle bundle = new Bundle();
@@ -189,15 +189,16 @@ public class FirebaseInstanceId {
         String valueOf = String.valueOf("/topics/");
         String valueOf2 = String.valueOf(str);
         bundle.putString(str2, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
-        zzd com_google_firebase_iid_zzd = this.bkC;
-        valueOf = getToken();
-        String valueOf3 = String.valueOf("/topics/");
+        zzd com_google_firebase_iid_zzd = this.zzciS;
+        String str3 = zzaad.zzbwP;
+        valueOf = String.valueOf("/topics/");
         valueOf2 = String.valueOf(str);
-        com_google_firebase_iid_zzd.getToken(valueOf, valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3), bundle);
+        com_google_firebase_iid_zzd.getToken(str3, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf), bundle);
     }
 
-    void zzts(String str) throws IOException {
-        if (getToken() == null) {
+    void zzjw(String str) throws IOException {
+        zza zzaad = zzaad();
+        if (zzaad == null || zzaad.zzjC(zzd.zzbhg)) {
             throw new IOException("token not available");
         }
         Bundle bundle = new Bundle();
@@ -205,10 +206,10 @@ public class FirebaseInstanceId {
         String valueOf = String.valueOf("/topics/");
         String valueOf2 = String.valueOf(str);
         bundle.putString(str2, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
-        zzd com_google_firebase_iid_zzd = this.bkC;
-        valueOf = getToken();
-        String valueOf3 = String.valueOf("/topics/");
+        zzd com_google_firebase_iid_zzd = this.zzciS;
+        String str3 = zzaad.zzbwP;
+        valueOf = String.valueOf("/topics/");
         valueOf2 = String.valueOf(str);
-        com_google_firebase_iid_zzd.zzb(valueOf, valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3), bundle);
+        com_google_firebase_iid_zzd.zzb(str3, valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf), bundle);
     }
 }

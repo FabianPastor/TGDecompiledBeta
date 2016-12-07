@@ -16,33 +16,28 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 public class zzd {
-    SharedPreferences aiG;
-    Context zzahs;
+    SharedPreferences zzbhD;
+    Context zzqr;
 
     public zzd(Context context) {
         this(context, "com.google.android.gms.appid");
     }
 
     public zzd(Context context, String str) {
-        this.zzahs = context;
-        this.aiG = context.getSharedPreferences(str, 4);
+        this.zzqr = context;
+        this.zzbhD = context.getSharedPreferences(str, 4);
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("-no-backup");
-        zzkq(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
+        zzeK(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
     }
 
-    private String zzg(String str, String str2, String str3) {
-        String valueOf = String.valueOf("|T|");
-        return new StringBuilder((((String.valueOf(str).length() + 1) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()) + String.valueOf(str3).length()).append(str).append(valueOf).append(str2).append("|").append(str3).toString();
-    }
-
-    private void zzkq(String str) {
-        File file = new File(zzw.getNoBackupFilesDir(this.zzahs), str);
+    private void zzeK(String str) {
+        File file = new File(zzw.getNoBackupFilesDir(this.zzqr), str);
         if (!file.exists()) {
             try {
                 if (file.createNewFile() && !isEmpty()) {
                     Log.i("InstanceID/Store", "App restored, clearing state");
-                    InstanceIDListenerService.zza(this.zzahs, this);
+                    InstanceIDListenerService.zza(this.zzqr, this);
                 }
             } catch (IOException e) {
                 if (Log.isLoggable("InstanceID/Store", 3)) {
@@ -55,20 +50,29 @@ public class zzd {
         }
     }
 
+    private String zzg(String str, String str2, String str3) {
+        String valueOf = String.valueOf("|T|");
+        return new StringBuilder((((String.valueOf(str).length() + 1) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()) + String.valueOf(str3).length()).append(str).append(valueOf).append(str2).append("|").append(str3).toString();
+    }
+
     synchronized String get(String str) {
-        return this.aiG.getString(str, null);
+        return this.zzbhD.getString(str, null);
     }
 
     synchronized String get(String str, String str2) {
         SharedPreferences sharedPreferences;
         String valueOf;
-        sharedPreferences = this.aiG;
+        sharedPreferences = this.zzbhD;
         valueOf = String.valueOf("|S|");
         return sharedPreferences.getString(new StringBuilder(((String.valueOf(str).length() + 0) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()).append(str).append(valueOf).append(str2).toString(), null);
     }
 
     public boolean isEmpty() {
-        return this.aiG.getAll().isEmpty();
+        return this.zzbhD.getAll().isEmpty();
+    }
+
+    public synchronized void zzGA() {
+        this.zzbhD.edit().clear().commit();
     }
 
     synchronized void zza(Editor editor, String str, String str2, String str3) {
@@ -78,42 +82,27 @@ public class zzd {
 
     public synchronized void zza(String str, String str2, String str3, String str4, String str5) {
         String zzg = zzg(str, str2, str3);
-        Editor edit = this.aiG.edit();
+        Editor edit = this.zzbhD.edit();
         edit.putString(zzg, str4);
         edit.putString("appVersion", str5);
         edit.putString("lastToken", Long.toString(System.currentTimeMillis() / 1000));
         edit.commit();
     }
 
-    public synchronized void zzbop() {
-        this.aiG.edit().clear().commit();
-    }
-
     synchronized KeyPair zze(String str, long j) {
-        KeyPair zzboh;
-        zzboh = zza.zzboh();
-        Editor edit = this.aiG.edit();
-        zza(edit, str, "|P|", InstanceID.zzv(zzboh.getPublic().getEncoded()));
-        zza(edit, str, "|K|", InstanceID.zzv(zzboh.getPrivate().getEncoded()));
+        KeyPair zzGs;
+        zzGs = zza.zzGs();
+        Editor edit = this.zzbhD.edit();
+        zza(edit, str, "|P|", InstanceID.zzv(zzGs.getPublic().getEncoded()));
+        zza(edit, str, "|K|", InstanceID.zzv(zzGs.getPrivate().getEncoded()));
         zza(edit, str, "cre", Long.toString(j));
         edit.commit();
-        return zzboh;
+        return zzGs;
     }
 
-    public synchronized String zzh(String str, String str2, String str3) {
-        return this.aiG.getString(zzg(str, str2, str3), null);
-    }
-
-    public synchronized void zzi(String str, String str2, String str3) {
-        String zzg = zzg(str, str2, str3);
-        Editor edit = this.aiG.edit();
-        edit.remove(zzg);
-        edit.commit();
-    }
-
-    public synchronized void zzkr(String str) {
-        Editor edit = this.aiG.edit();
-        for (String str2 : this.aiG.getAll().keySet()) {
+    public synchronized void zzeL(String str) {
+        Editor edit = this.zzbhD.edit();
+        for (String str2 : this.zzbhD.getAll().keySet()) {
             if (str2.startsWith(str)) {
                 edit.remove(str2);
             }
@@ -121,19 +110,19 @@ public class zzd {
         edit.commit();
     }
 
-    public KeyPair zzks(String str) {
-        return zzkv(str);
+    public KeyPair zzeM(String str) {
+        return zzeP(str);
     }
 
-    void zzkt(String str) {
-        zzkr(String.valueOf(str).concat("|"));
+    void zzeN(String str) {
+        zzeL(String.valueOf(str).concat("|"));
     }
 
-    public void zzku(String str) {
-        zzkr(String.valueOf(str).concat("|T|"));
+    public void zzeO(String str) {
+        zzeL(String.valueOf(str).concat("|T|"));
     }
 
-    KeyPair zzkv(String str) {
+    KeyPair zzeP(String str) {
         Object e;
         String str2 = get(str, "|P|");
         String str3 = get(str, "|K|");
@@ -149,14 +138,25 @@ public class zzd {
             e = e2;
             str2 = String.valueOf(e);
             Log.w("InstanceID/Store", new StringBuilder(String.valueOf(str2).length() + 19).append("Invalid key stored ").append(str2).toString());
-            InstanceIDListenerService.zza(this.zzahs, this);
+            InstanceIDListenerService.zza(this.zzqr, this);
             return null;
         } catch (NoSuchAlgorithmException e3) {
             e = e3;
             str2 = String.valueOf(e);
             Log.w("InstanceID/Store", new StringBuilder(String.valueOf(str2).length() + 19).append("Invalid key stored ").append(str2).toString());
-            InstanceIDListenerService.zza(this.zzahs, this);
+            InstanceIDListenerService.zza(this.zzqr, this);
             return null;
         }
+    }
+
+    public synchronized String zzh(String str, String str2, String str3) {
+        return this.zzbhD.getString(zzg(str, str2, str3), null);
+    }
+
+    public synchronized void zzi(String str, String str2, String str3) {
+        String zzg = zzg(str, str2, str3);
+        Editor edit = this.zzbhD.edit();
+        edit.remove(zzg);
+        edit.commit();
     }
 }

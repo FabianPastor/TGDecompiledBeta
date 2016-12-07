@@ -21,18 +21,18 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class zzt implements zzf {
     protected static final boolean DEBUG = zzs.DEBUG;
-    private static int zzbn = 3000;
-    private static int zzbo = 4096;
-    protected final zzy zzbp;
-    protected final zzu zzbq;
+    private static int zzam = 3000;
+    private static int zzan = 4096;
+    protected final zzy zzao;
+    protected final zzu zzap;
 
     public zzt(zzy com_google_android_gms_internal_zzy) {
-        this(com_google_android_gms_internal_zzy, new zzu(zzbo));
+        this(com_google_android_gms_internal_zzy, new zzu(zzan));
     }
 
     public zzt(zzy com_google_android_gms_internal_zzy, zzu com_google_android_gms_internal_zzu) {
-        this.zzbp = com_google_android_gms_internal_zzy;
-        this.zzbq = com_google_android_gms_internal_zzu;
+        this.zzao = com_google_android_gms_internal_zzy;
+        this.zzap = com_google_android_gms_internal_zzu;
     }
 
     protected static Map<String, String> zza(Header[] headerArr) {
@@ -44,26 +44,26 @@ public class zzt implements zzf {
     }
 
     private void zza(long j, zzk<?> com_google_android_gms_internal_zzk_, byte[] bArr, StatusLine statusLine) {
-        if (DEBUG || j > ((long) zzbn)) {
+        if (DEBUG || j > ((long) zzam)) {
             String str = "HTTP response for request=<%s> [lifetime=%d], [size=%s], [rc=%d], [retryCount=%s]";
             Object[] objArr = new Object[5];
             objArr[0] = com_google_android_gms_internal_zzk_;
             objArr[1] = Long.valueOf(j);
             objArr[2] = bArr != null ? Integer.valueOf(bArr.length) : "null";
             objArr[3] = Integer.valueOf(statusLine.getStatusCode());
-            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzk_.zzs().zzd());
+            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzk_.zzq().zzd());
             zzs.zzb(str, objArr);
         }
     }
 
     private static void zza(String str, zzk<?> com_google_android_gms_internal_zzk_, zzr com_google_android_gms_internal_zzr) throws zzr {
-        zzo zzs = com_google_android_gms_internal_zzk_.zzs();
-        int zzr = com_google_android_gms_internal_zzk_.zzr();
+        zzo zzq = com_google_android_gms_internal_zzk_.zzq();
+        int zzp = com_google_android_gms_internal_zzk_.zzp();
         try {
-            zzs.zza(com_google_android_gms_internal_zzr);
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzr)}));
+            zzq.zza(com_google_android_gms_internal_zzr);
+            com_google_android_gms_internal_zzk_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
         } catch (zzr e) {
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzr)}));
+            com_google_android_gms_internal_zzk_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
             throw e;
         }
     }
@@ -80,14 +80,14 @@ public class zzt implements zzf {
     }
 
     private byte[] zza(HttpEntity httpEntity) throws IOException, zzp {
-        zzaa com_google_android_gms_internal_zzaa = new zzaa(this.zzbq, (int) httpEntity.getContentLength());
+        zzaa com_google_android_gms_internal_zzaa = new zzaa(this.zzap, (int) httpEntity.getContentLength());
         byte[] bArr = null;
         try {
             InputStream content = httpEntity.getContent();
             if (content == null) {
                 throw new zzp();
             }
-            bArr = this.zzbq.zzb(1024);
+            bArr = this.zzap.zzb(1024);
             while (true) {
                 int read = content.read(bArr);
                 if (read == -1) {
@@ -103,7 +103,7 @@ public class zzt implements zzf {
             } catch (IOException e) {
                 zzs.zza("Error occured when calling consumingContent", new Object[0]);
             }
-            this.zzbq.zza(bArr);
+            this.zzap.zza(bArr);
             com_google_android_gms_internal_zzaa.close();
         }
     }
@@ -111,18 +111,18 @@ public class zzt implements zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
-        HttpResponse zza;
-        int statusCode;
-        byte[] zza2;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
+            HttpResponse zza;
+            int statusCode;
+            byte[] zza2;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzk_.zzh());
-                zza = this.zzbp.zza(com_google_android_gms_internal_zzk_, hashMap);
+                zza = this.zzao.zza(com_google_android_gms_internal_zzk_, hashMap);
                 StatusLine statusLine = zza.getStatusLine();
                 statusCode = statusLine.getStatusCode();
                 emptyMap = zza(zza.getAllHeaders());

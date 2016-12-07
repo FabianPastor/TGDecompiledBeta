@@ -16,7 +16,7 @@ public class zze {
         return valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf);
     }
 
-    static String zzih(String str) {
+    static String zzdB(String str) {
         return "com.google.android.gms".equals(str) ? null : str;
     }
 

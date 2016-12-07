@@ -5,26 +5,26 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.internal.zzsz;
+import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.internal.zzacx;
 
 public class zzf {
-    private static zzf xh;
+    private static zzf zzaxr;
     private final Context mContext;
 
     private zzf(Context context) {
         this.mContext = context.getApplicationContext();
     }
 
-    public static zzf zzbv(Context context) {
-        zzaa.zzy(context);
+    public static zzf zzav(Context context) {
+        zzac.zzw(context);
         synchronized (zzf.class) {
-            if (xh == null) {
-                zzd.zzbo(context);
-                xh = new zzf(context);
+            if (zzaxr == null) {
+                zzd.zzao(context);
+                zzaxr = new zzf(context);
             }
         }
-        return xh;
+        return zzaxr;
     }
 
     zza zza(PackageInfo packageInfo, zza... com_google_android_gms_common_zzd_zzaArr) {
@@ -50,9 +50,9 @@ public class zzf {
         if (!(packageInfo == null || packageInfo.signatures == null)) {
             zza zza;
             if (z) {
-                zza = zza(packageInfo, zzd.xa);
+                zza = zza(packageInfo, zzd.zzaxk);
             } else {
-                zza = zza(packageInfo, zzd.xa[0]);
+                zza = zza(packageInfo, zzd.zzaxk[0]);
             }
             if (zza != null) {
                 return true;
@@ -62,7 +62,7 @@ public class zzf {
     }
 
     public boolean zza(PackageManager packageManager, int i) {
-        String[] packagesForUid = zzsz.zzco(this.mContext).getPackagesForUid(i);
+        String[] packagesForUid = zzacx.zzaQ(this.mContext).getPackagesForUid(i);
         if (packagesForUid == null || packagesForUid.length == 0) {
             return false;
         }
@@ -78,7 +78,7 @@ public class zzf {
         if (packageInfo == null) {
             return false;
         }
-        if (zze.zzbr(this.mContext)) {
+        if (zze.zzar(this.mContext)) {
             return zzb(packageInfo, true);
         }
         boolean zzb = zzb(packageInfo, false);
@@ -90,17 +90,13 @@ public class zzf {
     }
 
     boolean zzb(PackageInfo packageInfo, boolean z) {
-        boolean z2 = false;
         if (packageInfo.signatures.length != 1) {
             Log.w("GoogleSignatureVerifier", "Package has more than one signature.");
-        } else {
-            zza com_google_android_gms_common_zzd_zzb = new zzb(packageInfo.signatures[0].toByteArray());
-            String str = packageInfo.packageName;
-            z2 = z ? zzd.zzb(str, com_google_android_gms_common_zzd_zzb) : zzd.zza(str, com_google_android_gms_common_zzd_zzb);
-            if (!z2) {
-            }
+            return false;
         }
-        return z2;
+        zza com_google_android_gms_common_zzd_zzb = new zzb(packageInfo.signatures[0].toByteArray());
+        String str = packageInfo.packageName;
+        return z ? zzd.zzb(str, com_google_android_gms_common_zzd_zzb) : zzd.zza(str, com_google_android_gms_common_zzd_zzb);
     }
 
     public boolean zzb(PackageManager packageManager, PackageInfo packageInfo) {
@@ -113,7 +109,7 @@ public class zzf {
         if (!zza(packageInfo, true)) {
             return false;
         }
-        if (zze.zzbr(this.mContext)) {
+        if (zze.zzar(this.mContext)) {
             return true;
         }
         Log.w("GoogleSignatureVerifier", "Test-keys aren't accepted on this build.");
@@ -122,7 +118,7 @@ public class zzf {
 
     public boolean zzb(PackageManager packageManager, String str) {
         try {
-            return zza(packageManager, zzsz.zzco(this.mContext).getPackageInfo(str, 64));
+            return zza(packageManager, zzacx.zzaQ(this.mContext).getPackageInfo(str, 64));
         } catch (NameNotFoundException e) {
             return false;
         }

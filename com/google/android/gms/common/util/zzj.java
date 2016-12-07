@@ -10,22 +10,17 @@ import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
 public final class zzj {
-    private static IntentFilter Gv = new IntentFilter("android.intent.action.BATTERY_CHANGED");
-    private static long Gw;
-    private static float Gx = Float.NaN;
+    private static IntentFilter zzaGQ = new IntentFilter("android.intent.action.BATTERY_CHANGED");
+    private static long zzaGR;
+    private static float zzaGS = Float.NaN;
 
     @TargetApi(20)
-    public static boolean zzb(PowerManager powerManager) {
-        return zzs.zzayv() ? powerManager.isInteractive() : powerManager.isScreenOn();
-    }
-
-    @TargetApi(20)
-    public static int zzck(Context context) {
+    public static int zzaM(Context context) {
         int i = 1;
         if (context == null || context.getApplicationContext() == null) {
             return -1;
         }
-        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, Gv);
+        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaGQ);
         int i2 = ((registerReceiver == null ? 0 : registerReceiver.getIntExtra("plugged", 0)) & 7) != 0 ? 1 : 0;
         PowerManager powerManager = (PowerManager) context.getSystemService("power");
         if (powerManager == null) {
@@ -38,20 +33,25 @@ public final class zzj {
         return i3 | i;
     }
 
-    public static synchronized float zzcl(Context context) {
+    public static synchronized float zzaN(Context context) {
         float f;
         synchronized (zzj.class) {
-            if (SystemClock.elapsedRealtime() - Gw >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS || Float.isNaN(Gx)) {
-                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, Gv);
+            if (SystemClock.elapsedRealtime() - zzaGR >= ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS || Float.isNaN(zzaGS)) {
+                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, zzaGQ);
                 if (registerReceiver != null) {
-                    Gx = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
+                    zzaGS = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
                 }
-                Gw = SystemClock.elapsedRealtime();
-                f = Gx;
+                zzaGR = SystemClock.elapsedRealtime();
+                f = zzaGS;
             } else {
-                f = Gx;
+                f = zzaGS;
             }
         }
         return f;
+    }
+
+    @TargetApi(20)
+    public static boolean zzb(PowerManager powerManager) {
+        return zzs.zzyG() ? powerManager.isInteractive() : powerManager.isScreenOn();
     }
 }

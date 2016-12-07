@@ -9,25 +9,25 @@ import com.google.android.gms.common.internal.ReflectedParcelable;
 public class PendingCallback implements Parcelable, ReflectedParcelable {
     public static final Creator<PendingCallback> CREATOR = new Creator<PendingCallback>() {
         public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzna(parcel);
+            return zzgi(parcel);
         }
 
         public /* synthetic */ Object[] newArray(int i) {
-            return zztp(i);
+            return zzjv(i);
         }
 
-        public PendingCallback zzna(Parcel parcel) {
+        public PendingCallback zzgi(Parcel parcel) {
             return new PendingCallback(parcel);
         }
 
-        public PendingCallback[] zztp(int i) {
+        public PendingCallback[] zzjv(int i) {
             return new PendingCallback[i];
         }
     };
-    final IBinder DI;
+    final IBinder zzaEa;
 
     public PendingCallback(Parcel parcel) {
-        this.DI = parcel.readStrongBinder();
+        this.zzaEa = parcel.readStrongBinder();
     }
 
     public int describeContents() {
@@ -35,10 +35,10 @@ public class PendingCallback implements Parcelable, ReflectedParcelable {
     }
 
     public IBinder getIBinder() {
-        return this.DI;
+        return this.zzaEa;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStrongBinder(this.DI);
+        parcel.writeStrongBinder(this.zzaEa);
     }
 }

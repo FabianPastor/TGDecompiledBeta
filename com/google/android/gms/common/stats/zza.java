@@ -12,63 +12,63 @@ import java.util.Collections;
 import java.util.List;
 
 public class zza {
-    private static final Object El = new Object();
-    private static Integer FF;
-    private static zza Fz;
-    private final List<String> FA;
-    private final List<String> FB;
-    private final List<String> FC;
-    private final List<String> FD;
-    private zzd FE;
-    private zzd FG;
+    private static final Object zzaED = new Object();
+    private static zza zzaFT;
+    private static Integer zzaFZ;
+    private final List<String> zzaFU;
+    private final List<String> zzaFV;
+    private final List<String> zzaFW;
+    private final List<String> zzaFX;
+    private zzd zzaFY;
+    private zzd zzaGa;
 
     private zza() {
-        if (zzaxs()) {
-            this.FA = Collections.EMPTY_LIST;
-            this.FB = Collections.EMPTY_LIST;
-            this.FC = Collections.EMPTY_LIST;
-            this.FD = Collections.EMPTY_LIST;
+        if (zzyd()) {
+            this.zzaFU = Collections.EMPTY_LIST;
+            this.zzaFV = Collections.EMPTY_LIST;
+            this.zzaFW = Collections.EMPTY_LIST;
+            this.zzaFX = Collections.EMPTY_LIST;
             return;
         }
-        String str = (String) com.google.android.gms.common.stats.zzb.zza.FK.get();
-        this.FA = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
-        str = (String) com.google.android.gms.common.stats.zzb.zza.FL.get();
-        this.FB = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
-        str = (String) com.google.android.gms.common.stats.zzb.zza.FM.get();
-        this.FC = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
-        str = (String) com.google.android.gms.common.stats.zzb.zza.FN.get();
-        this.FD = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
-        this.FE = new zzd(1024, ((Long) com.google.android.gms.common.stats.zzb.zza.FO.get()).longValue());
-        this.FG = new zzd(1024, ((Long) com.google.android.gms.common.stats.zzb.zza.FO.get()).longValue());
+        String str = (String) com.google.android.gms.common.stats.zzb.zza.zzaGe.get();
+        this.zzaFU = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
+        str = (String) com.google.android.gms.common.stats.zzb.zza.zzaGf.get();
+        this.zzaFV = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
+        str = (String) com.google.android.gms.common.stats.zzb.zza.zzaGg.get();
+        this.zzaFW = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
+        str = (String) com.google.android.gms.common.stats.zzb.zza.zzaGh.get();
+        this.zzaFX = str == null ? Collections.EMPTY_LIST : Arrays.asList(str.split(","));
+        this.zzaFY = new zzd(1024, ((Long) com.google.android.gms.common.stats.zzb.zza.zzaGi.get()).longValue());
+        this.zzaGa = new zzd(1024, ((Long) com.google.android.gms.common.stats.zzb.zza.zzaGi.get()).longValue());
     }
 
     private static int getLogLevel() {
-        if (FF == null) {
+        if (zzaFZ == null) {
             try {
-                FF = Integer.valueOf(zzd.zzayi() ? ((Integer) com.google.android.gms.common.stats.zzb.zza.FJ.get()).intValue() : zzc.LOG_LEVEL_OFF);
+                zzaFZ = Integer.valueOf(zzc.LOG_LEVEL_OFF);
             } catch (SecurityException e) {
-                FF = Integer.valueOf(zzc.LOG_LEVEL_OFF);
+                zzaFZ = Integer.valueOf(zzc.LOG_LEVEL_OFF);
             }
         }
-        return FF.intValue();
-    }
-
-    public static zza zzaxr() {
-        synchronized (El) {
-            if (Fz == null) {
-                Fz = new zza();
-            }
-        }
-        return Fz;
-    }
-
-    private boolean zzaxs() {
-        return getLogLevel() == zzc.LOG_LEVEL_OFF;
+        return zzaFZ.intValue();
     }
 
     private boolean zzc(Context context, Intent intent) {
         ComponentName component = intent.getComponent();
         return component == null ? false : zzd.zzx(context, component.getPackageName());
+    }
+
+    public static zza zzyc() {
+        synchronized (zzaED) {
+            if (zzaFT == null) {
+                zzaFT = new zza();
+            }
+        }
+        return zzaFT;
+    }
+
+    private boolean zzyd() {
+        return getLogLevel() == zzc.LOG_LEVEL_OFF;
     }
 
     @SuppressLint({"UntrackedBindService"})

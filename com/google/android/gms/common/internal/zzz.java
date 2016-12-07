@@ -1,51 +1,42 @@
 package com.google.android.gms.common.internal;
 
-import android.support.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import com.google.android.gms.internal.zzacx;
 
-public final class zzz {
+public class zzz {
+    private static boolean zzPT;
+    private static String zzaEW;
+    private static int zzaEX;
+    private static Object zztU = new Object();
 
-    public static final class zza {
-        private final List<String> EG;
-        private final Object zzcxk;
+    public static String zzaD(Context context) {
+        zzaF(context);
+        return zzaEW;
+    }
 
-        private zza(Object obj) {
-            this.zzcxk = zzaa.zzy(obj);
-            this.EG = new ArrayList();
-        }
+    public static int zzaE(Context context) {
+        zzaF(context);
+        return zzaEX;
+    }
 
-        public String toString() {
-            StringBuilder append = new StringBuilder(100).append(this.zzcxk.getClass().getSimpleName()).append('{');
-            int size = this.EG.size();
-            for (int i = 0; i < size; i++) {
-                append.append((String) this.EG.get(i));
-                if (i < size - 1) {
-                    append.append(", ");
-                }
+    private static void zzaF(Context context) {
+        synchronized (zztU) {
+            if (zzPT) {
+                return;
             }
-            return append.append('}').toString();
+            zzPT = true;
+            try {
+                Bundle bundle = zzacx.zzaQ(context).getApplicationInfo(context.getPackageName(), 128).metaData;
+                if (bundle == null) {
+                    return;
+                }
+                zzaEW = bundle.getString("com.google.app.id");
+                zzaEX = bundle.getInt("com.google.android.gms.version");
+            } catch (Throwable e) {
+                Log.wtf("MetadataValueReader", "This should never happen.", e);
+            }
         }
-
-        public zza zzg(String str, Object obj) {
-            List list = this.EG;
-            String str2 = (String) zzaa.zzy(str);
-            String valueOf = String.valueOf(String.valueOf(obj));
-            list.add(new StringBuilder((String.valueOf(str2).length() + 1) + String.valueOf(valueOf).length()).append(str2).append("=").append(valueOf).toString());
-            return this;
-        }
-    }
-
-    public static boolean equal(@Nullable Object obj, @Nullable Object obj2) {
-        return obj == obj2 || (obj != null && obj.equals(obj2));
-    }
-
-    public static int hashCode(Object... objArr) {
-        return Arrays.hashCode(objArr);
-    }
-
-    public static zza zzx(Object obj) {
-        return new zza(obj);
     }
 }

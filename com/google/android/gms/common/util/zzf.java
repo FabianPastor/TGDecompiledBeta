@@ -47,25 +47,13 @@ public final class zzf {
         }
     }
 
-    public static <T> Set<T> zzaa(T t) {
-        return Collections.singleton(t);
-    }
-
-    public static <T> Set<T> zzayj() {
-        return Collections.emptySet();
-    }
-
-    public static <K, V> Map<K, V> zzayk() {
-        return Collections.emptyMap();
-    }
-
     public static <K, V> Map<K, V> zzb(K[] kArr, V[] vArr) {
         int i = 0;
         zza(kArr, vArr);
         int length = kArr.length;
         switch (length) {
             case 0:
-                return zzayk();
+                return zzyu();
             case 1:
                 return zze(kArr[0], vArr[0]);
             default:
@@ -88,9 +76,9 @@ public final class zzf {
     public static <T> Set<T> zzc(T... tArr) {
         switch (tArr.length) {
             case 0:
-                return zzayj();
+                return zzyt();
             case 1:
-                return zzaa(tArr[0]);
+                return zzy(tArr[0]);
             case 2:
                 return zzd(tArr[0], tArr[1]);
             case 3:
@@ -113,7 +101,19 @@ public final class zzf {
         return Collections.singletonMap(k, v);
     }
 
-    public static <T> List<T> zzz(T t) {
+    public static <T> List<T> zzx(T t) {
         return Collections.singletonList(t);
+    }
+
+    public static <T> Set<T> zzy(T t) {
+        return Collections.singleton(t);
+    }
+
+    public static <T> Set<T> zzyt() {
+        return Collections.emptySet();
+    }
+
+    public static <K, V> Map<K, V> zzyu() {
+        return Collections.emptyMap();
     }
 }

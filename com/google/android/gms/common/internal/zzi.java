@@ -1,90 +1,93 @@
 package com.google.android.gms.common.internal;
 
-import android.accounts.Account;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.safeparcel.zzb;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import com.google.android.gms.internal.zzaax;
 
-public class zzi implements Creator<GetServiceRequest> {
-    static void zza(GetServiceRequest getServiceRequest, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, getServiceRequest.version);
-        zzb.zzc(parcel, 2, getServiceRequest.DU);
-        zzb.zzc(parcel, 3, getServiceRequest.DV);
-        zzb.zza(parcel, 4, getServiceRequest.DW, false);
-        zzb.zza(parcel, 5, getServiceRequest.DX, false);
-        zzb.zza(parcel, 6, getServiceRequest.DY, i, false);
-        zzb.zza(parcel, 7, getServiceRequest.DZ, false);
-        zzb.zza(parcel, 8, getServiceRequest.Ea, i, false);
-        zzb.zza(parcel, 9, getServiceRequest.Eb);
-        zzb.zzaj(parcel, zzcs);
-    }
+public abstract class zzi implements OnClickListener {
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcl(parcel);
-    }
+    class AnonymousClass1 extends zzi {
+        final /* synthetic */ Activity val$activity;
+        final /* synthetic */ Intent val$intent;
+        final /* synthetic */ int val$requestCode;
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzgm(i);
-    }
+        AnonymousClass1(Intent intent, Activity activity, int i) {
+            this.val$intent = intent;
+            this.val$activity = activity;
+            this.val$requestCode = i;
+        }
 
-    public GetServiceRequest zzcl(Parcel parcel) {
-        int i = 0;
-        Account account = null;
-        int zzcr = zza.zzcr(parcel);
-        long j = 0;
-        Bundle bundle = null;
-        Scope[] scopeArr = null;
-        IBinder iBinder = null;
-        String str = null;
-        int i2 = 0;
-        int i3 = 0;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = zza.zzcq(parcel);
-            switch (zza.zzgu(zzcq)) {
-                case 1:
-                    i3 = zza.zzg(parcel, zzcq);
-                    break;
-                case 2:
-                    i2 = zza.zzg(parcel, zzcq);
-                    break;
-                case 3:
-                    i = zza.zzg(parcel, zzcq);
-                    break;
-                case 4:
-                    str = zza.zzq(parcel, zzcq);
-                    break;
-                case 5:
-                    iBinder = zza.zzr(parcel, zzcq);
-                    break;
-                case 6:
-                    scopeArr = (Scope[]) zza.zzb(parcel, zzcq, Scope.CREATOR);
-                    break;
-                case 7:
-                    bundle = zza.zzs(parcel, zzcq);
-                    break;
-                case 8:
-                    account = (Account) zza.zza(parcel, zzcq, Account.CREATOR);
-                    break;
-                case 9:
-                    j = zza.zzi(parcel, zzcq);
-                    break;
-                default:
-                    zza.zzb(parcel, zzcq);
-                    break;
+        public void zzxm() {
+            if (this.val$intent != null) {
+                this.val$activity.startActivityForResult(this.val$intent, this.val$requestCode);
             }
         }
-        if (parcel.dataPosition() == zzcr) {
-            return new GetServiceRequest(i3, i2, i, str, iBinder, scopeArr, bundle, account, j);
-        }
-        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public GetServiceRequest[] zzgm(int i) {
-        return new GetServiceRequest[i];
+    class AnonymousClass2 extends zzi {
+        final /* synthetic */ Fragment val$fragment;
+        final /* synthetic */ Intent val$intent;
+        final /* synthetic */ int val$requestCode;
+
+        AnonymousClass2(Intent intent, Fragment fragment, int i) {
+            this.val$intent = intent;
+            this.val$fragment = fragment;
+            this.val$requestCode = i;
+        }
+
+        public void zzxm() {
+            if (this.val$intent != null) {
+                this.val$fragment.startActivityForResult(this.val$intent, this.val$requestCode);
+            }
+        }
     }
+
+    class AnonymousClass3 extends zzi {
+        final /* synthetic */ Intent val$intent;
+        final /* synthetic */ int val$requestCode;
+        final /* synthetic */ zzaax zzaEh;
+
+        AnonymousClass3(Intent intent, zzaax com_google_android_gms_internal_zzaax, int i) {
+            this.val$intent = intent;
+            this.zzaEh = com_google_android_gms_internal_zzaax;
+            this.val$requestCode = i;
+        }
+
+        @TargetApi(11)
+        public void zzxm() {
+            if (this.val$intent != null) {
+                this.zzaEh.startActivityForResult(this.val$intent, this.val$requestCode);
+            }
+        }
+    }
+
+    public static zzi zza(Activity activity, Intent intent, int i) {
+        return new AnonymousClass1(intent, activity, i);
+    }
+
+    public static zzi zza(@NonNull Fragment fragment, Intent intent, int i) {
+        return new AnonymousClass2(intent, fragment, i);
+    }
+
+    public static zzi zza(@NonNull zzaax com_google_android_gms_internal_zzaax, Intent intent, int i) {
+        return new AnonymousClass3(intent, com_google_android_gms_internal_zzaax, i);
+    }
+
+    public void onClick(DialogInterface dialogInterface, int i) {
+        try {
+            zzxm();
+        } catch (Throwable e) {
+            Log.e("DialogRedirect", "Failed to start resolution intent", e);
+        } finally {
+            dialogInterface.dismiss();
+        }
+    }
+
+    protected abstract void zzxm();
 }

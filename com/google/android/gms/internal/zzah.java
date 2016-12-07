@@ -261,13 +261,13 @@ public enum zzah {
     WAIT_FOR_TAGS_TIMEOUT("wait_for_tags_timeout"),
     WIDGET_IDS("widget_ids");
     
-    private final String zzvp;
+    private final String zzko;
 
     private zzah(String str) {
-        this.zzvp = str;
+        this.zzko = str;
     }
 
     public String toString() {
-        return this.zzvp;
+        return this.zzko;
     }
 }

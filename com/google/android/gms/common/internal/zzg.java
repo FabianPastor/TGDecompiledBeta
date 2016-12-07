@@ -1,177 +1,124 @@
 package com.google.android.gms.common.internal;
 
+import android.accounts.Account;
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.SimpleArrayMap;
-import android.text.TextUtils;
-import android.util.Log;
-import com.google.android.gms.R;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.util.zzi;
-import com.google.android.gms.internal.zzsz;
+import android.view.View;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.internal.zzaxo;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class zzg {
-    private static final SimpleArrayMap<String, String> DO = new SimpleArrayMap();
+    private final Set<Scope> zzaEb;
+    private final Map<Api<?>, zza> zzaEc;
+    private final zzaxo zzaEd;
+    private Integer zzaEe;
+    private final Account zzagg;
+    private final String zzahp;
+    private final Set<Scope> zzaxN;
+    private final int zzaxP;
+    private final View zzaxQ;
+    private final String zzaxR;
 
-    public static String zzcb(Context context) {
-        String str = context.getApplicationInfo().name;
-        if (TextUtils.isEmpty(str)) {
-            str = context.getPackageName();
-            try {
-                str = zzsz.zzco(context).zzik(context.getPackageName()).toString();
-            } catch (NameNotFoundException e) {
-            }
-        }
-        return str;
-    }
+    public static final class zza {
+        public final boolean zzaEf;
+        public final Set<Scope> zzajm;
 
-    @Nullable
-    public static String zzg(Context context, int i) {
-        Resources resources = context.getResources();
-        switch (i) {
-            case 1:
-                return resources.getString(R.string.common_google_play_services_install_title);
-            case 2:
-                return resources.getString(R.string.common_google_play_services_update_title);
-            case 3:
-                return resources.getString(R.string.common_google_play_services_enable_title);
-            case 4:
-            case 6:
-            case 18:
-                return null;
-            case 5:
-                Log.e("GoogleApiAvailability", "An invalid account was specified when connecting. Please provide a valid account.");
-                return zzu(context, "common_google_play_services_invalid_account_title");
-            case 7:
-                Log.e("GoogleApiAvailability", "Network error occurred. Please retry request later.");
-                return zzu(context, "common_google_play_services_network_error_title");
-            case 8:
-                Log.e("GoogleApiAvailability", "Internal error occurred. Please see logs for detailed information");
-                return null;
-            case 9:
-                Log.e("GoogleApiAvailability", "Google Play services is invalid. Cannot recover.");
-                return null;
-            case 10:
-                Log.e("GoogleApiAvailability", "Developer error occurred. Please see logs for detailed information");
-                return null;
-            case 11:
-                Log.e("GoogleApiAvailability", "The application is not licensed to the user.");
-                return null;
-            case 16:
-                Log.e("GoogleApiAvailability", "One of the API components you attempted to connect to is not available.");
-                return null;
-            case 17:
-                Log.e("GoogleApiAvailability", "The specified account could not be signed in.");
-                return zzu(context, "common_google_play_services_sign_in_failed_title");
-            case 20:
-                Log.e("GoogleApiAvailability", "The current user profile is restricted and could not use authenticated features.");
-                return zzu(context, "common_google_play_services_restricted_profile_title");
-            default:
-                Log.e("GoogleApiAvailability", "Unexpected error code " + i);
-                return null;
+        public zza(Set<Scope> set, boolean z) {
+            zzac.zzw(set);
+            this.zzajm = Collections.unmodifiableSet(set);
+            this.zzaEf = z;
         }
     }
 
-    private static String zzg(Context context, String str, String str2) {
-        Resources resources = context.getResources();
-        String zzu = zzu(context, str);
-        if (zzu == null) {
-            zzu = resources.getString(R.string.common_google_play_services_unknown_issue);
+    public zzg(Account account, Set<Scope> set, Map<Api<?>, zza> map, int i, View view, String str, String str2, zzaxo com_google_android_gms_internal_zzaxo) {
+        Map map2;
+        this.zzagg = account;
+        this.zzaxN = set == null ? Collections.EMPTY_SET : Collections.unmodifiableSet(set);
+        if (map == null) {
+            map2 = Collections.EMPTY_MAP;
         }
-        return String.format(resources.getConfiguration().locale, zzu, new Object[]{str2});
-    }
-
-    @NonNull
-    public static String zzh(Context context, int i) {
-        String zzu = i == 6 ? zzu(context, "common_google_play_services_resolution_required_title") : zzg(context, i);
-        return zzu == null ? context.getResources().getString(R.string.common_google_play_services_notification_ticker) : zzu;
-    }
-
-    @NonNull
-    public static String zzi(Context context, int i) {
-        Resources resources = context.getResources();
-        String zzcb = zzcb(context);
-        switch (i) {
-            case 1:
-                return resources.getString(R.string.common_google_play_services_install_text, new Object[]{zzcb});
-            case 2:
-                if (zzi.zzci(context)) {
-                    return resources.getString(R.string.common_google_play_services_wear_update_text);
-                }
-                return resources.getString(R.string.common_google_play_services_update_text, new Object[]{zzcb});
-            case 3:
-                return resources.getString(R.string.common_google_play_services_enable_text, new Object[]{zzcb});
-            case 5:
-                return zzg(context, "common_google_play_services_invalid_account_text", zzcb);
-            case 7:
-                return zzg(context, "common_google_play_services_network_error_text", zzcb);
-            case 9:
-                return resources.getString(R.string.common_google_play_services_unsupported_text, new Object[]{zzcb});
-            case 16:
-                return zzg(context, "common_google_play_services_api_unavailable_text", zzcb);
-            case 17:
-                return zzg(context, "common_google_play_services_sign_in_failed_text", zzcb);
-            case 18:
-                return resources.getString(R.string.common_google_play_services_updating_text, new Object[]{zzcb});
-            case 20:
-                return zzg(context, "common_google_play_services_restricted_profile_text", zzcb);
-            default:
-                return resources.getString(R.string.common_google_play_services_unknown_issue, new Object[]{zzcb});
+        this.zzaEc = map2;
+        this.zzaxQ = view;
+        this.zzaxP = i;
+        this.zzahp = str;
+        this.zzaxR = str2;
+        this.zzaEd = com_google_android_gms_internal_zzaxo;
+        Set hashSet = new HashSet(this.zzaxN);
+        for (zza com_google_android_gms_common_internal_zzg_zza : this.zzaEc.values()) {
+            hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzajm);
         }
+        this.zzaEb = Collections.unmodifiableSet(hashSet);
     }
 
-    @NonNull
-    public static String zzj(Context context, int i) {
-        return i == 6 ? zzg(context, "common_google_play_services_resolution_required_text", zzcb(context)) : zzi(context, i);
+    public static zzg zzaA(Context context) {
+        return new Builder(context).zzuP();
     }
 
-    @NonNull
-    public static String zzk(Context context, int i) {
-        Resources resources = context.getResources();
-        switch (i) {
-            case 1:
-                return resources.getString(R.string.common_google_play_services_install_button);
-            case 2:
-                return resources.getString(R.string.common_google_play_services_update_button);
-            case 3:
-                return resources.getString(R.string.common_google_play_services_enable_button);
-            default:
-                return resources.getString(17039370);
+    public Account getAccount() {
+        return this.zzagg;
+    }
+
+    @Deprecated
+    public String getAccountName() {
+        return this.zzagg != null ? this.zzagg.name : null;
+    }
+
+    public Set<Scope> zzc(Api<?> api) {
+        zza com_google_android_gms_common_internal_zzg_zza = (zza) this.zzaEc.get(api);
+        if (com_google_android_gms_common_internal_zzg_zza == null || com_google_android_gms_common_internal_zzg_zza.zzajm.isEmpty()) {
+            return this.zzaxN;
         }
+        Set<Scope> hashSet = new HashSet(this.zzaxN);
+        hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzajm);
+        return hashSet;
     }
 
-    @Nullable
-    private static String zzu(Context context, String str) {
-        synchronized (DO) {
-            String str2 = (String) DO.get(str);
-            if (str2 != null) {
-                return str2;
-            }
-            Resources remoteResource = GooglePlayServicesUtil.getRemoteResource(context);
-            if (remoteResource == null) {
-                return null;
-            }
-            int identifier = remoteResource.getIdentifier(str, "string", "com.google.android.gms");
-            if (identifier == 0) {
-                String str3 = "GoogleApiAvailability";
-                String str4 = "Missing resource: ";
-                str2 = String.valueOf(str);
-                Log.w(str3, str2.length() != 0 ? str4.concat(str2) : new String(str4));
-                return null;
-            }
-            Object string = remoteResource.getString(identifier);
-            if (TextUtils.isEmpty(string)) {
-                str3 = "GoogleApiAvailability";
-                str4 = "Got empty resource: ";
-                str2 = String.valueOf(str);
-                Log.w(str3, str2.length() != 0 ? str4.concat(str2) : new String(str4));
-                return null;
-            }
-            DO.put(str, string);
-            return string;
-        }
+    public void zzc(Integer num) {
+        this.zzaEe = num;
+    }
+
+    public Account zzwU() {
+        return this.zzagg != null ? this.zzagg : new Account("<<default account>>", "com.google");
+    }
+
+    public int zzxd() {
+        return this.zzaxP;
+    }
+
+    public Set<Scope> zzxe() {
+        return this.zzaxN;
+    }
+
+    public Set<Scope> zzxf() {
+        return this.zzaEb;
+    }
+
+    public Map<Api<?>, zza> zzxg() {
+        return this.zzaEc;
+    }
+
+    public String zzxh() {
+        return this.zzahp;
+    }
+
+    public String zzxi() {
+        return this.zzaxR;
+    }
+
+    public View zzxj() {
+        return this.zzaxQ;
+    }
+
+    public zzaxo zzxk() {
+        return this.zzaEd;
+    }
+
+    public Integer zzxl() {
+        return this.zzaEe;
     }
 }

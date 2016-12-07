@@ -8,35 +8,35 @@ import com.google.android.gms.dynamic.zze;
 import com.google.android.gms.flags.impl.zza.zzb;
 import com.google.android.gms.flags.impl.zza.zzc;
 import com.google.android.gms.flags.impl.zza.zzd;
-import com.google.android.gms.internal.zzvt.zza;
+import com.google.android.gms.internal.zzapq.zza;
 
 @DynamiteApi
 public class FlagProviderImpl extends zza {
-    private boolean zzaoz = false;
-    private SharedPreferences zzbct;
+    private SharedPreferences zzAN;
+    private boolean zztW = false;
 
     public boolean getBooleanFlagValue(String str, boolean z, int i) {
-        return !this.zzaoz ? z : zza.zza.zza(this.zzbct, str, Boolean.valueOf(z)).booleanValue();
+        return !this.zztW ? z : zza.zza.zza(this.zzAN, str, Boolean.valueOf(z)).booleanValue();
     }
 
     public int getIntFlagValue(String str, int i, int i2) {
-        return !this.zzaoz ? i : zzb.zza(this.zzbct, str, Integer.valueOf(i)).intValue();
+        return !this.zztW ? i : zzb.zza(this.zzAN, str, Integer.valueOf(i)).intValue();
     }
 
     public long getLongFlagValue(String str, long j, int i) {
-        return !this.zzaoz ? j : zzc.zza(this.zzbct, str, Long.valueOf(j)).longValue();
+        return !this.zztW ? j : zzc.zza(this.zzAN, str, Long.valueOf(j)).longValue();
     }
 
     public String getStringFlagValue(String str, String str2, int i) {
-        return !this.zzaoz ? str2 : zzd.zza(this.zzbct, str, str2);
+        return !this.zztW ? str2 : zzd.zza(this.zzAN, str, str2);
     }
 
     public void init(com.google.android.gms.dynamic.zzd com_google_android_gms_dynamic_zzd) {
-        Context context = (Context) zze.zzae(com_google_android_gms_dynamic_zzd);
-        if (!this.zzaoz) {
+        Context context = (Context) zze.zzE(com_google_android_gms_dynamic_zzd);
+        if (!this.zztW) {
             try {
-                this.zzbct = zzb.zzm(context.createPackageContext("com.google.android.gms", 0));
-                this.zzaoz = true;
+                this.zzAN = zzb.zzm(context.createPackageContext("com.google.android.gms", 0));
+                this.zztW = true;
             } catch (NameNotFoundException e) {
             }
         }

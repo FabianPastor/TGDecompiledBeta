@@ -1,23 +1,23 @@
 package com.google.android.gms.common.api;
 
-import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzac;
 import java.util.concurrent.TimeUnit;
 
 public final class BatchResult implements Result {
-    private final Status hv;
-    private final PendingResult<?>[] xs;
+    private final Status zzahq;
+    private final PendingResult<?>[] zzaxC;
 
     BatchResult(Status status, PendingResult<?>[] pendingResultArr) {
-        this.hv = status;
-        this.xs = pendingResultArr;
+        this.zzahq = status;
+        this.zzaxC = pendingResultArr;
     }
 
     public Status getStatus() {
-        return this.hv;
+        return this.zzahq;
     }
 
     public <R extends Result> R take(BatchResultToken<R> batchResultToken) {
-        zzaa.zzb(batchResultToken.mId < this.xs.length, (Object) "The result token does not belong to this batch");
-        return this.xs[batchResultToken.mId].await(0, TimeUnit.MILLISECONDS);
+        zzac.zzb(batchResultToken.mId < this.zzaxC.length, (Object) "The result token does not belong to this batch");
+        return this.zzaxC[batchResultToken.mId].await(0, TimeUnit.MILLISECONDS);
     }
 }

@@ -52,7 +52,7 @@ public class CropRotationWheel extends FrameLayout {
         this.whitePaint.setAntiAlias(true);
         this.bluePaint = new Paint();
         this.bluePaint.setStyle(Style.FILL);
-        this.bluePaint.setColor(-11227920);
+        this.bluePaint.setColor(-11420173);
         this.bluePaint.setAlpha(255);
         this.bluePaint.setAntiAlias(true);
         this.aspectRatioButton = new ImageView(context);
@@ -66,7 +66,7 @@ public class CropRotationWheel extends FrameLayout {
                 }
             }
         });
-        addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 60, 19));
+        addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         this.rotation90Button = new ImageView(context);
         this.rotation90Button.setImageResource(R.drawable.tool_rotate);
         this.rotation90Button.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
@@ -78,7 +78,7 @@ public class CropRotationWheel extends FrameLayout {
                 }
             }
         });
-        addView(this.rotation90Button, LayoutHelper.createFrame(70, 60, 21));
+        addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);
         addView(this.degreesLabel, LayoutHelper.createFrame(-2, -2, 49));

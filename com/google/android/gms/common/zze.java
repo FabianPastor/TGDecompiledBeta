@@ -16,13 +16,12 @@ import android.os.Bundle;
 import android.os.UserManager;
 import android.util.Log;
 import com.google.android.gms.R;
-import com.google.android.gms.common.internal.zzy;
-import com.google.android.gms.common.util.zzd;
+import com.google.android.gms.common.internal.zzz;
 import com.google.android.gms.common.util.zzi;
 import com.google.android.gms.common.util.zzl;
 import com.google.android.gms.common.util.zzs;
 import com.google.android.gms.common.util.zzx;
-import com.google.android.gms.internal.zzsz;
+import com.google.android.gms.internal.zzacx;
 import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -32,21 +31,21 @@ public class zze {
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzaqq();
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = 10084000;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
-    public static boolean xb = false;
-    public static boolean xc = false;
-    static boolean xd = false;
-    private static boolean xe = false;
-    static final AtomicBoolean xf = new AtomicBoolean();
-    private static final AtomicBoolean xg = new AtomicBoolean();
+    public static boolean zzaxl = false;
+    public static boolean zzaxm = false;
+    static boolean zzaxn = false;
+    private static boolean zzaxo = false;
+    static final AtomicBoolean zzaxp = new AtomicBoolean();
+    private static final AtomicBoolean zzaxq = new AtomicBoolean();
 
     zze() {
     }
 
     @Deprecated
     public static PendingIntent getErrorPendingIntent(int i, Context context, int i2) {
-        return zzc.zzaql().getErrorResolutionPendingIntent(context, i, i2);
+        return zzc.zzuz().getErrorResolutionPendingIntent(context, i, i2);
     }
 
     @Deprecated
@@ -104,9 +103,9 @@ public class zze {
             Log.e("GooglePlayServicesUtil", "The Google Play services resources were not found. Check your project configuration to ensure that the resources are included.");
         }
         if (!"com.google.android.gms".equals(context.getPackageName())) {
-            zzbp(context);
+            zzap(context);
         }
-        int i = !zzi.zzci(context) ? 1 : 0;
+        int i = (zzi.zzaJ(context) || zzi.zzaL(context)) ? 0 : 1;
         PackageInfo packageInfo = null;
         if (i != 0) {
             try {
@@ -118,21 +117,21 @@ public class zze {
         }
         try {
             PackageInfo packageInfo2 = packageManager.getPackageInfo("com.google.android.gms", 64);
-            zzf zzbv = zzf.zzbv(context);
+            zzf zzav = zzf.zzav(context);
             if (i != 0) {
-                if (zzbv.zza(packageInfo, zzd.xa) == null) {
+                if (zzav.zza(packageInfo, zzd.zzaxk) == null) {
                     Log.w("GooglePlayServicesUtil", "Google Play Store signature invalid.");
                     return 9;
                 }
-                if (zzbv.zza(packageInfo2, zzbv.zza(packageInfo, zzd.xa)) == null) {
+                if (zzav.zza(packageInfo2, zzav.zza(packageInfo, zzd.zzaxk)) == null) {
                     Log.w("GooglePlayServicesUtil", "Google Play services signature invalid.");
                     return 9;
                 }
-            } else if (zzbv.zza(packageInfo2, zzd.xa) == null) {
+            } else if (zzav.zza(packageInfo2, zzd.zzaxk) == null) {
                 Log.w("GooglePlayServicesUtil", "Google Play services signature invalid.");
                 return 9;
             }
-            if (zzl.zzhh(packageInfo2.versionCode) < zzl.zzhh(GOOGLE_PLAY_SERVICES_VERSION_CODE)) {
+            if (zzl.zzdj(packageInfo2.versionCode) < zzl.zzdj(GOOGLE_PLAY_SERVICES_VERSION_CODE)) {
                 Log.w("GooglePlayServicesUtil", "Google Play services out of date.  Requires " + GOOGLE_PLAY_SERVICES_VERSION_CODE + " but found " + packageInfo2.versionCode);
                 return 2;
             }
@@ -165,20 +164,11 @@ public class zze {
         }
     }
 
-    private static int zzaqq() {
-        return 9877000;
-    }
-
     @Deprecated
-    public static boolean zzaqr() {
-        return zzi.zzaym();
-    }
-
-    @Deprecated
-    public static void zzaz(Context context) throws GooglePlayServicesRepairableException, GooglePlayServicesNotAvailableException {
-        int isGooglePlayServicesAvailable = zzc.zzaql().isGooglePlayServicesAvailable(context);
+    public static void zzZ(Context context) throws GooglePlayServicesRepairableException, GooglePlayServicesNotAvailableException {
+        int isGooglePlayServicesAvailable = zzc.zzuz().isGooglePlayServicesAvailable(context);
         if (isGooglePlayServicesAvailable != 0) {
-            Intent zzb = zzc.zzaql().zzb(context, isGooglePlayServicesAvailable, "e");
+            Intent zzb = zzc.zzuz().zzb(context, isGooglePlayServicesAvailable, "e");
             Log.e("GooglePlayServicesUtil", "GooglePlayServices not available due to error " + isGooglePlayServicesAvailable);
             if (zzb == null) {
                 throw new GooglePlayServicesNotAvailableException(isGooglePlayServicesAvailable);
@@ -188,7 +178,7 @@ public class zze {
     }
 
     @Deprecated
-    public static int zzbk(Context context) {
+    public static int zzak(Context context) {
         int i = 0;
         try {
             return context.getPackageManager().getPackageInfo("com.google.android.gms", 0).versionCode;
@@ -199,8 +189,8 @@ public class zze {
     }
 
     @Deprecated
-    public static void zzbn(Context context) {
-        if (!xf.getAndSet(true)) {
+    public static void zzan(Context context) {
+        if (!zzaxp.getAndSet(true)) {
             try {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification");
                 if (notificationManager != null) {
@@ -211,31 +201,31 @@ public class zze {
         }
     }
 
-    private static void zzbp(Context context) {
-        if (!xg.get()) {
-            int zzce = zzy.zzce(context);
-            if (zzce == 0) {
+    private static void zzap(Context context) {
+        if (!zzaxq.get()) {
+            int zzaE = zzz.zzaE(context);
+            if (zzaE == 0) {
                 throw new IllegalStateException("A required meta-data tag in your app's AndroidManifest.xml does not exist.  You must have the following declaration within the <application> element:     <meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />");
-            } else if (zzce != GOOGLE_PLAY_SERVICES_VERSION_CODE) {
+            } else if (zzaE != GOOGLE_PLAY_SERVICES_VERSION_CODE) {
                 int i = GOOGLE_PLAY_SERVICES_VERSION_CODE;
                 String valueOf = String.valueOf("com.google.android.gms.version");
-                throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 290).append("The meta-data tag in your app's AndroidManifest.xml does not have the right value.  Expected ").append(i).append(" but found ").append(zzce).append(".  You must have the following declaration within the <application> element:     <meta-data android:name=\"").append(valueOf).append("\" android:value=\"@integer/google_play_services_version\" />").toString());
+                throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 290).append("The meta-data tag in your app's AndroidManifest.xml does not have the right value.  Expected ").append(i).append(" but found ").append(zzaE).append(".  You must have the following declaration within the <application> element:     <meta-data android:name=\"").append(valueOf).append("\" android:value=\"@integer/google_play_services_version\" />").toString());
             }
         }
     }
 
-    public static boolean zzbq(Context context) {
-        zzbt(context);
-        return xd;
+    public static boolean zzaq(Context context) {
+        zzat(context);
+        return zzaxn;
     }
 
-    public static boolean zzbr(Context context) {
-        return zzbq(context) || !zzaqr();
+    public static boolean zzar(Context context) {
+        return zzaq(context) || !zzuE();
     }
 
     @TargetApi(18)
-    public static boolean zzbs(Context context) {
-        if (zzs.zzayt()) {
+    public static boolean zzas(Context context) {
+        if (zzs.zzyE()) {
             Bundle applicationRestrictions = ((UserManager) context.getSystemService("user")).getApplicationRestrictions(context.getPackageName());
             if (applicationRestrictions != null && "true".equals(applicationRestrictions.getString("restricted_profile"))) {
                 return true;
@@ -244,29 +234,29 @@ public class zze {
         return false;
     }
 
-    private static void zzbt(Context context) {
-        if (!xe) {
-            zzbu(context);
+    private static void zzat(Context context) {
+        if (!zzaxo) {
+            zzau(context);
         }
     }
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static void zzbu(Context context) {
+    private static void zzau(Context context) {
         try {
-            PackageInfo packageInfo = zzsz.zzco(context).getPackageInfo("com.google.android.gms", 64);
+            PackageInfo packageInfo = zzacx.zzaQ(context).getPackageInfo("com.google.android.gms", 64);
             if (packageInfo != null) {
-                if (zzf.zzbv(context).zza(packageInfo, zzd.xa[1]) != null) {
-                    xd = true;
-                    xe = true;
+                if (zzf.zzav(context).zza(packageInfo, zzd.zzaxk[1]) != null) {
+                    zzaxn = true;
+                    zzaxo = true;
                 }
             }
-            xd = false;
-            xe = true;
+            zzaxn = false;
+            zzaxo = true;
         } catch (Throwable e) {
             Log.w("GooglePlayServicesUtil", "Cannot find Google Play services package name.", e);
         } catch (Throwable th) {
-            xe = true;
+            zzaxo = true;
         }
     }
 
@@ -294,10 +284,7 @@ public class zze {
     @TargetApi(21)
     static boolean zzs(Context context, String str) {
         boolean equals = str.equals("com.google.android.gms");
-        if (equals && zzd.zzayi()) {
-            return false;
-        }
-        if (zzs.zzayx()) {
+        if (zzs.zzyI()) {
             for (SessionInfo appPackageName : context.getPackageManager().getPackageInstaller().getAllSessions()) {
                 if (str.equals(appPackageName.getAppPackageName())) {
                     return true;
@@ -309,10 +296,15 @@ public class zze {
             if (equals) {
                 return applicationInfo.enabled;
             }
-            boolean z = applicationInfo.enabled && !zzbs(context);
+            boolean z = applicationInfo.enabled && !zzas(context);
             return z;
         } catch (NameNotFoundException e) {
             return false;
         }
+    }
+
+    @Deprecated
+    public static boolean zzuE() {
+        return zzi.zzyw();
     }
 }

@@ -22,6 +22,7 @@ public class CropGestureDetector {
     final float mMinimumVelocity;
     final float mTouchSlop = ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     private VelocityTracker mVelocityTracker;
+    private boolean started;
 
     public interface CropGestureListener {
         void onDrag(float f, float f2);
@@ -109,6 +110,25 @@ public class CropGestureDetector {
         this.mActivePointerIndex = ev.findPointerIndex(i);
         switch (ev.getAction()) {
             case 0:
+            case 2:
+                if (this.started) {
+                    float x = getActiveX(ev);
+                    float y = getActiveY(ev);
+                    float dx = x - this.mLastTouchX;
+                    float dy = y - this.mLastTouchY;
+                    if (!this.mIsDragging) {
+                        this.mIsDragging = ((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop;
+                    }
+                    if (this.mIsDragging) {
+                        this.mListener.onDrag(dx, dy);
+                        this.mLastTouchX = x;
+                        this.mLastTouchY = y;
+                        if (this.mVelocityTracker != null) {
+                            this.mVelocityTracker.addMovement(ev);
+                            break;
+                        }
+                    }
+                }
                 this.mVelocityTracker = VelocityTracker.obtain();
                 if (this.mVelocityTracker != null) {
                     this.mVelocityTracker.addMovement(ev);
@@ -116,6 +136,8 @@ public class CropGestureDetector {
                 this.mLastTouchX = getActiveX(ev);
                 this.mLastTouchY = getActiveY(ev);
                 this.mIsDragging = false;
+                this.started = true;
+                return true;
                 break;
             case 1:
                 if (this.mIsDragging && this.mVelocityTracker != null) {
@@ -132,33 +154,15 @@ public class CropGestureDetector {
                 if (this.mVelocityTracker != null) {
                     this.mVelocityTracker.recycle();
                     this.mVelocityTracker = null;
-                    break;
                 }
-                break;
-            case 2:
-                float x = getActiveX(ev);
-                float y = getActiveY(ev);
-                float dx = x - this.mLastTouchX;
-                float dy = y - this.mLastTouchY;
-                if (!this.mIsDragging) {
-                    this.mIsDragging = ((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop;
-                }
-                if (this.mIsDragging) {
-                    this.mListener.onDrag(dx, dy);
-                    this.mLastTouchX = x;
-                    this.mLastTouchY = y;
-                    if (this.mVelocityTracker != null) {
-                        this.mVelocityTracker.addMovement(ev);
-                        break;
-                    }
-                }
+                this.started = false;
                 break;
             case 3:
                 if (this.mVelocityTracker != null) {
                     this.mVelocityTracker.recycle();
                     this.mVelocityTracker = null;
-                    break;
                 }
+                this.started = false;
                 break;
         }
         return true;

@@ -11,14 +11,14 @@ public interface zzi extends IInterface {
     public static abstract class zza extends Binder implements zzi {
 
         private static class zza implements zzi {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onCameraMoveStarted(int i) throws RemoteException {
@@ -27,7 +27,7 @@ public interface zzi extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnCameraMoveStartedListener");
                     obtain.writeInt(i);
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -40,7 +40,7 @@ public interface zzi extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnCameraMoveStartedListener");
         }
 
-        public static zzi zzib(IBinder iBinder) {
+        public static zzi zzdD(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

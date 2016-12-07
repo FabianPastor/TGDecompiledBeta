@@ -11,14 +11,14 @@ public interface zzaf extends IInterface {
     public static abstract class zza extends Binder implements zzaf {
 
         private static class zza implements zzaf {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void zza(IStreetViewPanoramaDelegate iStreetViewPanoramaDelegate) throws RemoteException {
@@ -27,7 +27,7 @@ public interface zzaf extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback");
                     obtain.writeStrongBinder(iStreetViewPanoramaDelegate != null ? iStreetViewPanoramaDelegate.asBinder() : null);
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -40,7 +40,7 @@ public interface zzaf extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback");
         }
 
-        public static zzaf zziy(IBinder iBinder) {
+        public static zzaf zzea(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -56,7 +56,7 @@ public interface zzaf extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback");
-                    zza(com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate.zza.zzjb(parcel.readStrongBinder()));
+                    zza(com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate.zza.zzed(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:

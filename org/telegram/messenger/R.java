@@ -1687,6 +1687,7 @@ public final class R {
         public static final int PasswordReset = NUM;
         public static final int PendingEmailText = NUM;
         public static final int PermissionContacts = NUM;
+        public static final int PermissionDrawAboveOtherApps = NUM;
         public static final int PermissionNoAudio = NUM;
         public static final int PermissionNoAudioVideo = NUM;
         public static final int PermissionNoCamera = NUM;

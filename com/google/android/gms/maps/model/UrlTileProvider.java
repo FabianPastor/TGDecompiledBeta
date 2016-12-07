@@ -7,12 +7,12 @@ import java.io.OutputStream;
 import java.net.URL;
 
 public abstract class UrlTileProvider implements TileProvider {
-    private final int zzakh;
-    private final int zzaki;
+    private final int zzrG;
+    private final int zzrH;
 
     public UrlTileProvider(int i, int i2) {
-        this.zzakh = i;
-        this.zzaki = i2;
+        this.zzrG = i;
+        this.zzrH = i2;
     }
 
     private static long zzb(InputStream inputStream, OutputStream outputStream) throws IOException {
@@ -40,7 +40,7 @@ public abstract class UrlTileProvider implements TileProvider {
             return NO_TILE;
         }
         try {
-            return new Tile(this.zzakh, this.zzaki, zzl(tileUrl.openStream()));
+            return new Tile(this.zzrG, this.zzrH, zzl(tileUrl.openStream()));
         } catch (IOException e) {
             return null;
         }

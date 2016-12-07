@@ -11,21 +11,35 @@ public final class zze<T> extends zza {
         this.mWrappedObject = t;
     }
 
-    public static <T> zzd zzac(T t) {
+    public static <T> zzd zzA(T t) {
         return new zze(t);
     }
 
-    public static <T> T zzae(zzd com_google_android_gms_dynamic_zzd) {
+    public static <T> T zzE(zzd com_google_android_gms_dynamic_zzd) {
+        int i = 0;
         if (com_google_android_gms_dynamic_zzd instanceof zze) {
             return ((zze) com_google_android_gms_dynamic_zzd).mWrappedObject;
         }
         IBinder asBinder = com_google_android_gms_dynamic_zzd.asBinder();
         Field[] declaredFields = asBinder.getClass().getDeclaredFields();
-        if (declaredFields.length == 1) {
-            Field field = declaredFields[0];
-            if (field.isAccessible()) {
-                throw new IllegalArgumentException("IObjectWrapper declared field not private!");
+        Field field = null;
+        int length = declaredFields.length;
+        int i2 = 0;
+        while (i2 < length) {
+            Field field2 = declaredFields[i2];
+            if (field2.isSynthetic()) {
+                field2 = field;
+            } else {
+                i++;
             }
+            i2++;
+            field = field2;
+        }
+        if (i != 1) {
+            throw new IllegalArgumentException("Unexpected number of IObjectWrapper declared fields: " + declaredFields.length);
+        } else if (field.isAccessible()) {
+            throw new IllegalArgumentException("IObjectWrapper declared field not private!");
+        } else {
             field.setAccessible(true);
             try {
                 return field.get(asBinder);
@@ -35,6 +49,5 @@ public final class zze<T> extends zza {
                 throw new IllegalArgumentException("Could not access the field in remoteBinder.", e2);
             }
         }
-        throw new IllegalArgumentException("Unexpected number of IObjectWrapper declared fields: " + declaredFields.length);
     }
 }

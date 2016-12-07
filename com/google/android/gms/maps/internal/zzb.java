@@ -11,14 +11,14 @@ public interface zzb extends IInterface {
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzajq;
+            private IBinder zzrp;
 
             zza(IBinder iBinder) {
-                this.zzajq = iBinder;
+                this.zzrp = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajq;
+                return this.zzrp;
             }
 
             public void onCancel() throws RemoteException {
@@ -26,7 +26,7 @@ public interface zzb extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICancelableCallback");
-                    this.zzajq.transact(2, obtain, obtain2, 0);
+                    this.zzrp.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -39,7 +39,7 @@ public interface zzb extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICancelableCallback");
-                    this.zzajq.transact(1, obtain, obtain2, 0);
+                    this.zzrp.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -52,7 +52,7 @@ public interface zzb extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.ICancelableCallback");
         }
 
-        public static zzb zzhq(IBinder iBinder) {
+        public static zzb zzds(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

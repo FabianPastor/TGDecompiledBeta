@@ -4,12 +4,10 @@ import android.os.Bundle;
 import java.util.Iterator;
 
 public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
-    protected final DataHolder zy;
+    protected final DataHolder zzazI;
 
     protected AbstractDataBuffer(DataHolder dataHolder) {
-        this.zy = dataHolder;
-        if (this.zy == null) {
-        }
+        this.zzazI = dataHolder;
     }
 
     @Deprecated
@@ -20,12 +18,12 @@ public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
     public abstract T get(int i);
 
     public int getCount() {
-        return this.zy == null ? 0 : this.zy.getCount();
+        return this.zzazI == null ? 0 : this.zzazI.getCount();
     }
 
     @Deprecated
     public boolean isClosed() {
-        return this.zy == null || this.zy.isClosed();
+        return this.zzazI == null || this.zzazI.isClosed();
     }
 
     public Iterator<T> iterator() {
@@ -33,8 +31,8 @@ public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
     }
 
     public void release() {
-        if (this.zy != null) {
-            this.zy.close();
+        if (this.zzazI != null) {
+            this.zzazI.close();
         }
     }
 
@@ -42,7 +40,7 @@ public abstract class AbstractDataBuffer<T> implements DataBuffer<T> {
         return new zzg(this);
     }
 
-    public Bundle zzaui() {
-        return this.zy.zzaui();
+    public Bundle zzwy() {
+        return this.zzazI.zzwy();
     }
 }

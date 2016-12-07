@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
-import com.google.android.gms.measurement.internal.zzx;
+import com.google.android.gms.internal.zzatp;
 
 @Deprecated
 public class AppMeasurementContentProvider extends ContentProvider {
@@ -30,7 +30,7 @@ public class AppMeasurementContentProvider extends ContentProvider {
     }
 
     public boolean onCreate() {
-        zzx.zzdq(getContext());
+        zzatp.zzbu(getContext());
         return false;
     }
 

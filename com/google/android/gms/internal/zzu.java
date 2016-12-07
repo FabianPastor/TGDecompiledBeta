@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class zzu {
-    protected static final Comparator<byte[]> zzbv = new Comparator<byte[]>() {
+    protected static final Comparator<byte[]> zzau = new Comparator<byte[]>() {
         public /* synthetic */ int compare(Object obj, Object obj2) {
             return zza((byte[]) obj, (byte[]) obj2);
         }
@@ -16,46 +16,46 @@ public class zzu {
             return bArr.length - bArr2.length;
         }
     };
-    private List<byte[]> zzbr = new LinkedList();
-    private List<byte[]> zzbs = new ArrayList(64);
-    private int zzbt = 0;
-    private final int zzbu;
+    private List<byte[]> zzaq = new LinkedList();
+    private List<byte[]> zzar = new ArrayList(64);
+    private int zzas = 0;
+    private final int zzat;
 
     public zzu(int i) {
-        this.zzbu = i;
+        this.zzat = i;
     }
 
-    private synchronized void zzv() {
-        while (this.zzbt > this.zzbu) {
-            byte[] bArr = (byte[]) this.zzbr.remove(0);
-            this.zzbs.remove(bArr);
-            this.zzbt -= bArr.length;
+    private synchronized void zzt() {
+        while (this.zzas > this.zzat) {
+            byte[] bArr = (byte[]) this.zzaq.remove(0);
+            this.zzar.remove(bArr);
+            this.zzas -= bArr.length;
         }
     }
 
     public synchronized void zza(byte[] bArr) {
         if (bArr != null) {
-            if (bArr.length <= this.zzbu) {
-                this.zzbr.add(bArr);
-                int binarySearch = Collections.binarySearch(this.zzbs, bArr, zzbv);
+            if (bArr.length <= this.zzat) {
+                this.zzaq.add(bArr);
+                int binarySearch = Collections.binarySearch(this.zzar, bArr, zzau);
                 if (binarySearch < 0) {
                     binarySearch = (-binarySearch) - 1;
                 }
-                this.zzbs.add(binarySearch, bArr);
-                this.zzbt += bArr.length;
-                zzv();
+                this.zzar.add(binarySearch, bArr);
+                this.zzas += bArr.length;
+                zzt();
             }
         }
     }
 
     public synchronized byte[] zzb(int i) {
         byte[] bArr;
-        for (int i2 = 0; i2 < this.zzbs.size(); i2++) {
-            bArr = (byte[]) this.zzbs.get(i2);
+        for (int i2 = 0; i2 < this.zzar.size(); i2++) {
+            bArr = (byte[]) this.zzar.get(i2);
             if (bArr.length >= i) {
-                this.zzbt -= bArr.length;
-                this.zzbs.remove(i2);
-                this.zzbr.remove(bArr);
+                this.zzas -= bArr.length;
+                this.zzar.remove(i2);
+                this.zzaq.remove(bArr);
                 break;
             }
         }

@@ -1,101 +1,85 @@
 package com.google.android.gms.common.internal;
 
 import android.accounts.Account;
-import android.content.Context;
 import android.os.Bundle;
-import android.os.IInterface;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.Api.zze;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.zze.zzb;
-import com.google.android.gms.common.internal.zze.zzc;
-import com.google.android.gms.common.internal.zzk.zza;
-import java.util.Set;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.zzc;
+import java.util.Collection;
 
-public abstract class zzj<T extends IInterface> extends zze<T> implements zze, zza {
-    private final Account gj;
-    private final Set<Scope> jw;
-    private final zzf zP;
+public class zzj extends zza {
+    public static final Creator<zzj> CREATOR = new zzk();
+    final int version;
+    final int zzaEm;
+    int zzaEn;
+    String zzaEo;
+    IBinder zzaEp;
+    Scope[] zzaEq;
+    Bundle zzaEr;
+    Account zzaEs;
+    long zzaEt;
 
-    class AnonymousClass1 implements zzb {
-        final /* synthetic */ ConnectionCallbacks Ec;
+    public zzj(int i) {
+        this.version = 3;
+        this.zzaEn = zzc.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+        this.zzaEm = i;
+    }
 
-        AnonymousClass1(ConnectionCallbacks connectionCallbacks) {
-            this.Ec = connectionCallbacks;
+    zzj(int i, int i2, int i3, String str, IBinder iBinder, Scope[] scopeArr, Bundle bundle, Account account, long j) {
+        this.version = i;
+        this.zzaEm = i2;
+        this.zzaEn = i3;
+        if ("com.google.android.gms".equals(str)) {
+            this.zzaEo = "com.google.android.gms";
+        } else {
+            this.zzaEo = str;
         }
-
-        public void onConnected(@Nullable Bundle bundle) {
-            this.Ec.onConnected(bundle);
+        if (i < 2) {
+            this.zzaEs = zzbq(iBinder);
+        } else {
+            this.zzaEp = iBinder;
+            this.zzaEs = account;
         }
+        this.zzaEq = scopeArr;
+        this.zzaEr = bundle;
+        this.zzaEt = j;
+    }
 
-        public void onConnectionSuspended(int i) {
-            this.Ec.onConnectionSuspended(i);
+    private Account zzbq(IBinder iBinder) {
+        return iBinder != null ? zza.zza(zzr.zza.zzbr(iBinder)) : null;
+    }
+
+    public void writeToParcel(Parcel parcel, int i) {
+        zzk.zza(this, parcel, i);
+    }
+
+    public zzj zzb(zzr com_google_android_gms_common_internal_zzr) {
+        if (com_google_android_gms_common_internal_zzr != null) {
+            this.zzaEp = com_google_android_gms_common_internal_zzr.asBinder();
         }
+        return this;
     }
 
-    class AnonymousClass2 implements zzc {
-        final /* synthetic */ OnConnectionFailedListener Ed;
-
-        AnonymousClass2(OnConnectionFailedListener onConnectionFailedListener) {
-            this.Ed = onConnectionFailedListener;
-        }
-
-        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-            this.Ed.onConnectionFailed(connectionResult);
-        }
+    public zzj zzdq(String str) {
+        this.zzaEo = str;
+        return this;
     }
 
-    protected zzj(Context context, Looper looper, int i, zzf com_google_android_gms_common_internal_zzf, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        this(context, looper, zzl.zzcc(context), GoogleApiAvailability.getInstance(), i, com_google_android_gms_common_internal_zzf, (ConnectionCallbacks) zzaa.zzy(connectionCallbacks), (OnConnectionFailedListener) zzaa.zzy(onConnectionFailedListener));
+    public zzj zze(Account account) {
+        this.zzaEs = account;
+        return this;
     }
 
-    protected zzj(Context context, Looper looper, zzl com_google_android_gms_common_internal_zzl, GoogleApiAvailability googleApiAvailability, int i, zzf com_google_android_gms_common_internal_zzf, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        super(context, looper, com_google_android_gms_common_internal_zzl, googleApiAvailability, i, zza(connectionCallbacks), zza(onConnectionFailedListener), com_google_android_gms_common_internal_zzf.zzavt());
-        this.zP = com_google_android_gms_common_internal_zzf;
-        this.gj = com_google_android_gms_common_internal_zzf.getAccount();
-        this.jw = zzb(com_google_android_gms_common_internal_zzf.zzavq());
+    public zzj zzf(Collection<Scope> collection) {
+        this.zzaEq = (Scope[]) collection.toArray(new Scope[collection.size()]);
+        return this;
     }
 
-    @Nullable
-    private static zzb zza(ConnectionCallbacks connectionCallbacks) {
-        return connectionCallbacks == null ? null : new AnonymousClass1(connectionCallbacks);
-    }
-
-    @Nullable
-    private static zzc zza(OnConnectionFailedListener onConnectionFailedListener) {
-        return onConnectionFailedListener == null ? null : new AnonymousClass2(onConnectionFailedListener);
-    }
-
-    private Set<Scope> zzb(@NonNull Set<Scope> set) {
-        Set<Scope> zzc = zzc(set);
-        for (Scope contains : zzc) {
-            if (!set.contains(contains)) {
-                throw new IllegalStateException("Expanding scopes is not permitted, use implied scopes instead");
-            }
-        }
-        return zzc;
-    }
-
-    public final Account getAccount() {
-        return this.gj;
-    }
-
-    protected final Set<Scope> zzavi() {
-        return this.jw;
-    }
-
-    protected final zzf zzawb() {
-        return this.zP;
-    }
-
-    @NonNull
-    protected Set<Scope> zzc(@NonNull Set<Scope> set) {
-        return set;
+    public zzj zzp(Bundle bundle) {
+        this.zzaEr = bundle;
+        return this;
     }
 }

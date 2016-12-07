@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import com.google.android.gms.internal.zzsz;
+import com.google.android.gms.internal.zzacx;
 
 public class zzd {
     public static int zza(PackageInfo packageInfo) {
@@ -17,10 +17,6 @@ public class zzd {
         return bundle != null ? bundle.getInt("com.google.android.gms.version", -1) : -1;
     }
 
-    public static boolean zzayi() {
-        return false;
-    }
-
     public static int zzv(Context context, String str) {
         return zza(zzw(context, str));
     }
@@ -28,7 +24,7 @@ public class zzd {
     @Nullable
     public static PackageInfo zzw(Context context, String str) {
         try {
-            return zzsz.zzco(context).getPackageInfo(str, 128);
+            return zzacx.zzaQ(context).getPackageInfo(str, 128);
         } catch (NameNotFoundException e) {
             return null;
         }
@@ -36,14 +32,12 @@ public class zzd {
 
     @TargetApi(12)
     public static boolean zzx(Context context, String str) {
-        if (!zzs.zzayo()) {
+        if (!zzs.zzyy()) {
             return false;
         }
-        if ("com.google.android.gms".equals(str) && zzayi()) {
-            return false;
-        }
+        "com.google.android.gms".equals(str);
         try {
-            return (zzsz.zzco(context).getApplicationInfo(str, 0).flags & 2097152) != 0;
+            return (zzacx.zzaQ(context).getApplicationInfo(str, 0).flags & 2097152) != 0;
         } catch (NameNotFoundException e) {
             return false;
         }

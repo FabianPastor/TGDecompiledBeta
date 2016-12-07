@@ -7,7 +7,22 @@ import org.apache.http.impl.cookie.DateUtils;
 
 public class zzx {
     public static String zza(Map<String, String> map) {
-        return zzb(map, "ISO-8859-1");
+        return zza(map, "ISO-8859-1");
+    }
+
+    public static String zza(Map<String, String> map, String str) {
+        String str2 = (String) map.get("Content-Type");
+        if (str2 == null) {
+            return str;
+        }
+        String[] split = str2.split(";");
+        for (int i = 1; i < split.length; i++) {
+            String[] split2 = split[i].trim().split("=");
+            if (split2.length == 2 && split2[0].equals("charset")) {
+                return split2[1];
+            }
+        }
+        return str;
     }
 
     public static zza zzb(zzi com_google_android_gms_internal_zzi) {
@@ -15,7 +30,7 @@ public class zzx {
         long j;
         Object obj2;
         long currentTimeMillis = System.currentTimeMillis();
-        Map map = com_google_android_gms_internal_zzi.zzz;
+        Map map = com_google_android_gms_internal_zzi.zzy;
         long j2 = 0;
         long j3 = 0;
         long j4 = 0;
@@ -79,21 +94,6 @@ public class zzx {
         com_google_android_gms_internal_zzb_zza.zzc = zzg2;
         com_google_android_gms_internal_zzb_zza.zzf = map;
         return com_google_android_gms_internal_zzb_zza;
-    }
-
-    public static String zzb(Map<String, String> map, String str) {
-        String str2 = (String) map.get("Content-Type");
-        if (str2 == null) {
-            return str;
-        }
-        String[] split = str2.split(";");
-        for (int i = 1; i < split.length; i++) {
-            String[] split2 = split[i].trim().split("=");
-            if (split2.length == 2 && split2[0].equals("charset")) {
-                return split2[1];
-            }
-        }
-        return str;
     }
 
     public static long zzg(String str) {

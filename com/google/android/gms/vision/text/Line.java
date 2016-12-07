@@ -2,21 +2,21 @@ package com.google.android.gms.vision.text;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import com.google.android.gms.vision.text.internal.client.LineBoxParcel;
-import com.google.android.gms.vision.text.internal.client.WordBoxParcel;
+import com.google.android.gms.internal.zzbhk;
+import com.google.android.gms.internal.zzbht;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Line implements Text {
-    private LineBoxParcel aOG;
-    private List<Element> aOH;
+    private zzbhk zzbNs;
+    private List<Element> zzbNt;
 
-    Line(LineBoxParcel lineBoxParcel) {
-        this.aOG = lineBoxParcel;
+    Line(zzbhk com_google_android_gms_internal_zzbhk) {
+        this.zzbNs = com_google_android_gms_internal_zzbhk;
     }
 
     public float getAngle() {
-        return this.aOG.aOR.aOP;
+        return this.zzbNs.zzbNC.zzbNA;
     }
 
     public Rect getBoundingBox() {
@@ -24,35 +24,35 @@ public class Line implements Text {
     }
 
     public List<? extends Text> getComponents() {
-        return zzclt();
+        return zzSr();
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.aOG.aOR);
+        return zza.zza(this.zzbNs.zzbNC);
     }
 
     public String getLanguage() {
-        return this.aOG.aOK;
+        return this.zzbNs.zzbNw;
     }
 
     public String getValue() {
-        return this.aOG.aOU;
+        return this.zzbNs.zzbNF;
     }
 
     public boolean isVertical() {
-        return this.aOG.aOX;
+        return this.zzbNs.zzbNI;
     }
 
-    List<Element> zzclt() {
-        if (this.aOG.aOQ.length == 0) {
+    List<Element> zzSr() {
+        if (this.zzbNs.zzbNB.length == 0) {
             return new ArrayList(0);
         }
-        if (this.aOH == null) {
-            this.aOH = new ArrayList(this.aOG.aOQ.length);
-            for (WordBoxParcel element : this.aOG.aOQ) {
-                this.aOH.add(new Element(element));
+        if (this.zzbNt == null) {
+            this.zzbNt = new ArrayList(this.zzbNs.zzbNB.length);
+            for (zzbht element : this.zzbNs.zzbNB) {
+                this.zzbNt.add(new Element(element));
             }
         }
-        return this.aOH;
+        return this.zzbNt;
     }
 }

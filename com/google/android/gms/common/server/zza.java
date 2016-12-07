@@ -3,53 +3,54 @@ package com.google.android.gms.common.server;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zza implements Creator<FavaDiagnosticsEntity> {
     static void zza(FavaDiagnosticsEntity favaDiagnosticsEntity, Parcel parcel, int i) {
-        int zzcs = zzb.zzcs(parcel);
-        zzb.zzc(parcel, 1, favaDiagnosticsEntity.mVersionCode);
-        zzb.zza(parcel, 2, favaDiagnosticsEntity.EY, false);
-        zzb.zzc(parcel, 3, favaDiagnosticsEntity.EZ);
-        zzb.zzaj(parcel, zzcs);
+        int zzaV = zzc.zzaV(parcel);
+        zzc.zzc(parcel, 1, favaDiagnosticsEntity.mVersionCode);
+        zzc.zza(parcel, 2, favaDiagnosticsEntity.zzaFs, false);
+        zzc.zzc(parcel, 3, favaDiagnosticsEntity.zzaFt);
+        zzc.zzJ(parcel, zzaV);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzct(parcel);
+        return zzaW(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzgw(i);
+        return zzcY(i);
     }
 
-    public FavaDiagnosticsEntity zzct(Parcel parcel) {
+    public FavaDiagnosticsEntity zzaW(Parcel parcel) {
         int i = 0;
-        int zzcr = com.google.android.gms.common.internal.safeparcel.zza.zzcr(parcel);
+        int zzaU = zzb.zzaU(parcel);
         String str = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcr) {
-            int zzcq = com.google.android.gms.common.internal.safeparcel.zza.zzcq(parcel);
-            switch (com.google.android.gms.common.internal.safeparcel.zza.zzgu(zzcq)) {
+        while (parcel.dataPosition() < zzaU) {
+            int zzaT = zzb.zzaT(parcel);
+            switch (zzb.zzcW(zzaT)) {
                 case 1:
-                    i2 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
+                    i2 = zzb.zzg(parcel, zzaT);
                     break;
                 case 2:
-                    str = com.google.android.gms.common.internal.safeparcel.zza.zzq(parcel, zzcq);
+                    str = zzb.zzq(parcel, zzaT);
                     break;
                 case 3:
-                    i = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
+                    i = zzb.zzg(parcel, zzaT);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zza.zzb(parcel, zzcq);
+                    zzb.zzb(parcel, zzaT);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcr) {
+        if (parcel.dataPosition() == zzaU) {
             return new FavaDiagnosticsEntity(i2, str, i);
         }
-        throw new com.google.android.gms.common.internal.safeparcel.zza.zza("Overread allowed size end=" + zzcr, parcel);
+        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaU, parcel);
     }
 
-    public FavaDiagnosticsEntity[] zzgw(int i) {
+    public FavaDiagnosticsEntity[] zzcY(int i) {
         return new FavaDiagnosticsEntity[i];
     }
 }

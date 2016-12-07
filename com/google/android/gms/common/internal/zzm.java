@@ -1,258 +1,198 @@
 package com.google.android.gms.common.internal;
 
-import android.annotation.TargetApi;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
-import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
-import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import android.util.Log;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
-final class zzm extends zzl implements Callback {
-    private final HashMap<zza, zzb> En = new HashMap();
-    private final com.google.android.gms.common.stats.zza Eo;
-    private final long Ep;
+public final class zzm implements Callback {
     private final Handler mHandler;
-    private final Context zzatc;
+    private volatile boolean zzaEA = false;
+    private final AtomicInteger zzaEB = new AtomicInteger(0);
+    private boolean zzaEC = false;
+    private final zza zzaEw;
+    private final ArrayList<ConnectionCallbacks> zzaEx = new ArrayList();
+    final ArrayList<ConnectionCallbacks> zzaEy = new ArrayList();
+    private final ArrayList<OnConnectionFailedListener> zzaEz = new ArrayList();
+    private final Object zzrN = new Object();
 
-    private static final class zza {
-        private final String Eq;
-        private final ComponentName Er;
-        private final String cd;
+    public interface zza {
+        boolean isConnected();
 
-        public zza(ComponentName componentName) {
-            this.cd = null;
-            this.Eq = null;
-            this.Er = (ComponentName) zzaa.zzy(componentName);
-        }
-
-        public zza(String str, String str2) {
-            this.cd = zzaa.zzib(str);
-            this.Eq = zzaa.zzib(str2);
-            this.Er = null;
-        }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof zza)) {
-                return false;
-            }
-            zza com_google_android_gms_common_internal_zzm_zza = (zza) obj;
-            return zzz.equal(this.cd, com_google_android_gms_common_internal_zzm_zza.cd) && zzz.equal(this.Er, com_google_android_gms_common_internal_zzm_zza.Er);
-        }
-
-        public int hashCode() {
-            return zzz.hashCode(this.cd, this.Er);
-        }
-
-        public String toString() {
-            return this.cd == null ? this.Er.flattenToString() : this.cd;
-        }
-
-        public Intent zzawe() {
-            return this.cd != null ? new Intent(this.cd).setPackage(this.Eq) : new Intent().setComponent(this.Er);
-        }
+        Bundle zzud();
     }
 
-    private final class zzb {
-        private IBinder DI;
-        private ComponentName Er;
-        private final zza Es = new zza(this);
-        private final Set<ServiceConnection> Et = new HashSet();
-        private boolean Eu;
-        private final zza Ev;
-        final /* synthetic */ zzm Ew;
-        private int mState = 2;
-
-        public class zza implements ServiceConnection {
-            final /* synthetic */ zzb Ex;
-
-            public zza(zzb com_google_android_gms_common_internal_zzm_zzb) {
-                this.Ex = com_google_android_gms_common_internal_zzm_zzb;
-            }
-
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                synchronized (this.Ex.Ew.En) {
-                    this.Ex.DI = iBinder;
-                    this.Ex.Er = componentName;
-                    for (ServiceConnection onServiceConnected : this.Ex.Et) {
-                        onServiceConnected.onServiceConnected(componentName, iBinder);
-                    }
-                    this.Ex.mState = 1;
-                }
-            }
-
-            public void onServiceDisconnected(ComponentName componentName) {
-                synchronized (this.Ex.Ew.En) {
-                    this.Ex.DI = null;
-                    this.Ex.Er = componentName;
-                    for (ServiceConnection onServiceDisconnected : this.Ex.Et) {
-                        onServiceDisconnected.onServiceDisconnected(componentName);
-                    }
-                    this.Ex.mState = 2;
-                }
-            }
-        }
-
-        public zzb(zzm com_google_android_gms_common_internal_zzm, zza com_google_android_gms_common_internal_zzm_zza) {
-            this.Ew = com_google_android_gms_common_internal_zzm;
-            this.Ev = com_google_android_gms_common_internal_zzm_zza;
-        }
-
-        public IBinder getBinder() {
-            return this.DI;
-        }
-
-        public ComponentName getComponentName() {
-            return this.Er;
-        }
-
-        public int getState() {
-            return this.mState;
-        }
-
-        public boolean isBound() {
-            return this.Eu;
-        }
-
-        public void zza(ServiceConnection serviceConnection, String str) {
-            this.Ew.Eo.zza(this.Ew.zzatc, serviceConnection, str, this.Ev.zzawe());
-            this.Et.add(serviceConnection);
-        }
-
-        public boolean zza(ServiceConnection serviceConnection) {
-            return this.Et.contains(serviceConnection);
-        }
-
-        public boolean zzawf() {
-            return this.Et.isEmpty();
-        }
-
-        public void zzb(ServiceConnection serviceConnection, String str) {
-            this.Ew.Eo.zzb(this.Ew.zzatc, serviceConnection);
-            this.Et.remove(serviceConnection);
-        }
-
-        @TargetApi(14)
-        public void zzhw(String str) {
-            this.mState = 3;
-            this.Eu = this.Ew.Eo.zza(this.Ew.zzatc, str, this.Ev.zzawe(), this.Es, TsExtractor.TS_STREAM_TYPE_AC3);
-            if (!this.Eu) {
-                this.mState = 2;
-                try {
-                    this.Ew.Eo.zza(this.Ew.zzatc, this.Es);
-                } catch (IllegalArgumentException e) {
-                }
-            }
-        }
-
-        public void zzhx(String str) {
-            this.Ew.Eo.zza(this.Ew.zzatc, this.Es);
-            this.Eu = false;
-            this.mState = 2;
-        }
-    }
-
-    zzm(Context context) {
-        this.zzatc = context.getApplicationContext();
-        this.mHandler = new Handler(context.getMainLooper(), this);
-        this.Eo = com.google.android.gms.common.stats.zza.zzaxr();
-        this.Ep = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
-    }
-
-    private boolean zza(zza com_google_android_gms_common_internal_zzm_zza, ServiceConnection serviceConnection, String str) {
-        boolean isBound;
-        zzaa.zzb((Object) serviceConnection, (Object) "ServiceConnection must not be null");
-        synchronized (this.En) {
-            zzb com_google_android_gms_common_internal_zzm_zzb = (zzb) this.En.get(com_google_android_gms_common_internal_zzm_zza);
-            if (com_google_android_gms_common_internal_zzm_zzb != null) {
-                this.mHandler.removeMessages(0, com_google_android_gms_common_internal_zzm_zza);
-                if (!com_google_android_gms_common_internal_zzm_zzb.zza(serviceConnection)) {
-                    com_google_android_gms_common_internal_zzm_zzb.zza(serviceConnection, str);
-                    switch (com_google_android_gms_common_internal_zzm_zzb.getState()) {
-                        case 1:
-                            serviceConnection.onServiceConnected(com_google_android_gms_common_internal_zzm_zzb.getComponentName(), com_google_android_gms_common_internal_zzm_zzb.getBinder());
-                            break;
-                        case 2:
-                            com_google_android_gms_common_internal_zzm_zzb.zzhw(str);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                String valueOf = String.valueOf(com_google_android_gms_common_internal_zzm_zza);
-                throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 81).append("Trying to bind a GmsServiceConnection that was already connected before.  config=").append(valueOf).toString());
-            }
-            com_google_android_gms_common_internal_zzm_zzb = new zzb(this, com_google_android_gms_common_internal_zzm_zza);
-            com_google_android_gms_common_internal_zzm_zzb.zza(serviceConnection, str);
-            com_google_android_gms_common_internal_zzm_zzb.zzhw(str);
-            this.En.put(com_google_android_gms_common_internal_zzm_zza, com_google_android_gms_common_internal_zzm_zzb);
-            isBound = com_google_android_gms_common_internal_zzm_zzb.isBound();
-        }
-        return isBound;
-    }
-
-    private void zzb(zza com_google_android_gms_common_internal_zzm_zza, ServiceConnection serviceConnection, String str) {
-        zzaa.zzb((Object) serviceConnection, (Object) "ServiceConnection must not be null");
-        synchronized (this.En) {
-            zzb com_google_android_gms_common_internal_zzm_zzb = (zzb) this.En.get(com_google_android_gms_common_internal_zzm_zza);
-            String valueOf;
-            if (com_google_android_gms_common_internal_zzm_zzb == null) {
-                valueOf = String.valueOf(com_google_android_gms_common_internal_zzm_zza);
-                throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 50).append("Nonexistent connection status for service config: ").append(valueOf).toString());
-            } else if (com_google_android_gms_common_internal_zzm_zzb.zza(serviceConnection)) {
-                com_google_android_gms_common_internal_zzm_zzb.zzb(serviceConnection, str);
-                if (com_google_android_gms_common_internal_zzm_zzb.zzawf()) {
-                    this.mHandler.sendMessageDelayed(this.mHandler.obtainMessage(0, com_google_android_gms_common_internal_zzm_zza), this.Ep);
-                }
-            } else {
-                valueOf = String.valueOf(com_google_android_gms_common_internal_zzm_zza);
-                throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 76).append("Trying to unbind a GmsServiceConnection  that was not bound before.  config=").append(valueOf).toString());
-            }
-        }
+    public zzm(Looper looper, zza com_google_android_gms_common_internal_zzm_zza) {
+        this.zzaEw = com_google_android_gms_common_internal_zzm_zza;
+        this.mHandler = new Handler(looper, this);
     }
 
     public boolean handleMessage(Message message) {
-        switch (message.what) {
-            case 0:
-                zza com_google_android_gms_common_internal_zzm_zza = (zza) message.obj;
-                synchronized (this.En) {
-                    zzb com_google_android_gms_common_internal_zzm_zzb = (zzb) this.En.get(com_google_android_gms_common_internal_zzm_zza);
-                    if (com_google_android_gms_common_internal_zzm_zzb != null && com_google_android_gms_common_internal_zzm_zzb.zzawf()) {
-                        if (com_google_android_gms_common_internal_zzm_zzb.isBound()) {
-                            com_google_android_gms_common_internal_zzm_zzb.zzhx("GmsClientSupervisor");
-                        }
-                        this.En.remove(com_google_android_gms_common_internal_zzm_zza);
-                    }
+        if (message.what == 1) {
+            ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) message.obj;
+            synchronized (this.zzrN) {
+                if (this.zzaEA && this.zzaEw.isConnected() && this.zzaEx.contains(connectionCallbacks)) {
+                    connectionCallbacks.onConnected(this.zzaEw.zzud());
                 }
-                return true;
-            default:
-                return false;
+            }
+            return true;
+        }
+        Log.wtf("GmsClientEvents", "Don't know how to handle message: " + message.what, new Exception());
+        return false;
+    }
+
+    public boolean isConnectionCallbacksRegistered(ConnectionCallbacks connectionCallbacks) {
+        boolean contains;
+        zzac.zzw(connectionCallbacks);
+        synchronized (this.zzrN) {
+            contains = this.zzaEx.contains(connectionCallbacks);
+        }
+        return contains;
+    }
+
+    public boolean isConnectionFailedListenerRegistered(OnConnectionFailedListener onConnectionFailedListener) {
+        boolean contains;
+        zzac.zzw(onConnectionFailedListener);
+        synchronized (this.zzrN) {
+            contains = this.zzaEz.contains(onConnectionFailedListener);
+        }
+        return contains;
+    }
+
+    public void registerConnectionCallbacks(ConnectionCallbacks connectionCallbacks) {
+        zzac.zzw(connectionCallbacks);
+        synchronized (this.zzrN) {
+            if (this.zzaEx.contains(connectionCallbacks)) {
+                String valueOf = String.valueOf(connectionCallbacks);
+                Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 62).append("registerConnectionCallbacks(): listener ").append(valueOf).append(" is already registered").toString());
+            } else {
+                this.zzaEx.add(connectionCallbacks);
+            }
+        }
+        if (this.zzaEw.isConnected()) {
+            this.mHandler.sendMessage(this.mHandler.obtainMessage(1, connectionCallbacks));
         }
     }
 
-    public boolean zza(ComponentName componentName, ServiceConnection serviceConnection, String str) {
-        return zza(new zza(componentName), serviceConnection, str);
+    public void registerConnectionFailedListener(OnConnectionFailedListener onConnectionFailedListener) {
+        zzac.zzw(onConnectionFailedListener);
+        synchronized (this.zzrN) {
+            if (this.zzaEz.contains(onConnectionFailedListener)) {
+                String valueOf = String.valueOf(onConnectionFailedListener);
+                Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 67).append("registerConnectionFailedListener(): listener ").append(valueOf).append(" is already registered").toString());
+            } else {
+                this.zzaEz.add(onConnectionFailedListener);
+            }
+        }
     }
 
-    public boolean zza(String str, String str2, ServiceConnection serviceConnection, String str3) {
-        return zza(new zza(str, str2), serviceConnection, str3);
+    public void unregisterConnectionCallbacks(ConnectionCallbacks connectionCallbacks) {
+        zzac.zzw(connectionCallbacks);
+        synchronized (this.zzrN) {
+            if (!this.zzaEx.remove(connectionCallbacks)) {
+                String valueOf = String.valueOf(connectionCallbacks);
+                Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 52).append("unregisterConnectionCallbacks(): listener ").append(valueOf).append(" not found").toString());
+            } else if (this.zzaEC) {
+                this.zzaEy.add(connectionCallbacks);
+            }
+        }
     }
 
-    public void zzb(ComponentName componentName, ServiceConnection serviceConnection, String str) {
-        zzb(new zza(componentName), serviceConnection, str);
+    public void unregisterConnectionFailedListener(OnConnectionFailedListener onConnectionFailedListener) {
+        zzac.zzw(onConnectionFailedListener);
+        synchronized (this.zzrN) {
+            if (!this.zzaEz.remove(onConnectionFailedListener)) {
+                String valueOf = String.valueOf(onConnectionFailedListener);
+                Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 57).append("unregisterConnectionFailedListener(): listener ").append(valueOf).append(" not found").toString());
+            }
+        }
     }
 
-    public void zzb(String str, String str2, ServiceConnection serviceConnection, String str3) {
-        zzb(new zza(str, str2), serviceConnection, str3);
+    public void zzcP(int i) {
+        boolean z = false;
+        if (Looper.myLooper() == this.mHandler.getLooper()) {
+            z = true;
+        }
+        zzac.zza(z, (Object) "onUnintentionalDisconnection must only be called on the Handler thread");
+        this.mHandler.removeMessages(1);
+        synchronized (this.zzrN) {
+            this.zzaEC = true;
+            ArrayList arrayList = new ArrayList(this.zzaEx);
+            int i2 = this.zzaEB.get();
+            Iterator it = arrayList.iterator();
+            while (it.hasNext()) {
+                ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) it.next();
+                if (!this.zzaEA || this.zzaEB.get() != i2) {
+                    break;
+                } else if (this.zzaEx.contains(connectionCallbacks)) {
+                    connectionCallbacks.onConnectionSuspended(i);
+                }
+            }
+            this.zzaEy.clear();
+            this.zzaEC = false;
+        }
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void zzo(ConnectionResult connectionResult) {
+        zzac.zza(Looper.myLooper() == this.mHandler.getLooper(), (Object) "onConnectionFailure must only be called on the Handler thread");
+        this.mHandler.removeMessages(1);
+        synchronized (this.zzrN) {
+            ArrayList arrayList = new ArrayList(this.zzaEz);
+            int i = this.zzaEB.get();
+            Iterator it = arrayList.iterator();
+            while (it.hasNext()) {
+                OnConnectionFailedListener onConnectionFailedListener = (OnConnectionFailedListener) it.next();
+                if (!this.zzaEA || this.zzaEB.get() != i) {
+                } else if (this.zzaEz.contains(onConnectionFailedListener)) {
+                    onConnectionFailedListener.onConnectionFailed(connectionResult);
+                }
+            }
+        }
+    }
+
+    public void zzq(Bundle bundle) {
+        boolean z = true;
+        zzac.zza(Looper.myLooper() == this.mHandler.getLooper(), (Object) "onConnectionSuccess must only be called on the Handler thread");
+        synchronized (this.zzrN) {
+            zzac.zzar(!this.zzaEC);
+            this.mHandler.removeMessages(1);
+            this.zzaEC = true;
+            if (this.zzaEy.size() != 0) {
+                z = false;
+            }
+            zzac.zzar(z);
+            ArrayList arrayList = new ArrayList(this.zzaEx);
+            int i = this.zzaEB.get();
+            Iterator it = arrayList.iterator();
+            while (it.hasNext()) {
+                ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) it.next();
+                if (!this.zzaEA || !this.zzaEw.isConnected() || this.zzaEB.get() != i) {
+                    break;
+                } else if (!this.zzaEy.contains(connectionCallbacks)) {
+                    connectionCallbacks.onConnected(bundle);
+                }
+            }
+            this.zzaEy.clear();
+            this.zzaEC = false;
+        }
+    }
+
+    public void zzxq() {
+        this.zzaEA = false;
+        this.zzaEB.incrementAndGet();
+    }
+
+    public void zzxr() {
+        this.zzaEA = true;
     }
 }

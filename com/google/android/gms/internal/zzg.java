@@ -11,13 +11,13 @@ public class zzg extends Thread {
     private final zzb zzi;
     private final zzn zzj;
     private volatile boolean zzk = false;
-    private final BlockingQueue<zzk<?>> zzx;
-    private final zzf zzy;
+    private final BlockingQueue<zzk<?>> zzw;
+    private final zzf zzx;
 
     public zzg(BlockingQueue<zzk<?>> blockingQueue, zzf com_google_android_gms_internal_zzf, zzb com_google_android_gms_internal_zzb, zzn com_google_android_gms_internal_zzn) {
         super("VolleyNetworkDispatcher");
-        this.zzx = blockingQueue;
-        this.zzy = com_google_android_gms_internal_zzf;
+        this.zzw = blockingQueue;
+        this.zzx = com_google_android_gms_internal_zzf;
         this.zzi = com_google_android_gms_internal_zzb;
         this.zzj = com_google_android_gms_internal_zzn;
     }
@@ -43,27 +43,23 @@ public class zzg extends Thread {
         while (true) {
             long elapsedRealtime = SystemClock.elapsedRealtime();
             try {
-                zzk com_google_android_gms_internal_zzk = (zzk) this.zzx.take();
+                zzk com_google_android_gms_internal_zzk = (zzk) this.zzw.take();
                 try {
                     com_google_android_gms_internal_zzk.zzc("network-queue-take");
-                    if (com_google_android_gms_internal_zzk.isCanceled()) {
-                        com_google_android_gms_internal_zzk.zzd("network-discard-cancelled");
+                    zzb(com_google_android_gms_internal_zzk);
+                    zzi zza = this.zzx.zza(com_google_android_gms_internal_zzk);
+                    com_google_android_gms_internal_zzk.zzc("network-http-complete");
+                    if (zza.zzz && com_google_android_gms_internal_zzk.zzs()) {
+                        com_google_android_gms_internal_zzk.zzd("not-modified");
                     } else {
-                        zzb(com_google_android_gms_internal_zzk);
-                        zzi zza = this.zzy.zza(com_google_android_gms_internal_zzk);
-                        com_google_android_gms_internal_zzk.zzc("network-http-complete");
-                        if (zza.zzaa && com_google_android_gms_internal_zzk.zzu()) {
-                            com_google_android_gms_internal_zzk.zzd("not-modified");
-                        } else {
-                            zzm zza2 = com_google_android_gms_internal_zzk.zza(zza);
-                            com_google_android_gms_internal_zzk.zzc("network-parse-complete");
-                            if (com_google_android_gms_internal_zzk.zzp() && zza2.zzbf != null) {
-                                this.zzi.zza(com_google_android_gms_internal_zzk.zzg(), zza2.zzbf);
-                                com_google_android_gms_internal_zzk.zzc("network-cache-written");
-                            }
-                            com_google_android_gms_internal_zzk.zzt();
-                            this.zzj.zza(com_google_android_gms_internal_zzk, zza2);
+                        zzm zza2 = com_google_android_gms_internal_zzk.zza(zza);
+                        com_google_android_gms_internal_zzk.zzc("network-parse-complete");
+                        if (com_google_android_gms_internal_zzk.zzn() && zza2.zzae != null) {
+                            this.zzi.zza(com_google_android_gms_internal_zzk.zzg(), zza2.zzae);
+                            com_google_android_gms_internal_zzk.zzc("network-cache-written");
                         }
+                        com_google_android_gms_internal_zzk.zzr();
+                        this.zzj.zza(com_google_android_gms_internal_zzk, zza2);
                     }
                 } catch (zzr e) {
                     e.zza(SystemClock.elapsedRealtime() - elapsedRealtime);

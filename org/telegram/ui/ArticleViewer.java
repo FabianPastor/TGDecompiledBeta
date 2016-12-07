@@ -766,7 +766,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     return ArticleViewer.this.fullscreenTextureView;
                 }
 
-                public TextureView onSwtichToInline(View controlsView, boolean inline, float aspectRation, int rotation) {
+                public TextureView onSwtichToInline(View controlsView, boolean inline, float aspectRation, int rotation, org.telegram.ui.Components.Rect videoRect, boolean fromFullscreen) {
                     return null;
                 }
 
@@ -798,6 +798,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     } catch (Throwable e2) {
                         FileLog.e("tmessages", e2);
                     }
+                }
+
+                public boolean checkInlinePermissons() {
+                    return false;
                 }
             });
             addView(this.videoView);
@@ -951,7 +955,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 height = (int) dp;
                 this.webView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
                 if (this.videoView.getParent() == this) {
-                    this.videoView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(5.0f) + height, NUM));
+                    this.videoView.measure(MeasureSpec.makeMeasureSpec(listWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(10.0f) + height, NUM));
                 }
                 if (this.lastCreatedWidth != width) {
                     this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
@@ -4018,6 +4022,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4076,7 +4081,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
             LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
@@ -4098,7 +4102,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 }
                             }
                             try {
-                                this.windowLayoutParams.type = 99;
                                 if (VERSION.SDK_INT >= 21) {
                                     this.windowLayoutParams.flags = -NUM;
                                 }
@@ -4182,7 +4185,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (this.attachedToWindow) {
                 wm.removeView(this.windowView);
             }
-            this.windowLayoutParams.type = 99;
             if (VERSION.SDK_INT >= 21) {
                 this.windowLayoutParams.flags = -NUM;
             }

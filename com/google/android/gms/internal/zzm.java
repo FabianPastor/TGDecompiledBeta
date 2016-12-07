@@ -2,9 +2,9 @@ package com.google.android.gms.internal;
 
 public class zzm<T> {
     public final T result;
-    public final com.google.android.gms.internal.zzb.zza zzbf;
-    public final zzr zzbg;
-    public boolean zzbh;
+    public final com.google.android.gms.internal.zzb.zza zzae;
+    public final zzr zzaf;
+    public boolean zzag;
 
     public interface zza {
         void zze(zzr com_google_android_gms_internal_zzr);
@@ -15,17 +15,17 @@ public class zzm<T> {
     }
 
     private zzm(zzr com_google_android_gms_internal_zzr) {
-        this.zzbh = false;
+        this.zzag = false;
         this.result = null;
-        this.zzbf = null;
-        this.zzbg = com_google_android_gms_internal_zzr;
+        this.zzae = null;
+        this.zzaf = com_google_android_gms_internal_zzr;
     }
 
     private zzm(T t, com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza) {
-        this.zzbh = false;
+        this.zzag = false;
         this.result = t;
-        this.zzbf = com_google_android_gms_internal_zzb_zza;
-        this.zzbg = null;
+        this.zzae = com_google_android_gms_internal_zzb_zza;
+        this.zzaf = null;
     }
 
     public static <T> zzm<T> zza(T t, com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza) {
@@ -37,6 +37,6 @@ public class zzm<T> {
     }
 
     public boolean isSuccess() {
-        return this.zzbg == null;
+        return this.zzaf == null;
     }
 }
