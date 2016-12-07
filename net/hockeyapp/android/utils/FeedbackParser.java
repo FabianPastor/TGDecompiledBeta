@@ -31,13 +31,13 @@ public class FeedbackParser {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public FeedbackResponse parseFeedbackResponse(String feedbackResponseJson) {
         JSONException e;
-        Feedback feedback;
-        FeedbackResponse feedbackResponse = null;
+        FeedbackResponse feedbackResponse;
+        FeedbackResponse feedbackResponse2 = null;
         if (feedbackResponseJson == null) {
             return null;
         }
         try {
-            FeedbackResponse feedbackResponse2;
+            Feedback feedback;
             JSONObject jSONObject = new JSONObject(feedbackResponseJson);
             JSONObject feedbackObject = jSONObject.getJSONObject("feedback");
             Feedback feedback2 = new Feedback();
@@ -116,38 +116,38 @@ public class FeedbackParser {
                 } catch (JSONException e222) {
                     e222.printStackTrace();
                 }
-                feedbackResponse2 = new FeedbackResponse();
+                feedbackResponse = new FeedbackResponse();
             } catch (JSONException e3) {
                 e222 = e3;
                 feedback = feedback2;
                 e222.printStackTrace();
-                return feedbackResponse;
+                return feedbackResponse2;
             }
             try {
-                feedbackResponse2.setFeedback(feedback2);
+                feedbackResponse.setFeedback(feedback2);
                 try {
-                    feedbackResponse2.setStatus(jSONObject.getString("status").toString());
+                    feedbackResponse.setStatus(jSONObject.getString("status").toString());
                 } catch (JSONException e2222) {
                     e2222.printStackTrace();
                 }
                 try {
-                    feedbackResponse2.setToken(jSONObject.getString("token").toString());
+                    feedbackResponse.setToken(jSONObject.getString("token").toString());
                 } catch (JSONException e22222) {
                     e22222.printStackTrace();
                 }
                 feedback = feedback2;
-                return feedbackResponse2;
+                return feedbackResponse;
             } catch (JSONException e4) {
                 e22222 = e4;
                 feedback = feedback2;
-                feedbackResponse = feedbackResponse2;
+                feedbackResponse2 = feedbackResponse;
                 e22222.printStackTrace();
-                return feedbackResponse;
+                return feedbackResponse2;
             }
         } catch (JSONException e5) {
             e22222 = e5;
             e22222.printStackTrace();
-            return feedbackResponse;
+            return feedbackResponse2;
         }
     }
 }

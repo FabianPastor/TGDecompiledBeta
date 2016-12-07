@@ -1492,7 +1492,16 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 ArticleViewer.dotsPaint = new Paint(1);
                 ArticleViewer.dotsPaint.setColor(-1);
             }
-            this.innerListView = new ViewPager(context);
+            this.innerListView = new ViewPager(context, ArticleViewer.this) {
+                public boolean onTouchEvent(MotionEvent ev) {
+                    return super.onTouchEvent(ev);
+                }
+
+                public boolean onInterceptTouchEvent(MotionEvent ev) {
+                    ArticleViewer.this.windowView.requestDisallowInterceptTouchEvent(true);
+                    return super.onInterceptTouchEvent(ev);
+                }
+            };
             this.innerListView.addOnPageChangeListener(new OnPageChangeListener(ArticleViewer.this) {
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 }
@@ -1505,7 +1514,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
             });
             ViewPager viewPager = this.innerListView;
-            PagerAdapter anonymousClass2 = new PagerAdapter(ArticleViewer.this) {
+            PagerAdapter anonymousClass3 = new PagerAdapter(ArticleViewer.this) {
 
                 class ObjectContainer {
                     private PageBlock block;
@@ -1560,8 +1569,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
                 }
             };
-            this.adapter = anonymousClass2;
-            viewPager.setAdapter(anonymousClass2);
+            this.adapter = anonymousClass3;
+            viewPager.setAdapter(anonymousClass3);
             AndroidUtilities.setViewPagerEdgeEffectColor(this.innerListView, -657673);
             addView(this.innerListView);
             this.dotsContainer = new View(context, ArticleViewer.this) {
@@ -3814,7 +3823,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         final TL_webPage webPage = (TL_webPage) response;
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                if (ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == messageObject.messageOwner.media.webpage) {
+                                if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == messageObject.messageOwner.media.webpage) {
                                     messageObject.messageOwner.media.webpage = webPage;
                                     ArticleViewer.this.pagesStack.set(0, webPage);
                                     if (ArticleViewer.this.pagesStack.size() == 1) {

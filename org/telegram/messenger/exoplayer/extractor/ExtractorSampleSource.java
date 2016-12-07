@@ -149,10 +149,10 @@ public final class ExtractorSampleSource implements SampleSource, SampleSourceRe
         }
 
         public void load() throws IOException, InterruptedException {
+            ExtractorInput input;
             Throwable th;
             int result = 0;
             while (result == 0 && !this.loadCanceled) {
-                ExtractorInput input;
                 try {
                     long position = this.positionHolder.position;
                     long length = this.dataSource.open(new DataSpec(this.uri, position, -1, null));

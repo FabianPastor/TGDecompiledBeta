@@ -401,8 +401,8 @@ public final class Util {
     }
 
     public static byte[] executePost(String url, byte[] data, Map<String, String> requestProperties) throws IOException {
-        HttpURLConnection urlConnection = null;
         OutputStream out;
+        HttpURLConnection urlConnection = null;
         InputStream inputStream;
         try {
             urlConnection = (HttpURLConnection) new URL(url).openConnection();

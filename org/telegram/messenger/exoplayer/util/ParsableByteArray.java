@@ -426,7 +426,6 @@ public final class ParsableByteArray {
     }
 
     public long readUTF8EncodedLong() {
-        int i;
         int length = 0;
         long value = (long) this.data[this.position];
         for (int j = 7; j >= 0; j--) {
@@ -441,6 +440,7 @@ public final class ParsableByteArray {
                 if (length != 0) {
                     throw new NumberFormatException("Invalid UTF-8 sequence first byte: " + value);
                 }
+                int i;
                 for (i = 1; i < length; i++) {
                     x = this.data[this.position + i];
                     if ((x & PsExtractor.AUDIO_STREAM) == 128) {
