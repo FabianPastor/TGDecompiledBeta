@@ -655,7 +655,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
 
         protected void onDraw(Canvas canvas) {
-            PhotoViewer.getInstance().onDraw(canvas);
+            PhotoViewer.this.onDraw(canvas);
             if (VERSION.SDK_INT >= 21 && AndroidUtilities.statusBarHeight != 0) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.statusBarHeight, this.paint);
             }
@@ -1113,14 +1113,19 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.containerView.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
             if (VERSION.SDK_INT >= 21) {
+                this.containerView.setFitsSystemWindows(true);
                 this.containerView.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
                     @SuppressLint({"NewApi"})
                     public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                        WindowInsets oldInsets = (WindowInsets) PhotoViewer.this.lastInsets;
                         PhotoViewer.this.lastInsets = insets;
-                        PhotoViewer.this.windowView.requestLayout();
+                        if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+                            PhotoViewer.this.windowView.requestLayout();
+                        }
                         return insets.consumeSystemWindowInsets();
                     }
                 });
+                this.containerView.setSystemUiVisibility(1280);
             }
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.height = -1;
@@ -3630,6 +3635,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (object == null && photos == null) {
             return false;
         }
+        this.lastInsets = null;
         WindowManager wm = (WindowManager) this.parentActivity.getSystemService("window");
         if (this.attachedToWindow) {
             try {

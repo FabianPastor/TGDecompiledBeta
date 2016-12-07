@@ -335,6 +335,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
 
         public void onBindViewHolder(ViewHolder holder, int i) {
+            boolean enabled;
             boolean checkBackground = true;
             String text;
             switch (holder.getItemViewType()) {
@@ -381,8 +382,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
                     break;
                 case 3:
-                    TextCell textCell = holder.itemView;
+                    TextCell textCell = (TextCell) holder.itemView;
                     textCell.setTextColor(-14606047);
+                    String string;
                     String value;
                     if (i != ProfileActivity.this.sharedMediaRow) {
                         if (i != ProfileActivity.this.settingsTimerRow) {
@@ -442,7 +444,37 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 textCell.setTextColor(-13129447);
                                 break;
                             }
-                            textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.profile_list);
+                            long did;
+                            String string2;
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                            if (ProfileActivity.this.dialog_id != 0) {
+                                did = ProfileActivity.this.dialog_id;
+                            } else if (ProfileActivity.this.user_id != 0) {
+                                did = (long) ProfileActivity.this.user_id;
+                            } else {
+                                did = (long) (-ProfileActivity.this.chat_id);
+                            }
+                            int value2 = preferences.getInt("notify2_" + did, 0);
+                            if (value2 == 0) {
+                                if (((int) ProfileActivity.this.dialog_id) < 0) {
+                                    enabled = preferences.getBoolean("EnableGroup", true);
+                                } else {
+                                    enabled = preferences.getBoolean("EnableAll", true);
+                                }
+                            } else if (value2 == 1) {
+                                enabled = true;
+                            } else if (value2 == 2) {
+                                enabled = false;
+                            } else {
+                                enabled = false;
+                            }
+                            string = LocaleController.getString("Notifications", R.string.Notifications);
+                            if (enabled) {
+                                string2 = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                            } else {
+                                string2 = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                            }
+                            textCell.setTextAndValueAndIcon(string, string2, R.drawable.profile_list);
                             break;
                         }
                         EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32)));
@@ -457,10 +489,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     if (ProfileActivity.this.totalMediaCount == -1) {
                         value = LocaleController.getString("Loading", R.string.Loading);
                     } else {
-                        String str = "%d";
+                        string = "%d";
                         Object[] objArr = new Object[1];
                         objArr[0] = Integer.valueOf((ProfileActivity.this.totalMediaCountMerge != -1 ? ProfileActivity.this.totalMediaCountMerge : 0) + ProfileActivity.this.totalMediaCount);
-                        value = String.format(str, objArr);
+                        value = String.format(string, objArr);
                     }
                     if (ProfileActivity.this.user_id != 0 && UserConfig.getClientUserId() == ProfileActivity.this.user_id) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("SharedMedia", R.string.SharedMedia), value, R.drawable.profile_list);
@@ -526,7 +558,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     break;
             }
             if (checkBackground) {
-                boolean enabled = false;
+                enabled = false;
                 if (ProfileActivity.this.user_id != 0) {
                     enabled = i == ProfileActivity.this.phoneRow || i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.sharedMediaRow || i == ProfileActivity.this.startSecretChatRow || i == ProfileActivity.this.usernameRow || i == ProfileActivity.this.userInfoRow;
                 } else if (ProfileActivity.this.chat_id != 0) {

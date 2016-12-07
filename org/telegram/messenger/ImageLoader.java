@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -710,56 +709,6 @@ public class ImageLoader {
             } catch (Throwable e2) {
                 FileLog.e("tmessages", e2);
                 removeTask();
-            }
-        }
-    }
-
-    public class VMRuntimeHack {
-        private Object runtime = null;
-        private Method trackAllocation = null;
-        private Method trackFree = null;
-
-        public boolean trackAlloc(long size) {
-            if (this.runtime == null) {
-                return false;
-            }
-            try {
-                Object res = this.trackAllocation.invoke(this.runtime, new Object[]{Long.valueOf(size)});
-                if (res instanceof Boolean) {
-                    return ((Boolean) res).booleanValue();
-                }
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
-        public boolean trackFree(long size) {
-            if (this.runtime == null) {
-                return false;
-            }
-            try {
-                Object res = this.trackFree.invoke(this.runtime, new Object[]{Long.valueOf(size)});
-                if (res instanceof Boolean) {
-                    return ((Boolean) res).booleanValue();
-                }
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
-        public VMRuntimeHack() {
-            try {
-                Class cl = Class.forName("dalvik.system.VMRuntime");
-                this.runtime = cl.getMethod("getRuntime", new Class[0]).invoke(null, new Object[0]);
-                this.trackAllocation = cl.getMethod("trackExternalAllocation", new Class[]{Long.TYPE});
-                this.trackFree = cl.getMethod("trackExternalFree", new Class[]{Long.TYPE});
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-                this.runtime = null;
-                this.trackAllocation = null;
-                this.trackFree = null;
             }
         }
     }

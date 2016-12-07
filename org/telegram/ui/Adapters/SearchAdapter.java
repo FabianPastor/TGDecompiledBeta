@@ -20,11 +20,13 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
+import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.GreySectionCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.UserCell;
 
-public class SearchAdapter extends BaseSearchAdapter {
+public class SearchAdapter extends BaseFragmentAdapter {
     private boolean allowBots;
     private boolean allowChats;
     private boolean allowUsernameSearch;
@@ -32,6 +34,7 @@ public class SearchAdapter extends BaseSearchAdapter {
     private HashMap<Integer, User> ignoreUsers;
     private Context mContext;
     private boolean onlyMutual;
+    private SearchAdapterHelper searchAdapterHelper;
     private ArrayList<User> searchResult = new ArrayList();
     private ArrayList<CharSequence> searchResultNames = new ArrayList();
     private Timer searchTimer;
@@ -44,6 +47,15 @@ public class SearchAdapter extends BaseSearchAdapter {
         this.allowUsernameSearch = usernameSearch;
         this.allowChats = chats;
         this.allowBots = bots;
+        this.searchAdapterHelper = new SearchAdapterHelper();
+        this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
+            public void onDataSetChanged() {
+                SearchAdapter.this.notifyDataSetChanged();
+            }
+
+            public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+            }
+        });
     }
 
     public void setCheckedMap(HashMap<Integer, ?> map) {
@@ -66,7 +78,7 @@ public class SearchAdapter extends BaseSearchAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                queryServerSearch(null, this.allowChats, this.allowBots);
+                this.searchAdapterHelper.queryServerSearch(null, this.allowChats, this.allowBots);
             }
             notifyDataSetChanged();
             return;
@@ -89,7 +101,7 @@ public class SearchAdapter extends BaseSearchAdapter {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (SearchAdapter.this.allowUsernameSearch) {
-                    SearchAdapter.this.queryServerSearch(query, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots);
+                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots);
                 }
                 final ArrayList<TL_contact> contactsCopy = new ArrayList();
                 contactsCopy.addAll(ContactsController.getInstance().contacts);
@@ -169,7 +181,7 @@ public class SearchAdapter extends BaseSearchAdapter {
 
     public int getCount() {
         int count = this.searchResult.size();
-        int globalCount = this.globalSearch.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
         if (globalCount != 0) {
             return count + (globalCount + 1);
         }
@@ -178,7 +190,7 @@ public class SearchAdapter extends BaseSearchAdapter {
 
     public boolean isGlobalSearch(int i) {
         int localCount = this.searchResult.size();
-        int globalCount = this.globalSearch.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
         if ((i < 0 || i >= localCount) && i > localCount && i <= globalCount + localCount) {
             return true;
         }
@@ -187,14 +199,14 @@ public class SearchAdapter extends BaseSearchAdapter {
 
     public TLObject getItem(int i) {
         int localCount = this.searchResult.size();
-        int globalCount = this.globalSearch.size();
+        int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
         if (i >= 0 && i < localCount) {
             return (TLObject) this.searchResult.get(i);
         }
         if (i <= localCount || i > globalCount + localCount) {
             return null;
         }
-        return (TLObject) this.globalSearch.get((i - localCount) - 1);
+        return (TLObject) this.searchAdapterHelper.getGlobalSearch().get((i - localCount) - 1);
     }
 
     public long getItemId(int i) {
@@ -239,7 +251,7 @@ public class SearchAdapter extends BaseSearchAdapter {
                     name = null;
                 }
             } else if (i > this.searchResult.size() && un != null) {
-                String foundUserName = this.lastFoundUsername;
+                String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
                 if (foundUserName.startsWith("@")) {
                     foundUserName = foundUserName.substring(1);
                 }
@@ -292,6 +304,6 @@ public class SearchAdapter extends BaseSearchAdapter {
     }
 
     public boolean isEmpty() {
-        return this.searchResult.isEmpty() && this.globalSearch.isEmpty();
+        return this.searchResult.isEmpty() && this.searchAdapterHelper.getGlobalSearch().isEmpty();
     }
 }

@@ -100,10 +100,10 @@ class zze extends zzaa {
 
         @WorkerThread
         private boolean zza(SQLiteDatabase sQLiteDatabase, String str) {
+            Cursor query;
             Object e;
             Throwable th;
             Cursor cursor = null;
-            Cursor query;
             try {
                 SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
                 query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -498,7 +498,6 @@ class zze extends zzaa {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzhz(str);
@@ -506,6 +505,7 @@ class zze extends zzaa {
         zzaax();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_measurement_internal_zze_zza = new zza();
+        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -769,7 +769,6 @@ class zze extends zzaa {
     }
 
     public void zza(String str, long j, zzb com_google_android_gms_measurement_internal_zze_zzb) {
-        Object string;
         Object e;
         Throwable th;
         Cursor cursor = null;
@@ -778,6 +777,7 @@ class zze extends zzaa {
         zzaax();
         Cursor cursor2;
         try {
+            Object string;
             String str2;
             SQLiteDatabase writableDatabase = getWritableDatabase();
             String string2;
@@ -1128,7 +1128,6 @@ class zze extends zzaa {
     }
 
     Map<Integer, List<com.google.android.gms.internal.zzvk.zzb>> zzat(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzaax();
@@ -1136,6 +1135,7 @@ class zze extends zzaa {
         zzac.zzhz(str);
         zzac.zzhz(str2);
         Map<Integer, List<com.google.android.gms.internal.zzvk.zzb>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1324,12 +1324,12 @@ class zze extends zzaa {
     }
 
     public String zzbl(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzyl();
         zzaax();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1381,10 +1381,10 @@ class zze extends zzaa {
 
     @WorkerThread
     public String zzbvj() {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1612,12 +1612,12 @@ class zze extends zzaa {
 
     @WorkerThread
     public zza zzlz(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzhz(str);
         zzyl();
         zzaax();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
             try {

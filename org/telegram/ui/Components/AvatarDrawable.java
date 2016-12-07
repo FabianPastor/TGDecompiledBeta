@@ -25,16 +25,15 @@ public class AvatarDrawable extends Drawable {
     private static int[] arrColorsProfiles = new int[]{-2592923, -615071, -7570990, -9981091, -11099461, Theme.ACTION_BAR_MAIN_AVATAR_COLOR, -7570990, -819290};
     private static int[] arrColorsProfilesBack = new int[]{-3514282, -947900, -8557884, -11099828, -12283220, Theme.ACTION_BAR_PROFILE_COLOR, -8557884, -11762506};
     private static int[] arrColorsProfilesText = new int[]{-406587, -139832, -3291923, -4133446, -4660496, Theme.ACTION_BAR_PROFILE_SUBTITLE_COLOR, -3291923, -4990985};
+    private static int[] arrGroupCreateColors = new int[]{-136730, -267558, -1842948, -2296624, -2230789, -2888962, -1842948, -7189};
     private static Drawable broadcastDrawable;
-    private static TextPaint namePaint;
-    private static TextPaint namePaintSmall;
     private static Paint paint = new Paint(1);
     private static Drawable photoDrawable;
     private int color;
     private boolean drawBrodcast;
     private boolean drawPhoto;
     private boolean isProfile;
-    private boolean smallStyle;
+    private TextPaint namePaint;
     private StringBuilder stringBuilder;
     private float textHeight;
     private StaticLayout textLayout;
@@ -43,15 +42,13 @@ public class AvatarDrawable extends Drawable {
 
     public AvatarDrawable() {
         this.stringBuilder = new StringBuilder(5);
-        if (namePaint == null) {
-            namePaint = new TextPaint(1);
-            namePaint.setColor(-1);
-            namePaintSmall = new TextPaint(1);
-            namePaintSmall.setColor(-1);
+        this.namePaint = new TextPaint(1);
+        this.namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.namePaint.setColor(-1);
+        this.namePaint.setTextSize((float) AndroidUtilities.dp(18.0f));
+        if (broadcastDrawable == null) {
             broadcastDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.broadcast_w);
         }
-        namePaint.setTextSize((float) AndroidUtilities.dp(20.0f));
-        namePaintSmall.setTextSize((float) AndroidUtilities.dp(14.0f));
     }
 
     public AvatarDrawable(User user) {
@@ -82,10 +79,6 @@ public class AvatarDrawable extends Drawable {
         this.isProfile = value;
     }
 
-    public void setSmallStyle(boolean value) {
-        this.smallStyle = value;
-    }
-
     public static int getColorIndex(int id) {
         return (id < 0 || id >= 8) ? Math.abs(id % arrColors.length) : id;
     }
@@ -114,6 +107,10 @@ public class AvatarDrawable extends Drawable {
         return arrColorsNames[getColorIndex(id)];
     }
 
+    public static int getGroupCreateColor(int id) {
+        return arrGroupCreateColors[getColorIndex(id)];
+    }
+
     public void setInfo(User user) {
         if (user != null) {
             setInfo(user.id, user.first_name, user.last_name, false, null);
@@ -130,8 +127,16 @@ public class AvatarDrawable extends Drawable {
         this.color = value;
     }
 
+    public void setTextSize(int size) {
+        this.namePaint.setTextSize((float) size);
+    }
+
     public void setInfo(int id, String firstName, String lastName, boolean isBroadcast) {
         setInfo(id, firstName, lastName, isBroadcast, null);
+    }
+
+    public int getColor() {
+        return this.color;
     }
 
     public void setInfo(int id, String firstName, String lastName, boolean isBroadcast, String custom) {
@@ -180,7 +185,7 @@ public class AvatarDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.smallStyle ? namePaintSmall : namePaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.textLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.namePaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
                 if (this.textLayout.getLineCount() > 0) {
                     this.textLeft = this.textLayout.getLineLeft(0);
                     this.textWidth = this.textLayout.getLineWidth(0);

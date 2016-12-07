@@ -90,8 +90,8 @@ public final class InitializationChunk extends Chunk implements SingleTrackOutpu
     }
 
     public void load() throws IOException, InterruptedException {
-        DataSpec loadDataSpec = Util.getRemainderDataSpec(this.dataSpec, this.bytesLoaded);
         ExtractorInput input;
+        DataSpec loadDataSpec = Util.getRemainderDataSpec(this.dataSpec, this.bytesLoaded);
         try {
             input = new DefaultExtractorInput(this.dataSource, loadDataSpec.absoluteStreamPosition, this.dataSource.open(loadDataSpec));
             if (this.bytesLoaded == 0) {

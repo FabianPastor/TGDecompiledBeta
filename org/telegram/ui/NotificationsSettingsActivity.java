@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
@@ -44,8 +43,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Components.ColorPickerView;
-import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.AlertsCreator;
 
 public class NotificationsSettingsActivity extends BaseFragment implements NotificationCenterDelegate {
     private int androidAutoAlertRow;
@@ -125,7 +123,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             int type = getItemViewType(i);
             if (type == 0) {
                 if (view == null) {
-                    view = new HeaderCell(this.mContext);
+                    View headerCell = new HeaderCell(this.mContext);
                 }
                 if (i == NotificationsSettingsActivity.this.messageSectionRow) {
                     ((HeaderCell) view).setText(LocaleController.getString("MessageNotifications", R.string.MessageNotifications));
@@ -144,7 +142,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             SharedPreferences preferences;
             if (type == 1) {
                 if (view == null) {
-                    view = new TextCheckCell(this.mContext);
+                    headerCell = new TextCheckCell(this.mContext);
                 }
                 TextCheckCell checkCell = (TextCheckCell) view;
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
@@ -198,7 +196,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             } else if (type == 2) {
                 if (view == null) {
-                    view = new TextDetailSettingsCell(this.mContext);
+                    headerCell = new TextDetailSettingsCell(this.mContext);
                 }
                 TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
@@ -301,20 +299,25 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 }
             } else if (type == 3) {
+                int color;
                 if (view == null) {
-                    view = new TextColorCell(this.mContext);
+                    headerCell = new TextColorCell(this.mContext);
                 }
                 TextColorCell textCell2 = (TextColorCell) view;
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                 if (i == NotificationsSettingsActivity.this.messageLedRow) {
-                    textCell2.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), preferences.getInt("MessagesLed", -16711936), true);
-                    return view;
-                } else if (i != NotificationsSettingsActivity.this.groupLedRow) {
-                    return view;
+                    color = preferences.getInt("MessagesLed", -16776961);
                 } else {
-                    textCell2.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), preferences.getInt("GroupLed", -16711936), true);
-                    return view;
+                    color = preferences.getInt("GroupLed", -16776961);
                 }
+                for (int a = 0; a < 9; a++) {
+                    if (TextColorCell.colorsToSave[a] == color) {
+                        color = TextColorCell.colors[a];
+                        break;
+                    }
+                }
+                textCell2.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), color, true);
+                return view;
             } else if (type == 4 && view == null) {
                 return new ShadowSectionCell(this.mContext);
             } else {
@@ -550,10 +553,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else if (i == NotificationsSettingsActivity.this.messageSoundRow || i == NotificationsSettingsActivity.this.groupSoundRow) {
                     try {
                         preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                        Intent tmpIntent = new Intent("android.intent.action.RINGTONE_PICKER");
-                        tmpIntent.putExtra("android.intent.extra.ringtone.TYPE", 2);
-                        tmpIntent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
-                        tmpIntent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(2));
+                        Intent intent = new Intent("android.intent.action.RINGTONE_PICKER");
+                        intent.putExtra("android.intent.extra.ringtone.TYPE", 2);
+                        intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
+                        intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(2));
                         Uri currentSound = null;
                         String defaultPath = null;
                         Uri defaultUri = System.DEFAULT_NOTIFICATION_URI;
@@ -572,8 +575,8 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                 currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
                             }
                         }
-                        tmpIntent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
-                        NotificationsSettingsActivity.this.startActivityForResult(tmpIntent, i);
+                        intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
+                        NotificationsSettingsActivity.this.startActivityForResult(intent, i);
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
                     }
@@ -683,66 +686,26 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 } else if (i == NotificationsSettingsActivity.this.messageLedRow || i == NotificationsSettingsActivity.this.groupLedRow) {
                     if (NotificationsSettingsActivity.this.getParentActivity() != null) {
-                        LinearLayout linearLayout = new LinearLayout(NotificationsSettingsActivity.this.getParentActivity());
-                        linearLayout.setOrientation(1);
-                        final ColorPickerView colorPickerView = new ColorPickerView(NotificationsSettingsActivity.this.getParentActivity());
-                        linearLayout.addView(colorPickerView, LayoutHelper.createLinear(-2, -2, 17));
-                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                        if (i == NotificationsSettingsActivity.this.messageLedRow) {
-                            colorPickerView.setOldCenterColor(preferences.getInt("MessagesLed", -16711936));
-                        } else if (i == NotificationsSettingsActivity.this.groupLedRow) {
-                            colorPickerView.setOldCenterColor(preferences.getInt("GroupLed", -16711936));
-                        }
-                        builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
-                        builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
-                        builder.setView(linearLayout);
-                        final View view2 = view;
-                        final int i2 = i;
-                        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
-                            public void onClick(DialogInterface dialogInterface, int which) {
-                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                                TextColorCell textCell = view2;
-                                if (i2 == NotificationsSettingsActivity.this.messageLedRow) {
-                                    editor.putInt("MessagesLed", colorPickerView.getColor());
-                                    textCell.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), colorPickerView.getColor(), true);
-                                } else if (i2 == NotificationsSettingsActivity.this.groupLedRow) {
-                                    editor.putInt("GroupLed", colorPickerView.getColor());
-                                    textCell.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), colorPickerView.getColor(), true);
+                        NotificationsSettingsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), 0, i == NotificationsSettingsActivity.this.groupLedRow, i == NotificationsSettingsActivity.this.messageLedRow, new Runnable() {
+                            public void run() {
+                                if (NotificationsSettingsActivity.this.listView != null) {
+                                    NotificationsSettingsActivity.this.listView.invalidateViews();
                                 }
-                                editor.commit();
                             }
-                        });
-                        view2 = view;
-                        i2 = i;
-                        builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                                TextColorCell textCell = view2;
-                                if (i2 == NotificationsSettingsActivity.this.messageLedRow) {
-                                    editor.putInt("MessagesLed", 0);
-                                    textCell.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), 0, true);
-                                } else if (i2 == NotificationsSettingsActivity.this.groupLedRow) {
-                                    editor.putInt("GroupLed", 0);
-                                    textCell.setTextAndColor(LocaleController.getString("LedColor", R.string.LedColor), 0, true);
-                                }
-                                editor.commit();
-                                NotificationsSettingsActivity.this.listView.invalidateViews();
-                            }
-                        });
-                        NotificationsSettingsActivity.this.showDialog(builder.create());
+                        }));
                     } else {
                         return;
                     }
                 } else if (i == NotificationsSettingsActivity.this.messagePopupNotificationRow || i == NotificationsSettingsActivity.this.groupPopupNotificationRow) {
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
-                    r2 = i;
+                    r1 = i;
                     builder.setItems(new CharSequence[]{LocaleController.getString("NoPopup", R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", R.string.AlwaysShowPopup)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
-                            if (r2 == NotificationsSettingsActivity.this.messagePopupNotificationRow) {
+                            if (r1 == NotificationsSettingsActivity.this.messagePopupNotificationRow) {
                                 editor.putInt("popupAll", which);
-                            } else if (r2 == NotificationsSettingsActivity.this.groupPopupNotificationRow) {
+                            } else if (r1 == NotificationsSettingsActivity.this.groupPopupNotificationRow) {
                                 editor.putInt("popupGroup", which);
                             }
                             editor.commit();
@@ -756,12 +719,12 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow) {
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
-                    r2 = i;
+                    r1 = i;
                     builder.setItems(new CharSequence[]{LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long), LocaleController.getString("OnlyIfSilent", R.string.OnlyIfSilent)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
                             String param = "vibrate_messages";
-                            if (r2 == NotificationsSettingsActivity.this.groupVibrateRow) {
+                            if (r1 == NotificationsSettingsActivity.this.groupVibrateRow) {
                                 param = "vibrate_group";
                             }
                             if (which == 0) {
@@ -786,13 +749,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 } else if (i == NotificationsSettingsActivity.this.messagePriorityRow || i == NotificationsSettingsActivity.this.groupPriorityRow) {
                     builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
-                    r2 = i;
+                    r1 = i;
                     builder.setItems(new CharSequence[]{LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                            if (r2 == NotificationsSettingsActivity.this.messagePriorityRow) {
+                            if (r1 == NotificationsSettingsActivity.this.messagePriorityRow) {
                                 preferences.edit().putInt("priority_messages", which).commit();
-                            } else if (r2 == NotificationsSettingsActivity.this.groupPriorityRow) {
+                            } else if (r1 == NotificationsSettingsActivity.this.groupPriorityRow) {
                                 preferences.edit().putInt("priority_group", which).commit();
                             }
                             if (NotificationsSettingsActivity.this.listView != null) {

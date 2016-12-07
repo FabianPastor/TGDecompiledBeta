@@ -1687,7 +1687,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     }
 
     public static class RecycledViewPool {
-        private static final int DEFAULT_MAX_SCRAP = 5;
+        private static final int DEFAULT_MAX_SCRAP = 20;
         private int mAttachCount = 0;
         private SparseIntArray mMaxScrap = new SparseIntArray();
         private SparseArray<ArrayList<ViewHolder>> mScrap = new SparseArray();
@@ -1763,7 +1763,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 scrap = new ArrayList();
                 this.mScrap.put(viewType, scrap);
                 if (this.mMaxScrap.indexOfKey(viewType) < 0) {
-                    this.mMaxScrap.put(viewType, 5);
+                    this.mMaxScrap.put(viewType, 20);
                 }
             }
             return scrap;
@@ -2169,12 +2169,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
+            View view;
+            ViewHolder vh;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
-                View view;
-                ViewHolder vh;
                 int layoutIndex;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {

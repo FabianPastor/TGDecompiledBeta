@@ -93,7 +93,7 @@ public class ProfileSearchCell extends BaseCell {
             offlinePaint = new TextPaint(1);
             offlinePaint.setColor(-6710887);
             linePaint = new Paint();
-            linePaint.setColor(-2302756);
+            linePaint.setColor(Theme.GROUP_CREATE_DIVIDER_COLOR);
             countPaint = new TextPaint(1);
             countPaint.setColor(-1);
             countPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

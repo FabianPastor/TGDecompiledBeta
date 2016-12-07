@@ -207,6 +207,7 @@ public final class R {
         public static final int del_btn = NUM;
         public static final int del_btn_pressed = NUM;
         public static final int del_states = NUM;
+        public static final int delete = NUM;
         public static final int delete_reply = NUM;
         public static final int devices = NUM;
         public static final int dialogs_badge = NUM;
@@ -233,6 +234,7 @@ public final class R {
         public static final int edit_doneblue = NUM;
         public static final int edit_text = NUM;
         public static final int field_carret = NUM;
+        public static final int field_carret_empty = NUM;
         public static final int file_b = NUM;
         public static final int file_b_cancel = NUM;
         public static final int file_b_cancel_s = NUM;
@@ -548,6 +550,7 @@ public final class R {
         public static final int search_up = NUM;
         public static final int search_web = NUM;
         public static final int selectphoto_large = NUM;
+        public static final int shadowdown = NUM;
         public static final int share = NUM;
         public static final int share_arrow = NUM;
         public static final int share_round = NUM;
@@ -609,7 +612,6 @@ public final class R {
         public static final int auto = NUM;
         public static final int background_image_intro = NUM;
         public static final int bottom_pages = NUM;
-        public static final int bubble_text_view = NUM;
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
         public static final int button_login = NUM;
@@ -677,7 +679,6 @@ public final class R {
 
     public static final class layout {
         public static final int document_select_layout = NUM;
-        public static final int group_create_bubble = NUM;
         public static final int hockeyapp_activity_expiry_info = NUM;
         public static final int hockeyapp_activity_feedback = NUM;
         public static final int hockeyapp_activity_login = NUM;
@@ -1016,6 +1017,15 @@ public final class R {
         public static final int Close = NUM;
         public static final int Code = NUM;
         public static final int CodeExpired = NUM;
+        public static final int ColorBlue = NUM;
+        public static final int ColorCyan = NUM;
+        public static final int ColorGreen = NUM;
+        public static final int ColorOrange = NUM;
+        public static final int ColorPink = NUM;
+        public static final int ColorRed = NUM;
+        public static final int ColorViolet = NUM;
+        public static final int ColorWhite = NUM;
+        public static final int ColorYellow = NUM;
         public static final int CompatibilityChat = NUM;
         public static final int Connecting = NUM;
         public static final int ContactJoined = NUM;
@@ -1042,7 +1052,9 @@ public final class R {
         public static final int CurvesBlue = NUM;
         public static final int CurvesGreen = NUM;
         public static final int CurvesRed = NUM;
+        public static final int Custom = NUM;
         public static final int CustomHelp = NUM;
+        public static final int CustomNotifications = NUM;
         public static final int CustomShareInfo = NUM;
         public static final int CustomShareSettingsHelp = NUM;
         public static final int DaysBold_few = NUM;
@@ -1215,6 +1227,7 @@ public final class R {
         public static final int FromYou = NUM;
         public static final int Gallery = NUM;
         public static final int GalleryInfo = NUM;
+        public static final int General = NUM;
         public static final int GettingLinkInfo = NUM;
         public static final int GlobalSearch = NUM;
         public static final int GotAQuestion = NUM;
@@ -1366,6 +1379,7 @@ public final class R {
         public static final int MegaUsernameHelp = NUM;
         public static final int MegaWasPrivateAlert = NUM;
         public static final int MembersCount = NUM;
+        public static final int MembersCountZero = NUM;
         public static final int Members_few = NUM;
         public static final int Members_many = NUM;
         public static final int Members_one = NUM;
@@ -1534,12 +1548,18 @@ public final class R {
         public static final int Notifications = NUM;
         public static final int NotificationsAndSounds = NUM;
         public static final int NotificationsDisabled = NUM;
+        public static final int NotificationsLed = NUM;
+        public static final int NotificationsLedColor = NUM;
+        public static final int NotificationsLedInfo = NUM;
+        public static final int NotificationsOff = NUM;
+        public static final int NotificationsOn = NUM;
         public static final int NotificationsOther = NUM;
         public static final int NotificationsPriority = NUM;
         public static final int NotificationsPriorityDefault = NUM;
         public static final int NotificationsPriorityHigh = NUM;
         public static final int NotificationsPriorityLow = NUM;
         public static final int NotificationsPriorityMax = NUM;
+        public static final int NotificationsPrioritySettings = NUM;
         public static final int NotificationsService = NUM;
         public static final int NotificationsServiceConnection = NUM;
         public static final int NotificationsServiceConnectionInfo = NUM;
@@ -1640,12 +1660,15 @@ public final class R {
         public static final int Points_two = NUM;
         public static final int Points_zero = NUM;
         public static final int PopupNotification = NUM;
+        public static final int PriorityInfo = NUM;
         public static final int PrivacyFloodControlError = NUM;
         public static final int PrivacyLastSeen = NUM;
         public static final int PrivacyPolicy = NUM;
         public static final int PrivacyPolicyUrl = NUM;
         public static final int PrivacySettings = NUM;
         public static final int PrivacyTitle = NUM;
+        public static final int ProfilePopupNotification = NUM;
+        public static final int ProfilePopupNotificationInfo = NUM;
         public static final int RaiseToSpeak = NUM;
         public static final int RaiseToSpeakAlert = NUM;
         public static final int ReEnterYourPasscode = NUM;
@@ -1795,6 +1818,8 @@ public final class R {
         public static final int ShowAllMedia = NUM;
         public static final int SlideToCancel = NUM;
         public static final int SmartNotifications = NUM;
+        public static final int SmartNotificationsAlert = NUM;
+        public static final int SmartNotificationsDetail = NUM;
         public static final int SmartNotificationsDisabled = NUM;
         public static final int SmartNotificationsInfo = NUM;
         public static final int SmartNotificationsMinutes = NUM;

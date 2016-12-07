@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.ui.ActionBar.Theme;
 
 public class CheckBox extends View {
     private static Paint backgroundPaint = null;
@@ -28,7 +29,7 @@ public class CheckBox extends View {
     private Canvas checkCanvas;
     private Drawable checkDrawable;
     private int checkOffset;
-    private int color = -10567099;
+    private int color = Theme.GROUP_CREATE_CHECKBOX_COLOR;
     private boolean drawBackground;
     private Bitmap drawBitmap;
     private boolean isCheckAnimation = true;

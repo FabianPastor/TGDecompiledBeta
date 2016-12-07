@@ -43,6 +43,8 @@ import org.telegram.tgnet.TLRPC.TL_messages_searchGlobal;
 import org.telegram.tgnet.TLRPC.TL_topPeer;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_Messages;
+import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
+import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.GreySectionCell;
 import org.telegram.ui.Cells.HashtagSearchCell;
@@ -53,7 +55,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 
-public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
+public class DialogsSearchAdapter extends Adapter {
     private DialogsSearchAdapterDelegate delegate;
     private int dialogsType;
     private String lastMessagesSearchString;
@@ -66,6 +68,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
     private ArrayList<RecentSearchObject> recentSearchObjects = new ArrayList();
     private HashMap<Long, RecentSearchObject> recentSearchObjectsById = new HashMap();
     private int reqId = 0;
+    private SearchAdapterHelper searchAdapterHelper = new SearchAdapterHelper();
     private ArrayList<TLObject> searchResult = new ArrayList();
     private ArrayList<String> searchResultHashtags = new ArrayList();
     private ArrayList<MessageObject> searchResultMessages = new ArrayList();
@@ -151,6 +154,21 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
     }
 
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
+        this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
+            public void onDataSetChanged() {
+                DialogsSearchAdapter.this.notifyDataSetChanged();
+            }
+
+            public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+                for (int a = 0; a < arrayList.size(); a++) {
+                    DialogsSearchAdapter.this.searchResultHashtags.add(((HashtagObject) arrayList.get(a)).hashtag);
+                }
+                if (DialogsSearchAdapter.this.delegate != null) {
+                    DialogsSearchAdapter.this.delegate.searchStateChanged(false);
+                }
+                DialogsSearchAdapter.this.notifyDataSetChanged();
+            }
+        });
         this.mContext = context;
         this.needMessagesSearch = messagesSearch;
         this.dialogsType = type;
@@ -429,6 +447,10 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                 }
             }
         });
+    }
+
+    public void addHashtagsFromMessage(CharSequence message) {
+        this.searchAdapterHelper.addHashtagsFromMessage(message);
     }
 
     private void setRecentSearch(ArrayList<RecentSearchObject> arrayList, HashMap<Long, RecentSearchObject> hashMap) {
@@ -776,23 +798,12 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
     }
 
     public boolean isGlobalSearch(int i) {
-        return i > this.searchResult.size() && i <= this.globalSearch.size() + this.searchResult.size();
+        return i > this.searchResult.size() && i <= this.searchAdapterHelper.getGlobalSearch().size() + this.searchResult.size();
     }
 
     public void clearRecentHashtags() {
-        super.clearRecentHashtags();
+        this.searchAdapterHelper.clearRecentHashtags();
         this.searchResultHashtags.clear();
-        notifyDataSetChanged();
-    }
-
-    protected void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-        super.setHashtags(arrayList, hashMap);
-        for (int a = 0; a < arrayList.size(); a++) {
-            this.searchResultHashtags.add(((HashtagObject) arrayList.get(a)).hashtag);
-        }
-        if (this.delegate != null) {
-            this.delegate.searchStateChanged(false);
-        }
         notifyDataSetChanged();
     }
 
@@ -808,61 +819,60 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                 FileLog.e("tmessages", e);
             }
             if (query == null || query.length() == 0) {
-                this.hashtagsLoadedFromDb = false;
+                this.searchAdapterHelper.unloadRecentHashtags();
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
                 if (this.needMessagesSearch != 2) {
-                    queryServerSearch(null, true);
+                    this.searchAdapterHelper.queryServerSearch(null, true, true);
                 }
                 searchMessagesInternal(null);
                 notifyDataSetChanged();
-            } else if (this.needMessagesSearch != 2 && query.startsWith("#") && query.length() == 1) {
+                return;
+            }
+            if (this.needMessagesSearch != 2 && query.startsWith("#") && query.length() == 1) {
                 this.messagesSearchEndReached = true;
-                if (this.hashtagsLoadedFromDb) {
+                if (this.searchAdapterHelper.loadRecentHashtags()) {
                     this.searchResultMessages.clear();
                     this.searchResultHashtags.clear();
-                    for (int a = 0; a < this.hashtags.size(); a++) {
-                        this.searchResultHashtags.add(((HashtagObject) this.hashtags.get(a)).hashtag);
+                    ArrayList<HashtagObject> hashtags = this.searchAdapterHelper.getHashtags();
+                    for (int a = 0; a < hashtags.size(); a++) {
+                        this.searchResultHashtags.add(((HashtagObject) hashtags.get(a)).hashtag);
                     }
                     if (this.delegate != null) {
                         this.delegate.searchStateChanged(false);
                     }
-                    notifyDataSetChanged();
-                    return;
-                }
-                loadRecentHashtags();
-                if (this.delegate != null) {
+                } else if (this.delegate != null) {
                     this.delegate.searchStateChanged(true);
                 }
                 notifyDataSetChanged();
             } else {
                 this.searchResultHashtags.clear();
                 notifyDataSetChanged();
-                final int searchId = this.lastSearchId + 1;
-                this.lastSearchId = searchId;
-                this.searchTimer = new Timer();
-                this.searchTimer.schedule(new TimerTask() {
-                    public void run() {
-                        try {
-                            cancel();
-                            DialogsSearchAdapter.this.searchTimer.cancel();
-                            DialogsSearchAdapter.this.searchTimer = null;
-                        } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
-                        }
-                        DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (DialogsSearchAdapter.this.needMessagesSearch != 2) {
-                                    DialogsSearchAdapter.this.queryServerSearch(query, true);
-                                }
-                                DialogsSearchAdapter.this.searchMessagesInternal(query);
-                            }
-                        });
-                    }
-                }, 200, 300);
             }
+            final int searchId = this.lastSearchId + 1;
+            this.lastSearchId = searchId;
+            this.searchTimer = new Timer();
+            this.searchTimer.schedule(new TimerTask() {
+                public void run() {
+                    try {
+                        cancel();
+                        DialogsSearchAdapter.this.searchTimer.cancel();
+                        DialogsSearchAdapter.this.searchTimer = null;
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
+                    DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (DialogsSearchAdapter.this.needMessagesSearch != 2) {
+                                DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true);
+                            }
+                            DialogsSearchAdapter.this.searchMessagesInternal(query);
+                        }
+                    });
+                }
+            }, 200, 300);
         }
     }
 
@@ -883,7 +893,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
             return this.searchResultHashtags.size() + 1;
         } else {
             int count = this.searchResult.size();
-            int globalCount = this.globalSearch.size();
+            int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
             int messagesCount = this.searchResultMessages.size();
             if (globalCount != 0) {
                 count += globalCount + 1;
@@ -922,14 +932,15 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                 return object;
             }
         } else if (this.searchResultHashtags.isEmpty()) {
+            ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
             int localCount = this.searchResult.size();
-            int globalCount = this.globalSearch.isEmpty() ? 0 : this.globalSearch.size() + 1;
+            int globalCount = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
             int messagesCount = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
             if (i >= 0 && i < localCount) {
                 return this.searchResult.get(i);
             }
             if (i > localCount && i < globalCount + localCount) {
-                return this.globalSearch.get((i - localCount) - 1);
+                return globalSearch.get((i - localCount) - 1);
             }
             if (i <= globalCount + localCount || i >= (globalCount + localCount) + messagesCount) {
                 return null;
@@ -1047,8 +1058,9 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                     }
                     cell.useSeparator = z;
                 } else {
+                    ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
                     int localCount = this.searchResult.size();
-                    z = (position == getItemCount() + -1 || position == localCount - 1 || position == (localCount + (this.globalSearch.isEmpty() ? 0 : this.globalSearch.size() + 1)) - 1) ? false : true;
+                    z = (position == getItemCount() + -1 || position == localCount - 1 || position == (localCount + (globalSearch.isEmpty() ? 0 : globalSearch.size() + 1)) - 1) ? false : true;
                     cell.useSeparator = z;
                     if (position < this.searchResult.size()) {
                         name = (CharSequence) this.searchResultNames.get(position);
@@ -1057,7 +1069,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                             name = null;
                         }
                     } else if (position > this.searchResult.size() && un != null) {
-                        String foundUserName = this.lastFoundUsername;
+                        String foundUserName = this.searchAdapterHelper.getLastFoundUsername();
                         if (foundUserName.startsWith("@")) {
                             foundUserName = foundUserName.substring(1);
                         }
@@ -1089,7 +1101,7 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
                 } else if (!this.searchResultHashtags.isEmpty()) {
                     cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags).toUpperCase());
                     return;
-                } else if (this.globalSearch.isEmpty() || position != this.searchResult.size()) {
+                } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size()) {
                     cell2.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));
                     return;
                 } else {
@@ -1126,8 +1138,9 @@ public class DialogsSearchAdapter extends BaseSearchAdapterRecycler {
             }
             return 5;
         } else if (this.searchResultHashtags.isEmpty()) {
+            ArrayList<TLObject> globalSearch = this.searchAdapterHelper.getGlobalSearch();
             int localCount = this.searchResult.size();
-            int globalCount = this.globalSearch.isEmpty() ? 0 : this.globalSearch.size() + 1;
+            int globalCount = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
             int messagesCount = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
             if ((i >= 0 && i < localCount) || (i > localCount && i < globalCount + localCount)) {
                 return 0;

@@ -131,7 +131,7 @@ public class DialogCell extends BaseCell {
             messagePaint.setColor(Theme.DIALOGS_MESSAGE_TEXT_COLOR);
             messagePaint.linkColor = Theme.DIALOGS_MESSAGE_TEXT_COLOR;
             linePaint = new Paint();
-            linePaint.setColor(-2302756);
+            linePaint.setColor(Theme.GROUP_CREATE_DIVIDER_COLOR);
             backPaint = new Paint();
             backPaint.setColor(251658240);
             messagePrintingPaint = new TextPaint(1);
@@ -862,10 +862,10 @@ public class DialogCell extends BaseCell {
                 errorDrawable.draw(canvas);
             } else if (this.drawCount) {
                 if (this.dialogMuted) {
-                    setDrawableBounds(countDrawableGrey, this.countLeft - AndroidUtilities.dp(5.5f), this.countTop, this.countWidth + AndroidUtilities.dp(11.0f), countDrawable.getIntrinsicHeight());
+                    setDrawableBounds(countDrawableGrey, this.countLeft - AndroidUtilities.dp(5.5f), this.countTop, this.countWidth + AndroidUtilities.dp(11.0f), AndroidUtilities.dp(23.0f));
                     countDrawableGrey.draw(canvas);
                 } else {
-                    setDrawableBounds(countDrawable, this.countLeft - AndroidUtilities.dp(5.5f), this.countTop, this.countWidth + AndroidUtilities.dp(11.0f), countDrawable.getIntrinsicHeight());
+                    setDrawableBounds(countDrawable, this.countLeft - AndroidUtilities.dp(5.5f), this.countTop, this.countWidth + AndroidUtilities.dp(11.0f), AndroidUtilities.dp(23.0f));
                     countDrawable.draw(canvas);
                 }
                 canvas.save();

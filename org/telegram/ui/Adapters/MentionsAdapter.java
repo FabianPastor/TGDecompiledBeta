@@ -25,6 +25,7 @@ import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProvid
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.SearchQuery;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -49,12 +50,14 @@ import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_topPeer;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
+import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.ContextLinkCell.ContextLinkCellDelegate;
 import org.telegram.ui.Cells.MentionCell;
 
-public class MentionsAdapter extends BaseSearchAdapterRecycler {
+public class MentionsAdapter extends Adapter {
     private boolean allowNewMentions = true;
     private HashMap<Integer, BotInfo> botInfo;
     private int botsCount;
@@ -96,6 +99,7 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
     private BaseFragment parentFragment;
     private int resultLength;
     private int resultStartPosition;
+    private SearchAdapterHelper searchAdapterHelper;
     private ArrayList<BotInlineResult> searchResultBotContext;
     private HashMap<String, BotInlineResult> searchResultBotContextById;
     private TL_inlineBotSwitchPM searchResultBotContextSwitch;
@@ -126,6 +130,18 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
         this.delegate = mentionsAdapterDelegate;
         this.isDarkTheme = darkTheme;
         this.dialog_id = did;
+        this.searchAdapterHelper = new SearchAdapterHelper();
+        this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
+            public void onDataSetChanged() {
+                MentionsAdapter.this.notifyDataSetChanged();
+            }
+
+            public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+                if (MentionsAdapter.this.lastText != null) {
+                    MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages);
+                }
+            }
+        });
     }
 
     public void onDestroy() {
@@ -182,18 +198,11 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
     }
 
     public void clearRecentHashtags() {
-        super.clearRecentHashtags();
+        this.searchAdapterHelper.clearRecentHashtags();
         this.searchResultHashtags.clear();
         notifyDataSetChanged();
         if (this.delegate != null) {
             this.delegate.needChangePanelVisibility(false);
-        }
-    }
-
-    protected void setHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
-        super.setHashtags(arrayList, hashMap);
-        if (this.lastText != null) {
-            searchUsernameOrHashtag(this.lastText, this.lastPosition, this.messages);
         }
     }
 
@@ -472,11 +481,11 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
                                     } else {
                                         MentionsAdapter.this.notifyDataSetChanged();
                                     }
-                                    MentionsAdapterDelegate access$1200 = MentionsAdapter.this.delegate;
+                                    MentionsAdapterDelegate access$1500 = MentionsAdapter.this.delegate;
                                     if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
                                         z = true;
                                     }
-                                    access$1200.needChangePanelVisibility(z);
+                                    access$1500.needChangePanelVisibility(z);
                                 }
                             }
                         }
@@ -547,13 +556,12 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
                                     this.resultLength = result.length() + 1;
                                     break;
                                 }
-                            } else if (this.hashtagsLoadedFromDb) {
+                            } else if (this.searchAdapterHelper.loadRecentHashtags()) {
                                 foundType = 1;
                                 this.resultStartPosition = a;
                                 this.resultLength = result.length() + 1;
                                 result.insert(0, ch);
                             } else {
-                                loadRecentHashtags();
                                 this.lastText = text;
                                 this.lastPosition = position;
                                 this.messages = messageObjects;
@@ -675,8 +683,9 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
             } else if (foundType == 1) {
                 newResult = new ArrayList();
                 String hashtagString = result.toString().toLowerCase();
-                for (a = 0; a < this.hashtags.size(); a++) {
-                    HashtagObject hashtagObject = (HashtagObject) this.hashtags.get(a);
+                ArrayList<HashtagObject> hashtags = this.searchAdapterHelper.getHashtags();
+                for (a = 0; a < hashtags.size(); a++) {
+                    HashtagObject hashtagObject = (HashtagObject) hashtags.get(a);
                     if (!(hashtagObject == null || hashtagObject.hashtag == null || !hashtagObject.hashtag.startsWith(hashtagString))) {
                         newResult.add(hashtagObject.hashtag);
                     }
@@ -756,6 +765,10 @@ public class MentionsAdapter extends BaseSearchAdapterRecycler {
             return 1;
         }
         return 2;
+    }
+
+    public void addHashtagsFromMessage(CharSequence message) {
+        this.searchAdapterHelper.addHashtagsFromMessage(message);
     }
 
     public int getItemPosition(int i) {

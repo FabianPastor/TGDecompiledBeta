@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.text.TextUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
@@ -37,6 +38,6 @@ public class UserObject {
         if (name == null || name.length() == 0) {
             name = user.last_name;
         }
-        return (name == null || name.length() <= 0) ? LocaleController.getString("HiddenName", R.string.HiddenName) : name;
+        return TextUtils.isEmpty(name) ? LocaleController.getString("HiddenName", R.string.HiddenName) : name;
     }
 }

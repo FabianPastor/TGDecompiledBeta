@@ -1,12 +1,18 @@
 package org.telegram.ui.Components;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -26,6 +32,8 @@ import org.telegram.tgnet.TLRPC.TL_inputReportReasonViolence;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
+import org.telegram.ui.Cells.RadioColorCell;
+import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.ReportOtherActivity;
 
 public class AlertsCreator {
@@ -270,5 +278,112 @@ public class AlertsCreator {
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             fragment.showDialog(builder.create(), true);
         }
+    }
+
+    public static Dialog createColorSelectDialog(Activity parentActivity, long dialog_id, boolean globalGroup, boolean globalAll, Runnable onSelect) {
+        int currentColor;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+        if (globalGroup) {
+            currentColor = preferences.getInt("GroupLed", -16776961);
+        } else if (globalAll) {
+            currentColor = preferences.getInt("MessagesLed", -16776961);
+        } else {
+            if (preferences.contains("color_" + dialog_id)) {
+                currentColor = preferences.getInt("color_" + dialog_id, -16776961);
+            } else if (((int) dialog_id) < 0) {
+                currentColor = preferences.getInt("GroupLed", -16776961);
+            } else {
+                currentColor = preferences.getInt("MessagesLed", -16776961);
+            }
+        }
+        View scrollView = new ScrollView(parentActivity);
+        View linearLayout = new LinearLayout(parentActivity);
+        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+        linearLayout.setOrientation(1);
+        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+        String[] descriptions = new String[]{LocaleController.getString("ColorRed", R.string.ColorRed), LocaleController.getString("ColorOrange", R.string.ColorOrange), LocaleController.getString("ColorYellow", R.string.ColorYellow), LocaleController.getString("ColorGreen", R.string.ColorGreen), LocaleController.getString("ColorCyan", R.string.ColorCyan), LocaleController.getString("ColorBlue", R.string.ColorBlue), LocaleController.getString("ColorViolet", R.string.ColorViolet), LocaleController.getString("ColorPink", R.string.ColorPink), LocaleController.getString("ColorWhite", R.string.ColorWhite)};
+        final int[] selectedColor = new int[1];
+        for (int a = 0; a < 9; a++) {
+            RadioColorCell cell = new RadioColorCell(parentActivity);
+            cell.setTag(Integer.valueOf(a));
+            cell.setCheckColor(TextColorCell.colors[a]);
+            cell.setTextAndValue(descriptions[a], currentColor == TextColorCell.colorsToSave[a]);
+            linearLayout.addView(cell);
+            linearLayout = linearLayout;
+            cell.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int count = linearLayout.getChildCount();
+                    for (int a = 0; a < count; a++) {
+                        boolean z;
+                        View cell = (RadioColorCell) linearLayout.getChildAt(a);
+                        if (cell == v) {
+                            z = true;
+                        } else {
+                            z = false;
+                        }
+                        cell.setChecked(z, true);
+                    }
+                    selectedColor[0] = TextColorCell.colorsToSave[((Integer) v.getTag()).intValue()];
+                }
+            });
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
+        builder.setView(scrollView);
+        final boolean z = globalAll;
+        final boolean z2 = globalGroup;
+        final long j = dialog_id;
+        final Runnable runnable = onSelect;
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                if (z) {
+                    editor.putInt("MessagesLed", selectedColor[0]);
+                } else if (z2) {
+                    editor.putInt("GroupLed", selectedColor[0]);
+                } else {
+                    editor.putInt("color_" + j, selectedColor[0]);
+                }
+                editor.commit();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        });
+        final boolean z3 = globalAll;
+        final boolean z4 = globalGroup;
+        final long j2 = dialog_id;
+        final Runnable runnable2 = onSelect;
+        builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                if (z3) {
+                    editor.putInt("MessagesLed", 0);
+                } else if (z4) {
+                    editor.putInt("GroupLed", 0);
+                } else {
+                    editor.putInt("color_" + j2, 0);
+                }
+                editor.commit();
+                if (runnable2 != null) {
+                    runnable2.run();
+                }
+            }
+        });
+        if (!(globalAll || globalGroup)) {
+            final long j3 = dialog_id;
+            final Runnable runnable3 = onSelect;
+            builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                    editor.remove("color_" + j3);
+                    editor.commit();
+                    if (runnable3 != null) {
+                        runnable3.run();
+                    }
+                }
+            });
+        }
+        return builder.create();
     }
 }

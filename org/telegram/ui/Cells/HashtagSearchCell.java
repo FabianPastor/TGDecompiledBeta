@@ -9,6 +9,7 @@ import android.view.View.MeasureSpec;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 
 public class HashtagSearchCell extends TextView {
     private static Paint paint;
@@ -22,7 +23,7 @@ public class HashtagSearchCell extends TextView {
         setTextColor(-16777216);
         if (paint == null) {
             paint = new Paint();
-            paint.setColor(-2302756);
+            paint.setColor(Theme.GROUP_CREATE_DIVIDER_COLOR);
         }
         setBackgroundResource(R.drawable.list_selector);
     }

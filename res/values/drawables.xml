@@ -495,6 +495,10 @@
     <drawable name="del_btn_pressed">res/drawable-xhdpi-v4/del_btn_pressed.9.png</drawable>
     <drawable name="del_btn_pressed">res/drawable-xxhdpi-v4/del_btn_pressed.9.png</drawable>
     <drawable name="del_states">res/drawable/del_states.xml</drawable>
+    <drawable name="delete">res/drawable-mdpi-v4/delete.png</drawable>
+    <drawable name="delete">res/drawable-hdpi-v4/delete.png</drawable>
+    <drawable name="delete">res/drawable-xhdpi-v4/delete.png</drawable>
+    <drawable name="delete">res/drawable-xxhdpi-v4/delete.png</drawable>
     <drawable name="delete_reply">res/drawable-mdpi-v4/delete_reply.png</drawable>
     <drawable name="delete_reply">res/drawable-hdpi-v4/delete_reply.png</drawable>
     <drawable name="delete_reply">res/drawable-xhdpi-v4/delete_reply.png</drawable>
@@ -593,6 +597,7 @@
     <drawable name="edit_doneblue">res/drawable-xxhdpi-v4/edit_doneblue.png</drawable>
     <drawable name="edit_text">res/drawable/edit_text.xml</drawable>
     <drawable name="field_carret">res/drawable/field_carret.xml</drawable>
+    <drawable name="field_carret_empty">res/drawable/field_carret_empty.xml</drawable>
     <drawable name="file_b">res/drawable-mdpi-v4/file_b.png</drawable>
     <drawable name="file_b">res/drawable-hdpi-v4/file_b.png</drawable>
     <drawable name="file_b">res/drawable-xhdpi-v4/file_b.png</drawable>
@@ -1750,6 +1755,10 @@
     <drawable name="selectphoto_large">res/drawable-hdpi-v4/selectphoto_large.png</drawable>
     <drawable name="selectphoto_large">res/drawable-xhdpi-v4/selectphoto_large.png</drawable>
     <drawable name="selectphoto_large">res/drawable-xxhdpi-v4/selectphoto_large.png</drawable>
+    <drawable name="shadowdown">res/drawable-mdpi-v4/shadowdown.png</drawable>
+    <drawable name="shadowdown">res/drawable-hdpi-v4/shadowdown.png</drawable>
+    <drawable name="shadowdown">res/drawable-xhdpi-v4/shadowdown.png</drawable>
+    <drawable name="shadowdown">res/drawable-xxhdpi-v4/shadowdown.png</drawable>
     <drawable name="share">res/drawable-mdpi-v4/share.png</drawable>
     <drawable name="share">res/drawable-hdpi-v4/share.png</drawable>
     <drawable name="share">res/drawable-xhdpi-v4/share.png</drawable>

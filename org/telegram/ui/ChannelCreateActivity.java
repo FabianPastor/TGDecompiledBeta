@@ -8,30 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnTouchListener;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -41,9 +25,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -51,7 +32,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -60,7 +40,6 @@ import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ExportedChatInvite;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFile;
-import org.telegram.tgnet.TLRPC.InputUser;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_channels_checkUsername;
@@ -70,12 +49,9 @@ import org.telegram.tgnet.TLRPC.TL_channels_updateUsername;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_chats;
-import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.ContactsAdapter;
-import org.telegram.ui.Adapters.SearchAdapter;
 import org.telegram.ui.Cells.AdminedChannelCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.LoadingCell;
@@ -83,27 +59,21 @@ import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextBlockCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.ChipSpan;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.LetterSectionsListView;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenterDelegate, AvatarUpdaterDelegate {
     private static final int done_button = 1;
     private ArrayList<AdminedChannelCell> adminedChannelCells = new ArrayList();
     private TextInfoPrivacyCell adminedInfoCell;
-    private ArrayList<ChipSpan> allSpans = new ArrayList();
     private FileLocation avatar;
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImage;
     private AvatarUpdater avatarUpdater;
-    private int beforeChangeIndex;
     private boolean canCreatePublic = true;
-    private CharSequence changeString;
     private int chatId;
     private int checkReqId;
     private Runnable checkRunnable;
@@ -113,17 +83,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private EditText descriptionTextView;
     private View doneButton;
     private boolean donePressed;
-    private TextView emptyTextView;
     private HeaderCell headerCell;
-    private boolean ignoreChange;
     private ExportedChatInvite invite;
     private boolean isPrivate;
     private String lastCheckName;
     private boolean lastNameAvailable;
     private LinearLayout linearLayout;
     private LinearLayout linkContainer;
-    private LetterSectionsListView listView;
-    private ContactsAdapter listViewAdapter;
     private LoadingCell loadingAdminedCell;
     private boolean loadingAdminedChannels;
     private boolean loadingInvite;
@@ -134,11 +100,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private LinearLayout publicContainer;
     private RadioButtonCell radioButtonCell1;
     private RadioButtonCell radioButtonCell2;
-    private SearchAdapter searchListViewAdapter;
-    private boolean searchWas;
-    private boolean searching;
     private ShadowSectionCell sectionCell;
-    private HashMap<Integer, ChipSpan> selectedContacts = new HashMap();
     private TextInfoPrivacyCell typeInfoCell;
     private InputFile uploadedAvatar;
 
@@ -179,12 +141,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidCreated);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.chatDidFailCreate);
-        if (this.currentStep == 2) {
-            NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
-        } else if (this.currentStep == 1) {
+        if (this.currentStep == 1) {
             generateLink();
         }
         if (this.avatarUpdater != null) {
@@ -196,12 +155,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidCreated);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.chatDidFailCreate);
-        if (this.currentStep == 2) {
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
-        }
         if (this.avatarUpdater != null) {
             this.avatarUpdater.clear();
         }
@@ -214,8 +169,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public View createView(Context context) {
-        this.searching = false;
-        this.searchWas = false;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
@@ -297,49 +250,26 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         }
                         Bundle args = new Bundle();
                         args.putInt("step", 2);
-                        args.putInt("chat_id", ChannelCreateActivity.this.chatId);
-                        ChannelCreateActivity.this.presentFragment(new ChannelCreateActivity(args), true);
-                    } else {
-                        ArrayList<InputUser> result = new ArrayList();
-                        for (Integer uid : ChannelCreateActivity.this.selectedContacts.keySet()) {
-                            InputUser user = MessagesController.getInputUser(MessagesController.getInstance().getUser(uid));
-                            if (user != null) {
-                                result.add(user);
-                            }
-                        }
-                        MessagesController.getInstance().addUsersToChannel(ChannelCreateActivity.this.chatId, result, null);
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                        Bundle args2 = new Bundle();
-                        args2.putInt("chat_id", ChannelCreateActivity.this.chatId);
-                        ChannelCreateActivity.this.presentFragment(new ChatActivity(args2), true);
+                        args.putInt("chatId", ChannelCreateActivity.this.chatId);
+                        args.putInt("chatType", 2);
+                        ChannelCreateActivity.this.presentFragment(new GroupCreateActivity(args), true);
                     }
                 }
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        if (this.currentStep != 2) {
-            this.fragmentView = new ScrollView(context);
-            ScrollView scrollView = (ScrollView) this.fragmentView;
-            scrollView.setFillViewport(true);
-            this.linearLayout = new LinearLayout(context);
-            scrollView.addView(this.linearLayout, new LayoutParams(-1, -2));
-        } else {
-            this.fragmentView = new LinearLayout(context);
-            this.fragmentView.setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
-            this.linearLayout = (LinearLayout) this.fragmentView;
-        }
+        this.fragmentView = new ScrollView(context);
+        ScrollView scrollView = this.fragmentView;
+        scrollView.setFillViewport(true);
+        this.linearLayout = new LinearLayout(context);
         this.linearLayout.setOrientation(1);
-        FrameLayout frameLayout;
+        scrollView.addView(this.linearLayout, new LayoutParams(-1, -2));
         if (this.currentStep == 0) {
             float f;
             float f2;
             this.actionBar.setTitle(LocaleController.getString("NewChannel", R.string.NewChannel));
             this.fragmentView.setBackgroundColor(-1);
-            frameLayout = new FrameLayout(context);
+            FrameLayout frameLayout = new FrameLayout(context);
             this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
             this.avatarImage = new BackupImageView(context);
             this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
@@ -413,13 +343,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
                 public void afterTextChanged(Editable s) {
                     String obj;
-                    AvatarDrawable access$1600 = ChannelCreateActivity.this.avatarDrawable;
+                    AvatarDrawable access$1500 = ChannelCreateActivity.this.avatarDrawable;
                     if (ChannelCreateActivity.this.nameTextView.length() > 0) {
                         obj = ChannelCreateActivity.this.nameTextView.getText().toString();
                     } else {
                         obj = null;
                     }
-                    access$1600.setInfo(5, obj, null, false);
+                    access$1500.setInfo(5, obj, null, false);
                     ChannelCreateActivity.this.avatarImage.invalidate();
                 }
             });
@@ -576,226 +506,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.adminedInfoCell.setBackgroundResource(R.drawable.greydivider_bottom);
             this.linearLayout.addView(this.adminedInfoCell, LayoutHelper.createLinear(-1, -2));
             updatePrivatePublic();
-        } else if (this.currentStep == 2) {
-            this.actionBar.setTitle(LocaleController.getString("ChannelAddMembers", R.string.ChannelAddMembers));
-            this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", this.selectedContacts.size()));
-            this.searchListViewAdapter = new SearchAdapter(context, null, false, false, false, false);
-            this.searchListViewAdapter.setCheckedMap(this.selectedContacts);
-            this.searchListViewAdapter.setUseUserCell(true);
-            this.listViewAdapter = new ContactsAdapter(context, 1, false, null, false);
-            this.listViewAdapter.setCheckedMap(this.selectedContacts);
-            frameLayout = new FrameLayout(context);
-            this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2));
-            this.nameTextView = new EditText(context);
-            this.nameTextView.setTextSize(1, 16.0f);
-            this.nameTextView.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
-            this.nameTextView.setTextColor(-14606047);
-            this.nameTextView.setInputType(655536);
-            this.nameTextView.setMinimumHeight(AndroidUtilities.dp(54.0f));
-            this.nameTextView.setSingleLine(false);
-            this.nameTextView.setLines(2);
-            this.nameTextView.setMaxLines(2);
-            this.nameTextView.setVerticalScrollBarEnabled(true);
-            this.nameTextView.setHorizontalScrollBarEnabled(false);
-            this.nameTextView.setPadding(0, 0, 0, 0);
-            this.nameTextView.setHint(LocaleController.getString("AddMutual", R.string.AddMutual));
-            this.nameTextView.setTextIsSelectable(false);
-            this.nameTextView.setImeOptions(268435462);
-            this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            AndroidUtilities.clearCursorDrawable(this.nameTextView);
-            frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 10.0f, 0.0f, 10.0f, 0.0f));
-            this.nameTextView.addTextChangedListener(new TextWatcher() {
-                public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-                    if (!ChannelCreateActivity.this.ignoreChange) {
-                        ChannelCreateActivity.this.beforeChangeIndex = ChannelCreateActivity.this.nameTextView.getSelectionStart();
-                        ChannelCreateActivity.this.changeString = new SpannableString(charSequence);
-                    }
-                }
-
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void afterTextChanged(Editable editable) {
-                    if (!ChannelCreateActivity.this.ignoreChange) {
-                        boolean search = false;
-                        int afterChangeIndex = ChannelCreateActivity.this.nameTextView.getSelectionEnd();
-                        if (editable.toString().length() < ChannelCreateActivity.this.changeString.toString().length()) {
-                            String deletedString = "";
-                            try {
-                                deletedString = ChannelCreateActivity.this.changeString.toString().substring(afterChangeIndex, ChannelCreateActivity.this.beforeChangeIndex);
-                            } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
-                            }
-                            if (deletedString.length() > 0) {
-                                if (ChannelCreateActivity.this.searching && ChannelCreateActivity.this.searchWas) {
-                                    search = true;
-                                }
-                                Spannable span = ChannelCreateActivity.this.nameTextView.getText();
-                                for (int a = 0; a < ChannelCreateActivity.this.allSpans.size(); a++) {
-                                    ChipSpan sp = (ChipSpan) ChannelCreateActivity.this.allSpans.get(a);
-                                    if (span.getSpanStart(sp) == -1) {
-                                        ChannelCreateActivity.this.allSpans.remove(sp);
-                                        ChannelCreateActivity.this.selectedContacts.remove(Integer.valueOf(sp.uid));
-                                    }
-                                }
-                                ChannelCreateActivity.this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", ChannelCreateActivity.this.selectedContacts.size()));
-                                ChannelCreateActivity.this.listView.invalidateViews();
-                            } else {
-                                search = true;
-                            }
-                        } else {
-                            search = true;
-                        }
-                        if (search) {
-                            String text = ChannelCreateActivity.this.nameTextView.getText().toString().replace("<", "");
-                            if (text.length() != 0) {
-                                ChannelCreateActivity.this.searching = true;
-                                ChannelCreateActivity.this.searchWas = true;
-                                if (ChannelCreateActivity.this.listView != null) {
-                                    ChannelCreateActivity.this.listView.setAdapter(ChannelCreateActivity.this.searchListViewAdapter);
-                                    ChannelCreateActivity.this.searchListViewAdapter.notifyDataSetChanged();
-                                    ChannelCreateActivity.this.listView.setFastScrollAlwaysVisible(false);
-                                    ChannelCreateActivity.this.listView.setFastScrollEnabled(false);
-                                    ChannelCreateActivity.this.listView.setVerticalScrollBarEnabled(true);
-                                }
-                                if (ChannelCreateActivity.this.emptyTextView != null) {
-                                    ChannelCreateActivity.this.emptyTextView.setText(LocaleController.getString("NoResult", R.string.NoResult));
-                                }
-                                ChannelCreateActivity.this.searchListViewAdapter.searchDialogs(text);
-                                return;
-                            }
-                            ChannelCreateActivity.this.searchListViewAdapter.searchDialogs(null);
-                            ChannelCreateActivity.this.searching = false;
-                            ChannelCreateActivity.this.searchWas = false;
-                            ChannelCreateActivity.this.listView.setAdapter(ChannelCreateActivity.this.listViewAdapter);
-                            ChannelCreateActivity.this.listViewAdapter.notifyDataSetChanged();
-                            ChannelCreateActivity.this.listView.setFastScrollAlwaysVisible(true);
-                            ChannelCreateActivity.this.listView.setFastScrollEnabled(true);
-                            ChannelCreateActivity.this.listView.setVerticalScrollBarEnabled(false);
-                            ChannelCreateActivity.this.emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
-                        }
-                    }
-                }
-            });
-            LinearLayout emptyTextLayout = new LinearLayout(context);
-            emptyTextLayout.setVisibility(4);
-            emptyTextLayout.setOrientation(1);
-            this.linearLayout.addView(emptyTextLayout, LayoutHelper.createLinear(-1, -1));
-            emptyTextLayout.setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
-            this.emptyTextView = new TextView(context);
-            this.emptyTextView.setTextColor(-8355712);
-            this.emptyTextView.setTextSize(20.0f);
-            this.emptyTextView.setGravity(17);
-            this.emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
-            emptyTextLayout.addView(this.emptyTextView, LayoutHelper.createLinear(-1, -1, 0.5f));
-            emptyTextLayout.addView(new FrameLayout(context), LayoutHelper.createLinear(-1, -1, 0.5f));
-            this.listView = new LetterSectionsListView(context);
-            this.listView.setEmptyView(emptyTextLayout);
-            this.listView.setVerticalScrollBarEnabled(false);
-            this.listView.setDivider(null);
-            this.listView.setDividerHeight(0);
-            this.listView.setFastScrollEnabled(true);
-            this.listView.setScrollBarStyle(33554432);
-            this.listView.setAdapter(this.listViewAdapter);
-            this.listView.setFastScrollAlwaysVisible(true);
-            this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-            this.linearLayout.addView(this.listView, LayoutHelper.createLinear(-1, -1));
-            this.listView.setOnItemClickListener(new OnItemClickListener() {
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    User user;
-                    if (ChannelCreateActivity.this.searching && ChannelCreateActivity.this.searchWas) {
-                        user = (User) ChannelCreateActivity.this.searchListViewAdapter.getItem(i);
-                    } else {
-                        int section = ChannelCreateActivity.this.listViewAdapter.getSectionForPosition(i);
-                        int row = ChannelCreateActivity.this.listViewAdapter.getPositionInSectionForPosition(i);
-                        if (row >= 0 && section >= 0) {
-                            user = (User) ChannelCreateActivity.this.listViewAdapter.getItem(section, row);
-                        } else {
-                            return;
-                        }
-                    }
-                    if (user != null) {
-                        boolean check = true;
-                        ChipSpan span;
-                        if (ChannelCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id))) {
-                            check = false;
-                            try {
-                                span = (ChipSpan) ChannelCreateActivity.this.selectedContacts.get(Integer.valueOf(user.id));
-                                ChannelCreateActivity.this.selectedContacts.remove(Integer.valueOf(user.id));
-                                SpannableStringBuilder text = new SpannableStringBuilder(ChannelCreateActivity.this.nameTextView.getText());
-                                text.delete(text.getSpanStart(span), text.getSpanEnd(span));
-                                ChannelCreateActivity.this.allSpans.remove(span);
-                                ChannelCreateActivity.this.ignoreChange = true;
-                                ChannelCreateActivity.this.nameTextView.setText(text);
-                                ChannelCreateActivity.this.nameTextView.setSelection(text.length());
-                                ChannelCreateActivity.this.ignoreChange = false;
-                            } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
-                            }
-                        } else {
-                            ChannelCreateActivity.this.ignoreChange = true;
-                            span = ChannelCreateActivity.this.createAndPutChipForUser(user);
-                            if (span != null) {
-                                span.uid = user.id;
-                            }
-                            ChannelCreateActivity.this.ignoreChange = false;
-                            if (span == null) {
-                                return;
-                            }
-                        }
-                        ChannelCreateActivity.this.actionBar.setSubtitle(LocaleController.formatPluralString("Members", ChannelCreateActivity.this.selectedContacts.size()));
-                        if (ChannelCreateActivity.this.searching || ChannelCreateActivity.this.searchWas) {
-                            ChannelCreateActivity.this.ignoreChange = true;
-                            SpannableStringBuilder ssb = new SpannableStringBuilder("");
-                            Iterator it = ChannelCreateActivity.this.allSpans.iterator();
-                            while (it.hasNext()) {
-                                ImageSpan sp = (ImageSpan) it.next();
-                                ssb.append("<<");
-                                ssb.setSpan(sp, ssb.length() - 2, ssb.length(), 33);
-                            }
-                            ChannelCreateActivity.this.nameTextView.setText(ssb);
-                            ChannelCreateActivity.this.nameTextView.setSelection(ssb.length());
-                            ChannelCreateActivity.this.ignoreChange = false;
-                            ChannelCreateActivity.this.searchListViewAdapter.searchDialogs(null);
-                            ChannelCreateActivity.this.searching = false;
-                            ChannelCreateActivity.this.searchWas = false;
-                            ChannelCreateActivity.this.listView.setAdapter(ChannelCreateActivity.this.listViewAdapter);
-                            ChannelCreateActivity.this.listViewAdapter.notifyDataSetChanged();
-                            ChannelCreateActivity.this.listView.setFastScrollAlwaysVisible(true);
-                            ChannelCreateActivity.this.listView.setFastScrollEnabled(true);
-                            ChannelCreateActivity.this.listView.setVerticalScrollBarEnabled(false);
-                            ChannelCreateActivity.this.emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
-                        } else if (view instanceof UserCell) {
-                            ((UserCell) view).setChecked(check, true);
-                        }
-                    }
-                }
-            });
-            this.listView.setOnScrollListener(new OnScrollListener() {
-                public void onScrollStateChanged(AbsListView absListView, int i) {
-                    boolean z = true;
-                    if (i == 1) {
-                        AndroidUtilities.hideKeyboard(ChannelCreateActivity.this.nameTextView);
-                    }
-                    if (ChannelCreateActivity.this.listViewAdapter != null) {
-                        ContactsAdapter access$3200 = ChannelCreateActivity.this.listViewAdapter;
-                        if (i == 0) {
-                            z = false;
-                        }
-                        access$3200.setIsScrolling(z);
-                    }
-                }
-
-                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    if (absListView.isFastScrollEnabled()) {
-                        AndroidUtilities.clearDrawableAnimation(absListView);
-                    }
-                }
-            });
         }
         return this.fragmentView;
     }
@@ -956,12 +666,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationCenter.updateInterfaces) {
-            int mask = ((Integer) args[0]).intValue();
-            if ((mask & 2) != 0 || (mask & 1) != 0 || (mask & 4) != 0) {
-                updateVisibleRows(mask);
-            }
-        } else if (id == NotificationCenter.chatDidFailCreate) {
+        if (id == NotificationCenter.chatDidFailCreate) {
             if (this.progressDialog != null) {
                 try {
                     this.progressDialog.dismiss();
@@ -987,8 +692,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 MessagesController.getInstance().changeChatAvatar(chat_id, this.uploadedAvatar);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
-        } else if (id == NotificationCenter.contactsDidLoaded && this.listViewAdapter != null) {
-            this.listViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -1187,58 +890,6 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             showDialog(builder.create());
-        }
-    }
-
-    private void updateVisibleRows(int mask) {
-        if (this.listView != null) {
-            int count = this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = this.listView.getChildAt(a);
-                if (child instanceof UserCell) {
-                    ((UserCell) child).update(mask);
-                }
-            }
-        }
-    }
-
-    private ChipSpan createAndPutChipForUser(User user) {
-        try {
-            View textView = ((LayoutInflater) ApplicationLoader.applicationContext.getSystemService("layout_inflater")).inflate(R.layout.group_create_bubble, null);
-            TextView text = (TextView) textView.findViewById(R.id.bubble_text_view);
-            String name = UserObject.getUserName(user);
-            if (!(name.length() != 0 || user.phone == null || user.phone.length() == 0)) {
-                name = PhoneFormat.getInstance().format("+" + user.phone);
-            }
-            text.setText(name + ", ");
-            int spec = MeasureSpec.makeMeasureSpec(0, 0);
-            textView.measure(spec, spec);
-            textView.layout(0, 0, textView.getMeasuredWidth(), textView.getMeasuredHeight());
-            Bitmap b = Bitmap.createBitmap(textView.getWidth(), textView.getHeight(), Config.ARGB_8888);
-            Canvas canvas = new Canvas(b);
-            canvas.translate((float) (-textView.getScrollX()), (float) (-textView.getScrollY()));
-            textView.draw(canvas);
-            textView.setDrawingCacheEnabled(true);
-            Bitmap viewBmp = textView.getDrawingCache().copy(Config.ARGB_8888, true);
-            textView.destroyDrawingCache();
-            BitmapDrawable bmpDrawable = new BitmapDrawable(b);
-            bmpDrawable.setBounds(0, 0, b.getWidth(), b.getHeight());
-            SpannableStringBuilder ssb = new SpannableStringBuilder("");
-            ChipSpan chipSpan = new ChipSpan(bmpDrawable, 1);
-            this.allSpans.add(chipSpan);
-            this.selectedContacts.put(Integer.valueOf(user.id), chipSpan);
-            Iterator it = this.allSpans.iterator();
-            while (it.hasNext()) {
-                ImageSpan sp = (ImageSpan) it.next();
-                ssb.append("<<");
-                ssb.setSpan(sp, ssb.length() - 2, ssb.length(), 33);
-            }
-            this.nameTextView.setText(ssb);
-            this.nameTextView.setSelection(ssb.length());
-            return chipSpan;
-        } catch (Throwable e) {
-            FileLog.e("tmessages", e);
-            return null;
         }
     }
 }

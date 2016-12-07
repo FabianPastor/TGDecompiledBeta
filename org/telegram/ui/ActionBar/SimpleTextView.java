@@ -107,13 +107,8 @@ public class SimpleTextView extends View implements Callback {
                 }
                 width -= getPaddingLeft() + getPaddingRight();
                 CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
-                if (this.layout == null || !TextUtils.equals(this.layout.getText(), string)) {
-                    this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
-                    calcOffset(width);
-                } else {
-                    calcOffset(width);
-                    return false;
-                }
+                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                calcOffset(width);
             } catch (Exception e) {
             }
         } else {
@@ -197,8 +192,12 @@ public class SimpleTextView extends View implements Callback {
     }
 
     public void setText(CharSequence value) {
+        setText(value, false);
+    }
+
+    public void setText(CharSequence value, boolean force) {
         if (this.text != null || value != null) {
-            if (this.text == null || value == null || !this.text.equals(value)) {
+            if (force || this.text == null || value == null || !this.text.equals(value)) {
                 this.text = value;
                 recreateLayoutMaybe();
             }

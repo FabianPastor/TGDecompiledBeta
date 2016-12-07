@@ -551,18 +551,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     VideoEditorActivity.this.videoSeekBarView.setProgress(progress);
                 }
                 if (VideoEditorActivity.this.videoPlayer != null && VideoEditorActivity.this.playerPrepared) {
-                    if (VideoEditorActivity.this.videoPlayer.isPlaying()) {
-                        try {
-                            VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
-                            VideoEditorActivity.this.lastProgress = progress;
-                            return;
-                        } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
-                            return;
-                        }
+                    try {
+                        VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
+                        VideoEditorActivity.this.lastProgress = progress;
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
                     }
-                    VideoEditorActivity.this.lastProgress = progress;
-                    VideoEditorActivity.this.needSeek = true;
                 }
             }
         });

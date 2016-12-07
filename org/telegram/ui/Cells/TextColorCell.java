@@ -3,23 +3,22 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
+import android.support.v4.internal.view.SupportMenu;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextColorCell extends FrameLayout {
+    private static Paint colorPaint;
+    public static final int[] colors = new int[]{-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
+    public static final int[] colorsToSave = new int[]{SupportMenu.CATEGORY_MASK, -29183, -12769, -16711936, -12521994, -16776961, -2984711, -45162, -1};
     private static Paint paint;
-    private Drawable colorDrawable;
     private int currentColor;
     private boolean needDivider;
     private TextView textView;
@@ -32,8 +31,8 @@ public class TextColorCell extends FrameLayout {
             paint = new Paint();
             paint.setColor(-2500135);
             paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            colorPaint = new Paint(1);
         }
-        this.colorDrawable = getResources().getDrawable(R.drawable.switch_to_on2);
         this.textView = new TextView(context);
         this.textView.setTextColor(-14606047);
         this.textView.setTextSize(1, 16.0f);
@@ -61,8 +60,9 @@ public class TextColorCell extends FrameLayout {
     public void setTextAndColor(String text, int color, boolean divider) {
         this.textView.setText(text);
         this.needDivider = divider;
+        Paint paint = colorPaint;
         this.currentColor = color;
-        this.colorDrawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        paint.setColor(color);
         boolean z = !this.needDivider && this.currentColor == 0;
         setWillNotDraw(z);
         invalidate();
@@ -72,16 +72,8 @@ public class TextColorCell extends FrameLayout {
         if (this.needDivider) {
             canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
         }
-        if (this.currentColor != 0 && this.colorDrawable != null) {
-            int x;
-            int y = (getMeasuredHeight() - this.colorDrawable.getMinimumHeight()) / 2;
-            if (LocaleController.isRTL) {
-                x = AndroidUtilities.dp(14.5f);
-            } else {
-                x = (getMeasuredWidth() - this.colorDrawable.getIntrinsicWidth()) - AndroidUtilities.dp(14.5f);
-            }
-            this.colorDrawable.setBounds(x, y, this.colorDrawable.getIntrinsicWidth() + x, this.colorDrawable.getIntrinsicHeight() + y);
-            this.colorDrawable.draw(canvas);
+        if (this.currentColor != 0) {
+            canvas.drawCircle(LocaleController.isRTL ? (float) AndroidUtilities.dp(29.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(29.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
         }
     }
 }

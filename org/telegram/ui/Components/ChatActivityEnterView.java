@@ -16,7 +16,6 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
@@ -38,7 +37,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -50,7 +48,6 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -226,128 +223,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void onWindowSizeChanged(int i);
     }
 
-    private class EditTextCaption extends EditText {
-        private String caption;
-        private StaticLayout captionLayout;
-        private Object editor;
-        private Field editorField;
-        private Drawable[] mCursorDrawable;
-        private Field mCursorDrawableField;
-        private int triesCount = 0;
-        private int userNameLength;
-        private int xOffset;
-        private int yOffset;
-
-        public EditTextCaption(Context context) {
-            super(context);
-            try {
-                Field field = TextView.class.getDeclaredField("mEditor");
-                field.setAccessible(true);
-                this.editor = field.get(this);
-                Class editorClass = Class.forName("android.widget.Editor");
-                this.editorField = editorClass.getDeclaredField("mShowCursor");
-                this.editorField.setAccessible(true);
-                this.mCursorDrawableField = editorClass.getDeclaredField("mCursorDrawable");
-                this.mCursorDrawableField.setAccessible(true);
-                this.mCursorDrawable = (Drawable[]) this.mCursorDrawableField.get(this.editor);
-            } catch (Throwable th) {
-            }
-        }
-
-        public void setCaption(String value) {
-            if ((this.caption != null && this.caption.length() != 0) || (value != null && value.length() != 0)) {
-                if (this.caption == null || value == null || !this.caption.equals(value)) {
-                    this.caption = value;
-                    if (this.caption != null) {
-                        this.caption = this.caption.replace('\n', ' ');
-                    }
-                    requestLayout();
-                }
-            }
-        }
-
-        @SuppressLint({"DrawAllocation"})
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            try {
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            } catch (Throwable e) {
-                setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
-                FileLog.e("tmessages", e);
-            }
-            this.captionLayout = null;
-            if (this.caption != null && this.caption.length() > 0) {
-                CharSequence text = getText();
-                if (text.length() > 1 && text.charAt(0) == '@') {
-                    int index = TextUtils.indexOf(text, ' ');
-                    if (index != -1) {
-                        TextPaint paint = getPaint();
-                        int size = (int) Math.ceil((double) paint.measureText(text, 0, index + 1));
-                        int width = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
-                        this.userNameLength = text.subSequence(0, index + 1).length();
-                        CharSequence captionFinal = TextUtils.ellipsize(this.caption, paint, (float) (width - size), TruncateAt.END);
-                        this.xOffset = size;
-                        try {
-                            this.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
-                            if (this.captionLayout.getLineCount() > 0) {
-                                this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
-                            }
-                            this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
-                        } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
-                        }
-                    }
-                }
-            }
-        }
-
-        protected void onDraw(Canvas canvas) {
-            boolean showCursor = false;
-            try {
-                super.onDraw(canvas);
-                if (this.captionLayout != null && this.userNameLength == length()) {
-                    Paint paint = getPaint();
-                    int oldColor = getPaint().getColor();
-                    paint.setColor(-5066062);
-                    canvas.save();
-                    canvas.translate((float) this.xOffset, (float) this.yOffset);
-                    this.captionLayout.draw(canvas);
-                    canvas.restore();
-                    paint.setColor(oldColor);
-                }
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-            }
-            try {
-                if (this.editorField != null && this.mCursorDrawable != null && this.mCursorDrawable[0] != null) {
-                    if ((SystemClock.uptimeMillis() - this.editorField.getLong(this.editor)) % 1000 < 500) {
-                        showCursor = true;
-                    }
-                    if (showCursor) {
-                        canvas.save();
-                        canvas.translate(0.0f, (float) getPaddingTop());
-                        this.mCursorDrawable[0].draw(canvas);
-                        canvas.restore();
-                    }
-                }
-            } catch (Throwable th) {
-            }
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            boolean z = false;
-            if (ChatActivityEnterView.this.isPopupShowing() && event.getAction() == 0) {
-                ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? z : 2, z);
-                ChatActivityEnterView.this.openKeyboardInternal();
-            }
-            try {
-                z = super.onTouchEvent(event);
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-            }
-            return z;
-        }
-    }
-
     private class RecordCircle extends View {
         private float amplitude;
         private float animateAmplitudeDiff;
@@ -512,6 +387,97 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             this.seekBarWaveform.draw(canvas);
+        }
+    }
+
+    private class EditTextCaption extends EditTextBoldCursor {
+        private String caption;
+        private StaticLayout captionLayout;
+        private int triesCount = 0;
+        private int userNameLength;
+        private int xOffset;
+        private int yOffset;
+
+        public EditTextCaption(Context context) {
+            super(context);
+        }
+
+        public void setCaption(String value) {
+            if ((this.caption != null && this.caption.length() != 0) || (value != null && value.length() != 0)) {
+                if (this.caption == null || value == null || !this.caption.equals(value)) {
+                    this.caption = value;
+                    if (this.caption != null) {
+                        this.caption = this.caption.replace('\n', ' ');
+                    }
+                    requestLayout();
+                }
+            }
+        }
+
+        @SuppressLint({"DrawAllocation"})
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            try {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            } catch (Throwable e) {
+                setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
+                FileLog.e("tmessages", e);
+            }
+            this.captionLayout = null;
+            if (this.caption != null && this.caption.length() > 0) {
+                CharSequence text = getText();
+                if (text.length() > 1 && text.charAt(0) == '@') {
+                    int index = TextUtils.indexOf(text, ' ');
+                    if (index != -1) {
+                        TextPaint paint = getPaint();
+                        int size = (int) Math.ceil((double) paint.measureText(text, 0, index + 1));
+                        int width = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
+                        this.userNameLength = text.subSequence(0, index + 1).length();
+                        CharSequence captionFinal = TextUtils.ellipsize(this.caption, paint, (float) (width - size), TruncateAt.END);
+                        this.xOffset = size;
+                        try {
+                            this.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                            if (this.captionLayout.getLineCount() > 0) {
+                                this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
+                            }
+                            this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
+                        } catch (Throwable e2) {
+                            FileLog.e("tmessages", e2);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            try {
+                if (this.captionLayout != null && this.userNameLength == length()) {
+                    Paint paint = getPaint();
+                    int oldColor = getPaint().getColor();
+                    paint.setColor(-5066062);
+                    canvas.save();
+                    canvas.translate((float) this.xOffset, (float) this.yOffset);
+                    this.captionLayout.draw(canvas);
+                    canvas.restore();
+                    paint.setColor(oldColor);
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+
+        public boolean onTouchEvent(MotionEvent event) {
+            boolean z = false;
+            if (ChatActivityEnterView.this.isPopupShowing() && event.getAction() == 0) {
+                ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? z : 2, z);
+                ChatActivityEnterView.this.openKeyboardInternal();
+            }
+            try {
+                z = super.onTouchEvent(event);
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+            return z;
         }
     }
 
@@ -702,12 +668,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
         });
-        try {
-            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-            mCursorDrawableRes.setAccessible(true);
-            mCursorDrawableRes.set(this.messageEditText, Integer.valueOf(R.drawable.field_carret));
-        } catch (Exception e) {
-        }
         if (isChat) {
             this.attachButton = new LinearLayout(context);
             this.attachButton.setOrientation(0);

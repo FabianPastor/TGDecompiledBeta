@@ -159,12 +159,19 @@ public class CameraController implements OnInfoListener {
         });
     }
 
-    public void close(CameraSession session, final Semaphore semaphore) {
+    public void close(final CameraSession session, final Semaphore semaphore) {
         session.destroy();
         final Camera camera = session.cameraInfo.camera;
-        session.cameraInfo.camera = null;
+        if (camera != null) {
+            try {
+                camera.unlock();
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
         this.threadPool.execute(new Runnable() {
             public void run() {
+                session.cameraInfo.camera = null;
                 try {
                     if (camera != null) {
                         camera.stopPreview();
@@ -181,8 +188,8 @@ public class CameraController implements OnInfoListener {
         if (semaphore != null) {
             try {
                 semaphore.acquire();
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
             }
         }
     }
@@ -426,41 +433,58 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    public void recordVideo(CameraSession session, File path, VideoTakeCallback callback) {
+    public void recordVideo(CameraSession session, File path, VideoTakeCallback callback, Runnable onVideoStartRecord) {
         if (session != null) {
-            try {
-                CameraInfo info = session.cameraInfo;
-                Camera camera = info.camera;
-                if (camera != null) {
-                    camera.stopPreview();
-                    camera.unlock();
+            final CameraInfo info = session.cameraInfo;
+            final Camera camera = info.camera;
+            final CameraSession cameraSession = session;
+            final File file = path;
+            final VideoTakeCallback videoTakeCallback = callback;
+            final Runnable runnable = onVideoStartRecord;
+            this.threadPool.execute(new Runnable() {
+                public void run() {
                     try {
-                        this.recorder = new MediaRecorder();
-                        this.recorder.setCamera(camera);
-                        this.recorder.setVideoSource(1);
-                        this.recorder.setAudioSource(5);
-                        session.configureRecorder(1, this.recorder);
-                        this.recorder.setOutputFile(path.getAbsolutePath());
-                        this.recorder.setMaxFileSize(NUM);
-                        this.recorder.setVideoFrameRate(30);
-                        this.recorder.setMaxDuration(0);
-                        Size pictureSize = chooseOptimalSize(info.getPictureSizes(), 720, 480, new Size(16, 9));
-                        this.recorder.setVideoSize(pictureSize.getWidth(), pictureSize.getHeight());
-                        this.recorder.setVideoEncodingBitRate(1800000);
-                        this.recorder.setOnInfoListener(this);
-                        this.recorder.prepare();
-                        this.recorder.start();
-                        this.onVideoTakeCallback = callback;
-                        this.recordedFile = path.getAbsolutePath();
-                    } catch (Throwable e) {
-                        this.recorder.release();
-                        this.recorder = null;
-                        FileLog.e("tmessages", e);
+                        if (camera != null) {
+                            try {
+                                Parameters params = camera.getParameters();
+                                params.setFlashMode(cameraSession.getCurrentFlashMode().equals("on") ? "torch" : "off");
+                                camera.setParameters(params);
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
+                            }
+                            camera.unlock();
+                            try {
+                                CameraController.this.recorder = new MediaRecorder();
+                                CameraController.this.recorder.setCamera(camera);
+                                CameraController.this.recorder.setVideoSource(1);
+                                CameraController.this.recorder.setAudioSource(5);
+                                cameraSession.configureRecorder(1, CameraController.this.recorder);
+                                CameraController.this.recorder.setOutputFile(file.getAbsolutePath());
+                                CameraController.this.recorder.setMaxFileSize(NUM);
+                                CameraController.this.recorder.setVideoFrameRate(30);
+                                CameraController.this.recorder.setMaxDuration(0);
+                                Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 720, 480, new Size(16, 9));
+                                CameraController.this.recorder.setVideoSize(pictureSize.getWidth(), pictureSize.getHeight());
+                                CameraController.this.recorder.setVideoEncodingBitRate(1800000);
+                                CameraController.this.recorder.setOnInfoListener(CameraController.this);
+                                CameraController.this.recorder.prepare();
+                                CameraController.this.recorder.start();
+                                CameraController.this.onVideoTakeCallback = videoTakeCallback;
+                                CameraController.this.recordedFile = file.getAbsolutePath();
+                                if (runnable != null) {
+                                    AndroidUtilities.runOnUIThread(runnable);
+                                }
+                            } catch (Throwable e2) {
+                                CameraController.this.recorder.release();
+                                CameraController.this.recorder = null;
+                                FileLog.e("tmessages", e2);
+                            }
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.e("tmessages", e22);
                     }
                 }
-            } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
-            }
+            });
         }
     }
 
@@ -483,47 +507,67 @@ public class CameraController implements OnInfoListener {
         }
     }
 
-    public void stopVideoRecording(CameraSession session, boolean abandon) {
-        try {
-            Camera camera = session.cameraInfo.camera;
-            if (!(camera == null || this.recorder == null)) {
-                MediaRecorder tempRecorder = this.recorder;
-                this.recorder = null;
+    public void stopVideoRecording(final CameraSession session, final boolean abandon) {
+        this.threadPool.execute(new Runnable() {
+            public void run() {
                 try {
-                    tempRecorder.stop();
-                } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
-                }
-                try {
-                    tempRecorder.release();
-                } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
-                }
-                try {
-                    camera.reconnect();
-                    camera.startPreview();
-                } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
-                }
-                try {
-                    session.stopVideoRecording();
-                } catch (Throwable e222) {
-                    FileLog.e("tmessages", e222);
-                }
-            }
-            if (!abandon) {
-                if (this.onVideoTakeCallback != null) {
-                    final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
+                    final Camera camera = session.cameraInfo.camera;
+                    if (!(camera == null || CameraController.this.recorder == null)) {
+                        MediaRecorder tempRecorder = CameraController.this.recorder;
+                        CameraController.this.recorder = null;
+                        try {
+                            tempRecorder.stop();
+                        } catch (Throwable e) {
+                            FileLog.e("tmessages", e);
+                        }
+                        try {
+                            tempRecorder.release();
+                        } catch (Throwable e2) {
+                            FileLog.e("tmessages", e2);
+                        }
+                        try {
+                            camera.reconnect();
+                            camera.startPreview();
+                        } catch (Throwable e22) {
+                            FileLog.e("tmessages", e22);
+                        }
+                        try {
+                            session.stopVideoRecording();
+                        } catch (Throwable e222) {
+                            FileLog.e("tmessages", e222);
+                        }
+                    }
+                    try {
+                        Parameters params = camera.getParameters();
+                        params.setFlashMode("off");
+                        camera.setParameters(params);
+                    } catch (Throwable e2222) {
+                        FileLog.e("tmessages", e2222);
+                    }
+                    CameraController.this.threadPool.execute(new Runnable() {
                         public void run() {
-                            CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                            try {
+                                Parameters params = camera.getParameters();
+                                params.setFlashMode(session.getCurrentFlashMode());
+                                camera.setParameters(params);
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
+                            }
                         }
                     });
+                    if (!abandon && CameraController.this.onVideoTakeCallback != null) {
+                        final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(CameraController.this.recordedFile, 1);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                            }
+                        });
+                    }
+                } catch (Throwable e22222) {
+                    FileLog.e("tmessages", e22222);
                 }
             }
-        } catch (Throwable e2222) {
-            FileLog.e("tmessages", e2222);
-        }
+        });
     }
 
     public static Size chooseOptimalSize(List<Size> choices, int width, int height, Size aspectRatio) {

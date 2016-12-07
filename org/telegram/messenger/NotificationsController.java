@@ -495,11 +495,15 @@ public class NotificationsController {
                                 }
                                 added = true;
                                 Boolean value = (Boolean) settingsCache.get(Long.valueOf(dialog_id));
-                                boolean isChat = ((int) dialog_id) < 0;
-                                if (((int) dialog_id) == 0) {
-                                    popup = 0;
-                                } else {
-                                    popup = preferences.getInt(isChat ? "popupGroup" : "popupAll", 0);
+                                int lower_id = (int) dialog_id;
+                                boolean isChat = lower_id < 0;
+                                if (lower_id != 0) {
+                                    popup = preferences.getInt("popup_" + dialog_id, 0);
+                                    if (popup == 0) {
+                                        popup = preferences.getInt(((int) dialog_id) < 0 ? "popupGroup" : "popupAll", 0);
+                                    } else if (popup == 1) {
+                                        popup = 3;
+                                    }
                                 }
                                 if (value == null) {
                                     int notifyOverride = NotificationsController.this.getNotifyOverride(preferences, dialog_id);
@@ -1432,7 +1436,7 @@ public class NotificationsController {
                     vibrateOnlyIfSilent = true;
                     needVibrate = 0;
                 }
-                if ((needVibrate == 2 && (vibrateOverride == 1 || vibrateOverride == 3 || vibrateOverride == 5)) || ((needVibrate != 2 && vibrateOverride == 2) || vibrateOverride != 0)) {
+                if ((needVibrate == 2 && (vibrateOverride == 1 || vibrateOverride == 3)) || ((needVibrate != 2 && vibrateOverride == 2) || !(vibrateOverride == 0 || vibrateOverride == 4))) {
                     needVibrate = vibrateOverride;
                 }
                 if (!ApplicationLoader.mainInterfacePaused) {
