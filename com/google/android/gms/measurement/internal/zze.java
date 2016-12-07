@@ -1281,7 +1281,6 @@ class zze extends zzaa {
 
     @WorkerThread
     protected long zzau(String str, String str2) {
-        long zza;
         Object e;
         zzaa.zzib(str);
         zzaa.zzib(str2);
@@ -1289,6 +1288,7 @@ class zze extends zzaa {
         zzacj();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1684,12 +1684,12 @@ class zze extends zzaa {
 
     @WorkerThread
     public zza zzlz(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzaa.zzib(str);
         zzzx();
         zzacj();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1849,13 +1849,13 @@ class zze extends zzaa {
     }
 
     Map<Integer, zzf> zzmd(String str) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
         zzacj();
         zzzx();
         zzaa.zzib(str);
+        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1954,6 +1954,7 @@ class zze extends zzaa {
 
     @WorkerThread
     public List<Pair<com.google.android.gms.internal.zzwc.zze, Long>> zzn(String str, int i, int i2) {
+        List<Pair<com.google.android.gms.internal.zzwc.zze, Long>> emptyList;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -1967,7 +1968,6 @@ class zze extends zzaa {
         zzaa.zzbt(z);
         zzaa.zzib(str);
         Cursor query;
-        List<Pair<com.google.android.gms.internal.zzwc.zze, Long>> emptyList;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

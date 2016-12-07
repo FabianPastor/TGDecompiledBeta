@@ -349,7 +349,10 @@ public final class R {
         public static final int ic_video = NUM;
         public static final int inline_video_pause = NUM;
         public static final int inline_video_play = NUM;
+        public static final int instant_blue = NUM;
         public static final int instant_camera = NUM;
+        public static final int instant_green = NUM;
+        public static final int instant_white = NUM;
         public static final int intro1 = NUM;
         public static final int intro2 = NUM;
         public static final int intro3 = NUM;
@@ -431,7 +434,6 @@ public final class R {
         public static final int nocover_small = NUM;
         public static final int nophotos = NUM;
         public static final int notification = NUM;
-        public static final int notifications_s_1d = NUM;
         public static final int notifications_s_1h = NUM;
         public static final int notifications_s_2d = NUM;
         public static final int notifications_s_custom = NUM;
