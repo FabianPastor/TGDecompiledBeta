@@ -7,55 +7,55 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzk implements Creator<StreetViewPanoramaCamera> {
     static void zza(StreetViewPanoramaCamera streetViewPanoramaCamera, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, streetViewPanoramaCamera.getVersionCode());
         zzb.zza(parcel, 2, streetViewPanoramaCamera.zoom);
         zzb.zza(parcel, 3, streetViewPanoramaCamera.tilt);
         zzb.zza(parcel, 4, streetViewPanoramaCamera.bearing);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzox(parcel);
+        return zzpp(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwc(i);
+        return zzwt(i);
     }
 
-    public StreetViewPanoramaCamera zzox(Parcel parcel) {
+    public StreetViewPanoramaCamera zzpp(Parcel parcel) {
         float f = 0.0f;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         float f2 = 0.0f;
         int i = 0;
         float f3 = 0.0f;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    f2 = zza.zzl(parcel, zzcp);
+                    f2 = zza.zzl(parcel, zzcq);
                     break;
                 case 3:
-                    f3 = zza.zzl(parcel, zzcp);
+                    f3 = zza.zzl(parcel, zzcq);
                     break;
                 case 4:
-                    f = zza.zzl(parcel, zzcp);
+                    f = zza.zzl(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new StreetViewPanoramaCamera(i, f2, f3, f);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public StreetViewPanoramaCamera[] zzwc(int i) {
+    public StreetViewPanoramaCamera[] zzwt(int i) {
         return new StreetViewPanoramaCamera[i];
     }
 }

@@ -1,35 +1,35 @@
 package com.google.android.gms.measurement.internal;
 
 abstract class zzaa extends zzz {
-    private boolean aJ;
+    private boolean cR;
 
     zzaa(zzx com_google_android_gms_measurement_internal_zzx) {
         super(com_google_android_gms_measurement_internal_zzx);
-        this.anq.zzb(this);
+        this.aqw.zzb(this);
     }
 
     public final void initialize() {
-        if (this.aJ) {
+        if (this.cR) {
             throw new IllegalStateException("Can't initialize twice");
         }
-        zzym();
-        this.anq.zzbxo();
-        this.aJ = true;
+        zzzy();
+        this.aqw.zzbyi();
+        this.cR = true;
     }
 
     boolean isInitialized() {
-        return this.aJ;
+        return this.cR;
     }
 
-    protected void zzaax() {
+    protected void zzacj() {
         if (!isInitialized()) {
             throw new IllegalStateException("Not initialized");
         }
     }
 
-    boolean zzbxt() {
+    boolean zzbyn() {
         return false;
     }
 
-    protected abstract void zzym();
+    protected abstract void zzzy();
 }

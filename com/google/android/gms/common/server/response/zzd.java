@@ -10,50 +10,50 @@ import java.util.ArrayList;
 
 public class zzd implements Creator<Entry> {
     static void zza(Entry entry, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, entry.versionCode);
         zzb.zza(parcel, 2, entry.className, false);
-        zzb.zzc(parcel, 3, entry.DG, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzc(parcel, 3, entry.Ft, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcz(parcel);
+        return zzda(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzhe(i);
+        return zzhd(i);
     }
 
-    public Entry zzcz(Parcel parcel) {
+    public Entry zzda(Parcel parcel) {
         ArrayList arrayList = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         String str = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    arrayList = zza.zzc(parcel, zzcp, FieldMapPair.CREATOR);
+                    arrayList = zza.zzc(parcel, zzcq, FieldMapPair.CREATOR);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new Entry(i, str, arrayList);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public Entry[] zzhe(int i) {
+    public Entry[] zzhd(int i) {
         return new Entry[i];
     }
 }

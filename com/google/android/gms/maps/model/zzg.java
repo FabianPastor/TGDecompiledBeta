@@ -9,12 +9,12 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class zzg implements Creator<MarkerOptions> {
     static void zza(MarkerOptions markerOptions, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, markerOptions.getVersionCode());
         zzb.zza(parcel, 2, markerOptions.getPosition(), i, false);
         zzb.zza(parcel, 3, markerOptions.getTitle(), false);
         zzb.zza(parcel, 4, markerOptions.getSnippet(), false);
-        zzb.zza(parcel, 5, markerOptions.zzbsj(), false);
+        zzb.zza(parcel, 5, markerOptions.zzbsz(), false);
         zzb.zza(parcel, 6, markerOptions.getAnchorU());
         zzb.zza(parcel, 7, markerOptions.getAnchorV());
         zzb.zza(parcel, 8, markerOptions.isDraggable());
@@ -25,19 +25,19 @@ public class zzg implements Creator<MarkerOptions> {
         zzb.zza(parcel, 13, markerOptions.getInfoWindowAnchorV());
         zzb.zza(parcel, 14, markerOptions.getAlpha());
         zzb.zza(parcel, 15, markerOptions.getZIndex());
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzot(parcel);
+        return zzpl(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzvy(i);
+        return zzwp(i);
     }
 
-    public MarkerOptions zzot(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public MarkerOptions zzpl(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         LatLng latLng = null;
         String str = null;
@@ -53,66 +53,66 @@ public class zzg implements Creator<MarkerOptions> {
         float f5 = 0.0f;
         float f6 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         float f7 = 0.0f;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    latLng = (LatLng) zza.zza(parcel, zzcp, LatLng.CREATOR);
+                    latLng = (LatLng) zza.zza(parcel, zzcq, LatLng.CREATOR);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    iBinder = zza.zzr(parcel, zzcp);
+                    iBinder = zza.zzr(parcel, zzcq);
                     break;
                 case 6:
-                    f = zza.zzl(parcel, zzcp);
+                    f = zza.zzl(parcel, zzcq);
                     break;
                 case 7:
-                    f2 = zza.zzl(parcel, zzcp);
+                    f2 = zza.zzl(parcel, zzcq);
                     break;
                 case 8:
-                    z = zza.zzc(parcel, zzcp);
+                    z = zza.zzc(parcel, zzcq);
                     break;
                 case 9:
-                    z2 = zza.zzc(parcel, zzcp);
+                    z2 = zza.zzc(parcel, zzcq);
                     break;
                 case 10:
-                    z3 = zza.zzc(parcel, zzcp);
+                    z3 = zza.zzc(parcel, zzcq);
                     break;
                 case 11:
-                    f3 = zza.zzl(parcel, zzcp);
+                    f3 = zza.zzl(parcel, zzcq);
                     break;
                 case 12:
-                    f4 = zza.zzl(parcel, zzcp);
+                    f4 = zza.zzl(parcel, zzcq);
                     break;
                 case 13:
-                    f5 = zza.zzl(parcel, zzcp);
+                    f5 = zza.zzl(parcel, zzcq);
                     break;
                 case 14:
-                    f6 = zza.zzl(parcel, zzcp);
+                    f6 = zza.zzl(parcel, zzcq);
                     break;
                 case 15:
-                    f7 = zza.zzl(parcel, zzcp);
+                    f7 = zza.zzl(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new MarkerOptions(i, latLng, str, str2, iBinder, f, f2, z, z2, z3, f3, f4, f5, f6, f7);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public MarkerOptions[] zzvy(int i) {
+    public MarkerOptions[] zzwp(int i) {
         return new MarkerOptions[i];
     }
 }

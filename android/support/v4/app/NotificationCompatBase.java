@@ -4,8 +4,11 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
 
+@RestrictTo({Scope.GROUP_ID})
 public class NotificationCompatBase {
 
     public static abstract class Action {

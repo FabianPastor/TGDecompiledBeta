@@ -86,17 +86,35 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             }
         }
         if (info != null) {
-            Size pictureSize;
-            if (Math.abs((((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y))) - 1.3333334f) < 0.1f) {
-                pictureSize = new Size(4, 3);
+            Size aspectRatio;
+            int wantedWidth;
+            int wantedHeight;
+            float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
+            if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                aspectRatio = new Size(4, 3);
+                wantedWidth = 1280;
+                wantedHeight = 960;
             } else {
-                pictureSize = new Size(16, 9);
+                aspectRatio = new Size(16, 9);
+                wantedWidth = 1280;
+                wantedHeight = 720;
             }
             if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
                 int width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
-                this.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (pictureSize.getHeight() * width) / pictureSize.getWidth(), pictureSize);
+                this.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
             }
-            pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 1280, 1280, pictureSize);
+            Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
+            if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
+                if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                    aspectRatio = new Size(3, 4);
+                } else {
+                    aspectRatio = new Size(9, 16);
+                }
+                Size pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
+                if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
+                    pictureSize = pictureSize2;
+                }
+            }
             if (this.previewSize != null && this.textureView.getSurfaceTexture() != null) {
                 this.textureView.getSurfaceTexture().setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);

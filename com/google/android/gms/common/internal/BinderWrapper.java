@@ -10,35 +10,35 @@ import com.google.android.gms.common.annotation.KeepName;
 public final class BinderWrapper implements Parcelable {
     public static final Creator<BinderWrapper> CREATOR = new Creator<BinderWrapper>() {
         public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzcj(parcel);
+            return zzck(parcel);
         }
 
         public /* synthetic */ Object[] newArray(int i) {
-            return zzgm(i);
+            return zzgl(i);
         }
 
-        public BinderWrapper zzcj(Parcel parcel) {
+        public BinderWrapper zzck(Parcel parcel) {
             return new BinderWrapper(parcel);
         }
 
-        public BinderWrapper[] zzgm(int i) {
+        public BinderWrapper[] zzgl(int i) {
             return new BinderWrapper[i];
         }
     };
-    private IBinder Bz;
+    private IBinder DI;
 
     public BinderWrapper() {
-        this.Bz = null;
+        this.DI = null;
     }
 
     public BinderWrapper(IBinder iBinder) {
-        this.Bz = null;
-        this.Bz = iBinder;
+        this.DI = null;
+        this.DI = iBinder;
     }
 
     private BinderWrapper(Parcel parcel) {
-        this.Bz = null;
-        this.Bz = parcel.readStrongBinder();
+        this.DI = null;
+        this.DI = parcel.readStrongBinder();
     }
 
     public int describeContents() {
@@ -46,6 +46,6 @@ public final class BinderWrapper implements Parcelable {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStrongBinder(this.Bz);
+        parcel.writeStrongBinder(this.DI);
     }
 }

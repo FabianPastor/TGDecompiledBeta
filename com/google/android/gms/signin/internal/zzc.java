@@ -9,50 +9,50 @@ import java.util.List;
 
 public class zzc implements Creator<CheckServerAuthResult> {
     static void zza(CheckServerAuthResult checkServerAuthResult, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, checkServerAuthResult.mVersionCode);
-        zzb.zza(parcel, 2, checkServerAuthResult.aAh);
-        zzb.zzc(parcel, 3, checkServerAuthResult.aAi, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, checkServerAuthResult.aDs);
+        zzb.zzc(parcel, 3, checkServerAuthResult.aDt, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsk(parcel);
+        return zzsa(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzaae(i);
+        return zzzu(i);
     }
 
-    public CheckServerAuthResult[] zzaae(int i) {
-        return new CheckServerAuthResult[i];
-    }
-
-    public CheckServerAuthResult zzsk(Parcel parcel) {
+    public CheckServerAuthResult zzsa(Parcel parcel) {
         boolean z = false;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         List list = null;
         int i = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    z = zza.zzc(parcel, zzcp);
+                    z = zza.zzc(parcel, zzcq);
                     break;
                 case 3:
-                    list = zza.zzc(parcel, zzcp, Scope.CREATOR);
+                    list = zza.zzc(parcel, zzcq, Scope.CREATOR);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new CheckServerAuthResult(i, z, list);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+    }
+
+    public CheckServerAuthResult[] zzzu(int i) {
+        return new CheckServerAuthResult[i];
     }
 }

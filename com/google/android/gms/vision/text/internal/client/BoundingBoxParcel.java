@@ -1,11 +1,12 @@
 package com.google.android.gms.vision.text.internal.client;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class BoundingBoxParcel extends AbstractSafeParcelable {
-    public static final zza CREATOR = new zza();
-    public final float aLE;
+    public static final Creator<BoundingBoxParcel> CREATOR = new zza();
+    public final float aOP;
     public final int height;
     public final int left;
     public final int top;
@@ -18,7 +19,7 @@ public class BoundingBoxParcel extends AbstractSafeParcelable {
         this.top = i3;
         this.width = i4;
         this.height = i5;
-        this.aLE = f;
+        this.aOP = f;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

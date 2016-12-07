@@ -14,9 +14,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat21.SharedElementCallback21;
+import android.support.v4.app.ActivityCompatApi21.SharedElementCallback21;
 import android.support.v4.app.ActivityCompatApi23.OnSharedElementsReadyListenerBridge;
 import android.support.v4.app.ActivityCompatApi23.SharedElementCallback23;
 import android.support.v4.app.SharedElementCallback.OnSharedElementsReadyListener;
@@ -103,20 +104,15 @@ public class ActivityCompat extends ContextCompat {
         }
     }
 
+    protected ActivityCompat() {
+    }
+
     public static boolean invalidateOptionsMenu(Activity activity) {
         if (VERSION.SDK_INT < 11) {
             return false;
         }
         ActivityCompatHoneycomb.invalidateOptionsMenu(activity);
         return true;
-    }
-
-    public static void startActivity(Activity activity, Intent intent, @Nullable Bundle options) {
-        if (VERSION.SDK_INT >= 16) {
-            ActivityCompatJB.startActivity(activity, intent, options);
-        } else {
-            activity.startActivity(intent);
-        }
     }
 
     public static void startActivityForResult(Activity activity, Intent intent, int requestCode, @Nullable Bundle options) {
@@ -145,16 +141,16 @@ public class ActivityCompat extends ContextCompat {
 
     public static void finishAfterTransition(Activity activity) {
         if (VERSION.SDK_INT >= 21) {
-            ActivityCompat21.finishAfterTransition(activity);
+            ActivityCompatApi21.finishAfterTransition(activity);
         } else {
             activity.finish();
         }
     }
 
-    @Deprecated
-    public Uri getReferrer(Activity activity) {
+    @Nullable
+    public static Uri getReferrer(Activity activity) {
         if (VERSION.SDK_INT >= 22) {
-            return ActivityCompat22.getReferrer(activity);
+            return ActivityCompatApi22.getReferrer(activity);
         }
         Intent intent = activity.getIntent();
         Uri referrer = (Uri) intent.getParcelableExtra("android.intent.extra.REFERRER");
@@ -172,7 +168,7 @@ public class ActivityCompat extends ContextCompat {
         if (VERSION.SDK_INT >= 23) {
             ActivityCompatApi23.setEnterSharedElementCallback(activity, createCallback23(callback));
         } else if (VERSION.SDK_INT >= 21) {
-            ActivityCompat21.setEnterSharedElementCallback(activity, createCallback(callback));
+            ActivityCompatApi21.setEnterSharedElementCallback(activity, createCallback(callback));
         }
     }
 
@@ -180,23 +176,23 @@ public class ActivityCompat extends ContextCompat {
         if (VERSION.SDK_INT >= 23) {
             ActivityCompatApi23.setExitSharedElementCallback(activity, createCallback23(callback));
         } else if (VERSION.SDK_INT >= 21) {
-            ActivityCompat21.setExitSharedElementCallback(activity, createCallback(callback));
+            ActivityCompatApi21.setExitSharedElementCallback(activity, createCallback(callback));
         }
     }
 
     public static void postponeEnterTransition(Activity activity) {
         if (VERSION.SDK_INT >= 21) {
-            ActivityCompat21.postponeEnterTransition(activity);
+            ActivityCompatApi21.postponeEnterTransition(activity);
         }
     }
 
     public static void startPostponedEnterTransition(Activity activity) {
         if (VERSION.SDK_INT >= 21) {
-            ActivityCompat21.startPostponedEnterTransition(activity);
+            ActivityCompatApi21.startPostponedEnterTransition(activity);
         }
     }
 
-    public static void requestPermissions(@NonNull final Activity activity, @NonNull final String[] permissions, final int requestCode) {
+    public static void requestPermissions(@NonNull final Activity activity, @NonNull final String[] permissions, @IntRange(from = 0) final int requestCode) {
         if (VERSION.SDK_INT >= 23) {
             ActivityCompatApi23.requestPermissions(activity, permissions, requestCode);
         } else if (activity instanceof OnRequestPermissionsResultCallback) {

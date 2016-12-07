@@ -5,41 +5,26 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.internal.zzt;
-import com.google.android.gms.internal.zzsi;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.internal.zzsz;
 
 public class zzf {
-    private static zzf vf;
+    private static zzf xh;
     private final Context mContext;
 
     private zzf(Context context) {
         this.mContext = context.getApplicationContext();
     }
 
-    private boolean zzb(PackageInfo packageInfo, boolean z) {
-        if (packageInfo.signatures.length != 1) {
-            Log.w("GoogleSignatureVerifier", "Package has more than one signature.");
-            return false;
-        }
-        zza com_google_android_gms_common_zzd_zzb = new zzb(packageInfo.signatures[0].toByteArray());
-        for (zzt equals : z ? zzd.zzapf() : zzd.zzapg()) {
-            if (com_google_android_gms_common_zzd_zzb.equals(equals)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static zzf zzbz(Context context) {
-        zzac.zzy(context);
+    public static zzf zzbv(Context context) {
+        zzaa.zzy(context);
         synchronized (zzf.class) {
-            if (vf == null) {
-                zzd.zzbr(context);
-                vf = new zzf(context);
+            if (xh == null) {
+                zzd.zzbo(context);
+                xh = new zzf(context);
             }
         }
-        return vf;
+        return xh;
     }
 
     zza zza(PackageInfo packageInfo, zza... com_google_android_gms_common_zzd_zzaArr) {
@@ -65,11 +50,24 @@ public class zzf {
         if (!(packageInfo == null || packageInfo.signatures == null)) {
             zza zza;
             if (z) {
-                zza = zza(packageInfo, zzd.uW);
+                zza = zza(packageInfo, zzd.xa);
             } else {
-                zza = zza(packageInfo, zzd.uW[0]);
+                zza = zza(packageInfo, zzd.xa[0]);
             }
             if (zza != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean zza(PackageManager packageManager, int i) {
+        String[] packagesForUid = zzsz.zzco(this.mContext).getPackagesForUid(i);
+        if (packagesForUid == null || packagesForUid.length == 0) {
+            return false;
+        }
+        for (String zzb : packagesForUid) {
+            if (zzb(packageManager, zzb)) {
                 return true;
             }
         }
@@ -80,7 +78,7 @@ public class zzf {
         if (packageInfo == null) {
             return false;
         }
-        if (zze.zzbv(this.mContext)) {
+        if (zze.zzbr(this.mContext)) {
             return zzb(packageInfo, true);
         }
         boolean zzb = zzb(packageInfo, false);
@@ -89,6 +87,20 @@ public class zzf {
         }
         Log.w("GoogleSignatureVerifier", "Test-keys aren't accepted on this build.");
         return zzb;
+    }
+
+    boolean zzb(PackageInfo packageInfo, boolean z) {
+        boolean z2 = false;
+        if (packageInfo.signatures.length != 1) {
+            Log.w("GoogleSignatureVerifier", "Package has more than one signature.");
+        } else {
+            zza com_google_android_gms_common_zzd_zzb = new zzb(packageInfo.signatures[0].toByteArray());
+            String str = packageInfo.packageName;
+            z2 = z ? zzd.zzb(str, com_google_android_gms_common_zzd_zzb) : zzd.zza(str, com_google_android_gms_common_zzd_zzb);
+            if (!z2) {
+            }
+        }
+        return z2;
     }
 
     public boolean zzb(PackageManager packageManager, PackageInfo packageInfo) {
@@ -101,7 +113,7 @@ public class zzf {
         if (!zza(packageInfo, true)) {
             return false;
         }
-        if (zze.zzbv(this.mContext)) {
+        if (zze.zzbr(this.mContext)) {
             return true;
         }
         Log.w("GoogleSignatureVerifier", "Test-keys aren't accepted on this build.");
@@ -110,7 +122,7 @@ public class zzf {
 
     public boolean zzb(PackageManager packageManager, String str) {
         try {
-            return zza(packageManager, zzsi.zzcr(this.mContext).getPackageInfo(str, 64));
+            return zza(packageManager, zzsz.zzco(this.mContext).getPackageInfo(str, 64));
         } catch (NameNotFoundException e) {
             return false;
         }

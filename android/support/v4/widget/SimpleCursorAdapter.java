@@ -3,15 +3,19 @@ package android.support.v4.widget;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SimpleCursorAdapter extends ResourceCursorAdapter {
     private CursorToStringConverter mCursorToStringConverter;
+    @RestrictTo({Scope.GROUP_ID})
     protected int[] mFrom;
     String[] mOriginalFrom;
     private int mStringConversionColumn = -1;
+    @RestrictTo({Scope.GROUP_ID})
     protected int[] mTo;
     private ViewBinder mViewBinder;
 

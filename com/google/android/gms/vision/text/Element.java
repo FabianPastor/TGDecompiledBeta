@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Element implements Text {
-    private WordBoxParcel aLu;
+    private WordBoxParcel aOF;
 
     Element(WordBoxParcel wordBoxParcel) {
-        this.aLu = wordBoxParcel;
+        this.aOF = wordBoxParcel;
     }
 
     public Rect getBoundingBox() {
@@ -22,14 +22,14 @@ public class Element implements Text {
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.aLu.aLG);
+        return zza.zza(this.aOF.aOR);
     }
 
     public String getLanguage() {
-        return this.aLu.aLz;
+        return this.aOF.aOK;
     }
 
     public String getValue() {
-        return this.aLu.aLJ;
+        return this.aOF.aOU;
     }
 }

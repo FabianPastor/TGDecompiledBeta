@@ -78,7 +78,7 @@ public class SearchAdapter extends BaseFragmentAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch(null, this.allowChats, this.allowBots);
+                this.searchAdapterHelper.queryServerSearch(null, this.allowChats, this.allowBots, true);
             }
             notifyDataSetChanged();
             return;
@@ -101,7 +101,7 @@ public class SearchAdapter extends BaseFragmentAdapter {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 if (SearchAdapter.this.allowUsernameSearch) {
-                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots);
+                    SearchAdapter.this.searchAdapterHelper.queryServerSearch(query, SearchAdapter.this.allowChats, SearchAdapter.this.allowBots, true);
                 }
                 final ArrayList<TL_contact> contactsCopy = new ArrayList();
                 contactsCopy.addAll(ContactsController.getInstance().contacts);

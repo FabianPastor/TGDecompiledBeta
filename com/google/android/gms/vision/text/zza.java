@@ -22,8 +22,8 @@ final class zza {
 
     static Point[] zza(BoundingBoxParcel boundingBoxParcel) {
         r0 = new Point[4];
-        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel.aLE));
-        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel.aLE));
+        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel.aOP));
+        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel.aOP));
         r0[0] = new Point(boundingBoxParcel.left, boundingBoxParcel.top);
         r0[1] = new Point((int) (((double) boundingBoxParcel.left) + (((double) boundingBoxParcel.width) * cos)), (int) (((double) boundingBoxParcel.top) + (((double) boundingBoxParcel.width) * sin)));
         r0[2] = new Point((int) (((double) r0[1].x) - (sin * ((double) boundingBoxParcel.height))), (int) ((cos * ((double) boundingBoxParcel.height)) + ((double) r0[1].y)));

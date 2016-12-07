@@ -222,6 +222,48 @@ public class MentionsAdapter extends Adapter {
         return this.foundContextBot != null ? this.foundContextBot.username : "";
     }
 
+    private void processFoundUser(User user) {
+        this.contextUsernameReqid = 0;
+        this.locationProvider.stop();
+        if (user == null || !user.bot || user.bot_inline_placeholder == null) {
+            this.foundContextBot = null;
+        } else {
+            this.foundContextBot = user;
+            if (this.foundContextBot.bot_inline_geo) {
+                if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("inlinegeo_" + this.foundContextBot.id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
+                    checkLocationPermissionsOrStart();
+                } else {
+                    final User foundContextBotFinal = this.foundContextBot;
+                    Builder builder = new Builder(this.parentFragment.getParentActivity());
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (foundContextBotFinal != null) {
+                                ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
+                                MentionsAdapter.this.checkLocationPermissionsOrStart();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MentionsAdapter.this.onLocationUnavailable();
+                        }
+                    });
+                    this.parentFragment.showDialog(builder.create());
+                }
+            }
+        }
+        if (this.foundContextBot == null) {
+            this.noUserName = true;
+            return;
+        }
+        if (this.delegate != null) {
+            this.delegate.onContextSearch(true);
+        }
+        searchForContextBotResults(this.foundContextBot, this.searchingContextQuery, "");
+    }
+
     private void searchForContextBot(final String username, final String query) {
         if (this.foundContextBot == null || this.foundContextBot.username == null || !this.foundContextBot.username.equals(username) || this.searchingContextQuery == null || !this.searchingContextQuery.equals(query)) {
             this.searchResultBotContext = null;
@@ -282,59 +324,29 @@ public class MentionsAdapter extends Adapter {
                     if (MentionsAdapter.this.contextQueryRunnable == this) {
                         MentionsAdapter.this.contextQueryRunnable = null;
                         if (MentionsAdapter.this.foundContextBot == null && !MentionsAdapter.this.noUserName) {
+                            MentionsAdapter.this.searchingContextUsername = username;
+                            User user = MessagesController.getInstance().getUser(MentionsAdapter.this.searchingContextUsername);
+                            if (user != null) {
+                                MentionsAdapter.this.processFoundUser(user);
+                                return;
+                            }
                             TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
-                            req.username = MentionsAdapter.this.searchingContextUsername = username;
+                            req.username = MentionsAdapter.this.searchingContextUsername;
                             MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                 public void run(final TLObject response, final TL_error error) {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(username)) {
-                                                MentionsAdapter.this.contextUsernameReqid = 0;
-                                                MentionsAdapter.this.foundContextBot = null;
-                                                MentionsAdapter.this.locationProvider.stop();
+                                                User user = null;
                                                 if (error == null) {
                                                     TL_contacts_resolvedPeer res = response;
                                                     if (!res.users.isEmpty()) {
-                                                        User user = (User) res.users.get(0);
-                                                        if (user.bot && user.bot_inline_placeholder != null) {
-                                                            MessagesController.getInstance().putUser(user, false);
-                                                            MessagesStorage.getInstance().putUsersAndChats(res.users, null, true, true);
-                                                            MentionsAdapter.this.foundContextBot = user;
-                                                            if (MentionsAdapter.this.foundContextBot.bot_inline_geo) {
-                                                                if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("inlinegeo_" + MentionsAdapter.this.foundContextBot.id, false) || MentionsAdapter.this.parentFragment == null || MentionsAdapter.this.parentFragment.getParentActivity() == null) {
-                                                                    MentionsAdapter.this.checkLocationPermissionsOrStart();
-                                                                } else {
-                                                                    final User foundContextBotFinal = MentionsAdapter.this.foundContextBot;
-                                                                    Builder builder = new Builder(MentionsAdapter.this.parentFragment.getParentActivity());
-                                                                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
-                                                                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
-                                                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
-                                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                                            if (foundContextBotFinal != null) {
-                                                                                ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
-                                                                                MentionsAdapter.this.checkLocationPermissionsOrStart();
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                            MentionsAdapter.this.onLocationUnavailable();
-                                                                        }
-                                                                    });
-                                                                    MentionsAdapter.this.parentFragment.showDialog(builder.create());
-                                                                }
-                                                            }
-                                                        }
+                                                        user = (User) res.users.get(0);
+                                                        MessagesController.getInstance().putUser(user, false);
+                                                        MessagesStorage.getInstance().putUsersAndChats(res.users, null, true, true);
                                                     }
                                                 }
-                                                if (MentionsAdapter.this.foundContextBot == null) {
-                                                    MentionsAdapter.this.noUserName = true;
-                                                    return;
-                                                }
-                                                if (MentionsAdapter.this.delegate != null) {
-                                                    MentionsAdapter.this.delegate.onContextSearch(true);
-                                                }
-                                                MentionsAdapter.this.searchForContextBotResults(MentionsAdapter.this.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
+                                                MentionsAdapter.this.processFoundUser(user);
                                             }
                                         }
                                     });
@@ -481,11 +493,11 @@ public class MentionsAdapter extends Adapter {
                                     } else {
                                         MentionsAdapter.this.notifyDataSetChanged();
                                     }
-                                    MentionsAdapterDelegate access$1500 = MentionsAdapter.this.delegate;
+                                    MentionsAdapterDelegate access$1400 = MentionsAdapter.this.delegate;
                                     if (!(MentionsAdapter.this.searchResultBotContext.isEmpty() && MentionsAdapter.this.searchResultBotContextSwitch == null)) {
                                         z = true;
                                     }
-                                    access$1500.needChangePanelVisibility(z);
+                                    access$1400.needChangePanelVisibility(z);
                                 }
                             }
                         }

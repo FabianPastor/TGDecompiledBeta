@@ -13,12 +13,12 @@ public abstract class StatsEvent extends AbstractSafeParcelable implements Refle
         String valueOf = String.valueOf("\t");
         int eventType = getEventType();
         String valueOf2 = String.valueOf("\t");
-        long zzawq = zzawq();
-        String valueOf3 = String.valueOf(zzawt());
-        return new StringBuilder(((String.valueOf(valueOf).length() + 51) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()).append(timeMillis).append(valueOf).append(eventType).append(valueOf2).append(zzawq).append(valueOf3).toString();
+        long zzaxt = zzaxt();
+        String valueOf3 = String.valueOf(zzaxu());
+        return new StringBuilder(((String.valueOf(valueOf).length() + 51) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()).append(timeMillis).append(valueOf).append(eventType).append(valueOf2).append(zzaxt).append(valueOf3).toString();
     }
 
-    public abstract long zzawq();
+    public abstract long zzaxt();
 
-    public abstract String zzawt();
+    public abstract String zzaxu();
 }

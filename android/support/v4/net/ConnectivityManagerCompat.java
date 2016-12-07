@@ -4,12 +4,26 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build.VERSION;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public final class ConnectivityManagerCompat {
     private static final ConnectivityManagerCompatImpl IMPL;
+    public static final int RESTRICT_BACKGROUND_STATUS_DISABLED = 1;
+    public static final int RESTRICT_BACKGROUND_STATUS_ENABLED = 3;
+    public static final int RESTRICT_BACKGROUND_STATUS_WHITELISTED = 2;
 
     interface ConnectivityManagerCompatImpl {
+        int getRestrictBackgroundStatus(ConnectivityManager connectivityManager);
+
         boolean isActiveNetworkMetered(ConnectivityManager connectivityManager);
+    }
+
+    @RestrictTo({Scope.GROUP_ID})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface RestrictBackgroundStatus {
     }
 
     static class BaseConnectivityManagerCompatImpl implements ConnectivityManagerCompatImpl {
@@ -35,9 +49,13 @@ public final class ConnectivityManagerCompat {
                     return true;
             }
         }
+
+        public int getRestrictBackgroundStatus(ConnectivityManager cm) {
+            return 3;
+        }
     }
 
-    static class HoneycombMR2ConnectivityManagerCompatImpl implements ConnectivityManagerCompatImpl {
+    static class HoneycombMR2ConnectivityManagerCompatImpl extends BaseConnectivityManagerCompatImpl {
         HoneycombMR2ConnectivityManagerCompatImpl() {
         }
 
@@ -46,7 +64,7 @@ public final class ConnectivityManagerCompat {
         }
     }
 
-    static class JellyBeanConnectivityManagerCompatImpl implements ConnectivityManagerCompatImpl {
+    static class JellyBeanConnectivityManagerCompatImpl extends HoneycombMR2ConnectivityManagerCompatImpl {
         JellyBeanConnectivityManagerCompatImpl() {
         }
 
@@ -55,8 +73,19 @@ public final class ConnectivityManagerCompat {
         }
     }
 
+    static class Api24ConnectivityManagerCompatImpl extends JellyBeanConnectivityManagerCompatImpl {
+        Api24ConnectivityManagerCompatImpl() {
+        }
+
+        public int getRestrictBackgroundStatus(ConnectivityManager cm) {
+            return ConnectivityManagerCompatApi24.getRestrictBackgroundStatus(cm);
+        }
+    }
+
     static {
-        if (VERSION.SDK_INT >= 16) {
+        if (VERSION.SDK_INT >= 24) {
+            IMPL = new Api24ConnectivityManagerCompatImpl();
+        } else if (VERSION.SDK_INT >= 16) {
             IMPL = new JellyBeanConnectivityManagerCompatImpl();
         } else if (VERSION.SDK_INT >= 13) {
             IMPL = new HoneycombMR2ConnectivityManagerCompatImpl();
@@ -75,6 +104,10 @@ public final class ConnectivityManagerCompat {
             return cm.getNetworkInfo(info.getType());
         }
         return null;
+    }
+
+    public static int getRestrictBackgroundStatus(ConnectivityManager cm) {
+        return IMPL.getRestrictBackgroundStatus(cm);
     }
 
     private ConnectivityManagerCompat() {

@@ -1,12 +1,26 @@
 package com.google.android.gms.common.util;
 
-import com.google.android.gms.common.internal.zzg;
-import java.util.regex.Pattern;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.util.Log;
+import java.io.File;
 
 public class zzw {
-    private static final Pattern EZ = Pattern.compile("\\$\\{(.*?)\\}");
+    @TargetApi(21)
+    public static File getNoBackupFilesDir(Context context) {
+        return zzs.zzayx() ? context.getNoBackupFilesDir() : zze(new File(context.getApplicationInfo().dataDir, "no_backup"));
+    }
 
-    public static boolean zzij(String str) {
-        return str == null || zzg.BB.zzb(str);
+    private static synchronized File zze(File file) {
+        synchronized (zzw.class) {
+            if (!(file.exists() || file.mkdirs() || file.exists())) {
+                String str = "SupportV4Utils";
+                String str2 = "Unable to create no-backup dir ";
+                String valueOf = String.valueOf(file.getPath());
+                Log.w(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
+                file = null;
+            }
+        }
+        return file;
     }
 }

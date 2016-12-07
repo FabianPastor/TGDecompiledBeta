@@ -3,31 +3,32 @@ package com.google.android.gms.maps.model;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzz;
 
 public final class LatLngBounds extends AbstractSafeParcelable implements ReflectedParcelable {
-    public static final zzd CREATOR = new zzd();
+    public static final Creator<LatLngBounds> CREATOR = new zzd();
     private final int mVersionCode;
     public final LatLng northeast;
     public final LatLng southwest;
 
     public static final class Builder {
-        private double amQ = Double.POSITIVE_INFINITY;
-        private double amR = Double.NEGATIVE_INFINITY;
-        private double amS = Double.NaN;
-        private double amT = Double.NaN;
+        private double apW = Double.POSITIVE_INFINITY;
+        private double apX = Double.NEGATIVE_INFINITY;
+        private double apY = Double.NaN;
+        private double apZ = Double.NaN;
 
         private boolean zzi(double d) {
             boolean z = false;
-            if (this.amS <= this.amT) {
-                return this.amS <= d && d <= this.amT;
+            if (this.apY <= this.apZ) {
+                return this.apY <= d && d <= this.apZ;
             } else {
-                if (this.amS <= d || d <= this.amT) {
+                if (this.apY <= d || d <= this.apZ) {
                     z = true;
                 }
                 return z;
@@ -35,22 +36,22 @@ public final class LatLngBounds extends AbstractSafeParcelable implements Reflec
         }
 
         public LatLngBounds build() {
-            zzac.zza(!Double.isNaN(this.amS), (Object) "no included points");
-            return new LatLngBounds(new LatLng(this.amQ, this.amS), new LatLng(this.amR, this.amT));
+            zzaa.zza(!Double.isNaN(this.apY), (Object) "no included points");
+            return new LatLngBounds(new LatLng(this.apW, this.apY), new LatLng(this.apX, this.apZ));
         }
 
         public Builder include(LatLng latLng) {
-            this.amQ = Math.min(this.amQ, latLng.latitude);
-            this.amR = Math.max(this.amR, latLng.latitude);
+            this.apW = Math.min(this.apW, latLng.latitude);
+            this.apX = Math.max(this.apX, latLng.latitude);
             double d = latLng.longitude;
-            if (Double.isNaN(this.amS)) {
-                this.amS = d;
-                this.amT = d;
+            if (Double.isNaN(this.apY)) {
+                this.apY = d;
+                this.apZ = d;
             } else if (!zzi(d)) {
-                if (LatLngBounds.zzb(this.amS, d) < LatLngBounds.zzc(this.amT, d)) {
-                    this.amS = d;
+                if (LatLngBounds.zzb(this.apY, d) < LatLngBounds.zzc(this.apZ, d)) {
+                    this.apY = d;
                 } else {
-                    this.amT = d;
+                    this.apZ = d;
                 }
             }
             return this;
@@ -58,9 +59,9 @@ public final class LatLngBounds extends AbstractSafeParcelable implements Reflec
     }
 
     LatLngBounds(int i, LatLng latLng, LatLng latLng2) {
-        zzac.zzb((Object) latLng, (Object) "null southwest");
-        zzac.zzb((Object) latLng2, (Object) "null northeast");
-        zzac.zzb(latLng2.latitude >= latLng.latitude, "southern latitude exceeds northern latitude (%s > %s)", Double.valueOf(latLng.latitude), Double.valueOf(latLng2.latitude));
+        zzaa.zzb((Object) latLng, (Object) "null southwest");
+        zzaa.zzb((Object) latLng2, (Object) "null northeast");
+        zzaa.zzb(latLng2.latitude >= latLng.latitude, "southern latitude exceeds northern latitude (%s > %s)", Double.valueOf(latLng.latitude), Double.valueOf(latLng2.latitude));
         this.mVersionCode = i;
         this.southwest = latLng;
         this.northeast = latLng2;
@@ -137,7 +138,7 @@ public final class LatLngBounds extends AbstractSafeParcelable implements Reflec
     }
 
     public int hashCode() {
-        return zzab.hashCode(this.southwest, this.northeast);
+        return zzz.hashCode(this.southwest, this.northeast);
     }
 
     public LatLngBounds including(LatLng latLng) {
@@ -160,7 +161,7 @@ public final class LatLngBounds extends AbstractSafeParcelable implements Reflec
     }
 
     public String toString() {
-        return zzab.zzx(this).zzg("southwest", this.southwest).zzg("northeast", this.northeast).toString();
+        return zzz.zzx(this).zzg("southwest", this.southwest).zzg("northeast", this.northeast).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

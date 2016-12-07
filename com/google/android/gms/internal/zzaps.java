@@ -1,203 +1,198 @@
 package com.google.android.gms.internal;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-public final class zzaps implements zzaou {
-    private final zzapb bkM;
-    private final zzapc bkV;
-    private final zzaoa bkX;
+public final class zzaps {
+    private final Map<Type, zzaou<?>> bop;
 
-    static abstract class zzb {
-        final boolean bmN;
-        final boolean bmO;
-        final String name;
-
-        protected zzb(String str, boolean z, boolean z2) {
-            this.name = str;
-            this.bmN = z;
-            this.bmO = z2;
-        }
-
-        abstract void zza(zzapy com_google_android_gms_internal_zzapy, Object obj) throws IOException, IllegalAccessException;
-
-        abstract void zza(zzaqa com_google_android_gms_internal_zzaqa, Object obj) throws IOException, IllegalAccessException;
-
-        abstract boolean zzct(Object obj) throws IOException, IllegalAccessException;
+    public zzaps(Map<Type, zzaou<?>> map) {
+        this.bop = map;
     }
 
-    public static final class zza<T> extends zzaot<T> {
-        private final Map<String, zzb> bmM;
-        private final zzapg<T> bmt;
+    private <T> zzapx<T> zzc(final Type type, Class<? super T> cls) {
+        return Collection.class.isAssignableFrom(cls) ? SortedSet.class.isAssignableFrom(cls) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
 
-        private zza(zzapg<T> com_google_android_gms_internal_zzapg_T, Map<String, zzb> map) {
-            this.bmt = com_google_android_gms_internal_zzapg_T;
-            this.bmM = map;
-        }
-
-        public void zza(zzaqa com_google_android_gms_internal_zzaqa, T t) throws IOException {
-            if (t == null) {
-                com_google_android_gms_internal_zzaqa.bx();
-                return;
+            {
+                this.boR = r1;
             }
-            com_google_android_gms_internal_zzaqa.bv();
-            try {
-                for (zzb com_google_android_gms_internal_zzaps_zzb : this.bmM.values()) {
-                    if (com_google_android_gms_internal_zzaps_zzb.zzct(t)) {
-                        com_google_android_gms_internal_zzaqa.zzus(com_google_android_gms_internal_zzaps_zzb.name);
-                        com_google_android_gms_internal_zzaps_zzb.zza(com_google_android_gms_internal_zzaqa, (Object) t);
+
+            public T bj() {
+                return new TreeSet();
+            }
+        } : EnumSet.class.isAssignableFrom(cls) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            public T bj() {
+                if (type instanceof ParameterizedType) {
+                    Type type = ((ParameterizedType) type).getActualTypeArguments()[0];
+                    if (type instanceof Class) {
+                        return EnumSet.noneOf((Class) type);
                     }
+                    String str = "Invalid EnumSet type: ";
+                    String valueOf = String.valueOf(type.toString());
+                    throw new zzaoz(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
                 }
-                com_google_android_gms_internal_zzaqa.bw();
-            } catch (IllegalAccessException e) {
-                throw new AssertionError();
+                str = "Invalid EnumSet type: ";
+                valueOf = String.valueOf(type.toString());
+                throw new zzaoz(valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
             }
-        }
+        } : Set.class.isAssignableFrom(cls) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
 
-        public T zzb(zzapy com_google_android_gms_internal_zzapy) throws IOException {
-            if (com_google_android_gms_internal_zzapy.bn() == zzapz.NULL) {
-                com_google_android_gms_internal_zzapy.nextNull();
-                return null;
+            {
+                this.boR = r1;
             }
-            T bg = this.bmt.bg();
-            try {
-                com_google_android_gms_internal_zzapy.beginObject();
-                while (com_google_android_gms_internal_zzapy.hasNext()) {
-                    zzb com_google_android_gms_internal_zzaps_zzb = (zzb) this.bmM.get(com_google_android_gms_internal_zzapy.nextName());
-                    if (com_google_android_gms_internal_zzaps_zzb == null || !com_google_android_gms_internal_zzaps_zzb.bmO) {
-                        com_google_android_gms_internal_zzapy.skipValue();
-                    } else {
-                        com_google_android_gms_internal_zzaps_zzb.zza(com_google_android_gms_internal_zzapy, (Object) bg);
-                    }
-                }
-                com_google_android_gms_internal_zzapy.endObject();
-                return bg;
-            } catch (Throwable e) {
-                throw new zzaoq(e);
-            } catch (IllegalAccessException e2) {
-                throw new AssertionError(e2);
+
+            public T bj() {
+                return new LinkedHashSet();
             }
-        }
+        } : Queue.class.isAssignableFrom(cls) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            {
+                this.boR = r1;
+            }
+
+            public T bj() {
+                return new LinkedList();
+            }
+        } : new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            {
+                this.boR = r1;
+            }
+
+            public T bj() {
+                return new ArrayList();
+            }
+        } : Map.class.isAssignableFrom(cls) ? SortedMap.class.isAssignableFrom(cls) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            {
+                this.boR = r1;
+            }
+
+            public T bj() {
+                return new TreeMap();
+            }
+        } : (!(type instanceof ParameterizedType) || String.class.isAssignableFrom(zzaqo.zzl(((ParameterizedType) type).getActualTypeArguments()[0]).bB())) ? new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            {
+                this.boR = r1;
+            }
+
+            public T bj() {
+                return new zzapw();
+            }
+        } : new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+
+            {
+                this.boR = r1;
+            }
+
+            public T bj() {
+                return new LinkedHashMap();
+            }
+        } : null;
     }
 
-    public zzaps(zzapb com_google_android_gms_internal_zzapb, zzaoa com_google_android_gms_internal_zzaoa, zzapc com_google_android_gms_internal_zzapc) {
-        this.bkM = com_google_android_gms_internal_zzapb;
-        this.bkX = com_google_android_gms_internal_zzaoa;
-        this.bkV = com_google_android_gms_internal_zzapc;
-    }
+    private <T> zzapx<T> zzd(final Type type, final Class<? super T> cls) {
+        return new zzapx<T>(this) {
+            final /* synthetic */ zzaps boR;
+            private final zzaqa boS = zzaqa.bo();
 
-    private zzaot<?> zza(zzaob com_google_android_gms_internal_zzaob, Field field, zzapx<?> com_google_android_gms_internal_zzapx_) {
-        zzaov com_google_android_gms_internal_zzaov = (zzaov) field.getAnnotation(zzaov.class);
-        if (com_google_android_gms_internal_zzaov != null) {
-            zzaot<?> zza = zzapn.zza(this.bkM, com_google_android_gms_internal_zzaob, com_google_android_gms_internal_zzapx_, com_google_android_gms_internal_zzaov);
-            if (zza != null) {
-                return zza;
-            }
-        }
-        return com_google_android_gms_internal_zzaob.zza((zzapx) com_google_android_gms_internal_zzapx_);
-    }
-
-    private zzb zza(zzaob com_google_android_gms_internal_zzaob, Field field, String str, zzapx<?> com_google_android_gms_internal_zzapx_, boolean z, boolean z2) {
-        final boolean zzk = zzaph.zzk(com_google_android_gms_internal_zzapx_.by());
-        final zzaob com_google_android_gms_internal_zzaob2 = com_google_android_gms_internal_zzaob;
-        final Field field2 = field;
-        final zzapx<?> com_google_android_gms_internal_zzapx_2 = com_google_android_gms_internal_zzapx_;
-        return new zzb(this, str, z, z2) {
-            final zzaot<?> bmG = this.bmL.zza(com_google_android_gms_internal_zzaob2, field2, com_google_android_gms_internal_zzapx_2);
-            final /* synthetic */ zzaps bmL;
-
-            void zza(zzapy com_google_android_gms_internal_zzapy, Object obj) throws IOException, IllegalAccessException {
-                Object zzb = this.bmG.zzb(com_google_android_gms_internal_zzapy);
-                if (zzb != null || !zzk) {
-                    field2.set(obj, zzb);
+            public T bj() {
+                try {
+                    return this.boS.zzf(cls);
+                } catch (Throwable e) {
+                    String valueOf = String.valueOf(type);
+                    throw new RuntimeException(new StringBuilder(String.valueOf(valueOf).length() + 116).append("Unable to invoke no-args constructor for ").append(valueOf).append(". ").append("Register an InstanceCreator with Gson for this type may fix this problem.").toString(), e);
                 }
-            }
-
-            void zza(zzaqa com_google_android_gms_internal_zzaqa, Object obj) throws IOException, IllegalAccessException {
-                new zzapv(com_google_android_gms_internal_zzaob2, this.bmG, com_google_android_gms_internal_zzapx_2.bz()).zza(com_google_android_gms_internal_zzaqa, field2.get(obj));
-            }
-
-            public boolean zzct(Object obj) throws IOException, IllegalAccessException {
-                return this.bmN && field2.get(obj) != obj;
             }
         };
     }
 
-    static List<String> zza(zzaoa com_google_android_gms_internal_zzaoa, Field field) {
-        zzaow com_google_android_gms_internal_zzaow = (zzaow) field.getAnnotation(zzaow.class);
-        List<String> linkedList = new LinkedList();
-        if (com_google_android_gms_internal_zzaow == null) {
-            linkedList.add(com_google_android_gms_internal_zzaoa.zzc(field));
-        } else {
-            linkedList.add(com_google_android_gms_internal_zzaow.value());
-            for (Object add : com_google_android_gms_internal_zzaow.be()) {
-                linkedList.add(add);
+    private <T> zzapx<T> zzl(Class<? super T> cls) {
+        try {
+            final Constructor declaredConstructor = cls.getDeclaredConstructor(new Class[0]);
+            if (!declaredConstructor.isAccessible()) {
+                declaredConstructor.setAccessible(true);
             }
-        }
-        return linkedList;
-    }
+            return new zzapx<T>(this) {
+                final /* synthetic */ zzaps boR;
 
-    private Map<String, zzb> zza(zzaob com_google_android_gms_internal_zzaob, zzapx<?> com_google_android_gms_internal_zzapx_, Class<?> cls) {
-        Map<String, zzb> linkedHashMap = new LinkedHashMap();
-        if (cls.isInterface()) {
-            return linkedHashMap;
-        }
-        Type bz = com_google_android_gms_internal_zzapx_.bz();
-        Class by;
-        while (by != Object.class) {
-            for (Field field : by.getDeclaredFields()) {
-                boolean zza = zza(field, true);
-                boolean zza2 = zza(field, false);
-                if (zza || zza2) {
-                    field.setAccessible(true);
-                    Type zza3 = zzapa.zza(r19.bz(), by, field.getGenericType());
-                    List zzd = zzd(field);
-                    zzb com_google_android_gms_internal_zzaps_zzb = null;
-                    int i = 0;
-                    while (i < zzd.size()) {
-                        String str = (String) zzd.get(i);
-                        if (i != 0) {
-                            zza = false;
-                        }
-                        zzb com_google_android_gms_internal_zzaps_zzb2 = (zzb) linkedHashMap.put(str, zza(com_google_android_gms_internal_zzaob, field, str, zzapx.zzl(zza3), zza, zza2));
-                        if (com_google_android_gms_internal_zzaps_zzb != null) {
-                            com_google_android_gms_internal_zzaps_zzb2 = com_google_android_gms_internal_zzaps_zzb;
-                        }
-                        i++;
-                        com_google_android_gms_internal_zzaps_zzb = com_google_android_gms_internal_zzaps_zzb2;
-                    }
-                    if (com_google_android_gms_internal_zzaps_zzb != null) {
-                        String valueOf = String.valueOf(bz);
-                        String str2 = com_google_android_gms_internal_zzaps_zzb.name;
-                        throw new IllegalArgumentException(new StringBuilder((String.valueOf(valueOf).length() + 37) + String.valueOf(str2).length()).append(valueOf).append(" declares multiple JSON fields named ").append(str2).toString());
+                public T bj() {
+                    String valueOf;
+                    try {
+                        return declaredConstructor.newInstance(null);
+                    } catch (Throwable e) {
+                        valueOf = String.valueOf(declaredConstructor);
+                        throw new RuntimeException(new StringBuilder(String.valueOf(valueOf).length() + 30).append("Failed to invoke ").append(valueOf).append(" with no args").toString(), e);
+                    } catch (InvocationTargetException e2) {
+                        valueOf = String.valueOf(declaredConstructor);
+                        throw new RuntimeException(new StringBuilder(String.valueOf(valueOf).length() + 30).append("Failed to invoke ").append(valueOf).append(" with no args").toString(), e2.getTargetException());
+                    } catch (IllegalAccessException e3) {
+                        throw new AssertionError(e3);
                     }
                 }
-            }
-            zzapx zzl = zzapx.zzl(zzapa.zza(zzl.bz(), by, by.getGenericSuperclass()));
-            by = zzl.by();
+            };
+        } catch (NoSuchMethodException e) {
+            return null;
         }
-        return linkedHashMap;
     }
 
-    static boolean zza(Field field, boolean z, zzapc com_google_android_gms_internal_zzapc) {
-        return (com_google_android_gms_internal_zzapc.zza(field.getType(), z) || com_google_android_gms_internal_zzapc.zza(field, z)) ? false : true;
+    public String toString() {
+        return this.bop.toString();
     }
 
-    private List<String> zzd(Field field) {
-        return zza(this.bkX, field);
-    }
+    public <T> zzapx<T> zzb(zzaqo<T> com_google_android_gms_internal_zzaqo_T) {
+        final Type bC = com_google_android_gms_internal_zzaqo_T.bC();
+        Class bB = com_google_android_gms_internal_zzaqo_T.bB();
+        final zzaou com_google_android_gms_internal_zzaou = (zzaou) this.bop.get(bC);
+        if (com_google_android_gms_internal_zzaou != null) {
+            return new zzapx<T>(this) {
+                final /* synthetic */ zzaps boR;
 
-    public <T> zzaot<T> zza(zzaob com_google_android_gms_internal_zzaob, zzapx<T> com_google_android_gms_internal_zzapx_T) {
-        Class by = com_google_android_gms_internal_zzapx_T.by();
-        return !Object.class.isAssignableFrom(by) ? null : new zza(this.bkM.zzb(com_google_android_gms_internal_zzapx_T), zza(com_google_android_gms_internal_zzaob, (zzapx) com_google_android_gms_internal_zzapx_T, by));
-    }
+                public T bj() {
+                    return com_google_android_gms_internal_zzaou.zza(bC);
+                }
+            };
+        }
+        com_google_android_gms_internal_zzaou = (zzaou) this.bop.get(bB);
+        if (com_google_android_gms_internal_zzaou != null) {
+            return new zzapx<T>(this) {
+                final /* synthetic */ zzaps boR;
 
-    public boolean zza(Field field, boolean z) {
-        return zza(field, z, this.bkV);
+                public T bj() {
+                    return com_google_android_gms_internal_zzaou.zza(bC);
+                }
+            };
+        }
+        zzapx<T> zzl = zzl(bB);
+        if (zzl != null) {
+            return zzl;
+        }
+        zzl = zzc(bC, bB);
+        return zzl == null ? zzd(bC, bB) : zzl;
     }
 }

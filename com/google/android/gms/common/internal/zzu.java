@@ -1,110 +1,151 @@
 package com.google.android.gms.common.internal;
 
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.zzd;
 
 public interface zzu extends IInterface {
 
     public static abstract class zza extends Binder implements zzu {
 
         private static class zza implements zzu {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
-            public void zza(int i, IBinder iBinder, Bundle bundle) throws RemoteException {
+            public zzd zzawi() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGmsCallbacks");
-                    obtain.writeInt(i);
-                    obtain.writeStrongBinder(iBinder);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
+                    zzd zzfd = com.google.android.gms.dynamic.zzd.zza.zzfd(obtain2.readStrongBinder());
+                    return zzfd;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
                 }
             }
 
-            public void zzb(int i, Bundle bundle) throws RemoteException {
+            public zzd zzawj() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
-                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGmsCallbacks");
-                    obtain.writeInt(i);
-                    if (bundle != null) {
-                        obtain.writeInt(1);
-                        bundle.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
+                    zzd zzfd = com.google.android.gms.dynamic.zzd.zza.zzfd(obtain2.readStrongBinder());
+                    return zzfd;
                 } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public boolean zzd(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+                boolean z = false;
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    obtain.writeString(str);
+                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
+                    obtain2.readException();
+                    if (obtain2.readInt() != 0) {
+                        z = true;
+                    }
+                    obtain2.recycle();
+                    obtain.recycle();
+                    return z;
+                } catch (Throwable th) {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public boolean zze(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+                boolean z = false;
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    obtain.writeString(str);
+                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
+                    obtain2.readException();
+                    if (obtain2.readInt() != 0) {
+                        z = true;
+                    }
+                    obtain2.recycle();
+                    obtain.recycle();
+                    return z;
+                } catch (Throwable th) {
                     obtain2.recycle();
                     obtain.recycle();
                 }
             }
         }
 
-        public zza() {
-            attachInterface(this, "com.google.android.gms.common.internal.IGmsCallbacks");
-        }
-
-        public static zzu zzdu(IBinder iBinder) {
+        public static zzu zzdv(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IGmsCallbacks");
+            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
             return (queryLocalInterface == null || !(queryLocalInterface instanceof zzu)) ? new zza(iBinder) : (zzu) queryLocalInterface;
         }
 
-        public IBinder asBinder() {
-            return this;
-        }
-
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            Bundle bundle = null;
-            int readInt;
+            IBinder iBinder = null;
+            int i3 = 0;
+            zzd zzawi;
+            boolean zzd;
             switch (i) {
                 case 1:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.IGmsCallbacks");
-                    readInt = parcel.readInt();
-                    IBinder readStrongBinder = parcel.readStrongBinder();
-                    if (parcel.readInt() != 0) {
-                        bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                    }
-                    zza(readInt, readStrongBinder, bundle);
+                    parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    zzawi = zzawi();
                     parcel2.writeNoException();
+                    if (zzawi != null) {
+                        iBinder = zzawi.asBinder();
+                    }
+                    parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 2:
-                    parcel.enforceInterface("com.google.android.gms.common.internal.IGmsCallbacks");
-                    readInt = parcel.readInt();
-                    if (parcel.readInt() != 0) {
-                        bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
-                    }
-                    zzb(readInt, bundle);
+                    parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    zzawi = zzawj();
                     parcel2.writeNoException();
+                    if (zzawi != null) {
+                        iBinder = zzawi.asBinder();
+                    }
+                    parcel2.writeStrongBinder(iBinder);
+                    return true;
+                case 3:
+                    parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    zzd = zzd(parcel.readString(), com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    parcel2.writeInt(zzd ? 1 : 0);
+                    return true;
+                case 4:
+                    parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
+                    zzd = zze(parcel.readString(), com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    if (zzd) {
+                        i3 = 1;
+                    }
+                    parcel2.writeInt(i3);
                     return true;
                 case 1598968902:
-                    parcel2.writeString("com.google.android.gms.common.internal.IGmsCallbacks");
+                    parcel2.writeString("com.google.android.gms.common.internal.IGoogleCertificatesApi");
                     return true;
                 default:
                     return super.onTransact(i, parcel, parcel2, i2);
@@ -112,7 +153,11 @@ public interface zzu extends IInterface {
         }
     }
 
-    void zza(int i, IBinder iBinder, Bundle bundle) throws RemoteException;
+    zzd zzawi() throws RemoteException;
 
-    void zzb(int i, Bundle bundle) throws RemoteException;
+    zzd zzawj() throws RemoteException;
+
+    boolean zzd(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+
+    boolean zze(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
 }

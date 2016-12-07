@@ -5,6 +5,8 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Handler;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,14 +18,23 @@ public abstract class CursorAdapter extends BaseAdapter implements Filterable, C
     @Deprecated
     public static final int FLAG_AUTO_REQUERY = 1;
     public static final int FLAG_REGISTER_CONTENT_OBSERVER = 2;
+    @RestrictTo({Scope.GROUP_ID})
     protected boolean mAutoRequery;
+    @RestrictTo({Scope.GROUP_ID})
     protected ChangeObserver mChangeObserver;
+    @RestrictTo({Scope.GROUP_ID})
     protected Context mContext;
+    @RestrictTo({Scope.GROUP_ID})
     protected Cursor mCursor;
+    @RestrictTo({Scope.GROUP_ID})
     protected CursorFilter mCursorFilter;
+    @RestrictTo({Scope.GROUP_ID})
     protected DataSetObserver mDataSetObserver;
+    @RestrictTo({Scope.GROUP_ID})
     protected boolean mDataValid;
+    @RestrictTo({Scope.GROUP_ID})
     protected FilterQueryProvider mFilterQueryProvider;
+    @RestrictTo({Scope.GROUP_ID})
     protected int mRowIDColumn;
 
     private class ChangeObserver extends ContentObserver {

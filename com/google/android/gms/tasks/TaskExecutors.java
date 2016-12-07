@@ -7,7 +7,7 @@ import java.util.concurrent.Executor;
 
 public final class TaskExecutors {
     public static final Executor MAIN_THREAD = new zza();
-    static final Executor aJI = new Executor() {
+    static final Executor aMT = new Executor() {
         public void execute(@NonNull Runnable runnable) {
             runnable.run();
         }

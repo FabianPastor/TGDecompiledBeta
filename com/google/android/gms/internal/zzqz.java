@@ -1,29 +1,95 @@
 package com.google.android.gms.internal;
 
-import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.util.zzs;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
 
-public class zzqz {
-    private final Object yX;
+public class zzqz extends GoogleApiClient {
+    private final UnsupportedOperationException zz;
 
-    public zzqz(Activity activity) {
-        zzac.zzb((Object) activity, (Object) "Activity must not be null");
-        boolean z = zzs.zzaxk() || (activity instanceof FragmentActivity);
-        zzac.zzb(z, (Object) "This Activity is not supported before platform version 11 (3.0 Honeycomb). Please use FragmentActivity instead.");
-        this.yX = activity;
+    public zzqz(String str) {
+        this.zz = new UnsupportedOperationException(str);
     }
 
-    public boolean zzasn() {
-        return this.yX instanceof FragmentActivity;
+    public ConnectionResult blockingConnect() {
+        throw this.zz;
     }
 
-    public Activity zzaso() {
-        return (Activity) this.yX;
+    public ConnectionResult blockingConnect(long j, @NonNull TimeUnit timeUnit) {
+        throw this.zz;
     }
 
-    public FragmentActivity zzasp() {
-        return (FragmentActivity) this.yX;
+    public PendingResult<Status> clearDefaultAccountAndReconnect() {
+        throw this.zz;
+    }
+
+    public void connect() {
+        throw this.zz;
+    }
+
+    public void disconnect() {
+        throw this.zz;
+    }
+
+    public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
+        throw this.zz;
+    }
+
+    @NonNull
+    public ConnectionResult getConnectionResult(@NonNull Api<?> api) {
+        throw this.zz;
+    }
+
+    public boolean hasConnectedApi(@NonNull Api<?> api) {
+        throw this.zz;
+    }
+
+    public boolean isConnected() {
+        throw this.zz;
+    }
+
+    public boolean isConnecting() {
+        throw this.zz;
+    }
+
+    public boolean isConnectionCallbacksRegistered(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zz;
+    }
+
+    public boolean isConnectionFailedListenerRegistered(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zz;
+    }
+
+    public void reconnect() {
+        throw this.zz;
+    }
+
+    public void registerConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zz;
+    }
+
+    public void registerConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zz;
+    }
+
+    public void stopAutoManage(@NonNull FragmentActivity fragmentActivity) {
+        throw this.zz;
+    }
+
+    public void unregisterConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
+        throw this.zz;
+    }
+
+    public void unregisterConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
+        throw this.zz;
     }
 }

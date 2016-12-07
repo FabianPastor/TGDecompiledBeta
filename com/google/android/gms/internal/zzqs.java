@@ -1,12 +1,9 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 
-public abstract class zzqs {
-    private static final ExecutorService ys = Executors.newFixedThreadPool(2, new zzsf("GAC_Executor"));
-
-    public static ExecutorService zzarz() {
-        return ys;
-    }
+public interface zzqs extends ConnectionCallbacks {
+    void zza(ConnectionResult connectionResult, Api<?> api, int i);
 }

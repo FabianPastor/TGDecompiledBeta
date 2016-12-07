@@ -16,7 +16,7 @@ import com.google.android.gms.vision.barcode.Barcode.WiFi;
 
 public class zzb implements Creator<Barcode> {
     static void zza(Barcode barcode, Parcel parcel, int i) {
-        int zzcr = com.google.android.gms.common.internal.safeparcel.zzb.zzcr(parcel);
+        int zzcs = com.google.android.gms.common.internal.safeparcel.zzb.zzcs(parcel);
         com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 1, barcode.versionCode);
         com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 2, barcode.format);
         com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 3, barcode.rawValue, false);
@@ -32,23 +32,23 @@ public class zzb implements Creator<Barcode> {
         com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 13, barcode.calendarEvent, i, false);
         com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 14, barcode.contactInfo, i, false);
         com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 15, barcode.driverLicense, i, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcr);
+        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsp(parcel);
+        return zzsf(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabe(i);
+        return zzaau(i);
     }
 
-    public Barcode[] zzabe(int i) {
+    public Barcode[] zzaau(int i) {
         return new Barcode[i];
     }
 
-    public Barcode zzsp(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public Barcode zzsf(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         int i2 = 0;
         String str = null;
@@ -64,62 +64,62 @@ public class zzb implements Creator<Barcode> {
         CalendarEvent calendarEvent = null;
         ContactInfo contactInfo = null;
         DriverLicense driverLicense = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    i2 = zza.zzg(parcel, zzcp);
+                    i2 = zza.zzg(parcel, zzcq);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    i3 = zza.zzg(parcel, zzcp);
+                    i3 = zza.zzg(parcel, zzcq);
                     break;
                 case 6:
-                    pointArr = (Point[]) zza.zzb(parcel, zzcp, Point.CREATOR);
+                    pointArr = (Point[]) zza.zzb(parcel, zzcq, Point.CREATOR);
                     break;
                 case 7:
-                    email = (Email) zza.zza(parcel, zzcp, Email.CREATOR);
+                    email = (Email) zza.zza(parcel, zzcq, Email.CREATOR);
                     break;
                 case 8:
-                    phone = (Phone) zza.zza(parcel, zzcp, Phone.CREATOR);
+                    phone = (Phone) zza.zza(parcel, zzcq, Phone.CREATOR);
                     break;
                 case 9:
-                    sms = (Sms) zza.zza(parcel, zzcp, Sms.CREATOR);
+                    sms = (Sms) zza.zza(parcel, zzcq, Sms.CREATOR);
                     break;
                 case 10:
-                    wiFi = (WiFi) zza.zza(parcel, zzcp, WiFi.CREATOR);
+                    wiFi = (WiFi) zza.zza(parcel, zzcq, WiFi.CREATOR);
                     break;
                 case 11:
-                    urlBookmark = (UrlBookmark) zza.zza(parcel, zzcp, UrlBookmark.CREATOR);
+                    urlBookmark = (UrlBookmark) zza.zza(parcel, zzcq, UrlBookmark.CREATOR);
                     break;
                 case 12:
-                    geoPoint = (GeoPoint) zza.zza(parcel, zzcp, GeoPoint.CREATOR);
+                    geoPoint = (GeoPoint) zza.zza(parcel, zzcq, GeoPoint.CREATOR);
                     break;
                 case 13:
-                    calendarEvent = (CalendarEvent) zza.zza(parcel, zzcp, CalendarEvent.CREATOR);
+                    calendarEvent = (CalendarEvent) zza.zza(parcel, zzcq, CalendarEvent.CREATOR);
                     break;
                 case 14:
-                    contactInfo = (ContactInfo) zza.zza(parcel, zzcp, (Creator) ContactInfo.CREATOR);
+                    contactInfo = (ContactInfo) zza.zza(parcel, zzcq, ContactInfo.CREATOR);
                     break;
                 case 15:
-                    driverLicense = (DriverLicense) zza.zza(parcel, zzcp, (Creator) DriverLicense.CREATOR);
+                    driverLicense = (DriverLicense) zza.zza(parcel, zzcq, DriverLicense.CREATOR);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new Barcode(i, i2, str, str2, i3, pointArr, email, phone, sms, wiFi, urlBookmark, geoPoint, calendarEvent, contactInfo, driverLicense);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

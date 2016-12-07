@@ -619,7 +619,7 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
     }
 
     public void setDrawerShadow(@DrawableRes int resId, int gravity) {
-        setDrawerShadow(getResources().getDrawable(resId), gravity);
+        setDrawerShadow(ContextCompat.getDrawable(getContext(), resId), gravity);
     }
 
     public void setScrimColor(@ColorInt int color) {
@@ -837,7 +837,6 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
             if (hasWindowFocus()) {
                 sendAccessibilityEvent(32);
             }
-            drawerView.requestFocus();
         }
     }
 

@@ -6,32 +6,32 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 
 public class zzb implements Creator<AppMetadata> {
     static void zza(AppMetadata appMetadata, Parcel parcel, int i) {
-        int zzcr = com.google.android.gms.common.internal.safeparcel.zzb.zzcr(parcel);
+        int zzcs = com.google.android.gms.common.internal.safeparcel.zzb.zzcs(parcel);
         com.google.android.gms.common.internal.safeparcel.zzb.zzc(parcel, 1, appMetadata.versionCode);
         com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 2, appMetadata.packageName, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 3, appMetadata.anQ, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 4, appMetadata.afY, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 5, appMetadata.anR, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 6, appMetadata.anS);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 7, appMetadata.anT);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 8, appMetadata.anU, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 9, appMetadata.anV);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 10, appMetadata.anW);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 11, appMetadata.anX);
-        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 12, appMetadata.anY, false);
-        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcr);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 3, appMetadata.aqZ, false);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 4, appMetadata.aii, false);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 5, appMetadata.ara, false);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 6, appMetadata.arb);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 7, appMetadata.arc);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 8, appMetadata.ard, false);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 9, appMetadata.are);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 10, appMetadata.arf);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 11, appMetadata.arg);
+        com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, 12, appMetadata.arh, false);
+        com.google.android.gms.common.internal.safeparcel.zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpe(parcel);
+        return zzpw(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwk(i);
+        return zzxb(i);
     }
 
-    public AppMetadata zzpe(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public AppMetadata zzpw(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         String str = null;
         String str2 = null;
@@ -44,57 +44,57 @@ public class zzb implements Creator<AppMetadata> {
         boolean z2 = false;
         long j3 = 0;
         String str6 = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str3 = zza.zzq(parcel, zzcp);
+                    str3 = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    str4 = zza.zzq(parcel, zzcp);
+                    str4 = zza.zzq(parcel, zzcq);
                     break;
                 case 6:
-                    j = zza.zzi(parcel, zzcp);
+                    j = zza.zzi(parcel, zzcq);
                     break;
                 case 7:
-                    j2 = zza.zzi(parcel, zzcp);
+                    j2 = zza.zzi(parcel, zzcq);
                     break;
                 case 8:
-                    str5 = zza.zzq(parcel, zzcp);
+                    str5 = zza.zzq(parcel, zzcq);
                     break;
                 case 9:
-                    z = zza.zzc(parcel, zzcp);
+                    z = zza.zzc(parcel, zzcq);
                     break;
                 case 10:
-                    z2 = zza.zzc(parcel, zzcp);
+                    z2 = zza.zzc(parcel, zzcq);
                     break;
                 case 11:
-                    j3 = zza.zzi(parcel, zzcp);
+                    j3 = zza.zzi(parcel, zzcq);
                     break;
                 case 12:
-                    str6 = zza.zzq(parcel, zzcp);
+                    str6 = zza.zzq(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new AppMetadata(i, str, str2, str3, str4, j, j2, str5, z, z2, j3, str6);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public AppMetadata[] zzwk(int i) {
+    public AppMetadata[] zzxb(int i) {
         return new AppMetadata[i];
     }
 }

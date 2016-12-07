@@ -15,31 +15,31 @@ import android.os.RemoteException;
 public class MessengerCompat implements Parcelable {
     public static final Creator<MessengerCompat> CREATOR = new Creator<MessengerCompat>() {
         public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zznc(parcel);
+            return zznf(parcel);
         }
 
         public /* synthetic */ Object[] newArray(int i) {
-            return zztu(i);
+            return zztv(i);
         }
 
-        public MessengerCompat zznc(Parcel parcel) {
+        public MessengerCompat zznf(Parcel parcel) {
             IBinder readStrongBinder = parcel.readStrongBinder();
             return readStrongBinder != null ? new MessengerCompat(readStrongBinder) : null;
         }
 
-        public MessengerCompat[] zztu(int i) {
+        public MessengerCompat[] zztv(int i) {
             return new MessengerCompat[i];
         }
     };
-    Messenger agg;
-    zzb agh;
+    Messenger aiq;
+    zzb air;
 
     private final class zza extends com.google.android.gms.iid.zzb.zza {
-        final /* synthetic */ MessengerCompat agi;
+        final /* synthetic */ MessengerCompat ais;
         Handler handler;
 
         zza(MessengerCompat messengerCompat, Handler handler) {
-            this.agi = messengerCompat;
+            this.ais = messengerCompat;
             this.handler = handler;
         }
 
@@ -51,17 +51,17 @@ public class MessengerCompat implements Parcelable {
 
     public MessengerCompat(Handler handler) {
         if (VERSION.SDK_INT >= 21) {
-            this.agg = new Messenger(handler);
+            this.aiq = new Messenger(handler);
         } else {
-            this.agh = new zza(this, handler);
+            this.air = new zza(this, handler);
         }
     }
 
     public MessengerCompat(IBinder iBinder) {
         if (VERSION.SDK_INT >= 21) {
-            this.agg = new Messenger(iBinder);
+            this.aiq = new Messenger(iBinder);
         } else {
-            this.agh = com.google.android.gms.iid.zzb.zza.zzgw(iBinder);
+            this.air = com.google.android.gms.iid.zzb.zza.zzgx(iBinder);
         }
     }
 
@@ -90,7 +90,7 @@ public class MessengerCompat implements Parcelable {
     }
 
     public IBinder getBinder() {
-        return this.agg != null ? this.agg.getBinder() : this.agh.asBinder();
+        return this.aiq != null ? this.aiq.getBinder() : this.air.asBinder();
     }
 
     public int hashCode() {
@@ -98,18 +98,18 @@ public class MessengerCompat implements Parcelable {
     }
 
     public void send(Message message) throws RemoteException {
-        if (this.agg != null) {
-            this.agg.send(message);
+        if (this.aiq != null) {
+            this.aiq.send(message);
         } else {
-            this.agh.send(message);
+            this.air.send(message);
         }
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        if (this.agg != null) {
-            parcel.writeStrongBinder(this.agg.getBinder());
+        if (this.aiq != null) {
+            parcel.writeStrongBinder(this.aiq.getBinder());
         } else {
-            parcel.writeStrongBinder(this.agh.asBinder());
+            parcel.writeStrongBinder(this.air.asBinder());
         }
     }
 }

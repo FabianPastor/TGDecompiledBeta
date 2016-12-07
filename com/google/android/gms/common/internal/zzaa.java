@@ -1,42 +1,107 @@
 package com.google.android.gms.common.internal;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import com.google.android.gms.internal.zzsi;
+import android.os.Looper;
+import android.text.TextUtils;
 
-public class zzaa {
-    private static String CS;
-    private static int CT;
-    private static Object zzaok = new Object();
-    private static boolean zzcdp;
-
-    public static String zzcg(Context context) {
-        zzci(context);
-        return CS;
-    }
-
-    public static int zzch(Context context) {
-        zzci(context);
-        return CT;
-    }
-
-    private static void zzci(Context context) {
-        synchronized (zzaok) {
-            if (zzcdp) {
-                return;
-            }
-            zzcdp = true;
-            try {
-                Bundle bundle = zzsi.zzcr(context).getApplicationInfo(context.getPackageName(), 128).metaData;
-                if (bundle == null) {
-                    return;
-                }
-                CS = bundle.getString("com.google.app.id");
-                CT = bundle.getInt("com.google.android.gms.version");
-            } catch (Throwable e) {
-                Log.wtf("MetadataValueReader", "This should never happen.", e);
-            }
+public final class zzaa {
+    public static int zza(int i, Object obj) {
+        if (i != 0) {
+            return i;
         }
+        throw new IllegalArgumentException(String.valueOf(obj));
+    }
+
+    public static long zza(long j, Object obj) {
+        if (j != 0) {
+            return j;
+        }
+        throw new IllegalArgumentException(String.valueOf(obj));
+    }
+
+    public static void zza(boolean z, Object obj) {
+        if (!z) {
+            throw new IllegalStateException(String.valueOf(obj));
+        }
+    }
+
+    public static void zza(boolean z, String str, Object... objArr) {
+        if (!z) {
+            throw new IllegalStateException(String.format(str, objArr));
+        }
+    }
+
+    public static void zzawk() {
+        zzht("Must not be called on the main application thread");
+    }
+
+    public static <T> T zzb(T t, Object obj) {
+        if (t != null) {
+            return t;
+        }
+        throw new NullPointerException(String.valueOf(obj));
+    }
+
+    public static void zzb(boolean z, Object obj) {
+        if (!z) {
+            throw new IllegalArgumentException(String.valueOf(obj));
+        }
+    }
+
+    public static void zzb(boolean z, String str, Object... objArr) {
+        if (!z) {
+            throw new IllegalArgumentException(String.format(str, objArr));
+        }
+    }
+
+    public static void zzbs(boolean z) {
+        if (!z) {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static void zzbt(boolean z) {
+        if (!z) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static int zzgp(int i) {
+        if (i != 0) {
+            return i;
+        }
+        throw new IllegalArgumentException("Given Integer is zero");
+    }
+
+    public static String zzh(String str, Object obj) {
+        if (!TextUtils.isEmpty(str)) {
+            return str;
+        }
+        throw new IllegalArgumentException(String.valueOf(obj));
+    }
+
+    public static void zzhs(String str) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            throw new IllegalStateException(str);
+        }
+    }
+
+    public static void zzht(String str) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException(str);
+        }
+    }
+
+    public static String zzib(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            return str;
+        }
+        throw new IllegalArgumentException("Given String is empty or null");
+    }
+
+    public static <T> T zzy(T t) {
+        if (t != null) {
+            return t;
+        }
+        throw new NullPointerException("null reference");
     }
 }

@@ -2,9 +2,10 @@ package com.google.android.gms.common.server.response;
 
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import android.util.SparseArray;
 import com.google.android.gms.common.internal.safeparcel.zza;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.server.response.FastJsonResponse.Field;
 import com.google.android.gms.common.util.zzb;
 import com.google.android.gms.common.util.zzc;
@@ -17,25 +18,25 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
-    public static final zze CREATOR = new zze();
-    private final FieldMappingDictionary DB;
-    private final Parcel DI;
-    private final int DJ = 2;
-    private int DK;
-    private int DL;
+    public static final Creator<SafeParcelResponse> CREATOR = new zze();
+    private final FieldMappingDictionary Fo;
+    private final Parcel Fv;
+    private final int Fw = 2;
+    private int Fx;
+    private int Fy;
     private final String mClassName;
     private final int mVersionCode;
 
     SafeParcelResponse(int i, Parcel parcel, FieldMappingDictionary fieldMappingDictionary) {
         this.mVersionCode = i;
-        this.DI = (Parcel) zzac.zzy(parcel);
-        this.DB = fieldMappingDictionary;
-        if (this.DB == null) {
+        this.Fv = (Parcel) zzaa.zzy(parcel);
+        this.Fo = fieldMappingDictionary;
+        if (this.Fo == null) {
             this.mClassName = null;
         } else {
-            this.mClassName = this.DB.zzawg();
+            this.mClassName = this.Fo.zzaxn();
         }
-        this.DK = 2;
+        this.Fx = 2;
     }
 
     private void zza(StringBuilder stringBuilder, int i, Object obj) {
@@ -53,10 +54,10 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
                 stringBuilder.append("\"").append(zzp.zzii(obj.toString())).append("\"");
                 return;
             case 8:
-                stringBuilder.append("\"").append(zzc.zzp((byte[]) obj)).append("\"");
+                stringBuilder.append("\"").append(zzc.zzq((byte[]) obj)).append("\"");
                 return;
             case 9:
-                stringBuilder.append("\"").append(zzc.zzq((byte[]) obj));
+                stringBuilder.append("\"").append(zzc.zzr((byte[]) obj));
                 stringBuilder.append("\"");
                 return;
             case 10:
@@ -70,7 +71,7 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
     }
 
     private void zza(StringBuilder stringBuilder, Field<?, ?> field, Parcel parcel, int i) {
-        switch (field.zzavr()) {
+        switch (field.zzaxc()) {
             case 0:
                 zzb(stringBuilder, (Field) field, zza(field, Integer.valueOf(zza.zzg(parcel, i))));
                 return;
@@ -105,13 +106,13 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
             case 11:
                 throw new IllegalArgumentException("Method does not accept concrete type.");
             default:
-                throw new IllegalArgumentException("Unknown field out type = " + field.zzavr());
+                throw new IllegalArgumentException("Unknown field out type = " + field.zzaxc());
         }
     }
 
     private void zza(StringBuilder stringBuilder, String str, Field<?, ?> field, Parcel parcel, int i) {
         stringBuilder.append("\"").append(str).append("\":");
-        if (field.zzawb()) {
+        if (field.zzaxi()) {
             zza(stringBuilder, field, parcel, i);
         } else {
             zzb(stringBuilder, field, parcel, i);
@@ -119,39 +120,39 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
     }
 
     private void zza(StringBuilder stringBuilder, Map<String, Field<?, ?>> map, Parcel parcel) {
-        SparseArray zzav = zzav(map);
+        SparseArray zzax = zzax(map);
         stringBuilder.append('{');
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         Object obj = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            Entry entry = (Entry) zzav.get(zza.zzgv(zzcp));
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            Entry entry = (Entry) zzax.get(zza.zzgu(zzcq));
             if (entry != null) {
                 if (obj != null) {
                     stringBuilder.append(",");
                 }
-                zza(stringBuilder, (String) entry.getKey(), (Field) entry.getValue(), parcel, zzcp);
+                zza(stringBuilder, (String) entry.getKey(), (Field) entry.getValue(), parcel, zzcq);
                 obj = 1;
             }
         }
-        if (parcel.dataPosition() != zzcq) {
-            throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        if (parcel.dataPosition() != zzcr) {
+            throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
         }
         stringBuilder.append('}');
     }
 
-    private static SparseArray<Entry<String, Field<?, ?>>> zzav(Map<String, Field<?, ?>> map) {
+    private static SparseArray<Entry<String, Field<?, ?>>> zzax(Map<String, Field<?, ?>> map) {
         SparseArray<Entry<String, Field<?, ?>>> sparseArray = new SparseArray();
         for (Entry entry : map.entrySet()) {
-            sparseArray.put(((Field) entry.getValue()).zzavy(), entry);
+            sparseArray.put(((Field) entry.getValue()).zzaxf(), entry);
         }
         return sparseArray;
     }
 
     private void zzb(StringBuilder stringBuilder, Field<?, ?> field, Parcel parcel, int i) {
-        if (field.zzavw()) {
+        if (field.zzaxd()) {
             stringBuilder.append("[");
-            switch (field.zzavr()) {
+            switch (field.zzaxc()) {
                 case 0:
                     zzb.zza(stringBuilder, zza.zzw(parcel, i));
                     break;
@@ -188,7 +189,7 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
                             stringBuilder.append(",");
                         }
                         zzag[i2].setDataPosition(0);
-                        zza(stringBuilder, field.zzawd(), zzag[i2]);
+                        zza(stringBuilder, field.zzaxk(), zzag[i2]);
                     }
                     break;
                 default:
@@ -197,7 +198,7 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
             stringBuilder.append("]");
             return;
         }
-        switch (field.zzavr()) {
+        switch (field.zzaxc()) {
             case 0:
                 stringBuilder.append(zza.zzg(parcel, i));
                 return;
@@ -223,10 +224,10 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
                 stringBuilder.append("\"").append(zzp.zzii(zza.zzq(parcel, i))).append("\"");
                 return;
             case 8:
-                stringBuilder.append("\"").append(zzc.zzp(zza.zzt(parcel, i))).append("\"");
+                stringBuilder.append("\"").append(zzc.zzq(zza.zzt(parcel, i))).append("\"");
                 return;
             case 9:
-                stringBuilder.append("\"").append(zzc.zzq(zza.zzt(parcel, i)));
+                stringBuilder.append("\"").append(zzc.zzr(zza.zzt(parcel, i)));
                 stringBuilder.append("\"");
                 return;
             case 10:
@@ -249,7 +250,7 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
             case 11:
                 Parcel zzaf = zza.zzaf(parcel, i);
                 zzaf.setDataPosition(0);
-                zza(stringBuilder, field.zzawd(), zzaf);
+                zza(stringBuilder, field.zzaxk(), zzaf);
                 return;
             default:
                 throw new IllegalStateException("Unknown field type out");
@@ -257,10 +258,10 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
     }
 
     private void zzb(StringBuilder stringBuilder, Field<?, ?> field, Object obj) {
-        if (field.zzavv()) {
+        if (field.zzaxb()) {
             zzb(stringBuilder, (Field) field, (ArrayList) obj);
         } else {
-            zza(stringBuilder, field.zzavq(), obj);
+            zza(stringBuilder, field.zzaxa(), obj);
         }
     }
 
@@ -271,7 +272,7 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
             if (i != 0) {
                 stringBuilder.append(",");
             }
-            zza(stringBuilder, field.zzavq(), arrayList.get(i));
+            zza(stringBuilder, field.zzaxa(), arrayList.get(i));
         }
         stringBuilder.append("]");
     }
@@ -289,56 +290,55 @@ public class SafeParcelResponse extends FastSafeParcelableJsonResponse {
     }
 
     public String toString() {
-        zzac.zzb(this.DB, (Object) "Cannot convert to JSON on client side.");
-        Parcel zzawi = zzawi();
-        zzawi.setDataPosition(0);
+        zzaa.zzb(this.Fo, (Object) "Cannot convert to JSON on client side.");
+        Parcel zzaxp = zzaxp();
+        zzaxp.setDataPosition(0);
         StringBuilder stringBuilder = new StringBuilder(100);
-        zza(stringBuilder, this.DB.zzie(this.mClassName), zzawi);
+        zza(stringBuilder, this.Fo.zzig(this.mClassName), zzaxp);
         return stringBuilder.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zze com_google_android_gms_common_server_response_zze = CREATOR;
         zze.zza(this, parcel, i);
     }
 
-    public Map<String, Field<?, ?>> zzavs() {
-        return this.DB == null ? null : this.DB.zzie(this.mClassName);
+    public Map<String, Field<?, ?>> zzawz() {
+        return this.Fo == null ? null : this.Fo.zzig(this.mClassName);
     }
 
-    public Parcel zzawi() {
-        switch (this.DK) {
+    public Parcel zzaxp() {
+        switch (this.Fx) {
             case 0:
-                this.DL = com.google.android.gms.common.internal.safeparcel.zzb.zzcr(this.DI);
-                com.google.android.gms.common.internal.safeparcel.zzb.zzaj(this.DI, this.DL);
-                this.DK = 2;
+                this.Fy = com.google.android.gms.common.internal.safeparcel.zzb.zzcs(this.Fv);
+                com.google.android.gms.common.internal.safeparcel.zzb.zzaj(this.Fv, this.Fy);
+                this.Fx = 2;
                 break;
             case 1:
-                com.google.android.gms.common.internal.safeparcel.zzb.zzaj(this.DI, this.DL);
-                this.DK = 2;
+                com.google.android.gms.common.internal.safeparcel.zzb.zzaj(this.Fv, this.Fy);
+                this.Fx = 2;
                 break;
         }
-        return this.DI;
+        return this.Fv;
     }
 
-    FieldMappingDictionary zzawj() {
-        switch (this.DJ) {
+    FieldMappingDictionary zzaxq() {
+        switch (this.Fw) {
             case 0:
                 return null;
             case 1:
-                return this.DB;
+                return this.Fo;
             case 2:
-                return this.DB;
+                return this.Fo;
             default:
-                throw new IllegalStateException("Invalid creation type: " + this.DJ);
+                throw new IllegalStateException("Invalid creation type: " + this.Fw);
         }
     }
 
-    public Object zzia(String str) {
+    public Object zzic(String str) {
         throw new UnsupportedOperationException("Converting to JSON does not require this method.");
     }
 
-    public boolean zzib(String str) {
+    public boolean zzid(String str) {
         throw new UnsupportedOperationException("Converting to JSON does not require this method.");
     }
 }

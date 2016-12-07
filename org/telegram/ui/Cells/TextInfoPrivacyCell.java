@@ -1,14 +1,18 @@
 package org.telegram.ui.Cells;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -44,10 +48,35 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public void setText(CharSequence text) {
+        if (text == null) {
+            this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
+        } else {
+            this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
+        }
         this.textView.setText(text);
     }
 
     public void setTextColor(int color) {
         this.textView.setTextColor(color);
+    }
+
+    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (animators != null) {
+            TextView textView = this.textView;
+            String str = "alpha";
+            float[] fArr = new float[1];
+            if (!value) {
+                f = 0.5f;
+            }
+            fArr[0] = f;
+            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            return;
+        }
+        textView = this.textView;
+        if (!value) {
+            f = 0.5f;
+        }
+        textView.setAlpha(f);
     }
 }

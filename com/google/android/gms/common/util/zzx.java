@@ -2,25 +2,30 @@ package com.google.android.gms.common.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
-import java.io.File;
+import com.google.android.gms.common.zzf;
+import com.google.android.gms.internal.zzsz;
 
-public class zzx {
-    @TargetApi(21)
-    public static File getNoBackupFilesDir(Context context) {
-        return zzs.zzaxu() ? context.getNoBackupFilesDir() : zze(new File(context.getApplicationInfo().dataDir, "no_backup"));
+public final class zzx {
+    @TargetApi(19)
+    public static boolean zzc(Context context, int i, String str) {
+        return zzsz.zzco(context).zzg(i, str);
     }
 
-    private static synchronized File zze(File file) {
-        synchronized (zzx.class) {
-            if (!(file.exists() || file.mkdirs() || file.exists())) {
-                String str = "SupportV4Utils";
-                String str2 = "Unable to create no-backup dir ";
-                String valueOf = String.valueOf(file.getPath());
-                Log.w(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
-                file = null;
-            }
+    public static boolean zzf(Context context, int i) {
+        boolean z = false;
+        if (!zzc(context, i, "com.google.android.gms")) {
+            return z;
         }
-        return file;
+        try {
+            return zzf.zzbv(context).zzb(context.getPackageManager(), context.getPackageManager().getPackageInfo("com.google.android.gms", 64));
+        } catch (NameNotFoundException e) {
+            if (!Log.isLoggable("UidVerifier", 3)) {
+                return z;
+            }
+            Log.d("UidVerifier", "Package manager can't find google play services package, defaulting to false");
+            return z;
+        }
     }
 }

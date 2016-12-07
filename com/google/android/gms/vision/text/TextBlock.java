@@ -14,24 +14,24 @@ import java.util.Map.Entry;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class TextBlock implements Text {
-    private Rect aLA;
-    private LineBoxParcel[] aLx;
-    private List<Line> aLy;
-    private String aLz;
+    private LineBoxParcel[] aOI;
+    private List<Line> aOJ;
+    private String aOK;
+    private Rect aOL;
     private Point[] cornerPoints;
 
     TextBlock(SparseArray<LineBoxParcel> sparseArray) {
-        this.aLx = new LineBoxParcel[sparseArray.size()];
-        for (int i = 0; i < this.aLx.length; i++) {
-            this.aLx[i] = (LineBoxParcel) sparseArray.valueAt(i);
+        this.aOI = new LineBoxParcel[sparseArray.size()];
+        for (int i = 0; i < this.aOI.length; i++) {
+            this.aOI[i] = (LineBoxParcel) sparseArray.valueAt(i);
         }
     }
 
     private static Point[] zza(int i, int i2, int i3, int i4, BoundingBoxParcel boundingBoxParcel) {
         int i5 = boundingBoxParcel.left;
         int i6 = boundingBoxParcel.top;
-        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel.aLE));
-        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel.aLE));
+        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel.aOP));
+        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel.aOP));
         Point[] pointArr = new Point[]{new Point(i, i2), new Point(i3, i2), new Point(i3, i4), new Point(i, i4)};
         for (int i7 = 0; i7 < 4; i7++) {
             int i8 = (int) ((((double) pointArr[i7].x) * sin) + (((double) pointArr[i7].y) * cos));
@@ -45,8 +45,8 @@ public class TextBlock implements Text {
     private static Point[] zza(BoundingBoxParcel boundingBoxParcel, BoundingBoxParcel boundingBoxParcel2) {
         int i = -boundingBoxParcel2.left;
         int i2 = -boundingBoxParcel2.top;
-        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel2.aLE));
-        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel2.aLE));
+        double sin = Math.sin(Math.toRadians((double) boundingBoxParcel2.aOP));
+        double cos = Math.cos(Math.toRadians((double) boundingBoxParcel2.aOP));
         Point[] pointArr = new Point[4];
         pointArr[0] = new Point(boundingBoxParcel.left, boundingBoxParcel.top);
         pointArr[0].offset(i, i2);
@@ -61,36 +61,36 @@ public class TextBlock implements Text {
     }
 
     public Rect getBoundingBox() {
-        if (this.aLA == null) {
-            this.aLA = zza.zza((Text) this);
+        if (this.aOL == null) {
+            this.aOL = zza.zza((Text) this);
         }
-        return this.aLA;
+        return this.aOL;
     }
 
     public List<? extends Text> getComponents() {
-        return zzclw();
+        return zzclv();
     }
 
     public Point[] getCornerPoints() {
         if (this.cornerPoints == null) {
-            zzclv();
+            zzclu();
         }
         return this.cornerPoints;
     }
 
     public String getLanguage() {
-        if (this.aLz != null) {
-            return this.aLz;
+        if (this.aOK != null) {
+            return this.aOK;
         }
         HashMap hashMap = new HashMap();
-        for (LineBoxParcel lineBoxParcel : this.aLx) {
-            hashMap.put(lineBoxParcel.aLz, Integer.valueOf((hashMap.containsKey(lineBoxParcel.aLz) ? ((Integer) hashMap.get(lineBoxParcel.aLz)).intValue() : 0) + 1));
+        for (LineBoxParcel lineBoxParcel : this.aOI) {
+            hashMap.put(lineBoxParcel.aOK, Integer.valueOf((hashMap.containsKey(lineBoxParcel.aOK) ? ((Integer) hashMap.get(lineBoxParcel.aOK)).intValue() : 0) + 1));
         }
-        this.aLz = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
-            final /* synthetic */ TextBlock aLB;
+        this.aOK = (String) ((Entry) Collections.max(hashMap.entrySet(), new Comparator<Entry<String, Integer>>(this) {
+            final /* synthetic */ TextBlock aOM;
 
             {
-                this.aLB = r1;
+                this.aOM = r1;
             }
 
             public /* synthetic */ int compare(Object obj, Object obj2) {
@@ -101,26 +101,26 @@ public class TextBlock implements Text {
                 return ((Integer) entry.getValue()).compareTo((Integer) entry2.getValue());
             }
         })).getKey();
-        if (this.aLz == null || this.aLz.isEmpty()) {
-            this.aLz = "und";
+        if (this.aOK == null || this.aOK.isEmpty()) {
+            this.aOK = "und";
         }
-        return this.aLz;
+        return this.aOK;
     }
 
     public String getValue() {
-        if (this.aLx.length == 0) {
+        if (this.aOI.length == 0) {
             return "";
         }
-        StringBuilder stringBuilder = new StringBuilder(this.aLx[0].aLJ);
-        for (int i = 1; i < this.aLx.length; i++) {
+        StringBuilder stringBuilder = new StringBuilder(this.aOI[0].aOU);
+        for (int i = 1; i < this.aOI.length; i++) {
             stringBuilder.append("\n");
-            stringBuilder.append(this.aLx[i].aLJ);
+            stringBuilder.append(this.aOI[i].aOU);
         }
         return stringBuilder.toString();
     }
 
-    void zzclv() {
-        if (this.aLx.length == 0) {
+    void zzclu() {
+        if (this.aOI.length == 0) {
             this.cornerPoints = new Point[0];
             return;
         }
@@ -128,8 +128,8 @@ public class TextBlock implements Text {
         int i2 = Integer.MIN_VALUE;
         int i3 = ConnectionsManager.DEFAULT_DATACENTER_ID;
         int i4 = Integer.MIN_VALUE;
-        for (LineBoxParcel lineBoxParcel : this.aLx) {
-            Point[] zza = zza(lineBoxParcel.aLG, this.aLx[0].aLG);
+        for (LineBoxParcel lineBoxParcel : this.aOI) {
+            Point[] zza = zza(lineBoxParcel.aOR, this.aOI[0].aOR);
             int i5 = 0;
             while (i5 < 4) {
                 Point point = zza[i5];
@@ -143,19 +143,19 @@ public class TextBlock implements Text {
                 i3 = min;
             }
         }
-        this.cornerPoints = zza(i3, i, i2, i4, this.aLx[0].aLG);
+        this.cornerPoints = zza(i3, i, i2, i4, this.aOI[0].aOR);
     }
 
-    List<Line> zzclw() {
-        if (this.aLx.length == 0) {
+    List<Line> zzclv() {
+        if (this.aOI.length == 0) {
             return new ArrayList(0);
         }
-        if (this.aLy == null) {
-            this.aLy = new ArrayList(this.aLx.length);
-            for (LineBoxParcel line : this.aLx) {
-                this.aLy.add(new Line(line));
+        if (this.aOJ == null) {
+            this.aOJ = new ArrayList(this.aOI.length);
+            for (LineBoxParcel line : this.aOI) {
+                this.aOJ.add(new Line(line));
             }
         }
-        return this.aLy;
+        return this.aOJ;
     }
 }

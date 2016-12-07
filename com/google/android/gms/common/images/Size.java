@@ -1,12 +1,12 @@
 package com.google.android.gms.common.images;
 
 public final class Size {
-    private final int zzajw;
-    private final int zzajx;
+    private final int zzakh;
+    private final int zzaki;
 
     public Size(int i, int i2) {
-        this.zzajw = i;
-        this.zzajx = i2;
+        this.zzakh = i;
+        this.zzaki = i2;
     }
 
     public static Size parseSize(String str) throws NumberFormatException {
@@ -18,16 +18,16 @@ public final class Size {
             indexOf = str.indexOf(120);
         }
         if (indexOf < 0) {
-            throw zzhp(str);
+            throw zzhr(str);
         }
         try {
             return new Size(Integer.parseInt(str.substring(0, indexOf)), Integer.parseInt(str.substring(indexOf + 1)));
         } catch (NumberFormatException e) {
-            throw zzhp(str);
+            throw zzhr(str);
         }
     }
 
-    private static NumberFormatException zzhp(String str) {
+    private static NumberFormatException zzhr(String str) {
         throw new NumberFormatException(new StringBuilder(String.valueOf(str).length() + 16).append("Invalid Size: \"").append(str).append("\"").toString());
     }
 
@@ -43,26 +43,26 @@ public final class Size {
             return false;
         }
         Size size = (Size) obj;
-        if (!(this.zzajw == size.zzajw && this.zzajx == size.zzajx)) {
+        if (!(this.zzakh == size.zzakh && this.zzaki == size.zzaki)) {
             z = false;
         }
         return z;
     }
 
     public int getHeight() {
-        return this.zzajx;
+        return this.zzaki;
     }
 
     public int getWidth() {
-        return this.zzajw;
+        return this.zzakh;
     }
 
     public int hashCode() {
-        return this.zzajx ^ ((this.zzajw << 16) | (this.zzajw >>> 16));
+        return this.zzaki ^ ((this.zzakh << 16) | (this.zzakh >>> 16));
     }
 
     public String toString() {
-        int i = this.zzajw;
-        return i + "x" + this.zzajx;
+        int i = this.zzakh;
+        return i + "x" + this.zzaki;
     }
 }

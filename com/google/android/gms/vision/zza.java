@@ -3,31 +3,31 @@ package com.google.android.gms.vision;
 import android.util.SparseArray;
 
 public class zza {
-    private static int aKD = 0;
-    private static final Object zzaok = new Object();
-    private SparseArray<Integer> aKE = new SparseArray();
-    private SparseArray<Integer> aKF = new SparseArray();
+    private static int aNO = 0;
+    private static final Object zzaox = new Object();
+    private SparseArray<Integer> aNP = new SparseArray();
+    private SparseArray<Integer> aNQ = new SparseArray();
 
-    public int zzabb(int i) {
+    public int zzaar(int i) {
         int intValue;
-        synchronized (zzaok) {
-            Integer num = (Integer) this.aKE.get(i);
+        synchronized (zzaox) {
+            Integer num = (Integer) this.aNP.get(i);
             if (num != null) {
                 intValue = num.intValue();
             } else {
-                intValue = aKD;
-                aKD++;
-                this.aKE.append(i, Integer.valueOf(intValue));
-                this.aKF.append(intValue, Integer.valueOf(i));
+                intValue = aNO;
+                aNO++;
+                this.aNP.append(i, Integer.valueOf(intValue));
+                this.aNQ.append(intValue, Integer.valueOf(i));
             }
         }
         return intValue;
     }
 
-    public int zzabc(int i) {
+    public int zzaas(int i) {
         int intValue;
-        synchronized (zzaok) {
-            intValue = ((Integer) this.aKF.get(i)).intValue();
+        synchronized (zzaox) {
+            intValue = ((Integer) this.aNQ.get(i)).intValue();
         }
         return intValue;
     }

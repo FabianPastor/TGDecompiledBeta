@@ -138,6 +138,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private ChatActivityEnterViewDelegate delegate;
     private long dialog_id;
     private float distCanMove = ((float) AndroidUtilities.dp(80.0f));
+    private AnimatorSet doneButtonAnimation;
+    private FrameLayout doneButtonContainer;
+    private ImageView doneButtonImage;
+    private ContextProgressView doneButtonProgress;
     private Drawable dotDrawable;
     private boolean editingCaption;
     private MessageObject editingMessageObject;
@@ -935,6 +939,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ChatActivityEnterView.this.sendMessage();
             }
         });
+        this.doneButtonContainer = new FrameLayout(context);
+        this.doneButtonContainer.setVisibility(8);
+        this.textFieldContainer.addView(this.doneButtonContainer, LayoutHelper.createLinear(48, 48, 80));
+        if (VERSION.SDK_INT >= 21) {
+            this.doneButtonContainer.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
+        }
+        this.doneButtonContainer.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                ChatActivityEnterView.this.doneEditingMessage();
+            }
+        });
+        this.doneButtonImage = new ImageView(context);
+        this.doneButtonImage.setScaleType(ScaleType.CENTER);
+        this.doneButtonImage.setImageResource(R.drawable.edit_doneblue);
+        this.doneButtonContainer.addView(this.doneButtonImage, LayoutHelper.createFrame(48, 48.0f));
+        this.doneButtonProgress = new ContextProgressView(context, 0);
+        this.doneButtonProgress.setVisibility(4);
+        this.doneButtonContainer.addView(this.doneButtonProgress, LayoutHelper.createFrame(-1, -1.0f));
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("emoji", 0);
         this.keyboardHeight = sharedPreferences.getInt("kbd_height", AndroidUtilities.dp(200.0f));
         this.keyboardHeightLand = sharedPreferences.getInt("kbd_height_land3", AndroidUtilities.dp(200.0f));
@@ -1066,6 +1088,85 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             }
+        }
+    }
+
+    public void onEditTimeExpired() {
+        this.doneButtonContainer.setVisibility(8);
+    }
+
+    public void showEditDoneProgress(final boolean show, boolean animated) {
+        if (this.doneButtonAnimation != null) {
+            this.doneButtonAnimation.cancel();
+        }
+        if (animated) {
+            this.doneButtonAnimation = new AnimatorSet();
+            AnimatorSet animatorSet;
+            Animator[] animatorArr;
+            if (show) {
+                this.doneButtonProgress.setVisibility(0);
+                this.doneButtonContainer.setEnabled(false);
+                animatorSet = this.doneButtonAnimation;
+                animatorArr = new Animator[6];
+                animatorArr[0] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleX", new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleY", new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.doneButtonImage, "alpha", new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonProgress, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorSet.playTogether(animatorArr);
+            } else {
+                this.doneButtonImage.setVisibility(0);
+                this.doneButtonContainer.setEnabled(true);
+                animatorSet = this.doneButtonAnimation;
+                animatorArr = new Animator[6];
+                animatorArr[0] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleX", new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleY", new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.doneButtonProgress, "alpha", new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonImage, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorSet.playTogether(animatorArr);
+            }
+            this.doneButtonAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                public void onAnimationEnd(Animator animation) {
+                    if (ChatActivityEnterView.this.doneButtonAnimation != null && ChatActivityEnterView.this.doneButtonAnimation.equals(animation)) {
+                        if (show) {
+                            ChatActivityEnterView.this.doneButtonImage.setVisibility(4);
+                        } else {
+                            ChatActivityEnterView.this.doneButtonProgress.setVisibility(4);
+                        }
+                    }
+                }
+
+                public void onAnimationCancel(Animator animation) {
+                    if (ChatActivityEnterView.this.doneButtonAnimation != null && ChatActivityEnterView.this.doneButtonAnimation.equals(animation)) {
+                        ChatActivityEnterView.this.doneButtonAnimation = null;
+                    }
+                }
+            });
+            this.doneButtonAnimation.setDuration(150);
+            this.doneButtonAnimation.start();
+        } else if (show) {
+            this.doneButtonImage.setScaleX(0.1f);
+            this.doneButtonImage.setScaleY(0.1f);
+            this.doneButtonImage.setAlpha(0.0f);
+            this.doneButtonProgress.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonProgress.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonProgress.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonImage.setVisibility(4);
+            this.doneButtonProgress.setVisibility(0);
+            this.doneButtonContainer.setEnabled(false);
+        } else {
+            this.doneButtonProgress.setScaleX(0.1f);
+            this.doneButtonProgress.setScaleY(0.1f);
+            this.doneButtonProgress.setAlpha(0.0f);
+            this.doneButtonImage.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonImage.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonImage.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonImage.setVisibility(0);
+            this.doneButtonProgress.setVisibility(4);
+            this.doneButtonContainer.setEnabled(true);
         }
     }
 
@@ -1344,6 +1445,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public void doneEditingMessage() {
         if (this.editingMessageObject != null) {
             this.delegate.onMessageEditEnd(true);
+            showEditDoneProgress(true, true);
             CharSequence[] message = new CharSequence[]{this.messageEditText.getText()};
             this.editingMessageReqId = SendMessagesHelper.getInstance().editMessage(this.editingMessageObject, message[0].toString(), this.messageWebPageSearch, this.parentFragment, MessagesQuery.getEntities(message), new Runnable() {
                 public void run() {
@@ -1759,6 +1861,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.editingMessageObject = messageObject;
             this.editingCaption = caption;
             if (this.editingMessageObject != null) {
+                if (this.doneButtonAnimation != null) {
+                    this.doneButtonAnimation.cancel();
+                    this.doneButtonAnimation = null;
+                }
+                this.doneButtonContainer.setVisibility(0);
+                showEditDoneProgress(true, false);
                 InputFilter[] inputFilters = new InputFilter[1];
                 if (caption) {
                     inputFilters[0] = new LengthFilter(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
@@ -1809,6 +1917,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.attachButton.setVisibility(8);
                 this.sendButtonContainer.setVisibility(8);
             } else {
+                this.doneButtonContainer.setVisibility(8);
                 this.messageEditText.setFilters(new InputFilter[0]);
                 this.delegate.onMessageEditEnd(false);
                 this.audioSendButton.setVisibility(0);

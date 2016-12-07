@@ -192,7 +192,6 @@ public final class R {
         public static final int common_google_signin_btn_text_light_focused = NUM;
         public static final int common_google_signin_btn_text_light_normal = NUM;
         public static final int common_google_signin_btn_text_light_pressed = NUM;
-        public static final int common_ic_googleplayservices = NUM;
         public static final int compose_panel = NUM;
         public static final int contact_blue = NUM;
         public static final int contact_green = NUM;
@@ -324,6 +323,7 @@ public final class R {
         public static final int ic_player = NUM;
         public static final int ic_reply_icon = NUM;
         public static final int ic_send = NUM;
+        public static final int ic_share_article = NUM;
         public static final int ic_smile_w = NUM;
         public static final int ic_smiles2_car = NUM;
         public static final int ic_smiles2_car_active = NUM;
@@ -777,6 +777,7 @@ public final class R {
         public static final int Alert = NUM;
         public static final int AllPhotos = NUM;
         public static final int AllVideo = NUM;
+        public static final int AllowFillNumber = NUM;
         public static final int AllowReadCall = NUM;
         public static final int AllowReadCallAndSms = NUM;
         public static final int AllowReadSms = NUM;
@@ -831,6 +832,8 @@ public final class R {
         public static final int AreYouSureShareMyContactInfoBot = NUM;
         public static final int AreYouSureShareMyContactInfoUser = NUM;
         public static final int AreYouSureUnblockContact = NUM;
+        public static final int ArticleByAuthor = NUM;
+        public static final int ArticleDateByAuthor = NUM;
         public static final int AskAQuestion = NUM;
         public static final int AskAQuestionInfo = NUM;
         public static final int AskButton = NUM;
@@ -1242,6 +1245,8 @@ public final class R {
         public static final int GroupUserLeftError = NUM;
         public static final int GroupsAndChannels = NUM;
         public static final int GroupsAndChannelsHelp = NUM;
+        public static final int GroupsInCommon = NUM;
+        public static final int GroupsInCommonTitle = NUM;
         public static final int Hashtags = NUM;
         public static final int HiddenName = NUM;
         public static final int Highlights = NUM;
@@ -1449,6 +1454,7 @@ public final class R {
         public static final int NoChatsHelp = NUM;
         public static final int NoContacts = NUM;
         public static final int NoFiles = NUM;
+        public static final int NoGroupsInCommon = NUM;
         public static final int NoHandleAppInstalled = NUM;
         public static final int NoMailInstalled = NUM;
         public static final int NoMasks = NUM;
@@ -1547,7 +1553,10 @@ public final class R {
         public static final int NotificationUnrecognizedDevice = NUM;
         public static final int Notifications = NUM;
         public static final int NotificationsAndSounds = NUM;
+        public static final int NotificationsCustom = NUM;
+        public static final int NotificationsCustomize = NUM;
         public static final int NotificationsDisabled = NUM;
+        public static final int NotificationsEnableCustom = NUM;
         public static final int NotificationsLed = NUM;
         public static final int NotificationsLedColor = NUM;
         public static final int NotificationsLedInfo = NUM;
@@ -1967,18 +1976,15 @@ public final class R {
         public static final int common_google_play_services_enable_text = NUM;
         public static final int common_google_play_services_enable_title = NUM;
         public static final int common_google_play_services_install_button = NUM;
-        public static final int common_google_play_services_install_text_phone = NUM;
-        public static final int common_google_play_services_install_text_tablet = NUM;
+        public static final int common_google_play_services_install_text = NUM;
         public static final int common_google_play_services_install_title = NUM;
         public static final int common_google_play_services_notification_ticker = NUM;
         public static final int common_google_play_services_unknown_issue = NUM;
         public static final int common_google_play_services_unsupported_text = NUM;
-        public static final int common_google_play_services_unsupported_title = NUM;
         public static final int common_google_play_services_update_button = NUM;
         public static final int common_google_play_services_update_text = NUM;
         public static final int common_google_play_services_update_title = NUM;
         public static final int common_google_play_services_updating_text = NUM;
-        public static final int common_google_play_services_updating_title = NUM;
         public static final int common_google_play_services_wear_update_text = NUM;
         public static final int common_open_on_phone = NUM;
         public static final int common_signin_button_text = NUM;

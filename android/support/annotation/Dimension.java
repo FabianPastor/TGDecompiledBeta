@@ -14,9 +14,5 @@ public @interface Dimension {
     public static final int PX = 1;
     public static final int SP = 2;
 
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Unit {
-    }
-
     int unit() default 1;
 }

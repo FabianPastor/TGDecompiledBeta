@@ -1,19 +1,19 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.maps.model.internal.zzh;
 
 public final class TileOverlay {
-    private final zzh anj;
+    private final zzh aqp;
 
     public TileOverlay(zzh com_google_android_gms_maps_model_internal_zzh) {
-        this.anj = (zzh) zzac.zzy(com_google_android_gms_maps_model_internal_zzh);
+        this.aqp = (zzh) zzaa.zzy(com_google_android_gms_maps_model_internal_zzh);
     }
 
     public void clearTileCache() {
         try {
-            this.anj.clearTileCache();
+            this.aqp.clearTileCache();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -24,7 +24,7 @@ public final class TileOverlay {
             return false;
         }
         try {
-            return this.anj.zza(((TileOverlay) obj).anj);
+            return this.aqp.zza(((TileOverlay) obj).aqp);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -32,7 +32,7 @@ public final class TileOverlay {
 
     public boolean getFadeIn() {
         try {
-            return this.anj.getFadeIn();
+            return this.aqp.getFadeIn();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -40,7 +40,7 @@ public final class TileOverlay {
 
     public String getId() {
         try {
-            return this.anj.getId();
+            return this.aqp.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -48,7 +48,7 @@ public final class TileOverlay {
 
     public float getTransparency() {
         try {
-            return this.anj.getTransparency();
+            return this.aqp.getTransparency();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -56,7 +56,7 @@ public final class TileOverlay {
 
     public float getZIndex() {
         try {
-            return this.anj.getZIndex();
+            return this.aqp.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -64,7 +64,7 @@ public final class TileOverlay {
 
     public int hashCode() {
         try {
-            return this.anj.hashCodeRemote();
+            return this.aqp.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -72,7 +72,7 @@ public final class TileOverlay {
 
     public boolean isVisible() {
         try {
-            return this.anj.isVisible();
+            return this.aqp.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -80,7 +80,7 @@ public final class TileOverlay {
 
     public void remove() {
         try {
-            this.anj.remove();
+            this.aqp.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -88,7 +88,7 @@ public final class TileOverlay {
 
     public void setFadeIn(boolean z) {
         try {
-            this.anj.setFadeIn(z);
+            this.aqp.setFadeIn(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -96,7 +96,7 @@ public final class TileOverlay {
 
     public void setTransparency(float f) {
         try {
-            this.anj.setTransparency(f);
+            this.aqp.setTransparency(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -104,7 +104,7 @@ public final class TileOverlay {
 
     public void setVisible(boolean z) {
         try {
-            this.anj.setVisible(z);
+            this.aqp.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -112,7 +112,7 @@ public final class TileOverlay {
 
     public void setZIndex(float f) {
         try {
-            this.anj.setZIndex(f);
+            this.aqp.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

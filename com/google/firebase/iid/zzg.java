@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import com.google.android.gms.common.util.zzx;
+import com.google.android.gms.common.util.zzw;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -20,18 +20,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 class zzg {
-    SharedPreferences agw;
-    Context zzahn;
+    SharedPreferences aiG;
+    Context zzahs;
 
     static class zza {
-        private static final long bhE = TimeUnit.DAYS.toMillis(7);
-        final String afY;
-        final String auj;
+        private static final long bkQ = TimeUnit.DAYS.toMillis(7);
+        final String aii;
+        final String axH;
         final long timestamp;
 
         private zza(String str, String str2, long j) {
-            this.auj = str;
-            this.afY = str2;
+            this.axH = str;
+            this.aii = str2;
             this.timestamp = j;
         }
 
@@ -49,7 +49,7 @@ class zzg {
             }
         }
 
-        static zza zzty(String str) {
+        static zza zztx(String str) {
             if (TextUtils.isEmpty(str)) {
                 return null;
             }
@@ -66,8 +66,8 @@ class zzg {
             }
         }
 
-        boolean zztz(String str) {
-            return System.currentTimeMillis() > this.timestamp + bhE || !str.equals(this.afY);
+        boolean zzty(String str) {
+            return System.currentTimeMillis() > this.timestamp + bkQ || !str.equals(this.aii);
         }
     }
 
@@ -76,8 +76,8 @@ class zzg {
     }
 
     public zzg(Context context, String str) {
-        this.zzahn = context;
-        this.agw = context.getSharedPreferences(str, 4);
+        this.zzahs = context;
+        this.aiG = context.getSharedPreferences(str, 4);
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("-no-backup");
         zzkq(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
@@ -89,12 +89,12 @@ class zzg {
     }
 
     private void zzkq(String str) {
-        File file = new File(zzx.getNoBackupFilesDir(this.zzahn), str);
+        File file = new File(zzw.getNoBackupFilesDir(this.zzahs), str);
         if (!file.exists()) {
             try {
                 if (file.createNewFile() && !isEmpty()) {
                     Log.i("InstanceID/Store", "App restored, clearing state");
-                    FirebaseInstanceId.zza(this.zzahn, this);
+                    FirebaseInstanceId.zza(this.zzahs, this);
                 }
             } catch (IOException e) {
                 if (Log.isLoggable("InstanceID/Store", 3)) {
@@ -108,8 +108,8 @@ class zzg {
     }
 
     private void zzkr(String str) {
-        Editor edit = this.agw.edit();
-        for (String str2 : this.agw.getAll().keySet()) {
+        Editor edit = this.aiG.edit();
+        for (String str2 : this.aiG.getAll().keySet()) {
             if (str2.startsWith(str)) {
                 edit.remove(str2);
             }
@@ -122,30 +122,30 @@ class zzg {
         return new StringBuilder((((String.valueOf(str).length() + 1) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()) + String.valueOf(str3).length()).append(str).append(valueOf).append(str2).append("|").append(str3).toString();
     }
 
-    public SharedPreferences K() {
-        return this.agw;
+    public SharedPreferences M() {
+        return this.aiG;
     }
 
     public synchronized boolean isEmpty() {
-        return this.agw.getAll().isEmpty();
+        return this.aiG.getAll().isEmpty();
     }
 
     public synchronized void zza(String str, String str2, String str3, String str4, String str5) {
         String zzc = zza.zzc(str4, str5, System.currentTimeMillis());
         if (zzc != null) {
-            Editor edit = this.agw.edit();
+            Editor edit = this.aiG.edit();
             edit.putString(zzp(str, str2, str3), zzc);
             edit.commit();
         }
     }
 
-    public synchronized void zzbow() {
-        this.agw.edit().clear().commit();
+    public synchronized void zzbop() {
+        this.aiG.edit().clear().commit();
     }
 
     public synchronized void zzi(String str, String str2, String str3) {
         String zzp = zzp(str, str2, str3);
-        Editor edit = this.agw.edit();
+        Editor edit = this.aiG.edit();
         edit.remove(zzp);
         edit.commit();
     }
@@ -153,8 +153,8 @@ class zzg {
     public synchronized KeyPair zzks(String str) {
         KeyPair keyPair;
         Object e;
-        String string = this.agw.getString(zzbu(str, "|P|"), null);
-        String string2 = this.agw.getString(zzbu(str, "|K|"), null);
+        String string = this.aiG.getString(zzbu(str, "|P|"), null);
+        String string2 = this.aiG.getString(zzbu(str, "|K|"), null);
         if (string == null || string2 == null) {
             keyPair = null;
         } else {
@@ -167,14 +167,14 @@ class zzg {
                 e = e2;
                 string = String.valueOf(e);
                 Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzahn, this);
+                FirebaseInstanceId.zza(this.zzahs, this);
                 keyPair = null;
                 return keyPair;
             } catch (NoSuchAlgorithmException e3) {
                 e = e3;
                 string = String.valueOf(e);
                 Log.w("InstanceID/Store", new StringBuilder(String.valueOf(string).length() + 19).append("Invalid key stored ").append(string).toString());
-                FirebaseInstanceId.zza(this.zzahn, this);
+                FirebaseInstanceId.zza(this.zzahs, this);
                 keyPair = null;
                 return keyPair;
             }
@@ -191,12 +191,12 @@ class zzg {
     }
 
     public synchronized zza zzq(String str, String str2, String str3) {
-        return zza.zzty(this.agw.getString(zzp(str, str2, str3), null));
+        return zza.zztx(this.aiG.getString(zzp(str, str2, str3), null));
     }
 
-    public synchronized long zztw(String str) {
+    public synchronized long zztv(String str) {
         long parseLong;
-        String string = this.agw.getString(zzbu(str, "cre"), null);
+        String string = this.aiG.getString(zzbu(str, "cre"), null);
         if (string != null) {
             try {
                 parseLong = Long.parseLong(string);
@@ -207,15 +207,15 @@ class zzg {
         return parseLong;
     }
 
-    synchronized KeyPair zztx(String str) {
-        KeyPair zzboo;
-        zzboo = zza.zzboo();
+    synchronized KeyPair zztw(String str) {
+        KeyPair zzboh;
+        zzboh = zza.zzboh();
         long currentTimeMillis = System.currentTimeMillis();
-        Editor edit = this.agw.edit();
-        edit.putString(zzbu(str, "|P|"), FirebaseInstanceId.zzu(zzboo.getPublic().getEncoded()));
-        edit.putString(zzbu(str, "|K|"), FirebaseInstanceId.zzu(zzboo.getPrivate().getEncoded()));
+        Editor edit = this.aiG.edit();
+        edit.putString(zzbu(str, "|P|"), FirebaseInstanceId.zzv(zzboh.getPublic().getEncoded()));
+        edit.putString(zzbu(str, "|K|"), FirebaseInstanceId.zzv(zzboh.getPrivate().getEncoded()));
         edit.putString(zzbu(str, "cre"), Long.toString(currentTimeMillis));
         edit.commit();
-        return zzboo;
+        return zzboh;
     }
 }

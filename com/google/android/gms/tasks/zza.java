@@ -4,14 +4,14 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zza<TResult, TContinuationResult> implements zzf<TResult> {
-    private final Executor aBG;
-    private final Continuation<TResult, TContinuationResult> aJu;
-    private final zzh<TContinuationResult> aJv;
+    private final Executor aEQ;
+    private final Continuation<TResult, TContinuationResult> aMF;
+    private final zzh<TContinuationResult> aMG;
 
     public zza(@NonNull Executor executor, @NonNull Continuation<TResult, TContinuationResult> continuation, @NonNull zzh<TContinuationResult> com_google_android_gms_tasks_zzh_TContinuationResult) {
-        this.aBG = executor;
-        this.aJu = continuation;
-        this.aJv = com_google_android_gms_tasks_zzh_TContinuationResult;
+        this.aEQ = executor;
+        this.aMF = continuation;
+        this.aMG = com_google_android_gms_tasks_zzh_TContinuationResult;
     }
 
     public void cancel() {
@@ -19,20 +19,20 @@ class zza<TResult, TContinuationResult> implements zzf<TResult> {
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
-        this.aBG.execute(new Runnable(this) {
-            final /* synthetic */ zza aJx;
+        this.aEQ.execute(new Runnable(this) {
+            final /* synthetic */ zza aMI;
 
             public void run() {
                 try {
-                    this.aJx.aJv.setResult(this.aJx.aJu.then(task));
+                    this.aMI.aMG.setResult(this.aMI.aMF.then(task));
                 } catch (Exception e) {
                     if (e.getCause() instanceof Exception) {
-                        this.aJx.aJv.setException((Exception) e.getCause());
+                        this.aMI.aMG.setException((Exception) e.getCause());
                     } else {
-                        this.aJx.aJv.setException(e);
+                        this.aMI.aMG.setException(e);
                     }
                 } catch (Exception e2) {
-                    this.aJx.aJv.setException(e2);
+                    this.aMI.aMG.setException(e2);
                 }
             }
         });

@@ -1,5 +1,7 @@
 package org.telegram.ui.Cells;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.exoplayer.C;
@@ -80,6 +83,32 @@ public class RadioCell extends FrameLayout {
 
     public void setChecked(boolean checked, boolean animated) {
         this.radioButton.setChecked(checked, animated);
+    }
+
+    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (animators != null) {
+            TextView textView = this.textView;
+            String str = "alpha";
+            float[] fArr = new float[1];
+            fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            RadioButton radioButton = this.radioButton;
+            String str2 = "alpha";
+            float[] fArr2 = new float[1];
+            if (!value) {
+                f = 0.5f;
+            }
+            fArr2[0] = f;
+            animators.add(ObjectAnimator.ofFloat(radioButton, str2, fArr2));
+            return;
+        }
+        this.textView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        radioButton = this.radioButton;
+        if (!value) {
+            f = 0.5f;
+        }
+        radioButton.setAlpha(f);
     }
 
     protected void onDraw(Canvas canvas) {

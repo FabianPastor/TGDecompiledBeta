@@ -316,7 +316,7 @@ public class zzb {
         }
     }
 
-    public static int zzcr(Parcel parcel) {
+    public static int zzcs(Parcel parcel) {
         return zzah(parcel, 20293);
     }
 

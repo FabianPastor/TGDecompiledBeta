@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.CallSuper;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 public abstract class Task implements Parcelable {
     public static final int EXTRAS_LIMIT_BYTES = 10240;
@@ -13,17 +13,18 @@ public abstract class Task implements Parcelable {
     public static final int NETWORK_STATE_CONNECTED = 0;
     public static final int NETWORK_STATE_UNMETERED = 1;
     protected static final long UNINITIALIZED = -1;
-    private final String afk;
-    private final boolean afl;
-    private final boolean afm;
-    private final int afn;
-    private final boolean afo;
-    private final zzc afp;
+    private final String aht;
+    private final boolean ahu;
+    private final boolean ahv;
+    private final int ahw;
+    private final boolean ahx;
+    private final boolean ahy;
+    private final zzc ahz;
     private final Bundle mExtras;
     private final String mTag;
 
     public static abstract class Builder {
-        protected zzc afq = zzc.aff;
+        protected zzc ahA = zzc.aho;
         protected Bundle extras;
         protected String gcmTaskService;
         protected boolean isPersisted;
@@ -36,9 +37,9 @@ public abstract class Task implements Parcelable {
 
         @CallSuper
         protected void checkConditions() {
-            zzac.zzb(this.gcmTaskService != null, (Object) "Must provide an endpoint for this task by calling setService(ComponentName).");
+            zzaa.zzb(this.gcmTaskService != null, (Object) "Must provide an endpoint for this task by calling setService(ComponentName).");
             GcmNetworkManager.zzki(this.tag);
-            Task.zza(this.afq);
+            Task.zza(this.ahA);
             if (this.isPersisted) {
                 Task.zzak(this.extras);
             }
@@ -63,47 +64,49 @@ public abstract class Task implements Parcelable {
     Task(Parcel parcel) {
         boolean z = true;
         Log.e("Task", "Constructing a Task object using a parcel.");
-        this.afk = parcel.readString();
+        this.aht = parcel.readString();
         this.mTag = parcel.readString();
-        this.afl = parcel.readInt() == 1;
+        this.ahu = parcel.readInt() == 1;
         if (parcel.readInt() != 1) {
             z = false;
         }
-        this.afm = z;
-        this.afn = 2;
-        this.afo = false;
-        this.afp = zzc.aff;
+        this.ahv = z;
+        this.ahw = 2;
+        this.ahx = false;
+        this.ahy = false;
+        this.ahz = zzc.aho;
         this.mExtras = null;
     }
 
     Task(Builder builder) {
-        this.afk = builder.gcmTaskService;
+        this.aht = builder.gcmTaskService;
         this.mTag = builder.tag;
-        this.afl = builder.updateCurrent;
-        this.afm = builder.isPersisted;
-        this.afn = builder.requiredNetworkState;
-        this.afo = builder.requiresCharging;
+        this.ahu = builder.updateCurrent;
+        this.ahv = builder.isPersisted;
+        this.ahw = builder.requiredNetworkState;
+        this.ahx = builder.requiresCharging;
+        this.ahy = false;
         this.mExtras = builder.extras;
-        this.afp = builder.afq != null ? builder.afq : zzc.aff;
+        this.ahz = builder.ahA != null ? builder.ahA : zzc.aho;
     }
 
     public static void zza(zzc com_google_android_gms_gcm_zzc) {
         if (com_google_android_gms_gcm_zzc != null) {
-            int zzboc = com_google_android_gms_gcm_zzc.zzboc();
-            if (zzboc == 1 || zzboc == 0) {
-                int zzbod = com_google_android_gms_gcm_zzc.zzbod();
-                int zzboe = com_google_android_gms_gcm_zzc.zzboe();
-                if (zzboc == 0 && zzbod < 0) {
-                    throw new IllegalArgumentException("InitialBackoffSeconds can't be negative: " + zzbod);
-                } else if (zzboc == 1 && zzbod < 10) {
+            int zzbnv = com_google_android_gms_gcm_zzc.zzbnv();
+            if (zzbnv == 1 || zzbnv == 0) {
+                int zzbnw = com_google_android_gms_gcm_zzc.zzbnw();
+                int zzbnx = com_google_android_gms_gcm_zzc.zzbnx();
+                if (zzbnv == 0 && zzbnw < 0) {
+                    throw new IllegalArgumentException("InitialBackoffSeconds can't be negative: " + zzbnw);
+                } else if (zzbnv == 1 && zzbnw < 10) {
                     throw new IllegalArgumentException("RETRY_POLICY_LINEAR must have an initial backoff at least 10 seconds.");
-                } else if (zzboe < zzbod) {
-                    throw new IllegalArgumentException("MaximumBackoffSeconds must be greater than InitialBackoffSeconds: " + com_google_android_gms_gcm_zzc.zzboe());
+                } else if (zzbnx < zzbnw) {
+                    throw new IllegalArgumentException("MaximumBackoffSeconds must be greater than InitialBackoffSeconds: " + com_google_android_gms_gcm_zzc.zzbnx());
                 } else {
                     return;
                 }
             }
-            throw new IllegalArgumentException("Must provide a valid RetryPolicy: " + zzboc);
+            throw new IllegalArgumentException("Must provide a valid RetryPolicy: " + zzbnv);
         }
     }
 
@@ -139,15 +142,15 @@ public abstract class Task implements Parcelable {
     }
 
     public int getRequiredNetwork() {
-        return this.afn;
+        return this.ahw;
     }
 
     public boolean getRequiresCharging() {
-        return this.afo;
+        return this.ahx;
     }
 
     public String getServiceName() {
-        return this.afk;
+        return this.aht;
     }
 
     public String getTag() {
@@ -155,30 +158,31 @@ public abstract class Task implements Parcelable {
     }
 
     public boolean isPersisted() {
-        return this.afm;
+        return this.ahv;
     }
 
     public boolean isUpdateCurrent() {
-        return this.afl;
+        return this.ahu;
     }
 
     public void toBundle(Bundle bundle) {
         bundle.putString("tag", this.mTag);
-        bundle.putBoolean("update_current", this.afl);
-        bundle.putBoolean("persisted", this.afm);
-        bundle.putString("service", this.afk);
-        bundle.putInt("requiredNetwork", this.afn);
-        bundle.putBoolean("requiresCharging", this.afo);
-        bundle.putBundle("retryStrategy", this.afp.zzaj(new Bundle()));
+        bundle.putBoolean("update_current", this.ahu);
+        bundle.putBoolean("persisted", this.ahv);
+        bundle.putString("service", this.aht);
+        bundle.putInt("requiredNetwork", this.ahw);
+        bundle.putBoolean("requiresCharging", this.ahx);
+        bundle.putBoolean("requiresIdle", this.ahy);
+        bundle.putBundle("retryStrategy", this.ahz.zzaj(new Bundle()));
         bundle.putBundle("extras", this.mExtras);
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         int i2 = 1;
-        parcel.writeString(this.afk);
+        parcel.writeString(this.aht);
         parcel.writeString(this.mTag);
-        parcel.writeInt(this.afl ? 1 : 0);
-        if (!this.afm) {
+        parcel.writeInt(this.ahu ? 1 : 0);
+        if (!this.ahv) {
             i2 = 0;
         }
         parcel.writeInt(i2);

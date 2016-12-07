@@ -12,14 +12,14 @@ public interface zzc extends IInterface {
     public static abstract class zza extends Binder implements zzc {
 
         private static class zza implements zzc {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public zzb zza(zzd com_google_android_gms_dynamic_zzd, TextRecognizerOptions textRecognizerOptions) throws RemoteException {
@@ -34,10 +34,10 @@ public interface zzc extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzb zzln = com.google.android.gms.vision.text.internal.client.zzb.zza.zzln(obtain2.readStrongBinder());
-                    return zzln;
+                    zzb zzli = com.google.android.gms.vision.text.internal.client.zzb.zza.zzli(obtain2.readStrongBinder());
+                    return zzli;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -45,7 +45,7 @@ public interface zzc extends IInterface {
             }
         }
 
-        public static zzc zzlo(IBinder iBinder) {
+        public static zzc zzlj(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -58,7 +58,7 @@ public interface zzc extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.text.internal.client.INativeTextRecognizerCreator");
-                    zzb zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (TextRecognizerOptions) TextRecognizerOptions.CREATOR.createFromParcel(parcel) : null);
+                    zzb zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (TextRecognizerOptions) TextRecognizerOptions.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (zza != null) {
                         iBinder = zza.asBinder();

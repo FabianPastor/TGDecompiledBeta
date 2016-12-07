@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import com.google.android.gms.R;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.internal.zzag;
-import com.google.android.gms.common.internal.zzah;
+import com.google.android.gms.common.internal.zzae;
+import com.google.android.gms.common.internal.zzaf;
 import com.google.android.gms.dynamic.zzg.zza;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,8 +25,8 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public static final int SIZE_WIDE = 1;
     private int mColor;
     private int mSize;
-    private View vg;
-    private OnClickListener vh;
+    private View xi;
+    private OnClickListener xj;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface ButtonSize {
@@ -46,15 +46,15 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public SignInButton(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.vh = null;
+        this.xj = null;
         zzb(context, attributeSet);
         setStyle(this.mSize, this.mColor);
     }
 
     private static Button zza(Context context, int i, int i2) {
-        Button com_google_android_gms_common_internal_zzah = new zzah(context);
-        com_google_android_gms_common_internal_zzah.zza(context.getResources(), i, i2);
-        return com_google_android_gms_common_internal_zzah;
+        Button com_google_android_gms_common_internal_zzaf = new zzaf(context);
+        com_google_android_gms_common_internal_zzaf.zza(context.getResources(), i, i2);
+        return com_google_android_gms_common_internal_zzaf;
     }
 
     private void zzb(Context context, AttributeSet attributeSet) {
@@ -67,24 +67,24 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
         }
     }
 
-    private void zzca(Context context) {
-        if (this.vg != null) {
-            removeView(this.vg);
+    private void zzbw(Context context) {
+        if (this.xi != null) {
+            removeView(this.xi);
         }
         try {
-            this.vg = zzag.zzb(context, this.mSize, this.mColor);
+            this.xi = zzae.zzb(context, this.mSize, this.mColor);
         } catch (zza e) {
             Log.w("SignInButton", "Sign in button not found, using placeholder instead");
-            this.vg = zza(context, this.mSize, this.mColor);
+            this.xi = zza(context, this.mSize, this.mColor);
         }
-        addView(this.vg);
-        this.vg.setEnabled(isEnabled());
-        this.vg.setOnClickListener(this);
+        addView(this.xi);
+        this.xi.setEnabled(isEnabled());
+        this.xi.setOnClickListener(this);
     }
 
     public void onClick(View view) {
-        if (this.vh != null && view == this.vg) {
-            this.vh.onClick(this);
+        if (this.xj != null && view == this.xi) {
+            this.xj.onClick(this);
         }
     }
 
@@ -94,13 +94,13 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public void setEnabled(boolean z) {
         super.setEnabled(z);
-        this.vg.setEnabled(z);
+        this.xi.setEnabled(z);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
-        this.vh = onClickListener;
-        if (this.vg != null) {
-            this.vg.setOnClickListener(this);
+        this.xj = onClickListener;
+        if (this.xi != null) {
+            this.xi.setOnClickListener(this);
         }
     }
 
@@ -116,7 +116,7 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public void setStyle(int i, int i2) {
         this.mSize = i;
         this.mColor = i2;
-        zzca(getContext());
+        zzbw(getContext());
     }
 
     @Deprecated

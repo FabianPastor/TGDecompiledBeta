@@ -1,56 +1,102 @@
 package com.google.android.gms.internal;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
+import android.os.DeadObjectException;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.zzag;
+import com.google.android.gms.internal.zzqo.zza;
 
-public class zzra {
-    protected final zzrb yY;
+public class zzra implements zzre {
+    private final zzrf zA;
+    private boolean zB = false;
 
-    protected zzra(zzrb com_google_android_gms_internal_zzrb) {
-        this.yY = com_google_android_gms_internal_zzrb;
+    public zzra(zzrf com_google_android_gms_internal_zzrf) {
+        this.zA = com_google_android_gms_internal_zzrf;
     }
 
-    protected static zzrb zzc(zzqz com_google_android_gms_internal_zzqz) {
-        return com_google_android_gms_internal_zzqz.zzasn() ? zzrn.zza(com_google_android_gms_internal_zzqz.zzasp()) : zzrc.zzt(com_google_android_gms_internal_zzqz.zzaso());
+    private <A extends zzb> void zzd(zza<? extends Result, A> com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A) throws DeadObjectException {
+        this.zA.yW.Ap.zzb(com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A);
+        zzb zzb = this.zA.yW.zzb(com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A.zzaqv());
+        if (zzb.isConnected() || !this.zA.Ay.containsKey(com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A.zzaqv())) {
+            if (zzb instanceof zzag) {
+                zzb = ((zzag) zzb).zzawt();
+            }
+            com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A.zzb(zzb);
+            return;
+        }
+        com_google_android_gms_internal_zzqo_zza__extends_com_google_android_gms_common_api_Result__A.zzaa(new Status(17));
     }
 
-    protected static zzrb zzs(Activity activity) {
-        return zzc(new zzqz(activity));
+    public void begin() {
     }
 
-    @MainThread
-    public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
+    public void connect() {
+        if (this.zB) {
+            this.zB = false;
+            this.zA.zza(new zza(this, this) {
+                final /* synthetic */ zzra zC;
+
+                public void zzaso() {
+                    this.zC.zA.AC.zzn(null);
+                }
+            });
+        }
     }
 
-    public Activity getActivity() {
-        return this.yY.zzasq();
+    public boolean disconnect() {
+        if (this.zB) {
+            return false;
+        }
+        if (this.zA.yW.zzata()) {
+            this.zB = true;
+            for (zzsf zzaud : this.zA.yW.Ao) {
+                zzaud.zzaud();
+            }
+            return false;
+        }
+        this.zA.zzh(null);
+        return true;
     }
 
-    @MainThread
-    public void onActivityResult(int i, int i2, Intent intent) {
+    public void onConnected(Bundle bundle) {
     }
 
-    @MainThread
-    public void onCreate(Bundle bundle) {
+    public void onConnectionSuspended(int i) {
+        this.zA.zzh(null);
+        this.zA.AC.zzc(i, this.zB);
     }
 
-    @MainThread
-    public void onDestroy() {
+    public <A extends zzb, R extends Result, T extends zza<R, A>> T zza(T t) {
+        return zzb(t);
     }
 
-    @MainThread
-    public void onSaveInstanceState(Bundle bundle) {
+    public void zza(ConnectionResult connectionResult, Api<?> api, int i) {
     }
 
-    @MainThread
-    public void onStart() {
+    void zzasn() {
+        if (this.zB) {
+            this.zB = false;
+            this.zA.yW.Ap.release();
+            disconnect();
+        }
     }
 
-    @MainThread
-    public void onStop() {
+    public <A extends zzb, T extends zza<? extends Result, A>> T zzb(T t) {
+        try {
+            zzd(t);
+        } catch (DeadObjectException e) {
+            this.zA.zza(new zza(this, this) {
+                final /* synthetic */ zzra zC;
+
+                public void zzaso() {
+                    this.zC.onConnectionSuspended(1);
+                }
+            });
+        }
+        return t;
     }
 }

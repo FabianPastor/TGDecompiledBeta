@@ -61,7 +61,7 @@ public final class zzo {
         }
     }
 
-    public static byte[] zzl(InputStream inputStream) throws IOException {
+    public static byte[] zzk(InputStream inputStream) throws IOException {
         return zza(inputStream, true);
     }
 }

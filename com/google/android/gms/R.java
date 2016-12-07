@@ -75,7 +75,6 @@ public final class R {
         public static final int common_google_signin_btn_text_light_focused = NUM;
         public static final int common_google_signin_btn_text_light_normal = NUM;
         public static final int common_google_signin_btn_text_light_pressed = NUM;
-        public static final int common_ic_googleplayservices = NUM;
     }
 
     public static final class id {
@@ -109,18 +108,15 @@ public final class R {
         public static final int common_google_play_services_enable_text = NUM;
         public static final int common_google_play_services_enable_title = NUM;
         public static final int common_google_play_services_install_button = NUM;
-        public static final int common_google_play_services_install_text_phone = NUM;
-        public static final int common_google_play_services_install_text_tablet = NUM;
+        public static final int common_google_play_services_install_text = NUM;
         public static final int common_google_play_services_install_title = NUM;
         public static final int common_google_play_services_notification_ticker = NUM;
         public static final int common_google_play_services_unknown_issue = NUM;
         public static final int common_google_play_services_unsupported_text = NUM;
-        public static final int common_google_play_services_unsupported_title = NUM;
         public static final int common_google_play_services_update_button = NUM;
         public static final int common_google_play_services_update_text = NUM;
         public static final int common_google_play_services_update_title = NUM;
         public static final int common_google_play_services_updating_text = NUM;
-        public static final int common_google_play_services_updating_title = NUM;
         public static final int common_google_play_services_wear_update_text = NUM;
         public static final int common_open_on_phone = NUM;
         public static final int common_signin_button_text = NUM;

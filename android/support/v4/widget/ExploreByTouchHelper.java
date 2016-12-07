@@ -67,6 +67,14 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
         public boolean performAction(int virtualViewId, int action, Bundle arguments) {
             return ExploreByTouchHelper.this.performAction(virtualViewId, action, arguments);
         }
+
+        public AccessibilityNodeInfoCompat findFocus(int focusType) {
+            int focusedId = focusType == 2 ? ExploreByTouchHelper.this.mAccessibilityFocusedVirtualViewId : ExploreByTouchHelper.this.mKeyboardFocusedVirtualViewId;
+            if (focusedId == Integer.MIN_VALUE) {
+                return null;
+            }
+            return createAccessibilityNodeInfo(focusedId);
+        }
     }
 
     protected abstract int getVirtualViewAt(float f, float f2);

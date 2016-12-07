@@ -479,30 +479,42 @@ class AdapterHelper implements Callback {
     }
 
     boolean onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+        boolean z = true;
+        if (itemCount < 1) {
+            return false;
+        }
         this.mPendingUpdates.add(obtainUpdateOp(4, positionStart, itemCount, payload));
         this.mExistingUpdateTypes |= 4;
-        if (this.mPendingUpdates.size() == 1) {
-            return true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
-        return false;
+        return z;
     }
 
     boolean onItemRangeInserted(int positionStart, int itemCount) {
+        boolean z = true;
+        if (itemCount < 1) {
+            return false;
+        }
         this.mPendingUpdates.add(obtainUpdateOp(1, positionStart, itemCount, null));
         this.mExistingUpdateTypes |= 1;
-        if (this.mPendingUpdates.size() == 1) {
-            return true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
-        return false;
+        return z;
     }
 
     boolean onItemRangeRemoved(int positionStart, int itemCount) {
+        boolean z = true;
+        if (itemCount < 1) {
+            return false;
+        }
         this.mPendingUpdates.add(obtainUpdateOp(2, positionStart, itemCount, null));
         this.mExistingUpdateTypes |= 2;
-        if (this.mPendingUpdates.size() == 1) {
-            return true;
+        if (this.mPendingUpdates.size() != 1) {
+            z = false;
         }
-        return false;
+        return z;
     }
 
     boolean onItemRangeMoved(int from, int to, int itemCount) {

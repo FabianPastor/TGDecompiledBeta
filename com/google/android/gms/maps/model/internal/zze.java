@@ -11,10 +11,10 @@ public interface zze extends IInterface {
     public static abstract class zza extends Binder implements zze {
 
         private static class zza implements zze {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public void activate() throws RemoteException {
@@ -22,7 +22,7 @@ public interface zze extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -31,7 +31,7 @@ public interface zze extends IInterface {
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public String getName() throws RemoteException {
@@ -39,7 +39,7 @@ public interface zze extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     String readString = obtain2.readString();
                     return readString;
@@ -54,7 +54,7 @@ public interface zze extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     String readString = obtain2.readString();
                     return readString;
@@ -69,7 +69,7 @@ public interface zze extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    this.zzajf.transact(5, obtain, obtain2, 0);
+                    this.zzajq.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
@@ -86,7 +86,7 @@ public interface zze extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zze != null ? com_google_android_gms_maps_model_internal_zze.asBinder() : null);
-                    this.zzajf.transact(4, obtain, obtain2, 0);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -101,7 +101,7 @@ public interface zze extends IInterface {
             }
         }
 
-        public static zze zzjf(IBinder iBinder) {
+        public static zze zzjj(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -131,7 +131,7 @@ public interface zze extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IIndoorLevelDelegate");
-                    boolean zza = zza(zzjf(parcel.readStrongBinder()));
+                    boolean zza = zza(zzjj(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     parcel2.writeInt(zza ? 1 : 0);
                     return true;

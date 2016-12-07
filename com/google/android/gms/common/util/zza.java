@@ -6,14 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class zza<E> extends AbstractSet<E> {
-    private final ArrayMap<E, E> EJ;
+    private final ArrayMap<E, E> Gp;
 
     public zza() {
-        this.EJ = new ArrayMap();
+        this.Gp = new ArrayMap();
     }
 
     public zza(int i) {
-        this.EJ = new ArrayMap(i);
+        this.Gp = new ArrayMap(i);
     }
 
     public zza(Collection<E> collection) {
@@ -22,10 +22,10 @@ public class zza<E> extends AbstractSet<E> {
     }
 
     public boolean add(E e) {
-        if (this.EJ.containsKey(e)) {
+        if (this.Gp.containsKey(e)) {
             return false;
         }
-        this.EJ.put(e, e);
+        this.Gp.put(e, e);
         return true;
     }
 
@@ -34,32 +34,32 @@ public class zza<E> extends AbstractSet<E> {
     }
 
     public void clear() {
-        this.EJ.clear();
+        this.Gp.clear();
     }
 
     public boolean contains(Object obj) {
-        return this.EJ.containsKey(obj);
+        return this.Gp.containsKey(obj);
     }
 
     public Iterator<E> iterator() {
-        return this.EJ.keySet().iterator();
+        return this.Gp.keySet().iterator();
     }
 
     public boolean remove(Object obj) {
-        if (!this.EJ.containsKey(obj)) {
+        if (!this.Gp.containsKey(obj)) {
             return false;
         }
-        this.EJ.remove(obj);
+        this.Gp.remove(obj);
         return true;
     }
 
     public int size() {
-        return this.EJ.size();
+        return this.Gp.size();
     }
 
     public boolean zza(zza<? extends E> com_google_android_gms_common_util_zza__extends_E) {
         int size = size();
-        this.EJ.putAll(com_google_android_gms_common_util_zza__extends_E.EJ);
+        this.Gp.putAll(com_google_android_gms_common_util_zza__extends_E.Gp);
         return size() > size;
     }
 }

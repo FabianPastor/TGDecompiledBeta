@@ -11,7 +11,7 @@ import android.os.Parcelable.Creator;
 import android.util.Log;
 import com.google.android.gms.common.annotation.KeepName;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.internal.zzc;
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -23,48 +23,48 @@ import java.util.Map.Entry;
 @KeepName
 public final class DataHolder extends AbstractSafeParcelable implements Closeable {
     public static final Creator<DataHolder> CREATOR = new zze();
-    private static final zza zV = new AnonymousClass1(new String[0], null);
+    private static final zza Cf = new AnonymousClass1(new String[0], null);
+    private final String[] BY;
+    Bundle BZ;
+    private final CursorWindow[] Ca;
+    private final Bundle Cb;
+    int[] Cc;
+    int Cd;
+    private boolean Ce;
     boolean mClosed;
-    private final int mVersionCode;
-    private final int rR;
-    private final String[] zO;
-    Bundle zP;
-    private final CursorWindow[] zQ;
-    private final Bundle zR;
-    int[] zS;
-    int zT;
-    private boolean zU;
+    final int mVersionCode;
+    private final int uo;
 
     public static class zza {
-        private String Aa;
-        private final String[] zO;
-        private final ArrayList<HashMap<String, Object>> zW;
-        private final String zX;
-        private final HashMap<Object, Integer> zY;
-        private boolean zZ;
+        private final String[] BY;
+        private final ArrayList<HashMap<String, Object>> Cg;
+        private final String Ch;
+        private final HashMap<Object, Integer> Ci;
+        private boolean Cj;
+        private String Ck;
 
         private zza(String[] strArr, String str) {
-            this.zO = (String[]) zzac.zzy(strArr);
-            this.zW = new ArrayList();
-            this.zX = str;
-            this.zY = new HashMap();
-            this.zZ = false;
-            this.Aa = null;
+            this.BY = (String[]) zzaa.zzy(strArr);
+            this.Cg = new ArrayList();
+            this.Ch = str;
+            this.Ci = new HashMap();
+            this.Cj = false;
+            this.Ck = null;
         }
 
         private int zzc(HashMap<String, Object> hashMap) {
-            if (this.zX == null) {
+            if (this.Ch == null) {
                 return -1;
             }
-            Object obj = hashMap.get(this.zX);
+            Object obj = hashMap.get(this.Ch);
             if (obj == null) {
                 return -1;
             }
-            Integer num = (Integer) this.zY.get(obj);
+            Integer num = (Integer) this.Ci.get(obj);
             if (num != null) {
                 return num.intValue();
             }
-            this.zY.put(obj, Integer.valueOf(this.zW.size()));
+            this.Ci.put(obj, Integer.valueOf(this.Cg.size()));
             return -1;
         }
 
@@ -81,16 +81,16 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
             zzc.zzu(hashMap);
             int zzc = zzc(hashMap);
             if (zzc == -1) {
-                this.zW.add(hashMap);
+                this.Cg.add(hashMap);
             } else {
-                this.zW.remove(zzc);
-                this.zW.add(zzc, hashMap);
+                this.Cg.remove(zzc);
+                this.Cg.add(zzc, hashMap);
             }
-            this.zZ = false;
+            this.Cj = false;
             return this;
         }
 
-        public DataHolder zzgd(int i) {
+        public DataHolder zzgc(int i) {
             return new DataHolder(this, i, null);
         }
     }
@@ -117,44 +117,44 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
 
     DataHolder(int i, String[] strArr, CursorWindow[] cursorWindowArr, int i2, Bundle bundle) {
         this.mClosed = false;
-        this.zU = true;
+        this.Ce = true;
         this.mVersionCode = i;
-        this.zO = strArr;
-        this.zQ = cursorWindowArr;
-        this.rR = i2;
-        this.zR = bundle;
+        this.BY = strArr;
+        this.Ca = cursorWindowArr;
+        this.uo = i2;
+        this.Cb = bundle;
     }
 
     private DataHolder(zza com_google_android_gms_common_data_DataHolder_zza, int i, Bundle bundle) {
-        this(com_google_android_gms_common_data_DataHolder_zza.zO, zza(com_google_android_gms_common_data_DataHolder_zza, -1), i, bundle);
+        this(com_google_android_gms_common_data_DataHolder_zza.BY, zza(com_google_android_gms_common_data_DataHolder_zza, -1), i, bundle);
     }
 
     public DataHolder(String[] strArr, CursorWindow[] cursorWindowArr, int i, Bundle bundle) {
         this.mClosed = false;
-        this.zU = true;
+        this.Ce = true;
         this.mVersionCode = 1;
-        this.zO = (String[]) zzac.zzy(strArr);
-        this.zQ = (CursorWindow[]) zzac.zzy(cursorWindowArr);
-        this.rR = i;
-        this.zR = bundle;
-        zzate();
+        this.BY = (String[]) zzaa.zzy(strArr);
+        this.Ca = (CursorWindow[]) zzaa.zzy(cursorWindowArr);
+        this.uo = i;
+        this.Cb = bundle;
+        zzaun();
     }
 
     public static DataHolder zza(int i, Bundle bundle) {
-        return new DataHolder(zV, i, bundle);
+        return new DataHolder(Cf, i, bundle);
     }
 
     private static CursorWindow[] zza(zza com_google_android_gms_common_data_DataHolder_zza, int i) {
         int i2 = 0;
-        if (com_google_android_gms_common_data_DataHolder_zza.zO.length == 0) {
+        if (com_google_android_gms_common_data_DataHolder_zza.BY.length == 0) {
             return new CursorWindow[0];
         }
-        List zzb = (i < 0 || i >= com_google_android_gms_common_data_DataHolder_zza.zW.size()) ? com_google_android_gms_common_data_DataHolder_zza.zW : com_google_android_gms_common_data_DataHolder_zza.zW.subList(0, i);
+        List zzb = (i < 0 || i >= com_google_android_gms_common_data_DataHolder_zza.Cg.size()) ? com_google_android_gms_common_data_DataHolder_zza.Cg : com_google_android_gms_common_data_DataHolder_zza.Cg.subList(0, i);
         int size = zzb.size();
         CursorWindow cursorWindow = new CursorWindow(false);
         ArrayList arrayList = new ArrayList();
         arrayList.add(cursorWindow);
-        cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zO.length);
+        cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.BY.length);
         int i3 = 0;
         int i4 = 0;
         while (i3 < size) {
@@ -166,7 +166,7 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
                     Log.d("DataHolder", "Allocating additional cursor window for large data set (row " + i3 + ")");
                     cursorWindow = new CursorWindow(false);
                     cursorWindow.setStartPosition(i3);
-                    cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zO.length);
+                    cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.BY.length);
                     arrayList.add(cursorWindow);
                     if (!cursorWindow.allocRow()) {
                         Log.e("DataHolder", "Unable to allocate row to hold data.");
@@ -176,8 +176,8 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
                 }
                 Map map = (Map) zzb.get(i3);
                 boolean z = true;
-                for (int i7 = 0; i7 < com_google_android_gms_common_data_DataHolder_zza.zO.length && z; i7++) {
-                    String str = com_google_android_gms_common_data_DataHolder_zza.zO[i7];
+                for (int i7 = 0; i7 < com_google_android_gms_common_data_DataHolder_zza.BY.length && z; i7++) {
+                    String str = com_google_android_gms_common_data_DataHolder_zza.BY[i7];
                     Object obj = map.get(str);
                     if (obj == null) {
                         z = cursorWindow.putNull(i3, i7);
@@ -211,7 +211,7 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
                     cursorWindow.freeLastRow();
                     CursorWindow cursorWindow3 = new CursorWindow(false);
                     cursorWindow3.setStartPosition(i3);
-                    cursorWindow3.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zO.length);
+                    cursorWindow3.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.BY.length);
                     arrayList.add(cursorWindow3);
                     i5 = i3 - 1;
                     cursorWindow2 = cursorWindow3;
@@ -237,19 +237,19 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
         return new zza(strArr, null);
     }
 
-    public static DataHolder zzgc(int i) {
+    public static DataHolder zzgb(int i) {
         return zza(i, null);
     }
 
     private void zzi(String str, int i) {
-        if (this.zP == null || !this.zP.containsKey(str)) {
+        if (this.BZ == null || !this.BZ.containsKey(str)) {
             String str2 = "No such column: ";
             String valueOf = String.valueOf(str);
             throw new IllegalArgumentException(valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
         } else if (isClosed()) {
             throw new IllegalArgumentException("Buffer is closed.");
-        } else if (i < 0 || i >= this.zT) {
-            throw new CursorIndexOutOfBoundsException(i, this.zT);
+        } else if (i < 0 || i >= this.Cd) {
+            throw new CursorIndexOutOfBoundsException(i, this.Cd);
         }
     }
 
@@ -257,7 +257,7 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
         synchronized (this) {
             if (!this.mClosed) {
                 this.mClosed = true;
-                for (CursorWindow close : this.zQ) {
+                for (CursorWindow close : this.Ca) {
                     close.close();
                 }
             }
@@ -266,7 +266,7 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
 
     protected void finalize() throws Throwable {
         try {
-            if (this.zU && this.zQ.length > 0 && !isClosed()) {
+            if (this.Ce && this.Ca.length > 0 && !isClosed()) {
                 close();
                 String valueOf = String.valueOf(toString());
                 Log.e("DataBuffer", new StringBuilder(String.valueOf(valueOf).length() + 178).append("Internal data leak within a DataBuffer object detected!  Be sure to explicitly call release() on all DataBuffer extending objects when you are done with them. (internal object: ").append(valueOf).append(")").toString());
@@ -278,15 +278,11 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
     }
 
     public int getCount() {
-        return this.zT;
+        return this.Cd;
     }
 
     public int getStatusCode() {
-        return this.rR;
-    }
-
-    int getVersionCode() {
-        return this.mVersionCode;
+        return this.uo;
     }
 
     public boolean isClosed() {
@@ -303,80 +299,80 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
 
     public void zza(String str, int i, int i2, CharArrayBuffer charArrayBuffer) {
         zzi(str, i);
-        this.zQ[i2].copyStringToBuffer(i, this.zP.getInt(str), charArrayBuffer);
+        this.Ca[i2].copyStringToBuffer(i, this.BZ.getInt(str), charArrayBuffer);
     }
 
-    public Bundle zzasz() {
-        return this.zR;
+    public Bundle zzaui() {
+        return this.Cb;
     }
 
-    public void zzate() {
+    public void zzaun() {
         int i;
         int i2 = 0;
-        this.zP = new Bundle();
-        for (i = 0; i < this.zO.length; i++) {
-            this.zP.putInt(this.zO[i], i);
+        this.BZ = new Bundle();
+        for (i = 0; i < this.BY.length; i++) {
+            this.BZ.putInt(this.BY[i], i);
         }
-        this.zS = new int[this.zQ.length];
+        this.Cc = new int[this.Ca.length];
         i = 0;
-        while (i2 < this.zQ.length) {
-            this.zS[i2] = i;
-            i += this.zQ[i2].getNumRows() - (i - this.zQ[i2].getStartPosition());
+        while (i2 < this.Ca.length) {
+            this.Cc[i2] = i;
+            i += this.Ca[i2].getNumRows() - (i - this.Ca[i2].getStartPosition());
             i2++;
         }
-        this.zT = i;
+        this.Cd = i;
     }
 
-    String[] zzatf() {
-        return this.zO;
+    String[] zzauo() {
+        return this.BY;
     }
 
-    CursorWindow[] zzatg() {
-        return this.zQ;
+    CursorWindow[] zzaup() {
+        return this.Ca;
     }
 
     public long zzb(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].getLong(i, this.zP.getInt(str));
+        return this.Ca[i2].getLong(i, this.BZ.getInt(str));
     }
 
     public int zzc(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].getInt(i, this.zP.getInt(str));
+        return this.Ca[i2].getInt(i, this.BZ.getInt(str));
     }
 
     public String zzd(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].getString(i, this.zP.getInt(str));
+        return this.Ca[i2].getString(i, this.BZ.getInt(str));
     }
 
     public boolean zze(String str, int i, int i2) {
         zzi(str, i);
-        return Long.valueOf(this.zQ[i2].getLong(i, this.zP.getInt(str))).longValue() == 1;
+        return Long.valueOf(this.Ca[i2].getLong(i, this.BZ.getInt(str))).longValue() == 1;
     }
 
     public float zzf(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].getFloat(i, this.zP.getInt(str));
+        return this.Ca[i2].getFloat(i, this.BZ.getInt(str));
     }
 
     public byte[] zzg(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].getBlob(i, this.zP.getInt(str));
+        return this.Ca[i2].getBlob(i, this.BZ.getInt(str));
     }
 
-    public int zzgb(int i) {
+    public int zzga(int i) {
         int i2 = 0;
-        boolean z = i >= 0 && i < this.zT;
-        zzac.zzbr(z);
-        while (i2 < this.zS.length) {
-            if (i < this.zS[i2]) {
+        boolean z = i >= 0 && i < this.Cd;
+        zzaa.zzbs(z);
+        while (i2 < this.Cc.length) {
+            if (i < this.Cc[i2]) {
                 i2--;
                 break;
             }
             i2++;
         }
-        return i2 == this.zS.length ? i2 - 1 : i2;
+        return i2 == this.Cc.length ? i2 - 1 : i2;
     }
 
     public Uri zzh(String str, int i, int i2) {
@@ -384,12 +380,12 @@ public final class DataHolder extends AbstractSafeParcelable implements Closeabl
         return zzd == null ? null : Uri.parse(zzd);
     }
 
-    public boolean zzhm(String str) {
-        return this.zP.containsKey(str);
+    public boolean zzho(String str) {
+        return this.BZ.containsKey(str);
     }
 
     public boolean zzi(String str, int i, int i2) {
         zzi(str, i);
-        return this.zQ[i2].isNull(i, this.zP.getInt(str));
+        return this.Ca[i2].isNull(i, this.BZ.getInt(str));
     }
 }

@@ -6,15 +6,15 @@ import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.gms.common.zze;
 
-public class zza extends com.google.android.gms.common.internal.zzr.zza {
-    int AV;
+public class zza extends com.google.android.gms.common.internal.zzp.zza {
+    int De;
 
-    public static Account zza(zzr com_google_android_gms_common_internal_zzr) {
+    public static Account zza(zzp com_google_android_gms_common_internal_zzp) {
         Account account = null;
-        if (com_google_android_gms_common_internal_zzr != null) {
+        if (com_google_android_gms_common_internal_zzp != null) {
             long clearCallingIdentity = Binder.clearCallingIdentity();
             try {
-                account = com_google_android_gms_common_internal_zzr.getAccount();
+                account = com_google_android_gms_common_internal_zzp.getAccount();
             } catch (RemoteException e) {
                 Log.w("AccountAccessor", "Remote account accessor probably died");
             } finally {
@@ -38,9 +38,9 @@ public class zza extends com.google.android.gms.common.internal.zzr.zza {
 
     public Account getAccount() {
         int callingUid = Binder.getCallingUid();
-        if (callingUid != this.AV) {
+        if (callingUid != this.De) {
             if (zze.zzf(null, callingUid)) {
-                this.AV = callingUid;
+                this.De = callingUid;
             } else {
                 throw new SecurityException("Caller is not GooglePlayServices");
             }

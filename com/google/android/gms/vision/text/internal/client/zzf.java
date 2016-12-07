@@ -7,40 +7,40 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzf implements Creator<SymbolBoxParcel> {
     static void zza(SymbolBoxParcel symbolBoxParcel, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, symbolBoxParcel.versionCode);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zztj(parcel);
+        return zzsz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzaca(i);
+        return zzabq(i);
     }
 
-    public SymbolBoxParcel[] zzaca(int i) {
+    public SymbolBoxParcel[] zzabq(int i) {
         return new SymbolBoxParcel[i];
     }
 
-    public SymbolBoxParcel zztj(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public SymbolBoxParcel zzsz(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new SymbolBoxParcel(i);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

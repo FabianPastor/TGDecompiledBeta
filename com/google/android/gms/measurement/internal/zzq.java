@@ -1,386 +1,335 @@
 package com.google.android.gms.measurement.internal;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.annotation.WorkerThread;
-import com.google.android.gms.common.internal.zzac;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.Pair;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.util.zze;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.google.android.gms.measurement.AppMeasurement;
 
 public class zzq extends zzaa {
+    private final String EC = zzbwd().zzbub();
+    private final long aqN = zzbwd().zzbto();
+    private final char asA;
+    private final zza asB;
+    private final zza asC;
+    private final zza asD;
+    private final zza asE;
+    private final zza asF;
+    private final zza asG;
+    private final zza asH;
+    private final zza asI;
+    private final zza asJ;
 
-    @WorkerThread
-    interface zza {
-        void zza(String str, int i, Throwable th, byte[] bArr, Map<String, List<String>> map);
-    }
+    public class zza {
+        final /* synthetic */ zzq asL;
+        private final boolean asM;
+        private final boolean asN;
+        private final int mPriority;
 
-    @WorkerThread
-    private static class zzb implements Runnable {
-        private final zza apA;
-        private final byte[] apB;
-        private final Map<String, List<String>> apC;
-        private final String ed;
-        private final int zzbqm;
-        private final Throwable zzctw;
-
-        private zzb(String str, zza com_google_android_gms_measurement_internal_zzq_zza, int i, Throwable th, byte[] bArr, Map<String, List<String>> map) {
-            zzac.zzy(com_google_android_gms_measurement_internal_zzq_zza);
-            this.apA = com_google_android_gms_measurement_internal_zzq_zza;
-            this.zzbqm = i;
-            this.zzctw = th;
-            this.apB = bArr;
-            this.ed = str;
-            this.apC = map;
+        zza(zzq com_google_android_gms_measurement_internal_zzq, int i, boolean z, boolean z2) {
+            this.asL = com_google_android_gms_measurement_internal_zzq;
+            this.mPriority = i;
+            this.asM = z;
+            this.asN = z2;
         }
 
-        public void run() {
-            this.apA.zza(this.ed, this.zzbqm, this.zzctw, this.apB, this.apC);
-        }
-    }
-
-    @WorkerThread
-    private class zzc implements Runnable {
-        private final byte[] apD;
-        private final zza apE;
-        private final Map<String, String> apF;
-        final /* synthetic */ zzq apG;
-        private final String ed;
-        private final URL zzbnb;
-
-        public zzc(zzq com_google_android_gms_measurement_internal_zzq, String str, URL url, byte[] bArr, Map<String, String> map, zza com_google_android_gms_measurement_internal_zzq_zza) {
-            this.apG = com_google_android_gms_measurement_internal_zzq;
-            zzac.zzhz(str);
-            zzac.zzy(url);
-            zzac.zzy(com_google_android_gms_measurement_internal_zzq_zza);
-            this.zzbnb = url;
-            this.apD = bArr;
-            this.apE = com_google_android_gms_measurement_internal_zzq_zza;
-            this.ed = str;
-            this.apF = map;
+        public void log(String str) {
+            this.asL.zza(this.mPriority, this.asM, this.asN, str, null, null, null);
         }
 
-        public void run() {
-            HttpURLConnection zzc;
-            OutputStream outputStream;
-            Throwable e;
-            Map map;
-            int i;
-            HttpURLConnection httpURLConnection;
-            Throwable th;
-            Map map2;
-            this.apG.zzbuv();
-            int i2 = 0;
-            try {
-                this.apG.zzfb(this.ed);
-                zzc = this.apG.zzc(this.zzbnb);
-                try {
-                    if (this.apF != null) {
-                        for (Entry entry : this.apF.entrySet()) {
-                            zzc.addRequestProperty((String) entry.getKey(), (String) entry.getValue());
-                        }
-                    }
-                    if (this.apD != null) {
-                        byte[] zzj = this.apG.zzbvc().zzj(this.apD);
-                        this.apG.zzbvg().zzbwj().zzj("Uploading data. size", Integer.valueOf(zzj.length));
-                        zzc.setDoOutput(true);
-                        zzc.addRequestProperty("Content-Encoding", "gzip");
-                        zzc.setFixedLengthStreamingMode(zzj.length);
-                        zzc.connect();
-                        outputStream = zzc.getOutputStream();
-                        try {
-                            outputStream.write(zzj);
-                            outputStream.close();
-                        } catch (IOException e2) {
-                            e = e2;
-                            map = null;
-                            i = 0;
-                            httpURLConnection = zzc;
-                            if (outputStream != null) {
-                                try {
-                                    outputStream.close();
-                                } catch (IOException e3) {
-                                    this.apG.zzbvg().zzbwc().zzj("Error closing HTTP compressed POST connection output stream", e3);
-                                }
-                            }
-                            if (httpURLConnection != null) {
-                                httpURLConnection.disconnect();
-                            }
-                            this.apG.zzsm();
-                            this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i, e, null, map));
-                        } catch (Throwable th2) {
-                            th = th2;
-                            map2 = null;
-                            if (outputStream != null) {
-                                try {
-                                    outputStream.close();
-                                } catch (IOException e32) {
-                                    this.apG.zzbvg().zzbwc().zzj("Error closing HTTP compressed POST connection output stream", e32);
-                                }
-                            }
-                            if (zzc != null) {
-                                zzc.disconnect();
-                            }
-                            this.apG.zzsm();
-                            this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i2, null, null, map2));
-                            throw th;
-                        }
-                    }
-                    i2 = zzc.getResponseCode();
-                    map2 = zzc.getHeaderFields();
-                } catch (IOException e4) {
-                    e = e4;
-                    map = null;
-                    i = i2;
-                    outputStream = null;
-                    httpURLConnection = zzc;
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
-                    if (httpURLConnection != null) {
-                        httpURLConnection.disconnect();
-                    }
-                    this.apG.zzsm();
-                    this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i, e, null, map));
-                } catch (Throwable th3) {
-                    th = th3;
-                    map2 = null;
-                    outputStream = null;
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
-                    if (zzc != null) {
-                        zzc.disconnect();
-                    }
-                    this.apG.zzsm();
-                    this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i2, null, null, map2));
-                    throw th;
-                }
-                try {
-                    byte[] zza = this.apG.zzc(zzc);
-                    if (zzc != null) {
-                        zzc.disconnect();
-                    }
-                    this.apG.zzsm();
-                    this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i2, null, zza, map2));
-                } catch (IOException e5) {
-                    e = e5;
-                    map = map2;
-                    i = i2;
-                    outputStream = null;
-                    httpURLConnection = zzc;
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
-                    if (httpURLConnection != null) {
-                        httpURLConnection.disconnect();
-                    }
-                    this.apG.zzsm();
-                    this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i, e, null, map));
-                } catch (Throwable th32) {
-                    th = th32;
-                    outputStream = null;
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
-                    if (zzc != null) {
-                        zzc.disconnect();
-                    }
-                    this.apG.zzsm();
-                    this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i2, null, null, map2));
-                    throw th;
-                }
-            } catch (IOException e6) {
-                e = e6;
-                map = null;
-                i = 0;
-                outputStream = null;
-                httpURLConnection = null;
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (httpURLConnection != null) {
-                    httpURLConnection.disconnect();
-                }
-                this.apG.zzsm();
-                this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i, e, null, map));
-            } catch (Throwable th322) {
-                th = th322;
-                map2 = null;
-                zzc = null;
-                outputStream = null;
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (zzc != null) {
-                    zzc.disconnect();
-                }
-                this.apG.zzsm();
-                this.apG.zzbvf().zzm(new zzb(this.ed, this.apE, i2, null, null, map2));
-                throw th;
-            }
+        public void zzd(String str, Object obj, Object obj2, Object obj3) {
+            this.asL.zza(this.mPriority, this.asM, this.asN, str, obj, obj2, obj3);
+        }
+
+        public void zze(String str, Object obj, Object obj2) {
+            this.asL.zza(this.mPriority, this.asM, this.asN, str, obj, obj2, null);
+        }
+
+        public void zzj(String str, Object obj) {
+            this.asL.zza(this.mPriority, this.asM, this.asN, str, obj, null, null);
         }
     }
 
-    public zzq(zzx com_google_android_gms_measurement_internal_zzx) {
+    zzq(zzx com_google_android_gms_measurement_internal_zzx) {
         super(com_google_android_gms_measurement_internal_zzx);
+        if (zzbwd().zzaef()) {
+            zzbwd().zzayi();
+            this.asA = 'C';
+        } else {
+            zzbwd().zzayi();
+            this.asA = 'c';
+        }
+        this.asB = new zza(this, 6, false, false);
+        this.asC = new zza(this, 6, true, false);
+        this.asD = new zza(this, 6, false, true);
+        this.asE = new zza(this, 5, false, false);
+        this.asF = new zza(this, 5, true, false);
+        this.asG = new zza(this, 5, false, true);
+        this.asH = new zza(this, 4, false, false);
+        this.asI = new zza(this, 3, false, false);
+        this.asJ = new zza(this, 2, false, false);
     }
 
-    @WorkerThread
-    private byte[] zzc(HttpURLConnection httpURLConnection) throws IOException {
-        InputStream inputStream = null;
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            inputStream = httpURLConnection.getInputStream();
-            byte[] bArr = new byte[1024];
-            while (true) {
-                int read = inputStream.read(bArr);
-                if (read <= 0) {
-                    break;
-                }
-                byteArrayOutputStream.write(bArr, 0, read);
+    static String zza(boolean z, String str, Object obj, Object obj2, Object obj3) {
+        if (str == null) {
+            Object obj4 = "";
+        }
+        Object zzc = zzc(z, obj);
+        Object zzc2 = zzc(z, obj2);
+        Object zzc3 = zzc(z, obj3);
+        StringBuilder stringBuilder = new StringBuilder();
+        String str2 = "";
+        if (!TextUtils.isEmpty(obj4)) {
+            stringBuilder.append(obj4);
+            str2 = ": ";
+        }
+        if (!TextUtils.isEmpty(zzc)) {
+            stringBuilder.append(str2);
+            stringBuilder.append(zzc);
+            str2 = ", ";
+        }
+        if (!TextUtils.isEmpty(zzc2)) {
+            stringBuilder.append(str2);
+            stringBuilder.append(zzc2);
+            str2 = ", ";
+        }
+        if (!TextUtils.isEmpty(zzc3)) {
+            stringBuilder.append(str2);
+            stringBuilder.append(zzc3);
+        }
+        return stringBuilder.toString();
+    }
+
+    static String zzc(boolean z, Object obj) {
+        if (obj == null) {
+            return "";
+        }
+        Object valueOf = obj instanceof Integer ? Long.valueOf((long) ((Integer) obj).intValue()) : obj;
+        if (valueOf instanceof Long) {
+            if (!z) {
+                return String.valueOf(valueOf);
             }
-            byte[] toByteArray = byteArrayOutputStream.toByteArray();
-            return toByteArray;
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
+            if (Math.abs(((Long) valueOf).longValue()) < 100) {
+                return String.valueOf(valueOf);
+            }
+            String str = String.valueOf(valueOf).charAt(0) == '-' ? "-" : "";
+            String valueOf2 = String.valueOf(Math.abs(((Long) valueOf).longValue()));
+            return new StringBuilder((String.valueOf(str).length() + 43) + String.valueOf(str).length()).append(str).append(Math.round(Math.pow(10.0d, (double) (valueOf2.length() - 1)))).append("...").append(str).append(Math.round(Math.pow(10.0d, (double) valueOf2.length()) - 1.0d)).toString();
+        } else if (valueOf instanceof Boolean) {
+            return String.valueOf(valueOf);
+        } else {
+            if (!(valueOf instanceof Throwable)) {
+                return z ? "-" : String.valueOf(valueOf);
+            } else {
+                Throwable th = (Throwable) valueOf;
+                StringBuilder stringBuilder = new StringBuilder(z ? th.getClass().getName() : th.toString());
+                String zzmj = zzmj(AppMeasurement.class.getCanonicalName());
+                String zzmj2 = zzmj(zzx.class.getCanonicalName());
+                for (StackTraceElement stackTraceElement : th.getStackTrace()) {
+                    if (!stackTraceElement.isNativeMethod()) {
+                        String className = stackTraceElement.getClassName();
+                        if (className != null) {
+                            className = zzmj(className);
+                            if (className.equals(zzmj) || className.equals(zzmj2)) {
+                                stringBuilder.append(": ");
+                                stringBuilder.append(stackTraceElement);
+                                break;
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+                return stringBuilder.toString();
             }
         }
+    }
+
+    private static String zzmj(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return "";
+        }
+        int lastIndexOf = str.lastIndexOf(46);
+        return lastIndexOf != -1 ? str.substring(0, lastIndexOf) : str;
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
         return super.getContext();
     }
 
-    @WorkerThread
-    public void zza(String str, URL url, Map<String, String> map, zza com_google_android_gms_measurement_internal_zzq_zza) {
-        zzyl();
-        zzaax();
-        zzac.zzy(url);
-        zzac.zzy(com_google_android_gms_measurement_internal_zzq_zza);
-        zzbvf().zzn(new zzc(this, str, url, null, map, com_google_android_gms_measurement_internal_zzq_zza));
-    }
-
-    @WorkerThread
-    public void zza(String str, URL url, byte[] bArr, Map<String, String> map, zza com_google_android_gms_measurement_internal_zzq_zza) {
-        zzyl();
-        zzaax();
-        zzac.zzy(url);
-        zzac.zzy(bArr);
-        zzac.zzy(com_google_android_gms_measurement_internal_zzq_zza);
-        zzbvf().zzn(new zzc(this, str, url, bArr, map, com_google_android_gms_measurement_internal_zzq_zza));
-    }
-
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
-    }
-
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
-    }
-
-    public boolean zzafa() {
-        NetworkInfo activeNetworkInfo;
-        zzaax();
-        try {
-            activeNetworkInfo = ((ConnectivityManager) getContext().getSystemService("connectivity")).getActiveNetworkInfo();
-        } catch (SecurityException e) {
-            activeNetworkInfo = null;
+    protected void zza(int i, boolean z, boolean z2, String str, Object obj, Object obj2, Object obj3) {
+        if (!z && zzbi(i)) {
+            zzn(i, zza(false, str, obj, obj2, obj3));
         }
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public /* bridge */ /* synthetic */ void zzbuv() {
-        super.zzbuv();
-    }
-
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
-    }
-
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
-    }
-
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
-    }
-
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
-    }
-
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
-    }
-
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
-    }
-
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
-    }
-
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
-    }
-
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
-    }
-
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
-    }
-
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
-    }
-
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
-    }
-
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
-    }
-
-    @WorkerThread
-    protected HttpURLConnection zzc(URL url) throws IOException {
-        URLConnection openConnection = url.openConnection();
-        if (openConnection instanceof HttpURLConnection) {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) openConnection;
-            httpURLConnection.setDefaultUseCaches(false);
-            httpURLConnection.setConnectTimeout((int) zzbvi().zzbua());
-            httpURLConnection.setReadTimeout((int) zzbvi().zzbub());
-            httpURLConnection.setInstanceFollowRedirects(false);
-            httpURLConnection.setDoInput(true);
-            return httpURLConnection;
+        if (!z2 && i >= 5) {
+            zzb(i, str, obj, obj2, obj3);
         }
-        throw new IOException("Failed to obtain HTTP connection");
     }
 
-    protected void zzfb(String str) {
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    protected void zzsm() {
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
-    public /* bridge */ /* synthetic */ void zzyl() {
-        super.zzyl();
+    public void zzb(int i, String str, Object obj, Object obj2, Object obj3) {
+        zzaa.zzy(str);
+        zzw zzbxs = this.aqw.zzbxs();
+        if (zzbxs == null) {
+            zzn(6, "Scheduler not set. Not logging error/warn.");
+        } else if (!zzbxs.isInitialized()) {
+            zzn(6, "Scheduler not initialized. Not logging error/warn.");
+        } else if (zzbxs.zzbyn()) {
+            zzn(6, "Scheduler shutdown. Not logging error/warn.");
+        } else {
+            if (i < 0) {
+                i = 0;
+            }
+            if (i >= "01VDIWEA?".length()) {
+                i = "01VDIWEA?".length() - 1;
+            }
+            String valueOf = String.valueOf("1");
+            char charAt = "01VDIWEA?".charAt(i);
+            char c = this.asA;
+            long j = this.aqN;
+            String valueOf2 = String.valueOf(zza(true, str, obj, obj2, obj3));
+            valueOf = new StringBuilder((String.valueOf(valueOf).length() + 23) + String.valueOf(valueOf2).length()).append(valueOf).append(charAt).append(c).append(j).append(":").append(valueOf2).toString();
+            if (valueOf.length() > 1024) {
+                valueOf = str.substring(0, 1024);
+            }
+            zzbxs.zzm(new Runnable(this) {
+                final /* synthetic */ zzq asL;
+
+                public void run() {
+                    zzt zzbwc = this.asL.aqw.zzbwc();
+                    if (!zzbwc.isInitialized() || zzbwc.zzbyn()) {
+                        this.asL.zzn(6, "Persisted config not initialized . Not logging error/warn.");
+                    } else {
+                        zzbwc.asY.zzfg(valueOf);
+                    }
+                }
+            });
+        }
     }
 
-    protected void zzym() {
+    protected boolean zzbi(int i) {
+        return Log.isLoggable(this.EC, i);
+    }
+
+    public /* bridge */ /* synthetic */ void zzbvo() {
+        super.zzbvo();
+    }
+
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
+    }
+
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
+    }
+
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
+    }
+
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
+    }
+
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
+    }
+
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
+    }
+
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
+    }
+
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
+    }
+
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
+    }
+
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
+    }
+
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
+    }
+
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
+    }
+
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
+    }
+
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
+    }
+
+    public zza zzbwy() {
+        return this.asB;
+    }
+
+    public zza zzbwz() {
+        return this.asC;
+    }
+
+    public zza zzbxa() {
+        return this.asE;
+    }
+
+    public zza zzbxb() {
+        return this.asG;
+    }
+
+    public zza zzbxc() {
+        return this.asH;
+    }
+
+    public zza zzbxd() {
+        return this.asI;
+    }
+
+    public zza zzbxe() {
+        return this.asJ;
+    }
+
+    public String zzbxf() {
+        Pair zzagw = zzbwc().asY.zzagw();
+        if (zzagw == null || zzagw == zzt.asX) {
+            return null;
+        }
+        String valueOf = String.valueOf(String.valueOf(zzagw.second));
+        String str = (String) zzagw.first;
+        return new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(str).length()).append(valueOf).append(":").append(str).toString();
+    }
+
+    protected void zzn(int i, String str) {
+        Log.println(i, this.EC, str);
+    }
+
+    public /* bridge */ /* synthetic */ void zzzx() {
+        super.zzzx();
+    }
+
+    protected void zzzy() {
     }
 }

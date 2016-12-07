@@ -5,22 +5,22 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzr.zza;
+import com.google.android.gms.common.internal.zzp.zza;
 
 public class ResolveAccountResponse extends AbstractSafeParcelable {
-    public static final Creator<ResolveAccountResponse> CREATOR = new zzae();
-    IBinder AW;
-    private boolean CX;
+    public static final Creator<ResolveAccountResponse> CREATOR = new zzac();
+    IBinder Df;
+    private ConnectionResult EJ;
+    private boolean EK;
     final int mVersionCode;
-    private ConnectionResult vm;
-    private boolean xz;
+    private boolean zN;
 
     ResolveAccountResponse(int i, IBinder iBinder, ConnectionResult connectionResult, boolean z, boolean z2) {
         this.mVersionCode = i;
-        this.AW = iBinder;
-        this.vm = connectionResult;
-        this.xz = z;
-        this.CX = z2;
+        this.Df = iBinder;
+        this.EJ = connectionResult;
+        this.zN = z;
+        this.EK = z2;
     }
 
     public boolean equals(Object obj) {
@@ -31,26 +31,26 @@ public class ResolveAccountResponse extends AbstractSafeParcelable {
             return false;
         }
         ResolveAccountResponse resolveAccountResponse = (ResolveAccountResponse) obj;
-        return this.vm.equals(resolveAccountResponse.vm) && zzavd().equals(resolveAccountResponse.zzavd());
+        return this.EJ.equals(resolveAccountResponse.EJ) && zzawm().equals(resolveAccountResponse.zzawm());
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzae.zza(this, parcel, i);
+        zzac.zza(this, parcel, i);
     }
 
-    public zzr zzavd() {
-        return zza.zzdr(this.AW);
+    public zzp zzawm() {
+        return zza.zzdr(this.Df);
     }
 
-    public ConnectionResult zzave() {
-        return this.vm;
+    public ConnectionResult zzawn() {
+        return this.EJ;
     }
 
-    public boolean zzavf() {
-        return this.xz;
+    public boolean zzawo() {
+        return this.zN;
     }
 
-    public boolean zzavg() {
-        return this.CX;
+    public boolean zzawp() {
+        return this.EK;
     }
 }

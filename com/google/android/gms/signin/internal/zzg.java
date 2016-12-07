@@ -13,83 +13,83 @@ import com.google.android.gms.auth.api.signin.internal.zzk;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.internal.ResolveAccountRequest;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.internal.zzh;
-import com.google.android.gms.common.internal.zzl;
-import com.google.android.gms.common.internal.zzr;
-import com.google.android.gms.internal.zzwz;
-import com.google.android.gms.internal.zzxa;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzf;
+import com.google.android.gms.common.internal.zzj;
+import com.google.android.gms.common.internal.zzp;
+import com.google.android.gms.internal.zzxp;
+import com.google.android.gms.internal.zzxq;
 import com.google.android.gms.signin.internal.zze.zza;
 
-public class zzg extends zzl<zze> implements zzwz {
-    private Integer Ca;
-    private final boolean aAk;
-    private final Bundle aAl;
-    private final zzh xB;
+public class zzg extends zzj<zze> implements zzxp {
+    private Integer DM;
+    private final Bundle aDk;
+    private final boolean aDv;
+    private final zzf zP;
 
-    public zzg(Context context, Looper looper, boolean z, zzh com_google_android_gms_common_internal_zzh, Bundle bundle, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        super(context, looper, 44, com_google_android_gms_common_internal_zzh, connectionCallbacks, onConnectionFailedListener);
-        this.aAk = z;
-        this.xB = com_google_android_gms_common_internal_zzh;
-        this.aAl = bundle;
-        this.Ca = com_google_android_gms_common_internal_zzh.zzaun();
+    public zzg(Context context, Looper looper, boolean z, zzf com_google_android_gms_common_internal_zzf, Bundle bundle, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
+        super(context, looper, 44, com_google_android_gms_common_internal_zzf, connectionCallbacks, onConnectionFailedListener);
+        this.aDv = z;
+        this.zP = com_google_android_gms_common_internal_zzf;
+        this.aDk = bundle;
+        this.DM = com_google_android_gms_common_internal_zzf.zzavw();
     }
 
-    public zzg(Context context, Looper looper, boolean z, zzh com_google_android_gms_common_internal_zzh, zzxa com_google_android_gms_internal_zzxa, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        this(context, looper, z, com_google_android_gms_common_internal_zzh, zza(com_google_android_gms_common_internal_zzh), connectionCallbacks, onConnectionFailedListener);
+    public zzg(Context context, Looper looper, boolean z, zzf com_google_android_gms_common_internal_zzf, zzxq com_google_android_gms_internal_zzxq, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
+        this(context, looper, z, com_google_android_gms_common_internal_zzf, zza(com_google_android_gms_common_internal_zzf), connectionCallbacks, onConnectionFailedListener);
     }
 
-    public static Bundle zza(zzh com_google_android_gms_common_internal_zzh) {
-        zzxa zzaum = com_google_android_gms_common_internal_zzh.zzaum();
-        Integer zzaun = com_google_android_gms_common_internal_zzh.zzaun();
+    public static Bundle zza(zzf com_google_android_gms_common_internal_zzf) {
+        zzxq zzavv = com_google_android_gms_common_internal_zzf.zzavv();
+        Integer zzavw = com_google_android_gms_common_internal_zzf.zzavw();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("com.google.android.gms.signin.internal.clientRequestedAccount", com_google_android_gms_common_internal_zzh.getAccount());
-        if (zzaun != null) {
-            bundle.putInt("com.google.android.gms.common.internal.ClientSettings.sessionId", zzaun.intValue());
+        bundle.putParcelable("com.google.android.gms.signin.internal.clientRequestedAccount", com_google_android_gms_common_internal_zzf.getAccount());
+        if (zzavw != null) {
+            bundle.putInt("com.google.android.gms.common.internal.ClientSettings.sessionId", zzavw.intValue());
         }
-        if (zzaum != null) {
-            bundle.putBoolean("com.google.android.gms.signin.internal.offlineAccessRequested", zzaum.zzcdb());
-            bundle.putBoolean("com.google.android.gms.signin.internal.idTokenRequested", zzaum.zzahk());
-            bundle.putString("com.google.android.gms.signin.internal.serverClientId", zzaum.zzahn());
+        if (zzavv != null) {
+            bundle.putBoolean("com.google.android.gms.signin.internal.offlineAccessRequested", zzavv.zzcdd());
+            bundle.putBoolean("com.google.android.gms.signin.internal.idTokenRequested", zzavv.zzaiu());
+            bundle.putString("com.google.android.gms.signin.internal.serverClientId", zzavv.zzaix());
             bundle.putBoolean("com.google.android.gms.signin.internal.usePromptModeForAuthCode", true);
-            bundle.putBoolean("com.google.android.gms.signin.internal.forceCodeForRefreshToken", zzaum.zzahm());
-            bundle.putString("com.google.android.gms.signin.internal.hostedDomain", zzaum.zzaho());
-            bundle.putBoolean("com.google.android.gms.signin.internal.waitForAccessTokenRefresh", zzaum.zzcdc());
-            if (zzaum.zzcdd() != null) {
-                bundle.putLong("com.google.android.gms.signin.internal.authApiSignInModuleVersion", zzaum.zzcdd().longValue());
+            bundle.putBoolean("com.google.android.gms.signin.internal.forceCodeForRefreshToken", zzavv.zzaiw());
+            bundle.putString("com.google.android.gms.signin.internal.hostedDomain", zzavv.zzaiy());
+            bundle.putBoolean("com.google.android.gms.signin.internal.waitForAccessTokenRefresh", zzavv.zzcde());
+            if (zzavv.zzcdf() != null) {
+                bundle.putLong("com.google.android.gms.signin.internal.authApiSignInModuleVersion", zzavv.zzcdf().longValue());
             }
-            if (zzaum.zzcde() != null) {
-                bundle.putLong("com.google.android.gms.signin.internal.realClientLibraryVersion", zzaum.zzcde().longValue());
+            if (zzavv.zzcdg() != null) {
+                bundle.putLong("com.google.android.gms.signin.internal.realClientLibraryVersion", zzavv.zzcdg().longValue());
             }
         }
         return bundle;
     }
 
-    private ResolveAccountRequest zzcdj() {
-        Account zzatv = this.xB.zzatv();
+    private ResolveAccountRequest zzcdl() {
+        Account zzave = this.zP.zzave();
         GoogleSignInAccount googleSignInAccount = null;
-        if ("<<default account>>".equals(zzatv.name)) {
-            googleSignInAccount = zzk.zzbd(getContext()).zzaic();
+        if ("<<default account>>".equals(zzave.name)) {
+            googleSignInAccount = zzk.zzba(getContext()).zzajm();
         }
-        return new ResolveAccountRequest(zzatv, this.Ca.intValue(), googleSignInAccount);
+        return new ResolveAccountRequest(zzave, this.DM.intValue(), googleSignInAccount);
     }
 
     public void connect() {
         zza(new zzi(this));
     }
 
-    public void zza(zzr com_google_android_gms_common_internal_zzr, boolean z) {
+    public void zza(zzp com_google_android_gms_common_internal_zzp, boolean z) {
         try {
-            ((zze) zzatx()).zza(com_google_android_gms_common_internal_zzr, this.Ca.intValue(), z);
+            ((zze) zzavg()).zza(com_google_android_gms_common_internal_zzp, this.DM.intValue(), z);
         } catch (RemoteException e) {
             Log.w("SignInClientImpl", "Remote service probably died when saveDefaultAccount is called");
         }
     }
 
     public void zza(zzd com_google_android_gms_signin_internal_zzd) {
-        zzac.zzb((Object) com_google_android_gms_signin_internal_zzd, (Object) "Expecting a valid ISignInCallbacks");
+        zzaa.zzb((Object) com_google_android_gms_signin_internal_zzd, (Object) "Expecting a valid ISignInCallbacks");
         try {
-            ((zze) zzatx()).zza(new SignInRequest(zzcdj()), com_google_android_gms_signin_internal_zzd);
+            ((zze) zzavg()).zza(new SignInRequest(zzcdl()), com_google_android_gms_signin_internal_zzd);
         } catch (Throwable e) {
             Log.w("SignInClientImpl", "Remote service probably died when signIn is called");
             try {
@@ -100,38 +100,38 @@ public class zzg extends zzl<zze> implements zzwz {
         }
     }
 
-    protected Bundle zzagl() {
-        if (!getContext().getPackageName().equals(this.xB.zzauj())) {
-            this.aAl.putString("com.google.android.gms.signin.internal.realClientPackageName", this.xB.zzauj());
+    protected Bundle zzahv() {
+        if (!getContext().getPackageName().equals(this.zP.zzavs())) {
+            this.aDk.putString("com.google.android.gms.signin.internal.realClientPackageName", this.zP.zzavs());
         }
-        return this.aAl;
+        return this.aDk;
     }
 
-    public boolean zzahd() {
-        return this.aAk;
+    public boolean zzain() {
+        return this.aDv;
     }
 
-    public void zzcda() {
+    public void zzcdc() {
         try {
-            ((zze) zzatx()).zzaaf(this.Ca.intValue());
+            ((zze) zzavg()).zzzv(this.DM.intValue());
         } catch (RemoteException e) {
             Log.w("SignInClientImpl", "Remote service probably died when clearAccountFromSessionStore is called");
         }
     }
 
     protected /* synthetic */ IInterface zzh(IBinder iBinder) {
-        return zzlc(iBinder);
+        return zzkx(iBinder);
     }
 
-    protected String zzix() {
+    protected String zzjx() {
         return "com.google.android.gms.signin.service.START";
     }
 
-    protected String zziy() {
+    protected String zzjy() {
         return "com.google.android.gms.signin.internal.ISignInService";
     }
 
-    protected zze zzlc(IBinder iBinder) {
-        return zza.zzlb(iBinder);
+    protected zze zzkx(IBinder iBinder) {
+        return zza.zzkw(iBinder);
     }
 }

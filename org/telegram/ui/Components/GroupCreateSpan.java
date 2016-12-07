@@ -46,6 +46,7 @@ public class GroupCreateSpan extends View {
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         this.avatarDrawable.setInfo(user);
+        this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
         this.imageReceiver = new ImageReceiver();
         this.imageReceiver.setRoundRadius(AndroidUtilities.dp(16.0f));
         this.imageReceiver.setParentView(this);
@@ -66,7 +67,7 @@ public class GroupCreateSpan extends View {
             photo = user.photo.photo_small;
         }
         this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, true);
-        int color = AvatarDrawable.getGroupCreateColor(this.uid);
+        int color = AvatarDrawable.getGroupCreateColor(5);
         this.colors[0] = Color.red(-855310);
         this.colors[1] = Color.red(color) - 20;
         this.colors[2] = Color.green(-855310);

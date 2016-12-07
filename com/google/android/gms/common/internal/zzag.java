@@ -2,36 +2,37 @@ package com.google.android.gms.common.internal;
 
 import android.content.Context;
 import android.os.IBinder;
-import android.view.View;
-import com.google.android.gms.dynamic.zze;
-import com.google.android.gms.dynamic.zzg;
-import com.google.android.gms.dynamic.zzg.zza;
+import android.os.IInterface;
+import android.os.Looper;
+import com.google.android.gms.common.api.Api.zzg;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
-public final class zzag extends zzg<zzy> {
-    private static final zzag Da = new zzag();
+public class zzag<T extends IInterface> extends zzj<T> {
+    private final zzg<T> EO;
 
-    private zzag() {
-        super("com.google.android.gms.common.ui.SignInButtonCreatorImpl");
+    public zzag(Context context, Looper looper, int i, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener, zzf com_google_android_gms_common_internal_zzf, zzg<T> com_google_android_gms_common_api_Api_zzg_T) {
+        super(context, looper, i, com_google_android_gms_common_internal_zzf, connectionCallbacks, onConnectionFailedListener);
+        this.EO = com_google_android_gms_common_api_Api_zzg_T;
     }
 
-    public static View zzb(Context context, int i, int i2) throws zza {
-        return Da.zzc(context, i, i2);
+    public zzg<T> zzawt() {
+        return this.EO;
     }
 
-    private View zzc(Context context, int i, int i2) throws zza {
-        try {
-            SignInButtonConfig signInButtonConfig = new SignInButtonConfig(i, i2, null);
-            return (View) zze.zzae(((zzy) zzcu(context)).zza(zze.zzac(context), signInButtonConfig));
-        } catch (Throwable e) {
-            throw new zza("Could not get button with size " + i + " and color " + i2, e);
-        }
+    protected void zzc(int i, T t) {
+        this.EO.zza(i, t);
     }
 
-    public /* synthetic */ Object zzc(IBinder iBinder) {
-        return zzdz(iBinder);
+    protected T zzh(IBinder iBinder) {
+        return this.EO.zzh(iBinder);
     }
 
-    public zzy zzdz(IBinder iBinder) {
-        return zzy.zza.zzdy(iBinder);
+    protected String zzjx() {
+        return this.EO.zzjx();
+    }
+
+    protected String zzjy() {
+        return this.EO.zzjy();
     }
 }

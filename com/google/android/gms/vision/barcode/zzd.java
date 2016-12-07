@@ -9,7 +9,7 @@ import com.google.android.gms.vision.barcode.Barcode.CalendarEvent;
 
 public class zzd implements Creator<CalendarEvent> {
     static void zza(CalendarEvent calendarEvent, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, calendarEvent.versionCode);
         zzb.zza(parcel, 2, calendarEvent.summary, false);
         zzb.zza(parcel, 3, calendarEvent.description, false);
@@ -18,24 +18,24 @@ public class zzd implements Creator<CalendarEvent> {
         zzb.zza(parcel, 6, calendarEvent.status, false);
         zzb.zza(parcel, 7, calendarEvent.start, i, false);
         zzb.zza(parcel, 8, calendarEvent.end, i, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsr(parcel);
+        return zzsh(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabg(i);
+        return zzaaw(i);
     }
 
-    public CalendarEvent[] zzabg(int i) {
+    public CalendarEvent[] zzaaw(int i) {
         return new CalendarEvent[i];
     }
 
-    public CalendarEvent zzsr(Parcel parcel) {
+    public CalendarEvent zzsh(Parcel parcel) {
         CalendarDateTime calendarDateTime = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         CalendarDateTime calendarDateTime2 = null;
         String str = null;
@@ -43,41 +43,41 @@ public class zzd implements Creator<CalendarEvent> {
         String str3 = null;
         String str4 = null;
         String str5 = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str5 = zza.zzq(parcel, zzcp);
+                    str5 = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    str4 = zza.zzq(parcel, zzcp);
+                    str4 = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str3 = zza.zzq(parcel, zzcp);
+                    str3 = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 6:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 7:
-                    calendarDateTime2 = (CalendarDateTime) zza.zza(parcel, zzcp, CalendarDateTime.CREATOR);
+                    calendarDateTime2 = (CalendarDateTime) zza.zza(parcel, zzcq, CalendarDateTime.CREATOR);
                     break;
                 case 8:
-                    calendarDateTime = (CalendarDateTime) zza.zza(parcel, zzcp, CalendarDateTime.CREATOR);
+                    calendarDateTime = (CalendarDateTime) zza.zza(parcel, zzcq, CalendarDateTime.CREATOR);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new CalendarEvent(i, str5, str4, str3, str2, str, calendarDateTime2, calendarDateTime);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

@@ -1,12 +1,17 @@
 package org.telegram.ui;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -59,8 +64,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private boolean allowBots = true;
     private boolean allowUsernameSearch = true;
     private int chat_id;
+    private boolean checkPermission = true;
     private boolean createSecretChat;
-    private boolean creatingChat = false;
+    private boolean creatingChat;
     private ContactsActivityDelegate delegate;
     private boolean destroyAfterSelect;
     private TextView emptyTextView;
@@ -70,6 +76,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private boolean needForwardCount = true;
     private boolean needPhonebook;
     private boolean onlyUsers;
+    private AlertDialog permissionDialog;
     private boolean returnAsResult;
     private SearchAdapter searchListViewAdapter;
     private boolean searchWas;
@@ -467,6 +474,75 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         super.onResume();
         if (this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
+        }
+        if (this.checkPermission && VERSION.SDK_INT >= 23) {
+            Activity activity = getParentActivity();
+            if (activity != null) {
+                this.checkPermission = false;
+                if (activity.checkSelfPermission("android.permission.READ_CONTACTS") == 0) {
+                    return;
+                }
+                if (activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
+                    Builder builder = new Builder(activity);
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setMessage(LocaleController.getString("PermissionContacts", R.string.PermissionContacts));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    Dialog create = builder.create();
+                    this.permissionDialog = create;
+                    showDialog(create);
+                    return;
+                }
+                askForPermissons();
+            }
+        }
+    }
+
+    protected void onDialogDismiss(Dialog dialog) {
+        super.onDialogDismiss(dialog);
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
+            askForPermissons();
+        }
+    }
+
+    @TargetApi(23)
+    private void askForPermissons() {
+        Activity activity = getParentActivity();
+        if (activity != null) {
+            ArrayList<String> permissons = new ArrayList();
+            if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
+                permissons.add("android.permission.READ_CONTACTS");
+                permissons.add("android.permission.WRITE_CONTACTS");
+                permissons.add("android.permission.GET_ACCOUNTS");
+            }
+            activity.requestPermissions((String[]) permissons.toArray(new String[permissons.size()]), 1);
+        }
+    }
+
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            int a = 0;
+            while (a < permissions.length) {
+                if (grantResults.length > a && grantResults[a] == 0) {
+                    String str = permissions[a];
+                    Object obj = -1;
+                    switch (str.hashCode()) {
+                        case 1977429404:
+                            if (str.equals("android.permission.READ_CONTACTS")) {
+                                obj = null;
+                                break;
+                            }
+                            break;
+                    }
+                    switch (obj) {
+                        case null:
+                            ContactsController.getInstance().readContacts();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                a++;
+            }
         }
     }
 

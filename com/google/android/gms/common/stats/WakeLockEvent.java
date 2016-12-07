@@ -6,38 +6,38 @@ import android.text.TextUtils;
 import java.util.List;
 
 public final class WakeLockEvent extends StatsEvent {
-    public static final Creator<WakeLockEvent> CREATOR = new zzg();
-    private final long DM;
-    private int DN;
-    private final long DU;
-    private long DW;
-    private final String EA;
-    private final int EB;
-    private final List<String> EC;
-    private final String ED;
-    private int EE;
-    private final String EF;
-    private final float EG;
-    private final String Ey;
-    private final String Ez;
+    public static final Creator<WakeLockEvent> CREATOR = new zzf();
+    private final long Ga;
+    private int Gb;
+    private final String Gc;
+    private final String Gd;
+    private final String Ge;
+    private final int Gf;
+    private final List<String> Gg;
+    private final String Gh;
+    private final long Gi;
+    private int Gj;
+    private final String Gk;
+    private final float Gl;
+    private long Gm;
     private final long mTimeout;
     final int mVersionCode;
 
     WakeLockEvent(int i, long j, int i2, String str, int i3, List<String> list, String str2, long j2, int i4, String str3, String str4, float f, long j3, String str5) {
         this.mVersionCode = i;
-        this.DM = j;
-        this.DN = i2;
-        this.Ey = str;
-        this.Ez = str3;
-        this.EA = str5;
-        this.EB = i3;
-        this.DW = -1;
-        this.EC = list;
-        this.ED = str2;
-        this.DU = j2;
-        this.EE = i4;
-        this.EF = str4;
-        this.EG = f;
+        this.Ga = j;
+        this.Gb = i2;
+        this.Gc = str;
+        this.Gd = str3;
+        this.Ge = str5;
+        this.Gf = i3;
+        this.Gm = -1;
+        this.Gg = list;
+        this.Gh = str2;
+        this.Gi = j2;
+        this.Gj = i4;
+        this.Gk = str4;
+        this.Gl = f;
         this.mTimeout = j3;
     }
 
@@ -46,82 +46,82 @@ public final class WakeLockEvent extends StatsEvent {
     }
 
     public int getEventType() {
-        return this.DN;
+        return this.Gb;
     }
 
     public long getTimeMillis() {
-        return this.DM;
+        return this.Ga;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzg.zza(this, parcel, i);
+        zzf.zza(this, parcel, i);
     }
 
-    public String zzawp() {
-        return this.ED;
+    public long zzaxt() {
+        return this.Gm;
     }
 
-    public long zzawq() {
-        return this.DW;
-    }
-
-    public long zzaws() {
-        return this.DU;
-    }
-
-    public String zzawt() {
+    public String zzaxu() {
         String valueOf = String.valueOf("\t");
-        String valueOf2 = String.valueOf(zzaww());
+        String valueOf2 = String.valueOf(zzaxv());
         String valueOf3 = String.valueOf("\t");
-        int zzawz = zzawz();
+        int zzaxy = zzaxy();
         String valueOf4 = String.valueOf("\t");
-        String join = zzaxa() == null ? "" : TextUtils.join(",", zzaxa());
+        String join = zzaxz() == null ? "" : TextUtils.join(",", zzaxz());
         String valueOf5 = String.valueOf("\t");
-        int zzaxb = zzaxb();
+        int zzayc = zzayc();
         String valueOf6 = String.valueOf("\t");
-        String zzawx = zzawx() == null ? "" : zzawx();
+        String zzaxw = zzaxw() == null ? "" : zzaxw();
         String valueOf7 = String.valueOf("\t");
-        String zzaxc = zzaxc() == null ? "" : zzaxc();
+        String zzayd = zzayd() == null ? "" : zzayd();
         String valueOf8 = String.valueOf("\t");
-        float zzaxd = zzaxd();
+        float zzaye = zzaye();
         String valueOf9 = String.valueOf("\t");
-        String zzawy = zzawy() == null ? "" : zzawy();
-        return new StringBuilder(((((((((((((String.valueOf(valueOf).length() + 37) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()) + String.valueOf(join).length()) + String.valueOf(valueOf5).length()) + String.valueOf(valueOf6).length()) + String.valueOf(zzawx).length()) + String.valueOf(valueOf7).length()) + String.valueOf(zzaxc).length()) + String.valueOf(valueOf8).length()) + String.valueOf(valueOf9).length()) + String.valueOf(zzawy).length()).append(valueOf).append(valueOf2).append(valueOf3).append(zzawz).append(valueOf4).append(join).append(valueOf5).append(zzaxb).append(valueOf6).append(zzawx).append(valueOf7).append(zzaxc).append(valueOf8).append(zzaxd).append(valueOf9).append(zzawy).toString();
+        String zzaxx = zzaxx() == null ? "" : zzaxx();
+        return new StringBuilder(((((((((((((String.valueOf(valueOf).length() + 37) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()) + String.valueOf(join).length()) + String.valueOf(valueOf5).length()) + String.valueOf(valueOf6).length()) + String.valueOf(zzaxw).length()) + String.valueOf(valueOf7).length()) + String.valueOf(zzayd).length()) + String.valueOf(valueOf8).length()) + String.valueOf(valueOf9).length()) + String.valueOf(zzaxx).length()).append(valueOf).append(valueOf2).append(valueOf3).append(zzaxy).append(valueOf4).append(join).append(valueOf5).append(zzayc).append(valueOf6).append(zzaxw).append(valueOf7).append(zzayd).append(valueOf8).append(zzaye).append(valueOf9).append(zzaxx).toString();
     }
 
-    public String zzaww() {
-        return this.Ey;
+    public String zzaxv() {
+        return this.Gc;
     }
 
-    public String zzawx() {
-        return this.Ez;
+    public String zzaxw() {
+        return this.Gd;
     }
 
-    public String zzawy() {
-        return this.EA;
+    public String zzaxx() {
+        return this.Ge;
     }
 
-    public int zzawz() {
-        return this.EB;
+    public int zzaxy() {
+        return this.Gf;
     }
 
-    public List<String> zzaxa() {
-        return this.EC;
+    public List<String> zzaxz() {
+        return this.Gg;
     }
 
-    public int zzaxb() {
-        return this.EE;
+    public String zzaya() {
+        return this.Gh;
     }
 
-    public String zzaxc() {
-        return this.EF;
+    public long zzayb() {
+        return this.Gi;
     }
 
-    public float zzaxd() {
-        return this.EG;
+    public int zzayc() {
+        return this.Gj;
     }
 
-    public long zzaxe() {
+    public String zzayd() {
+        return this.Gk;
+    }
+
+    public float zzaye() {
+        return this.Gl;
+    }
+
+    public long zzayf() {
         return this.mTimeout;
     }
 }

@@ -1,8 +1,7 @@
 package com.google.android.gms.internal;
 
-public enum zzaor {
-    DEFAULT {
-    },
-    STRING {
-    }
+import java.lang.reflect.Field;
+
+public interface zzaor {
+    String zzc(Field field);
 }

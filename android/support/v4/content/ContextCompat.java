@@ -12,6 +12,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.os.BuildCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -23,6 +24,9 @@ public class ContextCompat {
     private static final String TAG = "ContextCompat";
     private static final Object sLock = new Object();
     private static TypedValue sTempValue;
+
+    protected ContextCompat() {
+    }
 
     public static boolean startActivities(Context context, Intent[] intents) {
         return startActivities(context, intents, null);
@@ -38,6 +42,14 @@ public class ContextCompat {
         } else {
             ContextCompatHoneycomb.startActivities(context, intents);
             return true;
+        }
+    }
+
+    public static void startActivity(Context context, Intent intent, @Nullable Bundle options) {
+        if (VERSION.SDK_INT >= 16) {
+            ContextCompatJellybean.startActivity(context, intent, options);
+        } else {
+            context.startActivity(intent);
         }
     }
 
@@ -169,20 +181,10 @@ public class ContextCompat {
         return null;
     }
 
-    @Deprecated
-    public static Context createDeviceEncryptedStorageContext(Context context) {
-        return createDeviceProtectedStorageContext(context);
-    }
-
     public static boolean isDeviceProtectedStorage(Context context) {
         if (BuildCompat.isAtLeastN()) {
             return ContextCompatApi24.isDeviceProtectedStorage(context);
         }
         return false;
-    }
-
-    @Deprecated
-    public static boolean isDeviceEncryptedStorage(Context context) {
-        return isDeviceProtectedStorage(context);
     }
 }

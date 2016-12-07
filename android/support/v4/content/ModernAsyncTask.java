@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.util.Log;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
@@ -38,6 +40,7 @@ abstract class ModernAsyncTask<Params, Progress, Result> {
             return new Thread(r, "ModernAsyncTask #" + this.mCount.getAndIncrement());
         }
     };
+    private final AtomicBoolean mCancelled = new AtomicBoolean();
     private final FutureTask<Result> mFuture = new FutureTask<Result>(this.mWorker) {
         protected void done() {
             try {
@@ -54,17 +57,18 @@ abstract class ModernAsyncTask<Params, Progress, Result> {
         }
     };
     private volatile Status mStatus = Status.PENDING;
-    final AtomicBoolean mTaskInvoked = new AtomicBoolean();
+    private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
     private final WorkerRunnable<Params, Result> mWorker = new WorkerRunnable<Params, Result>() {
         public Result call() throws Exception {
             ModernAsyncTask.this.mTaskInvoked.set(true);
-            Result result = null;
+            Object result = null;
             try {
                 Process.setThreadPriority(10);
                 result = ModernAsyncTask.this.doInBackground(this.mParams);
                 Binder.flushPendingCommands();
+                ModernAsyncTask.this.postResult(result);
                 return result;
-            } finally {
+            } catch (Throwable th) {
                 ModernAsyncTask.this.postResult(result);
             }
         }
@@ -126,6 +130,7 @@ abstract class ModernAsyncTask<Params, Progress, Result> {
         return handler;
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public static void setDefaultExecutor(Executor exec) {
         sDefaultExecutor = exec;
     }
@@ -162,10 +167,11 @@ abstract class ModernAsyncTask<Params, Progress, Result> {
     }
 
     public final boolean isCancelled() {
-        return this.mFuture.isCancelled();
+        return this.mCancelled.get();
     }
 
     public final boolean cancel(boolean mayInterruptIfRunning) {
+        this.mCancelled.set(true);
         return this.mFuture.cancel(mayInterruptIfRunning);
     }
 

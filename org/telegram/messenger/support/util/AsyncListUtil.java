@@ -10,9 +10,9 @@ import org.telegram.messenger.support.util.ThreadUtil.MainThreadCallback;
 import org.telegram.messenger.support.util.TileList.Tile;
 
 public class AsyncListUtil<T> {
-    private static final boolean DEBUG = false;
-    private static final String TAG = "AsyncListUtil";
-    private boolean mAllowScrollHints;
+    static final boolean DEBUG = false;
+    static final String TAG = "AsyncListUtil";
+    boolean mAllowScrollHints;
     private final BackgroundCallback<T> mBackgroundCallback = new BackgroundCallback<T>() {
         private int mFirstRequiredTileStart;
         private int mGeneration;
@@ -130,7 +130,7 @@ public class AsyncListUtil<T> {
     final BackgroundCallback<T> mBackgroundProxy;
     final DataCallback<T> mDataCallback;
     int mDisplayedGeneration = 0;
-    private int mItemCount = 0;
+    int mItemCount = 0;
     private final MainThreadCallback<T> mMainThreadCallback = new MainThreadCallback<T>() {
         public void updateItemCount(int generation, int itemCount) {
             if (isRequestedGeneration(generation)) {
@@ -189,7 +189,7 @@ public class AsyncListUtil<T> {
         }
     };
     final MainThreadCallback<T> mMainThreadProxy;
-    private final SparseIntArray mMissingPositions = new SparseIntArray();
+    final SparseIntArray mMissingPositions = new SparseIntArray();
     final int[] mPrevRange = new int[2];
     int mRequestedGeneration = this.mDisplayedGeneration;
     private int mScrollHint = 0;
@@ -251,7 +251,7 @@ public class AsyncListUtil<T> {
         }
     }
 
-    private void log(String s, Object... args) {
+    void log(String s, Object... args) {
         Log.d(TAG, "[MAIN] " + String.format(s, args));
     }
 
@@ -301,7 +301,7 @@ public class AsyncListUtil<T> {
         return this.mItemCount;
     }
 
-    private void updateRange() {
+    void updateRange() {
         this.mViewCallback.getItemRangeInto(this.mTmpRange);
         if (this.mTmpRange[0] <= this.mTmpRange[1] && this.mTmpRange[0] >= 0 && this.mTmpRange[1] < this.mItemCount) {
             if (!this.mAllowScrollHints) {

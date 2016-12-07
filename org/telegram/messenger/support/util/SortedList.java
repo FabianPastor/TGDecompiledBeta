@@ -22,7 +22,7 @@ public class SortedList<T> {
     private int mSize;
     private final Class<T> mTClass;
 
-    public static abstract class Callback<T2> implements Comparator<T2> {
+    public static abstract class Callback<T2> implements Comparator<T2>, ListUpdateCallback {
         public abstract boolean areContentsTheSame(T2 t2, T2 t22);
 
         public abstract boolean areItemsTheSame(T2 t2, T2 t22);
@@ -31,23 +31,14 @@ public class SortedList<T> {
 
         public abstract void onChanged(int i, int i2);
 
-        public abstract void onInserted(int i, int i2);
-
-        public abstract void onMoved(int i, int i2);
-
-        public abstract void onRemoved(int i, int i2);
+        public void onChanged(int position, int count, Object payload) {
+            onChanged(position, count);
+        }
     }
 
     public static class BatchedCallback<T2> extends Callback<T2> {
-        static final int TYPE_ADD = 1;
-        static final int TYPE_CHANGE = 3;
-        static final int TYPE_MOVE = 4;
-        static final int TYPE_NONE = 0;
-        static final int TYPE_REMOVE = 2;
-        int mLastEventCount = -1;
-        int mLastEventPosition = -1;
-        int mLastEventType = 0;
-        private final Callback<T2> mWrappedCallback;
+        private final BatchingListUpdateCallback mBatchingListUpdateCallback = new BatchingListUpdateCallback(this.mWrappedCallback);
+        final Callback<T2> mWrappedCallback;
 
         public BatchedCallback(Callback<T2> wrappedCallback) {
             this.mWrappedCallback = wrappedCallback;
@@ -58,44 +49,19 @@ public class SortedList<T> {
         }
 
         public void onInserted(int position, int count) {
-            if (this.mLastEventType != 1 || position < this.mLastEventPosition || position > this.mLastEventPosition + this.mLastEventCount) {
-                dispatchLastEvent();
-                this.mLastEventPosition = position;
-                this.mLastEventCount = count;
-                this.mLastEventType = 1;
-                return;
-            }
-            this.mLastEventCount += count;
-            this.mLastEventPosition = Math.min(position, this.mLastEventPosition);
+            this.mBatchingListUpdateCallback.onInserted(position, count);
         }
 
         public void onRemoved(int position, int count) {
-            if (this.mLastEventType == 2 && this.mLastEventPosition == position) {
-                this.mLastEventCount += count;
-                return;
-            }
-            dispatchLastEvent();
-            this.mLastEventPosition = position;
-            this.mLastEventCount = count;
-            this.mLastEventType = 2;
+            this.mBatchingListUpdateCallback.onRemoved(position, count);
         }
 
         public void onMoved(int fromPosition, int toPosition) {
-            dispatchLastEvent();
-            this.mWrappedCallback.onMoved(fromPosition, toPosition);
+            this.mBatchingListUpdateCallback.onMoved(fromPosition, toPosition);
         }
 
         public void onChanged(int position, int count) {
-            if (this.mLastEventType != 3 || position > this.mLastEventPosition + this.mLastEventCount || position + count < this.mLastEventPosition) {
-                dispatchLastEvent();
-                this.mLastEventPosition = position;
-                this.mLastEventCount = count;
-                this.mLastEventType = 3;
-                return;
-            }
-            int previousEnd = this.mLastEventPosition + this.mLastEventCount;
-            this.mLastEventPosition = Math.min(position, this.mLastEventPosition);
-            this.mLastEventCount = Math.max(previousEnd, position + count) - this.mLastEventPosition;
+            this.mBatchingListUpdateCallback.onChanged(position, count, null);
         }
 
         public boolean areContentsTheSame(T2 oldItem, T2 newItem) {
@@ -107,20 +73,7 @@ public class SortedList<T> {
         }
 
         public void dispatchLastEvent() {
-            if (this.mLastEventType != 0) {
-                switch (this.mLastEventType) {
-                    case 1:
-                        this.mWrappedCallback.onInserted(this.mLastEventPosition, this.mLastEventCount);
-                        break;
-                    case 2:
-                        this.mWrappedCallback.onRemoved(this.mLastEventPosition, this.mLastEventCount);
-                        break;
-                    case 3:
-                        this.mWrappedCallback.onChanged(this.mLastEventPosition, this.mLastEventCount);
-                        break;
-                }
-                this.mLastEventType = 0;
-            }
+            this.mBatchingListUpdateCallback.dispatchLastEvent();
         }
     }
 

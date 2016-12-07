@@ -9,10 +9,10 @@ import com.google.android.gms.dynamic.zzc.zza;
 
 @SuppressLint({"NewApi"})
 public final class zzb extends zza {
-    private Fragment Os;
+    private Fragment Qd;
 
     private zzb(Fragment fragment) {
-        this.Os = fragment;
+        this.Qd = fragment;
     }
 
     public static zzb zza(Fragment fragment) {
@@ -20,106 +20,106 @@ public final class zzb extends zza {
     }
 
     public Bundle getArguments() {
-        return this.Os.getArguments();
+        return this.Qd.getArguments();
     }
 
     public int getId() {
-        return this.Os.getId();
+        return this.Qd.getId();
     }
 
     public boolean getRetainInstance() {
-        return this.Os.getRetainInstance();
+        return this.Qd.getRetainInstance();
     }
 
     public String getTag() {
-        return this.Os.getTag();
+        return this.Qd.getTag();
     }
 
     public int getTargetRequestCode() {
-        return this.Os.getTargetRequestCode();
+        return this.Qd.getTargetRequestCode();
     }
 
     public boolean getUserVisibleHint() {
-        return this.Os.getUserVisibleHint();
+        return this.Qd.getUserVisibleHint();
     }
 
     public zzd getView() {
-        return zze.zzac(this.Os.getView());
+        return zze.zzac(this.Qd.getView());
     }
 
     public boolean isAdded() {
-        return this.Os.isAdded();
+        return this.Qd.isAdded();
     }
 
     public boolean isDetached() {
-        return this.Os.isDetached();
+        return this.Qd.isDetached();
     }
 
     public boolean isHidden() {
-        return this.Os.isHidden();
+        return this.Qd.isHidden();
     }
 
     public boolean isInLayout() {
-        return this.Os.isInLayout();
+        return this.Qd.isInLayout();
     }
 
     public boolean isRemoving() {
-        return this.Os.isRemoving();
+        return this.Qd.isRemoving();
     }
 
     public boolean isResumed() {
-        return this.Os.isResumed();
+        return this.Qd.isResumed();
     }
 
     public boolean isVisible() {
-        return this.Os.isVisible();
+        return this.Qd.isVisible();
     }
 
     public void setHasOptionsMenu(boolean z) {
-        this.Os.setHasOptionsMenu(z);
+        this.Qd.setHasOptionsMenu(z);
     }
 
     public void setMenuVisibility(boolean z) {
-        this.Os.setMenuVisibility(z);
+        this.Qd.setMenuVisibility(z);
     }
 
     public void setRetainInstance(boolean z) {
-        this.Os.setRetainInstance(z);
+        this.Qd.setRetainInstance(z);
     }
 
     public void setUserVisibleHint(boolean z) {
-        this.Os.setUserVisibleHint(z);
+        this.Qd.setUserVisibleHint(z);
     }
 
     public void startActivity(Intent intent) {
-        this.Os.startActivity(intent);
+        this.Qd.startActivity(intent);
     }
 
     public void startActivityForResult(Intent intent, int i) {
-        this.Os.startActivityForResult(intent, i);
+        this.Qd.startActivityForResult(intent, i);
     }
 
     public void zzac(zzd com_google_android_gms_dynamic_zzd) {
-        this.Os.registerForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
+        this.Qd.registerForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
     }
 
     public void zzad(zzd com_google_android_gms_dynamic_zzd) {
-        this.Os.unregisterForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
+        this.Qd.unregisterForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
     }
 
-    public zzd zzbdu() {
-        return zze.zzac(this.Os.getActivity());
+    public zzd zzbdp() {
+        return zze.zzac(this.Qd.getActivity());
     }
 
-    public zzc zzbdv() {
-        return zza(this.Os.getParentFragment());
+    public zzc zzbdq() {
+        return zza(this.Qd.getParentFragment());
     }
 
-    public zzd zzbdw() {
-        return zze.zzac(this.Os.getResources());
+    public zzd zzbdr() {
+        return zze.zzac(this.Qd.getResources());
     }
 
-    public zzc zzbdx() {
-        return zza(this.Os.getTargetFragment());
+    public zzc zzbds() {
+        return zza(this.Qd.getTargetFragment());
     }
 }

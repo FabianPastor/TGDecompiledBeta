@@ -2,12 +2,12 @@ package com.google.android.gms.dynamic;
 
 import android.content.Context;
 import android.os.IBinder;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.zze;
 
 public abstract class zzg<T> {
-    private final String Ot;
-    private T Ou;
+    private final String Qe;
+    private T Qf;
 
     public static class zza extends Exception {
         public zza(String str) {
@@ -20,20 +20,20 @@ public abstract class zzg<T> {
     }
 
     protected zzg(String str) {
-        this.Ot = str;
+        this.Qe = str;
     }
 
     protected abstract T zzc(IBinder iBinder);
 
-    protected final T zzcu(Context context) throws zza {
-        if (this.Ou == null) {
-            zzac.zzy(context);
+    protected final T zzcr(Context context) throws zza {
+        if (this.Qf == null) {
+            zzaa.zzy(context);
             Context remoteContext = zze.getRemoteContext(context);
             if (remoteContext == null) {
                 throw new zza("Could not get remote context.");
             }
             try {
-                this.Ou = zzc((IBinder) remoteContext.getClassLoader().loadClass(this.Ot).newInstance());
+                this.Qf = zzc((IBinder) remoteContext.getClassLoader().loadClass(this.Qe).newInstance());
             } catch (Throwable e) {
                 throw new zza("Could not load creator class.", e);
             } catch (Throwable e2) {
@@ -42,6 +42,6 @@ public abstract class zzg<T> {
                 throw new zza("Could not access creator.", e22);
             }
         }
-        return this.Ou;
+        return this.Qf;
     }
 }

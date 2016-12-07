@@ -43,9 +43,9 @@ public class zzz implements zzy {
 
     private HttpURLConnection zza(URL url, zzk<?> com_google_android_gms_internal_zzk_) throws IOException {
         HttpURLConnection zza = zza(url);
-        int zzs = com_google_android_gms_internal_zzk_.zzs();
-        zza.setConnectTimeout(zzs);
-        zza.setReadTimeout(zzs);
+        int zzr = com_google_android_gms_internal_zzk_.zzr();
+        zza.setConnectTimeout(zzr);
+        zza.setReadTimeout(zzr);
         zza.setUseCaches(false);
         zza.setDoInput(true);
         if ("https".equals(url.getProtocol()) && this.zzcf != null) {
@@ -116,12 +116,12 @@ public class zzz implements zzy {
     }
 
     private static void zzb(HttpURLConnection httpURLConnection, zzk<?> com_google_android_gms_internal_zzk_) throws IOException, zza {
-        byte[] zzp = com_google_android_gms_internal_zzk_.zzp();
-        if (zzp != null) {
+        byte[] zzo = com_google_android_gms_internal_zzk_.zzo();
+        if (zzo != null) {
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzo());
+            httpURLConnection.addRequestProperty("Content-Type", com_google_android_gms_internal_zzk_.zzn());
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
-            dataOutputStream.write(zzp);
+            dataOutputStream.write(zzo);
             dataOutputStream.close();
         }
     }

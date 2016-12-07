@@ -34,30 +34,30 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class zze<T extends IInterface> {
-    public static final String[] Bs = new String[]{"service_esmobile", "service_googleme"};
-    private int Ba;
-    private long Bb;
-    private long Bc;
-    private int Bd;
-    private long Be;
-    private final zzn Bf;
-    private final Object Bg;
-    private zzv Bh;
-    private zzf Bi;
-    private T Bj;
-    private final ArrayList<zze<?>> Bk;
-    private zzh Bl;
-    private int Bm;
-    private final zzb Bn;
-    private final zzc Bo;
-    private final int Bp;
-    private final String Bq;
-    protected AtomicInteger Br;
+    public static final String[] DB = new String[]{"service_esmobile", "service_googleme"};
+    protected AtomicInteger DA;
+    private int Dj;
+    private long Dk;
+    private long Dl;
+    private int Dm;
+    private long Dn;
+    private final zzl Do;
+    private final Object Dp;
+    private zzt Dq;
+    protected zzf Dr;
+    private T Ds;
+    private final ArrayList<zze<?>> Dt;
+    private zzh Du;
+    private int Dv;
+    private final zzb Dw;
+    private final zzc Dx;
+    private final int Dy;
+    private final String Dz;
     private final Context mContext;
     final Handler mHandler;
-    private final com.google.android.gms.common.zzc xn;
-    private final Looper zzajn;
-    private final Object zzakd;
+    private final com.google.android.gms.common.zzc zm;
+    private final Looper zzajy;
+    private final Object zzako;
 
     public interface zzb {
         void onConnected(@Nullable Bundle bundle);
@@ -70,16 +70,16 @@ public abstract class zze<T extends IInterface> {
     }
 
     final class zzd extends Handler {
-        final /* synthetic */ zze Bu;
+        final /* synthetic */ zze DD;
 
         public zzd(zze com_google_android_gms_common_internal_zze, Looper looper) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
             super(looper);
         }
 
         private void zza(Message message) {
             zze com_google_android_gms_common_internal_zze_zze = (zze) message.obj;
-            com_google_android_gms_common_internal_zze_zze.zzaub();
+            com_google_android_gms_common_internal_zze_zze.zzavk();
             com_google_android_gms_common_internal_zze_zze.unregister();
         }
 
@@ -89,30 +89,30 @@ public abstract class zze<T extends IInterface> {
 
         public void handleMessage(Message message) {
             PendingIntent pendingIntent = null;
-            if (this.Bu.Br.get() != message.arg1) {
+            if (this.DD.DA.get() != message.arg1) {
                 if (zzb(message)) {
                     zza(message);
                 }
-            } else if ((message.what == 1 || message.what == 5) && !this.Bu.isConnecting()) {
+            } else if ((message.what == 1 || message.what == 5) && !this.DD.isConnecting()) {
                 zza(message);
             } else if (message.what == 3) {
                 if (message.obj instanceof PendingIntent) {
                     pendingIntent = (PendingIntent) message.obj;
                 }
                 ConnectionResult connectionResult = new ConnectionResult(message.arg2, pendingIntent);
-                this.Bu.Bi.zzh(connectionResult);
-                this.Bu.onConnectionFailed(connectionResult);
+                this.DD.Dr.zzg(connectionResult);
+                this.DD.onConnectionFailed(connectionResult);
             } else if (message.what == 4) {
-                this.Bu.zzb(4, null);
-                if (this.Bu.Bn != null) {
-                    this.Bu.Bn.onConnectionSuspended(message.arg2);
+                this.DD.zzb(4, null);
+                if (this.DD.Dw != null) {
+                    this.DD.Dw.onConnectionSuspended(message.arg2);
                 }
-                this.Bu.onConnectionSuspended(message.arg2);
-                this.Bu.zza(4, 1, null);
-            } else if (message.what == 2 && !this.Bu.isConnected()) {
+                this.DD.onConnectionSuspended(message.arg2);
+                this.DD.zza(4, 1, null);
+            } else if (message.what == 2 && !this.DD.isConnected()) {
                 zza(message);
             } else if (zzb(message)) {
-                ((zze) message.obj).zzauc();
+                ((zze) message.obj).zzavl();
             } else {
                 Log.wtf("GmsClient", "Don't know how to handle message: " + message.what, new Exception());
             }
@@ -120,28 +120,28 @@ public abstract class zze<T extends IInterface> {
     }
 
     protected abstract class zze<TListener> {
-        final /* synthetic */ zze Bu;
-        private boolean Bv = false;
+        final /* synthetic */ zze DD;
+        private boolean DE = false;
         private TListener mListener;
 
         public zze(zze com_google_android_gms_common_internal_zze, TListener tListener) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
             this.mListener = tListener;
         }
 
         public void unregister() {
-            zzaud();
-            synchronized (this.Bu.Bk) {
-                this.Bu.Bk.remove(this);
+            zzavm();
+            synchronized (this.DD.Dt) {
+                this.DD.Dt.remove(this);
             }
         }
 
-        protected abstract void zzaub();
+        protected abstract void zzavk();
 
-        public void zzauc() {
+        public void zzavl() {
             synchronized (this) {
                 Object obj = this.mListener;
-                if (this.Bv) {
+                if (this.DE) {
                     String valueOf = String.valueOf(this);
                     Log.w("GmsClient", new StringBuilder(String.valueOf(valueOf).length() + 47).append("Callback proxy ").append(valueOf).append(" being reused. This is not safe.").toString());
                 }
@@ -150,18 +150,18 @@ public abstract class zze<T extends IInterface> {
                 try {
                     zzv(obj);
                 } catch (RuntimeException e) {
-                    zzaub();
+                    zzavk();
                     throw e;
                 }
             }
-            zzaub();
+            zzavk();
             synchronized (this) {
-                this.Bv = true;
+                this.DE = true;
             }
             unregister();
         }
 
-        public void zzaud() {
+        public void zzavm() {
             synchronized (this) {
                 this.mListener = null;
             }
@@ -171,73 +171,76 @@ public abstract class zze<T extends IInterface> {
     }
 
     public interface zzf {
-        void zzh(@NonNull ConnectionResult connectionResult);
+        void zzg(@NonNull ConnectionResult connectionResult);
     }
 
     public final class zzh implements ServiceConnection {
-        final /* synthetic */ zze Bu;
-        private final int Bx;
+        final /* synthetic */ zze DD;
+        private final int DG;
 
         public zzh(zze com_google_android_gms_common_internal_zze, int i) {
-            this.Bu = com_google_android_gms_common_internal_zze;
-            this.Bx = i;
+            this.DD = com_google_android_gms_common_internal_zze;
+            this.DG = i;
         }
 
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            zzac.zzb((Object) iBinder, (Object) "Expecting a valid IBinder");
-            synchronized (this.Bu.Bg) {
-                this.Bu.Bh = com.google.android.gms.common.internal.zzv.zza.zzdv(iBinder);
+            if (iBinder == null) {
+                this.DD.zzl(new ConnectionResult(8, null, "ServiceBroker IBinder is null"));
+                return;
             }
-            this.Bu.zza(0, null, this.Bx);
+            synchronized (this.DD.Dp) {
+                this.DD.Dq = com.google.android.gms.common.internal.zzt.zza.zzdu(iBinder);
+            }
+            this.DD.zza(0, null, this.DG);
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            synchronized (this.Bu.Bg) {
-                this.Bu.Bh = null;
+            synchronized (this.DD.Dp) {
+                this.DD.Dq = null;
             }
-            this.Bu.mHandler.sendMessage(this.Bu.mHandler.obtainMessage(4, this.Bx, 1));
+            this.DD.mHandler.sendMessage(this.DD.mHandler.obtainMessage(4, this.DG, 1));
         }
     }
 
     private abstract class zza extends zze<Boolean> {
-        public final Bundle Bt;
-        final /* synthetic */ zze Bu;
+        public final Bundle DC;
+        final /* synthetic */ zze DD;
         public final int statusCode;
 
         @BinderThread
         protected zza(zze com_google_android_gms_common_internal_zze, int i, Bundle bundle) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
             super(com_google_android_gms_common_internal_zze, Boolean.valueOf(true));
             this.statusCode = i;
-            this.Bt = bundle;
+            this.DC = bundle;
         }
 
-        protected abstract boolean zzaua();
+        protected abstract boolean zzavj();
 
-        protected void zzaub() {
+        protected void zzavk() {
         }
 
         protected void zzc(Boolean bool) {
             PendingIntent pendingIntent = null;
             if (bool == null) {
-                this.Bu.zzb(1, null);
+                this.DD.zzb(1, null);
                 return;
             }
             switch (this.statusCode) {
                 case 0:
-                    if (!zzaua()) {
-                        this.Bu.zzb(1, null);
+                    if (!zzavj()) {
+                        this.DD.zzb(1, null);
                         zzm(new ConnectionResult(8, null));
                         return;
                     }
                     return;
                 case 10:
-                    this.Bu.zzb(1, null);
+                    this.DD.zzb(1, null);
                     throw new IllegalStateException("A fatal developer error has occurred. Check the logs for further information.");
                 default:
-                    this.Bu.zzb(1, null);
-                    if (this.Bt != null) {
-                        pendingIntent = (PendingIntent) this.Bt.getParcelable("pendingIntent");
+                    this.DD.zzb(1, null);
+                    if (this.DC != null) {
+                        pendingIntent = (PendingIntent) this.DC.getParcelable("pendingIntent");
                     }
                     zzm(new ConnectionResult(this.statusCode, pendingIntent));
                     return;
@@ -252,39 +255,39 @@ public abstract class zze<T extends IInterface> {
     }
 
     protected class zzi implements zzf {
-        final /* synthetic */ zze Bu;
+        final /* synthetic */ zze DD;
 
         public zzi(zze com_google_android_gms_common_internal_zze) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
         }
 
-        public void zzh(@NonNull ConnectionResult connectionResult) {
+        public void zzg(@NonNull ConnectionResult connectionResult) {
             if (connectionResult.isSuccess()) {
-                this.Bu.zza(null, this.Bu.zzatz());
-            } else if (this.Bu.Bo != null) {
-                this.Bu.Bo.onConnectionFailed(connectionResult);
+                this.DD.zza(null, this.DD.zzavi());
+            } else if (this.DD.Dx != null) {
+                this.DD.Dx.onConnectionFailed(connectionResult);
             }
         }
     }
 
-    public static final class zzg extends com.google.android.gms.common.internal.zzu.zza {
-        private zze Bw;
-        private final int Bx;
+    public static final class zzg extends com.google.android.gms.common.internal.zzs.zza {
+        private zze DF;
+        private final int DG;
 
         public zzg(@NonNull zze com_google_android_gms_common_internal_zze, int i) {
-            this.Bw = com_google_android_gms_common_internal_zze;
-            this.Bx = i;
+            this.DF = com_google_android_gms_common_internal_zze;
+            this.DG = i;
         }
 
-        private void zzaue() {
-            this.Bw = null;
+        private void zzavn() {
+            this.DF = null;
         }
 
         @BinderThread
         public void zza(int i, @NonNull IBinder iBinder, @Nullable Bundle bundle) {
-            zzac.zzb(this.Bw, (Object) "onPostInitComplete can be called only once per call to getRemoteService");
-            this.Bw.zza(i, iBinder, bundle, this.Bx);
-            zzaue();
+            zzaa.zzb(this.DF, (Object) "onPostInitComplete can be called only once per call to getRemoteService");
+            this.DF.zza(i, iBinder, bundle, this.DG);
+            zzavn();
         }
 
         @BinderThread
@@ -294,31 +297,31 @@ public abstract class zze<T extends IInterface> {
     }
 
     protected final class zzj extends zza {
-        final /* synthetic */ zze Bu;
-        public final IBinder By;
+        final /* synthetic */ zze DD;
+        public final IBinder DH;
 
         @BinderThread
         public zzj(zze com_google_android_gms_common_internal_zze, int i, IBinder iBinder, Bundle bundle) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
             super(com_google_android_gms_common_internal_zze, i, bundle);
-            this.By = iBinder;
+            this.DH = iBinder;
         }
 
-        protected boolean zzaua() {
+        protected boolean zzavj() {
             try {
-                String interfaceDescriptor = this.By.getInterfaceDescriptor();
-                if (this.Bu.zziy().equals(interfaceDescriptor)) {
-                    IInterface zzh = this.Bu.zzh(this.By);
-                    if (zzh == null || !this.Bu.zza(2, 3, zzh)) {
+                String interfaceDescriptor = this.DH.getInterfaceDescriptor();
+                if (this.DD.zzjy().equals(interfaceDescriptor)) {
+                    IInterface zzh = this.DD.zzh(this.DH);
+                    if (zzh == null || !this.DD.zza(2, 3, zzh)) {
                         return false;
                     }
-                    Bundle zzaoe = this.Bu.zzaoe();
-                    if (this.Bu.Bn != null) {
-                        this.Bu.Bn.onConnected(zzaoe);
+                    Bundle zzapn = this.DD.zzapn();
+                    if (this.DD.Dw != null) {
+                        this.DD.Dw.onConnected(zzapn);
                     }
                     return true;
                 }
-                String valueOf = String.valueOf(this.Bu.zziy());
+                String valueOf = String.valueOf(this.DD.zzjy());
                 Log.e("GmsClient", new StringBuilder((String.valueOf(valueOf).length() + 34) + String.valueOf(interfaceDescriptor).length()).append("service descriptor mismatch: ").append(valueOf).append(" vs. ").append(interfaceDescriptor).toString());
                 return false;
             } catch (RemoteException e) {
@@ -328,58 +331,58 @@ public abstract class zze<T extends IInterface> {
         }
 
         protected void zzm(ConnectionResult connectionResult) {
-            if (this.Bu.Bo != null) {
-                this.Bu.Bo.onConnectionFailed(connectionResult);
+            if (this.DD.Dx != null) {
+                this.DD.Dx.onConnectionFailed(connectionResult);
             }
-            this.Bu.onConnectionFailed(connectionResult);
+            this.DD.onConnectionFailed(connectionResult);
         }
     }
 
     protected final class zzk extends zza {
-        final /* synthetic */ zze Bu;
+        final /* synthetic */ zze DD;
 
         @BinderThread
         public zzk(zze com_google_android_gms_common_internal_zze, int i, @Nullable Bundle bundle) {
-            this.Bu = com_google_android_gms_common_internal_zze;
+            this.DD = com_google_android_gms_common_internal_zze;
             super(com_google_android_gms_common_internal_zze, i, bundle);
         }
 
-        protected boolean zzaua() {
-            this.Bu.Bi.zzh(ConnectionResult.uJ);
+        protected boolean zzavj() {
+            this.DD.Dr.zzg(ConnectionResult.wO);
             return true;
         }
 
         protected void zzm(ConnectionResult connectionResult) {
-            this.Bu.Bi.zzh(connectionResult);
-            this.Bu.onConnectionFailed(connectionResult);
+            this.DD.Dr.zzg(connectionResult);
+            this.DD.onConnectionFailed(connectionResult);
         }
     }
 
     protected zze(Context context, Looper looper, int i, zzb com_google_android_gms_common_internal_zze_zzb, zzc com_google_android_gms_common_internal_zze_zzc, String str) {
-        this(context, looper, zzn.zzcf(context), com.google.android.gms.common.zzc.zzapd(), i, (zzb) zzac.zzy(com_google_android_gms_common_internal_zze_zzb), (zzc) zzac.zzy(com_google_android_gms_common_internal_zze_zzc), str);
+        this(context, looper, zzl.zzcc(context), com.google.android.gms.common.zzc.zzaql(), i, (zzb) zzaa.zzy(com_google_android_gms_common_internal_zze_zzb), (zzc) zzaa.zzy(com_google_android_gms_common_internal_zze_zzc), str);
     }
 
-    protected zze(Context context, Looper looper, zzn com_google_android_gms_common_internal_zzn, com.google.android.gms.common.zzc com_google_android_gms_common_zzc, int i, zzb com_google_android_gms_common_internal_zze_zzb, zzc com_google_android_gms_common_internal_zze_zzc, String str) {
-        this.zzakd = new Object();
-        this.Bg = new Object();
-        this.Bk = new ArrayList();
-        this.Bm = 1;
-        this.Br = new AtomicInteger(0);
-        this.mContext = (Context) zzac.zzb((Object) context, (Object) "Context must not be null");
-        this.zzajn = (Looper) zzac.zzb((Object) looper, (Object) "Looper must not be null");
-        this.Bf = (zzn) zzac.zzb((Object) com_google_android_gms_common_internal_zzn, (Object) "Supervisor must not be null");
-        this.xn = (com.google.android.gms.common.zzc) zzac.zzb((Object) com_google_android_gms_common_zzc, (Object) "API availability must not be null");
+    protected zze(Context context, Looper looper, zzl com_google_android_gms_common_internal_zzl, com.google.android.gms.common.zzc com_google_android_gms_common_zzc, int i, zzb com_google_android_gms_common_internal_zze_zzb, zzc com_google_android_gms_common_internal_zze_zzc, String str) {
+        this.zzako = new Object();
+        this.Dp = new Object();
+        this.Dt = new ArrayList();
+        this.Dv = 1;
+        this.DA = new AtomicInteger(0);
+        this.mContext = (Context) zzaa.zzb((Object) context, (Object) "Context must not be null");
+        this.zzajy = (Looper) zzaa.zzb((Object) looper, (Object) "Looper must not be null");
+        this.Do = (zzl) zzaa.zzb((Object) com_google_android_gms_common_internal_zzl, (Object) "Supervisor must not be null");
+        this.zm = (com.google.android.gms.common.zzc) zzaa.zzb((Object) com_google_android_gms_common_zzc, (Object) "API availability must not be null");
         this.mHandler = new zzd(this, looper);
-        this.Bp = i;
-        this.Bn = com_google_android_gms_common_internal_zze_zzb;
-        this.Bo = com_google_android_gms_common_internal_zze_zzc;
-        this.Bq = str;
+        this.Dy = i;
+        this.Dw = com_google_android_gms_common_internal_zze_zzb;
+        this.Dx = com_google_android_gms_common_internal_zze_zzc;
+        this.Dz = str;
     }
 
     private boolean zza(int i, int i2, T t) {
         boolean z;
-        synchronized (this.zzakd) {
-            if (this.Bm != i) {
+        synchronized (this.zzako) {
+            if (this.Dv != i) {
                 z = false;
             } else {
                 zzb(i2, t);
@@ -389,27 +392,27 @@ public abstract class zze<T extends IInterface> {
         return z;
     }
 
-    private void zzats() {
-        if (this.Bl != null) {
-            String valueOf = String.valueOf(zzix());
-            String valueOf2 = String.valueOf(zzatq());
+    private void zzavb() {
+        if (this.Du != null) {
+            String valueOf = String.valueOf(zzjx());
+            String valueOf2 = String.valueOf(zzauz());
             Log.e("GmsClient", new StringBuilder((String.valueOf(valueOf).length() + 70) + String.valueOf(valueOf2).length()).append("Calling connect() while still connected, missing disconnect() for ").append(valueOf).append(" on ").append(valueOf2).toString());
-            this.Bf.zzb(zzix(), zzatq(), this.Bl, zzatr());
-            this.Br.incrementAndGet();
+            this.Do.zzb(zzjx(), zzauz(), this.Du, zzava());
+            this.DA.incrementAndGet();
         }
-        this.Bl = new zzh(this, this.Br.get());
-        if (!this.Bf.zza(zzix(), zzatq(), this.Bl, zzatr())) {
-            valueOf = String.valueOf(zzix());
-            valueOf2 = String.valueOf(zzatq());
+        this.Du = new zzh(this, this.DA.get());
+        if (!this.Do.zza(zzjx(), zzauz(), this.Du, zzava())) {
+            valueOf = String.valueOf(zzjx());
+            valueOf2 = String.valueOf(zzauz());
             Log.e("GmsClient", new StringBuilder((String.valueOf(valueOf).length() + 34) + String.valueOf(valueOf2).length()).append("unable to connect to service: ").append(valueOf).append(" on ").append(valueOf2).toString());
-            zza(16, null, this.Br.get());
+            zza(16, null, this.DA.get());
         }
     }
 
-    private void zzatt() {
-        if (this.Bl != null) {
-            this.Bf.zzb(zzix(), zzatq(), this.Bl, zzatr());
-            this.Bl = null;
+    private void zzavc() {
+        if (this.Du != null) {
+            this.Do.zzb(zzjx(), zzauz(), this.Du, zzava());
+            this.Du = null;
         }
     }
 
@@ -418,17 +421,17 @@ public abstract class zze<T extends IInterface> {
         if ((i == 3) != (t != null)) {
             z = false;
         }
-        zzac.zzbs(z);
-        synchronized (this.zzakd) {
-            this.Bm = i;
-            this.Bj = t;
+        zzaa.zzbt(z);
+        synchronized (this.zzako) {
+            this.Dv = i;
+            this.Ds = t;
             zzc(i, t);
             switch (i) {
                 case 1:
-                    zzatt();
+                    zzavc();
                     break;
                 case 2:
-                    zzats();
+                    zzavb();
                     break;
                 case 3:
                     zza((IInterface) t);
@@ -437,25 +440,29 @@ public abstract class zze<T extends IInterface> {
         }
     }
 
+    private void zzl(ConnectionResult connectionResult) {
+        this.mHandler.sendMessage(this.mHandler.obtainMessage(3, this.DA.get(), connectionResult.getErrorCode(), connectionResult.getResolution()));
+    }
+
     public void disconnect() {
-        this.Br.incrementAndGet();
-        synchronized (this.Bk) {
-            int size = this.Bk.size();
+        this.DA.incrementAndGet();
+        synchronized (this.Dt) {
+            int size = this.Dt.size();
             for (int i = 0; i < size; i++) {
-                ((zze) this.Bk.get(i)).zzaud();
+                ((zze) this.Dt.get(i)).zzavm();
             }
-            this.Bk.clear();
+            this.Dt.clear();
         }
-        synchronized (this.Bg) {
-            this.Bh = null;
+        synchronized (this.Dp) {
+            this.Dq = null;
         }
         zzb(1, null);
     }
 
     public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
-        synchronized (this.zzakd) {
-            int i = this.Bm;
-            IInterface iInterface = this.Bj;
+        synchronized (this.zzako) {
+            int i = this.Dv;
+            IInterface iInterface = this.Ds;
         }
         printWriter.append(str).append("mConnectState=");
         switch (i) {
@@ -479,18 +486,18 @@ public abstract class zze<T extends IInterface> {
         if (iInterface == null) {
             printWriter.println("null");
         } else {
-            printWriter.append(zziy()).append("@").println(Integer.toHexString(System.identityHashCode(iInterface.asBinder())));
+            printWriter.append(zzjy()).append("@").println(Integer.toHexString(System.identityHashCode(iInterface.asBinder())));
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US);
-        if (this.Bc > 0) {
+        if (this.Dl > 0) {
             PrintWriter append = printWriter.append(str).append("lastConnectedTime=");
-            long j = this.Bc;
-            String valueOf = String.valueOf(simpleDateFormat.format(new Date(this.Bc)));
+            long j = this.Dl;
+            String valueOf = String.valueOf(simpleDateFormat.format(new Date(this.Dl)));
             append.println(new StringBuilder(String.valueOf(valueOf).length() + 21).append(j).append(" ").append(valueOf).toString());
         }
-        if (this.Bb > 0) {
+        if (this.Dk > 0) {
             printWriter.append(str).append("lastSuspendedCause=");
-            switch (this.Ba) {
+            switch (this.Dj) {
                 case 1:
                     printWriter.append("CAUSE_SERVICE_DISCONNECTED");
                     break;
@@ -498,19 +505,19 @@ public abstract class zze<T extends IInterface> {
                     printWriter.append("CAUSE_NETWORK_LOST");
                     break;
                 default:
-                    printWriter.append(String.valueOf(this.Ba));
+                    printWriter.append(String.valueOf(this.Dj));
                     break;
             }
             append = printWriter.append(" lastSuspendedTime=");
-            j = this.Bb;
-            valueOf = String.valueOf(simpleDateFormat.format(new Date(this.Bb)));
+            j = this.Dk;
+            valueOf = String.valueOf(simpleDateFormat.format(new Date(this.Dk)));
             append.println(new StringBuilder(String.valueOf(valueOf).length() + 21).append(j).append(" ").append(valueOf).toString());
         }
-        if (this.Be > 0) {
-            printWriter.append(str).append("lastFailedStatus=").append(CommonStatusCodes.getStatusCodeString(this.Bd));
+        if (this.Dn > 0) {
+            printWriter.append(str).append("lastFailedStatus=").append(CommonStatusCodes.getStatusCodeString(this.Dm));
             append = printWriter.append(" lastFailedTime=");
-            j = this.Be;
-            String valueOf2 = String.valueOf(simpleDateFormat.format(new Date(this.Be)));
+            j = this.Dn;
+            String valueOf2 = String.valueOf(simpleDateFormat.format(new Date(this.Dn)));
             append.println(new StringBuilder(String.valueOf(valueOf2).length() + 21).append(j).append(" ").append(valueOf2).toString());
         }
     }
@@ -524,35 +531,35 @@ public abstract class zze<T extends IInterface> {
     }
 
     public final Looper getLooper() {
-        return this.zzajn;
+        return this.zzajy;
     }
 
     public boolean isConnected() {
         boolean z;
-        synchronized (this.zzakd) {
-            z = this.Bm == 3;
+        synchronized (this.zzako) {
+            z = this.Dv == 3;
         }
         return z;
     }
 
     public boolean isConnecting() {
         boolean z;
-        synchronized (this.zzakd) {
-            z = this.Bm == 2;
+        synchronized (this.zzako) {
+            z = this.Dv == 2;
         }
         return z;
     }
 
     @CallSuper
     protected void onConnectionFailed(ConnectionResult connectionResult) {
-        this.Bd = connectionResult.getErrorCode();
-        this.Be = System.currentTimeMillis();
+        this.Dm = connectionResult.getErrorCode();
+        this.Dn = System.currentTimeMillis();
     }
 
     @CallSuper
     protected void onConnectionSuspended(int i) {
-        this.Ba = i;
-        this.Bb = System.currentTimeMillis();
+        this.Dj = i;
+        this.Dk = System.currentTimeMillis();
     }
 
     protected void zza(int i, @Nullable Bundle bundle, int i2) {
@@ -566,147 +573,152 @@ public abstract class zze<T extends IInterface> {
 
     @CallSuper
     protected void zza(@NonNull T t) {
-        this.Bc = System.currentTimeMillis();
+        this.Dl = System.currentTimeMillis();
     }
 
     public void zza(@NonNull zzf com_google_android_gms_common_internal_zze_zzf) {
-        this.Bi = (zzf) zzac.zzb((Object) com_google_android_gms_common_internal_zze_zzf, (Object) "Connection progress callbacks cannot be null.");
+        this.Dr = (zzf) zzaa.zzb((Object) com_google_android_gms_common_internal_zze_zzf, (Object) "Connection progress callbacks cannot be null.");
         zzb(2, null);
     }
 
     public void zza(zzf com_google_android_gms_common_internal_zze_zzf, ConnectionResult connectionResult) {
-        this.Bi = (zzf) zzac.zzb((Object) com_google_android_gms_common_internal_zze_zzf, (Object) "Connection progress callbacks cannot be null.");
-        this.mHandler.sendMessage(this.mHandler.obtainMessage(3, this.Br.get(), connectionResult.getErrorCode(), connectionResult.getResolution()));
+        this.Dr = (zzf) zzaa.zzb((Object) com_google_android_gms_common_internal_zze_zzf, (Object) "Connection progress callbacks cannot be null.");
+        this.mHandler.sendMessage(this.mHandler.obtainMessage(3, this.DA.get(), connectionResult.getErrorCode(), connectionResult.getResolution()));
     }
 
     @WorkerThread
-    public void zza(zzr com_google_android_gms_common_internal_zzr, Set<Scope> set) {
+    public void zza(zzp com_google_android_gms_common_internal_zzp, Set<Scope> set) {
+        GetServiceRequest zzo = new GetServiceRequest(this.Dy).zzhv(this.mContext.getPackageName()).zzo(zzahv());
+        if (set != null) {
+            zzo.zzf(set);
+        }
+        if (zzain()) {
+            zzo.zze(zzave()).zzb(com_google_android_gms_common_internal_zzp);
+        } else if (zzavh()) {
+            zzo.zze(getAccount());
+        }
         try {
-            GetServiceRequest zzo = new GetServiceRequest(this.Bp).zzht(this.mContext.getPackageName()).zzo(zzagl());
-            if (set != null) {
-                zzo.zzf(set);
-            }
-            if (zzahd()) {
-                zzo.zzd(zzatv()).zzb(com_google_android_gms_common_internal_zzr);
-            } else if (zzaty()) {
-                zzo.zzd(getAccount());
-            }
-            synchronized (this.Bg) {
-                if (this.Bh != null) {
-                    this.Bh.zza(new zzg(this, this.Br.get()), zzo);
+            synchronized (this.Dp) {
+                if (this.Dq != null) {
+                    this.Dq.zza(new zzg(this, this.DA.get()), zzo);
                 } else {
                     Log.w("GmsClient", "mServiceBroker is null, client disconnected");
                 }
             }
         } catch (DeadObjectException e) {
             Log.w("GmsClient", "service died");
-            zzgl(1);
+            zzgk(1);
         } catch (Throwable e2) {
             Log.w("GmsClient", "Remote exception occurred", e2);
+        } catch (SecurityException e3) {
+            throw e3;
+        } catch (Throwable e22) {
+            Log.w("GmsClient", "IGmsServiceBroker.getService failed", e22);
+            zzl(new ConnectionResult(8, null, "IGmsServiceBroker.getService failed."));
         }
     }
 
-    protected Bundle zzagl() {
+    protected Bundle zzahv() {
         return new Bundle();
     }
 
-    public boolean zzahd() {
+    public boolean zzain() {
         return false;
     }
 
-    public boolean zzahs() {
+    public boolean zzajc() {
         return false;
     }
 
-    public Intent zzaht() {
+    public Intent zzajd() {
         throw new UnsupportedOperationException("Not a sign in API");
     }
 
-    public Bundle zzaoe() {
+    public Bundle zzapn() {
         return null;
     }
 
-    public boolean zzapr() {
+    public boolean zzaqx() {
         return true;
     }
 
     @Nullable
-    public IBinder zzaps() {
+    public IBinder zzaqy() {
         IBinder iBinder;
-        synchronized (this.Bg) {
-            if (this.Bh == null) {
+        synchronized (this.Dp) {
+            if (this.Dq == null) {
                 iBinder = null;
             } else {
-                iBinder = this.Bh.asBinder();
+                iBinder = this.Dq.asBinder();
             }
         }
         return iBinder;
     }
 
-    protected String zzatq() {
+    protected String zzauz() {
         return "com.google.android.gms";
     }
 
     @Nullable
-    protected final String zzatr() {
-        return this.Bq == null ? this.mContext.getClass().getName() : this.Bq;
+    protected final String zzava() {
+        return this.Dz == null ? this.mContext.getClass().getName() : this.Dz;
     }
 
-    public void zzatu() {
-        int isGooglePlayServicesAvailable = this.xn.isGooglePlayServicesAvailable(this.mContext);
+    public void zzavd() {
+        int isGooglePlayServicesAvailable = this.zm.isGooglePlayServicesAvailable(this.mContext);
         if (isGooglePlayServicesAvailable != 0) {
             zzb(1, null);
-            this.Bi = new zzi(this);
-            this.mHandler.sendMessage(this.mHandler.obtainMessage(3, this.Br.get(), isGooglePlayServicesAvailable));
+            this.Dr = new zzi(this);
+            this.mHandler.sendMessage(this.mHandler.obtainMessage(3, this.DA.get(), isGooglePlayServicesAvailable));
             return;
         }
         zza(new zzi(this));
     }
 
-    public final Account zzatv() {
+    public final Account zzave() {
         return getAccount() != null ? getAccount() : new Account("<<default account>>", "com.google");
     }
 
-    protected final void zzatw() {
+    protected final void zzavf() {
         if (!isConnected()) {
             throw new IllegalStateException("Not connected. Call connect() and wait for onConnected() to be called.");
         }
     }
 
-    public final T zzatx() throws DeadObjectException {
+    public final T zzavg() throws DeadObjectException {
         T t;
-        synchronized (this.zzakd) {
-            if (this.Bm == 4) {
+        synchronized (this.zzako) {
+            if (this.Dv == 4) {
                 throw new DeadObjectException();
             }
-            zzatw();
-            zzac.zza(this.Bj != null, (Object) "Client is connected but service is null");
-            t = this.Bj;
+            zzavf();
+            zzaa.zza(this.Ds != null, (Object) "Client is connected but service is null");
+            t = this.Ds;
         }
         return t;
     }
 
-    public boolean zzaty() {
+    public boolean zzavh() {
         return false;
     }
 
-    protected Set<Scope> zzatz() {
+    protected Set<Scope> zzavi() {
         return Collections.EMPTY_SET;
     }
 
     void zzc(int i, T t) {
     }
 
-    public void zzgl(int i) {
-        this.mHandler.sendMessage(this.mHandler.obtainMessage(4, this.Br.get(), i));
+    public void zzgk(int i) {
+        this.mHandler.sendMessage(this.mHandler.obtainMessage(4, this.DA.get(), i));
     }
 
     @Nullable
     protected abstract T zzh(IBinder iBinder);
 
     @NonNull
-    protected abstract String zzix();
+    protected abstract String zzjx();
 
     @NonNull
-    protected abstract String zziy();
+    protected abstract String zzjy();
 }

@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.dynamic.zze;
 import com.google.android.gms.dynamic.zzf;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
@@ -23,59 +23,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupportMapFragment extends Fragment {
-    private final zzb amo = new zzb(this);
+    private final zzb apu = new zzb(this);
 
     static class zzb extends com.google.android.gms.dynamic.zza<zza> {
-        private final Fragment Ov;
-        protected zzf<zza> alG;
-        private final List<OnMapReadyCallback> alH = new ArrayList();
+        private final Fragment Qg;
+        protected zzf<zza> aoN;
+        private final List<OnMapReadyCallback> aoO = new ArrayList();
         private Activity mActivity;
 
         zzb(Fragment fragment) {
-            this.Ov = fragment;
+            this.Qg = fragment;
         }
 
         private void setActivity(Activity activity) {
             this.mActivity = activity;
-            zzbru();
+            zzbsp();
         }
 
         public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
-            if (zzbdt() != null) {
-                ((zza) zzbdt()).getMapAsync(onMapReadyCallback);
+            if (zzbdo() != null) {
+                ((zza) zzbdo()).getMapAsync(onMapReadyCallback);
             } else {
-                this.alH.add(onMapReadyCallback);
+                this.aoO.add(onMapReadyCallback);
             }
         }
 
         public void onEnterAmbient(Bundle bundle) {
-            if (zzbdt() != null) {
-                ((zza) zzbdt()).onEnterAmbient(bundle);
+            if (zzbdo() != null) {
+                ((zza) zzbdo()).onEnterAmbient(bundle);
             }
         }
 
         public void onExitAmbient() {
-            if (zzbdt() != null) {
-                ((zza) zzbdt()).onExitAmbient();
+            if (zzbdo() != null) {
+                ((zza) zzbdo()).onExitAmbient();
             }
         }
 
         protected void zza(zzf<zza> com_google_android_gms_dynamic_zzf_com_google_android_gms_maps_SupportMapFragment_zza) {
-            this.alG = com_google_android_gms_dynamic_zzf_com_google_android_gms_maps_SupportMapFragment_zza;
-            zzbru();
+            this.aoN = com_google_android_gms_dynamic_zzf_com_google_android_gms_maps_SupportMapFragment_zza;
+            zzbsp();
         }
 
-        public void zzbru() {
-            if (this.mActivity != null && this.alG != null && zzbdt() == null) {
+        public void zzbsp() {
+            if (this.mActivity != null && this.aoN != null && zzbdo() == null) {
                 try {
                     MapsInitializer.initialize(this.mActivity);
-                    IMapFragmentDelegate zzah = zzai.zzdp(this.mActivity).zzah(zze.zzac(this.mActivity));
+                    IMapFragmentDelegate zzah = zzai.zzdm(this.mActivity).zzah(zze.zzac(this.mActivity));
                     if (zzah != null) {
-                        this.alG.zza(new zza(this.Ov, zzah));
-                        for (OnMapReadyCallback mapAsync : this.alH) {
-                            ((zza) zzbdt()).getMapAsync(mapAsync);
+                        this.aoN.zza(new zza(this.Qg, zzah));
+                        for (OnMapReadyCallback mapAsync : this.aoO) {
+                            ((zza) zzbdo()).getMapAsync(mapAsync);
                         }
-                        this.alH.clear();
+                        this.aoO.clear();
                     }
                 } catch (RemoteException e) {
                     throw new RuntimeRemoteException(e);
@@ -86,18 +86,18 @@ public class SupportMapFragment extends Fragment {
     }
 
     static class zza implements MapLifecycleDelegate {
-        private final Fragment Ov;
-        private final IMapFragmentDelegate alD;
+        private final Fragment Qg;
+        private final IMapFragmentDelegate aoK;
 
         public zza(Fragment fragment, IMapFragmentDelegate iMapFragmentDelegate) {
-            this.alD = (IMapFragmentDelegate) zzac.zzy(iMapFragmentDelegate);
-            this.Ov = (Fragment) zzac.zzy(fragment);
+            this.aoK = (IMapFragmentDelegate) zzaa.zzy(iMapFragmentDelegate);
+            this.Qg = (Fragment) zzaa.zzy(fragment);
         }
 
         public void getMapAsync(final OnMapReadyCallback onMapReadyCallback) {
             try {
-                this.alD.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
-                    final /* synthetic */ zza amp;
+                this.aoK.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
+                    final /* synthetic */ zza apv;
 
                     public void zza(IGoogleMapDelegate iGoogleMapDelegate) throws RemoteException {
                         onMapReadyCallback.onMapReady(new GoogleMap(iGoogleMapDelegate));
@@ -116,16 +116,16 @@ public class SupportMapFragment extends Fragment {
                     throw new RuntimeRemoteException(e);
                 }
             }
-            Bundle arguments = this.Ov.getArguments();
+            Bundle arguments = this.Qg.getArguments();
             if (arguments != null && arguments.containsKey("MapOptions")) {
                 zzah.zza(bundle, "MapOptions", arguments.getParcelable("MapOptions"));
             }
-            this.alD.onCreate(bundle);
+            this.aoK.onCreate(bundle);
         }
 
         public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
             try {
-                return (View) zze.zzae(this.alD.onCreateView(zze.zzac(layoutInflater), zze.zzac(viewGroup), bundle));
+                return (View) zze.zzae(this.aoK.onCreateView(zze.zzac(layoutInflater), zze.zzac(viewGroup), bundle));
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -133,7 +133,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onDestroy() {
             try {
-                this.alD.onDestroy();
+                this.aoK.onDestroy();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -141,7 +141,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onDestroyView() {
             try {
-                this.alD.onDestroyView();
+                this.aoK.onDestroyView();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -149,7 +149,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onEnterAmbient(Bundle bundle) {
             try {
-                this.alD.onEnterAmbient(bundle);
+                this.aoK.onEnterAmbient(bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -157,7 +157,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onExitAmbient() {
             try {
-                this.alD.onExitAmbient();
+                this.aoK.onExitAmbient();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -165,7 +165,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onInflate(Activity activity, Bundle bundle, Bundle bundle2) {
             try {
-                this.alD.onInflate(zze.zzac(activity), (GoogleMapOptions) bundle.getParcelable("MapOptions"), bundle2);
+                this.aoK.onInflate(zze.zzac(activity), (GoogleMapOptions) bundle.getParcelable("MapOptions"), bundle2);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -173,7 +173,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onLowMemory() {
             try {
-                this.alD.onLowMemory();
+                this.aoK.onLowMemory();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -181,7 +181,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onPause() {
             try {
-                this.alD.onPause();
+                this.aoK.onPause();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -189,7 +189,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onResume() {
             try {
-                this.alD.onResume();
+                this.aoK.onResume();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -197,7 +197,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onSaveInstanceState(Bundle bundle) {
             try {
-                this.alD.onSaveInstanceState(bundle);
+                this.aoK.onSaveInstanceState(bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -205,7 +205,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onStart() {
             try {
-                this.alD.onStart();
+                this.aoK.onStart();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -213,7 +213,7 @@ public class SupportMapFragment extends Fragment {
 
         public void onStop() {
             try {
-                this.alD.onStop();
+                this.aoK.onStop();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -233,8 +233,8 @@ public class SupportMapFragment extends Fragment {
     }
 
     public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
-        zzac.zzhq("getMapAsync must be called on the main thread.");
-        this.amo.getMapAsync(onMapReadyCallback);
+        zzaa.zzhs("getMapAsync must be called on the main thread.");
+        this.apu.getMapAsync(onMapReadyCallback);
     }
 
     public void onActivityCreated(Bundle bundle) {
@@ -246,62 +246,62 @@ public class SupportMapFragment extends Fragment {
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.amo.setActivity(activity);
+        this.apu.setActivity(activity);
     }
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        this.amo.onCreate(bundle);
+        this.apu.onCreate(bundle);
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View onCreateView = this.amo.onCreateView(layoutInflater, viewGroup, bundle);
+        View onCreateView = this.apu.onCreateView(layoutInflater, viewGroup, bundle);
         onCreateView.setClickable(true);
         return onCreateView;
     }
 
     public void onDestroy() {
-        this.amo.onDestroy();
+        this.apu.onDestroy();
         super.onDestroy();
     }
 
     public void onDestroyView() {
-        this.amo.onDestroyView();
+        this.apu.onDestroyView();
         super.onDestroyView();
     }
 
     public final void onEnterAmbient(Bundle bundle) {
-        zzac.zzhq("onEnterAmbient must be called on the main thread.");
-        this.amo.onEnterAmbient(bundle);
+        zzaa.zzhs("onEnterAmbient must be called on the main thread.");
+        this.apu.onEnterAmbient(bundle);
     }
 
     public final void onExitAmbient() {
-        zzac.zzhq("onExitAmbient must be called on the main thread.");
-        this.amo.onExitAmbient();
+        zzaa.zzhs("onExitAmbient must be called on the main thread.");
+        this.apu.onExitAmbient();
     }
 
     public void onInflate(Activity activity, AttributeSet attributeSet, Bundle bundle) {
         super.onInflate(activity, attributeSet, bundle);
-        this.amo.setActivity(activity);
+        this.apu.setActivity(activity);
         Parcelable createFromAttributes = GoogleMapOptions.createFromAttributes(activity, attributeSet);
         Bundle bundle2 = new Bundle();
         bundle2.putParcelable("MapOptions", createFromAttributes);
-        this.amo.onInflate(activity, bundle2, bundle);
+        this.apu.onInflate(activity, bundle2, bundle);
     }
 
     public void onLowMemory() {
-        this.amo.onLowMemory();
+        this.apu.onLowMemory();
         super.onLowMemory();
     }
 
     public void onPause() {
-        this.amo.onPause();
+        this.apu.onPause();
         super.onPause();
     }
 
     public void onResume() {
         super.onResume();
-        this.amo.onResume();
+        this.apu.onResume();
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -309,16 +309,16 @@ public class SupportMapFragment extends Fragment {
             bundle.setClassLoader(SupportMapFragment.class.getClassLoader());
         }
         super.onSaveInstanceState(bundle);
-        this.amo.onSaveInstanceState(bundle);
+        this.apu.onSaveInstanceState(bundle);
     }
 
     public void onStart() {
         super.onStart();
-        this.amo.onStart();
+        this.apu.onStart();
     }
 
     public void onStop() {
-        this.amo.onStop();
+        this.apu.onStop();
         super.onStop();
     }
 

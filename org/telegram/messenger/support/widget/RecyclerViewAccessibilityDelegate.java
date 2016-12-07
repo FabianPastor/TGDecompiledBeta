@@ -31,7 +31,7 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
         this.mRecyclerView = recyclerView;
     }
 
-    private boolean shouldIgnore() {
+    boolean shouldIgnore() {
         return this.mRecyclerView.hasPendingAdapterUpdates();
     }
 
@@ -64,7 +64,7 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
         }
     }
 
-    AccessibilityDelegateCompat getItemDelegate() {
+    public AccessibilityDelegateCompat getItemDelegate() {
         return this.mItemDelegate;
     }
 }

@@ -8,14 +8,14 @@ import java.util.List;
 
 public class CheckServerAuthResult extends AbstractSafeParcelable {
     public static final Creator<CheckServerAuthResult> CREATOR = new zzc();
-    final boolean aAh;
-    final List<Scope> aAi;
+    final boolean aDs;
+    final List<Scope> aDt;
     final int mVersionCode;
 
     CheckServerAuthResult(int i, boolean z, List<Scope> list) {
         this.mVersionCode = i;
-        this.aAh = z;
-        this.aAi = list;
+        this.aDs = z;
+        this.aDt = list;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

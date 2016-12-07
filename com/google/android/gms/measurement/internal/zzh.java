@@ -2,50 +2,50 @@ package com.google.android.gms.measurement.internal;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.Iterator;
 
 public class zzh {
-    final String aoq;
-    final long aor;
-    final EventParams aos;
+    final String arA;
+    final long arB;
+    final EventParams arC;
     final String mName;
-    final long tr;
-    final String zzcpe;
+    final long vO;
+    final String zzctj;
 
     zzh(zzx com_google_android_gms_measurement_internal_zzx, String str, String str2, String str3, long j, long j2, Bundle bundle) {
-        zzac.zzhz(str2);
-        zzac.zzhz(str3);
-        this.zzcpe = str2;
+        zzaa.zzib(str2);
+        zzaa.zzib(str3);
+        this.zzctj = str2;
         this.mName = str3;
         if (TextUtils.isEmpty(str)) {
             str = null;
         }
-        this.aoq = str;
-        this.tr = j;
-        this.aor = j2;
-        if (this.aor != 0 && this.aor > this.tr) {
-            com_google_android_gms_measurement_internal_zzx.zzbvg().zzbwe().log("Event created with reverse previous/current timestamps");
+        this.arA = str;
+        this.vO = j;
+        this.arB = j2;
+        if (this.arB != 0 && this.arB > this.vO) {
+            com_google_android_gms_measurement_internal_zzx.zzbwb().zzbxa().log("Event created with reverse previous/current timestamps");
         }
-        this.aos = zza(com_google_android_gms_measurement_internal_zzx, bundle);
+        this.arC = zza(com_google_android_gms_measurement_internal_zzx, bundle);
     }
 
     private zzh(zzx com_google_android_gms_measurement_internal_zzx, String str, String str2, String str3, long j, long j2, EventParams eventParams) {
-        zzac.zzhz(str2);
-        zzac.zzhz(str3);
-        zzac.zzy(eventParams);
-        this.zzcpe = str2;
+        zzaa.zzib(str2);
+        zzaa.zzib(str3);
+        zzaa.zzy(eventParams);
+        this.zzctj = str2;
         this.mName = str3;
         if (TextUtils.isEmpty(str)) {
             str = null;
         }
-        this.aoq = str;
-        this.tr = j;
-        this.aor = j2;
-        if (this.aor != 0 && this.aor > this.tr) {
-            com_google_android_gms_measurement_internal_zzx.zzbvg().zzbwe().log("Event created with reverse previous/current timestamps");
+        this.arA = str;
+        this.vO = j;
+        this.arB = j2;
+        if (this.arB != 0 && this.arB > this.vO) {
+            com_google_android_gms_measurement_internal_zzx.zzbwb().zzbxa().log("Event created with reverse previous/current timestamps");
         }
-        this.aos = eventParams;
+        this.arC = eventParams;
     }
 
     static EventParams zza(zzx com_google_android_gms_measurement_internal_zzx, Bundle bundle) {
@@ -57,15 +57,15 @@ public class zzh {
         while (it.hasNext()) {
             String str = (String) it.next();
             if (str == null) {
-                com_google_android_gms_measurement_internal_zzx.zzbvg().zzbwc().log("Param name can't be null");
+                com_google_android_gms_measurement_internal_zzx.zzbwb().zzbwy().log("Param name can't be null");
                 it.remove();
             } else {
-                Object zzl = com_google_android_gms_measurement_internal_zzx.zzbvc().zzl(str, bundle2.get(str));
+                Object zzl = com_google_android_gms_measurement_internal_zzx.zzbvx().zzl(str, bundle2.get(str));
                 if (zzl == null) {
-                    com_google_android_gms_measurement_internal_zzx.zzbvg().zzbwe().zzj("Param value can't be null", str);
+                    com_google_android_gms_measurement_internal_zzx.zzbwb().zzbxa().zzj("Param value can't be null", str);
                     it.remove();
                 } else {
-                    com_google_android_gms_measurement_internal_zzx.zzbvc().zza(bundle2, str, zzl);
+                    com_google_android_gms_measurement_internal_zzx.zzbvx().zza(bundle2, str, zzl);
                 }
             }
         }
@@ -73,13 +73,13 @@ public class zzh {
     }
 
     public String toString() {
-        String str = this.zzcpe;
+        String str = this.zzctj;
         String str2 = this.mName;
-        String valueOf = String.valueOf(this.aos);
+        String valueOf = String.valueOf(this.arC);
         return new StringBuilder(((String.valueOf(str).length() + 33) + String.valueOf(str2).length()) + String.valueOf(valueOf).length()).append("Event{appId='").append(str).append("'").append(", name='").append(str2).append("'").append(", params=").append(valueOf).append("}").toString();
     }
 
     zzh zza(zzx com_google_android_gms_measurement_internal_zzx, long j) {
-        return new zzh(com_google_android_gms_measurement_internal_zzx, this.aoq, this.zzcpe, this.mName, this.tr, j, this.aos);
+        return new zzh(com_google_android_gms_measurement_internal_zzx, this.arA, this.zzctj, this.mName, this.vO, j, this.arC);
     }
 }

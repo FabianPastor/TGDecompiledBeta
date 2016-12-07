@@ -14,15 +14,18 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -34,6 +37,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,6 +58,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
@@ -100,10 +107,13 @@ import org.telegram.tgnet.TLRPC.TL_chatParticipants;
 import org.telegram.tgnet.TLRPC.TL_chatParticipantsForbidden;
 import org.telegram.tgnet.TLRPC.TL_chatPhotoEmpty;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
+import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_encryptedChat;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_userEmpty;
+import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -119,6 +129,7 @@ import org.telegram.ui.Cells.AboutLinkCell.AboutLinkCellDelegate;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.LoadingCell;
+import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailCell;
@@ -175,6 +186,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private int emptyRowChat;
     private int emptyRowChat2;
     private int extraHeight;
+    private int groupsInCommonRow;
     private ChatFull info;
     private int initialAnimationExtraHeight;
     private LinearLayoutManager layoutManager;
@@ -338,6 +350,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             boolean enabled;
             boolean checkBackground = true;
             String text;
+            TL_userFull userFull;
             switch (holder.getItemViewType()) {
                 case 0:
                     if (i != ProfileActivity.this.emptyRowChat && i != ProfileActivity.this.emptyRowChat2) {
@@ -384,115 +397,149 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 case 3:
                     TextCell textCell = (TextCell) holder.itemView;
                     textCell.setTextColor(-14606047);
-                    String string;
                     String value;
+                    String string;
                     if (i != ProfileActivity.this.sharedMediaRow) {
-                        if (i != ProfileActivity.this.settingsTimerRow) {
-                            if (i != ProfileActivity.this.settingsNotificationsRow) {
-                                if (i != ProfileActivity.this.startSecretChatRow) {
-                                    if (i != ProfileActivity.this.settingsKeyRow) {
-                                        if (i != ProfileActivity.this.leaveChannelRow) {
-                                            if (i != ProfileActivity.this.convertRow) {
-                                                if (i != ProfileActivity.this.membersRow) {
-                                                    if (i != ProfileActivity.this.managementRow) {
-                                                        if (i != ProfileActivity.this.blockedUsersRow) {
-                                                            if (i == ProfileActivity.this.addMemberRow) {
-                                                                if (ProfileActivity.this.chat_id <= 0) {
-                                                                    textCell.setText(LocaleController.getString("AddRecipient", R.string.AddRecipient));
-                                                                    break;
-                                                                } else {
-                                                                    textCell.setText(LocaleController.getString("AddMember", R.string.AddMember));
-                                                                    break;
+                        if (i != ProfileActivity.this.groupsInCommonRow) {
+                            if (i != ProfileActivity.this.settingsTimerRow) {
+                                if (i != ProfileActivity.this.settingsNotificationsRow) {
+                                    if (i != ProfileActivity.this.startSecretChatRow) {
+                                        if (i != ProfileActivity.this.settingsKeyRow) {
+                                            if (i != ProfileActivity.this.leaveChannelRow) {
+                                                if (i != ProfileActivity.this.convertRow) {
+                                                    if (i != ProfileActivity.this.membersRow) {
+                                                        if (i != ProfileActivity.this.managementRow) {
+                                                            if (i != ProfileActivity.this.blockedUsersRow) {
+                                                                if (i == ProfileActivity.this.addMemberRow) {
+                                                                    if (ProfileActivity.this.chat_id <= 0) {
+                                                                        textCell.setText(LocaleController.getString("AddRecipient", R.string.AddRecipient));
+                                                                        break;
+                                                                    } else {
+                                                                        textCell.setText(LocaleController.getString("AddMember", R.string.AddMember));
+                                                                        break;
+                                                                    }
                                                                 }
+                                                            } else if (ProfileActivity.this.info == null) {
+                                                                textCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
+                                                                break;
+                                                            } else {
+                                                                textCell.setTextAndValue(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.kicked_count)}));
+                                                                break;
                                                             }
                                                         } else if (ProfileActivity.this.info == null) {
-                                                            textCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
+                                                            textCell.setText(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators));
                                                             break;
                                                         } else {
-                                                            textCell.setTextAndValue(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.kicked_count)}));
+                                                            textCell.setTextAndValue(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.admins_count)}));
                                                             break;
                                                         }
                                                     } else if (ProfileActivity.this.info == null) {
-                                                        textCell.setText(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators));
+                                                        textCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                                                         break;
                                                     } else {
-                                                        textCell.setTextAndValue(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.admins_count)}));
+                                                        textCell.setTextAndValue(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
                                                         break;
                                                     }
-                                                } else if (ProfileActivity.this.info == null) {
-                                                    textCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
-                                                    break;
-                                                } else {
-                                                    textCell.setTextAndValue(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.info.participants_count)}));
-                                                    break;
                                                 }
+                                                textCell.setText(LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
+                                                textCell.setTextColor(-13129447);
+                                                break;
                                             }
-                                            textCell.setText(LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
-                                            textCell.setTextColor(-13129447);
+                                            textCell.setTextColor(-1229511);
+                                            textCell.setText(LocaleController.getString("LeaveChannel", R.string.LeaveChannel));
                                             break;
                                         }
-                                        textCell.setTextColor(-1229511);
-                                        textCell.setText(LocaleController.getString("LeaveChannel", R.string.LeaveChannel));
+                                        Drawable identiconDrawable = new IdenticonDrawable();
+                                        identiconDrawable.setEncryptedChat(MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32))));
+                                        textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", R.string.EncryptionKey), identiconDrawable);
                                         break;
                                     }
-                                    IdenticonDrawable identiconDrawable = new IdenticonDrawable();
-                                    identiconDrawable.setEncryptedChat(MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32))));
-                                    textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", R.string.EncryptionKey), identiconDrawable);
+                                    textCell.setText(LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
+                                    textCell.setTextColor(-13129447);
                                     break;
                                 }
-                                textCell.setText(LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
-                                textCell.setTextColor(-13129447);
-                                break;
-                            }
-                            long did;
-                            String string2;
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-                            if (ProfileActivity.this.dialog_id != 0) {
-                                did = ProfileActivity.this.dialog_id;
-                            } else if (ProfileActivity.this.user_id != 0) {
-                                did = (long) ProfileActivity.this.user_id;
-                            } else {
-                                did = (long) (-ProfileActivity.this.chat_id);
-                            }
-                            int value2 = preferences.getInt("notify2_" + did, 0);
-                            if (value2 == 0) {
-                                if (((int) ProfileActivity.this.dialog_id) < 0) {
-                                    enabled = preferences.getBoolean("EnableGroup", true);
+                                long did;
+                                String val;
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                                if (ProfileActivity.this.dialog_id != 0) {
+                                    did = ProfileActivity.this.dialog_id;
+                                } else if (ProfileActivity.this.user_id != 0) {
+                                    did = (long) ProfileActivity.this.user_id;
                                 } else {
-                                    enabled = preferences.getBoolean("EnableAll", true);
+                                    did = (long) (-ProfileActivity.this.chat_id);
                                 }
-                            } else if (value2 == 1) {
-                                enabled = true;
-                            } else if (value2 == 2) {
-                                enabled = false;
-                            } else {
-                                enabled = false;
+                                boolean custom = preferences.getBoolean("custom_" + did, false);
+                                int value2 = preferences.getInt("notify2_" + did, 0);
+                                int delta = preferences.getInt("notifyuntil_" + did, 0);
+                                if (value2 != 3 || delta == Integer.MAX_VALUE) {
+                                    if (value2 == 0) {
+                                        if (((int) did) < 0) {
+                                            enabled = preferences.getBoolean("EnableGroup", true);
+                                        } else {
+                                            enabled = preferences.getBoolean("EnableAll", true);
+                                        }
+                                    } else if (value2 == 1) {
+                                        enabled = true;
+                                    } else if (value2 == 2) {
+                                        enabled = false;
+                                    } else {
+                                        enabled = false;
+                                    }
+                                    if (enabled && custom) {
+                                        val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                                    } else {
+                                        val = enabled ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                                    }
+                                } else {
+                                    delta -= ConnectionsManager.getInstance().getCurrentTime();
+                                    if (delta <= 0) {
+                                        if (custom) {
+                                            val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                                        } else {
+                                            val = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                                        }
+                                    } else if (delta < 3600) {
+                                        val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                                    } else if (delta < 86400) {
+                                        val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / BitmapDescriptorFactory.HUE_YELLOW) / BitmapDescriptorFactory.HUE_YELLOW))));
+                                    } else if (delta < 31536000) {
+                                        val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / BitmapDescriptorFactory.HUE_YELLOW) / BitmapDescriptorFactory.HUE_YELLOW) / 24.0f))));
+                                    } else {
+                                        val = null;
+                                    }
+                                }
+                                if (val == null) {
+                                    textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", R.string.Notifications), LocaleController.getString("NotificationsOff", R.string.NotificationsOff), R.drawable.profile_list);
+                                    break;
+                                } else {
+                                    textCell.setTextAndValueAndIcon(LocaleController.getString("Notifications", R.string.Notifications), val, R.drawable.profile_list);
+                                    break;
+                                }
                             }
-                            string = LocaleController.getString("Notifications", R.string.Notifications);
-                            if (enabled) {
-                                string2 = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                            EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32)));
+                            if (encryptedChat.ttl == 0) {
+                                value = LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
                             } else {
-                                string2 = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                                value = AndroidUtilities.formatTTLString(encryptedChat.ttl);
                             }
-                            textCell.setTextAndValueAndIcon(string, string2, R.drawable.profile_list);
+                            textCell.setTextAndValue(LocaleController.getString("MessageLifetime", R.string.MessageLifetime), value);
                             break;
                         }
-                        EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (ProfileActivity.this.dialog_id >> 32)));
-                        if (encryptedChat.ttl == 0) {
-                            value = LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
-                        } else {
-                            value = AndroidUtilities.formatTTLString(encryptedChat.ttl);
-                        }
-                        textCell.setTextAndValue(LocaleController.getString("MessageLifetime", R.string.MessageLifetime), value);
+                        userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.user_id);
+                        string = LocaleController.getString("GroupsInCommon", R.string.GroupsInCommon);
+                        String str = "%d";
+                        Object[] objArr = new Object[1];
+                        objArr[0] = Integer.valueOf(userFull != null ? userFull.common_chats_count : 0);
+                        textCell.setTextAndValue(string, String.format(str, objArr));
                         break;
                     }
                     if (ProfileActivity.this.totalMediaCount == -1) {
                         value = LocaleController.getString("Loading", R.string.Loading);
                     } else {
                         string = "%d";
-                        Object[] objArr = new Object[1];
-                        objArr[0] = Integer.valueOf((ProfileActivity.this.totalMediaCountMerge != -1 ? ProfileActivity.this.totalMediaCountMerge : 0) + ProfileActivity.this.totalMediaCount);
-                        value = String.format(string, objArr);
+                        Object[] objArr2 = new Object[1];
+                        objArr2[0] = Integer.valueOf((ProfileActivity.this.totalMediaCountMerge != -1 ? ProfileActivity.this.totalMediaCountMerge : 0) + ProfileActivity.this.totalMediaCount);
+                        value = String.format(string, objArr2);
                     }
                     if (ProfileActivity.this.user_id != 0 && UserConfig.getClientUserId() == ProfileActivity.this.user_id) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("SharedMedia", R.string.SharedMedia), value, R.drawable.profile_list);
@@ -550,7 +597,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             break;
                         }
                     }
-                    aboutLinkCell.setTextAndIcon(MessagesController.getInstance().getUserAbout(ProfileActivity.this.user_id), R.drawable.bot_info);
+                    userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.user_id);
+                    aboutLinkCell.setTextAndIcon(userFull != null ? userFull.about : null, R.drawable.bot_info);
                     break;
                     break;
                 default:
@@ -560,7 +608,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (checkBackground) {
                 enabled = false;
                 if (ProfileActivity.this.user_id != 0) {
-                    enabled = i == ProfileActivity.this.phoneRow || i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.sharedMediaRow || i == ProfileActivity.this.startSecretChatRow || i == ProfileActivity.this.usernameRow || i == ProfileActivity.this.userInfoRow;
+                    enabled = i == ProfileActivity.this.phoneRow || i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.sharedMediaRow || i == ProfileActivity.this.startSecretChatRow || i == ProfileActivity.this.usernameRow || i == ProfileActivity.this.userInfoRow || i == ProfileActivity.this.groupsInCommonRow;
                 } else if (ProfileActivity.this.chat_id != 0) {
                     enabled = i == ProfileActivity.this.convertRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.sharedMediaRow || ((i > ProfileActivity.this.emptyRowChat2 && i < ProfileActivity.this.membersEndRow) || i == ProfileActivity.this.addMemberRow || i == ProfileActivity.this.channelNameRow || i == ProfileActivity.this.leaveChannelRow || i == ProfileActivity.this.membersRow || i == ProfileActivity.this.managementRow || i == ProfileActivity.this.blockedUsersRow || i == ProfileActivity.this.channelInfoRow);
                 }
@@ -588,7 +636,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (i == ProfileActivity.this.phoneRow || i == ProfileActivity.this.usernameRow || i == ProfileActivity.this.channelNameRow) {
                 return 2;
             }
-            if (i == ProfileActivity.this.leaveChannelRow || i == ProfileActivity.this.sharedMediaRow || i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.startSecretChatRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.membersRow || i == ProfileActivity.this.managementRow || i == ProfileActivity.this.blockedUsersRow || i == ProfileActivity.this.convertRow || i == ProfileActivity.this.addMemberRow) {
+            if (i == ProfileActivity.this.leaveChannelRow || i == ProfileActivity.this.sharedMediaRow || i == ProfileActivity.this.settingsTimerRow || i == ProfileActivity.this.settingsNotificationsRow || i == ProfileActivity.this.startSecretChatRow || i == ProfileActivity.this.settingsKeyRow || i == ProfileActivity.this.membersRow || i == ProfileActivity.this.managementRow || i == ProfileActivity.this.blockedUsersRow || i == ProfileActivity.this.convertRow || i == ProfileActivity.this.addMemberRow || i == ProfileActivity.this.groupsInCommonRow) {
                 return 3;
             }
             if (i > ProfileActivity.this.emptyRowChat2 && i < ProfileActivity.this.membersEndRow) {
@@ -862,13 +910,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             if (MessagesController.getInstance().getUser(Integer.valueOf(ProfileActivity.this.user_id)) != null) {
                                 Intent intent = new Intent("android.intent.action.SEND");
                                 intent.setType("text/plain");
-                                String about = MessagesController.getInstance().getUserAbout(ProfileActivity.this.botInfo.user_id);
-                                if (ProfileActivity.this.botInfo == null || about == null) {
+                                TL_userFull userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.botInfo.user_id);
+                                if (ProfileActivity.this.botInfo == null || userFull == null || TextUtils.isEmpty(userFull.about)) {
                                     intent = intent;
                                     intent.putExtra("android.intent.extra.TEXT", String.format("https://telegram.me/%s", new Object[]{user.username}));
                                 } else {
                                     intent = intent;
-                                    intent.putExtra("android.intent.extra.TEXT", String.format("%s https://telegram.me/%s", new Object[]{about, user.username}));
+                                    intent.putExtra("android.intent.extra.TEXT", String.format("%s https://telegram.me/%s", new Object[]{userFull.about, user.username}));
                                 }
                                 ProfileActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
                             }
@@ -958,6 +1006,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         MediaActivity fragment = new MediaActivity(args);
                         fragment.setChatInfo(ProfileActivity.this.info);
                         ProfileActivity.this.presentFragment(fragment);
+                    } else if (position == ProfileActivity.this.groupsInCommonRow) {
+                        args = new Bundle();
+                        args.putInt("user_id", ProfileActivity.this.user_id);
+                        ProfileActivity.this.presentFragment(new CommonGroupsActivity(args));
                     } else if (position == ProfileActivity.this.settingsKeyRow) {
                         args = new Bundle();
                         args.putInt("chat_id", (int) (ProfileActivity.this.dialog_id >> 32));
@@ -965,13 +1017,122 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (position == ProfileActivity.this.settingsTimerRow) {
                         ProfileActivity.this.showDialog(AndroidUtilities.buildTTLAlert(ProfileActivity.this.getParentActivity(), ProfileActivity.this.currentEncryptedChat).create());
                     } else if (position == ProfileActivity.this.settingsNotificationsRow) {
-                        args = new Bundle();
-                        if (ProfileActivity.this.user_id != 0) {
-                            args.putLong("dialog_id", ProfileActivity.this.dialog_id == 0 ? (long) ProfileActivity.this.user_id : ProfileActivity.this.dialog_id);
-                        } else if (ProfileActivity.this.chat_id != 0) {
-                            args.putLong("dialog_id", (long) (-ProfileActivity.this.chat_id));
+                        long did;
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                        int[] selected = new int[1];
+                        if (ProfileActivity.this.dialog_id != 0) {
+                            did = ProfileActivity.this.dialog_id;
+                        } else if (ProfileActivity.this.user_id != 0) {
+                            did = (long) ProfileActivity.this.user_id;
+                        } else {
+                            did = (long) (-ProfileActivity.this.chat_id);
                         }
-                        ProfileActivity.this.presentFragment(new ProfileNotificationsActivity(args));
+                        int value = preferences.getInt("notify2_" + did, 0);
+                        if (value == 0) {
+                            if (((int) did) < 0) {
+                                int i;
+                                if (preferences.getBoolean("EnableGroup", true)) {
+                                    i = 0;
+                                } else {
+                                    i = 4;
+                                }
+                                selected[0] = i;
+                            } else {
+                                selected[0] = preferences.getBoolean("EnableAll", true) ? 0 : 4;
+                            }
+                        } else if (value == 1) {
+                            selected[0] = 0;
+                        } else if (value == 2) {
+                            selected[0] = 4;
+                        } else {
+                            selected[0] = -1;
+                        }
+                        String[] descriptions = new String[5];
+                        descriptions[0] = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                        descriptions[1] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
+                        descriptions[2] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8));
+                        descriptions[3] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
+                        descriptions[4] = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                        View scrollView = new ScrollView(ProfileActivity.this.getParentActivity());
+                        LinearLayout linearLayout = new LinearLayout(ProfileActivity.this.getParentActivity());
+                        linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(8.0f));
+                        linearLayout.setOrientation(1);
+                        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
+                        int a = 0;
+                        while (a < descriptions.length) {
+                            RadioColorCell cell = new RadioColorCell(ProfileActivity.this.getParentActivity());
+                            cell.setTag(Integer.valueOf(a));
+                            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+                            cell.setTextAndValue(descriptions[a], selected[0] == a);
+                            linearLayout.addView(cell);
+                            cell.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    int i = ((Integer) v.getTag()).intValue();
+                                    Editor editor;
+                                    TL_dialog dialog;
+                                    if (i == 0) {
+                                        editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                                        editor.putInt("notify2_" + did, 0);
+                                        MessagesStorage.getInstance().setDialogFlags(did, 0);
+                                        editor.commit();
+                                        dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(did));
+                                        if (dialog != null) {
+                                            dialog.notify_settings = new TL_peerNotifySettings();
+                                        }
+                                        NotificationsController.updateServerNotificationsSettings(did);
+                                    } else {
+                                        long flags;
+                                        int untilTime = ConnectionsManager.getInstance().getCurrentTime();
+                                        if (i == 1) {
+                                            untilTime += 3600;
+                                        } else if (i == 2) {
+                                            untilTime += 28800;
+                                        } else if (i == 3) {
+                                            untilTime += 172800;
+                                        } else if (i == 4) {
+                                            untilTime = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                                        }
+                                        editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
+                                        if (i == 4) {
+                                            editor.putInt("notify2_" + did, 2);
+                                            flags = 1;
+                                        } else {
+                                            editor.putInt("notify2_" + did, 3);
+                                            editor.putInt("notifyuntil_" + did, untilTime);
+                                            flags = (((long) untilTime) << 32) | 1;
+                                        }
+                                        NotificationsController.getInstance().removeNotificationsForDialog(did);
+                                        MessagesStorage.getInstance().setDialogFlags(did, flags);
+                                        editor.commit();
+                                        dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(did));
+                                        if (dialog != null) {
+                                            dialog.notify_settings = new TL_peerNotifySettings();
+                                            dialog.notify_settings.mute_until = untilTime;
+                                        }
+                                        NotificationsController.updateServerNotificationsSettings(did);
+                                    }
+                                    ProfileActivity.this.listAdapter.notifyItemChanged(ProfileActivity.this.settingsNotificationsRow);
+                                    ProfileActivity.this.dismissCurrentDialig();
+                                }
+                            });
+                            a++;
+                        }
+                        builder = new Builder(ProfileActivity.this.getParentActivity());
+                        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
+                        builder.setView(scrollView);
+                        builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNeutralButton(LocaleController.getString("NotificationsCustomize", R.string.NotificationsCustomize), new OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Bundle args = new Bundle();
+                                if (ProfileActivity.this.user_id != 0) {
+                                    args.putLong("dialog_id", ProfileActivity.this.dialog_id == 0 ? (long) ProfileActivity.this.user_id : ProfileActivity.this.dialog_id);
+                                } else if (ProfileActivity.this.chat_id != 0) {
+                                    args.putLong("dialog_id", (long) (-ProfileActivity.this.chat_id));
+                                }
+                                ProfileActivity.this.presentFragment(new ProfileNotificationsActivity(args));
+                            }
+                        });
+                        ProfileActivity.this.showDialog(builder.create());
                     } else if (position == ProfileActivity.this.startSecretChatRow) {
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
@@ -1352,7 +1513,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         if (position == ProfileActivity.this.channelInfoRow) {
                             about = ProfileActivity.this.info.about;
                         } else {
-                            about = MessagesController.getInstance().getUserAbout(ProfileActivity.this.botInfo.user_id);
+                            TL_userFull userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.botInfo.user_id);
+                            about = userFull != null ? userFull.about : null;
                         }
                         if (about != null) {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", about));
@@ -2239,6 +2401,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.managementRow = -1;
         this.leaveChannelRow = -1;
         this.loadMoreMembersRow = -1;
+        this.groupsInCommonRow = -1;
         this.blockedUsersRow = -1;
         this.rowCount = 0;
         int i;
@@ -2257,7 +2420,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.rowCount = i + 1;
                 this.usernameRow = i;
             }
-            if (MessagesController.getInstance().getUserAbout(user.id) != null) {
+            TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
+            if ((userFull != null ? userFull.about : null) != null) {
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.userSectionRow = i;
@@ -2286,6 +2450,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 i = this.rowCount;
                 this.rowCount = i + 1;
                 this.settingsKeyRow = i;
+            }
+            if (!(userFull == null || userFull.common_chats_count == 0)) {
+                i = this.rowCount;
+                this.rowCount = i + 1;
+                this.groupsInCommonRow = i;
             }
             if (user != null && !user.bot && this.currentEncryptedChat == null && user.id != UserConfig.getClientUserId()) {
                 i = this.rowCount;

@@ -49,7 +49,6 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.BaseFragmentAdapter;
@@ -414,7 +413,6 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        ActionBarMenu menu = this.actionBar.createMenu();
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
         FrameLayout frameLayout = this.fragmentView;

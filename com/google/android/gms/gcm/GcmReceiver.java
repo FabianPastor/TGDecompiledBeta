@@ -11,13 +11,13 @@ import android.util.Base64;
 import android.util.Log;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
-    private static String aeK = "gcm.googleapis.com/refresh";
+    private static String agS = "gcm.googleapis.com/refresh";
 
     private void doStartService(Context context, Intent intent) {
         if (isOrderedBroadcast()) {
             setResultCode(500);
         }
-        zzf(context, intent);
+        zze(context, intent);
         try {
             ComponentName startWakefulService;
             if (context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0) {
@@ -42,7 +42,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    private void zzf(Context context, Intent intent) {
+    private void zze(Context context, Intent intent) {
         ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
         if (resolveService == null || resolveService.serviceInfo == null) {
             Log.e("GcmReceiver", "Failed to resolve target intent service, skipping classname enforcement");
@@ -77,7 +77,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeCategory(context.getPackageName());
         }
         String stringExtra = intent.getStringExtra("from");
-        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || aeK.equals(stringExtra)) {
+        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || agS.equals(stringExtra)) {
             intent.setAction("com.google.android.gms.iid.InstanceID");
         }
         stringExtra = intent.getStringExtra("gcm.rawData64");
@@ -86,7 +86,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeExtra("gcm.rawData64");
         }
         if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {
-            zze(context, intent);
+            zzd(context, intent);
         } else {
             doStartService(context, intent);
         }
@@ -95,7 +95,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    public void zze(Context context, Intent intent) {
+    public void zzd(Context context, Intent intent) {
         doStartService(context, intent);
     }
 }

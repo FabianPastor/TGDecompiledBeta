@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,7 +90,7 @@ public class PagerTabStrip extends PagerTitleStrip {
     }
 
     public void setTabIndicatorColorResource(@ColorRes int resId) {
-        setTabIndicatorColor(getContext().getResources().getColor(resId));
+        setTabIndicatorColor(ContextCompat.getColor(getContext(), resId));
     }
 
     @ColorInt

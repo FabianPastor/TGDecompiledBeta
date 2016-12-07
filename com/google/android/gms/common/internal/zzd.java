@@ -9,60 +9,60 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzd implements Creator<AuthAccountRequest> {
     static void zza(AuthAccountRequest authAccountRequest, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, authAccountRequest.mVersionCode);
-        zzb.zza(parcel, 2, authAccountRequest.AW, false);
-        zzb.zza(parcel, 3, authAccountRequest.AX, i, false);
-        zzb.zza(parcel, 4, authAccountRequest.AY, false);
-        zzb.zza(parcel, 5, authAccountRequest.AZ, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, authAccountRequest.Df, false);
+        zzb.zza(parcel, 3, authAccountRequest.Dg, i, false);
+        zzb.zza(parcel, 4, authAccountRequest.Dh, false);
+        zzb.zza(parcel, 5, authAccountRequest.Di, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzci(parcel);
+        return zzcj(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzgk(i);
+        return zzgj(i);
     }
 
-    public AuthAccountRequest zzci(Parcel parcel) {
+    public AuthAccountRequest zzcj(Parcel parcel) {
         Integer num = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         Integer num2 = null;
         Scope[] scopeArr = null;
         IBinder iBinder = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    iBinder = zza.zzr(parcel, zzcp);
+                    iBinder = zza.zzr(parcel, zzcq);
                     break;
                 case 3:
-                    scopeArr = (Scope[]) zza.zzb(parcel, zzcp, Scope.CREATOR);
+                    scopeArr = (Scope[]) zza.zzb(parcel, zzcq, Scope.CREATOR);
                     break;
                 case 4:
-                    num2 = zza.zzh(parcel, zzcp);
+                    num2 = zza.zzh(parcel, zzcq);
                     break;
                 case 5:
-                    num = zza.zzh(parcel, zzcp);
+                    num = zza.zzh(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new AuthAccountRequest(i, iBinder, scopeArr, num2, num);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public AuthAccountRequest[] zzgk(int i) {
+    public AuthAccountRequest[] zzgj(int i) {
         return new AuthAccountRequest[i];
     }
 }

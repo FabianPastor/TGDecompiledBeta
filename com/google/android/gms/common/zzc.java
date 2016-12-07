@@ -6,23 +6,23 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import com.google.android.gms.common.internal.zzp;
+import com.google.android.gms.common.internal.zzn;
 import com.google.android.gms.common.util.zzi;
-import com.google.android.gms.internal.zzsi;
+import com.google.android.gms.internal.zzsz;
 
 public class zzc {
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zze.GOOGLE_PLAY_SERVICES_VERSION_CODE;
-    private static final zzc uN = new zzc();
+    private static final zzc wT = new zzc();
 
     zzc() {
     }
 
-    public static zzc zzapd() {
-        return uN;
+    public static zzc zzaql() {
+        return wT;
     }
 
-    private String zzt(@Nullable Context context, @Nullable String str) {
+    static String zzt(@Nullable Context context, @Nullable String str) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("gcore_");
         stringBuilder.append(GOOGLE_PLAY_SERVICES_VERSION_CODE);
@@ -37,7 +37,7 @@ public class zzc {
         stringBuilder.append("-");
         if (context != null) {
             try {
-                stringBuilder.append(zzsi.zzcr(context).getPackageInfo(context.getPackageName(), 0).versionCode);
+                stringBuilder.append(zzsz.zzco(context).getPackageInfo(context.getPackageName(), 0).versionCode);
             } catch (NameNotFoundException e) {
             }
         }
@@ -69,38 +69,33 @@ public class zzc {
 
     @Nullable
     public PendingIntent zza(Context context, int i, int i2, @Nullable String str) {
-        if (zzi.zzcl(context) && i == 2) {
-            i = 42;
-        }
-        Intent zza = zza(context, i, str);
-        return zza == null ? null : PendingIntent.getActivity(context, i2, zza, 268435456);
+        Intent zzb = zzb(context, i, str);
+        return zzb == null ? null : PendingIntent.getActivity(context, i2, zzb, 268435456);
     }
 
     @Nullable
-    public Intent zza(Context context, int i, @Nullable String str) {
+    public Intent zzb(Context context, int i, @Nullable String str) {
         switch (i) {
             case 1:
             case 2:
-                return zzp.zzad("com.google.android.gms", zzt(context, str));
+                return (context == null || !zzi.zzci(context)) ? zzn.zzac("com.google.android.gms", zzt(context, str)) : zzn.zzawg();
             case 3:
-                return zzp.zzhw("com.google.android.gms");
-            case 42:
-                return zzp.zzaux();
+                return zzn.zzhy("com.google.android.gms");
             default:
                 return null;
         }
     }
 
-    public int zzbo(Context context) {
-        return zze.zzbo(context);
+    public int zzbk(Context context) {
+        return zze.zzbk(context);
     }
 
-    public void zzbp(Context context) throws GooglePlayServicesRepairableException, GooglePlayServicesNotAvailableException {
-        zze.zzbc(context);
+    public void zzbm(Context context) throws GooglePlayServicesRepairableException, GooglePlayServicesNotAvailableException {
+        zze.zzaz(context);
     }
 
-    public void zzbq(Context context) {
-        zze.zzbq(context);
+    public void zzbn(Context context) {
+        zze.zzbn(context);
     }
 
     public boolean zzd(Context context, int i) {
@@ -109,8 +104,8 @@ public class zzc {
 
     @Nullable
     @Deprecated
-    public Intent zzfl(int i) {
-        return zza(null, i, null);
+    public Intent zzfp(int i) {
+        return zzb(null, i, null);
     }
 
     public boolean zzs(Context context, String str) {

@@ -7,12 +7,12 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class SignInRequest extends AbstractSafeParcelable {
     public static final Creator<SignInRequest> CREATOR = new zzh();
-    final ResolveAccountRequest aAm;
+    final ResolveAccountRequest aDw;
     final int mVersionCode;
 
     SignInRequest(int i, ResolveAccountRequest resolveAccountRequest) {
         this.mVersionCode = i;
-        this.aAm = resolveAccountRequest;
+        this.aDw = resolveAccountRequest;
     }
 
     public SignInRequest(ResolveAccountRequest resolveAccountRequest) {
@@ -23,7 +23,7 @@ public class SignInRequest extends AbstractSafeParcelable {
         zzh.zza(this, parcel, i);
     }
 
-    public ResolveAccountRequest zzcdk() {
-        return this.aAm;
+    public ResolveAccountRequest zzcdm() {
+        return this.aDw;
     }
 }

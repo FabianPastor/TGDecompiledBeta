@@ -12,14 +12,14 @@ public interface zzb extends IInterface {
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void send(Message message) throws RemoteException {
@@ -32,7 +32,7 @@ public interface zzb extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, null, 1);
+                    this.zzajq.transact(1, obtain, null, 1);
                 } finally {
                     obtain.recycle();
                 }
@@ -43,7 +43,7 @@ public interface zzb extends IInterface {
             attachInterface(this, "com.google.android.gms.iid.IMessengerCompat");
         }
 
-        public static zzb zzgw(IBinder iBinder) {
+        public static zzb zzgx(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

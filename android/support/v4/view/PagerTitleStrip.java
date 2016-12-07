@@ -10,6 +10,7 @@ import android.support.annotation.FloatRange;
 import android.support.v4.view.ViewPager.DecorView;
 import android.support.v4.view.ViewPager.OnAdapterChangeListener;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.TextViewCompat;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.view.View;
@@ -142,9 +143,9 @@ public class PagerTitleStrip extends ViewGroup {
         TypedArray a = context.obtainStyledAttributes(attrs, ATTRS);
         int textAppearance = a.getResourceId(0, 0);
         if (textAppearance != 0) {
-            this.mPrevText.setTextAppearance(context, textAppearance);
-            this.mCurrText.setTextAppearance(context, textAppearance);
-            this.mNextText.setTextAppearance(context, textAppearance);
+            TextViewCompat.setTextAppearance(this.mPrevText, textAppearance);
+            TextViewCompat.setTextAppearance(this.mCurrText, textAppearance);
+            TextViewCompat.setTextAppearance(this.mNextText, textAppearance);
         }
         int textSize = a.getDimensionPixelSize(1, 0);
         if (textSize != 0) {

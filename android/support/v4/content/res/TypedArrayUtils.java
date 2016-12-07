@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AnyRes;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.annotation.StyleableRes;
 import android.util.TypedValue;
 
+@RestrictTo({Scope.GROUP_ID})
 public class TypedArrayUtils {
     public static boolean getBoolean(TypedArray a, @StyleableRes int index, @StyleableRes int fallbackIndex, boolean defaultValue) {
         return a.getBoolean(index, a.getBoolean(fallbackIndex, defaultValue));

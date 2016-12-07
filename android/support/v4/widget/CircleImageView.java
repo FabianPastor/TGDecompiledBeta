@@ -8,6 +8,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build.VERSION;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
@@ -67,7 +68,7 @@ class CircleImageView extends ImageView {
             setPadding(padding, padding, padding, padding);
         }
         circle.getPaint().setColor(color);
-        setBackgroundDrawable(circle);
+        ViewCompat.setBackground(this, circle);
     }
 
     private boolean elevationSupported() {
@@ -100,7 +101,7 @@ class CircleImageView extends ImageView {
     }
 
     public void setBackgroundColorRes(int colorRes) {
-        setBackgroundColor(getContext().getResources().getColor(colorRes));
+        setBackgroundColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     public void setBackgroundColor(int color) {

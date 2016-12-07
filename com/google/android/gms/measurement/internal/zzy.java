@@ -5,8 +5,10 @@ import android.support.annotation.BinderThread;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.util.zzx;
 import com.google.android.gms.common.zze;
+import com.google.android.gms.measurement.AppMeasurement.zzf;
 import com.google.android.gms.measurement.internal.zzm.zza;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +17,38 @@ import java.util.concurrent.ExecutionException;
 import org.telegram.messenger.exoplayer.C;
 
 public class zzy extends zza {
-    private final zzx anq;
-    private Boolean art;
+    private final zzx aqw;
+    private Boolean auE;
     @Nullable
-    private String aru;
+    private String auF;
 
     public zzy(zzx com_google_android_gms_measurement_internal_zzx) {
         this(com_google_android_gms_measurement_internal_zzx, null);
     }
 
     public zzy(zzx com_google_android_gms_measurement_internal_zzx, @Nullable String str) {
-        zzac.zzy(com_google_android_gms_measurement_internal_zzx);
-        this.anq = com_google_android_gms_measurement_internal_zzx;
-        this.aru = str;
+        zzaa.zzy(com_google_android_gms_measurement_internal_zzx);
+        this.aqw = com_google_android_gms_measurement_internal_zzx;
+        this.auF = str;
     }
 
     @BinderThread
-    private void zzf(AppMetadata appMetadata) {
-        zzac.zzy(appMetadata);
-        zzmt(appMetadata.packageName);
-        this.anq.zzbvc().zzne(appMetadata.anQ);
+    private void zzb(AppMetadata appMetadata, boolean z) {
+        zzaa.zzy(appMetadata);
+        zzn(appMetadata.packageName, z);
+        this.aqw.zzbvx().zznb(appMetadata.aqZ);
     }
 
     @BinderThread
-    private void zzmt(String str) throws SecurityException {
+    private void zzn(String str, boolean z) throws SecurityException {
         if (TextUtils.isEmpty(str)) {
-            this.anq.zzbvg().zzbwc().log("Measurement Service called without app package");
+            this.aqw.zzbwb().zzbwy().log("Measurement Service called without app package");
             throw new SecurityException("Measurement Service called without app package");
         }
         try {
-            zzmu(str);
+            zzo(str, z);
         } catch (SecurityException e) {
-            this.anq.zzbvg().zzbwc().zzj("Measurement Service called with invalid calling package", str);
+            this.aqw.zzbwb().zzbwy().zzj("Measurement Service called with invalid calling package", str);
             throw e;
         }
     }
@@ -54,105 +56,128 @@ public class zzy extends zza {
     @BinderThread
     public List<UserAttributeParcel> zza(final AppMetadata appMetadata, boolean z) {
         Object e;
-        zzf(appMetadata);
+        zzb(appMetadata, false);
         try {
-            List<zzak> list = (List) this.anq.zzbvf().zzd(new Callable<List<zzak>>(this) {
-                final /* synthetic */ zzy arw;
+            List<zzak> list = (List) this.aqw.zzbwa().zzd(new Callable<List<zzak>>(this) {
+                final /* synthetic */ zzy auH;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzbxs();
+                    return zzbym();
                 }
 
-                public List<zzak> zzbxs() throws Exception {
-                    this.arw.anq.zzbxp();
-                    return this.arw.anq.zzbvb().zzly(appMetadata.packageName);
+                public List<zzak> zzbym() throws Exception {
+                    this.auH.aqw.zzbyj();
+                    return this.auH.aqw.zzbvw().zzly(appMetadata.packageName);
                 }
             }).get();
             List<UserAttributeParcel> arrayList = new ArrayList(list.size());
             for (zzak com_google_android_gms_measurement_internal_zzak : list) {
-                if (z || !zzal.zznh(com_google_android_gms_measurement_internal_zzak.mName)) {
+                if (z || !zzal.zzne(com_google_android_gms_measurement_internal_zzak.mName)) {
                     arrayList.add(new UserAttributeParcel(com_google_android_gms_measurement_internal_zzak));
                 }
             }
             return arrayList;
         } catch (InterruptedException e2) {
             e = e2;
-            this.anq.zzbvg().zzbwc().zzj("Failed to get user attributes", e);
+            this.aqw.zzbwb().zzbwy().zzj("Failed to get user attributes", e);
             return null;
         } catch (ExecutionException e3) {
             e = e3;
-            this.anq.zzbvg().zzbwc().zzj("Failed to get user attributes", e);
+            this.aqw.zzbwb().zzbwy().zzj("Failed to get user attributes", e);
             return null;
         }
     }
 
     @BinderThread
-    public void zza(final AppMetadata appMetadata) {
-        zzf(appMetadata);
-        this.anq.zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzy arw;
+    public void zza(long j, String str, String str2, String str3) {
+        final String str4 = str2;
+        final String str5 = str3;
+        final String str6 = str;
+        final long j2 = j;
+        this.aqw.zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzy auH;
 
             public void run() {
-                this.arw.anq.zzbxp();
-                this.arw.zzms(appMetadata.anU);
-                this.arw.anq.zzd(appMetadata);
+                if (str4 == null) {
+                    this.auH.aqw.zzbvu().zza(str5, null);
+                    return;
+                }
+                zzf com_google_android_gms_measurement_AppMeasurement_zzf = new zzf();
+                com_google_android_gms_measurement_AppMeasurement_zzf.aqz = str6;
+                com_google_android_gms_measurement_AppMeasurement_zzf.aqA = str4;
+                com_google_android_gms_measurement_AppMeasurement_zzf.aqB = j2;
+                this.auH.aqw.zzbvu().zza(str5, com_google_android_gms_measurement_AppMeasurement_zzf);
+            }
+        });
+    }
+
+    @BinderThread
+    public void zza(final AppMetadata appMetadata) {
+        zzb(appMetadata, false);
+        this.aqw.zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzy auH;
+
+            public void run() {
+                this.auH.aqw.zzbyj();
+                this.auH.zzmr(appMetadata.ard);
+                this.auH.aqw.zzd(appMetadata);
             }
         });
     }
 
     @BinderThread
     public void zza(final EventParcel eventParcel, final AppMetadata appMetadata) {
-        zzac.zzy(eventParcel);
-        zzf(appMetadata);
-        this.anq.zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzy arw;
+        zzaa.zzy(eventParcel);
+        zzb(appMetadata, false);
+        this.aqw.zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzy auH;
 
             public void run() {
-                this.arw.anq.zzbxp();
-                this.arw.zzms(appMetadata.anU);
-                this.arw.anq.zzb(eventParcel, appMetadata);
+                this.auH.aqw.zzbyj();
+                this.auH.zzmr(appMetadata.ard);
+                this.auH.aqw.zzb(eventParcel, appMetadata);
             }
         });
     }
 
     @BinderThread
     public void zza(final EventParcel eventParcel, final String str, final String str2) {
-        zzac.zzy(eventParcel);
-        zzac.zzhz(str);
-        zzmt(str);
-        this.anq.zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzy arw;
+        zzaa.zzy(eventParcel);
+        zzaa.zzib(str);
+        zzn(str, true);
+        this.aqw.zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzy auH;
 
             public void run() {
-                this.arw.anq.zzbxp();
-                this.arw.zzms(str2);
-                this.arw.anq.zzb(eventParcel, str);
+                this.auH.aqw.zzbyj();
+                this.auH.zzmr(str2);
+                this.auH.aqw.zzb(eventParcel, str);
             }
         });
     }
 
     @BinderThread
     public void zza(final UserAttributeParcel userAttributeParcel, final AppMetadata appMetadata) {
-        zzac.zzy(userAttributeParcel);
-        zzf(appMetadata);
+        zzaa.zzy(userAttributeParcel);
+        zzb(appMetadata, false);
         if (userAttributeParcel.getValue() == null) {
-            this.anq.zzbvf().zzm(new Runnable(this) {
-                final /* synthetic */ zzy arw;
+            this.aqw.zzbwa().zzm(new Runnable(this) {
+                final /* synthetic */ zzy auH;
 
                 public void run() {
-                    this.arw.anq.zzbxp();
-                    this.arw.zzms(appMetadata.anU);
-                    this.arw.anq.zzc(userAttributeParcel, appMetadata);
+                    this.auH.aqw.zzbyj();
+                    this.auH.zzmr(appMetadata.ard);
+                    this.auH.aqw.zzc(userAttributeParcel, appMetadata);
                 }
             });
         } else {
-            this.anq.zzbvf().zzm(new Runnable(this) {
-                final /* synthetic */ zzy arw;
+            this.aqw.zzbwa().zzm(new Runnable(this) {
+                final /* synthetic */ zzy auH;
 
                 public void run() {
-                    this.arw.anq.zzbxp();
-                    this.arw.zzms(appMetadata.anU);
-                    this.arw.anq.zzb(userAttributeParcel, appMetadata);
+                    this.auH.aqw.zzbyj();
+                    this.auH.zzmr(appMetadata.ard);
+                    this.auH.aqw.zzb(userAttributeParcel, appMetadata);
                 }
             });
         }
@@ -161,86 +186,95 @@ public class zzy extends zza {
     @BinderThread
     public byte[] zza(final EventParcel eventParcel, final String str) {
         Object e;
-        zzac.zzhz(str);
-        zzac.zzy(eventParcel);
-        zzmt(str);
-        this.anq.zzbvg().zzbwi().zzj("Log and bundle. event", eventParcel.name);
-        long nanoTime = this.anq.zzaan().nanoTime() / C.MICROS_PER_SECOND;
+        zzaa.zzib(str);
+        zzaa.zzy(eventParcel);
+        zzn(str, true);
+        this.aqw.zzbwb().zzbxd().zzj("Log and bundle. event", eventParcel.name);
+        long nanoTime = this.aqw.zzabz().nanoTime() / C.MICROS_PER_SECOND;
         try {
-            byte[] bArr = (byte[]) this.anq.zzbvf().zze(new Callable<byte[]>(this) {
-                final /* synthetic */ zzy arw;
+            byte[] bArr = (byte[]) this.aqw.zzbwa().zze(new Callable<byte[]>(this) {
+                final /* synthetic */ zzy auH;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzbxr();
+                    return zzbyl();
                 }
 
-                public byte[] zzbxr() throws Exception {
-                    this.arw.anq.zzbxp();
-                    return this.arw.anq.zza(eventParcel, str);
+                public byte[] zzbyl() throws Exception {
+                    this.auH.aqw.zzbyj();
+                    return this.auH.aqw.zza(eventParcel, str);
                 }
             }).get();
             if (bArr == null) {
-                this.anq.zzbvg().zzbwc().log("Log and bundle returned null");
+                this.aqw.zzbwb().zzbwy().log("Log and bundle returned null");
                 bArr = new byte[0];
             }
-            this.anq.zzbvg().zzbwi().zzd("Log and bundle processed. event, size, time_ms", eventParcel.name, Integer.valueOf(bArr.length), Long.valueOf((this.anq.zzaan().nanoTime() / C.MICROS_PER_SECOND) - nanoTime));
+            this.aqw.zzbwb().zzbxd().zzd("Log and bundle processed. event, size, time_ms", eventParcel.name, Integer.valueOf(bArr.length), Long.valueOf((this.aqw.zzabz().nanoTime() / C.MICROS_PER_SECOND) - nanoTime));
             return bArr;
         } catch (InterruptedException e2) {
             e = e2;
-            this.anq.zzbvg().zzbwc().zze("Failed to log and bundle. event, error", eventParcel.name, e);
+            this.aqw.zzbwb().zzbwy().zze("Failed to log and bundle. event, error", eventParcel.name, e);
             return null;
         } catch (ExecutionException e3) {
             e = e3;
-            this.anq.zzbvg().zzbwc().zze("Failed to log and bundle. event, error", eventParcel.name, e);
+            this.aqw.zzbwb().zzbwy().zze("Failed to log and bundle. event, error", eventParcel.name, e);
             return null;
         }
     }
 
     @BinderThread
     public void zzb(final AppMetadata appMetadata) {
-        zzf(appMetadata);
-        this.anq.zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzy arw;
+        zzb(appMetadata, false);
+        this.aqw.zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzy auH;
 
             public void run() {
-                this.arw.anq.zzbxp();
-                this.arw.zzms(appMetadata.anU);
-                this.arw.anq.zzc(appMetadata);
+                this.auH.aqw.zzbyj();
+                this.auH.zzmr(appMetadata.ard);
+                this.auH.aqw.zzc(appMetadata);
             }
         });
     }
 
     @WorkerThread
-    void zzms(String str) {
+    void zzmr(String str) {
         if (!TextUtils.isEmpty(str)) {
             String[] split = str.split(":", 2);
             if (split.length == 2) {
                 try {
                     long longValue = Long.valueOf(split[0]).longValue();
                     if (longValue > 0) {
-                        this.anq.zzbvh().apP.zzi(split[1], longValue);
+                        this.aqw.zzbwc().asY.zzg(split[1], longValue);
                     } else {
-                        this.anq.zzbvg().zzbwe().zzj("Combining sample with a non-positive weight", Long.valueOf(longValue));
+                        this.aqw.zzbwb().zzbxa().zzj("Combining sample with a non-positive weight", Long.valueOf(longValue));
                     }
                 } catch (NumberFormatException e) {
-                    this.anq.zzbvg().zzbwe().zzj("Combining sample with a non-number weight", split[0]);
+                    this.aqw.zzbwb().zzbxa().zzj("Combining sample with a non-number weight", split[0]);
                 }
             }
         }
     }
 
-    protected void zzmu(String str) throws SecurityException {
-        if (this.aru == null && zze.zzb(this.anq.getContext(), Binder.getCallingUid(), str)) {
-            this.aru = str;
+    protected void zzo(String str, boolean z) throws SecurityException {
+        if (z) {
+            if (this.auE == null) {
+                boolean z2;
+                if ("com.google.android.gms".equals(this.auF) || zzx.zzf(this.aqw.getContext(), Binder.getCallingUid()) || com.google.android.gms.common.zzf.zzbv(this.aqw.getContext()).zza(this.aqw.getContext().getPackageManager(), Binder.getCallingUid())) {
+                    zzx com_google_android_gms_measurement_internal_zzx = this.aqw;
+                    z2 = true;
+                } else {
+                    z2 = false;
+                }
+                this.auE = Boolean.valueOf(z2);
+            }
+            if (this.auE.booleanValue()) {
+                return;
+            }
         }
-        if (!str.equals(this.aru)) {
-            if (this.art == null) {
-                boolean z = ("com.google.android.gms".equals(this.aru) || com.google.android.gms.common.util.zzy.zzf(this.anq.getContext(), Binder.getCallingUid())) && !this.anq.zzbxg();
-                this.art = Boolean.valueOf(z);
-            }
-            if (!this.art.booleanValue()) {
-                throw new SecurityException(String.format("Unknown calling package name '%s'.", new Object[]{str}));
-            }
+        if (this.auF == null && zze.zzc(this.aqw.getContext(), Binder.getCallingUid(), str)) {
+            this.auF = str;
+        }
+        if (!str.equals(this.auF)) {
+            throw new SecurityException(String.format("Unknown calling package name '%s'.", new Object[]{str}));
         }
     }
 }

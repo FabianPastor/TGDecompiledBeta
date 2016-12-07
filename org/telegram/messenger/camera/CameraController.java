@@ -302,6 +302,14 @@ public class CameraController implements OnInfoListener {
                     String key = String.format(Locale.US, "%s@%d_%d", new Object[]{Utilities.MD5(path.getAbsolutePath()), Integer.valueOf(size), Integer.valueOf(size)});
                     try {
                         Options options = new Options();
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                        float scaleFactor = Math.max(((float) options.outWidth) / ((float) AndroidUtilities.getPhotoSize()), ((float) options.outHeight) / ((float) AndroidUtilities.getPhotoSize()));
+                        if (scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                            scaleFactor = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                        }
+                        options.inJustDecodeBounds = false;
+                        options.inSampleSize = (int) scaleFactor;
                         options.inPurgeable = true;
                         bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                     } catch (Throwable e) {
@@ -493,7 +501,10 @@ public class CameraController implements OnInfoListener {
                 final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(this.recordedFile, 1);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                        if (CameraController.this.onVideoTakeCallback != null) {
+                            CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                            CameraController.this.onVideoTakeCallback = null;
+                        }
                     }
                 });
             }
@@ -548,14 +559,19 @@ public class CameraController implements OnInfoListener {
                             }
                         }
                     });
-                    if (!abandon && CameraController.this.onVideoTakeCallback != null) {
-                        final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(CameraController.this.recordedFile, 1);
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
-                            }
-                        });
+                    if (abandon || CameraController.this.onVideoTakeCallback == null) {
+                        CameraController.this.onVideoTakeCallback = null;
+                        return;
                     }
+                    final Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(CameraController.this.recordedFile, 1);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (CameraController.this.onVideoTakeCallback != null) {
+                                CameraController.this.onVideoTakeCallback.onFinishVideoRecording(bitmap);
+                                CameraController.this.onVideoTakeCallback = null;
+                            }
+                        }
+                    });
                 } catch (Throwable e22222) {
                     FileLog.e("tmessages", e22222);
                 }

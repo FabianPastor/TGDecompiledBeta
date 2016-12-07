@@ -9,55 +9,51 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzi implements Creator<SignInResponse> {
     static void zza(SignInResponse signInResponse, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, signInResponse.mVersionCode);
-        zzb.zza(parcel, 2, signInResponse.zzave(), i, false);
-        zzb.zza(parcel, 3, signInResponse.zzcdl(), i, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, signInResponse.zzawn(), i, false);
+        zzb.zza(parcel, 3, signInResponse.zzcdn(), i, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsn(parcel);
+        return zzsd(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzaai(i);
+        return zzzy(i);
     }
 
-    public SignInResponse[] zzaai(int i) {
-        return new SignInResponse[i];
-    }
-
-    public SignInResponse zzsn(Parcel parcel) {
+    public SignInResponse zzsd(Parcel parcel) {
         ResolveAccountResponse resolveAccountResponse = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         ConnectionResult connectionResult = null;
-        while (parcel.dataPosition() < zzcq) {
+        while (parcel.dataPosition() < zzcr) {
             ConnectionResult connectionResult2;
             int zzg;
             ResolveAccountResponse resolveAccountResponse2;
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
                     ResolveAccountResponse resolveAccountResponse3 = resolveAccountResponse;
                     connectionResult2 = connectionResult;
-                    zzg = zza.zzg(parcel, zzcp);
+                    zzg = zza.zzg(parcel, zzcq);
                     resolveAccountResponse2 = resolveAccountResponse3;
                     break;
                 case 2:
                     zzg = i;
-                    ConnectionResult connectionResult3 = (ConnectionResult) zza.zza(parcel, zzcp, ConnectionResult.CREATOR);
+                    ConnectionResult connectionResult3 = (ConnectionResult) zza.zza(parcel, zzcq, ConnectionResult.CREATOR);
                     resolveAccountResponse2 = resolveAccountResponse;
                     connectionResult2 = connectionResult3;
                     break;
                 case 3:
-                    resolveAccountResponse2 = (ResolveAccountResponse) zza.zza(parcel, zzcp, ResolveAccountResponse.CREATOR);
+                    resolveAccountResponse2 = (ResolveAccountResponse) zza.zza(parcel, zzcq, ResolveAccountResponse.CREATOR);
                     connectionResult2 = connectionResult;
                     zzg = i;
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     resolveAccountResponse2 = resolveAccountResponse;
                     connectionResult2 = connectionResult;
                     zzg = i;
@@ -67,9 +63,13 @@ public class zzi implements Creator<SignInResponse> {
             connectionResult = connectionResult2;
             resolveAccountResponse = resolveAccountResponse2;
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new SignInResponse(i, connectionResult, resolveAccountResponse);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+    }
+
+    public SignInResponse[] zzzy(int i) {
+        return new SignInResponse[i];
     }
 }

@@ -1,16 +1,17 @@
 package com.google.android.gms.vision.face.internal.client;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class FaceParcel extends AbstractSafeParcelable {
-    public static final zzb CREATOR = new zzb();
-    public final float aLg;
-    public final float aLh;
-    public final LandmarkParcel[] aLi;
-    public final float aLj;
-    public final float aLk;
-    public final float aLl;
+    public static final Creator<FaceParcel> CREATOR = new zzb();
+    public final float aOr;
+    public final float aOs;
+    public final LandmarkParcel[] aOt;
+    public final float aOu;
+    public final float aOv;
+    public final float aOw;
     public final float centerX;
     public final float centerY;
     public final float height;
@@ -25,12 +26,12 @@ public class FaceParcel extends AbstractSafeParcelable {
         this.centerY = f2;
         this.width = f3;
         this.height = f4;
-        this.aLg = f5;
-        this.aLh = f6;
-        this.aLi = landmarkParcelArr;
-        this.aLj = f7;
-        this.aLk = f8;
-        this.aLl = f9;
+        this.aOr = f5;
+        this.aOs = f6;
+        this.aOt = landmarkParcelArr;
+        this.aOu = f7;
+        this.aOv = f8;
+        this.aOw = f9;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

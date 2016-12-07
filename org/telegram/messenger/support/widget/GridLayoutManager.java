@@ -142,8 +142,8 @@ public class GridLayoutManager extends LinearLayoutManager {
 
     public static class LayoutParams extends org.telegram.messenger.support.widget.RecyclerView.LayoutParams {
         public static final int INVALID_SPAN_ID = -1;
-        private int mSpanIndex = -1;
-        private int mSpanSize = 0;
+        int mSpanIndex = -1;
+        int mSpanSize = 0;
 
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
@@ -243,9 +243,11 @@ public class GridLayoutManager extends LinearLayoutManager {
         }
         super.onLayoutChildren(recycler, state);
         clearPreLayoutSpanMappingCache();
-        if (!state.isPreLayout()) {
-            this.mPendingSpanCountChange = false;
-        }
+    }
+
+    public void onLayoutCompleted(State state) {
+        super.onLayoutCompleted(state);
+        this.mPendingSpanCountChange = false;
     }
 
     private void clearPreLayoutSpanMappingCache() {
@@ -365,6 +367,13 @@ public class GridLayoutManager extends LinearLayoutManager {
             cachedBorders[i] = consumedPixels;
         }
         return cachedBorders;
+    }
+
+    int getSpaceForSpanRange(int startSpan, int spanSize) {
+        if (this.mOrientation == 1 && isLayoutRTL()) {
+            return this.mCachedBorders[this.mSpanCount - startSpan] - this.mCachedBorders[(this.mSpanCount - startSpan) - spanSize];
+        }
+        return this.mCachedBorders[startSpan + spanSize] - this.mCachedBorders[startSpan];
     }
 
     void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int itemDirection) {
@@ -495,7 +504,25 @@ public class GridLayoutManager extends LinearLayoutManager {
         return 1;
     }
 
+    int getItemPrefetchCount() {
+        return this.mSpanCount;
+    }
+
+    int gatherPrefetchIndicesForLayoutState(State state, LayoutState layoutState, int[] outIndices) {
+        int remainingSpan = this.mSpanCount;
+        int count = 0;
+        while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
+            int pos = layoutState.mCurrentPosition;
+            outIndices[count] = pos;
+            remainingSpan -= this.mSpanSizeLookup.getSpanSize(pos);
+            layoutState.mCurrentPosition += layoutState.mItemDirection;
+            count++;
+        }
+        return count;
+    }
+
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+        View view;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean flexibleInOtherDir = otherDirSpecMode != NUM;
         int currentOtherDirSize = getChildCount() > 0 ? this.mCachedBorders[this.mSpanCount] : 0;
@@ -512,7 +539,6 @@ public class GridLayoutManager extends LinearLayoutManager {
         while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
             int pos = layoutState.mCurrentPosition;
             int spanSize = getSpanSize(recycler, state, pos);
-            View view;
             if (spanSize <= this.mSpanCount) {
                 remainingSpan -= spanSize;
                 if (remainingSpan >= 0) {
@@ -550,19 +576,13 @@ public class GridLayoutManager extends LinearLayoutManager {
             } else {
                 addDisappearingView(view, 0);
             }
-            LayoutParams lp = (LayoutParams) view.getLayoutParams();
-            int spec = LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanIndex + lp.mSpanSize] - this.mCachedBorders[lp.mSpanIndex], otherDirSpecMode, 0, this.mOrientation == 0 ? lp.height : lp.width, false);
-            int mainSpec = LayoutManager.getChildMeasureSpec(this.mOrientationHelper.getTotalSpace(), this.mOrientationHelper.getMode(), 0, this.mOrientation == 1 ? lp.height : lp.width, true);
-            if (this.mOrientation == 1) {
-                measureChildWithDecorationsAndMargin(view, spec, mainSpec, lp.height == -1, false);
-            } else {
-                measureChildWithDecorationsAndMargin(view, mainSpec, spec, lp.width == -1, false);
-            }
+            calculateItemDecorationsForChild(view, this.mDecorInsets);
+            measureChild(view, otherDirSpecMode, false);
             int size = this.mOrientationHelper.getDecoratedMeasurement(view);
             if (size > maxSize) {
                 maxSize = size;
             }
-            float otherSize = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) this.mOrientationHelper.getDecoratedMeasurementInOther(view))) / ((float) lp.mSpanSize);
+            float otherSize = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) this.mOrientationHelper.getDecoratedMeasurementInOther(view))) / ((float) ((LayoutParams) view.getLayoutParams()).mSpanSize);
             if (otherSize > maxSizeInOther) {
                 maxSizeInOther = otherSize;
             }
@@ -572,31 +592,31 @@ public class GridLayoutManager extends LinearLayoutManager {
             maxSize = 0;
             for (i = 0; i < count; i++) {
                 view = this.mSet[i];
-                lp = (LayoutParams) view.getLayoutParams();
-                spec = LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanIndex + lp.mSpanSize] - this.mCachedBorders[lp.mSpanIndex], C.ENCODING_PCM_32BIT, 0, this.mOrientation == 0 ? lp.height : lp.width, false);
-                mainSpec = LayoutManager.getChildMeasureSpec(this.mOrientationHelper.getTotalSpace(), this.mOrientationHelper.getMode(), 0, this.mOrientation == 1 ? lp.height : lp.width, true);
-                if (this.mOrientation == 1) {
-                    measureChildWithDecorationsAndMargin(view, spec, mainSpec, false, true);
-                } else {
-                    measureChildWithDecorationsAndMargin(view, mainSpec, spec, false, true);
-                }
+                measureChild(view, C.ENCODING_PCM_32BIT, true);
                 size = this.mOrientationHelper.getDecoratedMeasurement(view);
                 if (size > maxSize) {
                     maxSize = size;
                 }
             }
         }
-        int maxMeasureSpec = MeasureSpec.makeMeasureSpec(maxSize, C.ENCODING_PCM_32BIT);
         for (i = 0; i < count; i++) {
             view = this.mSet[i];
             if (this.mOrientationHelper.getDecoratedMeasurement(view) != maxSize) {
-                lp = (LayoutParams) view.getLayoutParams();
-                spec = LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanIndex + lp.mSpanSize] - this.mCachedBorders[lp.mSpanIndex], C.ENCODING_PCM_32BIT, 0, this.mOrientation == 0 ? lp.height : lp.width, false);
+                int wSpec;
+                int hSpec;
+                LayoutParams lp = (LayoutParams) view.getLayoutParams();
+                Rect decorInsets = lp.mDecorInsets;
+                int verticalInsets = ((decorInsets.top + decorInsets.bottom) + lp.topMargin) + lp.bottomMargin;
+                int horizontalInsets = ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin;
+                int totalSpaceInOther = getSpaceForSpanRange(lp.mSpanIndex, lp.mSpanSize);
                 if (this.mOrientation == 1) {
-                    measureChildWithDecorationsAndMargin(view, spec, maxMeasureSpec, true, true);
+                    wSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, C.ENCODING_PCM_32BIT, horizontalInsets, lp.width, false);
+                    hSpec = MeasureSpec.makeMeasureSpec(maxSize - verticalInsets, C.ENCODING_PCM_32BIT);
                 } else {
-                    measureChildWithDecorationsAndMargin(view, maxMeasureSpec, spec, true, true);
+                    wSpec = MeasureSpec.makeMeasureSpec(maxSize - horizontalInsets, C.ENCODING_PCM_32BIT);
+                    hSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, C.ENCODING_PCM_32BIT, verticalInsets, lp.height, false);
                 }
+                measureChildWithDecorationsAndMargin(view, wSpec, hSpec, true);
             }
         }
         result.mConsumed = maxSize;
@@ -626,13 +646,13 @@ public class GridLayoutManager extends LinearLayoutManager {
                 top = getPaddingTop() + this.mCachedBorders[params.mSpanIndex];
                 bottom = top + this.mOrientationHelper.getDecoratedMeasurementInOther(view);
             } else if (isLayoutRTL()) {
-                right = getPaddingLeft() + this.mCachedBorders[params.mSpanIndex + params.mSpanSize];
+                right = getPaddingLeft() + this.mCachedBorders[this.mSpanCount - params.mSpanIndex];
                 left = right - this.mOrientationHelper.getDecoratedMeasurementInOther(view);
             } else {
                 left = getPaddingLeft() + this.mCachedBorders[params.mSpanIndex];
                 right = left + this.mOrientationHelper.getDecoratedMeasurementInOther(view);
             }
-            layoutDecorated(view, left + params.leftMargin, top + params.topMargin, right - params.rightMargin, bottom - params.bottomMargin);
+            layoutDecoratedWithMargins(view, left, top, right, bottom);
             if (params.isItemRemoved() || params.isItemChanged()) {
                 result.mIgnoreConsumed = true;
             }
@@ -641,20 +661,31 @@ public class GridLayoutManager extends LinearLayoutManager {
         Arrays.fill(this.mSet, null);
     }
 
+    private void measureChild(View view, int otherDirParentSpecMode, boolean alreadyMeasured) {
+        int wSpec;
+        int hSpec;
+        LayoutParams lp = (LayoutParams) view.getLayoutParams();
+        Rect decorInsets = lp.mDecorInsets;
+        int verticalInsets = ((decorInsets.top + decorInsets.bottom) + lp.topMargin) + lp.bottomMargin;
+        int horizontalInsets = ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin;
+        int availableSpaceInOther = getSpaceForSpanRange(lp.mSpanIndex, lp.mSpanSize);
+        if (this.mOrientation == 1) {
+            wSpec = LayoutManager.getChildMeasureSpec(availableSpaceInOther, otherDirParentSpecMode, horizontalInsets, lp.width, false);
+            hSpec = LayoutManager.getChildMeasureSpec(this.mOrientationHelper.getTotalSpace(), getHeightMode(), verticalInsets, lp.height, true);
+        } else {
+            hSpec = LayoutManager.getChildMeasureSpec(availableSpaceInOther, otherDirParentSpecMode, verticalInsets, lp.height, false);
+            wSpec = LayoutManager.getChildMeasureSpec(this.mOrientationHelper.getTotalSpace(), getWidthMode(), horizontalInsets, lp.width, true);
+        }
+        measureChildWithDecorationsAndMargin(view, wSpec, hSpec, alreadyMeasured);
+    }
+
     private void guessMeasurement(float maxSizeInOther, int currentOtherDirSize) {
         calculateItemBorders(Math.max(Math.round(((float) this.mSpanCount) * maxSizeInOther), currentOtherDirSize));
     }
 
-    private void measureChildWithDecorationsAndMargin(View child, int widthSpec, int heightSpec, boolean capBothSpecs, boolean alreadyMeasured) {
+    private void measureChildWithDecorationsAndMargin(View child, int widthSpec, int heightSpec, boolean alreadyMeasured) {
         boolean measure;
-        calculateItemDecorationsForChild(child, this.mDecorInsets);
         org.telegram.messenger.support.widget.RecyclerView.LayoutParams lp = (org.telegram.messenger.support.widget.RecyclerView.LayoutParams) child.getLayoutParams();
-        if (capBothSpecs || this.mOrientation == 1) {
-            widthSpec = updateSpecWithExtra(widthSpec, lp.leftMargin + this.mDecorInsets.left, lp.rightMargin + this.mDecorInsets.right);
-        }
-        if (capBothSpecs || this.mOrientation == 0) {
-            heightSpec = updateSpecWithExtra(heightSpec, lp.topMargin + this.mDecorInsets.top, lp.bottomMargin + this.mDecorInsets.bottom);
-        }
         if (alreadyMeasured) {
             measure = shouldReMeasureChild(child, widthSpec, heightSpec, lp);
         } else {
@@ -665,23 +696,10 @@ public class GridLayoutManager extends LinearLayoutManager {
         }
     }
 
-    private int updateSpecWithExtra(int spec, int startInset, int endInset) {
-        if (startInset == 0 && endInset == 0) {
-            return spec;
-        }
-        int mode = MeasureSpec.getMode(spec);
-        if (mode == Integer.MIN_VALUE || mode == C.ENCODING_PCM_32BIT) {
-            return MeasureSpec.makeMeasureSpec(Math.max(0, (MeasureSpec.getSize(spec) - startInset) - endInset), mode);
-        }
-        return spec;
-    }
-
     private void assignSpans(Recycler recycler, State state, int count, int consumedSpanCount, boolean layingOutInPrimaryDirection) {
         int start;
         int end;
         int diff;
-        int span;
-        int spanDiff;
         if (layingOutInPrimaryDirection) {
             start = 0;
             end = count;
@@ -691,23 +709,13 @@ public class GridLayoutManager extends LinearLayoutManager {
             end = -1;
             diff = -1;
         }
-        if (this.mOrientation == 1 && isLayoutRTL()) {
-            span = this.mSpanCount - 1;
-            spanDiff = -1;
-        } else {
-            span = 0;
-            spanDiff = 1;
-        }
+        int span = 0;
         for (int i = start; i != end; i += diff) {
             View view = this.mSet[i];
             LayoutParams params = (LayoutParams) view.getLayoutParams();
             params.mSpanSize = getSpanSize(recycler, state, getPosition(view));
-            if (spanDiff != -1 || params.mSpanSize <= 1) {
-                params.mSpanIndex = span;
-            } else {
-                params.mSpanIndex = span - (params.mSpanSize - 1);
-            }
-            span += params.mSpanSize * spanDiff;
+            params.mSpanIndex = span;
+            span += params.mSpanSize;
         }
     }
 
@@ -723,6 +731,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             }
             this.mSpanCount = spanCount;
             this.mSpanSizeLookup.invalidateSpanIndexCache();
+            requestLayout();
         }
     }
 

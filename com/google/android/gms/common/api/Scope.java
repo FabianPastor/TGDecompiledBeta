@@ -4,17 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 public final class Scope extends AbstractSafeParcelable implements ReflectedParcelable {
-    public static final Creator<Scope> CREATOR = new zzg();
+    public static final Creator<Scope> CREATOR = new zzf();
     final int mVersionCode;
-    private final String vX;
+    private final String xY;
 
     Scope(int i, String str) {
-        zzac.zzh(str, "scopeUri must not be null or empty");
+        zzaa.zzh(str, "scopeUri must not be null or empty");
         this.mVersionCode = i;
-        this.vX = str;
+        this.xY = str;
     }
 
     public Scope(String str) {
@@ -22,22 +22,22 @@ public final class Scope extends AbstractSafeParcelable implements ReflectedParc
     }
 
     public boolean equals(Object obj) {
-        return this == obj ? true : !(obj instanceof Scope) ? false : this.vX.equals(((Scope) obj).vX);
+        return this == obj ? true : !(obj instanceof Scope) ? false : this.xY.equals(((Scope) obj).xY);
     }
 
     public int hashCode() {
-        return this.vX.hashCode();
+        return this.xY.hashCode();
     }
 
     public String toString() {
-        return this.vX;
+        return this.xY;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzg.zza(this, parcel, i);
+        zzf.zza(this, parcel, i);
     }
 
-    public String zzaqg() {
-        return this.vX;
+    public String zzari() {
+        return this.xY;
     }
 }

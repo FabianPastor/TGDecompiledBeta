@@ -1,95 +1,51 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
+import com.google.android.gms.common.api.Api.ApiOptions;
+import com.google.android.gms.common.internal.zzz;
 
-public class zzql extends GoogleApiClient {
-    private final UnsupportedOperationException xj;
+public final class zzql<O extends ApiOptions> {
+    private final Api<O> vS;
+    private final O xw;
+    private final boolean yo = true;
+    private final int yp;
 
-    public zzql(String str) {
-        this.xj = new UnsupportedOperationException(str);
+    private zzql(Api<O> api) {
+        this.vS = api;
+        this.xw = null;
+        this.yp = System.identityHashCode(this);
     }
 
-    public ConnectionResult blockingConnect() {
-        throw this.xj;
+    private zzql(Api<O> api, O o) {
+        this.vS = api;
+        this.xw = o;
+        this.yp = zzz.hashCode(this.vS, this.xw);
     }
 
-    public ConnectionResult blockingConnect(long j, @NonNull TimeUnit timeUnit) {
-        throw this.xj;
+    public static <O extends ApiOptions> zzql<O> zza(Api<O> api, O o) {
+        return new zzql(api, o);
     }
 
-    public PendingResult<Status> clearDefaultAccountAndReconnect() {
-        throw this.xj;
+    public static <O extends ApiOptions> zzql<O> zzb(Api<O> api) {
+        return new zzql(api);
     }
 
-    public void connect() {
-        throw this.xj;
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof zzql)) {
+            return false;
+        }
+        zzql com_google_android_gms_internal_zzql = (zzql) obj;
+        return !this.yo && !com_google_android_gms_internal_zzql.yo && zzz.equal(this.vS, com_google_android_gms_internal_zzql.vS) && zzz.equal(this.xw, com_google_android_gms_internal_zzql.xw);
     }
 
-    public void disconnect() {
-        throw this.xj;
+    public int hashCode() {
+        return this.yp;
     }
 
-    public void dump(String str, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strArr) {
-        throw this.xj;
-    }
-
-    @NonNull
-    public ConnectionResult getConnectionResult(@NonNull Api<?> api) {
-        throw this.xj;
-    }
-
-    public boolean hasConnectedApi(@NonNull Api<?> api) {
-        throw this.xj;
-    }
-
-    public boolean isConnected() {
-        throw this.xj;
-    }
-
-    public boolean isConnecting() {
-        throw this.xj;
-    }
-
-    public boolean isConnectionCallbacksRegistered(@NonNull ConnectionCallbacks connectionCallbacks) {
-        throw this.xj;
-    }
-
-    public boolean isConnectionFailedListenerRegistered(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
-        throw this.xj;
-    }
-
-    public void reconnect() {
-        throw this.xj;
-    }
-
-    public void registerConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
-        throw this.xj;
-    }
-
-    public void registerConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
-        throw this.xj;
-    }
-
-    public void stopAutoManage(@NonNull FragmentActivity fragmentActivity) {
-        throw this.xj;
-    }
-
-    public void unregisterConnectionCallbacks(@NonNull ConnectionCallbacks connectionCallbacks) {
-        throw this.xj;
-    }
-
-    public void unregisterConnectionFailedListener(@NonNull OnConnectionFailedListener onConnectionFailedListener) {
-        throw this.xj;
+    public String zzarl() {
+        return this.vS.getName();
     }
 }

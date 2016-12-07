@@ -1,38 +1,58 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.internal.zzaps.zza;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.math.BigDecimal;
 
-final class zzapv<T> extends zzaot<T> {
-    private final zzaot<T> bkU;
-    private final zzaob bmQ;
-    private final Type bmR;
+public final class zzapv extends Number {
+    private final String value;
 
-    zzapv(zzaob com_google_android_gms_internal_zzaob, zzaot<T> com_google_android_gms_internal_zzaot_T, Type type) {
-        this.bmQ = com_google_android_gms_internal_zzaob;
-        this.bkU = com_google_android_gms_internal_zzaot_T;
-        this.bmR = type;
+    public zzapv(String str) {
+        this.value = str;
     }
 
-    private Type zzb(Type type, Object obj) {
-        return obj != null ? (type == Object.class || (type instanceof TypeVariable) || (type instanceof Class)) ? obj.getClass() : type : type;
+    public double doubleValue() {
+        return Double.parseDouble(this.value);
     }
 
-    public void zza(zzaqa com_google_android_gms_internal_zzaqa, T t) throws IOException {
-        zzaot com_google_android_gms_internal_zzaot = this.bkU;
-        Type zzb = zzb(this.bmR, t);
-        if (zzb != this.bmR) {
-            com_google_android_gms_internal_zzaot = this.bmQ.zza(zzapx.zzl(zzb));
-            if ((com_google_android_gms_internal_zzaot instanceof zza) && !(this.bkU instanceof zza)) {
-                com_google_android_gms_internal_zzaot = this.bkU;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof zzapv)) {
+            return false;
+        }
+        zzapv com_google_android_gms_internal_zzapv = (zzapv) obj;
+        return this.value == com_google_android_gms_internal_zzapv.value || this.value.equals(com_google_android_gms_internal_zzapv.value);
+    }
+
+    public float floatValue() {
+        return Float.parseFloat(this.value);
+    }
+
+    public int hashCode() {
+        return this.value.hashCode();
+    }
+
+    public int intValue() {
+        try {
+            return Integer.parseInt(this.value);
+        } catch (NumberFormatException e) {
+            try {
+                return (int) Long.parseLong(this.value);
+            } catch (NumberFormatException e2) {
+                return new BigDecimal(this.value).intValue();
             }
         }
-        com_google_android_gms_internal_zzaot.zza(com_google_android_gms_internal_zzaqa, t);
     }
 
-    public T zzb(zzapy com_google_android_gms_internal_zzapy) throws IOException {
-        return this.bkU.zzb(com_google_android_gms_internal_zzapy);
+    public long longValue() {
+        try {
+            return Long.parseLong(this.value);
+        } catch (NumberFormatException e) {
+            return new BigDecimal(this.value).longValue();
+        }
+    }
+
+    public String toString() {
+        return this.value;
     }
 }

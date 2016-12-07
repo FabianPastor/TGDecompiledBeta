@@ -3,79 +3,79 @@ package com.google.android.gms.common.data;
 import java.util.ArrayList;
 
 public abstract class zzf<T> extends AbstractDataBuffer<T> {
-    private boolean Ab = false;
-    private ArrayList<Integer> Ac;
+    private boolean Cl = false;
+    private ArrayList<Integer> Cm;
 
     protected zzf(DataHolder dataHolder) {
         super(dataHolder);
     }
 
-    private void zzati() {
+    private void zzaur() {
         synchronized (this) {
-            if (!this.Ab) {
-                int count = this.xi.getCount();
-                this.Ac = new ArrayList();
+            if (!this.Cl) {
+                int count = this.zy.getCount();
+                this.Cm = new ArrayList();
                 if (count > 0) {
-                    this.Ac.add(Integer.valueOf(0));
-                    String zzath = zzath();
-                    String zzd = this.xi.zzd(zzath, 0, this.xi.zzgb(0));
+                    this.Cm.add(Integer.valueOf(0));
+                    String zzauq = zzauq();
+                    String zzd = this.zy.zzd(zzauq, 0, this.zy.zzga(0));
                     int i = 1;
                     while (i < count) {
-                        int zzgb = this.xi.zzgb(i);
-                        String zzd2 = this.xi.zzd(zzath, i, zzgb);
+                        int zzga = this.zy.zzga(i);
+                        String zzd2 = this.zy.zzd(zzauq, i, zzga);
                         if (zzd2 == null) {
-                            throw new NullPointerException(new StringBuilder(String.valueOf(zzath).length() + 78).append("Missing value for markerColumn: ").append(zzath).append(", at row: ").append(i).append(", for window: ").append(zzgb).toString());
+                            throw new NullPointerException(new StringBuilder(String.valueOf(zzauq).length() + 78).append("Missing value for markerColumn: ").append(zzauq).append(", at row: ").append(i).append(", for window: ").append(zzga).toString());
                         }
                         if (zzd2.equals(zzd)) {
                             zzd2 = zzd;
                         } else {
-                            this.Ac.add(Integer.valueOf(i));
+                            this.Cm.add(Integer.valueOf(i));
                         }
                         i++;
                         zzd = zzd2;
                     }
                 }
-                this.Ab = true;
+                this.Cl = true;
             }
         }
     }
 
     public final T get(int i) {
-        zzati();
-        return zzl(zzgf(i), zzgg(i));
+        zzaur();
+        return zzn(zzge(i), zzgf(i));
     }
 
     public int getCount() {
-        zzati();
-        return this.Ac.size();
+        zzaur();
+        return this.Cm.size();
     }
 
-    protected abstract String zzath();
+    protected abstract String zzauq();
 
-    protected String zzatj() {
+    protected String zzaus() {
         return null;
     }
 
-    int zzgf(int i) {
-        if (i >= 0 && i < this.Ac.size()) {
-            return ((Integer) this.Ac.get(i)).intValue();
+    int zzge(int i) {
+        if (i >= 0 && i < this.Cm.size()) {
+            return ((Integer) this.Cm.get(i)).intValue();
         }
         throw new IllegalArgumentException("Position " + i + " is out of bounds for this buffer");
     }
 
-    protected int zzgg(int i) {
-        if (i < 0 || i == this.Ac.size()) {
+    protected int zzgf(int i) {
+        if (i < 0 || i == this.Cm.size()) {
             return 0;
         }
-        int count = i == this.Ac.size() + -1 ? this.xi.getCount() - ((Integer) this.Ac.get(i)).intValue() : ((Integer) this.Ac.get(i + 1)).intValue() - ((Integer) this.Ac.get(i)).intValue();
+        int count = i == this.Cm.size() + -1 ? this.zy.getCount() - ((Integer) this.Cm.get(i)).intValue() : ((Integer) this.Cm.get(i + 1)).intValue() - ((Integer) this.Cm.get(i)).intValue();
         if (count != 1) {
             return count;
         }
-        int zzgf = zzgf(i);
-        int zzgb = this.xi.zzgb(zzgf);
-        String zzatj = zzatj();
-        return (zzatj == null || this.xi.zzd(zzatj, zzgf, zzgb) != null) ? count : 0;
+        int zzge = zzge(i);
+        int zzga = this.zy.zzga(zzge);
+        String zzaus = zzaus();
+        return (zzaus == null || this.zy.zzd(zzaus, zzge, zzga) != null) ? count : 0;
     }
 
-    protected abstract T zzl(int i, int i2);
+    protected abstract T zzn(int i, int i2);
 }

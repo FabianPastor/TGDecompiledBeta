@@ -4,19 +4,19 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 public abstract class DowngradeableSafeParcel extends AbstractSafeParcelable implements ReflectedParcelable {
-    private static final Object Ce = new Object();
-    private static ClassLoader Cf = null;
-    private static Integer Cg = null;
-    private boolean Ch = false;
+    private static final Object DQ = new Object();
+    private static ClassLoader DR = null;
+    private static Integer DS = null;
+    private boolean DT = false;
 
-    protected static ClassLoader zzaup() {
-        synchronized (Ce) {
+    protected static ClassLoader zzavy() {
+        synchronized (DQ) {
         }
         return null;
     }
 
-    protected static Integer zzauq() {
-        synchronized (Ce) {
+    protected static Integer zzavz() {
+        synchronized (DQ) {
         }
         return null;
     }
@@ -31,19 +31,19 @@ public abstract class DowngradeableSafeParcel extends AbstractSafeParcelable imp
         return z;
     }
 
-    protected static boolean zzhs(String str) {
-        ClassLoader zzaup = zzaup();
-        if (zzaup == null) {
+    protected static boolean zzhu(String str) {
+        ClassLoader zzavy = zzavy();
+        if (zzavy == null) {
             return true;
         }
         try {
-            return zzd(zzaup.loadClass(str));
+            return zzd(zzavy.loadClass(str));
         } catch (Exception e) {
             return false;
         }
     }
 
-    protected boolean zzaur() {
+    protected boolean zzawa() {
         return false;
     }
 }

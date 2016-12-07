@@ -2,346 +2,346 @@ package com.google.android.gms.measurement.internal;
 
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 class zza {
-    private String FA;
-    private String G;
-    private long anA;
-    private long anB;
-    private long anC;
-    private String anD;
-    private long anE;
-    private long anF;
-    private boolean anG;
-    private long anH;
-    private long anI;
-    private long anJ;
-    private long anK;
-    private long anL;
-    private long anM;
-    private boolean anN;
-    private long anO;
-    private long anP;
-    private final zzx anq;
-    private String anw;
-    private String anx;
-    private String any;
-    private long anz;
-    private final String zzcpe;
+    private String Hh;
+    private String aqF;
+    private String aqG;
+    private String aqH;
+    private long aqI;
+    private long aqJ;
+    private long aqK;
+    private long aqL;
+    private String aqM;
+    private long aqN;
+    private long aqO;
+    private boolean aqP;
+    private long aqQ;
+    private long aqR;
+    private long aqS;
+    private long aqT;
+    private long aqU;
+    private long aqV;
+    private boolean aqW;
+    private long aqX;
+    private long aqY;
+    private final zzx aqw;
+    private String bO;
+    private final String zzctj;
 
     @WorkerThread
     zza(zzx com_google_android_gms_measurement_internal_zzx, String str) {
-        zzac.zzy(com_google_android_gms_measurement_internal_zzx);
-        zzac.zzhz(str);
-        this.anq = com_google_android_gms_measurement_internal_zzx;
-        this.zzcpe = str;
-        this.anq.zzyl();
+        zzaa.zzy(com_google_android_gms_measurement_internal_zzx);
+        zzaa.zzib(str);
+        this.aqw = com_google_android_gms_measurement_internal_zzx;
+        this.zzctj = str;
+        this.aqw.zzzx();
     }
 
     @WorkerThread
     public void setAppVersion(String str) {
-        this.anq.zzyl();
-        this.anN = (!zzal.zzbb(this.G, str) ? 1 : 0) | this.anN;
-        this.G = str;
+        this.aqw.zzzx();
+        this.aqW = (!zzal.zzbb(this.bO, str) ? 1 : 0) | this.aqW;
+        this.bO = str;
     }
 
     @WorkerThread
     public void setMeasurementEnabled(boolean z) {
-        this.anq.zzyl();
-        this.anN = (this.anG != z ? 1 : 0) | this.anN;
-        this.anG = z;
+        this.aqw.zzzx();
+        this.aqW = (this.aqP != z ? 1 : 0) | this.aqW;
+        this.aqP = z;
+    }
+
+    @WorkerThread
+    public String zzaaf() {
+        this.aqw.zzzx();
+        return this.bO;
+    }
+
+    @WorkerThread
+    public void zzav(long j) {
+        this.aqw.zzzx();
+        this.aqW = (this.aqJ != j ? 1 : 0) | this.aqW;
+        this.aqJ = j;
     }
 
     @WorkerThread
     public void zzaw(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anA != j ? 1 : 0) | this.anN;
-        this.anA = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqK != j ? 1 : 0) | this.aqW;
+        this.aqK = j;
     }
 
     @WorkerThread
     public void zzax(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anB != j ? 1 : 0) | this.anN;
-        this.anB = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqL != j ? 1 : 0) | this.aqW;
+        this.aqL = j;
     }
 
     @WorkerThread
     public void zzay(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anC != j ? 1 : 0) | this.anN;
-        this.anC = j;
-    }
-
-    @WorkerThread
-    public String zzayn() {
-        this.anq.zzyl();
-        return this.FA;
+        this.aqw.zzzx();
+        this.aqW = (this.aqN != j ? 1 : 0) | this.aqW;
+        this.aqN = j;
     }
 
     @WorkerThread
     public void zzaz(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anE != j ? 1 : 0) | this.anN;
-        this.anE = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqO != j ? 1 : 0) | this.aqW;
+        this.aqO = j;
+    }
+
+    @WorkerThread
+    public String zzazn() {
+        this.aqw.zzzx();
+        return this.Hh;
     }
 
     @WorkerThread
     public void zzba(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anF != j ? 1 : 0) | this.anN;
-        this.anF = j;
+        int i = 1;
+        zzaa.zzbt(j >= 0);
+        this.aqw.zzzx();
+        boolean z = this.aqW;
+        if (this.aqI == j) {
+            i = 0;
+        }
+        this.aqW = z | i;
+        this.aqI = j;
     }
 
     @WorkerThread
     public void zzbb(long j) {
-        int i = 1;
-        zzac.zzbs(j >= 0);
-        this.anq.zzyl();
-        boolean z = this.anN;
-        if (this.anz == j) {
-            i = 0;
-        }
-        this.anN = z | i;
-        this.anz = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqX != j ? 1 : 0) | this.aqW;
+        this.aqX = j;
     }
 
     @WorkerThread
     public void zzbc(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anO != j ? 1 : 0) | this.anN;
-        this.anO = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqY != j ? 1 : 0) | this.aqW;
+        this.aqY = j;
     }
 
     @WorkerThread
     public void zzbd(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anP != j ? 1 : 0) | this.anN;
-        this.anP = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqQ != j ? 1 : 0) | this.aqW;
+        this.aqQ = j;
     }
 
     @WorkerThread
     public void zzbe(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anH != j ? 1 : 0) | this.anN;
-        this.anH = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqR != j ? 1 : 0) | this.aqW;
+        this.aqR = j;
     }
 
     @WorkerThread
     public void zzbf(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anI != j ? 1 : 0) | this.anN;
-        this.anI = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqS != j ? 1 : 0) | this.aqW;
+        this.aqS = j;
     }
 
     @WorkerThread
     public void zzbg(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anJ != j ? 1 : 0) | this.anN;
-        this.anJ = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqT != j ? 1 : 0) | this.aqW;
+        this.aqT = j;
     }
 
     @WorkerThread
     public void zzbh(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anK != j ? 1 : 0) | this.anN;
-        this.anK = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqV != j ? 1 : 0) | this.aqW;
+        this.aqV = j;
     }
 
     @WorkerThread
     public void zzbi(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anM != j ? 1 : 0) | this.anN;
-        this.anM = j;
+        this.aqw.zzzx();
+        this.aqW = (this.aqU != j ? 1 : 0) | this.aqW;
+        this.aqU = j;
     }
 
     @WorkerThread
-    public void zzbj(long j) {
-        this.anq.zzyl();
-        this.anN = (this.anL != j ? 1 : 0) | this.anN;
-        this.anL = j;
+    public void zzbtg() {
+        this.aqw.zzzx();
+        this.aqW = false;
     }
 
     @WorkerThread
-    public void zzbsq() {
-        this.anq.zzyl();
-        this.anN = false;
+    public String zzbth() {
+        this.aqw.zzzx();
+        return this.aqF;
     }
 
     @WorkerThread
-    public String zzbsr() {
-        this.anq.zzyl();
-        return this.anw;
+    public String zzbti() {
+        this.aqw.zzzx();
+        return this.aqG;
     }
 
     @WorkerThread
-    public String zzbss() {
-        this.anq.zzyl();
-        return this.anx;
-    }
-
-    @WorkerThread
-    public String zzbst() {
-        this.anq.zzyl();
-        return this.any;
-    }
-
-    @WorkerThread
-    public long zzbsu() {
-        this.anq.zzyl();
-        return this.anA;
-    }
-
-    @WorkerThread
-    public long zzbsv() {
-        this.anq.zzyl();
-        return this.anB;
-    }
-
-    @WorkerThread
-    public long zzbsw() {
-        this.anq.zzyl();
-        return this.anC;
-    }
-
-    @WorkerThread
-    public String zzbsx() {
-        this.anq.zzyl();
-        return this.anD;
-    }
-
-    @WorkerThread
-    public long zzbsy() {
-        this.anq.zzyl();
-        return this.anE;
-    }
-
-    @WorkerThread
-    public long zzbsz() {
-        this.anq.zzyl();
-        return this.anF;
-    }
-
-    @WorkerThread
-    public boolean zzbta() {
-        this.anq.zzyl();
-        return this.anG;
-    }
-
-    @WorkerThread
-    public long zzbtb() {
-        this.anq.zzyl();
-        return this.anz;
-    }
-
-    @WorkerThread
-    public long zzbtc() {
-        this.anq.zzyl();
-        return this.anO;
-    }
-
-    @WorkerThread
-    public long zzbtd() {
-        this.anq.zzyl();
-        return this.anP;
-    }
-
-    @WorkerThread
-    public void zzbte() {
-        this.anq.zzyl();
-        long j = this.anz + 1;
-        if (j > 2147483647L) {
-            this.anq.zzbvg().zzbwe().log("Bundle index overflow");
-            j = 0;
-        }
-        this.anN = true;
-        this.anz = j;
-    }
-
-    @WorkerThread
-    public long zzbtf() {
-        this.anq.zzyl();
-        return this.anH;
-    }
-
-    @WorkerThread
-    public long zzbtg() {
-        this.anq.zzyl();
-        return this.anI;
-    }
-
-    @WorkerThread
-    public long zzbth() {
-        this.anq.zzyl();
-        return this.anJ;
-    }
-
-    @WorkerThread
-    public long zzbti() {
-        this.anq.zzyl();
-        return this.anK;
-    }
-
-    @WorkerThread
-    public long zzbtj() {
-        this.anq.zzyl();
-        return this.anM;
+    public String zzbtj() {
+        this.aqw.zzzx();
+        return this.aqH;
     }
 
     @WorkerThread
     public long zzbtk() {
-        this.anq.zzyl();
-        return this.anL;
+        this.aqw.zzzx();
+        return this.aqJ;
+    }
+
+    @WorkerThread
+    public long zzbtl() {
+        this.aqw.zzzx();
+        return this.aqK;
+    }
+
+    @WorkerThread
+    public long zzbtm() {
+        this.aqw.zzzx();
+        return this.aqL;
+    }
+
+    @WorkerThread
+    public String zzbtn() {
+        this.aqw.zzzx();
+        return this.aqM;
+    }
+
+    @WorkerThread
+    public long zzbto() {
+        this.aqw.zzzx();
+        return this.aqN;
+    }
+
+    @WorkerThread
+    public long zzbtp() {
+        this.aqw.zzzx();
+        return this.aqO;
+    }
+
+    @WorkerThread
+    public boolean zzbtq() {
+        this.aqw.zzzx();
+        return this.aqP;
+    }
+
+    @WorkerThread
+    public long zzbtr() {
+        this.aqw.zzzx();
+        return this.aqI;
+    }
+
+    @WorkerThread
+    public long zzbts() {
+        this.aqw.zzzx();
+        return this.aqX;
+    }
+
+    @WorkerThread
+    public long zzbtt() {
+        this.aqw.zzzx();
+        return this.aqY;
+    }
+
+    @WorkerThread
+    public void zzbtu() {
+        this.aqw.zzzx();
+        long j = this.aqI + 1;
+        if (j > 2147483647L) {
+            this.aqw.zzbwb().zzbxa().log("Bundle index overflow");
+            j = 0;
+        }
+        this.aqW = true;
+        this.aqI = j;
+    }
+
+    @WorkerThread
+    public long zzbtv() {
+        this.aqw.zzzx();
+        return this.aqQ;
+    }
+
+    @WorkerThread
+    public long zzbtw() {
+        this.aqw.zzzx();
+        return this.aqR;
+    }
+
+    @WorkerThread
+    public long zzbtx() {
+        this.aqw.zzzx();
+        return this.aqS;
+    }
+
+    @WorkerThread
+    public long zzbty() {
+        this.aqw.zzzx();
+        return this.aqT;
+    }
+
+    @WorkerThread
+    public long zzbtz() {
+        this.aqw.zzzx();
+        return this.aqV;
+    }
+
+    @WorkerThread
+    public long zzbua() {
+        this.aqw.zzzx();
+        return this.aqU;
     }
 
     @WorkerThread
     public void zzlj(String str) {
-        this.anq.zzyl();
-        this.anN = (!zzal.zzbb(this.FA, str) ? 1 : 0) | this.anN;
-        this.FA = str;
+        this.aqw.zzzx();
+        this.aqW = (!zzal.zzbb(this.Hh, str) ? 1 : 0) | this.aqW;
+        this.Hh = str;
     }
 
     @WorkerThread
     public void zzlk(String str) {
-        this.anq.zzyl();
+        this.aqw.zzzx();
         if (TextUtils.isEmpty(str)) {
             str = null;
         }
-        this.anN = (!zzal.zzbb(this.anw, str) ? 1 : 0) | this.anN;
-        this.anw = str;
+        this.aqW = (!zzal.zzbb(this.aqF, str) ? 1 : 0) | this.aqW;
+        this.aqF = str;
     }
 
     @WorkerThread
     public void zzll(String str) {
-        this.anq.zzyl();
-        this.anN = (!zzal.zzbb(this.anx, str) ? 1 : 0) | this.anN;
-        this.anx = str;
+        this.aqw.zzzx();
+        this.aqW = (!zzal.zzbb(this.aqG, str) ? 1 : 0) | this.aqW;
+        this.aqG = str;
     }
 
     @WorkerThread
     public void zzlm(String str) {
-        this.anq.zzyl();
-        this.anN = (!zzal.zzbb(this.any, str) ? 1 : 0) | this.anN;
-        this.any = str;
+        this.aqw.zzzx();
+        this.aqW = (!zzal.zzbb(this.aqH, str) ? 1 : 0) | this.aqW;
+        this.aqH = str;
     }
 
     @WorkerThread
     public void zzln(String str) {
-        this.anq.zzyl();
-        this.anN = (!zzal.zzbb(this.anD, str) ? 1 : 0) | this.anN;
-        this.anD = str;
+        this.aqw.zzzx();
+        this.aqW = (!zzal.zzbb(this.aqM, str) ? 1 : 0) | this.aqW;
+        this.aqM = str;
     }
 
     @WorkerThread
-    public String zzti() {
-        this.anq.zzyl();
-        return this.zzcpe;
-    }
-
-    @WorkerThread
-    public String zzyt() {
-        this.anq.zzyl();
-        return this.G;
+    public String zzup() {
+        this.aqw.zzzx();
+        return this.zzctj;
     }
 }

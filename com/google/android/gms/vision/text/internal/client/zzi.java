@@ -7,75 +7,75 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzi implements Creator<WordBoxParcel> {
     static void zza(WordBoxParcel wordBoxParcel, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, wordBoxParcel.versionCode);
-        zzb.zza(parcel, 2, wordBoxParcel.aLQ, i, false);
-        zzb.zza(parcel, 3, wordBoxParcel.aLG, i, false);
-        zzb.zza(parcel, 4, wordBoxParcel.aLH, i, false);
-        zzb.zza(parcel, 5, wordBoxParcel.aLJ, false);
-        zzb.zza(parcel, 6, wordBoxParcel.aLK);
-        zzb.zza(parcel, 7, wordBoxParcel.aLz, false);
-        zzb.zza(parcel, 8, wordBoxParcel.aLR);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, wordBoxParcel.aPb, i, false);
+        zzb.zza(parcel, 3, wordBoxParcel.aOR, i, false);
+        zzb.zza(parcel, 4, wordBoxParcel.aOS, i, false);
+        zzb.zza(parcel, 5, wordBoxParcel.aOU, false);
+        zzb.zza(parcel, 6, wordBoxParcel.aOV);
+        zzb.zza(parcel, 7, wordBoxParcel.aOK, false);
+        zzb.zza(parcel, 8, wordBoxParcel.aPc);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zztl(parcel);
+        return zztb(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzacc(i);
+        return zzabs(i);
     }
 
-    public WordBoxParcel[] zzacc(int i) {
+    public WordBoxParcel[] zzabs(int i) {
         return new WordBoxParcel[i];
     }
 
-    public WordBoxParcel zztl(Parcel parcel) {
+    public WordBoxParcel zztb(Parcel parcel) {
         boolean z = false;
         String str = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         float f = 0.0f;
         String str2 = null;
         BoundingBoxParcel boundingBoxParcel = null;
         BoundingBoxParcel boundingBoxParcel2 = null;
         SymbolBoxParcel[] symbolBoxParcelArr = null;
         int i = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    symbolBoxParcelArr = (SymbolBoxParcel[]) zza.zzb(parcel, zzcp, SymbolBoxParcel.CREATOR);
+                    symbolBoxParcelArr = (SymbolBoxParcel[]) zza.zzb(parcel, zzcq, SymbolBoxParcel.CREATOR);
                     break;
                 case 3:
-                    boundingBoxParcel2 = (BoundingBoxParcel) zza.zza(parcel, zzcp, BoundingBoxParcel.CREATOR);
+                    boundingBoxParcel2 = (BoundingBoxParcel) zza.zza(parcel, zzcq, BoundingBoxParcel.CREATOR);
                     break;
                 case 4:
-                    boundingBoxParcel = (BoundingBoxParcel) zza.zza(parcel, zzcp, BoundingBoxParcel.CREATOR);
+                    boundingBoxParcel = (BoundingBoxParcel) zza.zza(parcel, zzcq, BoundingBoxParcel.CREATOR);
                     break;
                 case 5:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 6:
-                    f = zza.zzl(parcel, zzcp);
+                    f = zza.zzl(parcel, zzcq);
                     break;
                 case 7:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 8:
-                    z = zza.zzc(parcel, zzcp);
+                    z = zza.zzc(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new WordBoxParcel(i, symbolBoxParcelArr, boundingBoxParcel2, boundingBoxParcel, str2, f, str, z);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

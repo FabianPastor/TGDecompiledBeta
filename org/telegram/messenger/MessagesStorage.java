@@ -2339,6 +2339,12 @@ Error: java.util.NoSuchElementException
                             contact = new Contact();
                             contact.first_name = cursor.stringValue(1);
                             contact.last_name = cursor.stringValue(2);
+                            if (contact.first_name == null) {
+                                contact.first_name = "";
+                            }
+                            if (contact.last_name == null) {
+                                contact.last_name = "";
+                            }
                             contact.id = uid;
                             contactHashMap.put(Integer.valueOf(uid), contact);
                         }
@@ -5315,12 +5321,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 57;
+                    message.media.bytes[0] = (byte) 58;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 57;
+                message.media.bytes[0] = (byte) 58;
                 message.flags |= 512;
             }
         }

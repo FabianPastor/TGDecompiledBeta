@@ -1,69 +1,70 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class PolylineOptions extends AbstractSafeParcelable {
-    public static final zzj CREATOR = new zzj();
-    private float amD;
-    private boolean amE;
-    private boolean amF;
-    private float amJ;
-    private final List<LatLng> ane;
-    private boolean ang;
+    public static final Creator<PolylineOptions> CREATOR = new zzj();
+    private float apJ;
+    private boolean apK;
+    private boolean apL;
+    private float apP;
+    private final List<LatLng> aqk;
+    private boolean aqm;
     private int mColor;
     private final int mVersionCode;
 
     public PolylineOptions() {
-        this.amJ = 10.0f;
+        this.apP = 10.0f;
         this.mColor = -16777216;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.ang = false;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.aqm = false;
+        this.apL = false;
         this.mVersionCode = 1;
-        this.ane = new ArrayList();
+        this.aqk = new ArrayList();
     }
 
     PolylineOptions(int i, List list, float f, int i2, float f2, boolean z, boolean z2, boolean z3) {
-        this.amJ = 10.0f;
+        this.apP = 10.0f;
         this.mColor = -16777216;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.ang = false;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.aqm = false;
+        this.apL = false;
         this.mVersionCode = i;
-        this.ane = list;
-        this.amJ = f;
+        this.aqk = list;
+        this.apP = f;
         this.mColor = i2;
-        this.amD = f2;
-        this.amE = z;
-        this.ang = z2;
-        this.amF = z3;
+        this.apJ = f2;
+        this.apK = z;
+        this.aqm = z2;
+        this.apL = z3;
     }
 
     public PolylineOptions add(LatLng latLng) {
-        this.ane.add(latLng);
+        this.aqk.add(latLng);
         return this;
     }
 
     public PolylineOptions add(LatLng... latLngArr) {
-        this.ane.addAll(Arrays.asList(latLngArr));
+        this.aqk.addAll(Arrays.asList(latLngArr));
         return this;
     }
 
     public PolylineOptions addAll(Iterable<LatLng> iterable) {
         for (LatLng add : iterable) {
-            this.ane.add(add);
+            this.aqk.add(add);
         }
         return this;
     }
 
     public PolylineOptions clickable(boolean z) {
-        this.amF = z;
+        this.apL = z;
         return this;
     }
 
@@ -73,7 +74,7 @@ public final class PolylineOptions extends AbstractSafeParcelable {
     }
 
     public PolylineOptions geodesic(boolean z) {
-        this.ang = z;
+        this.aqm = z;
         return this;
     }
 
@@ -82,7 +83,7 @@ public final class PolylineOptions extends AbstractSafeParcelable {
     }
 
     public List<LatLng> getPoints() {
-        return this.ane;
+        return this.aqk;
     }
 
     int getVersionCode() {
@@ -90,32 +91,32 @@ public final class PolylineOptions extends AbstractSafeParcelable {
     }
 
     public float getWidth() {
-        return this.amJ;
+        return this.apP;
     }
 
     public float getZIndex() {
-        return this.amD;
+        return this.apJ;
     }
 
     public boolean isClickable() {
-        return this.amF;
+        return this.apL;
     }
 
     public boolean isGeodesic() {
-        return this.ang;
+        return this.aqm;
     }
 
     public boolean isVisible() {
-        return this.amE;
+        return this.apK;
     }
 
     public PolylineOptions visible(boolean z) {
-        this.amE = z;
+        this.apK = z;
         return this;
     }
 
     public PolylineOptions width(float f) {
-        this.amJ = f;
+        this.apP = f;
         return this;
     }
 
@@ -124,7 +125,7 @@ public final class PolylineOptions extends AbstractSafeParcelable {
     }
 
     public PolylineOptions zIndex(float f) {
-        this.amD = f;
+        this.apJ = f;
         return this;
     }
 }

@@ -1,6 +1,8 @@
 package android.support.v4.app;
 
 import android.app.Service;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.os.BuildCompat;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,6 +17,7 @@ public final class ServiceCompat {
         void stopForeground(Service service, int i);
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     @Retention(RetentionPolicy.SOURCE)
     public @interface StopForegroundFlags {
     }

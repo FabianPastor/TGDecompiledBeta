@@ -3,12 +3,12 @@ package com.google.android.gms.common.api;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import com.google.android.gms.internal.zzrk;
+import com.google.android.gms.internal.zzrz;
 
 public abstract class ResultTransform<R extends Result, S extends Result> {
     @NonNull
     public final PendingResult<S> createFailedResult(@NonNull Status status) {
-        return new zzrk(status);
+        return new zzrz(status);
     }
 
     @NonNull

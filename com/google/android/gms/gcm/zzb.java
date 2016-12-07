@@ -11,23 +11,23 @@ public interface zzb extends IInterface {
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
-            public void zztm(int i) throws RemoteException {
+            public void zztn(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.gcm.INetworkTaskCallback");
                     obtain.writeInt(i);
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -36,7 +36,7 @@ public interface zzb extends IInterface {
             }
         }
 
-        public static zzb zzgs(IBinder iBinder) {
+        public static zzb zzgt(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -48,7 +48,7 @@ public interface zzb extends IInterface {
             switch (i) {
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.gcm.INetworkTaskCallback");
-                    zztm(parcel.readInt());
+                    zztn(parcel.readInt());
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -60,5 +60,5 @@ public interface zzb extends IInterface {
         }
     }
 
-    void zztm(int i) throws RemoteException;
+    void zztn(int i) throws RemoteException;
 }

@@ -190,24 +190,24 @@ public class zza {
         return parcel.readInt() != 0;
     }
 
-    public static int zzcp(Parcel parcel) {
+    public static int zzcq(Parcel parcel) {
         return parcel.readInt();
     }
 
-    public static int zzcq(Parcel parcel) {
-        int zzcp = zzcp(parcel);
-        int zza = zza(parcel, zzcp);
+    public static int zzcr(Parcel parcel) {
+        int zzcq = zzcq(parcel);
+        int zza = zza(parcel, zzcq);
         int dataPosition = parcel.dataPosition();
-        if (zzgv(zzcp) != 20293) {
+        if (zzgu(zzcq) != 20293) {
             String str = "Expected object header. Got 0x";
-            String valueOf = String.valueOf(Integer.toHexString(zzcp));
+            String valueOf = String.valueOf(Integer.toHexString(zzcq));
             throw new zza(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), parcel);
         }
-        zzcp = dataPosition + zza;
-        if (zzcp >= dataPosition && zzcp <= parcel.dataSize()) {
-            return zzcp;
+        zzcq = dataPosition + zza;
+        if (zzcq >= dataPosition && zzcq <= parcel.dataSize()) {
+            return zzcq;
         }
-        throw new zza("Size read is invalid start=" + dataPosition + " end=" + zzcp, parcel);
+        throw new zza("Size read is invalid start=" + dataPosition + " end=" + zzcq, parcel);
     }
 
     public static Boolean zzd(Parcel parcel, int i) {
@@ -234,7 +234,7 @@ public class zza {
         return parcel.readInt();
     }
 
-    public static int zzgv(int i) {
+    public static int zzgu(int i) {
         return SupportMenu.USER_MASK & i;
     }
 

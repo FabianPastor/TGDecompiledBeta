@@ -84,7 +84,7 @@ public class zzl {
         }
         com_google_android_gms_internal_zzk_T.zza(getSequenceNumber());
         com_google_android_gms_internal_zzk_T.zzc("add-to-queue");
-        if (com_google_android_gms_internal_zzk_T.zzq()) {
+        if (com_google_android_gms_internal_zzk_T.zzp()) {
             synchronized (this.zzay) {
                 String zzg = com_google_android_gms_internal_zzk_T.zzg();
                 if (this.zzay.containsKey(zzg)) {
@@ -117,7 +117,7 @@ public class zzl {
                 zzg.zzg(com_google_android_gms_internal_zzk_T);
             }
         }
-        if (com_google_android_gms_internal_zzk_T.zzq()) {
+        if (com_google_android_gms_internal_zzk_T.zzp()) {
             synchronized (this.zzay) {
                 Queue queue = (Queue) this.zzay.remove(com_google_android_gms_internal_zzk_T.zzg());
                 if (queue != null) {

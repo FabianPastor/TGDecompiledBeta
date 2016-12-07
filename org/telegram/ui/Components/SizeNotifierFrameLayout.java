@@ -7,9 +7,11 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.ActionBar;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     private Drawable backgroundDrawable;
@@ -93,8 +95,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
                 return;
             }
+            int actionBarHeight = ActionBar.getCurrentActionBarHeight() + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            int viewHeight = getMeasuredHeight() - actionBarHeight;
             float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
-            float scaleY = ((float) (getMeasuredHeight() + this.keyboardHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
+            float scaleY = ((float) (this.keyboardHeight + viewHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
             if (scaleX < scaleY) {
                 scale = scaleY;
             } else {
@@ -103,10 +107,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             int width = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicWidth()) * scale));
             int height = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * scale));
             int x = (getMeasuredWidth() - width) / 2;
-            int y = ((getMeasuredHeight() - height) + this.keyboardHeight) / 2;
+            int y = (((viewHeight - height) + this.keyboardHeight) / 2) + actionBarHeight;
             if (this.bottomClip != 0) {
                 canvas.save();
-                canvas.clipRect(0, 0, width, getMeasuredHeight() - this.bottomClip);
+                canvas.clipRect(0, 0, width, viewHeight - this.bottomClip);
             }
             this.backgroundDrawable.setBounds(x, y, x + width, y + height);
             this.backgroundDrawable.draw(canvas);

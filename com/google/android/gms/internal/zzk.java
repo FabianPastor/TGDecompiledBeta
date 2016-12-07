@@ -103,7 +103,7 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
         valueOf = valueOf.length() != 0 ? str.concat(valueOf) : new String(str);
         str = "[ ] ";
         String valueOf2 = String.valueOf(getUrl());
-        String valueOf3 = String.valueOf(zzr());
+        String valueOf3 = String.valueOf(zzq());
         String valueOf4 = String.valueOf(this.zzah);
         return new StringBuilder(((((String.valueOf(str).length() + 3) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()).append(str).append(valueOf2).append(" ").append(valueOf).append(" ").append(valueOf3).append(" ").append(valueOf4).toString();
     }
@@ -137,9 +137,9 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
     }
 
     public int zzc(zzk<T> com_google_android_gms_internal_zzk_T) {
-        zza zzr = zzr();
-        zza zzr2 = com_google_android_gms_internal_zzk_T.zzr();
-        return zzr == zzr2 ? this.zzah.intValue() - com_google_android_gms_internal_zzk_T.zzah.intValue() : zzr2.ordinal() - zzr.ordinal();
+        zza zzq = zzq();
+        zza zzq2 = com_google_android_gms_internal_zzk_T.zzq();
+        return zzq == zzq2 ? this.zzah.intValue() - com_google_android_gms_internal_zzk_T.zzah.intValue() : zzq2.ordinal() - zzq.ordinal();
     }
 
     public void zzc(zzr com_google_android_gms_internal_zzr) {
@@ -196,17 +196,17 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
 
     @Deprecated
     protected Map<String, String> zzi() throws zza {
-        return zzm();
+        return null;
     }
 
     @Deprecated
     protected String zzj() {
-        return zzn();
+        return zzm();
     }
 
     @Deprecated
     public String zzk() {
-        return zzo();
+        return zzn();
     }
 
     @Deprecated
@@ -215,46 +215,41 @@ public abstract class zzk<T> implements Comparable<zzk<T>> {
         return (zzi == null || zzi.size() <= 0) ? null : zza(zzi, zzj());
     }
 
-    protected Map<String, String> zzm() throws zza {
-        return null;
-    }
-
-    protected String zzn() {
+    protected String zzm() {
         return "UTF-8";
     }
 
-    public String zzo() {
+    public String zzn() {
         String str = "application/x-www-form-urlencoded; charset=";
-        String valueOf = String.valueOf(zzn());
+        String valueOf = String.valueOf(zzm());
         return valueOf.length() != 0 ? str.concat(valueOf) : new String(str);
     }
 
-    public byte[] zzp() throws zza {
-        Map zzm = zzm();
-        return (zzm == null || zzm.size() <= 0) ? null : zza(zzm, zzn());
+    public byte[] zzo() throws zza {
+        return null;
     }
 
-    public final boolean zzq() {
+    public final boolean zzp() {
         return this.zzaj;
     }
 
-    public zza zzr() {
+    public zza zzq() {
         return zza.NORMAL;
     }
 
-    public final int zzs() {
+    public final int zzr() {
         return this.zzan.zzc();
     }
 
-    public zzo zzt() {
+    public zzo zzs() {
         return this.zzan;
     }
 
-    public void zzu() {
+    public void zzt() {
         this.zzal = true;
     }
 
-    public boolean zzv() {
+    public boolean zzu() {
         return this.zzal;
     }
 }

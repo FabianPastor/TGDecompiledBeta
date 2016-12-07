@@ -6,39 +6,39 @@ import com.google.android.gms.vision.Detector.Detections;
 import com.google.android.gms.vision.Detector.Processor;
 
 public abstract class FocusingProcessor<T> implements Processor<T> {
-    private Detector<T> aKf;
-    private Tracker<T> aKv;
-    private int aKw = 3;
-    private boolean aKx = false;
-    private int aKy;
-    private int aKz = 0;
+    private Tracker<T> aNG;
+    private int aNH = 3;
+    private boolean aNI = false;
+    private int aNJ;
+    private int aNK = 0;
+    private Detector<T> aNq;
 
     public FocusingProcessor(Detector<T> detector, Tracker<T> tracker) {
-        this.aKf = detector;
-        this.aKv = tracker;
+        this.aNq = detector;
+        this.aNG = tracker;
     }
 
     public void receiveDetections(Detections<T> detections) {
         SparseArray detectedItems = detections.getDetectedItems();
         if (detectedItems.size() == 0) {
-            if (this.aKz == this.aKw) {
-                this.aKv.onDone();
-                this.aKx = false;
+            if (this.aNK == this.aNH) {
+                this.aNG.onDone();
+                this.aNI = false;
             } else {
-                this.aKv.onMissing(detections);
+                this.aNG.onMissing(detections);
             }
-            this.aKz++;
+            this.aNK++;
             return;
         }
-        this.aKz = 0;
-        if (this.aKx) {
-            Object obj = detectedItems.get(this.aKy);
+        this.aNK = 0;
+        if (this.aNI) {
+            Object obj = detectedItems.get(this.aNJ);
             if (obj != null) {
-                this.aKv.onUpdate(detections, obj);
+                this.aNG.onUpdate(detections, obj);
                 return;
             } else {
-                this.aKv.onDone();
-                this.aKx = false;
+                this.aNG.onDone();
+                this.aNI = false;
             }
         }
         int selectFocus = selectFocus(detections);
@@ -47,23 +47,23 @@ public abstract class FocusingProcessor<T> implements Processor<T> {
             Log.w("FocusingProcessor", "Invalid focus selected: " + selectFocus);
             return;
         }
-        this.aKx = true;
-        this.aKy = selectFocus;
-        this.aKf.setFocus(this.aKy);
-        this.aKv.onNewItem(this.aKy, obj2);
-        this.aKv.onUpdate(detections, obj2);
+        this.aNI = true;
+        this.aNJ = selectFocus;
+        this.aNq.setFocus(this.aNJ);
+        this.aNG.onNewItem(this.aNJ, obj2);
+        this.aNG.onUpdate(detections, obj2);
     }
 
     public void release() {
-        this.aKv.onDone();
+        this.aNG.onDone();
     }
 
     public abstract int selectFocus(Detections<T> detections);
 
-    protected void zzaba(int i) {
+    protected void zzaaq(int i) {
         if (i < 0) {
             throw new IllegalArgumentException("Invalid max gap: " + i);
         }
-        this.aKw = i;
+        this.aNH = i;
     }
 }

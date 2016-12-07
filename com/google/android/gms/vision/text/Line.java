@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Line implements Text {
-    private LineBoxParcel aLv;
-    private List<Element> aLw;
+    private LineBoxParcel aOG;
+    private List<Element> aOH;
 
     Line(LineBoxParcel lineBoxParcel) {
-        this.aLv = lineBoxParcel;
+        this.aOG = lineBoxParcel;
     }
 
     public float getAngle() {
-        return this.aLv.aLG.aLE;
+        return this.aOG.aOR.aOP;
     }
 
     public Rect getBoundingBox() {
@@ -24,35 +24,35 @@ public class Line implements Text {
     }
 
     public List<? extends Text> getComponents() {
-        return zzclu();
+        return zzclt();
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.aLv.aLG);
+        return zza.zza(this.aOG.aOR);
     }
 
     public String getLanguage() {
-        return this.aLv.aLz;
+        return this.aOG.aOK;
     }
 
     public String getValue() {
-        return this.aLv.aLJ;
+        return this.aOG.aOU;
     }
 
     public boolean isVertical() {
-        return this.aLv.aLM;
+        return this.aOG.aOX;
     }
 
-    List<Element> zzclu() {
-        if (this.aLv.aLF.length == 0) {
+    List<Element> zzclt() {
+        if (this.aOG.aOQ.length == 0) {
             return new ArrayList(0);
         }
-        if (this.aLw == null) {
-            this.aLw = new ArrayList(this.aLv.aLF.length);
-            for (WordBoxParcel element : this.aLv.aLF) {
-                this.aLw.add(new Element(element));
+        if (this.aOH == null) {
+            this.aOH = new ArrayList(this.aOG.aOQ.length);
+            for (WordBoxParcel element : this.aOG.aOQ) {
+                this.aOH.add(new Element(element));
             }
         }
-        return this.aLw;
+        return this.aOH;
     }
 }

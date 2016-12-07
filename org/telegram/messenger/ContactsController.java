@@ -422,7 +422,7 @@ public class ContactsController {
                     pCur.close();
                 }
                 pCur = cr.query(Data.CONTENT_URI, this.projectionNames, "contact_id IN (" + TextUtils.join(",", idsArr) + ") AND " + "mimetype" + " = '" + "vnd.android.cursor.item/name" + "'", null, null);
-                if (pCur != null && pCur.getCount() > 0) {
+                if (pCur != null) {
                     while (pCur.moveToNext()) {
                         int id2 = pCur.getInt(0);
                         String fname = pCur.getString(1);
@@ -430,7 +430,7 @@ public class ContactsController {
                         String sname2 = pCur.getString(3);
                         String mname = pCur.getString(4);
                         contact = (Contact) contactsMap.get(Integer.valueOf(id2));
-                        if (contact != null && contact.first_name.length() == 0 && contact.last_name.length() == 0) {
+                        if (contact != null && TextUtils.isEmpty(contact.first_name) && TextUtils.isEmpty(contact.last_name)) {
                             contact.first_name = fname;
                             contact.last_name = sname;
                             if (contact.first_name == null) {
@@ -560,7 +560,7 @@ public class ContactsController {
                                     }
                                 }
                             }
-                            boolean nameChanged = existing != null && ((TextUtils.isEmpty(value.first_name) && !existing.first_name.equals(value.first_name)) || !(TextUtils.isEmpty(value.last_name) || existing.last_name.equals(value.last_name)));
+                            boolean nameChanged = (existing == null || ((TextUtils.isEmpty(value.first_name) || existing.first_name.equals(value.first_name)) && (TextUtils.isEmpty(value.last_name) || existing.last_name.equals(value.last_name)))) ? false : true;
                             String sphone;
                             int index;
                             if (existing == null || nameChanged) {
@@ -594,6 +594,17 @@ public class ContactsController {
                                     sphone = (String) value.shortPhones.get(a);
                                     contactsBookShort.put(sphone, value);
                                     index = existing.shortPhones.indexOf(sphone);
+                                    boolean emptyNameReimport = false;
+                                    if (z2) {
+                                        contact = (TL_contact) ContactsController.this.contactsByPhone.get(sphone);
+                                        if (contact != null) {
+                                            user = MessagesController.getInstance().getUser(Integer.valueOf(contact.user_id));
+                                            if (user != null && TextUtils.isEmpty(user.first_name) && TextUtils.isEmpty(user.last_name) && !(TextUtils.isEmpty(value.first_name) && TextUtils.isEmpty(value.last_name))) {
+                                                index = -1;
+                                                emptyNameReimport = true;
+                                            }
+                                        }
+                                    }
                                     if (index != -1) {
                                         value.phoneDeleted.set(a, existing.phoneDeleted.get(index));
                                         existing.phones.remove(index);
@@ -601,13 +612,13 @@ public class ContactsController {
                                         existing.phoneDeleted.remove(index);
                                         existing.phoneTypes.remove(index);
                                     } else if (z2) {
-                                        contact = (TL_contact) ContactsController.this.contactsByPhone.get(sphone);
-                                        if (contact != null) {
-                                            user = MessagesController.getInstance().getUser(Integer.valueOf(contact.user_id));
-                                            if (user != null) {
-                                                firstName = user.first_name != null ? user.first_name : "";
-                                                lastName = user.last_name != null ? user.last_name : "";
+                                        if (!emptyNameReimport) {
+                                            contact = (TL_contact) ContactsController.this.contactsByPhone.get(sphone);
+                                            if (contact != null) {
+                                                user = MessagesController.getInstance().getUser(Integer.valueOf(contact.user_id));
                                                 if (user != null) {
+                                                    firstName = user.first_name != null ? user.first_name : "";
+                                                    lastName = user.last_name != null ? user.last_name : "";
                                                     if (firstName.equals(value.first_name)) {
                                                         if (lastName.equals(value.last_name)) {
                                                         }
@@ -649,7 +660,7 @@ public class ContactsController {
                                                 HashMap<String, User> contactsPhonesShort = new HashMap();
                                                 for (a = 0; a < ContactsController.this.contacts.size(); a++) {
                                                     user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) ContactsController.this.contacts.get(a)).user_id));
-                                                    if (!(user == null || user.phone == null || user.phone.length() == 0)) {
+                                                    if (!(user == null || TextUtils.isEmpty(user.phone))) {
                                                         contactsPhonesShort.put(user.phone, user);
                                                     }
                                                 }
@@ -695,13 +706,11 @@ public class ContactsController {
                                         if (user != null) {
                                             firstName = user.first_name != null ? user.first_name : "";
                                             lastName = user.last_name != null ? user.last_name : "";
-                                            if (user != null) {
-                                                if (firstName.equals(value.first_name)) {
-                                                    if (lastName.equals(value.last_name)) {
-                                                    }
+                                            if (firstName.equals(value.first_name)) {
+                                                if (lastName.equals(value.last_name)) {
                                                 }
-                                                if (TextUtils.isEmpty(value.first_name) && TextUtils.isEmpty(value.last_name)) {
-                                                }
+                                            }
+                                            if (TextUtils.isEmpty(value.first_name) && TextUtils.isEmpty(value.last_name)) {
                                             }
                                         }
                                     }
@@ -960,7 +969,7 @@ public class ContactsController {
                                 User user = (User) usersDict.get(Integer.valueOf(value.user_id));
                                 if (user != null) {
                                     contactsDictionary.put(value.user_id, value);
-                                    if (contactsByPhonesDict != null) {
+                                    if (!(contactsByPhonesDict == null || TextUtils.isEmpty(user.phone))) {
                                         contactsByPhonesDict.put(user.phone, value);
                                     }
                                     String key = UserObject.getFirstName(user);
@@ -1093,12 +1102,12 @@ public class ContactsController {
     }
 
     private void updateUnregisteredContacts(ArrayList<TL_contact> contactsArr) {
+        int a;
         HashMap<String, TL_contact> contactsPhonesShort = new HashMap();
-        Iterator it = contactsArr.iterator();
-        while (it.hasNext()) {
-            TL_contact value = (TL_contact) it.next();
+        for (a = 0; a < contactsArr.size(); a++) {
+            TL_contact value = (TL_contact) contactsArr.get(a);
             User user = MessagesController.getInstance().getUser(Integer.valueOf(value.user_id));
-            if (!(user == null || user.phone == null || user.phone.length() == 0)) {
+            if (!(user == null || TextUtils.isEmpty(user.phone))) {
                 contactsPhonesShort.put(user.phone, value);
             }
         }
@@ -1107,7 +1116,7 @@ public class ContactsController {
             Contact value2 = (Contact) pair.getValue();
             int id = ((Integer) pair.getKey()).intValue();
             boolean skip = false;
-            int a = 0;
+            a = 0;
             while (a < value2.phones.size()) {
                 if (contactsPhonesShort.containsKey((String) value2.shortPhones.get(a)) || ((Integer) value2.phoneDeleted.get(a)).intValue() == 1) {
                     skip = true;
@@ -1272,6 +1281,7 @@ public class ContactsController {
     private void applyContactsUpdates(ArrayList<Integer> ids, ConcurrentHashMap<Integer, User> userDict, ArrayList<TL_contact> newC, ArrayList<Integer> contactsTD) {
         int a;
         Integer uid;
+        Contact contact;
         int index;
         if (newC == null || contactsTD == null) {
             newC = new ArrayList();
@@ -1279,9 +1289,9 @@ public class ContactsController {
             for (a = 0; a < ids.size(); a++) {
                 uid = (Integer) ids.get(a);
                 if (uid.intValue() > 0) {
-                    TL_contact contact = new TL_contact();
-                    contact.user_id = uid.intValue();
-                    newC.add(contact);
+                    TL_contact contact2 = new TL_contact();
+                    contact2.user_id = uid.intValue();
+                    newC.add(contact2);
                 } else if (uid.intValue() < 0) {
                     contactsTD.add(Integer.valueOf(-uid.intValue()));
                 }
@@ -1292,7 +1302,6 @@ public class ContactsController {
         StringBuilder toDelete = new StringBuilder();
         boolean reloadContacts = false;
         for (a = 0; a < newC.size(); a++) {
-            Contact contact2;
             TL_contact newContact = (TL_contact) newC.get(a);
             User user = null;
             if (userDict != null) {
@@ -1303,14 +1312,14 @@ public class ContactsController {
             } else {
                 MessagesController.getInstance().putUser(user, true);
             }
-            if (user == null || user.phone == null || user.phone.length() == 0) {
+            if (user == null || TextUtils.isEmpty(user.phone)) {
                 reloadContacts = true;
             } else {
-                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact2 != null) {
-                    index = contact2.shortPhones.indexOf(user.phone);
+                contact = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact != null) {
+                    index = contact.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact2.phoneDeleted.set(index, Integer.valueOf(0));
+                        contact.phoneDeleted.set(index, Integer.valueOf(0));
                     }
                 }
                 if (toAdd.length() != 0) {
@@ -1337,12 +1346,12 @@ public class ContactsController {
             }
             if (user == null) {
                 reloadContacts = true;
-            } else if (user.phone != null && user.phone.length() > 0) {
-                contact2 = (Contact) this.contactsBookSPhones.get(user.phone);
-                if (contact2 != null) {
-                    index = contact2.shortPhones.indexOf(user.phone);
+            } else if (!TextUtils.isEmpty(user.phone)) {
+                contact = (Contact) this.contactsBookSPhones.get(user.phone);
+                if (contact != null) {
+                    index = contact.shortPhones.indexOf(user.phone);
                     if (index != -1) {
-                        contact2.phoneDeleted.set(index, Integer.valueOf(1));
+                        contact.phoneDeleted.set(index, Integer.valueOf(1));
                     }
                 }
                 if (toDelete.length() != 0) {
@@ -1443,7 +1452,7 @@ public class ContactsController {
 
     public long addContactToPhoneBook(User user, boolean check) {
         long j = -1;
-        if (!(this.currentAccount == null || user == null || user.phone == null || user.phone.length() == 0 || !hasContactsPermission())) {
+        if (!(this.currentAccount == null || user == null || TextUtils.isEmpty(user.phone) || !hasContactsPermission())) {
             j = -1;
             synchronized (this.observerLock) {
                 this.ignoreChanges = true;
@@ -1522,7 +1531,7 @@ public class ContactsController {
     }
 
     public void addContact(User user) {
-        if (user != null && user.phone != null) {
+        if (user != null && !TextUtils.isEmpty(user.phone)) {
             TL_contacts_importContacts req = new TL_contacts_importContacts();
             ArrayList<TL_inputPhoneContact> contactsParams = new ArrayList();
             TL_inputPhoneContact c = new TL_inputPhoneContact();
@@ -1553,7 +1562,7 @@ public class ContactsController {
                             ArrayList<TL_contact> arrayList = new ArrayList();
                             arrayList.add(newContact);
                             MessagesStorage.getInstance().putContacts(arrayList, false);
-                            if (u.phone != null && u.phone.length() > 0) {
+                            if (!TextUtils.isEmpty(u.phone)) {
                                 CharSequence name = ContactsController.formatName(u.first_name, u.last_name);
                                 MessagesStorage.getInstance().applyPhoneBookUpdates(u.phone, "");
                                 Contact contact = (Contact) ContactsController.this.contactsBookSPhones.get(u.phone);
@@ -1613,10 +1622,9 @@ public class ContactsController {
                                 }
                             }
                         });
-                        Iterator it = users.iterator();
-                        while (it.hasNext()) {
-                            User user = (User) it.next();
-                            if (user.phone != null && user.phone.length() > 0) {
+                        for (int a = 0; a < users.size(); a++) {
+                            User user = (User) users.get(a);
+                            if (!TextUtils.isEmpty(user.phone)) {
                                 CharSequence name = UserObject.getUserName(user);
                                 MessagesStorage.getInstance().applyPhoneBookUpdates(user.phone, "");
                                 Contact contact = (Contact) ContactsController.this.contactsBookSPhones.get(user.phone);

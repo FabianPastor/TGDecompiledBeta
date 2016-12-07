@@ -1,15 +1,22 @@
 package com.google.android.gms.common.stats;
 
-import android.content.ComponentName;
+import android.support.v4.util.SimpleArrayMap;
+import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
-public final class zzd {
-    public static final ComponentName En = new ComponentName("com.google.android.gms", "com.google.android.gms.common.stats.GmsCoreStatsService");
-    public static int Eo = 1;
-    public static int Ep = 2;
-    public static int Eq = 4;
-    public static int Er = 8;
-    public static int Es = 16;
-    public static int Et = 32;
-    public static int Eu = 1;
-    public static int LOG_LEVEL_OFF = 0;
+public class zzd {
+    private final long FX;
+    private final int FY;
+    private final SimpleArrayMap<String, Long> FZ;
+
+    public zzd() {
+        this.FX = HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS;
+        this.FY = 10;
+        this.FZ = new SimpleArrayMap(10);
+    }
+
+    public zzd(int i, long j) {
+        this.FX = j;
+        this.FY = i;
+        this.FZ = new SimpleArrayMap();
+    }
 }

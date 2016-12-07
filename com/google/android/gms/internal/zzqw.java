@@ -1,126 +1,56 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.text.TextUtils;
-import com.google.android.gms.R;
-import com.google.android.gms.common.api.Status;
+import android.app.Activity;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.internal.zzaa;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.internal.zzaj;
+import com.google.android.gms.common.util.zza;
 
-@Deprecated
-public final class zzqw {
-    private static zzqw yP;
-    private static Object zzaok = new Object();
-    private final String yQ;
-    private final Status yR;
-    private final String yS;
-    private final String yT;
-    private final String yU;
-    private final boolean yV;
-    private final boolean yW;
-    private final String zzcpe;
+public class zzqw extends zzqp {
+    private zzrh xy;
+    private final zza<zzql<?>> zx = new zza();
 
-    zzqw(Context context) {
-        boolean z = true;
-        Resources resources = context.getResources();
-        int identifier = resources.getIdentifier("google_app_measurement_enable", "integer", resources.getResourcePackageName(R.string.common_google_play_services_unknown_issue));
-        if (identifier != 0) {
-            boolean z2 = resources.getInteger(identifier) != 0;
-            if (z2) {
-                z = false;
-            }
-            this.yW = z;
-            z = z2;
-        } else {
-            this.yW = false;
+    private zzqw(zzrp com_google_android_gms_internal_zzrp) {
+        super(com_google_android_gms_internal_zzrp);
+        this.Bf.zza("ConnectionlessLifecycleHelper", (zzro) this);
+    }
+
+    public static void zza(Activity activity, zzrh com_google_android_gms_internal_zzrh, zzql<?> com_google_android_gms_internal_zzql_) {
+        zzrp zzs = zzro.zzs(activity);
+        zzqw com_google_android_gms_internal_zzqw = (zzqw) zzs.zza("ConnectionlessLifecycleHelper", zzqw.class);
+        if (com_google_android_gms_internal_zzqw == null) {
+            com_google_android_gms_internal_zzqw = new zzqw(zzs);
         }
-        this.yV = z;
-        zzaj com_google_android_gms_common_internal_zzaj = new zzaj(context);
-        this.yS = com_google_android_gms_common_internal_zzaj.getString("firebase_database_url");
-        this.yU = com_google_android_gms_common_internal_zzaj.getString("google_storage_bucket");
-        this.yT = com_google_android_gms_common_internal_zzaj.getString("gcm_defaultSenderId");
-        this.yQ = com_google_android_gms_common_internal_zzaj.getString("google_api_key");
-        Object zzcg = zzaa.zzcg(context);
-        if (zzcg == null) {
-            zzcg = com_google_android_gms_common_internal_zzaj.getString("google_app_id");
+        com_google_android_gms_internal_zzqw.xy = com_google_android_gms_internal_zzrh;
+        com_google_android_gms_internal_zzqw.zza(com_google_android_gms_internal_zzql_);
+        com_google_android_gms_internal_zzrh.zza(com_google_android_gms_internal_zzqw);
+    }
+
+    private void zza(zzql<?> com_google_android_gms_internal_zzql_) {
+        zzaa.zzb((Object) com_google_android_gms_internal_zzql_, (Object) "ApiKey cannot be null");
+        this.zx.add(com_google_android_gms_internal_zzql_);
+    }
+
+    public void onStart() {
+        super.onStart();
+        if (!this.zx.isEmpty()) {
+            this.xy.zza(this);
         }
-        if (TextUtils.isEmpty(zzcg)) {
-            this.yR = new Status(10, "Missing google app id value from from string resources with name google_app_id.");
-            this.zzcpe = null;
-            return;
-        }
-        this.zzcpe = zzcg;
-        this.yR = Status.vY;
     }
 
-    zzqw(String str, boolean z) {
-        this(str, z, null, null, null);
+    public void onStop() {
+        super.onStop();
+        this.xy.zzb(this);
     }
 
-    zzqw(String str, boolean z, String str2, String str3, String str4) {
-        this.zzcpe = str;
-        this.yQ = null;
-        this.yR = Status.vY;
-        this.yV = z;
-        this.yW = !z;
-        this.yS = str2;
-        this.yT = str4;
-        this.yU = str3;
+    protected void zza(ConnectionResult connectionResult, int i) {
+        this.xy.zza(connectionResult, i);
     }
 
-    public static String zzasl() {
-        return zzhf("getGoogleAppId").zzcpe;
+    protected void zzarm() {
+        this.xy.zzarm();
     }
 
-    public static boolean zzasm() {
-        return zzhf("isMeasurementExplicitlyDisabled").yW;
-    }
-
-    public static Status zzb(Context context, String str, boolean z) {
-        Status zzhe;
-        zzac.zzb((Object) context, (Object) "Context must not be null.");
-        zzac.zzh(str, "App ID must be nonempty.");
-        synchronized (zzaok) {
-            if (yP != null) {
-                zzhe = yP.zzhe(str);
-            } else {
-                yP = new zzqw(str, z);
-                zzhe = yP.yR;
-            }
-        }
-        return zzhe;
-    }
-
-    public static Status zzcb(Context context) {
-        Status status;
-        zzac.zzb((Object) context, (Object) "Context must not be null.");
-        synchronized (zzaok) {
-            if (yP == null) {
-                yP = new zzqw(context);
-            }
-            status = yP.yR;
-        }
-        return status;
-    }
-
-    private static zzqw zzhf(String str) {
-        zzqw com_google_android_gms_internal_zzqw;
-        synchronized (zzaok) {
-            if (yP == null) {
-                throw new IllegalStateException(new StringBuilder(String.valueOf(str).length() + 34).append("Initialize must be called before ").append(str).append(".").toString());
-            }
-            com_google_android_gms_internal_zzqw = yP;
-        }
-        return com_google_android_gms_internal_zzqw;
-    }
-
-    Status zzhe(String str) {
-        if (this.zzcpe == null || this.zzcpe.equals(str)) {
-            return Status.vY;
-        }
-        String str2 = this.zzcpe;
-        return new Status(10, new StringBuilder(String.valueOf(str2).length() + 97).append("Initialize was called with two different Google App IDs.  Only the first app ID will be used: '").append(str2).append("'.").toString());
+    zza<zzql<?>> zzasl() {
+        return this.zx;
     }
 }

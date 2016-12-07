@@ -1,19 +1,20 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class PolygonOptions extends AbstractSafeParcelable {
-    public static final zzi CREATOR = new zzi();
-    private float amD;
-    private boolean amE;
-    private boolean amF;
-    private final List<LatLng> ane;
-    private final List<List<LatLng>> anf;
-    private boolean ang;
+    public static final Creator<PolygonOptions> CREATOR = new zzi();
+    private float apJ;
+    private boolean apK;
+    private boolean apL;
+    private final List<LatLng> aqk;
+    private final List<List<LatLng>> aql;
+    private boolean aqm;
     private int mFillColor;
     private int mStrokeColor;
     private float mStrokeWidth;
@@ -23,48 +24,48 @@ public final class PolygonOptions extends AbstractSafeParcelable {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.ang = false;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.aqm = false;
+        this.apL = false;
         this.mVersionCode = 1;
-        this.ane = new ArrayList();
-        this.anf = new ArrayList();
+        this.aqk = new ArrayList();
+        this.aql = new ArrayList();
     }
 
     PolygonOptions(int i, List<LatLng> list, List list2, float f, int i2, int i3, float f2, boolean z, boolean z2, boolean z3) {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.ang = false;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.aqm = false;
+        this.apL = false;
         this.mVersionCode = i;
-        this.ane = list;
-        this.anf = list2;
+        this.aqk = list;
+        this.aql = list2;
         this.mStrokeWidth = f;
         this.mStrokeColor = i2;
         this.mFillColor = i3;
-        this.amD = f2;
-        this.amE = z;
-        this.ang = z2;
-        this.amF = z3;
+        this.apJ = f2;
+        this.apK = z;
+        this.aqm = z2;
+        this.apL = z3;
     }
 
     public PolygonOptions add(LatLng latLng) {
-        this.ane.add(latLng);
+        this.aqk.add(latLng);
         return this;
     }
 
     public PolygonOptions add(LatLng... latLngArr) {
-        this.ane.addAll(Arrays.asList(latLngArr));
+        this.aqk.addAll(Arrays.asList(latLngArr));
         return this;
     }
 
     public PolygonOptions addAll(Iterable<LatLng> iterable) {
         for (LatLng add : iterable) {
-            this.ane.add(add);
+            this.aqk.add(add);
         }
         return this;
     }
@@ -74,12 +75,12 @@ public final class PolygonOptions extends AbstractSafeParcelable {
         for (LatLng add : iterable) {
             arrayList.add(add);
         }
-        this.anf.add(arrayList);
+        this.aql.add(arrayList);
         return this;
     }
 
     public PolygonOptions clickable(boolean z) {
-        this.amF = z;
+        this.apL = z;
         return this;
     }
 
@@ -89,7 +90,7 @@ public final class PolygonOptions extends AbstractSafeParcelable {
     }
 
     public PolygonOptions geodesic(boolean z) {
-        this.ang = z;
+        this.aqm = z;
         return this;
     }
 
@@ -98,11 +99,11 @@ public final class PolygonOptions extends AbstractSafeParcelable {
     }
 
     public List<List<LatLng>> getHoles() {
-        return this.anf;
+        return this.aql;
     }
 
     public List<LatLng> getPoints() {
-        return this.ane;
+        return this.aqk;
     }
 
     public int getStrokeColor() {
@@ -118,19 +119,19 @@ public final class PolygonOptions extends AbstractSafeParcelable {
     }
 
     public float getZIndex() {
-        return this.amD;
+        return this.apJ;
     }
 
     public boolean isClickable() {
-        return this.amF;
+        return this.apL;
     }
 
     public boolean isGeodesic() {
-        return this.ang;
+        return this.aqm;
     }
 
     public boolean isVisible() {
-        return this.amE;
+        return this.apK;
     }
 
     public PolygonOptions strokeColor(int i) {
@@ -144,7 +145,7 @@ public final class PolygonOptions extends AbstractSafeParcelable {
     }
 
     public PolygonOptions visible(boolean z) {
-        this.amE = z;
+        this.apK = z;
         return this;
     }
 
@@ -153,11 +154,11 @@ public final class PolygonOptions extends AbstractSafeParcelable {
     }
 
     public PolygonOptions zIndex(float f) {
-        this.amD = f;
+        this.apJ = f;
         return this;
     }
 
-    List zzbsk() {
-        return this.anf;
+    List zzbta() {
+        return this.aql;
     }
 }

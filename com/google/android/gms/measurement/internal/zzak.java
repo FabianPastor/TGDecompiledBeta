@@ -1,20 +1,20 @@
 package com.google.android.gms.measurement.internal;
 
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 class zzak {
-    final long asy;
+    final long avX;
     final String mName;
-    final String zzcpe;
-    final Object zzctv;
+    final String zzctj;
+    final Object zzcyd;
 
     zzak(String str, String str2, long j, Object obj) {
-        zzac.zzhz(str);
-        zzac.zzhz(str2);
-        zzac.zzy(obj);
-        this.zzcpe = str;
+        zzaa.zzib(str);
+        zzaa.zzib(str2);
+        zzaa.zzy(obj);
+        this.zzctj = str;
         this.mName = str2;
-        this.asy = j;
-        this.zzctv = obj;
+        this.avX = j;
+        this.zzcyd = obj;
     }
 }

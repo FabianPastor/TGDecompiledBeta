@@ -1,139 +1,93 @@
 package com.google.android.gms.internal;
 
-import java.math.BigInteger;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
-public final class zzaon extends zzaoh {
-    private static final Class<?>[] blf = new Class[]{Integer.TYPE, Long.TYPE, Short.TYPE, Float.TYPE, Double.TYPE, Byte.TYPE, Boolean.TYPE, Character.TYPE, Integer.class, Long.class, Short.class, Float.class, Double.class, Byte.class, Boolean.class, Character.class};
-    private Object value;
+final class zzaon implements zzaox<Date>, zzapg<Date> {
+    private final DateFormat bnQ;
+    private final DateFormat bnR;
+    private final DateFormat bnS;
 
-    public zzaon(Boolean bool) {
-        setValue(bool);
+    zzaon() {
+        this(DateFormat.getDateTimeInstance(2, 2, Locale.US), DateFormat.getDateTimeInstance(2, 2));
     }
 
-    public zzaon(Number number) {
-        setValue(number);
+    public zzaon(int i, int i2) {
+        this(DateFormat.getDateTimeInstance(i, i2, Locale.US), DateFormat.getDateTimeInstance(i, i2));
     }
 
-    zzaon(Object obj) {
-        setValue(obj);
+    zzaon(String str) {
+        this(new SimpleDateFormat(str, Locale.US), new SimpleDateFormat(str));
     }
 
-    public zzaon(String str) {
-        setValue(str);
+    zzaon(DateFormat dateFormat, DateFormat dateFormat2) {
+        this.bnQ = dateFormat;
+        this.bnR = dateFormat2;
+        this.bnS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        this.bnS.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    private static boolean zza(zzaon com_google_android_gms_internal_zzaon) {
-        if (!(com_google_android_gms_internal_zzaon.value instanceof Number)) {
-            return false;
-        }
-        Number number = (Number) com_google_android_gms_internal_zzaon.value;
-        return (number instanceof BigInteger) || (number instanceof Long) || (number instanceof Integer) || (number instanceof Short) || (number instanceof Byte);
-    }
-
-    private static boolean zzcn(Object obj) {
-        if (obj instanceof String) {
-            return true;
-        }
-        Class cls = obj.getClass();
-        for (Class isAssignableFrom : blf) {
-            if (isAssignableFrom.isAssignableFrom(cls)) {
-                return true;
+    private Date zza(zzaoy com_google_android_gms_internal_zzaoy) {
+        Date parse;
+        synchronized (this.bnR) {
+            try {
+                parse = this.bnR.parse(com_google_android_gms_internal_zzaoy.aU());
+            } catch (ParseException e) {
+                try {
+                    parse = this.bnQ.parse(com_google_android_gms_internal_zzaoy.aU());
+                } catch (ParseException e2) {
+                    try {
+                        parse = this.bnS.parse(com_google_android_gms_internal_zzaoy.aU());
+                    } catch (Throwable e3) {
+                        throw new zzaph(com_google_android_gms_internal_zzaoy.aU(), e3);
+                    }
+                }
             }
         }
-        return false;
+        return parse;
     }
 
-    public Number aQ() {
-        return this.value instanceof String ? new zzape((String) this.value) : (Number) this.value;
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(zzaon.class.getSimpleName());
+        stringBuilder.append('(').append(this.bnR.getClass().getSimpleName()).append(')');
+        return stringBuilder.toString();
     }
 
-    public String aR() {
-        return bb() ? aQ().toString() : ba() ? aZ().toString() : (String) this.value;
-    }
-
-    Boolean aZ() {
-        return (Boolean) this.value;
-    }
-
-    public boolean ba() {
-        return this.value instanceof Boolean;
-    }
-
-    public boolean bb() {
-        return this.value instanceof Number;
-    }
-
-    public boolean bc() {
-        return this.value instanceof String;
-    }
-
-    public boolean equals(Object obj) {
-        boolean z = false;
-        if (this == obj) {
-            return true;
+    public zzaoy zza(Date date, Type type, zzapf com_google_android_gms_internal_zzapf) {
+        zzaoy com_google_android_gms_internal_zzape;
+        synchronized (this.bnR) {
+            com_google_android_gms_internal_zzape = new zzape(this.bnQ.format(date));
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        zzaon com_google_android_gms_internal_zzaon = (zzaon) obj;
-        if (this.value == null) {
-            return com_google_android_gms_internal_zzaon.value == null;
-        } else {
-            if (zza(this) && zza(com_google_android_gms_internal_zzaon)) {
-                return aQ().longValue() == com_google_android_gms_internal_zzaon.aQ().longValue();
-            } else {
-                if (!(this.value instanceof Number) || !(com_google_android_gms_internal_zzaon.value instanceof Number)) {
-                    return this.value.equals(com_google_android_gms_internal_zzaon.value);
-                }
-                double doubleValue = aQ().doubleValue();
-                double doubleValue2 = com_google_android_gms_internal_zzaon.aQ().doubleValue();
-                if (doubleValue == doubleValue2 || (Double.isNaN(doubleValue) && Double.isNaN(doubleValue2))) {
-                    z = true;
-                }
-                return z;
+        return com_google_android_gms_internal_zzape;
+    }
+
+    public Date zza(zzaoy com_google_android_gms_internal_zzaoy, Type type, zzaow com_google_android_gms_internal_zzaow) throws zzapc {
+        if (com_google_android_gms_internal_zzaoy instanceof zzape) {
+            Date zza = zza(com_google_android_gms_internal_zzaoy);
+            if (type == Date.class) {
+                return zza;
             }
+            if (type == Timestamp.class) {
+                return new Timestamp(zza.getTime());
+            }
+            if (type == java.sql.Date.class) {
+                return new java.sql.Date(zza.getTime());
+            }
+            String valueOf = String.valueOf(getClass());
+            String valueOf2 = String.valueOf(type);
+            throw new IllegalArgumentException(new StringBuilder((String.valueOf(valueOf).length() + 23) + String.valueOf(valueOf2).length()).append(valueOf).append(" cannot deserialize to ").append(valueOf2).toString());
         }
+        throw new zzapc("The date should be a string value");
     }
 
-    public boolean getAsBoolean() {
-        return ba() ? aZ().booleanValue() : Boolean.parseBoolean(aR());
-    }
-
-    public double getAsDouble() {
-        return bb() ? aQ().doubleValue() : Double.parseDouble(aR());
-    }
-
-    public int getAsInt() {
-        return bb() ? aQ().intValue() : Integer.parseInt(aR());
-    }
-
-    public long getAsLong() {
-        return bb() ? aQ().longValue() : Long.parseLong(aR());
-    }
-
-    public int hashCode() {
-        if (this.value == null) {
-            return 31;
-        }
-        long longValue;
-        if (zza(this)) {
-            longValue = aQ().longValue();
-            return (int) (longValue ^ (longValue >>> 32));
-        } else if (!(this.value instanceof Number)) {
-            return this.value.hashCode();
-        } else {
-            longValue = Double.doubleToLongBits(aQ().doubleValue());
-            return (int) (longValue ^ (longValue >>> 32));
-        }
-    }
-
-    void setValue(Object obj) {
-        if (obj instanceof Character) {
-            this.value = String.valueOf(((Character) obj).charValue());
-            return;
-        }
-        boolean z = (obj instanceof Number) || zzcn(obj);
-        zzaoz.zzbs(z);
-        this.value = obj;
+    public /* synthetic */ Object zzb(zzaoy com_google_android_gms_internal_zzaoy, Type type, zzaow com_google_android_gms_internal_zzaow) throws zzapc {
+        return zza(com_google_android_gms_internal_zzaoy, type, com_google_android_gms_internal_zzaow);
     }
 }

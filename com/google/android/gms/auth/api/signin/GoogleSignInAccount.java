@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.util.zze;
 import com.google.android.gms.common.util.zzh;
 import java.util.ArrayList;
@@ -25,52 +25,52 @@ import org.json.JSONObject;
 
 public class GoogleSignInAccount extends AbstractSafeParcelable implements ReflectedParcelable {
     public static final Creator<GoogleSignInAccount> CREATOR = new zza();
-    public static zze gT = zzh.zzaxj();
-    private static Comparator<Scope> hc = new Comparator<Scope>() {
+    public static zze jf = zzh.zzayl();
+    private static Comparator<Scope> jm = new Comparator<Scope>() {
         public /* synthetic */ int compare(Object obj, Object obj2) {
             return zza((Scope) obj, (Scope) obj2);
         }
 
         public int zza(Scope scope, Scope scope2) {
-            return scope.zzaqg().compareTo(scope2.zzaqg());
+            return scope.zzari().compareTo(scope2.zzari());
         }
     };
-    List<Scope> fK;
-    private String gU;
-    private String gV;
-    private Uri gW;
-    private String gX;
-    private long gY;
-    private String gZ;
-    private String gs;
-    private String ha;
-    private String hb;
+    List<Scope> hR;
+    private String iF;
+    private String is;
+    private String it;
+    private String jg;
+    private String jh;
+    private Uri ji;
+    private String jj;
+    private long jk;
+    private String jl;
     final int versionCode;
-    private String zzbks;
+    private String zzboa;
 
     GoogleSignInAccount(int i, String str, String str2, String str3, String str4, Uri uri, String str5, long j, String str6, List<Scope> list, String str7, String str8) {
         this.versionCode = i;
-        this.zzbks = str;
-        this.gs = str2;
-        this.gU = str3;
-        this.gV = str4;
-        this.gW = uri;
-        this.gX = str5;
-        this.gY = j;
-        this.gZ = str6;
-        this.fK = list;
-        this.ha = str7;
-        this.hb = str8;
+        this.zzboa = str;
+        this.iF = str2;
+        this.jg = str3;
+        this.jh = str4;
+        this.ji = uri;
+        this.jj = str5;
+        this.jk = j;
+        this.jl = str6;
+        this.hR = list;
+        this.is = str7;
+        this.it = str8;
     }
 
     public static GoogleSignInAccount zza(@Nullable String str, @Nullable String str2, @Nullable String str3, @Nullable String str4, @Nullable String str5, @Nullable String str6, @Nullable Uri uri, @Nullable Long l, @NonNull String str7, @NonNull Set<Scope> set) {
         if (l == null) {
-            l = Long.valueOf(gT.currentTimeMillis() / 1000);
+            l = Long.valueOf(jf.currentTimeMillis() / 1000);
         }
-        return new GoogleSignInAccount(3, str, str2, str3, str4, uri, null, l.longValue(), zzac.zzhz(str7), new ArrayList((Collection) zzac.zzy(set)), str5, str6);
+        return new GoogleSignInAccount(3, str, str2, str3, str4, uri, null, l.longValue(), zzaa.zzib(str7), new ArrayList((Collection) zzaa.zzy(set)), str5, str6);
     }
 
-    private JSONObject zzahi() {
+    private JSONObject zzais() {
         JSONObject jSONObject = new JSONObject();
         try {
             if (getId() != null) {
@@ -97,12 +97,12 @@ public class GoogleSignInAccount extends AbstractSafeParcelable implements Refle
             if (getServerAuthCode() != null) {
                 jSONObject.put("serverAuthCode", getServerAuthCode());
             }
-            jSONObject.put("expirationTime", this.gY);
-            jSONObject.put("obfuscatedIdentifier", zzahf());
+            jSONObject.put("expirationTime", this.jk);
+            jSONObject.put("obfuscatedIdentifier", zzaip());
             JSONArray jSONArray = new JSONArray();
-            Collections.sort(this.fK, hc);
-            for (Scope zzaqg : this.fK) {
-                jSONArray.put(zzaqg.zzaqg());
+            Collections.sort(this.hR, jm);
+            for (Scope zzari : this.hR) {
+                jSONArray.put(zzari.zzari());
             }
             jSONObject.put("grantedScopes", jSONArray);
             return jSONObject;
@@ -112,7 +112,7 @@ public class GoogleSignInAccount extends AbstractSafeParcelable implements Refle
     }
 
     @Nullable
-    public static GoogleSignInAccount zzfw(@Nullable String str) throws JSONException {
+    public static GoogleSignInAccount zzfz(@Nullable String str) throws JSONException {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
@@ -126,60 +126,60 @@ public class GoogleSignInAccount extends AbstractSafeParcelable implements Refle
         for (int i = 0; i < length; i++) {
             hashSet.add(new Scope(jSONArray.getString(i)));
         }
-        return zza(jSONObject.optString(TtmlNode.ATTR_ID), jSONObject.optString("tokenId", null), jSONObject.optString("email", null), jSONObject.optString("displayName", null), jSONObject.optString("givenName", null), jSONObject.optString("familyName", null), parse, Long.valueOf(parseLong), jSONObject.getString("obfuscatedIdentifier"), hashSet).zzfx(jSONObject.optString("serverAuthCode", null));
+        return zza(jSONObject.optString(TtmlNode.ATTR_ID), jSONObject.optString("tokenId", null), jSONObject.optString("email", null), jSONObject.optString("displayName", null), jSONObject.optString("givenName", null), jSONObject.optString("familyName", null), parse, Long.valueOf(parseLong), jSONObject.getString("obfuscatedIdentifier"), hashSet).zzga(jSONObject.optString("serverAuthCode", null));
     }
 
     public boolean equals(Object obj) {
-        return !(obj instanceof GoogleSignInAccount) ? false : ((GoogleSignInAccount) obj).zzahg().equals(zzahg());
+        return !(obj instanceof GoogleSignInAccount) ? false : ((GoogleSignInAccount) obj).zzaiq().equals(zzaiq());
     }
 
     @Nullable
     public String getDisplayName() {
-        return this.gV;
+        return this.jh;
     }
 
     @Nullable
     public String getEmail() {
-        return this.gU;
+        return this.jg;
     }
 
     @Nullable
     public String getFamilyName() {
-        return this.hb;
+        return this.it;
     }
 
     @Nullable
     public String getGivenName() {
-        return this.ha;
+        return this.is;
     }
 
     @NonNull
     public Set<Scope> getGrantedScopes() {
-        return new HashSet(this.fK);
+        return new HashSet(this.hR);
     }
 
     @Nullable
     public String getId() {
-        return this.zzbks;
+        return this.zzboa;
     }
 
     @Nullable
     public String getIdToken() {
-        return this.gs;
+        return this.iF;
     }
 
     @Nullable
     public Uri getPhotoUrl() {
-        return this.gW;
+        return this.ji;
     }
 
     @Nullable
     public String getServerAuthCode() {
-        return this.gX;
+        return this.jj;
     }
 
     public int hashCode() {
-        return zzahg().hashCode();
+        return zzaiq().hashCode();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
@@ -187,30 +187,30 @@ public class GoogleSignInAccount extends AbstractSafeParcelable implements Refle
     }
 
     public boolean zza() {
-        return gT.currentTimeMillis() / 1000 >= this.gY - 300;
+        return jf.currentTimeMillis() / 1000 >= this.jk - 300;
     }
 
-    public long zzahe() {
-        return this.gY;
+    public long zzaio() {
+        return this.jk;
     }
 
     @NonNull
-    public String zzahf() {
-        return this.gZ;
+    public String zzaip() {
+        return this.jl;
     }
 
-    public String zzahg() {
-        return zzahi().toString();
+    public String zzaiq() {
+        return zzais().toString();
     }
 
-    public String zzahh() {
-        JSONObject zzahi = zzahi();
-        zzahi.remove("serverAuthCode");
-        return zzahi.toString();
+    public String zzair() {
+        JSONObject zzais = zzais();
+        zzais.remove("serverAuthCode");
+        return zzais.toString();
     }
 
-    public GoogleSignInAccount zzfx(String str) {
-        this.gX = str;
+    public GoogleSignInAccount zzga(String str) {
+        this.jj = str;
         return this;
     }
 }

@@ -25,7 +25,7 @@ public class zzu {
         this.zzbu = i;
     }
 
-    private synchronized void zzw() {
+    private synchronized void zzv() {
         while (this.zzbt > this.zzbu) {
             byte[] bArr = (byte[]) this.zzbr.remove(0);
             this.zzbs.remove(bArr);
@@ -43,7 +43,7 @@ public class zzu {
                 }
                 this.zzbs.add(binarySearch, bArr);
                 this.zzbt += bArr.length;
-                zzw();
+                zzv();
             }
         }
     }

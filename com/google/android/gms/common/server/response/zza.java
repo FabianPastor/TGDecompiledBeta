@@ -8,31 +8,31 @@ import com.google.android.gms.common.server.response.FastJsonResponse.Field;
 
 public class zza implements Creator<Field> {
     static void zza(Field field, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, field.getVersionCode());
-        zzb.zzc(parcel, 2, field.zzavq());
-        zzb.zza(parcel, 3, field.zzavv());
-        zzb.zzc(parcel, 4, field.zzavr());
-        zzb.zza(parcel, 5, field.zzavw());
-        zzb.zza(parcel, 6, field.zzavx(), false);
-        zzb.zzc(parcel, 7, field.zzavy());
-        zzb.zza(parcel, 8, field.zzawa(), false);
-        zzb.zza(parcel, 9, field.zzawc(), i, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzc(parcel, 2, field.zzaxa());
+        zzb.zza(parcel, 3, field.zzaxb());
+        zzb.zzc(parcel, 4, field.zzaxc());
+        zzb.zza(parcel, 5, field.zzaxd());
+        zzb.zza(parcel, 6, field.zzaxe(), false);
+        zzb.zzc(parcel, 7, field.zzaxf());
+        zzb.zza(parcel, 8, field.zzaxh(), false);
+        zzb.zza(parcel, 9, field.zzaxj(), i, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcw(parcel);
+        return zzcx(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzhb(i);
+        return zzha(i);
     }
 
-    public Field zzcw(Parcel parcel) {
+    public Field zzcx(Parcel parcel) {
         ConverterWrapper converterWrapper = null;
         int i = 0;
-        int zzcq = com.google.android.gms.common.internal.safeparcel.zza.zzcq(parcel);
+        int zzcr = com.google.android.gms.common.internal.safeparcel.zza.zzcr(parcel);
         String str = null;
         String str2 = null;
         boolean z = false;
@@ -40,48 +40,48 @@ public class zza implements Creator<Field> {
         boolean z2 = false;
         int i3 = 0;
         int i4 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = com.google.android.gms.common.internal.safeparcel.zza.zzcp(parcel);
-            switch (com.google.android.gms.common.internal.safeparcel.zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = com.google.android.gms.common.internal.safeparcel.zza.zzcq(parcel);
+            switch (com.google.android.gms.common.internal.safeparcel.zza.zzgu(zzcq)) {
                 case 1:
-                    i4 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i4 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    i3 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i3 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 3:
-                    z2 = com.google.android.gms.common.internal.safeparcel.zza.zzc(parcel, zzcp);
+                    z2 = com.google.android.gms.common.internal.safeparcel.zza.zzc(parcel, zzcq);
                     break;
                 case 4:
-                    i2 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i2 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 5:
-                    z = com.google.android.gms.common.internal.safeparcel.zza.zzc(parcel, zzcp);
+                    z = com.google.android.gms.common.internal.safeparcel.zza.zzc(parcel, zzcq);
                     break;
                 case 6:
-                    str2 = com.google.android.gms.common.internal.safeparcel.zza.zzq(parcel, zzcp);
+                    str2 = com.google.android.gms.common.internal.safeparcel.zza.zzq(parcel, zzcq);
                     break;
                 case 7:
-                    i = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 8:
-                    str = com.google.android.gms.common.internal.safeparcel.zza.zzq(parcel, zzcp);
+                    str = com.google.android.gms.common.internal.safeparcel.zza.zzq(parcel, zzcq);
                     break;
                 case 9:
-                    converterWrapper = (ConverterWrapper) com.google.android.gms.common.internal.safeparcel.zza.zza(parcel, zzcp, ConverterWrapper.CREATOR);
+                    converterWrapper = (ConverterWrapper) com.google.android.gms.common.internal.safeparcel.zza.zza(parcel, zzcq, ConverterWrapper.CREATOR);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zza.zzb(parcel, zzcp);
+                    com.google.android.gms.common.internal.safeparcel.zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new Field(i4, i3, z2, i2, z, str2, i, str, converterWrapper);
         }
-        throw new com.google.android.gms.common.internal.safeparcel.zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new com.google.android.gms.common.internal.safeparcel.zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public Field[] zzhb(int i) {
+    public Field[] zzha(int i) {
         return new Field[i];
     }
 }

@@ -8,13 +8,13 @@ import com.google.android.gms.measurement.internal.zzu;
 import com.google.android.gms.measurement.internal.zzu.zza;
 
 public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiver implements zza {
-    private zzu anu;
+    private zzu aqD;
 
-    private zzu zzbso() {
-        if (this.anu == null) {
-            this.anu = new zzu(this);
+    private zzu zzbte() {
+        if (this.aqD == null) {
+            this.aqD = new zzu(this);
         }
-        return this.anu;
+        return this.aqD;
     }
 
     public void doStartService(Context context, Intent intent) {
@@ -22,6 +22,6 @@ public final class AppMeasurementInstallReferrerReceiver extends BroadcastReceiv
 
     @MainThread
     public void onReceive(Context context, Intent intent) {
-        zzbso().onReceive(context, intent);
+        zzbte().onReceive(context, intent);
     }
 }

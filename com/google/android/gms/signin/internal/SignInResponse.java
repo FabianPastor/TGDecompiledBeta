@@ -8,9 +8,9 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class SignInResponse extends AbstractSafeParcelable {
     public static final Creator<SignInResponse> CREATOR = new zzi();
-    private final ResolveAccountResponse aAn;
+    private final ConnectionResult EJ;
+    private final ResolveAccountResponse aDx;
     final int mVersionCode;
-    private final ConnectionResult vm;
 
     public SignInResponse(int i) {
         this(new ConnectionResult(i, null), null);
@@ -18,8 +18,8 @@ public class SignInResponse extends AbstractSafeParcelable {
 
     SignInResponse(int i, ConnectionResult connectionResult, ResolveAccountResponse resolveAccountResponse) {
         this.mVersionCode = i;
-        this.vm = connectionResult;
-        this.aAn = resolveAccountResponse;
+        this.EJ = connectionResult;
+        this.aDx = resolveAccountResponse;
     }
 
     public SignInResponse(ConnectionResult connectionResult, ResolveAccountResponse resolveAccountResponse) {
@@ -30,11 +30,11 @@ public class SignInResponse extends AbstractSafeParcelable {
         zzi.zza(this, parcel, i);
     }
 
-    public ConnectionResult zzave() {
-        return this.vm;
+    public ConnectionResult zzawn() {
+        return this.EJ;
     }
 
-    public ResolveAccountResponse zzcdl() {
-        return this.aAn;
+    public ResolveAccountResponse zzcdn() {
+        return this.aDx;
     }
 }

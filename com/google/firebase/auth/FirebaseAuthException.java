@@ -1,19 +1,19 @@
 package com.google.firebase.auth;
 
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.firebase.FirebaseException;
 
 public class FirebaseAuthException extends FirebaseException {
-    private final String aTP;
+    private final String aXe;
 
     public FirebaseAuthException(@NonNull String str, @NonNull String str2) {
         super(str2);
-        this.aTP = zzac.zzhz(str);
+        this.aXe = zzaa.zzib(str);
     }
 
     @NonNull
     public String getErrorCode() {
-        return this.aTP;
+        return this.aXe;
     }
 }

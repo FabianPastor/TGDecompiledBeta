@@ -2,7 +2,10 @@ package com.google.android.gms.dynamic;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,44 +15,48 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.internal.zzi;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.internal.zzg;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public abstract class zza<T extends LifecycleDelegate> {
-    private T Oi;
-    private Bundle Oj;
-    private LinkedList<zza> Ok;
-    private final zzf<T> Ol = new zzf<T>(this) {
-        final /* synthetic */ zza Om;
+    private T PT;
+    private Bundle PU;
+    private LinkedList<zza> PV;
+    private final zzf<T> PW = new zzf<T>(this) {
+        final /* synthetic */ zza PX;
 
         {
-            this.Om = r1;
+            this.PX = r1;
         }
 
         public void zza(T t) {
-            this.Om.Oi = t;
-            Iterator it = this.Om.Ok.iterator();
+            this.PX.PT = t;
+            Iterator it = this.PX.PV.iterator();
             while (it.hasNext()) {
-                ((zza) it.next()).zzb(this.Om.Oi);
+                ((zza) it.next()).zzb(this.PX.PT);
             }
-            this.Om.Ok.clear();
-            this.Om.Oj = null;
+            this.PX.PV.clear();
+            this.PX.PU = null;
         }
     };
 
     class AnonymousClass5 implements OnClickListener {
-        final /* synthetic */ Context zzamt;
-        final /* synthetic */ int zzbom;
+        final /* synthetic */ Intent Qc;
+        final /* synthetic */ Context zzang;
 
-        AnonymousClass5(Context context, int i) {
-            this.zzamt = context;
-            this.zzbom = i;
+        AnonymousClass5(Context context, Intent intent) {
+            this.zzang = context;
+            this.Qc = intent;
         }
 
         public void onClick(View view) {
-            this.zzamt.startActivity(GooglePlayServicesUtil.zzfm(this.zzbom));
+            try {
+                this.zzang.startActivity(this.Qc);
+            } catch (Throwable e) {
+                Log.e("DeferredLifecycleHelper", "Failed to start resolution intent", e);
+            }
         }
     }
 
@@ -60,29 +67,30 @@ public abstract class zza<T extends LifecycleDelegate> {
     }
 
     private void zza(Bundle bundle, zza com_google_android_gms_dynamic_zza_zza) {
-        if (this.Oi != null) {
-            com_google_android_gms_dynamic_zza_zza.zzb(this.Oi);
+        if (this.PT != null) {
+            com_google_android_gms_dynamic_zza_zza.zzb(this.PT);
             return;
         }
-        if (this.Ok == null) {
-            this.Ok = new LinkedList();
+        if (this.PV == null) {
+            this.PV = new LinkedList();
         }
-        this.Ok.add(com_google_android_gms_dynamic_zza_zza);
+        this.PV.add(com_google_android_gms_dynamic_zza_zza);
         if (bundle != null) {
-            if (this.Oj == null) {
-                this.Oj = (Bundle) bundle.clone();
+            if (this.PU == null) {
+                this.PU = (Bundle) bundle.clone();
             } else {
-                this.Oj.putAll(bundle);
+                this.PU.putAll(bundle);
             }
         }
-        zza(this.Ol);
+        zza(this.PW);
     }
 
-    public static void zzb(FrameLayout frameLayout) {
+    @VisibleForTesting
+    static void zza(FrameLayout frameLayout, GoogleApiAvailability googleApiAvailability) {
         Context context = frameLayout.getContext();
-        int isGooglePlayServicesAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        CharSequence zzi = zzi.zzi(context, isGooglePlayServicesAvailable);
-        CharSequence zzk = zzi.zzk(context, isGooglePlayServicesAvailable);
+        int isGooglePlayServicesAvailable = googleApiAvailability.isGooglePlayServicesAvailable(context);
+        CharSequence zzi = zzg.zzi(context, isGooglePlayServicesAvailable);
+        CharSequence zzk = zzg.zzk(context, isGooglePlayServicesAvailable);
         View linearLayout = new LinearLayout(frameLayout.getContext());
         linearLayout.setOrientation(1);
         linearLayout.setLayoutParams(new LayoutParams(-2, -2));
@@ -91,31 +99,37 @@ public abstract class zza<T extends LifecycleDelegate> {
         textView.setLayoutParams(new LayoutParams(-2, -2));
         textView.setText(zzi);
         linearLayout.addView(textView);
-        if (zzk != null) {
+        Intent zzb = googleApiAvailability.zzb(context, isGooglePlayServicesAvailable, null);
+        if (zzb != null) {
             View button = new Button(context);
+            button.setId(16908313);
             button.setLayoutParams(new LayoutParams(-2, -2));
             button.setText(zzk);
             linearLayout.addView(button);
-            button.setOnClickListener(new AnonymousClass5(context, isGooglePlayServicesAvailable));
+            button.setOnClickListener(new AnonymousClass5(context, zzb));
         }
     }
 
-    private void zzno(int i) {
-        while (!this.Ok.isEmpty() && ((zza) this.Ok.getLast()).getState() >= i) {
-            this.Ok.removeLast();
+    public static void zzb(FrameLayout frameLayout) {
+        zza(frameLayout, GoogleApiAvailability.getInstance());
+    }
+
+    private void zznj(int i) {
+        while (!this.PV.isEmpty() && ((zza) this.PV.getLast()).getState() >= i) {
+            this.PV.removeLast();
         }
     }
 
     public void onCreate(final Bundle bundle) {
         zza(bundle, new zza(this) {
-            final /* synthetic */ zza Om;
+            final /* synthetic */ zza PX;
 
             public int getState() {
                 return 1;
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.Om.Oi.onCreate(bundle);
+                this.PX.PT.onCreate(bundle);
             }
         });
     }
@@ -126,7 +140,7 @@ public abstract class zza<T extends LifecycleDelegate> {
         final ViewGroup viewGroup2 = viewGroup;
         final Bundle bundle2 = bundle;
         zza(bundle, new zza(this) {
-            final /* synthetic */ zza Om;
+            final /* synthetic */ zza PX;
 
             public int getState() {
                 return 2;
@@ -134,65 +148,65 @@ public abstract class zza<T extends LifecycleDelegate> {
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
                 frameLayout.removeAllViews();
-                frameLayout.addView(this.Om.Oi.onCreateView(layoutInflater2, viewGroup2, bundle2));
+                frameLayout.addView(this.PX.PT.onCreateView(layoutInflater2, viewGroup2, bundle2));
             }
         });
-        if (this.Oi == null) {
+        if (this.PT == null) {
             zza(frameLayout);
         }
         return frameLayout;
     }
 
     public void onDestroy() {
-        if (this.Oi != null) {
-            this.Oi.onDestroy();
+        if (this.PT != null) {
+            this.PT.onDestroy();
         } else {
-            zzno(1);
+            zznj(1);
         }
     }
 
     public void onDestroyView() {
-        if (this.Oi != null) {
-            this.Oi.onDestroyView();
+        if (this.PT != null) {
+            this.PT.onDestroyView();
         } else {
-            zzno(2);
+            zznj(2);
         }
     }
 
     public void onInflate(final Activity activity, final Bundle bundle, final Bundle bundle2) {
         zza(bundle2, new zza(this) {
-            final /* synthetic */ zza Om;
+            final /* synthetic */ zza PX;
 
             public int getState() {
                 return 0;
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.Om.Oi.onInflate(activity, bundle, bundle2);
+                this.PX.PT.onInflate(activity, bundle, bundle2);
             }
         });
     }
 
     public void onLowMemory() {
-        if (this.Oi != null) {
-            this.Oi.onLowMemory();
+        if (this.PT != null) {
+            this.PT.onLowMemory();
         }
     }
 
     public void onPause() {
-        if (this.Oi != null) {
-            this.Oi.onPause();
+        if (this.PT != null) {
+            this.PT.onPause();
         } else {
-            zzno(5);
+            zznj(5);
         }
     }
 
     public void onResume() {
         zza(null, new zza(this) {
-            final /* synthetic */ zza Om;
+            final /* synthetic */ zza PX;
 
             {
-                this.Om = r1;
+                this.PX = r1;
             }
 
             public int getState() {
@@ -200,25 +214,25 @@ public abstract class zza<T extends LifecycleDelegate> {
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.Om.Oi.onResume();
+                this.PX.PT.onResume();
             }
         });
     }
 
     public void onSaveInstanceState(Bundle bundle) {
-        if (this.Oi != null) {
-            this.Oi.onSaveInstanceState(bundle);
-        } else if (this.Oj != null) {
-            bundle.putAll(this.Oj);
+        if (this.PT != null) {
+            this.PT.onSaveInstanceState(bundle);
+        } else if (this.PU != null) {
+            bundle.putAll(this.PU);
         }
     }
 
     public void onStart() {
         zza(null, new zza(this) {
-            final /* synthetic */ zza Om;
+            final /* synthetic */ zza PX;
 
             {
-                this.Om = r1;
+                this.PX = r1;
             }
 
             public int getState() {
@@ -226,16 +240,16 @@ public abstract class zza<T extends LifecycleDelegate> {
             }
 
             public void zzb(LifecycleDelegate lifecycleDelegate) {
-                this.Om.Oi.onStart();
+                this.PX.PT.onStart();
             }
         });
     }
 
     public void onStop() {
-        if (this.Oi != null) {
-            this.Oi.onStop();
+        if (this.PT != null) {
+            this.PT.onStop();
         } else {
-            zzno(4);
+            zznj(4);
         }
     }
 
@@ -245,7 +259,7 @@ public abstract class zza<T extends LifecycleDelegate> {
 
     protected abstract void zza(zzf<T> com_google_android_gms_dynamic_zzf_T);
 
-    public T zzbdt() {
-        return this.Oi;
+    public T zzbdo() {
+        return this.PT;
     }
 }

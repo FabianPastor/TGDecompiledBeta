@@ -1,196 +1,177 @@
 package com.google.android.gms.common.internal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.util.SimpleArrayMap;
+import android.text.TextUtils;
+import android.util.Log;
+import com.google.android.gms.R;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.util.zzi;
+import com.google.android.gms.internal.zzsz;
 
-public abstract class zzg {
-    public static final zzg BB = zza((CharSequence) "\t\n\u000b\f\r     　 ᠎ ").zza(zza(' ', ' '));
-    public static final zzg BC = zza((CharSequence) "\t\n\u000b\f\r     　").zza(zza(' ', ' ')).zza(zza(' ', ' '));
-    public static final zzg BD = zza('\u0000', '');
-    public static final zzg BE;
-    public static final zzg BF = zza('\t', '\r').zza(zza('\u001c', ' ')).zza(zzc(' ')).zza(zzc('᠎')).zza(zza(' ', ' ')).zza(zza(' ', '​')).zza(zza(' ', ' ')).zza(zzc(' ')).zza(zzc('　'));
-    public static final zzg BG = new zzg() {
-        public boolean zzd(char c) {
-            return Character.isDigit(c);
-        }
-    };
-    public static final zzg BH = new zzg() {
-        public boolean zzd(char c) {
-            return Character.isLetter(c);
-        }
-    };
-    public static final zzg BI = new zzg() {
-        public boolean zzd(char c) {
-            return Character.isLetterOrDigit(c);
-        }
-    };
-    public static final zzg BJ = new zzg() {
-        public boolean zzd(char c) {
-            return Character.isUpperCase(c);
-        }
-    };
-    public static final zzg BK = new zzg() {
-        public boolean zzd(char c) {
-            return Character.isLowerCase(c);
-        }
-    };
-    public static final zzg BL = zza('\u0000', '\u001f').zza(zza('', ''));
-    public static final zzg BM = zza('\u0000', ' ').zza(zza('', ' ')).zza(zzc('­')).zza(zza('؀', '؃')).zza(zza((CharSequence) "۝܏ ឴឵᠎")).zza(zza(' ', '‏')).zza(zza(' ', ' ')).zza(zza(' ', '⁤')).zza(zza('⁪', '⁯')).zza(zzc('　')).zza(zza('?', '')).zza(zza((CharSequence) "﻿￹￺￻"));
-    public static final zzg BN = zza('\u0000', 'ӹ').zza(zzc('־')).zza(zza('א', 'ת')).zza(zzc('׳')).zza(zzc('״')).zza(zza('؀', 'ۿ')).zza(zza('ݐ', 'ݿ')).zza(zza('฀', '๿')).zza(zza('Ḁ', '₯')).zza(zza('℀', '℺')).zza(zza('ﭐ', '﷿')).zza(zza('ﹰ', '﻿')).zza(zza('｡', 'ￜ'));
-    public static final zzg BO = new zzg() {
-        public zzg zza(zzg com_google_android_gms_common_internal_zzg) {
-            zzac.zzy(com_google_android_gms_common_internal_zzg);
-            return this;
-        }
+public final class zzg {
+    private static final SimpleArrayMap<String, String> DO = new SimpleArrayMap();
 
-        public boolean zzb(CharSequence charSequence) {
-            zzac.zzy(charSequence);
-            return true;
-        }
-
-        public boolean zzd(char c) {
-            return true;
-        }
-    };
-    public static final zzg BP = new zzg() {
-        public zzg zza(zzg com_google_android_gms_common_internal_zzg) {
-            return (zzg) zzac.zzy(com_google_android_gms_common_internal_zzg);
-        }
-
-        public boolean zzb(CharSequence charSequence) {
-            return charSequence.length() == 0;
-        }
-
-        public boolean zzd(char c) {
-            return false;
-        }
-    };
-
-    class AnonymousClass11 extends zzg {
-        final /* synthetic */ char BV;
-
-        AnonymousClass11(char c) {
-            this.BV = c;
-        }
-
-        public zzg zza(zzg com_google_android_gms_common_internal_zzg) {
-            return com_google_android_gms_common_internal_zzg.zzd(this.BV) ? com_google_android_gms_common_internal_zzg : super.zza(com_google_android_gms_common_internal_zzg);
-        }
-
-        public boolean zzd(char c) {
-            return c == this.BV;
-        }
-    }
-
-    class AnonymousClass2 extends zzg {
-        final /* synthetic */ char BQ;
-        final /* synthetic */ char BR;
-
-        AnonymousClass2(char c, char c2) {
-            this.BQ = c;
-            this.BR = c2;
-        }
-
-        public boolean zzd(char c) {
-            return c == this.BQ || c == this.BR;
-        }
-    }
-
-    class AnonymousClass3 extends zzg {
-        final /* synthetic */ char[] BS;
-
-        AnonymousClass3(char[] cArr) {
-            this.BS = cArr;
-        }
-
-        public boolean zzd(char c) {
-            return Arrays.binarySearch(this.BS, c) >= 0;
-        }
-    }
-
-    class AnonymousClass4 extends zzg {
-        final /* synthetic */ char BT;
-        final /* synthetic */ char BU;
-
-        AnonymousClass4(char c, char c2) {
-            this.BT = c;
-            this.BU = c2;
-        }
-
-        public boolean zzd(char c) {
-            return this.BT <= c && c <= this.BU;
-        }
-    }
-
-    private static class zza extends zzg {
-        List<zzg> BW;
-
-        zza(List<zzg> list) {
-            this.BW = list;
-        }
-
-        public zzg zza(zzg com_google_android_gms_common_internal_zzg) {
-            List arrayList = new ArrayList(this.BW);
-            arrayList.add((zzg) zzac.zzy(com_google_android_gms_common_internal_zzg));
-            return new zza(arrayList);
-        }
-
-        public boolean zzd(char c) {
-            for (zzg zzd : this.BW) {
-                if (zzd.zzd(c)) {
-                    return true;
-                }
+    public static String zzcb(Context context) {
+        String str = context.getApplicationInfo().name;
+        if (TextUtils.isEmpty(str)) {
+            str = context.getPackageName();
+            try {
+                str = zzsz.zzco(context).zzik(context.getPackageName()).toString();
+            } catch (NameNotFoundException e) {
             }
-            return false;
         }
+        return str;
     }
 
-    static {
-        zzg zza = zza('0', '9');
-        zzg com_google_android_gms_common_internal_zzg = zza;
-        for (char c : "٠۰߀०০੦૦୦௦౦೦൦๐໐༠၀႐០᠐᥆᧐᭐᮰᱀᱐꘠꣐꤀꩐０".toCharArray()) {
-            com_google_android_gms_common_internal_zzg = com_google_android_gms_common_internal_zzg.zza(zza(c, (char) (c + 9)));
-        }
-        BE = com_google_android_gms_common_internal_zzg;
-    }
-
-    public static zzg zza(char c, char c2) {
-        zzac.zzbs(c2 >= c);
-        return new AnonymousClass4(c, c2);
-    }
-
-    public static zzg zza(CharSequence charSequence) {
-        switch (charSequence.length()) {
-            case 0:
-                return BP;
+    @Nullable
+    public static String zzg(Context context, int i) {
+        Resources resources = context.getResources();
+        switch (i) {
             case 1:
-                return zzc(charSequence.charAt(0));
+                return resources.getString(R.string.common_google_play_services_install_title);
             case 2:
-                return new AnonymousClass2(charSequence.charAt(0), charSequence.charAt(1));
+                return resources.getString(R.string.common_google_play_services_update_title);
+            case 3:
+                return resources.getString(R.string.common_google_play_services_enable_title);
+            case 4:
+            case 6:
+            case 18:
+                return null;
+            case 5:
+                Log.e("GoogleApiAvailability", "An invalid account was specified when connecting. Please provide a valid account.");
+                return zzu(context, "common_google_play_services_invalid_account_title");
+            case 7:
+                Log.e("GoogleApiAvailability", "Network error occurred. Please retry request later.");
+                return zzu(context, "common_google_play_services_network_error_title");
+            case 8:
+                Log.e("GoogleApiAvailability", "Internal error occurred. Please see logs for detailed information");
+                return null;
+            case 9:
+                Log.e("GoogleApiAvailability", "Google Play services is invalid. Cannot recover.");
+                return null;
+            case 10:
+                Log.e("GoogleApiAvailability", "Developer error occurred. Please see logs for detailed information");
+                return null;
+            case 11:
+                Log.e("GoogleApiAvailability", "The application is not licensed to the user.");
+                return null;
+            case 16:
+                Log.e("GoogleApiAvailability", "One of the API components you attempted to connect to is not available.");
+                return null;
+            case 17:
+                Log.e("GoogleApiAvailability", "The specified account could not be signed in.");
+                return zzu(context, "common_google_play_services_sign_in_failed_title");
+            case 20:
+                Log.e("GoogleApiAvailability", "The current user profile is restricted and could not use authenticated features.");
+                return zzu(context, "common_google_play_services_restricted_profile_title");
             default:
-                char[] toCharArray = charSequence.toString().toCharArray();
-                Arrays.sort(toCharArray);
-                return new AnonymousClass3(toCharArray);
+                Log.e("GoogleApiAvailability", "Unexpected error code " + i);
+                return null;
         }
     }
 
-    public static zzg zzc(char c) {
-        return new AnonymousClass11(c);
+    private static String zzg(Context context, String str, String str2) {
+        Resources resources = context.getResources();
+        String zzu = zzu(context, str);
+        if (zzu == null) {
+            zzu = resources.getString(R.string.common_google_play_services_unknown_issue);
+        }
+        return String.format(resources.getConfiguration().locale, zzu, new Object[]{str2});
     }
 
-    public zzg zza(zzg com_google_android_gms_common_internal_zzg) {
-        return new zza(Arrays.asList(new zzg[]{this, (zzg) zzac.zzy(com_google_android_gms_common_internal_zzg)}));
+    @NonNull
+    public static String zzh(Context context, int i) {
+        String zzu = i == 6 ? zzu(context, "common_google_play_services_resolution_required_title") : zzg(context, i);
+        return zzu == null ? context.getResources().getString(R.string.common_google_play_services_notification_ticker) : zzu;
     }
 
-    public boolean zzb(CharSequence charSequence) {
-        for (int length = charSequence.length() - 1; length >= 0; length--) {
-            if (!zzd(charSequence.charAt(length))) {
-                return false;
+    @NonNull
+    public static String zzi(Context context, int i) {
+        Resources resources = context.getResources();
+        String zzcb = zzcb(context);
+        switch (i) {
+            case 1:
+                return resources.getString(R.string.common_google_play_services_install_text, new Object[]{zzcb});
+            case 2:
+                if (zzi.zzci(context)) {
+                    return resources.getString(R.string.common_google_play_services_wear_update_text);
+                }
+                return resources.getString(R.string.common_google_play_services_update_text, new Object[]{zzcb});
+            case 3:
+                return resources.getString(R.string.common_google_play_services_enable_text, new Object[]{zzcb});
+            case 5:
+                return zzg(context, "common_google_play_services_invalid_account_text", zzcb);
+            case 7:
+                return zzg(context, "common_google_play_services_network_error_text", zzcb);
+            case 9:
+                return resources.getString(R.string.common_google_play_services_unsupported_text, new Object[]{zzcb});
+            case 16:
+                return zzg(context, "common_google_play_services_api_unavailable_text", zzcb);
+            case 17:
+                return zzg(context, "common_google_play_services_sign_in_failed_text", zzcb);
+            case 18:
+                return resources.getString(R.string.common_google_play_services_updating_text, new Object[]{zzcb});
+            case 20:
+                return zzg(context, "common_google_play_services_restricted_profile_text", zzcb);
+            default:
+                return resources.getString(R.string.common_google_play_services_unknown_issue, new Object[]{zzcb});
+        }
+    }
+
+    @NonNull
+    public static String zzj(Context context, int i) {
+        return i == 6 ? zzg(context, "common_google_play_services_resolution_required_text", zzcb(context)) : zzi(context, i);
+    }
+
+    @NonNull
+    public static String zzk(Context context, int i) {
+        Resources resources = context.getResources();
+        switch (i) {
+            case 1:
+                return resources.getString(R.string.common_google_play_services_install_button);
+            case 2:
+                return resources.getString(R.string.common_google_play_services_update_button);
+            case 3:
+                return resources.getString(R.string.common_google_play_services_enable_button);
+            default:
+                return resources.getString(17039370);
+        }
+    }
+
+    @Nullable
+    private static String zzu(Context context, String str) {
+        synchronized (DO) {
+            String str2 = (String) DO.get(str);
+            if (str2 != null) {
+                return str2;
             }
+            Resources remoteResource = GooglePlayServicesUtil.getRemoteResource(context);
+            if (remoteResource == null) {
+                return null;
+            }
+            int identifier = remoteResource.getIdentifier(str, "string", "com.google.android.gms");
+            if (identifier == 0) {
+                String str3 = "GoogleApiAvailability";
+                String str4 = "Missing resource: ";
+                str2 = String.valueOf(str);
+                Log.w(str3, str2.length() != 0 ? str4.concat(str2) : new String(str4));
+                return null;
+            }
+            Object string = remoteResource.getString(identifier);
+            if (TextUtils.isEmpty(string)) {
+                str3 = "GoogleApiAvailability";
+                str4 = "Got empty resource: ";
+                str2 = String.valueOf(str);
+                Log.w(str3, str2.length() != 0 ? str4.concat(str2) : new String(str4));
+                return null;
+            }
+            DO.put(str, string);
+            return string;
         }
-        return true;
     }
-
-    public abstract boolean zzd(char c);
 }

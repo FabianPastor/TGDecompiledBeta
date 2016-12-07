@@ -14,14 +14,14 @@ public interface zzd extends IInterface {
     public static abstract class zza extends Binder implements zzd {
 
         private static class zza implements zzd {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void zza(ConnectionResult connectionResult, AuthAccountResult authAccountResult) throws RemoteException {
@@ -41,7 +41,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -66,7 +66,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(7, obtain, obtain2, 0);
+                    this.zzajq.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -85,7 +85,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(8, obtain, obtain2, 0);
+                    this.zzajq.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -93,7 +93,7 @@ public interface zzd extends IInterface {
                 }
             }
 
-            public void zzed(Status status) throws RemoteException {
+            public void zzej(Status status) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -104,7 +104,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(4, obtain, obtain2, 0);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -112,7 +112,7 @@ public interface zzd extends IInterface {
                 }
             }
 
-            public void zzee(Status status) throws RemoteException {
+            public void zzek(Status status) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -123,7 +123,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(6, obtain, obtain2, 0);
+                    this.zzajq.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -136,7 +136,7 @@ public interface zzd extends IInterface {
             attachInterface(this, "com.google.android.gms.signin.internal.ISignInCallbacks");
         }
 
-        public static zzd zzla(IBinder iBinder) {
+        public static zzd zzkv(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -157,12 +157,12 @@ public interface zzd extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInCallbacks");
-                    zzed(parcel.readInt() != 0 ? (Status) Status.CREATOR.createFromParcel(parcel) : null);
+                    zzej(parcel.readInt() != 0 ? (Status) Status.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     return true;
                 case 6:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInCallbacks");
-                    zzee(parcel.readInt() != 0 ? (Status) Status.CREATOR.createFromParcel(parcel) : null);
+                    zzek(parcel.readInt() != 0 ? (Status) Status.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     return true;
                 case 7:
@@ -190,7 +190,7 @@ public interface zzd extends IInterface {
 
     void zzb(SignInResponse signInResponse) throws RemoteException;
 
-    void zzed(Status status) throws RemoteException;
+    void zzej(Status status) throws RemoteException;
 
-    void zzee(Status status) throws RemoteException;
+    void zzek(Status status) throws RemoteException;
 }

@@ -16,21 +16,21 @@ import android.util.Log;
 
 public class InstanceIDListenerService extends Service {
     static String ACTION = "action";
-    private static String aeK = "gcm.googleapis.com/refresh";
-    private static String agb = "google.com/iid";
-    private static String agc = "CMD";
-    MessengerCompat afZ = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
-        final /* synthetic */ InstanceIDListenerService agf;
+    private static String agS = "gcm.googleapis.com/refresh";
+    private static String ail = "google.com/iid";
+    private static String aim = "CMD";
+    MessengerCompat aij = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
+        final /* synthetic */ InstanceIDListenerService aip;
 
         public void handleMessage(Message message) {
-            this.agf.zza(message, MessengerCompat.zzc(message));
+            this.aip.zza(message, MessengerCompat.zzc(message));
         }
     });
-    BroadcastReceiver aga = new BroadcastReceiver(this) {
-        final /* synthetic */ InstanceIDListenerService agf;
+    BroadcastReceiver aik = new BroadcastReceiver(this) {
+        final /* synthetic */ InstanceIDListenerService aip;
 
         {
-            this.agf = r1;
+            this.aip = r1;
         }
 
         public void onReceive(Context context, Intent intent) {
@@ -39,55 +39,55 @@ public class InstanceIDListenerService extends Service {
                 String valueOf = String.valueOf(intent.getExtras());
                 Log.d("InstanceID", new StringBuilder(String.valueOf(valueOf).length() + 46).append("Received GSF callback using dynamic receiver: ").append(valueOf).toString());
             }
-            this.agf.zzn(intent);
-            this.agf.stop();
+            this.aip.zzn(intent);
+            this.aip.stop();
         }
     };
-    int agd;
-    int age;
+    int ain;
+    int aio;
 
     static void zza(Context context, zzd com_google_android_gms_iid_zzd) {
-        com_google_android_gms_iid_zzd.zzbow();
+        com_google_android_gms_iid_zzd.zzbop();
         Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
-        intent.putExtra(agc, "RST");
+        intent.putExtra(aim, "RST");
         intent.setPackage(context.getPackageName());
         context.startService(intent);
     }
 
     private void zza(Message message, int i) {
-        zzc.zzdj(this);
+        zzc.zzdg(this);
         getPackageManager();
-        if (i == zzc.agl || i == zzc.agk) {
+        if (i == zzc.aiv || i == zzc.aiu) {
             zzn((Intent) message.obj);
             return;
         }
-        int i2 = zzc.agk;
-        Log.w("InstanceID", "Message from unexpected caller " + i + " mine=" + i2 + " appid=" + zzc.agl);
+        int i2 = zzc.aiu;
+        Log.w("InstanceID", "Message from unexpected caller " + i + " mine=" + i2 + " appid=" + zzc.aiv);
     }
 
-    static void zzdi(Context context) {
+    static void zzdf(Context context) {
         Intent intent = new Intent("com.google.android.gms.iid.InstanceID");
         intent.setPackage(context.getPackageName());
-        intent.putExtra(agc, "SYNC");
+        intent.putExtra(aim, "SYNC");
         context.startService(intent);
     }
 
     public IBinder onBind(Intent intent) {
-        return (intent == null || !"com.google.android.gms.iid.InstanceID".equals(intent.getAction())) ? null : this.afZ.getBinder();
+        return (intent == null || !"com.google.android.gms.iid.InstanceID".equals(intent.getAction())) ? null : this.aij.getBinder();
     }
 
     public void onCreate() {
         IntentFilter intentFilter = new IntentFilter("com.google.android.c2dm.intent.REGISTRATION");
         intentFilter.addCategory(getPackageName());
-        registerReceiver(this.aga, intentFilter, "com.google.android.c2dm.permission.RECEIVE", null);
+        registerReceiver(this.aik, intentFilter, "com.google.android.c2dm.permission.RECEIVE", null);
     }
 
     public void onDestroy() {
-        unregisterReceiver(this.aga);
+        unregisterReceiver(this.aik);
     }
 
     public int onStartCommand(Intent intent, int i, int i2) {
-        zztt(i2);
+        zztu(i2);
         if (intent == null) {
             stop();
             return 2;
@@ -118,18 +118,18 @@ public class InstanceIDListenerService extends Service {
 
     void stop() {
         synchronized (this) {
-            this.agd--;
-            if (this.agd == 0) {
-                stopSelf(this.age);
+            this.ain--;
+            if (this.ain == 0) {
+                stopSelf(this.aio);
             }
             if (Log.isLoggable("InstanceID", 3)) {
-                int i = this.agd;
-                Log.d("InstanceID", "Stop " + i + " " + this.age);
+                int i = this.ain;
+                Log.d("InstanceID", "Stop " + i + " " + this.aio);
             }
         }
     }
 
-    public void zzcb(boolean z) {
+    public void zzcc(boolean z) {
         onTokenRefresh();
     }
 
@@ -143,38 +143,38 @@ public class InstanceIDListenerService extends Service {
             bundle.putString("subtype", stringExtra);
             instance = InstanceID.zza(this, bundle);
         }
-        String stringExtra2 = intent.getStringExtra(agc);
+        String stringExtra2 = intent.getStringExtra(aim);
         if (intent.getStringExtra("error") == null && intent.getStringExtra("registration_id") == null) {
             if (Log.isLoggable("InstanceID", 3)) {
                 String valueOf = String.valueOf(intent.getExtras());
                 Log.d("InstanceID", new StringBuilder(((String.valueOf(stringExtra).length() + 18) + String.valueOf(stringExtra2).length()) + String.valueOf(valueOf).length()).append("Service command ").append(stringExtra).append(" ").append(stringExtra2).append(" ").append(valueOf).toString());
             }
             if (intent.getStringExtra("unregistered") != null) {
-                zzd zzbor = instance.zzbor();
+                zzd zzbok = instance.zzbok();
                 if (stringExtra == null) {
                     stringExtra = "";
                 }
-                zzbor.zzku(stringExtra);
-                instance.zzbos().zzv(intent);
+                zzbok.zzku(stringExtra);
+                instance.zzbol().zzv(intent);
                 return;
-            } else if (aeK.equals(intent.getStringExtra("from"))) {
-                instance.zzbor().zzku(stringExtra);
-                zzcb(false);
+            } else if (agS.equals(intent.getStringExtra("from"))) {
+                instance.zzbok().zzku(stringExtra);
+                zzcc(false);
                 return;
             } else if ("RST".equals(stringExtra2)) {
-                instance.zzboq();
-                zzcb(true);
+                instance.zzboj();
+                zzcc(true);
                 return;
             } else if ("RST_FULL".equals(stringExtra2)) {
-                if (!instance.zzbor().isEmpty()) {
-                    instance.zzbor().zzbow();
-                    zzcb(true);
+                if (!instance.zzbok().isEmpty()) {
+                    instance.zzbok().zzbop();
+                    zzcc(true);
                     return;
                 }
                 return;
             } else if ("SYNC".equals(stringExtra2)) {
-                instance.zzbor().zzku(stringExtra);
-                zzcb(false);
+                instance.zzbok().zzku(stringExtra);
+                zzcc(false);
                 return;
             } else if (!"PING".equals(stringExtra2)) {
                 return;
@@ -188,14 +188,14 @@ public class InstanceIDListenerService extends Service {
             stringExtra = String.valueOf(stringExtra);
             Log.d(stringExtra2, stringExtra.length() != 0 ? str.concat(stringExtra) : new String(str));
         }
-        instance.zzbos().zzv(intent);
+        instance.zzbol().zzv(intent);
     }
 
-    void zztt(int i) {
+    void zztu(int i) {
         synchronized (this) {
-            this.agd++;
-            if (i > this.age) {
-                this.age = i;
+            this.ain++;
+            if (i > this.aio) {
+                this.aio = i;
             }
         }
     }

@@ -2,8 +2,10 @@ package android.support.v4.view;
 
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff.Mode;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import java.lang.reflect.Field;
 
 class ViewCompatBase {
@@ -106,5 +108,12 @@ class ViewCompatBase {
             }
             view.invalidate();
         }
+    }
+
+    static Display getDisplay(View view) {
+        if (isAttachedToWindow(view)) {
+            return ((WindowManager) view.getContext().getSystemService("window")).getDefaultDisplay();
+        }
+        return null;
     }
 }

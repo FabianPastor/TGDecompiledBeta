@@ -13,24 +13,24 @@ public interface zzd extends IInterface {
     public static abstract class zza extends Binder implements zzd {
 
         private static class zza implements zzd {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
-            public boolean zzabr(int i) throws RemoteException {
+            public boolean zzabh(int i) throws RemoteException {
                 boolean z = false;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
                     obtain.writeInt(i);
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -56,7 +56,7 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     FaceParcel[] faceParcelArr = (FaceParcel[]) obtain2.createTypedArray(FaceParcel.CREATOR);
                     return faceParcelArr;
@@ -66,12 +66,12 @@ public interface zzd extends IInterface {
                 }
             }
 
-            public void zzclr() throws RemoteException {
+            public void zzclq() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -80,7 +80,7 @@ public interface zzd extends IInterface {
             }
         }
 
-        public static zzd zzll(IBinder iBinder) {
+        public static zzd zzlg(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -92,19 +92,19 @@ public interface zzd extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    Parcelable[] zzc = zzc(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null);
+                    Parcelable[] zzc = zzc(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     parcel2.writeTypedArray(zzc, 1);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    boolean zzabr = zzabr(parcel.readInt());
+                    boolean zzabh = zzabh(parcel.readInt());
                     parcel2.writeNoException();
-                    parcel2.writeInt(zzabr ? 1 : 0);
+                    parcel2.writeInt(zzabh ? 1 : 0);
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    zzclr();
+                    zzclq();
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -116,9 +116,9 @@ public interface zzd extends IInterface {
         }
     }
 
-    boolean zzabr(int i) throws RemoteException;
+    boolean zzabh(int i) throws RemoteException;
 
     FaceParcel[] zzc(com.google.android.gms.dynamic.zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel) throws RemoteException;
 
-    void zzclr() throws RemoteException;
+    void zzclq() throws RemoteException;
 }

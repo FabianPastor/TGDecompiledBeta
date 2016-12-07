@@ -7,12 +7,12 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 @TargetApi(11)
 public class ErrorDialogFragment extends DialogFragment {
     private Dialog mDialog = null;
-    private OnCancelListener uL = null;
+    private OnCancelListener wQ = null;
 
     public static ErrorDialogFragment newInstance(Dialog dialog) {
         return newInstance(dialog, null);
@@ -20,19 +20,19 @@ public class ErrorDialogFragment extends DialogFragment {
 
     public static ErrorDialogFragment newInstance(Dialog dialog, OnCancelListener onCancelListener) {
         ErrorDialogFragment errorDialogFragment = new ErrorDialogFragment();
-        Dialog dialog2 = (Dialog) zzac.zzb((Object) dialog, (Object) "Cannot display null dialog");
+        Dialog dialog2 = (Dialog) zzaa.zzb((Object) dialog, (Object) "Cannot display null dialog");
         dialog2.setOnCancelListener(null);
         dialog2.setOnDismissListener(null);
         errorDialogFragment.mDialog = dialog2;
         if (onCancelListener != null) {
-            errorDialogFragment.uL = onCancelListener;
+            errorDialogFragment.wQ = onCancelListener;
         }
         return errorDialogFragment;
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        if (this.uL != null) {
-            this.uL.onCancel(dialogInterface);
+        if (this.wQ != null) {
+            this.wQ.onCancel(dialogInterface);
         }
     }
 

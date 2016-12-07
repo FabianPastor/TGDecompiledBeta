@@ -8,50 +8,50 @@ import com.google.android.gms.vision.barcode.Barcode.GeoPoint;
 
 public class zzh implements Creator<GeoPoint> {
     static void zza(GeoPoint geoPoint, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, geoPoint.versionCode);
         zzb.zza(parcel, 2, geoPoint.lat);
         zzb.zza(parcel, 3, geoPoint.lng);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsv(parcel);
+        return zzsl(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabk(i);
+        return zzaba(i);
     }
 
-    public GeoPoint[] zzabk(int i) {
+    public GeoPoint[] zzaba(int i) {
         return new GeoPoint[i];
     }
 
-    public GeoPoint zzsv(Parcel parcel) {
+    public GeoPoint zzsl(Parcel parcel) {
         double d = 0.0d;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         double d2 = 0.0d;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    d2 = zza.zzn(parcel, zzcp);
+                    d2 = zza.zzn(parcel, zzcq);
                     break;
                 case 3:
-                    d = zza.zzn(parcel, zzcp);
+                    d = zza.zzn(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new GeoPoint(i, d2, d);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

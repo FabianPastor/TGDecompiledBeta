@@ -2,69 +2,69 @@ package com.google.android.gms.measurement.internal;
 
 import android.os.Handler;
 import android.os.Looper;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 
 abstract class zzf {
-    private static volatile Handler bY;
-    private final zzx anq;
-    private boolean aol = true;
-    private volatile long bZ;
+    private static volatile Handler ef;
+    private final zzx aqw;
+    private boolean arv = true;
+    private volatile long eg;
     private final Runnable zzw = new Runnable(this) {
-        final /* synthetic */ zzf aom;
+        final /* synthetic */ zzf arw;
 
         {
-            this.aom = r1;
+            this.arw = r1;
         }
 
         public void run() {
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                this.aom.anq.zzbvf().zzm(this);
+                this.arw.aqw.zzbwa().zzm(this);
                 return;
             }
-            boolean zzfl = this.aom.zzfl();
-            this.aom.bZ = 0;
-            if (zzfl && this.aom.aol) {
-                this.aom.run();
+            boolean zzfy = this.arw.zzfy();
+            this.arw.eg = 0;
+            if (zzfy && this.arw.arv) {
+                this.arw.run();
             }
         }
     };
 
     zzf(zzx com_google_android_gms_measurement_internal_zzx) {
-        zzac.zzy(com_google_android_gms_measurement_internal_zzx);
-        this.anq = com_google_android_gms_measurement_internal_zzx;
+        zzaa.zzy(com_google_android_gms_measurement_internal_zzx);
+        this.aqw = com_google_android_gms_measurement_internal_zzx;
     }
 
     private Handler getHandler() {
-        if (bY != null) {
-            return bY;
+        if (ef != null) {
+            return ef;
         }
         Handler handler;
         synchronized (zzf.class) {
-            if (bY == null) {
-                bY = new Handler(this.anq.getContext().getMainLooper());
+            if (ef == null) {
+                ef = new Handler(this.aqw.getContext().getMainLooper());
             }
-            handler = bY;
+            handler = ef;
         }
         return handler;
     }
 
     public void cancel() {
-        this.bZ = 0;
+        this.eg = 0;
         getHandler().removeCallbacks(this.zzw);
     }
 
     public abstract void run();
 
-    public boolean zzfl() {
-        return this.bZ != 0;
+    public boolean zzfy() {
+        return this.eg != 0;
     }
 
     public void zzx(long j) {
         cancel();
         if (j >= 0) {
-            this.bZ = this.anq.zzaan().currentTimeMillis();
+            this.eg = this.aqw.zzabz().currentTimeMillis();
             if (!getHandler().postDelayed(this.zzw, j)) {
-                this.anq.zzbvg().zzbwc().zzj("Failed to schedule delayed post. time", Long.valueOf(j));
+                this.aqw.zzbwb().zzbwy().zzj("Failed to schedule delayed post. time", Long.valueOf(j));
             }
         }
     }

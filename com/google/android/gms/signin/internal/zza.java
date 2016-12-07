@@ -7,50 +7,50 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zza implements Creator<AuthAccountResult> {
     static void zza(AuthAccountResult authAccountResult, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, authAccountResult.mVersionCode);
-        zzb.zzc(parcel, 2, authAccountResult.zzcdg());
-        zzb.zza(parcel, 3, authAccountResult.zzcdh(), i, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzc(parcel, 2, authAccountResult.zzcdi());
+        zzb.zza(parcel, 3, authAccountResult.zzcdj(), i, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsj(parcel);
+        return zzrz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzaad(i);
+        return zzzt(i);
     }
 
-    public AuthAccountResult[] zzaad(int i) {
-        return new AuthAccountResult[i];
-    }
-
-    public AuthAccountResult zzsj(Parcel parcel) {
+    public AuthAccountResult zzrz(Parcel parcel) {
         int i = 0;
-        int zzcq = com.google.android.gms.common.internal.safeparcel.zza.zzcq(parcel);
+        int zzcr = com.google.android.gms.common.internal.safeparcel.zza.zzcr(parcel);
         Intent intent = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = com.google.android.gms.common.internal.safeparcel.zza.zzcp(parcel);
-            switch (com.google.android.gms.common.internal.safeparcel.zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = com.google.android.gms.common.internal.safeparcel.zza.zzcq(parcel);
+            switch (com.google.android.gms.common.internal.safeparcel.zza.zzgu(zzcq)) {
                 case 1:
-                    i2 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i2 = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    i = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcp);
+                    i = com.google.android.gms.common.internal.safeparcel.zza.zzg(parcel, zzcq);
                     break;
                 case 3:
-                    intent = (Intent) com.google.android.gms.common.internal.safeparcel.zza.zza(parcel, zzcp, Intent.CREATOR);
+                    intent = (Intent) com.google.android.gms.common.internal.safeparcel.zza.zza(parcel, zzcq, Intent.CREATOR);
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zza.zzb(parcel, zzcp);
+                    com.google.android.gms.common.internal.safeparcel.zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new AuthAccountResult(i2, i, intent);
         }
-        throw new com.google.android.gms.common.internal.safeparcel.zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new com.google.android.gms.common.internal.safeparcel.zza.zza("Overread allowed size end=" + zzcr, parcel);
+    }
+
+    public AuthAccountResult[] zzzt(int i) {
+        return new AuthAccountResult[i];
     }
 }

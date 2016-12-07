@@ -51,19 +51,19 @@ public class zzt implements zzf {
             objArr[1] = Long.valueOf(j);
             objArr[2] = bArr != null ? Integer.valueOf(bArr.length) : "null";
             objArr[3] = Integer.valueOf(statusLine.getStatusCode());
-            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzk_.zzt().zzd());
+            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzk_.zzs().zzd());
             zzs.zzb(str, objArr);
         }
     }
 
     private static void zza(String str, zzk<?> com_google_android_gms_internal_zzk_, zzr com_google_android_gms_internal_zzr) throws zzr {
-        zzo zzt = com_google_android_gms_internal_zzk_.zzt();
-        int zzs = com_google_android_gms_internal_zzk_.zzs();
+        zzo zzs = com_google_android_gms_internal_zzk_.zzs();
+        int zzr = com_google_android_gms_internal_zzk_.zzr();
         try {
-            zzt.zza(com_google_android_gms_internal_zzr);
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzs)}));
+            zzs.zza(com_google_android_gms_internal_zzr);
+            com_google_android_gms_internal_zzk_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzr)}));
         } catch (zzr e) {
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzs)}));
+            com_google_android_gms_internal_zzk_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzr)}));
             throw e;
         }
     }
@@ -111,12 +111,12 @@ public class zzt implements zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
-        HttpResponse zza;
         Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
+            HttpResponse zza;
             int statusCode;
             byte[] zza2;
             try {

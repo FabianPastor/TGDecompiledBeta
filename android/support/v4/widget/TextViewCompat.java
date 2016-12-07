@@ -163,6 +163,6 @@ public final class TextViewCompat {
     }
 
     public static Drawable[] getCompoundDrawablesRelative(@NonNull TextView textView) {
-        return textView.getCompoundDrawables();
+        return IMPL.getCompoundDrawablesRelative(textView);
     }
 }

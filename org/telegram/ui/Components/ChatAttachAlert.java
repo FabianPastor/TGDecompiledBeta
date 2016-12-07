@@ -744,6 +744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         ArrayList<Object> arrayList = MediaController.allPhotosAlbumEntry.photos;
                         if (position >= 0 && position < arrayList.size()) {
                             PhotoViewer.getInstance().setParentActivity(ChatAttachAlert.this.baseFragment.getParentActivity());
+                            PhotoViewer.getInstance().setParentAlert(ChatAttachAlert.this);
                             PhotoViewer.getInstance().openPhotoForSelect(arrayList, position, 0, ChatAttachAlert.this, ChatAttachAlert.this.baseFragment);
                             AndroidUtilities.hideKeyboard(ChatAttachAlert.this.baseFragment.getFragmentView().findFocus());
                         }
@@ -881,6 +882,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                 public void onFinishVideoRecording(final Bitmap thumb) {
                                     if (ChatAttachAlert.this.cameraFile != null && ChatAttachAlert.this.baseFragment != null) {
                                         PhotoViewer.getInstance().setParentActivity(ChatAttachAlert.this.baseFragment.getParentActivity());
+                                        PhotoViewer.getInstance().setParentAlert(ChatAttachAlert.this);
                                         ChatAttachAlert.this.cameraPhoto = new ArrayList();
                                         ChatAttachAlert.this.cameraPhoto.add(new PhotoEntry(0, 0, 0, ChatAttachAlert.this.cameraFile.getAbsolutePath(), 0, true));
                                         PhotoViewer.getInstance().openPhotoForSelect(ChatAttachAlert.this.cameraPhoto, 0, 2, new EmptyPhotoViewerProvider() {
@@ -949,6 +951,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                 ChatAttachAlert.this.takingPhoto = false;
                                 if (ChatAttachAlert.this.cameraFile != null && ChatAttachAlert.this.baseFragment != null) {
                                     PhotoViewer.getInstance().setParentActivity(ChatAttachAlert.this.baseFragment.getParentActivity());
+                                    PhotoViewer.getInstance().setParentAlert(ChatAttachAlert.this);
                                     ChatAttachAlert.this.cameraPhoto = new ArrayList();
                                     int orientation = 0;
                                     try {
@@ -1927,6 +1930,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     public void onOpenAnimationStart() {
+    }
+
+    public void setAllowDrawContent(boolean value) {
+        super.setAllowDrawContent(value);
+        checkCameraViewPosition();
     }
 
     private void setUseRevealAnimation(boolean value) {

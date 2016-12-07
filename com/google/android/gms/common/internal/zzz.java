@@ -1,35 +1,51 @@
 package com.google.android.gms.common.internal;
 
-import java.util.Iterator;
+import android.support.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class zzz {
-    private final String separator;
+public final class zzz {
 
-    private zzz(String str) {
-        this.separator = str;
-    }
+    public static final class zza {
+        private final List<String> EG;
+        private final Object zzcxk;
 
-    public static zzz zzhy(String str) {
-        return new zzz(str);
-    }
-
-    public final String zza(Iterable<?> iterable) {
-        return zza(new StringBuilder(), iterable).toString();
-    }
-
-    public final StringBuilder zza(StringBuilder stringBuilder, Iterable<?> iterable) {
-        Iterator it = iterable.iterator();
-        if (it.hasNext()) {
-            stringBuilder.append(zzw(it.next()));
-            while (it.hasNext()) {
-                stringBuilder.append(this.separator);
-                stringBuilder.append(zzw(it.next()));
-            }
+        private zza(Object obj) {
+            this.zzcxk = zzaa.zzy(obj);
+            this.EG = new ArrayList();
         }
-        return stringBuilder;
+
+        public String toString() {
+            StringBuilder append = new StringBuilder(100).append(this.zzcxk.getClass().getSimpleName()).append('{');
+            int size = this.EG.size();
+            for (int i = 0; i < size; i++) {
+                append.append((String) this.EG.get(i));
+                if (i < size - 1) {
+                    append.append(", ");
+                }
+            }
+            return append.append('}').toString();
+        }
+
+        public zza zzg(String str, Object obj) {
+            List list = this.EG;
+            String str2 = (String) zzaa.zzy(str);
+            String valueOf = String.valueOf(String.valueOf(obj));
+            list.add(new StringBuilder((String.valueOf(str2).length() + 1) + String.valueOf(valueOf).length()).append(str2).append("=").append(valueOf).toString());
+            return this;
+        }
     }
 
-    CharSequence zzw(Object obj) {
-        return obj instanceof CharSequence ? (CharSequence) obj : obj.toString();
+    public static boolean equal(@Nullable Object obj, @Nullable Object obj2) {
+        return obj == obj2 || (obj != null && obj.equals(obj2));
+    }
+
+    public static int hashCode(Object... objArr) {
+        return Arrays.hashCode(objArr);
+    }
+
+    public static zza zzx(Object obj) {
+        return new zza(obj);
     }
 }

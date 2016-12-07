@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -50,6 +51,7 @@ public class BottomSheet extends Dialog {
     protected static int backgroundPaddingTop;
     private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     private boolean allowCustomAnimation = true;
+    private boolean allowDrawContent = true;
     private boolean applyBottomPadding = true;
     private boolean applyTopPadding = true;
     protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
@@ -522,7 +524,11 @@ public class BottomSheet extends Dialog {
         this.shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
         backgroundPaddingTop = padding.top;
-        this.container = new ContainerView(getContext());
+        this.container = new ContainerView(getContext()) {
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                return BottomSheet.this.allowDrawContent && super.drawChild(canvas, child, drawingTime);
+            }
+        };
         this.container.setBackgroundDrawable(this.backDrawable);
         this.focusable = needFocus;
         if (VERSION.SDK_INT >= 21) {
@@ -638,7 +644,7 @@ public class BottomSheet extends Dialog {
         this.backDrawable.setAlpha(0);
         if (VERSION.SDK_INT >= 18) {
             this.layoutCount = 2;
-            Runnable anonymousClass5 = new Runnable() {
+            Runnable anonymousClass6 = new Runnable() {
                 public void run() {
                     if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
                         BottomSheet.this.startAnimationRunnable = null;
@@ -646,11 +652,19 @@ public class BottomSheet extends Dialog {
                     }
                 }
             };
-            this.startAnimationRunnable = anonymousClass5;
-            AndroidUtilities.runOnUIThread(anonymousClass5, 150);
+            this.startAnimationRunnable = anonymousClass6;
+            AndroidUtilities.runOnUIThread(anonymousClass6, 150);
             return;
         }
         startOpenAnimation();
+    }
+
+    public void setAllowDrawContent(boolean value) {
+        if (this.allowDrawContent != value) {
+            this.allowDrawContent = value;
+            this.container.setBackgroundDrawable(this.allowDrawContent ? this.backDrawable : null);
+            this.container.invalidate();
+        }
     }
 
     protected boolean canDismissWithSwipe() {

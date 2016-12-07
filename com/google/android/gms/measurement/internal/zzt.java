@@ -8,194 +8,194 @@ import android.text.TextUtils;
 import android.util.Pair;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient.Info;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Locale;
 
 class zzt extends zzaa {
-    static final Pair<String, Long> apO = new Pair("", Long.valueOf(0));
-    public final zzc apP = new zzc("health_monitor", zzbvi().zzadz());
-    public final zzb apQ = new zzb(this, "last_upload", 0);
-    public final zzb apR = new zzb(this, "last_upload_attempt", 0);
-    public final zzb apS = new zzb(this, "backoff", 0);
-    public final zzb apT = new zzb(this, "last_delete_stale", 0);
-    public final zzb apU = new zzb(this, "midnight_offset", 0);
-    private String apV;
-    private boolean apW;
-    private long apX;
-    private SecureRandom apY;
-    public final zzb apZ = new zzb(this, "time_before_start", 10000);
-    public final zzb aqa = new zzb(this, "session_timeout", 1800000);
-    public final zza aqb = new zza(this, "start_new_session", true);
-    public final zzb aqc = new zzb(this, "last_pause_time", 0);
-    public final zzb aqd = new zzb(this, "time_active", 0);
-    public boolean aqe;
-    private SharedPreferences dy;
+    static final Pair<String, Long> asX = new Pair("", Long.valueOf(0));
+    public final zzc asY = new zzc("health_monitor", zzbwd().zzafj());
+    public final zzb asZ = new zzb(this, "last_upload", 0);
+    public final zzb ata = new zzb(this, "last_upload_attempt", 0);
+    public final zzb atb = new zzb(this, "backoff", 0);
+    public final zzb atc = new zzb(this, "last_delete_stale", 0);
+    public final zzb atd = new zzb(this, "midnight_offset", 0);
+    private String ate;
+    private boolean atf;
+    private long atg;
+    private SecureRandom ath;
+    public final zzb ati = new zzb(this, "time_before_start", 10000);
+    public final zzb atj = new zzb(this, "session_timeout", 1800000);
+    public final zza atk = new zza(this, "start_new_session", true);
+    public final zzb atl = new zzb(this, "last_pause_time", 0);
+    public final zzb atm = new zzb(this, "time_active", 0);
+    public boolean atn;
+    private SharedPreferences fF;
 
     public final class zza {
-        private final boolean aqf;
-        private boolean aqg;
-        final /* synthetic */ zzt aqh;
-        private boolean vu;
-        private final String zzbaf;
+        private final boolean ato;
+        private boolean atp;
+        final /* synthetic */ zzt atq;
+        private boolean xv;
+        private final String zzbcn;
 
         public zza(zzt com_google_android_gms_measurement_internal_zzt, String str, boolean z) {
-            this.aqh = com_google_android_gms_measurement_internal_zzt;
-            zzac.zzhz(str);
-            this.zzbaf = str;
-            this.aqf = z;
+            this.atq = com_google_android_gms_measurement_internal_zzt;
+            zzaa.zzib(str);
+            this.zzbcn = str;
+            this.ato = z;
         }
 
         @WorkerThread
-        private void zzbwt() {
-            if (!this.aqg) {
-                this.aqg = true;
-                this.vu = this.aqh.dy.getBoolean(this.zzbaf, this.aqf);
+        private void zzbxo() {
+            if (!this.atp) {
+                this.atp = true;
+                this.xv = this.atq.fF.getBoolean(this.zzbcn, this.ato);
             }
         }
 
         @WorkerThread
         public boolean get() {
-            zzbwt();
-            return this.vu;
+            zzbxo();
+            return this.xv;
         }
 
         @WorkerThread
         public void set(boolean z) {
-            Editor edit = this.aqh.dy.edit();
-            edit.putBoolean(this.zzbaf, z);
+            Editor edit = this.atq.fF.edit();
+            edit.putBoolean(this.zzbcn, z);
             edit.apply();
-            this.vu = z;
+            this.xv = z;
         }
     }
 
     public final class zzb {
-        private long X;
-        private boolean aqg;
-        final /* synthetic */ zzt aqh;
-        private final long aqi;
-        private final String zzbaf;
+        private boolean atp;
+        final /* synthetic */ zzt atq;
+        private final long atr;
+        private long cf;
+        private final String zzbcn;
 
         public zzb(zzt com_google_android_gms_measurement_internal_zzt, String str, long j) {
-            this.aqh = com_google_android_gms_measurement_internal_zzt;
-            zzac.zzhz(str);
-            this.zzbaf = str;
-            this.aqi = j;
+            this.atq = com_google_android_gms_measurement_internal_zzt;
+            zzaa.zzib(str);
+            this.zzbcn = str;
+            this.atr = j;
         }
 
         @WorkerThread
-        private void zzbwt() {
-            if (!this.aqg) {
-                this.aqg = true;
-                this.X = this.aqh.dy.getLong(this.zzbaf, this.aqi);
+        private void zzbxo() {
+            if (!this.atp) {
+                this.atp = true;
+                this.cf = this.atq.fF.getLong(this.zzbcn, this.atr);
             }
         }
 
         @WorkerThread
         public long get() {
-            zzbwt();
-            return this.X;
+            zzbxo();
+            return this.cf;
         }
 
         @WorkerThread
         public void set(long j) {
-            Editor edit = this.aqh.dy.edit();
-            edit.putLong(this.zzbaf, j);
+            Editor edit = this.atq.fF.edit();
+            edit.putLong(this.zzbcn, j);
             edit.apply();
-            this.X = j;
+            this.cf = j;
         }
     }
 
     public final class zzc {
-        final /* synthetic */ zzt aqh;
-        final String aqj;
-        private final String aqk;
-        private final String aql;
-        private final long dC;
+        final /* synthetic */ zzt atq;
+        final String ats;
+        private final String att;
+        private final String atu;
+        private final long fJ;
 
         private zzc(zzt com_google_android_gms_measurement_internal_zzt, String str, long j) {
-            this.aqh = com_google_android_gms_measurement_internal_zzt;
-            zzac.zzhz(str);
-            zzac.zzbs(j > 0);
-            this.aqj = String.valueOf(str).concat(":start");
-            this.aqk = String.valueOf(str).concat(":count");
-            this.aql = String.valueOf(str).concat(":value");
-            this.dC = j;
+            this.atq = com_google_android_gms_measurement_internal_zzt;
+            zzaa.zzib(str);
+            zzaa.zzbt(j > 0);
+            this.ats = String.valueOf(str).concat(":start");
+            this.att = String.valueOf(str).concat(":count");
+            this.atu = String.valueOf(str).concat(":value");
+            this.fJ = j;
         }
 
         @WorkerThread
-        private void zzafk() {
-            this.aqh.zzyl();
-            long currentTimeMillis = this.aqh.zzaan().currentTimeMillis();
-            Editor edit = this.aqh.dy.edit();
-            edit.remove(this.aqk);
-            edit.remove(this.aql);
-            edit.putLong(this.aqj, currentTimeMillis);
+        private void zzagu() {
+            this.atq.zzzx();
+            long currentTimeMillis = this.atq.zzabz().currentTimeMillis();
+            Editor edit = this.atq.fF.edit();
+            edit.remove(this.att);
+            edit.remove(this.atu);
+            edit.putLong(this.ats, currentTimeMillis);
             edit.apply();
         }
 
         @WorkerThread
-        private long zzafl() {
-            this.aqh.zzyl();
-            long zzafn = zzafn();
-            if (zzafn != 0) {
-                return Math.abs(zzafn - this.aqh.zzaan().currentTimeMillis());
+        private long zzagv() {
+            this.atq.zzzx();
+            long zzagx = zzagx();
+            if (zzagx != 0) {
+                return Math.abs(zzagx - this.atq.zzabz().currentTimeMillis());
             }
-            zzafk();
+            zzagu();
             return 0;
         }
 
         @WorkerThread
-        private long zzafn() {
-            return this.aqh.zzbwo().getLong(this.aqj, 0);
+        private long zzagx() {
+            return this.atq.zzbxj().getLong(this.ats, 0);
         }
 
         @WorkerThread
-        public Pair<String, Long> zzafm() {
-            this.aqh.zzyl();
-            long zzafl = zzafl();
-            if (zzafl < this.dC) {
+        public Pair<String, Long> zzagw() {
+            this.atq.zzzx();
+            long zzagv = zzagv();
+            if (zzagv < this.fJ) {
                 return null;
             }
-            if (zzafl > this.dC * 2) {
-                zzafk();
+            if (zzagv > this.fJ * 2) {
+                zzagu();
                 return null;
             }
-            String string = this.aqh.zzbwo().getString(this.aql, null);
-            zzafl = this.aqh.zzbwo().getLong(this.aqk, 0);
-            zzafk();
-            return (string == null || zzafl <= 0) ? zzt.apO : new Pair(string, Long.valueOf(zzafl));
+            String string = this.atq.zzbxj().getString(this.atu, null);
+            zzagv = this.atq.zzbxj().getLong(this.att, 0);
+            zzagu();
+            return (string == null || zzagv <= 0) ? zzt.asX : new Pair(string, Long.valueOf(zzagv));
         }
 
         @WorkerThread
-        public void zzfd(String str) {
-            zzi(str, 1);
+        public void zzfg(String str) {
+            zzg(str, 1);
         }
 
         @WorkerThread
-        public void zzi(String str, long j) {
-            this.aqh.zzyl();
-            if (zzafn() == 0) {
-                zzafk();
+        public void zzg(String str, long j) {
+            this.atq.zzzx();
+            if (zzagx() == 0) {
+                zzagu();
             }
             if (str == null) {
                 str = "";
             }
-            long j2 = this.aqh.dy.getLong(this.aqk, 0);
+            long j2 = this.atq.fF.getLong(this.att, 0);
             if (j2 <= 0) {
-                Editor edit = this.aqh.dy.edit();
-                edit.putString(this.aql, str);
-                edit.putLong(this.aqk, j);
+                Editor edit = this.atq.fF.edit();
+                edit.putString(this.atu, str);
+                edit.putLong(this.att, j);
                 edit.apply();
                 return;
             }
-            Object obj = (this.aqh.zzbwl().nextLong() & Long.MAX_VALUE) < (Long.MAX_VALUE / (j2 + j)) * j ? 1 : null;
-            Editor edit2 = this.aqh.dy.edit();
+            Object obj = (this.atq.zzbxg().nextLong() & Long.MAX_VALUE) < (Long.MAX_VALUE / (j2 + j)) * j ? 1 : null;
+            Editor edit2 = this.atq.fF.edit();
             if (obj != null) {
-                edit2.putString(this.aql, str);
+                edit2.putString(this.atu, str);
             }
-            edit2.putLong(this.aqk, j2 + j);
+            edit2.putLong(this.att, j2 + j);
             edit2.apply();
         }
     }
@@ -205,82 +205,82 @@ class zzt extends zzaa {
     }
 
     @WorkerThread
-    private SecureRandom zzbwl() {
-        zzyl();
-        if (this.apY == null) {
-            this.apY = new SecureRandom();
+    private SecureRandom zzbxg() {
+        zzzx();
+        if (this.ath == null) {
+            this.ath = new SecureRandom();
         }
-        return this.apY;
+        return this.ath;
     }
 
     @WorkerThread
-    private SharedPreferences zzbwo() {
-        zzyl();
-        zzaax();
-        return this.dy;
+    private SharedPreferences zzbxj() {
+        zzzx();
+        zzacj();
+        return this.fF;
     }
 
     @WorkerThread
     void setMeasurementEnabled(boolean z) {
-        zzyl();
-        zzbvg().zzbwj().zzj("Setting measurementEnabled", Boolean.valueOf(z));
-        Editor edit = zzbwo().edit();
+        zzzx();
+        zzbwb().zzbxe().zzj("Setting measurementEnabled", Boolean.valueOf(z));
+        Editor edit = zzbxj().edit();
         edit.putBoolean("measurement_enabled", z);
         edit.apply();
     }
 
     @WorkerThread
-    String zzbst() {
-        zzyl();
+    String zzbtj() {
+        zzzx();
         try {
-            return com.google.firebase.iid.zzc.A().getId();
+            return com.google.firebase.iid.zzc.C().getId();
         } catch (IllegalStateException e) {
-            zzbvg().zzbwe().log("Failed to retrieve Firebase Instance Id");
+            zzbwb().zzbxa().log("Failed to retrieve Firebase Instance Id");
             return null;
         }
     }
 
     @WorkerThread
-    String zzbwm() {
-        zzbwl().nextBytes(new byte[16]);
+    String zzbxh() {
+        zzbxg().nextBytes(new byte[16]);
         return String.format(Locale.US, "%032x", new Object[]{new BigInteger(1, r0)});
     }
 
     @WorkerThread
-    long zzbwn() {
-        zzaax();
-        zzyl();
-        long j = this.apU.get();
+    long zzbxi() {
+        zzacj();
+        zzzx();
+        long j = this.atd.get();
         if (j != 0) {
             return j;
         }
-        j = (long) (zzbwl().nextInt(86400000) + 1);
-        this.apU.set(j);
+        j = (long) (zzbxg().nextInt(86400000) + 1);
+        this.atd.set(j);
         return j;
     }
 
     @WorkerThread
-    String zzbwp() {
-        zzyl();
-        return zzbwo().getString("gmp_app_id", null);
+    String zzbxk() {
+        zzzx();
+        return zzbxj().getString("gmp_app_id", null);
     }
 
     @WorkerThread
-    Boolean zzbwq() {
-        zzyl();
-        return !zzbwo().contains("use_service") ? null : Boolean.valueOf(zzbwo().getBoolean("use_service", false));
+    Boolean zzbxl() {
+        zzzx();
+        return !zzbxj().contains("use_service") ? null : Boolean.valueOf(zzbxj().getBoolean("use_service", false));
     }
 
     @WorkerThread
-    void zzbwr() {
+    void zzbxm() {
         boolean z = true;
-        zzyl();
-        zzbvg().zzbwj().log("Clearing collection preferences.");
-        boolean contains = zzbwo().contains("measurement_enabled");
+        zzzx();
+        zzbwb().zzbxe().log("Clearing collection preferences.");
+        boolean contains = zzbxj().contains("measurement_enabled");
         if (contains) {
-            z = zzcg(true);
+            z = zzch(true);
         }
-        Editor edit = zzbwo().edit();
+        Editor edit = zzbxj().edit();
         edit.clear();
         edit.apply();
         if (contains) {
@@ -289,79 +289,81 @@ class zzt extends zzaa {
     }
 
     @WorkerThread
-    protected String zzbws() {
-        zzyl();
-        String string = zzbwo().getString("previous_os_version", null);
-        String zzbvv = zzbuz().zzbvv();
-        if (!(TextUtils.isEmpty(zzbvv) || zzbvv.equals(string))) {
-            Editor edit = zzbwo().edit();
-            edit.putString("previous_os_version", zzbvv);
+    protected String zzbxn() {
+        zzzx();
+        String string = zzbxj().getString("previous_os_version", null);
+        String zzbws = zzbvs().zzbws();
+        if (!(TextUtils.isEmpty(zzbws) || zzbws.equals(string))) {
+            Editor edit = zzbxj().edit();
+            edit.putString("previous_os_version", zzbws);
             edit.apply();
         }
         return string;
     }
 
     @WorkerThread
-    void zzcf(boolean z) {
-        zzyl();
-        zzbvg().zzbwj().zzj("Setting useService", Boolean.valueOf(z));
-        Editor edit = zzbwo().edit();
+    void zzcg(boolean z) {
+        zzzx();
+        zzbwb().zzbxe().zzj("Setting useService", Boolean.valueOf(z));
+        Editor edit = zzbxj().edit();
         edit.putBoolean("use_service", z);
         edit.apply();
     }
 
     @WorkerThread
-    boolean zzcg(boolean z) {
-        zzyl();
-        return zzbwo().getBoolean("measurement_enabled", z);
+    boolean zzch(boolean z) {
+        zzzx();
+        return zzbxj().getBoolean("measurement_enabled", z);
     }
 
     @WorkerThread
     @NonNull
-    Pair<String, Boolean> zzml(String str) {
-        zzyl();
-        long elapsedRealtime = zzaan().elapsedRealtime();
-        if (this.apV != null && elapsedRealtime < this.apX) {
-            return new Pair(this.apV, Boolean.valueOf(this.apW));
+    Pair<String, Boolean> zzmk(String str) {
+        zzzx();
+        long elapsedRealtime = zzabz().elapsedRealtime();
+        if (this.ate != null && elapsedRealtime < this.atg) {
+            return new Pair(this.ate, Boolean.valueOf(this.atf));
         }
-        this.apX = elapsedRealtime + zzbvi().zzlr(str);
+        this.atg = elapsedRealtime + zzbwd().zzlr(str);
         AdvertisingIdClient.setShouldSkipGmsCoreVersionCheck(true);
         try {
             Info advertisingIdInfo = AdvertisingIdClient.getAdvertisingIdInfo(getContext());
-            this.apV = advertisingIdInfo.getId();
-            if (this.apV == null) {
-                this.apV = "";
+            this.ate = advertisingIdInfo.getId();
+            if (this.ate == null) {
+                this.ate = "";
             }
-            this.apW = advertisingIdInfo.isLimitAdTrackingEnabled();
+            this.atf = advertisingIdInfo.isLimitAdTrackingEnabled();
         } catch (Throwable th) {
-            zzbvg().zzbwi().zzj("Unable to get advertising id", th);
-            this.apV = "";
+            zzbwb().zzbxd().zzj("Unable to get advertising id", th);
+            this.ate = "";
         }
         AdvertisingIdClient.setShouldSkipGmsCoreVersionCheck(false);
-        return new Pair(this.apV, Boolean.valueOf(this.apW));
-    }
-
-    String zzmm(String str) {
-        String str2 = (String) zzml(str).first;
-        if (zzal.zzfi("MD5") == null) {
-            return null;
-        }
-        return String.format(Locale.US, "%032X", new Object[]{new BigInteger(1, zzal.zzfi("MD5").digest(str2.getBytes()))});
+        return new Pair(this.ate, Boolean.valueOf(this.atf));
     }
 
     @WorkerThread
-    void zzmn(String str) {
-        zzyl();
-        Editor edit = zzbwo().edit();
+    String zzml(String str) {
+        zzzx();
+        String str2 = (String) zzmk(str).first;
+        if (zzal.zzfl("MD5") == null) {
+            return null;
+        }
+        return String.format(Locale.US, "%032X", new Object[]{new BigInteger(1, zzal.zzfl("MD5").digest(str2.getBytes()))});
+    }
+
+    @WorkerThread
+    void zzmm(String str) {
+        zzzx();
+        Editor edit = zzbxj().edit();
         edit.putString("gmp_app_id", str);
         edit.apply();
     }
 
-    protected void zzym() {
-        this.dy = getContext().getSharedPreferences("com.google.android.gms.measurement.prefs", 0);
-        this.aqe = this.dy.getBoolean("has_been_opened", false);
-        if (!this.aqe) {
-            Editor edit = this.dy.edit();
+    protected void zzzy() {
+        this.fF = getContext().getSharedPreferences("com.google.android.gms.measurement.prefs", 0);
+        this.atn = this.fF.getBoolean("has_been_opened", false);
+        if (!this.atn) {
+            Editor edit = this.fF.edit();
             edit.putBoolean("has_been_opened", true);
             edit.apply();
         }

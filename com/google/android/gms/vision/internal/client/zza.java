@@ -3,14 +3,14 @@ package com.google.android.gms.vision.internal.client;
 import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
-import com.google.android.gms.internal.zzsu;
+import com.google.android.gms.internal.zztl;
 
 public abstract class zza<T> {
-    private boolean aLr = false;
-    private T aLs;
+    private boolean aOC = false;
+    private T aOD;
     private final Context mContext;
     private final String mTag;
-    private final Object zzakd = new Object();
+    private final Object zzako = new Object();
 
     public zza(Context context, String str) {
         this.mContext = context;
@@ -18,59 +18,59 @@ public abstract class zza<T> {
     }
 
     public boolean isOperational() {
-        return zzclt() != null;
+        return zzcls() != null;
     }
 
-    protected abstract T zzb(zzsu com_google_android_gms_internal_zzsu, Context context) throws RemoteException, com.google.android.gms.internal.zzsu.zza;
+    protected abstract T zzb(zztl com_google_android_gms_internal_zztl, Context context) throws RemoteException, com.google.android.gms.internal.zztl.zza;
 
-    protected abstract void zzclq() throws RemoteException;
+    protected abstract void zzclp() throws RemoteException;
 
-    public void zzcls() {
-        synchronized (this.zzakd) {
-            if (this.aLs == null) {
+    public void zzclr() {
+        synchronized (this.zzako) {
+            if (this.aOD == null) {
                 return;
             }
             try {
-                zzclq();
+                zzclp();
             } catch (Throwable e) {
                 Log.e(this.mTag, "Could not finalize native handle", e);
             }
         }
     }
 
-    protected T zzclt() {
+    protected T zzcls() {
         T t;
         Throwable e;
-        synchronized (this.zzakd) {
-            if (this.aLs != null) {
-                t = this.aLs;
+        synchronized (this.zzako) {
+            if (this.aOD != null) {
+                t = this.aOD;
             } else {
                 try {
-                    this.aLs = zzb(zzsu.zza(this.mContext, zzsu.OB, "com.google.android.gms.vision.dynamite"), this.mContext);
-                } catch (com.google.android.gms.internal.zzsu.zza e2) {
+                    this.aOD = zzb(zztl.zza(this.mContext, zztl.Qp, "com.google.android.gms.vision.dynamite"), this.mContext);
+                } catch (com.google.android.gms.internal.zztl.zza e2) {
                     e = e2;
                     Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!!this.aLr) {
+                    if (!!this.aOC) {
                     }
                     Log.w(this.mTag, "Native handle is now available.");
-                    t = this.aLs;
+                    t = this.aOD;
                     return t;
                 } catch (RemoteException e3) {
                     e = e3;
                     Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!this.aLr) {
+                    if (!this.aOC) {
                     }
                     Log.w(this.mTag, "Native handle is now available.");
-                    t = this.aLs;
+                    t = this.aOD;
                     return t;
                 }
-                if (!this.aLr && this.aLs == null) {
+                if (!this.aOC && this.aOD == null) {
                     Log.w(this.mTag, "Native handle not yet available. Reverting to no-op handle.");
-                    this.aLr = true;
-                } else if (this.aLr && this.aLs != null) {
+                    this.aOC = true;
+                } else if (this.aOC && this.aOD != null) {
                     Log.w(this.mTag, "Native handle is now available.");
                 }
-                t = this.aLs;
+                t = this.aOD;
             }
         }
         return t;

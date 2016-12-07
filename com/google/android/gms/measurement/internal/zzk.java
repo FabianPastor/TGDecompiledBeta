@@ -7,60 +7,60 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzk implements Creator<EventParcel> {
     static void zza(EventParcel eventParcel, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, eventParcel.versionCode);
         zzb.zza(parcel, 2, eventParcel.name, false);
-        zzb.zza(parcel, 3, eventParcel.aoz, i, false);
-        zzb.zza(parcel, 4, eventParcel.aoA, false);
-        zzb.zza(parcel, 5, eventParcel.aoB);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 3, eventParcel.arJ, i, false);
+        zzb.zza(parcel, 4, eventParcel.arK, false);
+        zzb.zza(parcel, 5, eventParcel.arL);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpg(parcel);
+        return zzpy(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwm(i);
+        return zzxd(i);
     }
 
-    public EventParcel zzpg(Parcel parcel) {
+    public EventParcel zzpy(Parcel parcel) {
         String str = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         long j = 0;
         EventParams eventParams = null;
         String str2 = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    eventParams = (EventParams) zza.zza(parcel, zzcp, EventParams.CREATOR);
+                    eventParams = (EventParams) zza.zza(parcel, zzcq, EventParams.CREATOR);
                     break;
                 case 4:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    j = zza.zzi(parcel, zzcp);
+                    j = zza.zzi(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new EventParcel(i, str2, eventParams, str, j);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public EventParcel[] zzwm(int i) {
+    public EventParcel[] zzxd(int i) {
         return new EventParcel[i];
     }
 }

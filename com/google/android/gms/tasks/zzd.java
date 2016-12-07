@@ -4,34 +4,34 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zzd<TResult> implements zzf<TResult> {
-    private final Executor aBG;
-    private OnFailureListener aJB;
-    private final Object zzakd = new Object();
+    private final Executor aEQ;
+    private OnFailureListener aMM;
+    private final Object zzako = new Object();
 
     public zzd(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-        this.aBG = executor;
-        this.aJB = onFailureListener;
+        this.aEQ = executor;
+        this.aMM = onFailureListener;
     }
 
     public void cancel() {
-        synchronized (this.zzakd) {
-            this.aJB = null;
+        synchronized (this.zzako) {
+            this.aMM = null;
         }
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
         if (!task.isSuccessful()) {
-            synchronized (this.zzakd) {
-                if (this.aJB == null) {
+            synchronized (this.zzako) {
+                if (this.aMM == null) {
                     return;
                 }
-                this.aBG.execute(new Runnable(this) {
-                    final /* synthetic */ zzd aJC;
+                this.aEQ.execute(new Runnable(this) {
+                    final /* synthetic */ zzd aMN;
 
                     public void run() {
-                        synchronized (this.aJC.zzakd) {
-                            if (this.aJC.aJB != null) {
-                                this.aJC.aJB.onFailure(task.getException());
+                        synchronized (this.aMN.zzako) {
+                            if (this.aMN.aMM != null) {
+                                this.aMN.aMM.onFailure(task.getException());
                             }
                         }
                     }

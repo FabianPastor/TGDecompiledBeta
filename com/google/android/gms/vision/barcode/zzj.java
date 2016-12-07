@@ -8,50 +8,50 @@ import com.google.android.gms.vision.barcode.Barcode.Phone;
 
 public class zzj implements Creator<Phone> {
     static void zza(Phone phone, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, phone.versionCode);
         zzb.zzc(parcel, 2, phone.type);
         zzb.zza(parcel, 3, phone.number, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsx(parcel);
+        return zzsn(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabm(i);
+        return zzabc(i);
     }
 
-    public Phone[] zzabm(int i) {
+    public Phone[] zzabc(int i) {
         return new Phone[i];
     }
 
-    public Phone zzsx(Parcel parcel) {
+    public Phone zzsn(Parcel parcel) {
         int i = 0;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         String str = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i2 = zza.zzg(parcel, zzcp);
+                    i2 = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new Phone(i2, i, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

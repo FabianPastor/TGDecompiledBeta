@@ -15,46 +15,46 @@ import java.util.concurrent.Executors;
 
 public abstract class zzb extends Service {
     @VisibleForTesting
-    final ExecutorService aDx = Executors.newSingleThreadExecutor();
-    private int aeC;
-    private int aeD = 0;
-    MessengerCompat afZ = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
-        final /* synthetic */ zzb bhl;
+    final ExecutorService aGI = Executors.newSingleThreadExecutor();
+    private int agK;
+    private int agL = 0;
+    MessengerCompat aij = new MessengerCompat(new Handler(this, Looper.getMainLooper()) {
+        final /* synthetic */ zzb bkx;
 
         public void handleMessage(Message message) {
             int zzc = MessengerCompat.zzc(message);
-            zzf.zzdj(this.bhl);
-            this.bhl.getPackageManager();
-            if (zzc == zzf.agl || zzc == zzf.agk) {
-                this.bhl.zzm((Intent) message.obj);
+            zzf.zzdg(this.bkx);
+            this.bkx.getPackageManager();
+            if (zzc == zzf.aiv || zzc == zzf.aiu) {
+                this.bkx.zzm((Intent) message.obj);
                 return;
             }
-            int i = zzf.agk;
-            Log.w("FirebaseInstanceId", "Message from unexpected caller " + zzc + " mine=" + i + " appid=" + zzf.agl);
+            int i = zzf.aiu;
+            Log.w("FirebaseInstanceId", "Message from unexpected caller " + zzc + " mine=" + i + " appid=" + zzf.aiv);
         }
     });
-    private final Object zzakd = new Object();
+    private final Object zzako = new Object();
 
     private void zzaf(Intent intent) {
         if (intent != null) {
             WakefulBroadcastReceiver.completeWakefulIntent(intent);
         }
-        synchronized (this.zzakd) {
-            this.aeD--;
-            if (this.aeD == 0) {
-                zztk(this.aeC);
+        synchronized (this.zzako) {
+            this.agL--;
+            if (this.agL == 0) {
+                zztl(this.agK);
             }
         }
     }
 
     public final IBinder onBind(Intent intent) {
-        return (intent == null || !"com.google.firebase.INSTANCE_ID_EVENT".equals(intent.getAction())) ? null : this.afZ.getBinder();
+        return (intent == null || !"com.google.firebase.INSTANCE_ID_EVENT".equals(intent.getAction())) ? null : this.aij.getBinder();
     }
 
     public final int onStartCommand(final Intent intent, int i, int i2) {
-        synchronized (this.zzakd) {
-            this.aeC = i2;
-            this.aeD++;
+        synchronized (this.zzako) {
+            this.agK = i2;
+            this.agL++;
         }
         final Intent zzae = zzae(intent);
         if (zzae == null) {
@@ -64,12 +64,12 @@ public abstract class zzb extends Service {
             zzaf(intent);
             return 2;
         } else {
-            this.aDx.execute(new Runnable(this) {
-                final /* synthetic */ zzb bhl;
+            this.aGI.execute(new Runnable(this) {
+                final /* synthetic */ zzb bkx;
 
                 public void run() {
-                    this.bhl.zzm(zzae);
-                    this.bhl.zzaf(intent);
+                    this.bkx.zzm(zzae);
+                    this.bkx.zzaf(intent);
                 }
             });
             return 3;
@@ -84,7 +84,7 @@ public abstract class zzb extends Service {
 
     public abstract void zzm(Intent intent);
 
-    boolean zztk(int i) {
+    boolean zztl(int i) {
         return stopSelfResult(i);
     }
 }

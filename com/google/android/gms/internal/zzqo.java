@@ -1,48 +1,76 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
-import com.google.android.gms.common.ConnectionResult;
+import android.os.DeadObjectException;
+import android.os.RemoteException;
 import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.Api.zzc;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
-import com.google.android.gms.internal.zzqc.zza;
-import java.util.Collections;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.zzaa;
 
-public class zzqo implements zzqq {
-    private final zzqr xk;
+public class zzqo {
 
-    public zzqo(zzqr com_google_android_gms_internal_zzqr) {
-        this.xk = com_google_android_gms_internal_zzqr;
+    public interface zzb<R> {
+        void setResult(R r);
+
+        void zzaa(Status status);
     }
 
-    public void begin() {
-        this.xk.zzary();
-        this.xk.wV.xX = Collections.emptySet();
-    }
+    public static abstract class zza<R extends Result, A extends com.google.android.gms.common.api.Api.zzb> extends zzqq<R> implements zzb<R> {
+        private final Api<?> vS;
+        private final zzc<A> yy;
 
-    public void connect() {
-        this.xk.zzarw();
-    }
+        @Deprecated
+        protected zza(zzc<A> com_google_android_gms_common_api_Api_zzc_A, GoogleApiClient googleApiClient) {
+            super((GoogleApiClient) zzaa.zzb((Object) googleApiClient, (Object) "GoogleApiClient must not be null"));
+            this.yy = (zzc) zzaa.zzy(com_google_android_gms_common_api_Api_zzc_A);
+            this.vS = null;
+        }
 
-    public boolean disconnect() {
-        return true;
-    }
+        protected zza(Api<?> api, GoogleApiClient googleApiClient) {
+            super((GoogleApiClient) zzaa.zzb((Object) googleApiClient, (Object) "GoogleApiClient must not be null"));
+            this.yy = api.zzaqv();
+            this.vS = api;
+        }
 
-    public void onConnected(Bundle bundle) {
-    }
+        private void zza(RemoteException remoteException) {
+            zzaa(new Status(8, remoteException.getLocalizedMessage(), null));
+        }
 
-    public void onConnectionSuspended(int i) {
-    }
+        public final Api<?> getApi() {
+            return this.vS;
+        }
 
-    public void zza(ConnectionResult connectionResult, Api<?> api, int i) {
-    }
+        public /* synthetic */ void setResult(Object obj) {
+            super.zzc((Result) obj);
+        }
 
-    public <A extends zzb, R extends Result, T extends zza<R, A>> T zzc(T t) {
-        this.xk.wV.xQ.add(t);
-        return t;
-    }
+        protected abstract void zza(A a) throws RemoteException;
 
-    public <A extends zzb, T extends zza<? extends Result, A>> T zzd(T t) {
-        throw new IllegalStateException("GoogleApiClient is not connected yet.");
+        public final void zzaa(Status status) {
+            zzaa.zzb(!status.isSuccess(), (Object) "Failed result must not be success");
+            Result zzc = zzc(status);
+            zzc(zzc);
+            zzb(zzc);
+        }
+
+        public final zzc<A> zzaqv() {
+            return this.yy;
+        }
+
+        public final void zzb(A a) throws DeadObjectException {
+            try {
+                zza((com.google.android.gms.common.api.Api.zzb) a);
+            } catch (RemoteException e) {
+                zza(e);
+                throw e;
+            } catch (RemoteException e2) {
+                zza(e2);
+            }
+        }
+
+        protected void zzb(R r) {
+        }
     }
 }

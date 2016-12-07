@@ -9,8 +9,8 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class AuthAccountResult extends AbstractSafeParcelable implements Result {
     public static final Creator<AuthAccountResult> CREATOR = new zza();
-    private int aAf;
-    private Intent aAg;
+    private int aDq;
+    private Intent aDr;
     final int mVersionCode;
 
     public AuthAccountResult() {
@@ -19,8 +19,8 @@ public class AuthAccountResult extends AbstractSafeParcelable implements Result 
 
     AuthAccountResult(int i, int i2, Intent intent) {
         this.mVersionCode = i;
-        this.aAf = i2;
-        this.aAg = intent;
+        this.aDq = i2;
+        this.aDr = intent;
     }
 
     public AuthAccountResult(int i, Intent intent) {
@@ -28,18 +28,18 @@ public class AuthAccountResult extends AbstractSafeParcelable implements Result 
     }
 
     public Status getStatus() {
-        return this.aAf == 0 ? Status.vY : Status.wc;
+        return this.aDq == 0 ? Status.xZ : Status.yd;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zza.zza(this, parcel, i);
     }
 
-    public int zzcdg() {
-        return this.aAf;
+    public int zzcdi() {
+        return this.aDq;
     }
 
-    public Intent zzcdh() {
-        return this.aAg;
+    public Intent zzcdj() {
+        return this.aDr;
     }
 }

@@ -1,12 +1,13 @@
 package com.google.android.gms.vision.internal.client;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.vision.Frame;
 
 public class FrameMetadataParcel extends AbstractSafeParcelable {
-    public static final zzb CREATOR = new zzb();
-    public long aLt;
+    public static final Creator<FrameMetadataParcel> CREATOR = new zzb();
+    public long aOE;
     public int height;
     public int id;
     public int rotation;
@@ -22,7 +23,7 @@ public class FrameMetadataParcel extends AbstractSafeParcelable {
         this.width = i2;
         this.height = i3;
         this.id = i4;
-        this.aLt = j;
+        this.aOE = j;
         this.rotation = i5;
     }
 
@@ -32,12 +33,11 @@ public class FrameMetadataParcel extends AbstractSafeParcelable {
         frameMetadataParcel.height = frame.getMetadata().getHeight();
         frameMetadataParcel.rotation = frame.getMetadata().getRotation();
         frameMetadataParcel.id = frame.getMetadata().getId();
-        frameMetadataParcel.aLt = frame.getMetadata().getTimestampMillis();
+        frameMetadataParcel.aOE = frame.getMetadata().getTimestampMillis();
         return frameMetadataParcel;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzb com_google_android_gms_vision_internal_client_zzb = CREATOR;
         zzb.zza(this, parcel, i);
     }
 }

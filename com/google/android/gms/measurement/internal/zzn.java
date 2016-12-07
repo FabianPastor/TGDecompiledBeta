@@ -4,27 +4,21 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.support.annotation.WorkerThread;
 import android.support.v4.os.EnvironmentCompat;
 import android.text.TextUtils;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.util.zze;
-import com.google.android.gms.internal.zzqw;
-import java.io.ByteArrayInputStream;
-import java.security.MessageDigest;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import javax.security.auth.x500.X500Principal;
+import com.google.android.gms.internal.zzrk;
 
 public class zzn extends zzaa {
-    private static final X500Principal apj = new X500Principal("CN=Android Debug,O=Android,C=US");
-    private String F;
-    private String G;
-    private String anD;
-    private String anw;
-    private int apk;
-    private long apl;
-    private String zzcpe;
+    private String aqF;
+    private String aqM;
+    private int asv;
+    private long asw;
+    private String bN;
+    private String bO;
+    private String zzctj;
 
     zzn(zzx com_google_android_gms_measurement_internal_zzx) {
         super(com_google_android_gms_measurement_internal_zzx);
@@ -34,130 +28,136 @@ public class zzn extends zzaa {
         return super.getContext();
     }
 
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
+    String zzaaf() {
+        zzacj();
+        return this.bO;
     }
 
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    String zzbsr() {
-        zzaax();
-        return this.anw;
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
-    String zzbsx() {
-        zzaax();
-        return this.anD;
+    String zzbth() {
+        zzacj();
+        return this.aqF;
     }
 
-    long zzbsy() {
-        return zzbvi().zzbsy();
+    String zzbtn() {
+        zzacj();
+        return this.aqM;
     }
 
-    long zzbsz() {
-        zzaax();
-        return this.apl;
+    long zzbto() {
+        return zzbwd().zzbto();
     }
 
-    public /* bridge */ /* synthetic */ void zzbuv() {
-        super.zzbuv();
-    }
-
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
-    }
-
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
-    }
-
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
-    }
-
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
-    }
-
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
-    }
-
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
-    }
-
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
-    }
-
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
-    }
-
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
-    }
-
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
-    }
-
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
-    }
-
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
-    }
-
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
-    }
-
-    int zzbwa() {
-        zzaax();
-        return this.apk;
-    }
-
-    boolean zzbwb() {
-        try {
-            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 64);
-            if (!(packageInfo == null || packageInfo.signatures == null || packageInfo.signatures.length <= 0)) {
-                return ((X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(packageInfo.signatures[0].toByteArray()))).getSubjectX500Principal().equals(apj);
-            }
-        } catch (CertificateException e) {
-            zzbvg().zzbwc().zzj("Error obtaining certificate", e);
-        } catch (NameNotFoundException e2) {
-            zzbvg().zzbwc().zzj("Package name not found", e2);
+    @WorkerThread
+    long zzbtp() {
+        zzacj();
+        zzzx();
+        if (this.asw == 0) {
+            this.asw = this.aqw.zzbvx().zzad(getContext(), getContext().getPackageName());
         }
-        return true;
+        return this.asw;
     }
 
-    protected void zzdr(Status status) {
+    public /* bridge */ /* synthetic */ void zzbvo() {
+        super.zzbvo();
+    }
+
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
+    }
+
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
+    }
+
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
+    }
+
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
+    }
+
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
+    }
+
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
+    }
+
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
+    }
+
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
+    }
+
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
+    }
+
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
+    }
+
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
+    }
+
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
+    }
+
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
+    }
+
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
+    }
+
+    int zzbwx() {
+        zzacj();
+        return this.asv;
+    }
+
+    protected void zzdw(Status status) {
         if (status == null) {
-            zzbvg().zzbwc().log("GoogleService failed to initialize (no status)");
+            zzbwb().zzbwy().log("GoogleService failed to initialize (no status)");
         } else {
-            zzbvg().zzbwc().zze("GoogleService failed to initialize, status", Integer.valueOf(status.getStatusCode()), status.getStatusMessage());
+            zzbwb().zzbwy().zze("GoogleService failed to initialize, status", Integer.valueOf(status.getStatusCode()), status.getStatusMessage());
         }
     }
 
+    @WorkerThread
     AppMetadata zzmi(String str) {
-        return new AppMetadata(zzti(), zzbsr(), zzyt(), (long) zzbwa(), zzbsx(), zzbsy(), zzbsz(), str, this.anq.isEnabled(), !zzbvh().aqe, zzbvh().zzbst());
+        zzzx();
+        return new AppMetadata(zzup(), zzbth(), zzaaf(), (long) zzbwx(), zzbtn(), zzbto(), zzbtp(), str, this.aqw.isEnabled(), !zzbwc().atn, zzbwc().zzbtj());
     }
 
-    String zzti() {
-        zzaax();
-        return this.zzcpe;
+    String zzup() {
+        zzacj();
+        return this.zzctj;
     }
 
-    public /* bridge */ /* synthetic */ void zzyl() {
-        super.zzyl();
+    public /* bridge */ /* synthetic */ void zzzx() {
+        super.zzzx();
     }
 
-    protected void zzym() {
+    protected void zzzy() {
         String str = EnvironmentCompat.MEDIA_UNKNOWN;
         String str2 = "Unknown";
         int i = Integer.MIN_VALUE;
@@ -165,9 +165,13 @@ public class zzn extends zzaa {
         String packageName = getContext().getPackageName();
         PackageManager packageManager = getContext().getPackageManager();
         if (packageManager == null) {
-            zzbvg().zzbwc().log("PackageManager is null, app identity information might be inaccurate");
+            zzbwb().zzbwy().log("PackageManager is null, app identity information might be inaccurate");
         } else {
-            str = packageManager.getInstallerPackageName(packageName);
+            try {
+                str = packageManager.getInstallerPackageName(packageName);
+            } catch (IllegalArgumentException e) {
+                zzbwb().zzbwy().zzj("Error retrieving app installer package name", packageName);
+            }
             if (str == null) {
                 str = "manual_install";
             } else if ("com.android.vending".equals(str)) {
@@ -183,74 +187,53 @@ public class zzn extends zzaa {
                     str2 = packageInfo.versionName;
                     i = packageInfo.versionCode;
                 }
-            } catch (NameNotFoundException e) {
-                zzbvg().zzbwc().zzj("Error retrieving package info: appName", str3);
-            }
-        }
-        this.zzcpe = packageName;
-        this.anD = str;
-        this.G = str2;
-        this.apk = i;
-        this.F = str3;
-        this.apl = 0;
-        MessageDigest zzfi = zzal.zzfi("MD5");
-        if (zzfi == null) {
-            zzbvg().zzbwc().log("Could not get MD5 instance");
-            this.apl = -1;
-        } else if (packageManager != null) {
-            try {
-                if (!zzbwb()) {
-                    PackageInfo packageInfo2 = packageManager.getPackageInfo(getContext().getPackageName(), 64);
-                    if (packageInfo2.signatures != null && packageInfo2.signatures.length > 0) {
-                        this.apl = zzal.zzx(zzfi.digest(packageInfo2.signatures[0].toByteArray()));
-                    }
-                }
             } catch (NameNotFoundException e2) {
-                zzbvg().zzbwc().zzj("Package name not found", e2);
+                zzbwb().zzbwy().zzj("Error retrieving package info: appName", str3);
             }
         }
-        Status zzb = zzbvi().zzact() ? zzqw.zzb(getContext(), "-", true) : zzqw.zzcb(getContext());
-        boolean z = zzb != null && zzb.isSuccess();
-        if (!z) {
-            zzdr(zzb);
+        this.zzctj = packageName;
+        this.aqM = str;
+        this.bO = str2;
+        this.asv = i;
+        this.bN = str3;
+        zzbwd().zzayi();
+        Status zzby = zzrk.zzby(getContext());
+        Object obj = (zzby == null || !zzby.isSuccess()) ? null : 1;
+        if (obj == null) {
+            zzdw(zzby);
         }
-        if (z) {
-            Boolean zzbud = zzbvi().zzbud();
-            if (zzbvi().zzbuc()) {
-                zzbvg().zzbwh().log("Collection disabled with firebase_analytics_collection_deactivated=1");
-                z = false;
-            } else if (zzbud != null && !zzbud.booleanValue()) {
-                zzbvg().zzbwh().log("Collection disabled with firebase_analytics_collection_enabled=0");
-                z = false;
-            } else if (zzbud == null && zzbvi().zzasm()) {
-                zzbvg().zzbwh().log("Collection disabled with google_app_measurement_enable=0");
-                z = false;
+        if (obj != null) {
+            Boolean zzbuu = zzbwd().zzbuu();
+            if (zzbwd().zzbut()) {
+                zzbwb().zzbxc().log("Collection disabled with firebase_analytics_collection_deactivated=1");
+                obj = null;
+            } else if (zzbuu != null && !zzbuu.booleanValue()) {
+                zzbwb().zzbxc().log("Collection disabled with firebase_analytics_collection_enabled=0");
+                obj = null;
+            } else if (zzbuu == null && zzbwd().zzatu()) {
+                zzbwb().zzbxc().log("Collection disabled with google_app_measurement_enable=0");
+                obj = null;
             } else {
-                zzbvg().zzbwj().log("Collection enabled");
-                z = true;
+                zzbwb().zzbxe().log("Collection enabled");
+                int i2 = 1;
             }
         } else {
-            z = false;
+            obj = null;
         }
-        this.anw = "";
-        if (!zzbvi().zzact()) {
+        this.aqF = "";
+        if (!zzbwd().zzayi()) {
             try {
-                String zzasl = zzqw.zzasl();
-                if (TextUtils.isEmpty(zzasl)) {
-                    zzasl = "";
+                String zzatt = zzrk.zzatt();
+                if (TextUtils.isEmpty(zzatt)) {
+                    zzatt = "";
                 }
-                this.anw = zzasl;
-                if (z) {
-                    zzbvg().zzbwj().zze("App package, google app id", this.zzcpe, this.anw);
+                this.aqF = zzatt;
+                if (obj != null) {
+                    zzbwb().zzbxe().zze("App package, google app id", this.zzctj, this.aqF);
                 }
             } catch (IllegalStateException e3) {
-                zzbvg().zzbwc().zzj("getGoogleAppId or isMeasurementEnabled failed with exception", e3);
+                zzbwb().zzbwy().zzj("getGoogleAppId or isMeasurementEnabled failed with exception", e3);
             }
         }
-    }
-
-    String zzyt() {
-        zzaax();
-        return this.G;
     }
 }

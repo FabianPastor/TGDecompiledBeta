@@ -15,14 +15,14 @@ public interface zzc extends IInterface {
     public static abstract class zza extends Binder implements zzc {
 
         private static class zza implements zzc {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public Barcode[] zza(zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel) throws RemoteException {
@@ -37,7 +37,7 @@ public interface zzc extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     Barcode[] barcodeArr = (Barcode[]) obtain2.createTypedArray(Barcode.CREATOR);
                     return barcodeArr;
@@ -59,7 +59,7 @@ public interface zzc extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     Barcode[] barcodeArr = (Barcode[]) obtain2.createTypedArray(Barcode.CREATOR);
                     return barcodeArr;
@@ -69,12 +69,12 @@ public interface zzc extends IInterface {
                 }
             }
 
-            public void zzclr() throws RemoteException {
+            public void zzclq() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -83,7 +83,7 @@ public interface zzc extends IInterface {
             }
         }
 
-        public static zzc zzlj(IBinder iBinder) {
+        public static zzc zzle(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -93,32 +93,32 @@ public interface zzc extends IInterface {
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             FrameMetadataParcel frameMetadataParcel = null;
-            zzd zzfe;
+            zzd zzfd;
             Parcelable[] zza;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
-                    zzfe = com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder());
+                    zzfd = com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder());
                     if (parcel.readInt() != 0) {
                         frameMetadataParcel = (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel);
                     }
-                    zza = zza(zzfe, frameMetadataParcel);
+                    zza = zza(zzfd, frameMetadataParcel);
                     parcel2.writeNoException();
                     parcel2.writeTypedArray(zza, 1);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
-                    zzfe = com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder());
+                    zzfd = com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder());
                     if (parcel.readInt() != 0) {
                         frameMetadataParcel = (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel);
                     }
-                    zza = zzb(zzfe, frameMetadataParcel);
+                    zza = zzb(zzfd, frameMetadataParcel);
                     parcel2.writeNoException();
                     parcel2.writeTypedArray(zza, 1);
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetector");
-                    zzclr();
+                    zzclq();
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -134,5 +134,5 @@ public interface zzc extends IInterface {
 
     Barcode[] zzb(zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel) throws RemoteException;
 
-    void zzclr() throws RemoteException;
+    void zzclq() throws RemoteException;
 }

@@ -25,7 +25,7 @@ import org.json.JSONException;
 import org.telegram.messenger.exoplayer.C;
 
 class zza {
-    static zza aeG;
+    static zza agO;
     private final Context mContext;
 
     private class zza extends IllegalArgumentException {
@@ -130,25 +130,25 @@ class zza {
                 intent.removeExtra(str);
             }
         }
-        return PendingIntent.getActivity(this.mContext, zzbnz(), intent, C.ENCODING_PCM_32BIT);
+        return PendingIntent.getActivity(this.mContext, zzbnr(), intent, C.ENCODING_PCM_32BIT);
     }
 
-    private int zzbnz() {
+    private int zzbnr() {
         return (int) SystemClock.uptimeMillis();
     }
 
-    static synchronized zza zzdc(Context context) {
+    static synchronized zza zzcz(Context context) {
         zza com_google_android_gms_gcm_zza;
         synchronized (zza.class) {
-            if (aeG == null) {
-                aeG = new zza(context);
+            if (agO == null) {
+                agO = new zza(context);
             }
-            com_google_android_gms_gcm_zza = aeG;
+            com_google_android_gms_gcm_zza = agO;
         }
         return com_google_android_gms_gcm_zza;
     }
 
-    static boolean zzdd(Context context) {
+    static boolean zzda(Context context) {
         if (((KeyguardManager) context.getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             return false;
         }

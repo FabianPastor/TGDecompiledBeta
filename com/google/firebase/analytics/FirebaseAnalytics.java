@@ -1,16 +1,18 @@
 package com.google.firebase.analytics;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.measurement.internal.zzx;
 
 public final class FirebaseAnalytics {
-    private final zzx anq;
+    private final zzx aqw;
 
     public static class Event {
         public static final String ADD_PAYMENT_INFO = "add_payment_info";
@@ -88,36 +90,41 @@ public final class FirebaseAnalytics {
     }
 
     public FirebaseAnalytics(zzx com_google_android_gms_measurement_internal_zzx) {
-        zzac.zzy(com_google_android_gms_measurement_internal_zzx);
-        this.anq = com_google_android_gms_measurement_internal_zzx;
+        zzaa.zzy(com_google_android_gms_measurement_internal_zzx);
+        this.aqw = com_google_android_gms_measurement_internal_zzx;
     }
 
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     public static FirebaseAnalytics getInstance(Context context) {
-        return zzx.zzdt(context).zzbwz();
+        return zzx.zzdq(context).zzbxu();
     }
 
     public void logEvent(@Size(max = 32, min = 1) @NonNull String str, Bundle bundle) {
-        this.anq.zzbwy().logEvent(str, bundle);
+        this.aqw.zzbxt().logEvent(str, bundle);
     }
 
     public void setAnalyticsCollectionEnabled(boolean z) {
-        this.anq.zzbwy().setMeasurementEnabled(z);
+        this.aqw.zzbxt().setMeasurementEnabled(z);
+    }
+
+    @MainThread
+    public void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
+        this.aqw.zzbvu().setCurrentScreen(activity, str, str2);
     }
 
     public void setMinimumSessionDuration(long j) {
-        this.anq.zzbwy().setMinimumSessionDuration(j);
+        this.aqw.zzbxt().setMinimumSessionDuration(j);
     }
 
     public void setSessionTimeoutDuration(long j) {
-        this.anq.zzbwy().setSessionTimeoutDuration(j);
+        this.aqw.zzbxt().setSessionTimeoutDuration(j);
     }
 
     public void setUserId(String str) {
-        this.anq.zzbwy().setUserId(str);
+        this.aqw.zzbxt().setUserId(str);
     }
 
     public void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
-        this.anq.zzbwy().setUserProperty(str, str2);
+        this.aqw.zzbxt().setUserProperty(str, str2);
     }
 }

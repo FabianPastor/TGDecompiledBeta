@@ -1,11 +1,12 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public final class LatLng extends AbstractSafeParcelable implements ReflectedParcelable {
-    public static final zze CREATOR = new zze();
+    public static final Creator<LatLng> CREATOR = new zze();
     public final double latitude;
     public final double longitude;
     private final int mVersionCode;

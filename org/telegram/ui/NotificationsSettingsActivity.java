@@ -568,13 +568,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         String path;
                         if (i == NotificationsSettingsActivity.this.messageSoundRow) {
                             path = preferences.getString("GlobalSoundPath", defaultPath);
-                            if (!(path == null || path.equals("NoSound"))) {
-                                currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                            if (path != null) {
+                                if (!path.equals("NoSound")) {
+                                    currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                                }
                             }
                         } else if (i == NotificationsSettingsActivity.this.groupSoundRow) {
                             path = preferences.getString("GroupSoundPath", defaultPath);
-                            if (!(path == null || path.equals("NoSound"))) {
-                                currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                            if (path != null) {
+                                if (!path.equals("NoSound")) {
+                                    currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
+                                }
                             }
                         }
                         intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
@@ -700,7 +704,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 } else if (i == NotificationsSettingsActivity.this.messagePopupNotificationRow || i == NotificationsSettingsActivity.this.groupPopupNotificationRow) {
                     if (NotificationsSettingsActivity.this.getParentActivity() != null) {
-                        NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPopupSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), i == NotificationsSettingsActivity.this.groupPopupNotificationRow, i == NotificationsSettingsActivity.this.messagePopupNotificationRow, new Runnable() {
+                        NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPopupSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, i == NotificationsSettingsActivity.this.groupPopupNotificationRow, i == NotificationsSettingsActivity.this.messagePopupNotificationRow, new Runnable() {
                             public void run() {
                                 if (NotificationsSettingsActivity.this.listView != null) {
                                     NotificationsSettingsActivity.this.listView.invalidateViews();
@@ -711,7 +715,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         return;
                     }
                 } else if (i == NotificationsSettingsActivity.this.messageVibrateRow || i == NotificationsSettingsActivity.this.groupVibrateRow) {
-                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), 0, i == NotificationsSettingsActivity.this.groupVibrateRow, i == NotificationsSettingsActivity.this.messageVibrateRow, new Runnable() {
+                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, i == NotificationsSettingsActivity.this.groupVibrateRow, i == NotificationsSettingsActivity.this.messageVibrateRow, new Runnable() {
                         public void run() {
                             if (NotificationsSettingsActivity.this.listView != null) {
                                 NotificationsSettingsActivity.this.listView.invalidateViews();
@@ -719,7 +723,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         }
                     }));
                 } else if (i == NotificationsSettingsActivity.this.messagePriorityRow || i == NotificationsSettingsActivity.this.groupPriorityRow) {
-                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(NotificationsSettingsActivity.this.getParentActivity(), 0, i == NotificationsSettingsActivity.this.groupPriorityRow, i == NotificationsSettingsActivity.this.messagePriorityRow, new Runnable() {
+                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, i == NotificationsSettingsActivity.this.groupPriorityRow, i == NotificationsSettingsActivity.this.messagePriorityRow, new Runnable() {
                         public void run() {
                             if (NotificationsSettingsActivity.this.listView != null) {
                                 NotificationsSettingsActivity.this.listView.invalidateViews();

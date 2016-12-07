@@ -4,141 +4,147 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.common.util.zze;
 
 public class zzai extends zzaa {
-    private final zzf ass;
-    private boolean cc;
-    private final AlarmManager cd = ((AlarmManager) getContext().getSystemService("alarm"));
+    private final zzf avR;
+    private boolean ej;
+    private final AlarmManager ek = ((AlarmManager) getContext().getSystemService("alarm"));
 
     protected zzai(zzx com_google_android_gms_measurement_internal_zzx) {
         super(com_google_android_gms_measurement_internal_zzx);
-        this.ass = new zzf(this, com_google_android_gms_measurement_internal_zzx) {
-            final /* synthetic */ zzai ast;
+        this.avR = new zzf(this, com_google_android_gms_measurement_internal_zzx) {
+            final /* synthetic */ zzai avS;
 
             public void run() {
-                this.ast.zzbyl();
+                this.avS.zzbzg();
             }
         };
     }
 
-    private PendingIntent zzaee() {
+    private PendingIntent zzafo() {
         Intent intent = new Intent();
         Context context = getContext();
-        String str = (!zzbvi().zzact() || this.anq.zzbxg()) ? "com.google.android.gms.measurement.AppMeasurementReceiver" : "com.google.android.gms.measurement.PackageMeasurementReceiver";
-        Intent className = intent.setClassName(context, str);
-        className.setAction("com.google.android.gms.measurement.UPLOAD");
-        return PendingIntent.getBroadcast(getContext(), 0, className, 0);
+        zzbwd().zzayi();
+        intent = intent.setClassName(context, "com.google.android.gms.measurement.AppMeasurementReceiver");
+        intent.setAction("com.google.android.gms.measurement.UPLOAD");
+        return PendingIntent.getBroadcast(getContext(), 0, intent, 0);
     }
 
-    private void zzbyl() {
+    private void zzbzg() {
         Intent intent = new Intent();
         Context context = getContext();
-        String str = (!zzbvi().zzact() || this.anq.zzbxg()) ? "com.google.android.gms.measurement.AppMeasurementReceiver" : "com.google.android.gms.measurement.PackageMeasurementReceiver";
-        Intent className = intent.setClassName(context, str);
-        className.setAction("com.google.android.gms.measurement.UPLOAD");
-        getContext().sendBroadcast(className);
+        zzbwd().zzayi();
+        intent = intent.setClassName(context, "com.google.android.gms.measurement.AppMeasurementReceiver");
+        intent.setAction("com.google.android.gms.measurement.UPLOAD");
+        getContext().sendBroadcast(intent);
     }
 
     public void cancel() {
-        zzaax();
-        this.cc = false;
-        this.cd.cancel(zzaee());
-        this.ass.cancel();
+        zzacj();
+        this.ej = false;
+        this.ek.cancel(zzafo());
+        this.avR.cancel();
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
         return super.getContext();
     }
 
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
-    public /* bridge */ /* synthetic */ void zzbuv() {
-        super.zzbuv();
+    public /* bridge */ /* synthetic */ void zzbvo() {
+        super.zzbvo();
     }
 
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
     }
 
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
     }
 
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
     }
 
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
     }
 
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
     }
 
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
     }
 
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
     }
 
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
     }
 
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
     }
 
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
     }
 
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
     }
 
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
     }
 
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
+    }
+
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
     }
 
     public void zzx(long j) {
-        boolean z = false;
-        zzaax();
-        boolean z2 = zzbvi().zzact() || zzu.zzh(getContext(), false);
-        zzac.zza(z2, (Object) "Receiver not registered/enabled");
-        if (zzbvi().zzact() || zzae.zzi(getContext(), false)) {
-            z = true;
+        zzacj();
+        if (!(zzbwd().zzayi() || zzu.zzh(getContext(), false))) {
+            zzbwb().zzbxd().log("Receiver not registered/enabled");
         }
-        zzac.zza(z, (Object) "Service not registered/enabled");
+        if (!(zzbwd().zzayi() || zzaf.zzi(getContext(), false))) {
+            zzbwb().zzbxd().log("Service not registered/enabled");
+        }
         cancel();
-        long elapsedRealtime = zzaan().elapsedRealtime() + j;
-        this.cc = true;
-        if (j < zzbvi().zzbup() && !this.ass.zzfl()) {
-            this.ass.zzx(j);
+        long elapsedRealtime = zzabz().elapsedRealtime() + j;
+        this.ej = true;
+        if (j < zzbwd().zzbvi() && !this.avR.zzfy()) {
+            this.avR.zzx(j);
         }
-        this.cd.setInexactRepeating(2, elapsedRealtime, Math.max(zzbvi().zzbuq(), j), zzaee());
+        this.ek.setInexactRepeating(2, elapsedRealtime, Math.max(zzbwd().zzbvj(), j), zzafo());
     }
 
-    public /* bridge */ /* synthetic */ void zzyl() {
-        super.zzyl();
+    public /* bridge */ /* synthetic */ void zzzx() {
+        super.zzzx();
     }
 
-    protected void zzym() {
-        this.cd.cancel(zzaee());
+    protected void zzzy() {
+        this.ek.cancel(zzafo());
     }
 }

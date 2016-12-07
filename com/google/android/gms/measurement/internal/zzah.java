@@ -1,26 +1,26 @@
 package com.google.android.gms.measurement.internal;
 
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.util.zze;
 
 class zzah {
-    private final zze zzapy;
-    private long zzbtl;
+    private final zze zzaql;
+    private long zzbwt;
 
     public zzah(zze com_google_android_gms_common_util_zze) {
-        zzac.zzy(com_google_android_gms_common_util_zze);
-        this.zzapy = com_google_android_gms_common_util_zze;
+        zzaa.zzy(com_google_android_gms_common_util_zze);
+        this.zzaql = com_google_android_gms_common_util_zze;
     }
 
     public void clear() {
-        this.zzbtl = 0;
+        this.zzbwt = 0;
     }
 
     public void start() {
-        this.zzbtl = this.zzapy.elapsedRealtime();
+        this.zzbwt = this.zzaql.elapsedRealtime();
     }
 
     public boolean zzz(long j) {
-        return this.zzbtl == 0 || this.zzapy.elapsedRealtime() - this.zzbtl >= j;
+        return this.zzbwt == 0 || this.zzaql.elapsedRealtime() - this.zzbwt >= j;
     }
 }

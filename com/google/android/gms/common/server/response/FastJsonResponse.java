@@ -2,8 +2,8 @@ package com.google.android.gms.common.server.response;
 
 import android.os.Parcel;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzz;
 import com.google.android.gms.common.server.converter.ConverterWrapper;
 import com.google.android.gms.common.util.zzc;
 import com.google.android.gms.common.util.zzp;
@@ -16,67 +16,63 @@ public abstract class FastJsonResponse {
 
     public interface zza<I, O> {
         I convertBack(O o);
-
-        int zzavq();
-
-        int zzavr();
     }
 
     public static class Field<I, O> extends AbstractSafeParcelable {
         public static final zza CREATOR = new zza();
-        protected final String DA;
-        private FieldMappingDictionary DB;
-        private zza<I, O> DC;
-        protected final int Dt;
-        protected final boolean Du;
-        protected final int Dv;
-        protected final boolean Dw;
-        protected final String Dx;
-        protected final int Dy;
-        protected final Class<? extends FastJsonResponse> Dz;
+        protected final int Fg;
+        protected final boolean Fh;
+        protected final int Fi;
+        protected final boolean Fj;
+        protected final String Fk;
+        protected final int Fl;
+        protected final Class<? extends FastJsonResponse> Fm;
+        protected final String Fn;
+        private FieldMappingDictionary Fo;
+        private zza<I, O> Fp;
         private final int mVersionCode;
 
         Field(int i, int i2, boolean z, int i3, boolean z2, String str, int i4, String str2, ConverterWrapper converterWrapper) {
             this.mVersionCode = i;
-            this.Dt = i2;
-            this.Du = z;
-            this.Dv = i3;
-            this.Dw = z2;
-            this.Dx = str;
-            this.Dy = i4;
+            this.Fg = i2;
+            this.Fh = z;
+            this.Fi = i3;
+            this.Fj = z2;
+            this.Fk = str;
+            this.Fl = i4;
             if (str2 == null) {
-                this.Dz = null;
-                this.DA = null;
+                this.Fm = null;
+                this.Fn = null;
             } else {
-                this.Dz = SafeParcelResponse.class;
-                this.DA = str2;
+                this.Fm = SafeParcelResponse.class;
+                this.Fn = str2;
             }
             if (converterWrapper == null) {
-                this.DC = null;
+                this.Fp = null;
             } else {
-                this.DC = converterWrapper.zzavo();
+                this.Fp = converterWrapper.zzawx();
             }
         }
 
         protected Field(int i, boolean z, int i2, boolean z2, String str, int i3, Class<? extends FastJsonResponse> cls, zza<I, O> com_google_android_gms_common_server_response_FastJsonResponse_zza_I__O) {
             this.mVersionCode = 1;
-            this.Dt = i;
-            this.Du = z;
-            this.Dv = i2;
-            this.Dw = z2;
-            this.Dx = str;
-            this.Dy = i3;
-            this.Dz = cls;
+            this.Fg = i;
+            this.Fh = z;
+            this.Fi = i2;
+            this.Fj = z2;
+            this.Fk = str;
+            this.Fl = i3;
+            this.Fm = cls;
             if (cls == null) {
-                this.DA = null;
+                this.Fn = null;
             } else {
-                this.DA = cls.getCanonicalName();
+                this.Fn = cls.getCanonicalName();
             }
-            this.DC = com_google_android_gms_common_server_response_FastJsonResponse_zza_I__O;
+            this.Fp = com_google_android_gms_common_server_response_FastJsonResponse_zza_I__O;
         }
 
         public static Field zza(String str, int i, zza<?, ?> com_google_android_gms_common_server_response_FastJsonResponse_zza___, boolean z) {
-            return new Field(com_google_android_gms_common_server_response_FastJsonResponse_zza___.zzavq(), z, com_google_android_gms_common_server_response_FastJsonResponse_zza___.zzavr(), false, str, i, null, com_google_android_gms_common_server_response_FastJsonResponse_zza___);
+            return new Field(7, z, 0, false, str, i, null, com_google_android_gms_common_server_response_FastJsonResponse_zza___);
         }
 
         public static <T extends FastJsonResponse> Field<T, T> zza(String str, int i, Class<T> cls) {
@@ -100,7 +96,7 @@ public abstract class FastJsonResponse {
         }
 
         public I convertBack(O o) {
-            return this.DC.convertBack(o);
+            return this.Fp.convertBack(o);
         }
 
         public int getVersionCode() {
@@ -108,77 +104,76 @@ public abstract class FastJsonResponse {
         }
 
         public String toString() {
-            com.google.android.gms.common.internal.zzab.zza zzg = zzab.zzx(this).zzg("versionCode", Integer.valueOf(this.mVersionCode)).zzg("typeIn", Integer.valueOf(this.Dt)).zzg("typeInArray", Boolean.valueOf(this.Du)).zzg("typeOut", Integer.valueOf(this.Dv)).zzg("typeOutArray", Boolean.valueOf(this.Dw)).zzg("outputFieldName", this.Dx).zzg("safeParcelFieldId", Integer.valueOf(this.Dy)).zzg("concreteTypeName", zzawa());
-            Class zzavz = zzavz();
-            if (zzavz != null) {
-                zzg.zzg("concreteType.class", zzavz.getCanonicalName());
+            com.google.android.gms.common.internal.zzz.zza zzg = zzz.zzx(this).zzg("versionCode", Integer.valueOf(this.mVersionCode)).zzg("typeIn", Integer.valueOf(this.Fg)).zzg("typeInArray", Boolean.valueOf(this.Fh)).zzg("typeOut", Integer.valueOf(this.Fi)).zzg("typeOutArray", Boolean.valueOf(this.Fj)).zzg("outputFieldName", this.Fk).zzg("safeParcelFieldId", Integer.valueOf(this.Fl)).zzg("concreteTypeName", zzaxh());
+            Class zzaxg = zzaxg();
+            if (zzaxg != null) {
+                zzg.zzg("concreteType.class", zzaxg.getCanonicalName());
             }
-            if (this.DC != null) {
-                zzg.zzg("converterName", this.DC.getClass().getCanonicalName());
+            if (this.Fp != null) {
+                zzg.zzg("converterName", this.Fp.getClass().getCanonicalName());
             }
             return zzg.toString();
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zza com_google_android_gms_common_server_response_zza = CREATOR;
             zza.zza(this, parcel, i);
         }
 
         public void zza(FieldMappingDictionary fieldMappingDictionary) {
-            this.DB = fieldMappingDictionary;
+            this.Fo = fieldMappingDictionary;
         }
 
-        public int zzavq() {
-            return this.Dt;
+        public int zzaxa() {
+            return this.Fg;
         }
 
-        public int zzavr() {
-            return this.Dv;
+        public boolean zzaxb() {
+            return this.Fh;
         }
 
-        public boolean zzavv() {
-            return this.Du;
+        public int zzaxc() {
+            return this.Fi;
         }
 
-        public boolean zzavw() {
-            return this.Dw;
+        public boolean zzaxd() {
+            return this.Fj;
         }
 
-        public String zzavx() {
-            return this.Dx;
+        public String zzaxe() {
+            return this.Fk;
         }
 
-        public int zzavy() {
-            return this.Dy;
+        public int zzaxf() {
+            return this.Fl;
         }
 
-        public Class<? extends FastJsonResponse> zzavz() {
-            return this.Dz;
+        public Class<? extends FastJsonResponse> zzaxg() {
+            return this.Fm;
         }
 
-        String zzawa() {
-            return this.DA == null ? null : this.DA;
+        String zzaxh() {
+            return this.Fn == null ? null : this.Fn;
         }
 
-        public boolean zzawb() {
-            return this.DC != null;
+        public boolean zzaxi() {
+            return this.Fp != null;
         }
 
-        ConverterWrapper zzawc() {
-            return this.DC == null ? null : ConverterWrapper.zza(this.DC);
+        ConverterWrapper zzaxj() {
+            return this.Fp == null ? null : ConverterWrapper.zza(this.Fp);
         }
 
-        public Map<String, Field<?, ?>> zzawd() {
-            zzac.zzy(this.DA);
-            zzac.zzy(this.DB);
-            return this.DB.zzie(this.DA);
+        public Map<String, Field<?, ?>> zzaxk() {
+            zzaa.zzy(this.Fn);
+            zzaa.zzy(this.Fo);
+            return this.Fo.zzig(this.Fn);
         }
     }
 
     private void zza(StringBuilder stringBuilder, Field field, Object obj) {
-        if (field.zzavq() == 11) {
-            stringBuilder.append(((FastJsonResponse) field.zzavz().cast(obj)).toString());
-        } else if (field.zzavq() == 7) {
+        if (field.zzaxa() == 11) {
+            stringBuilder.append(((FastJsonResponse) field.zzaxg().cast(obj)).toString());
+        } else if (field.zzaxa() == 7) {
             stringBuilder.append("\"");
             stringBuilder.append(zzp.zzii((String) obj));
             stringBuilder.append("\"");
@@ -203,10 +198,10 @@ public abstract class FastJsonResponse {
     }
 
     public String toString() {
-        Map zzavs = zzavs();
+        Map zzawz = zzawz();
         StringBuilder stringBuilder = new StringBuilder(100);
-        for (String str : zzavs.keySet()) {
-            Field field = (Field) zzavs.get(str);
+        for (String str : zzawz.keySet()) {
+            Field field = (Field) zzawz.get(str);
             if (zza(field)) {
                 Object zza = zza(field, zzb(field));
                 if (stringBuilder.length() == 0) {
@@ -216,18 +211,18 @@ public abstract class FastJsonResponse {
                 }
                 stringBuilder.append("\"").append(str).append("\":");
                 if (zza != null) {
-                    switch (field.zzavr()) {
+                    switch (field.zzaxc()) {
                         case 8:
-                            stringBuilder.append("\"").append(zzc.zzp((byte[]) zza)).append("\"");
+                            stringBuilder.append("\"").append(zzc.zzq((byte[]) zza)).append("\"");
                             break;
                         case 9:
-                            stringBuilder.append("\"").append(zzc.zzq((byte[]) zza)).append("\"");
+                            stringBuilder.append("\"").append(zzc.zzr((byte[]) zza)).append("\"");
                             break;
                         case 10:
                             zzq.zza(stringBuilder, (HashMap) zza);
                             break;
                         default:
-                            if (!field.zzavv()) {
+                            if (!field.zzaxb()) {
                                 zza(stringBuilder, field, zza);
                                 break;
                             }
@@ -247,51 +242,41 @@ public abstract class FastJsonResponse {
     }
 
     protected <O, I> I zza(Field<I, O> field, Object obj) {
-        return field.DC != null ? field.convertBack(obj) : obj;
+        return field.Fp != null ? field.convertBack(obj) : obj;
     }
 
     protected boolean zza(Field field) {
-        return field.zzavr() == 11 ? field.zzavw() ? zzid(field.zzavx()) : zzic(field.zzavx()) : zzib(field.zzavx());
+        return field.zzaxc() == 11 ? field.zzaxd() ? zzif(field.zzaxe()) : zzie(field.zzaxe()) : zzid(field.zzaxe());
     }
 
-    public abstract Map<String, Field<?, ?>> zzavs();
-
-    public HashMap<String, Object> zzavt() {
-        return null;
-    }
-
-    public HashMap<String, Object> zzavu() {
-        return null;
-    }
+    public abstract Map<String, Field<?, ?>> zzawz();
 
     protected Object zzb(Field field) {
-        String zzavx = field.zzavx();
-        if (field.zzavz() == null) {
-            return zzia(field.zzavx());
+        String zzaxe = field.zzaxe();
+        if (field.zzaxg() == null) {
+            return zzic(field.zzaxe());
         }
-        zzac.zza(zzia(field.zzavx()) == null, "Concrete field shouldn't be value object: %s", field.zzavx());
-        Map zzavu = field.zzavw() ? zzavu() : zzavt();
-        if (zzavu != null) {
-            return zzavu.get(zzavx);
+        zzaa.zza(zzic(field.zzaxe()) == null, "Concrete field shouldn't be value object: %s", field.zzaxe());
+        if (field.zzaxd()) {
         }
         try {
-            char toUpperCase = Character.toUpperCase(zzavx.charAt(0));
-            String valueOf = String.valueOf(zzavx.substring(1));
+            char toUpperCase = Character.toUpperCase(zzaxe.charAt(0));
+            String valueOf = String.valueOf(zzaxe.substring(1));
             return getClass().getMethod(new StringBuilder(String.valueOf(valueOf).length() + 4).append("get").append(toUpperCase).append(valueOf).toString(), new Class[0]).invoke(this, new Object[0]);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected abstract Object zzia(String str);
+    protected abstract Object zzic(String str);
 
-    protected abstract boolean zzib(String str);
+    protected abstract boolean zzid(String str);
 
-    protected boolean zzic(String str) {
+    protected boolean zzie(String str) {
         throw new UnsupportedOperationException("Concrete types not supported");
     }
 
-    protected boolean zzid(String str) {
+    protected boolean zzif(String str) {
         throw new UnsupportedOperationException("Concrete type arrays not supported");
     }
 }

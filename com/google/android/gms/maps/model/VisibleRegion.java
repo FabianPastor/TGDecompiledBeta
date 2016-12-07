@@ -1,11 +1,12 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
+import com.google.android.gms.common.internal.zzz;
 
 public final class VisibleRegion extends AbstractSafeParcelable {
-    public static final zzq CREATOR = new zzq();
+    public static final Creator<VisibleRegion> CREATOR = new zzq();
     public final LatLng farLeft;
     public final LatLng farRight;
     public final LatLngBounds latLngBounds;
@@ -42,11 +43,11 @@ public final class VisibleRegion extends AbstractSafeParcelable {
     }
 
     public int hashCode() {
-        return zzab.hashCode(this.nearLeft, this.nearRight, this.farLeft, this.farRight, this.latLngBounds);
+        return zzz.hashCode(this.nearLeft, this.nearRight, this.farLeft, this.farRight, this.latLngBounds);
     }
 
     public String toString() {
-        return zzab.zzx(this).zzg("nearLeft", this.nearLeft).zzg("nearRight", this.nearRight).zzg("farLeft", this.farLeft).zzg("farRight", this.farRight).zzg("latLngBounds", this.latLngBounds).toString();
+        return zzz.zzx(this).zzg("nearLeft", this.nearLeft).zzg("nearRight", this.nearRight).zzg("farLeft", this.farLeft).zzg("farRight", this.farRight).zzg("latLngBounds", this.latLngBounds).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

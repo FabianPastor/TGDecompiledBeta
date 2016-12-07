@@ -17,6 +17,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.os.ParcelableCompat;
 import android.support.v4.os.ParcelableCompatCreatorCallbacks;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -131,6 +132,7 @@ public class ViewPager extends ViewGroup {
     private List<OnPageChangeListener> mOnPageChangeListeners;
     private int mPageMargin;
     private PageTransformer mPageTransformer;
+    private int mPageTransformerLayerType;
     private boolean mPopulatePending;
     private Parcelable mRestoredAdapterState = null;
     private ClassLoader mRestoredClassLoader = null;
@@ -590,6 +592,10 @@ public class ViewPager extends ViewGroup {
     }
 
     public void setPageTransformer(boolean reverseDrawingOrder, PageTransformer transformer) {
+        setPageTransformer(reverseDrawingOrder, transformer, 2);
+    }
+
+    public void setPageTransformer(boolean reverseDrawingOrder, PageTransformer transformer, int pageLayerType) {
         int i = 1;
         if (VERSION.SDK_INT >= 11) {
             boolean z;
@@ -607,6 +613,7 @@ public class ViewPager extends ViewGroup {
                     i = 2;
                 }
                 this.mDrawingOrder = i;
+                this.mPageTransformerLayerType = pageLayerType;
             } else {
                 this.mDrawingOrder = 0;
             }
@@ -686,7 +693,7 @@ public class ViewPager extends ViewGroup {
     }
 
     public void setPageMarginDrawable(@DrawableRes int resId) {
-        setPageMarginDrawable(getContext().getResources().getDrawable(resId));
+        setPageMarginDrawable(ContextCompat.getDrawable(getContext(), resId));
     }
 
     protected boolean verifyDrawable(Drawable who) {
@@ -1349,8 +1356,7 @@ public class ViewPager extends ViewGroup {
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int i;
-        int childLeft;
-        int childTop;
+        LayoutParams lp;
         int count = getChildCount();
         int width = r - l;
         int height = b - t;
@@ -1361,7 +1367,8 @@ public class ViewPager extends ViewGroup {
         int scrollX = getScrollX();
         int decorCount = 0;
         for (i = 0; i < count; i++) {
-            LayoutParams lp;
+            int childLeft;
+            int childTop;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
@@ -1640,7 +1647,7 @@ public class ViewPager extends ViewGroup {
     private void enableLayers(boolean enable) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
-            ViewCompat.setLayerType(getChildAt(i), enable ? 2 : 0, null);
+            ViewCompat.setLayerType(getChildAt(i), enable ? this.mPageTransformerLayerType : 0, null);
         }
     }
 

@@ -3,6 +3,7 @@ package com.google.android.gms.vision.barcode;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -15,7 +16,7 @@ public class Barcode extends AbstractSafeParcelable {
     public static final int CODE_39 = 2;
     public static final int CODE_93 = 4;
     public static final int CONTACT_INFO = 1;
-    public static final zzb CREATOR = new zzb();
+    public static final Creator<Barcode> CREATOR = new zzb();
     public static final int DATA_MATRIX = 16;
     public static final int DRIVER_LICENSE = 12;
     public static final int EAN_13 = 32;
@@ -51,7 +52,7 @@ public class Barcode extends AbstractSafeParcelable {
     public WiFi wifi;
 
     public static class Address extends AbstractSafeParcelable {
-        public static final zza CREATOR = new zza();
+        public static final Creator<Address> CREATOR = new zza();
         public static final int HOME = 2;
         public static final int UNKNOWN = 0;
         public static final int WORK = 1;
@@ -70,13 +71,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zza com_google_android_gms_vision_barcode_zza = CREATOR;
             zza.zza(this, parcel, i);
         }
     }
 
     public static class CalendarDateTime extends AbstractSafeParcelable {
-        public static final zzc CREATOR = new zzc();
+        public static final Creator<CalendarDateTime> CREATOR = new zzc();
         public int day;
         public int hours;
         public boolean isUtc;
@@ -104,13 +104,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzc com_google_android_gms_vision_barcode_zzc = CREATOR;
             zzc.zza(this, parcel, i);
         }
     }
 
     public static class CalendarEvent extends AbstractSafeParcelable {
-        public static final zzd CREATOR = new zzd();
+        public static final Creator<CalendarEvent> CREATOR = new zzd();
         public String description;
         public CalendarDateTime end;
         public String location;
@@ -136,13 +135,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzd com_google_android_gms_vision_barcode_zzd = CREATOR;
             zzd.zza(this, parcel, i);
         }
     }
 
     public static class ContactInfo extends AbstractSafeParcelable {
-        public static final zze CREATOR = new zze();
+        public static final Creator<ContactInfo> CREATOR = new zze();
         public Address[] addresses;
         public Email[] emails;
         public PersonName name;
@@ -168,13 +166,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zze com_google_android_gms_vision_barcode_zze = CREATOR;
             zze.zza(this, parcel, i);
         }
     }
 
     public static class DriverLicense extends AbstractSafeParcelable {
-        public static final zzf CREATOR = new zzf();
+        public static final Creator<DriverLicense> CREATOR = new zzf();
         public String addressCity;
         public String addressState;
         public String addressStreet;
@@ -214,13 +211,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzf com_google_android_gms_vision_barcode_zzf = CREATOR;
             zzf.zza(this, parcel, i);
         }
     }
 
     public static class Email extends AbstractSafeParcelable {
-        public static final zzg CREATOR = new zzg();
+        public static final Creator<Email> CREATOR = new zzg();
         public static final int HOME = 2;
         public static final int UNKNOWN = 0;
         public static final int WORK = 1;
@@ -243,13 +239,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzg com_google_android_gms_vision_barcode_zzg = CREATOR;
             zzg.zza(this, parcel, i);
         }
     }
 
     public static class GeoPoint extends AbstractSafeParcelable {
-        public static final zzh CREATOR = new zzh();
+        public static final Creator<GeoPoint> CREATOR = new zzh();
         public double lat;
         public double lng;
         final int versionCode;
@@ -265,13 +260,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzh com_google_android_gms_vision_barcode_zzh = CREATOR;
             zzh.zza(this, parcel, i);
         }
     }
 
     public static class PersonName extends AbstractSafeParcelable {
-        public static final zzi CREATOR = new zzi();
+        public static final Creator<PersonName> CREATOR = new zzi();
         public String first;
         public String formattedName;
         public String last;
@@ -297,13 +291,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzi com_google_android_gms_vision_barcode_zzi = CREATOR;
             zzi.zza(this, parcel, i);
         }
     }
 
     public static class Phone extends AbstractSafeParcelable {
-        public static final zzj CREATOR = new zzj();
+        public static final Creator<Phone> CREATOR = new zzj();
         public static final int FAX = 3;
         public static final int HOME = 2;
         public static final int MOBILE = 4;
@@ -324,13 +317,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzj com_google_android_gms_vision_barcode_zzj = CREATOR;
             zzj.zza(this, parcel, i);
         }
     }
 
     public static class Sms extends AbstractSafeParcelable {
-        public static final zzk CREATOR = new zzk();
+        public static final Creator<Sms> CREATOR = new zzk();
         public String message;
         public String phoneNumber;
         final int versionCode;
@@ -346,13 +338,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzk com_google_android_gms_vision_barcode_zzk = CREATOR;
             zzk.zza(this, parcel, i);
         }
     }
 
     public static class UrlBookmark extends AbstractSafeParcelable {
-        public static final zzl CREATOR = new zzl();
+        public static final Creator<UrlBookmark> CREATOR = new zzl();
         public String title;
         public String url;
         final int versionCode;
@@ -368,13 +359,12 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzl com_google_android_gms_vision_barcode_zzl = CREATOR;
             zzl.zza(this, parcel, i);
         }
     }
 
     public static class WiFi extends AbstractSafeParcelable {
-        public static final zzm CREATOR = new zzm();
+        public static final Creator<WiFi> CREATOR = new zzm();
         public static final int OPEN = 1;
         public static final int WEP = 3;
         public static final int WPA = 2;
@@ -395,7 +385,6 @@ public class Barcode extends AbstractSafeParcelable {
         }
 
         public void writeToParcel(Parcel parcel, int i) {
-            zzm com_google_android_gms_vision_barcode_zzm = CREATOR;
             zzm.zza(this, parcel, i);
         }
     }
@@ -437,7 +426,6 @@ public class Barcode extends AbstractSafeParcelable {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzb com_google_android_gms_vision_barcode_zzb = CREATOR;
         zzb.zza(this, parcel, i);
     }
 }

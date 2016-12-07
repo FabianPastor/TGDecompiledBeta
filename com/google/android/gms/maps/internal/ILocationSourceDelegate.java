@@ -11,10 +11,10 @@ public interface ILocationSourceDelegate extends IInterface {
     public static abstract class zza extends Binder implements ILocationSourceDelegate {
 
         private static class zza implements ILocationSourceDelegate {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public void activate(zzp com_google_android_gms_maps_internal_zzp) throws RemoteException {
@@ -23,7 +23,7 @@ public interface ILocationSourceDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ILocationSourceDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzp != null ? com_google_android_gms_maps_internal_zzp.asBinder() : null);
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -32,7 +32,7 @@ public interface ILocationSourceDelegate extends IInterface {
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void deactivate() throws RemoteException {
@@ -40,7 +40,7 @@ public interface ILocationSourceDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -53,7 +53,7 @@ public interface ILocationSourceDelegate extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.ILocationSourceDelegate");
         }
 
-        public static ILocationSourceDelegate zzhq(IBinder iBinder) {
+        public static ILocationSourceDelegate zzhu(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -69,7 +69,7 @@ public interface ILocationSourceDelegate extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.ILocationSourceDelegate");
-                    activate(com.google.android.gms.maps.internal.zzp.zza.zzie(parcel.readStrongBinder()));
+                    activate(com.google.android.gms.maps.internal.zzp.zza.zzii(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 2:

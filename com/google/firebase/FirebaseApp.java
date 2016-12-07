@@ -9,17 +9,18 @@ import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzx;
 import com.google.android.gms.common.internal.zzz;
 import com.google.android.gms.common.util.zzs;
 import com.google.android.gms.common.util.zzt;
-import com.google.android.gms.internal.zzamz;
-import com.google.android.gms.internal.zzana;
-import com.google.android.gms.internal.zzanb;
-import com.google.android.gms.internal.zzanc;
+import com.google.android.gms.internal.zzanq;
+import com.google.android.gms.internal.zzanr;
+import com.google.android.gms.internal.zzans;
+import com.google.android.gms.internal.zzant;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.GetTokenResult;
@@ -39,44 +40,44 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FirebaseApp {
     public static final String DEFAULT_APP_NAME = "[DEFAULT]";
-    private static final List<String> aSH = Arrays.asList(new String[]{"com.google.firebase.auth.FirebaseAuth", "com.google.firebase.iid.FirebaseInstanceId"});
-    private static final List<String> aSI = Collections.singletonList("com.google.firebase.crash.FirebaseCrash");
-    private static final List<String> aSJ = Arrays.asList(new String[]{"com.google.android.gms.measurement.AppMeasurement"});
-    private static final List<String> aSK = Arrays.asList(new String[0]);
-    private static final Set<String> aSL = Collections.emptySet();
-    static final Map<String, FirebaseApp> afS = new ArrayMap();
-    private static final Object zzaok = new Object();
-    private final FirebaseOptions aSM;
-    private final AtomicBoolean aSN = new AtomicBoolean(false);
-    private final AtomicBoolean aSO = new AtomicBoolean();
-    private final List<zza> aSP = new CopyOnWriteArrayList();
-    private final List<zzb> aSQ = new CopyOnWriteArrayList();
-    private final List<Object> aSR = new CopyOnWriteArrayList();
-    private zzanb aSS;
+    private static final List<String> aVT = Arrays.asList(new String[]{"com.google.firebase.auth.FirebaseAuth", "com.google.firebase.iid.FirebaseInstanceId"});
+    private static final List<String> aVU = Collections.singletonList("com.google.firebase.crash.FirebaseCrash");
+    private static final List<String> aVV = Arrays.asList(new String[]{"com.google.android.gms.measurement.AppMeasurement"});
+    private static final List<String> aVW = Arrays.asList(new String[0]);
+    private static final Set<String> aVX = Collections.emptySet();
+    static final Map<String, FirebaseApp> aic = new ArrayMap();
+    private static final Object zzaox = new Object();
+    private final FirebaseOptions aVY;
+    private final AtomicBoolean aVZ = new AtomicBoolean(false);
+    private final AtomicBoolean aWa = new AtomicBoolean();
+    private final List<zza> aWb = new CopyOnWriteArrayList();
+    private final List<zzb> aWc = new CopyOnWriteArrayList();
+    private final List<Object> aWd = new CopyOnWriteArrayList();
+    private zzans aWe;
     private final String mName;
-    private final Context zzask;
+    private final Context zzatc;
 
     public interface zza {
-        void zzb(@NonNull zzanc com_google_android_gms_internal_zzanc);
+        void zzb(@NonNull zzant com_google_android_gms_internal_zzant);
     }
 
     public interface zzb {
-        void zzcp(boolean z);
+        void zzcr(boolean z);
     }
 
     @TargetApi(24)
     private static class zzc extends BroadcastReceiver {
-        private static AtomicReference<zzc> aST = new AtomicReference();
-        private final Context zzask;
+        private static AtomicReference<zzc> aWf = new AtomicReference();
+        private final Context zzatc;
 
         public zzc(Context context) {
-            this.zzask = context;
+            this.zzatc = context;
         }
 
-        private static void zzeq(Context context) {
-            if (aST.get() == null) {
+        private static void zzen(Context context) {
+            if (aWf.get() == null) {
                 BroadcastReceiver com_google_firebase_FirebaseApp_zzc = new zzc(context);
-                if (aST.compareAndSet(null, com_google_firebase_FirebaseApp_zzc)) {
+                if (aWf.compareAndSet(null, com_google_firebase_FirebaseApp_zzc)) {
                     IntentFilter intentFilter = new IntentFilter("android.intent.action.USER_UNLOCKED");
                     intentFilter.addDataScheme("package");
                     context.registerReceiver(com_google_firebase_FirebaseApp_zzc, intentFilter);
@@ -85,8 +86,8 @@ public class FirebaseApp {
         }
 
         public void onReceive(Context context, Intent intent) {
-            synchronized (FirebaseApp.zzaok) {
-                for (FirebaseApp zza : FirebaseApp.afS.values()) {
+            synchronized (FirebaseApp.zzaox) {
+                for (FirebaseApp zza : FirebaseApp.aic.values()) {
                     zza.zzcnx();
                 }
             }
@@ -94,25 +95,26 @@ public class FirebaseApp {
         }
 
         public void unregister() {
-            this.zzask.unregisterReceiver(this);
+            this.zzatc.unregisterReceiver(this);
         }
     }
 
     protected FirebaseApp(Context context, String str, FirebaseOptions firebaseOptions) {
-        this.zzask = (Context) zzac.zzy(context);
-        this.mName = zzac.zzhz(str);
-        this.aSM = (FirebaseOptions) zzac.zzy(firebaseOptions);
+        this.zzatc = (Context) zzaa.zzy(context);
+        this.mName = zzaa.zzib(str);
+        this.aVY = (FirebaseOptions) zzaa.zzy(firebaseOptions);
     }
 
     public static List<FirebaseApp> getApps(Context context) {
         List<FirebaseApp> arrayList;
-        zzana zzew = zzana.zzew(context);
-        synchronized (zzaok) {
-            arrayList = new ArrayList(afS.values());
-            Set<String> O = zzana.N().O();
-            O.removeAll(afS.keySet());
-            for (String str : O) {
-                arrayList.add(initializeApp(context, zzew.zzua(str), str));
+        zzanr zzeu = zzanr.zzeu(context);
+        synchronized (zzaox) {
+            arrayList = new ArrayList(aic.values());
+            Set<String> Q = zzanr.P().Q();
+            Q.removeAll(aic.keySet());
+            for (String str : Q) {
+                zzeu.zztz(str);
+                arrayList.add(initializeApp(context, null, str));
             }
         }
         return arrayList;
@@ -121,10 +123,10 @@ public class FirebaseApp {
     @Nullable
     public static FirebaseApp getInstance() {
         FirebaseApp firebaseApp;
-        synchronized (zzaok) {
-            firebaseApp = (FirebaseApp) afS.get(DEFAULT_APP_NAME);
+        synchronized (zzaox) {
+            firebaseApp = (FirebaseApp) aic.get(DEFAULT_APP_NAME);
             if (firebaseApp == null) {
-                String valueOf = String.valueOf(zzt.zzaxy());
+                String valueOf = String.valueOf(zzt.zzayz());
                 throw new IllegalStateException(new StringBuilder(String.valueOf(valueOf).length() + 116).append("Default FirebaseApp is not initialized in this process ").append(valueOf).append(". Make sure to call FirebaseApp.initializeApp(Context) first.").toString());
             }
         }
@@ -133,8 +135,8 @@ public class FirebaseApp {
 
     public static FirebaseApp getInstance(@NonNull String str) {
         FirebaseApp firebaseApp;
-        synchronized (zzaok) {
-            firebaseApp = (FirebaseApp) afS.get(zzrr(str));
+        synchronized (zzaox) {
+            firebaseApp = (FirebaseApp) aic.get(zzrq(str));
             if (firebaseApp != null) {
             } else {
                 String str2;
@@ -143,7 +145,7 @@ public class FirebaseApp {
                     str2 = "";
                 } else {
                     String str3 = "Available app names: ";
-                    str2 = String.valueOf(zzz.zzhy(", ").zza(zzcnw));
+                    str2 = String.valueOf(zzx.zzia(", ").zzb(zzcnw));
                     str2 = str2.length() != 0 ? str3.concat(str2) : new String(str3);
                 }
                 throw new IllegalStateException(String.format("FirebaseApp with name %s doesn't exist. %s", new Object[]{str, str2}));
@@ -152,10 +154,11 @@ public class FirebaseApp {
         return firebaseApp;
     }
 
+    @Nullable
     public static FirebaseApp initializeApp(Context context) {
         FirebaseApp instance;
-        synchronized (zzaok) {
-            if (afS.containsKey(DEFAULT_APP_NAME)) {
+        synchronized (zzaox) {
+            if (aic.containsKey(DEFAULT_APP_NAME)) {
                 instance = getInstance();
             } else {
                 FirebaseOptions fromResource = FirebaseOptions.fromResource(context);
@@ -175,46 +178,40 @@ public class FirebaseApp {
 
     public static FirebaseApp initializeApp(Context context, FirebaseOptions firebaseOptions, String str) {
         FirebaseApp firebaseApp;
-        zzana zzew = zzana.zzew(context);
-        zzep(context);
-        String zzrr = zzrr(str);
+        zzanr zzeu = zzanr.zzeu(context);
+        zzem(context);
+        String zzrq = zzrq(str);
         if (!(context instanceof Application)) {
             Object applicationContext = context.getApplicationContext();
         }
-        synchronized (zzaok) {
-            zzac.zza(!afS.containsKey(zzrr), new StringBuilder(String.valueOf(zzrr).length() + 33).append("FirebaseApp name ").append(zzrr).append(" already exists!").toString());
-            zzac.zzb(applicationContext, (Object) "Application context cannot be null.");
-            firebaseApp = new FirebaseApp(applicationContext, zzrr, firebaseOptions);
-            afS.put(zzrr, firebaseApp);
+        synchronized (zzaox) {
+            zzaa.zza(!aic.containsKey(zzrq), new StringBuilder(String.valueOf(zzrq).length() + 33).append("FirebaseApp name ").append(zzrq).append(" already exists!").toString());
+            zzaa.zzb(applicationContext, (Object) "Application context cannot be null.");
+            firebaseApp = new FirebaseApp(applicationContext, zzrq, firebaseOptions);
+            aic.put(zzrq, firebaseApp);
         }
-        zzew.zzg(firebaseApp);
-        firebaseApp.zza(FirebaseApp.class, firebaseApp, aSH);
+        zzeu.zzg(firebaseApp);
+        firebaseApp.zza(FirebaseApp.class, firebaseApp, aVT);
         if (firebaseApp.zzcnu()) {
-            firebaseApp.zza(FirebaseApp.class, firebaseApp, aSI);
-            firebaseApp.zza(Context.class, firebaseApp.getApplicationContext(), aSJ);
+            firebaseApp.zza(FirebaseApp.class, firebaseApp, aVU);
+            firebaseApp.zza(Context.class, firebaseApp.getApplicationContext(), aVV);
         }
         return firebaseApp;
     }
 
     private <T> void zza(Class<T> cls, T t, Iterable<String> iterable) {
-        boolean z;
         String valueOf;
-        if (zzs.zzaxw()) {
-            boolean isDeviceProtectedStorage = this.zzask.isDeviceProtectedStorage();
-            if (isDeviceProtectedStorage) {
-                zzc.zzeq(this.zzask);
-            }
-            z = isDeviceProtectedStorage;
-        } else {
-            z = false;
+        boolean isDeviceProtectedStorage = ContextCompat.isDeviceProtectedStorage(this.zzatc);
+        if (isDeviceProtectedStorage) {
+            zzc.zzen(this.zzatc);
         }
         for (String valueOf2 : iterable) {
-            if (z) {
+            if (isDeviceProtectedStorage) {
                 try {
-                    if (!aSK.contains(valueOf2)) {
+                    if (!aVW.contains(valueOf2)) {
                     }
                 } catch (ClassNotFoundException e) {
-                    if (aSL.contains(valueOf2)) {
+                    if (aVX.contains(valueOf2)) {
                         throw new IllegalStateException(String.valueOf(valueOf2).concat(" is missing, but is required. Check if it has been removed by Proguard."));
                     }
                     Log.d("FirebaseApp", String.valueOf(valueOf2).concat(" is not linked. Skipping initialization."));
@@ -238,18 +235,18 @@ public class FirebaseApp {
     }
 
     private void zzcnt() {
-        zzac.zza(!this.aSO.get(), (Object) "FirebaseApp was deleted");
+        zzaa.zza(!this.aWa.get(), (Object) "FirebaseApp was deleted");
     }
 
     private static List<String> zzcnw() {
         Collection com_google_android_gms_common_util_zza = new com.google.android.gms.common.util.zza();
-        synchronized (zzaok) {
-            for (FirebaseApp name : afS.values()) {
+        synchronized (zzaox) {
+            for (FirebaseApp name : aic.values()) {
                 com_google_android_gms_common_util_zza.add(name.getName());
             }
-            zzana N = zzana.N();
-            if (N != null) {
-                com_google_android_gms_common_util_zza.addAll(N.O());
+            zzanr P = zzanr.P();
+            if (P != null) {
+                com_google_android_gms_common_util_zza.addAll(P.Q());
             }
         }
         List<String> arrayList = new ArrayList(com_google_android_gms_common_util_zza);
@@ -258,40 +255,40 @@ public class FirebaseApp {
     }
 
     private void zzcnx() {
-        zza(FirebaseApp.class, this, aSH);
+        zza(FirebaseApp.class, this, aVT);
         if (zzcnu()) {
-            zza(FirebaseApp.class, this, aSI);
-            zza(Context.class, this.zzask, aSJ);
+            zza(FirebaseApp.class, this, aVU);
+            zza(Context.class, this.zzatc, aVV);
         }
     }
 
-    public static void zzcp(boolean z) {
-        synchronized (zzaok) {
-            Iterator it = new ArrayList(afS.values()).iterator();
+    public static void zzcr(boolean z) {
+        synchronized (zzaox) {
+            Iterator it = new ArrayList(aic.values()).iterator();
             while (it.hasNext()) {
                 FirebaseApp firebaseApp = (FirebaseApp) it.next();
-                if (firebaseApp.aSN.get()) {
-                    firebaseApp.zzcq(z);
+                if (firebaseApp.aVZ.get()) {
+                    firebaseApp.zzcs(z);
                 }
             }
         }
     }
 
-    private void zzcq(boolean z) {
+    private void zzcs(boolean z) {
         Log.d("FirebaseApp", "Notifying background state change listeners.");
-        for (zzb zzcp : this.aSQ) {
-            zzcp.zzcp(z);
+        for (zzb zzcr : this.aWc) {
+            zzcr.zzcr(z);
         }
     }
 
     @TargetApi(14)
-    private static void zzep(Context context) {
-        if (zzs.zzaxn() && (context.getApplicationContext() instanceof Application)) {
-            zzamz.zza((Application) context.getApplicationContext());
+    private static void zzem(Context context) {
+        if (zzs.zzayq() && (context.getApplicationContext() instanceof Application)) {
+            zzanq.zza((Application) context.getApplicationContext());
         }
     }
 
-    private static String zzrr(@NonNull String str) {
+    private static String zzrq(@NonNull String str) {
         return str.trim();
     }
 
@@ -302,7 +299,7 @@ public class FirebaseApp {
     @NonNull
     public Context getApplicationContext() {
         zzcnt();
-        return this.zzask;
+        return this.zzatc;
     }
 
     @NonNull
@@ -314,32 +311,44 @@ public class FirebaseApp {
     @NonNull
     public FirebaseOptions getOptions() {
         zzcnt();
-        return this.aSM;
+        return this.aVY;
     }
 
     public Task<GetTokenResult> getToken(boolean z) {
         zzcnt();
-        return this.aSS == null ? Tasks.forException(new FirebaseApiNotAvailableException("firebase-auth is not linked, please fall back to unauthenticated mode.")) : this.aSS.zzcr(z);
+        return this.aWe == null ? Tasks.forException(new FirebaseApiNotAvailableException("firebase-auth is not linked, please fall back to unauthenticated mode.")) : this.aWe.zzct(z);
     }
 
     public int hashCode() {
         return this.mName.hashCode();
     }
 
-    public String toString() {
-        return zzab.zzx(this).zzg("name", this.mName).zzg("options", this.aSM).toString();
+    public void setAutomaticResourceManagementEnabled(boolean z) {
+        zzcnt();
+        if (this.aVZ.compareAndSet(!z, z)) {
+            boolean O = zzanq.N().O();
+            if (z && O) {
+                zzcs(true);
+            } else if (!z && O) {
+                zzcs(false);
+            }
+        }
     }
 
-    public void zza(@NonNull zzanb com_google_android_gms_internal_zzanb) {
-        this.aSS = (zzanb) zzac.zzy(com_google_android_gms_internal_zzanb);
+    public String toString() {
+        return zzz.zzx(this).zzg("name", this.mName).zzg("options", this.aVY).toString();
+    }
+
+    public void zza(@NonNull zzans com_google_android_gms_internal_zzans) {
+        this.aWe = (zzans) zzaa.zzy(com_google_android_gms_internal_zzans);
     }
 
     @UiThread
-    public void zza(@NonNull zzanc com_google_android_gms_internal_zzanc) {
+    public void zza(@NonNull zzant com_google_android_gms_internal_zzant) {
         Log.d("FirebaseApp", "Notifying auth state listeners.");
         int i = 0;
-        for (zza zzb : this.aSP) {
-            zzb.zzb(com_google_android_gms_internal_zzanc);
+        for (zza zzb : this.aWb) {
+            zzb.zzb(com_google_android_gms_internal_zzant);
             i++;
         }
         Log.d("FirebaseApp", String.format("Notified %d auth state listeners.", new Object[]{Integer.valueOf(i)}));
@@ -347,16 +356,16 @@ public class FirebaseApp {
 
     public void zza(@NonNull zza com_google_firebase_FirebaseApp_zza) {
         zzcnt();
-        zzac.zzy(com_google_firebase_FirebaseApp_zza);
-        this.aSP.add(com_google_firebase_FirebaseApp_zza);
+        zzaa.zzy(com_google_firebase_FirebaseApp_zza);
+        this.aWb.add(com_google_firebase_FirebaseApp_zza);
     }
 
     public void zza(zzb com_google_firebase_FirebaseApp_zzb) {
         zzcnt();
-        if (this.aSN.get() && zzamz.L().M()) {
-            com_google_firebase_FirebaseApp_zzb.zzcp(true);
+        if (this.aVZ.get() && zzanq.N().O()) {
+            com_google_firebase_FirebaseApp_zzb.zzcr(true);
         }
-        this.aSQ.add(com_google_firebase_FirebaseApp_zzb);
+        this.aWc.add(com_google_firebase_FirebaseApp_zzb);
     }
 
     public boolean zzcnu() {
@@ -364,8 +373,8 @@ public class FirebaseApp {
     }
 
     public String zzcnv() {
-        String valueOf = String.valueOf(com.google.android.gms.common.util.zzc.zzr(getName().getBytes()));
-        String valueOf2 = String.valueOf(com.google.android.gms.common.util.zzc.zzr(getOptions().getApplicationId().getBytes()));
+        String valueOf = String.valueOf(com.google.android.gms.common.util.zzc.zzs(getName().getBytes()));
+        String valueOf2 = String.valueOf(com.google.android.gms.common.util.zzc.zzs(getOptions().getApplicationId().getBytes()));
         return new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("+").append(valueOf2).toString();
     }
 }

@@ -824,7 +824,7 @@ public class DialogsSearchAdapter extends Adapter {
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
                 if (this.needMessagesSearch != 2) {
-                    this.searchAdapterHelper.queryServerSearch(null, true, true);
+                    this.searchAdapterHelper.queryServerSearch(null, true, true, true);
                 }
                 searchMessagesInternal(null);
                 notifyDataSetChanged();
@@ -866,7 +866,7 @@ public class DialogsSearchAdapter extends Adapter {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (DialogsSearchAdapter.this.needMessagesSearch != 2) {
-                                DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true);
+                                DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true, true);
                             }
                             DialogsSearchAdapter.this.searchMessagesInternal(query);
                         }

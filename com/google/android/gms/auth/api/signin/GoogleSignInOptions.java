@@ -12,7 +12,7 @@ import com.google.android.gms.common.api.Api.ApiOptions.Optional;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,85 +28,85 @@ import org.json.JSONObject;
 public class GoogleSignInOptions extends AbstractSafeParcelable implements Optional, ReflectedParcelable {
     public static final Creator<GoogleSignInOptions> CREATOR = new zzb();
     public static final GoogleSignInOptions DEFAULT_SIGN_IN = new Builder().requestId().requestProfile().build();
-    private static Comparator<Scope> hc = new Comparator<Scope>() {
+    private static Comparator<Scope> jm = new Comparator<Scope>() {
         public /* synthetic */ int compare(Object obj, Object obj2) {
             return zza((Scope) obj, (Scope) obj2);
         }
 
         public int zza(Scope scope, Scope scope2) {
-            return scope.zzaqg().compareTo(scope2.zzaqg());
+            return scope.zzari().compareTo(scope2.zzari());
         }
     };
-    public static final Scope hd = new Scope(Scopes.PROFILE);
-    public static final Scope he = new Scope("email");
-    public static final Scope hf = new Scope("openid");
-    private Account ec;
-    private final ArrayList<Scope> hg;
-    private boolean hh;
-    private final boolean hi;
-    private final boolean hj;
-    private String hk;
-    private String hl;
+    public static final Scope jn = new Scope(Scopes.PROFILE);
+    public static final Scope jo = new Scope("email");
+    public static final Scope jp = new Scope("openid");
+    private Account gj;
+    private final ArrayList<Scope> jq;
+    private boolean jr;
+    private final boolean js;
+    private final boolean jt;
+    private String ju;
+    private String jv;
     final int versionCode;
 
     public static final class Builder {
-        private Account ec;
-        private boolean hh;
-        private boolean hi;
-        private boolean hj;
-        private String hk;
-        private String hl;
-        private Set<Scope> hm = new HashSet();
+        private Account gj;
+        private boolean jr;
+        private boolean js;
+        private boolean jt;
+        private String ju;
+        private String jv;
+        private Set<Scope> jw = new HashSet();
 
         public Builder(@NonNull GoogleSignInOptions googleSignInOptions) {
-            zzac.zzy(googleSignInOptions);
-            this.hm = new HashSet(googleSignInOptions.hg);
-            this.hi = googleSignInOptions.hi;
-            this.hj = googleSignInOptions.hj;
-            this.hh = googleSignInOptions.hh;
-            this.hk = googleSignInOptions.hk;
-            this.ec = googleSignInOptions.ec;
-            this.hl = googleSignInOptions.hl;
+            zzaa.zzy(googleSignInOptions);
+            this.jw = new HashSet(googleSignInOptions.jq);
+            this.js = googleSignInOptions.js;
+            this.jt = googleSignInOptions.jt;
+            this.jr = googleSignInOptions.jr;
+            this.ju = googleSignInOptions.ju;
+            this.gj = googleSignInOptions.gj;
+            this.jv = googleSignInOptions.jv;
         }
 
-        private String zzfz(String str) {
-            zzac.zzhz(str);
-            boolean z = this.hk == null || this.hk.equals(str);
-            zzac.zzb(z, (Object) "two different server client ids provided");
+        private String zzgc(String str) {
+            zzaa.zzib(str);
+            boolean z = this.ju == null || this.ju.equals(str);
+            zzaa.zzb(z, (Object) "two different server client ids provided");
             return str;
         }
 
         public GoogleSignInOptions build() {
-            if (this.hh && (this.ec == null || !this.hm.isEmpty())) {
+            if (this.jr && (this.gj == null || !this.jw.isEmpty())) {
                 requestId();
             }
-            return new GoogleSignInOptions(this.hm, this.ec, this.hh, this.hi, this.hj, this.hk, this.hl);
+            return new GoogleSignInOptions(this.jw, this.gj, this.jr, this.js, this.jt, this.ju, this.jv);
         }
 
         public Builder requestEmail() {
-            this.hm.add(GoogleSignInOptions.he);
+            this.jw.add(GoogleSignInOptions.jo);
             return this;
         }
 
         public Builder requestId() {
-            this.hm.add(GoogleSignInOptions.hf);
+            this.jw.add(GoogleSignInOptions.jp);
             return this;
         }
 
         public Builder requestIdToken(String str) {
-            this.hh = true;
-            this.hk = zzfz(str);
+            this.jr = true;
+            this.ju = zzgc(str);
             return this;
         }
 
         public Builder requestProfile() {
-            this.hm.add(GoogleSignInOptions.hd);
+            this.jw.add(GoogleSignInOptions.jn);
             return this;
         }
 
         public Builder requestScopes(Scope scope, Scope... scopeArr) {
-            this.hm.add(scope);
-            this.hm.addAll(Arrays.asList(scopeArr));
+            this.jw.add(scope);
+            this.jw.addAll(Arrays.asList(scopeArr));
             return this;
         }
 
@@ -115,59 +115,59 @@ public class GoogleSignInOptions extends AbstractSafeParcelable implements Optio
         }
 
         public Builder requestServerAuthCode(String str, boolean z) {
-            this.hi = true;
-            this.hk = zzfz(str);
-            this.hj = z;
+            this.js = true;
+            this.ju = zzgc(str);
+            this.jt = z;
             return this;
         }
 
         public Builder setAccountName(String str) {
-            this.ec = new Account(zzac.zzhz(str), "com.google");
+            this.gj = new Account(zzaa.zzib(str), "com.google");
             return this;
         }
 
         public Builder setHostedDomain(String str) {
-            this.hl = zzac.zzhz(str);
+            this.jv = zzaa.zzib(str);
             return this;
         }
     }
 
     GoogleSignInOptions(int i, ArrayList<Scope> arrayList, Account account, boolean z, boolean z2, boolean z3, String str, String str2) {
         this.versionCode = i;
-        this.hg = arrayList;
-        this.ec = account;
-        this.hh = z;
-        this.hi = z2;
-        this.hj = z3;
-        this.hk = str;
-        this.hl = str2;
+        this.jq = arrayList;
+        this.gj = account;
+        this.jr = z;
+        this.js = z2;
+        this.jt = z3;
+        this.ju = str;
+        this.jv = str2;
     }
 
     private GoogleSignInOptions(Set<Scope> set, Account account, boolean z, boolean z2, boolean z3, String str, String str2) {
         this(2, new ArrayList(set), account, z, z2, z3, str, str2);
     }
 
-    private JSONObject zzahi() {
+    private JSONObject zzais() {
         JSONObject jSONObject = new JSONObject();
         try {
             JSONArray jSONArray = new JSONArray();
-            Collections.sort(this.hg, hc);
-            Iterator it = this.hg.iterator();
+            Collections.sort(this.jq, jm);
+            Iterator it = this.jq.iterator();
             while (it.hasNext()) {
-                jSONArray.put(((Scope) it.next()).zzaqg());
+                jSONArray.put(((Scope) it.next()).zzari());
             }
             jSONObject.put("scopes", jSONArray);
-            if (this.ec != null) {
-                jSONObject.put("accountName", this.ec.name);
+            if (this.gj != null) {
+                jSONObject.put("accountName", this.gj.name);
             }
-            jSONObject.put("idTokenRequested", this.hh);
-            jSONObject.put("forceCodeForRefreshToken", this.hj);
-            jSONObject.put("serverAuthRequested", this.hi);
-            if (!TextUtils.isEmpty(this.hk)) {
-                jSONObject.put("serverClientId", this.hk);
+            jSONObject.put("idTokenRequested", this.jr);
+            jSONObject.put("forceCodeForRefreshToken", this.jt);
+            jSONObject.put("serverAuthRequested", this.js);
+            if (!TextUtils.isEmpty(this.ju)) {
+                jSONObject.put("serverClientId", this.ju);
             }
-            if (!TextUtils.isEmpty(this.hl)) {
-                jSONObject.put("hostedDomain", this.hl);
+            if (!TextUtils.isEmpty(this.jv)) {
+                jSONObject.put("hostedDomain", this.jv);
             }
             return jSONObject;
         } catch (Throwable e) {
@@ -176,7 +176,7 @@ public class GoogleSignInOptions extends AbstractSafeParcelable implements Optio
     }
 
     @Nullable
-    public static GoogleSignInOptions zzfy(@Nullable String str) throws JSONException {
+    public static GoogleSignInOptions zzgb(@Nullable String str) throws JSONException {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
@@ -197,76 +197,76 @@ public class GoogleSignInOptions extends AbstractSafeParcelable implements Optio
         }
         try {
             GoogleSignInOptions googleSignInOptions = (GoogleSignInOptions) obj;
-            if (this.hg.size() != googleSignInOptions.zzahj().size() || !this.hg.containsAll(googleSignInOptions.zzahj())) {
+            if (this.jq.size() != googleSignInOptions.zzait().size() || !this.jq.containsAll(googleSignInOptions.zzait())) {
                 return false;
             }
-            if (this.ec == null) {
+            if (this.gj == null) {
                 if (googleSignInOptions.getAccount() != null) {
                     return false;
                 }
-            } else if (!this.ec.equals(googleSignInOptions.getAccount())) {
+            } else if (!this.gj.equals(googleSignInOptions.getAccount())) {
                 return false;
             }
-            if (TextUtils.isEmpty(this.hk)) {
-                if (!TextUtils.isEmpty(googleSignInOptions.zzahn())) {
+            if (TextUtils.isEmpty(this.ju)) {
+                if (!TextUtils.isEmpty(googleSignInOptions.zzaix())) {
                     return false;
                 }
-            } else if (!this.hk.equals(googleSignInOptions.zzahn())) {
+            } else if (!this.ju.equals(googleSignInOptions.zzaix())) {
                 return false;
             }
-            return this.hj == googleSignInOptions.zzahm() && this.hh == googleSignInOptions.zzahk() && this.hi == googleSignInOptions.zzahl();
+            return this.jt == googleSignInOptions.zzaiw() && this.jr == googleSignInOptions.zzaiu() && this.js == googleSignInOptions.zzaiv();
         } catch (ClassCastException e) {
             return false;
         }
     }
 
     public Account getAccount() {
-        return this.ec;
+        return this.gj;
     }
 
     public Scope[] getScopeArray() {
-        return (Scope[]) this.hg.toArray(new Scope[this.hg.size()]);
+        return (Scope[]) this.jq.toArray(new Scope[this.jq.size()]);
     }
 
     public int hashCode() {
         List arrayList = new ArrayList();
-        Iterator it = this.hg.iterator();
+        Iterator it = this.jq.iterator();
         while (it.hasNext()) {
-            arrayList.add(((Scope) it.next()).zzaqg());
+            arrayList.add(((Scope) it.next()).zzari());
         }
         Collections.sort(arrayList);
-        return new zze().zzq(arrayList).zzq(this.ec).zzq(this.hk).zzbd(this.hj).zzbd(this.hh).zzbd(this.hi).zzahv();
+        return new zze().zzq(arrayList).zzq(this.gj).zzq(this.ju).zzbe(this.jt).zzbe(this.jr).zzbe(this.js).zzajf();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzb.zza(this, parcel, i);
     }
 
-    public String zzahg() {
-        return zzahi().toString();
+    public String zzaiq() {
+        return zzais().toString();
     }
 
-    public ArrayList<Scope> zzahj() {
-        return new ArrayList(this.hg);
+    public ArrayList<Scope> zzait() {
+        return new ArrayList(this.jq);
     }
 
-    public boolean zzahk() {
-        return this.hh;
+    public boolean zzaiu() {
+        return this.jr;
     }
 
-    public boolean zzahl() {
-        return this.hi;
+    public boolean zzaiv() {
+        return this.js;
     }
 
-    public boolean zzahm() {
-        return this.hj;
+    public boolean zzaiw() {
+        return this.jt;
     }
 
-    public String zzahn() {
-        return this.hk;
+    public String zzaix() {
+        return this.ju;
     }
 
-    public String zzaho() {
-        return this.hl;
+    public String zzaiy() {
+        return this.jv;
     }
 }

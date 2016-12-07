@@ -7,55 +7,55 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzi implements Creator<PlaceReport> {
     static void zza(PlaceReport placeReport, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, placeReport.mVersionCode);
         zzb.zza(parcel, 2, placeReport.getPlaceId(), false);
         zzb.zza(parcel, 3, placeReport.getTag(), false);
         zzb.zza(parcel, 4, placeReport.getSource(), false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzny(parcel);
+        return zzon(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzvb(i);
+        return zzvp(i);
     }
 
-    public PlaceReport zzny(Parcel parcel) {
+    public PlaceReport zzon(Parcel parcel) {
         String str = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         String str2 = null;
         String str3 = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str3 = zza.zzq(parcel, zzcp);
+                    str3 = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new PlaceReport(i, str3, str2, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public PlaceReport[] zzvb(int i) {
+    public PlaceReport[] zzvp(int i) {
         return new PlaceReport[i];
     }
 }

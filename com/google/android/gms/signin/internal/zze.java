@@ -8,22 +8,22 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import com.google.android.gms.common.internal.AuthAccountRequest;
 import com.google.android.gms.common.internal.ResolveAccountRequest;
-import com.google.android.gms.common.internal.zzr;
-import com.google.android.gms.common.internal.zzx;
+import com.google.android.gms.common.internal.zzp;
+import com.google.android.gms.common.internal.zzv;
 
 public interface zze extends IInterface {
 
     public static abstract class zza extends Binder implements zze {
 
         private static class zza implements zze {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void zza(int i, Account account, zzd com_google_android_gms_signin_internal_zzd) throws RemoteException {
@@ -39,7 +39,7 @@ public interface zze extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeStrongBinder(com_google_android_gms_signin_internal_zzd != null ? com_google_android_gms_signin_internal_zzd.asBinder() : null);
-                    this.zzajf.transact(8, obtain, obtain2, 0);
+                    this.zzajq.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -59,7 +59,7 @@ public interface zze extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeStrongBinder(com_google_android_gms_signin_internal_zzd != null ? com_google_android_gms_signin_internal_zzd.asBinder() : null);
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -67,7 +67,7 @@ public interface zze extends IInterface {
                 }
             }
 
-            public void zza(ResolveAccountRequest resolveAccountRequest, zzx com_google_android_gms_common_internal_zzx) throws RemoteException {
+            public void zza(ResolveAccountRequest resolveAccountRequest, zzv com_google_android_gms_common_internal_zzv) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -78,8 +78,8 @@ public interface zze extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    obtain.writeStrongBinder(com_google_android_gms_common_internal_zzx != null ? com_google_android_gms_common_internal_zzx.asBinder() : null);
-                    this.zzajf.transact(5, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(com_google_android_gms_common_internal_zzv != null ? com_google_android_gms_common_internal_zzv.asBinder() : null);
+                    this.zzajq.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -87,19 +87,19 @@ public interface zze extends IInterface {
                 }
             }
 
-            public void zza(zzr com_google_android_gms_common_internal_zzr, int i, boolean z) throws RemoteException {
+            public void zza(zzp com_google_android_gms_common_internal_zzp, int i, boolean z) throws RemoteException {
                 int i2 = 0;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.signin.internal.ISignInService");
-                    obtain.writeStrongBinder(com_google_android_gms_common_internal_zzr != null ? com_google_android_gms_common_internal_zzr.asBinder() : null);
+                    obtain.writeStrongBinder(com_google_android_gms_common_internal_zzp != null ? com_google_android_gms_common_internal_zzp.asBinder() : null);
                     obtain.writeInt(i);
                     if (z) {
                         i2 = 1;
                     }
                     obtain.writeInt(i2);
-                    this.zzajf.transact(9, obtain, obtain2, 0);
+                    this.zzajq.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -118,7 +118,7 @@ public interface zze extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -138,7 +138,7 @@ public interface zze extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeStrongBinder(com_google_android_gms_signin_internal_zzd != null ? com_google_android_gms_signin_internal_zzd.asBinder() : null);
-                    this.zzajf.transact(10, obtain, obtain2, 0);
+                    this.zzajq.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -158,21 +158,7 @@ public interface zze extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeStrongBinder(com_google_android_gms_signin_internal_zzd != null ? com_google_android_gms_signin_internal_zzd.asBinder() : null);
-                    this.zzajf.transact(12, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zzaaf(int i) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.signin.internal.ISignInService");
-                    obtain.writeInt(i);
-                    this.zzajf.transact(7, obtain, obtain2, 0);
+                    this.zzajq.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -186,7 +172,7 @@ public interface zze extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.signin.internal.ISignInService");
                     obtain.writeStrongBinder(com_google_android_gms_signin_internal_zzd != null ? com_google_android_gms_signin_internal_zzd.asBinder() : null);
-                    this.zzajf.transact(11, obtain, obtain2, 0);
+                    this.zzajq.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -194,7 +180,7 @@ public interface zze extends IInterface {
                 }
             }
 
-            public void zzcj(boolean z) throws RemoteException {
+            public void zzcl(boolean z) throws RemoteException {
                 int i = 0;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
@@ -204,7 +190,21 @@ public interface zze extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(4, obtain, obtain2, 0);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void zzzv(int i) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.signin.internal.ISignInService");
+                    obtain.writeInt(i);
+                    this.zzajq.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -213,7 +213,7 @@ public interface zze extends IInterface {
             }
         }
 
-        public static zze zzlb(IBinder iBinder) {
+        public static zze zzkw(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -231,7 +231,7 @@ public interface zze extends IInterface {
                     if (parcel.readInt() != 0) {
                         authAccountRequest = (AuthAccountRequest) AuthAccountRequest.CREATOR.createFromParcel(parcel);
                     }
-                    zza(authAccountRequest, com.google.android.gms.signin.internal.zzd.zza.zzla(parcel.readStrongBinder()));
+                    zza(authAccountRequest, com.google.android.gms.signin.internal.zzd.zza.zzkv(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 3:
@@ -245,7 +245,7 @@ public interface zze extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInService");
-                    zzcj(parcel.readInt() != 0);
+                    zzcl(parcel.readInt() != 0);
                     parcel2.writeNoException();
                     return true;
                 case 5:
@@ -254,12 +254,12 @@ public interface zze extends IInterface {
                     if (parcel.readInt() != 0) {
                         resolveAccountRequest = (ResolveAccountRequest) ResolveAccountRequest.CREATOR.createFromParcel(parcel);
                     }
-                    zza(resolveAccountRequest, com.google.android.gms.common.internal.zzx.zza.zzdx(parcel.readStrongBinder()));
+                    zza(resolveAccountRequest, com.google.android.gms.common.internal.zzv.zza.zzdw(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 7:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInService");
-                    zzaaf(parcel.readInt());
+                    zzzv(parcel.readInt());
                     parcel2.writeNoException();
                     return true;
                 case 8:
@@ -269,12 +269,12 @@ public interface zze extends IInterface {
                     if (parcel.readInt() != 0) {
                         account = (Account) Account.CREATOR.createFromParcel(parcel);
                     }
-                    zza(readInt, account, com.google.android.gms.signin.internal.zzd.zza.zzla(parcel.readStrongBinder()));
+                    zza(readInt, account, com.google.android.gms.signin.internal.zzd.zza.zzkv(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 9:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInService");
-                    zzr zzdr = com.google.android.gms.common.internal.zzr.zza.zzdr(parcel.readStrongBinder());
+                    zzp zzdr = com.google.android.gms.common.internal.zzp.zza.zzdr(parcel.readStrongBinder());
                     int readInt2 = parcel.readInt();
                     if (parcel.readInt() != 0) {
                         z = true;
@@ -288,12 +288,12 @@ public interface zze extends IInterface {
                     if (parcel.readInt() != 0) {
                         recordConsentRequest = (RecordConsentRequest) RecordConsentRequest.CREATOR.createFromParcel(parcel);
                     }
-                    zza(recordConsentRequest, com.google.android.gms.signin.internal.zzd.zza.zzla(parcel.readStrongBinder()));
+                    zza(recordConsentRequest, com.google.android.gms.signin.internal.zzd.zza.zzkv(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 11:
                     parcel.enforceInterface("com.google.android.gms.signin.internal.ISignInService");
-                    zzb(com.google.android.gms.signin.internal.zzd.zza.zzla(parcel.readStrongBinder()));
+                    zzb(com.google.android.gms.signin.internal.zzd.zza.zzkv(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 12:
@@ -301,7 +301,7 @@ public interface zze extends IInterface {
                     if (parcel.readInt() != 0) {
                         signInRequest = (SignInRequest) SignInRequest.CREATOR.createFromParcel(parcel);
                     }
-                    zza(signInRequest, com.google.android.gms.signin.internal.zzd.zza.zzla(parcel.readStrongBinder()));
+                    zza(signInRequest, com.google.android.gms.signin.internal.zzd.zza.zzkv(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -317,9 +317,9 @@ public interface zze extends IInterface {
 
     void zza(AuthAccountRequest authAccountRequest, zzd com_google_android_gms_signin_internal_zzd) throws RemoteException;
 
-    void zza(ResolveAccountRequest resolveAccountRequest, zzx com_google_android_gms_common_internal_zzx) throws RemoteException;
+    void zza(ResolveAccountRequest resolveAccountRequest, zzv com_google_android_gms_common_internal_zzv) throws RemoteException;
 
-    void zza(zzr com_google_android_gms_common_internal_zzr, int i, boolean z) throws RemoteException;
+    void zza(zzp com_google_android_gms_common_internal_zzp, int i, boolean z) throws RemoteException;
 
     void zza(CheckServerAuthResult checkServerAuthResult) throws RemoteException;
 
@@ -327,9 +327,9 @@ public interface zze extends IInterface {
 
     void zza(SignInRequest signInRequest, zzd com_google_android_gms_signin_internal_zzd) throws RemoteException;
 
-    void zzaaf(int i) throws RemoteException;
-
     void zzb(zzd com_google_android_gms_signin_internal_zzd) throws RemoteException;
 
-    void zzcj(boolean z) throws RemoteException;
+    void zzcl(boolean z) throws RemoteException;
+
+    void zzzv(int i) throws RemoteException;
 }

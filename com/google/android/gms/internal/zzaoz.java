@@ -1,16 +1,11 @@
 package com.google.android.gms.internal;
 
-public final class zzaoz {
-    public static void zzbs(boolean z) {
-        if (!z) {
-            throw new IllegalArgumentException();
-        }
+public final class zzaoz extends zzapc {
+    public zzaoz(String str) {
+        super(str);
     }
 
-    public static <T> T zzy(T t) {
-        if (t != null) {
-            return t;
-        }
-        throw new NullPointerException();
+    public zzaoz(Throwable th) {
+        super(th);
     }
 }

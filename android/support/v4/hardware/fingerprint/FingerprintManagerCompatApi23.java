@@ -5,10 +5,13 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.FingerprintManager.AuthenticationResult;
 import android.os.CancellationSignal;
 import android.os.Handler;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import java.security.Signature;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 
+@RestrictTo({Scope.GROUP_ID})
 public final class FingerprintManagerCompatApi23 {
 
     public static abstract class AuthenticationCallback {

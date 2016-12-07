@@ -23,6 +23,9 @@ public class CommonStatusCodes {
     public static final int SUCCESS_CACHE = -1;
     public static final int TIMEOUT = 15;
 
+    protected CommonStatusCodes() {
+    }
+
     @NonNull
     public static String getStatusCodeString(int i) {
         switch (i) {

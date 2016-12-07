@@ -52,16 +52,16 @@ public class zzg extends Thread {
                         zzb(com_google_android_gms_internal_zzk);
                         zzi zza = this.zzy.zza(com_google_android_gms_internal_zzk);
                         com_google_android_gms_internal_zzk.zzc("network-http-complete");
-                        if (zza.zzaa && com_google_android_gms_internal_zzk.zzv()) {
+                        if (zza.zzaa && com_google_android_gms_internal_zzk.zzu()) {
                             com_google_android_gms_internal_zzk.zzd("not-modified");
                         } else {
                             zzm zza2 = com_google_android_gms_internal_zzk.zza(zza);
                             com_google_android_gms_internal_zzk.zzc("network-parse-complete");
-                            if (com_google_android_gms_internal_zzk.zzq() && zza2.zzbf != null) {
+                            if (com_google_android_gms_internal_zzk.zzp() && zza2.zzbf != null) {
                                 this.zzi.zza(com_google_android_gms_internal_zzk.zzg(), zza2.zzbf);
                                 com_google_android_gms_internal_zzk.zzc("network-cache-written");
                             }
-                            com_google_android_gms_internal_zzk.zzu();
+                            com_google_android_gms_internal_zzk.zzt();
                             this.zzj.zza(com_google_android_gms_internal_zzk, zza2);
                         }
                     }

@@ -40,7 +40,7 @@ public class SearchAdapterHelper {
         void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap);
     }
 
-    public void queryServerSearch(String query, boolean allowChats, boolean allowBots) {
+    public void queryServerSearch(String query, boolean allowChats, boolean allowBots, boolean allowSelf) {
         if (this.reqId != 0) {
             ConnectionsManager.getInstance().cancelRequest(this.reqId, true);
             this.reqId = 0;
@@ -58,6 +58,7 @@ public class SearchAdapterHelper {
         this.lastReqId = currentReqId;
         final boolean z = allowChats;
         final boolean z2 = allowBots;
+        final boolean z3 = allowSelf;
         final String str = query;
         this.reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
@@ -72,12 +73,11 @@ public class SearchAdapterHelper {
                                     SearchAdapterHelper.this.globalSearch.add(res.chats.get(a));
                                 }
                             }
-                            a = 0;
-                            while (a < res.users.size()) {
-                                if (z2 || !((User) res.users.get(a)).bot) {
+                            for (a = 0; a < res.users.size(); a++) {
+                                User user = (User) res.users.get(a);
+                                if ((z2 || !user.bot) && (z3 || !user.self)) {
                                     SearchAdapterHelper.this.globalSearch.add(res.users.get(a));
                                 }
-                                a++;
                             }
                             SearchAdapterHelper.this.lastFoundUsername = str;
                             SearchAdapterHelper.this.delegate.onDataSetChanged();

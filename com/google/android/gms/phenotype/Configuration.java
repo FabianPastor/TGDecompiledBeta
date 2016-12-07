@@ -3,29 +3,29 @@ package com.google.android.gms.phenotype;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
+import com.google.android.gms.common.internal.zzz;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Configuration extends AbstractSafeParcelable implements Comparable<Configuration> {
     public static final Creator<Configuration> CREATOR = new zza();
-    public final int axl;
-    public final Flag[] axm;
-    public final String[] axn;
-    public final Map<String, Flag> axo = new TreeMap();
+    public final int aAs;
+    public final Flag[] aAt;
+    public final String[] aAu;
+    public final Map<String, Flag> aAv = new TreeMap();
     final int mVersionCode;
 
     Configuration(int i, int i2, Flag[] flagArr, String[] strArr) {
         this.mVersionCode = i;
-        this.axl = i2;
-        this.axm = flagArr;
+        this.aAs = i2;
+        this.aAt = flagArr;
         for (Flag flag : flagArr) {
-            this.axo.put(flag.name, flag);
+            this.aAv.put(flag.name, flag);
         }
-        this.axn = strArr;
-        if (this.axn != null) {
-            Arrays.sort(this.axn);
+        this.aAu = strArr;
+        if (this.aAu != null) {
+            Arrays.sort(this.aAu);
         }
     }
 
@@ -38,25 +38,25 @@ public class Configuration extends AbstractSafeParcelable implements Comparable<
             return false;
         }
         Configuration configuration = (Configuration) obj;
-        return this.mVersionCode == configuration.mVersionCode && this.axl == configuration.axl && zzab.equal(this.axo, configuration.axo) && Arrays.equals(this.axn, configuration.axn);
+        return this.mVersionCode == configuration.mVersionCode && this.aAs == configuration.aAs && zzz.equal(this.aAv, configuration.aAv) && Arrays.equals(this.aAu, configuration.aAu);
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("Configuration(");
         stringBuilder.append(this.mVersionCode);
         stringBuilder.append(", ");
-        stringBuilder.append(this.axl);
+        stringBuilder.append(this.aAs);
         stringBuilder.append(", ");
         stringBuilder.append("(");
-        for (Flag append : this.axo.values()) {
+        for (Flag append : this.aAv.values()) {
             stringBuilder.append(append);
             stringBuilder.append(", ");
         }
         stringBuilder.append(")");
         stringBuilder.append(", ");
         stringBuilder.append("(");
-        if (this.axn != null) {
-            for (String append2 : this.axn) {
+        if (this.aAu != null) {
+            for (String append2 : this.aAu) {
                 stringBuilder.append(append2);
                 stringBuilder.append(", ");
             }
@@ -73,6 +73,6 @@ public class Configuration extends AbstractSafeParcelable implements Comparable<
     }
 
     public int zza(Configuration configuration) {
-        return this.axl - configuration.axl;
+        return this.aAs - configuration.aAs;
     }
 }

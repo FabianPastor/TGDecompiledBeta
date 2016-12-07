@@ -11,15 +11,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastReceiver {
-    private static final Queue<Intent> bhs = new LinkedList();
-    private static final Queue<Intent> bht = new LinkedList();
+    private static final Queue<Intent> bkE = new LinkedList();
+    private static final Queue<Intent> bkF = new LinkedList();
 
-    public static Intent F() {
-        return (Intent) bhs.poll();
+    public static Intent H() {
+        return (Intent) bkE.poll();
     }
 
-    public static Intent G() {
-        return (Intent) bht.poll();
+    public static Intent I() {
+        return (Intent) bkF.poll();
     }
 
     private static Intent zza(Context context, String str, Intent intent) {
@@ -47,10 +47,10 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
         }
         switch (obj) {
             case null:
-                bhs.offer(intent);
+                bkE.offer(intent);
                 break;
             case 1:
-                bht.offer(intent);
+                bkF.offer(intent);
                 break;
             default:
                 String str2 = "FirebaseInstanceId";
@@ -61,10 +61,10 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
         }
         Intent intent2 = new Intent(str);
         intent2.setPackage(context.getPackageName());
-        return zzi(context, intent2);
+        return zzh(context, intent2);
     }
 
-    private static void zzf(Context context, Intent intent) {
+    private static void zze(Context context, Intent intent) {
         ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
         if (resolveService == null || resolveService.serviceInfo == null) {
             Log.e("FirebaseInstanceId", "Failed to resolve target intent service, skipping classname enforcement");
@@ -92,16 +92,16 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
         intent.setClassName(context.getPackageName(), valueOf2);
     }
 
-    public static Intent zzg(Context context, Intent intent) {
+    public static Intent zzf(Context context, Intent intent) {
         return zza(context, "com.google.firebase.INSTANCE_ID_EVENT", intent);
     }
 
-    public static Intent zzh(Context context, Intent intent) {
+    public static Intent zzg(Context context, Intent intent) {
         return zza(context, "com.google.firebase.MESSAGING_EVENT", intent);
     }
 
-    private static int zzi(Context context, Intent intent) {
-        zzf(context, intent);
+    private static int zzh(Context context, Intent intent) {
+        zze(context, intent);
         try {
             ComponentName startWakefulService;
             if (context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0) {

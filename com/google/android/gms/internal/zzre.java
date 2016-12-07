@@ -1,32 +1,26 @@
 package com.google.android.gms.internal;
 
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
-import java.util.Collections;
-import java.util.Set;
-import java.util.WeakHashMap;
+import android.os.Bundle;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.internal.zzqo.zza;
 
-public class zzre {
-    private final Set<zzrd<?>> pA = Collections.newSetFromMap(new WeakHashMap());
+public interface zzre {
+    void begin();
 
-    public void release() {
-        for (zzrd clear : this.pA) {
-            clear.clear();
-        }
-        this.pA.clear();
-    }
+    void connect();
 
-    public <L> zzrd<L> zza(@NonNull L l, @NonNull Looper looper, @NonNull String str) {
-        zzac.zzb((Object) l, (Object) "Listener must not be null");
-        zzac.zzb((Object) looper, (Object) "Looper must not be null");
-        zzac.zzb((Object) str, (Object) "Listener type must not be null");
-        zzrd<L> com_google_android_gms_internal_zzrd = new zzrd(looper, l, str);
-        this.pA.add(com_google_android_gms_internal_zzrd);
-        return com_google_android_gms_internal_zzrd;
-    }
+    boolean disconnect();
 
-    public <L> zzrd<L> zzb(@NonNull L l, Looper looper) {
-        return zza(l, looper, "NO_TYPE");
-    }
+    void onConnected(Bundle bundle);
+
+    void onConnectionSuspended(int i);
+
+    <A extends zzb, R extends Result, T extends zza<R, A>> T zza(T t);
+
+    void zza(ConnectionResult connectionResult, Api<?> api, int i);
+
+    <A extends zzb, T extends zza<? extends Result, A>> T zzb(T t);
 }

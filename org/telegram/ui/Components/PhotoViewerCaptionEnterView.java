@@ -13,6 +13,7 @@ import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -220,6 +221,18 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     Emoji.replaceEmoji(editable, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                     this.processChange = false;
                 }
+            }
+        });
+        ImageView doneButton = new ImageView(context);
+        doneButton.setScaleType(ScaleType.CENTER);
+        doneButton.setImageResource(R.drawable.ic_done);
+        textFieldContainer.addView(doneButton, LayoutHelper.createLinear(48, 48, 80));
+        if (VERSION.SDK_INT >= 21) {
+            doneButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        }
+        doneButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                PhotoViewerCaptionEnterView.this.delegate.onCaptionEnter();
             }
         });
     }
@@ -472,12 +485,29 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void openKeyboardInternal() {
         showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2);
-        AndroidUtilities.showKeyboard(this.messageEditText);
+        openKeyboard();
     }
 
     public void openKeyboard() {
-        this.messageEditText.requestFocus();
+        int currentSelection;
+        try {
+            currentSelection = this.messageEditText.getSelectionStart();
+        } catch (Throwable e) {
+            currentSelection = this.messageEditText.length();
+            FileLog.e("tmessages", e);
+        }
+        MotionEvent event = MotionEvent.obtain(0, 0, 0, 0.0f, 0.0f, 0);
+        this.messageEditText.onTouchEvent(event);
+        event.recycle();
+        event = MotionEvent.obtain(0, 0, 1, 0.0f, 0.0f, 0);
+        this.messageEditText.onTouchEvent(event);
+        event.recycle();
         AndroidUtilities.showKeyboard(this.messageEditText);
+        try {
+            this.messageEditText.setSelection(currentSelection);
+        } catch (Throwable e2) {
+            FileLog.e("tmessages", e2);
+        }
     }
 
     public boolean isPopupShowing() {
@@ -489,7 +519,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public boolean isKeyboardVisible() {
-        return (AndroidUtilities.usingHardwareInput && getLayoutParams() != null && ((LayoutParams) getLayoutParams()).bottomMargin == 0) || this.keyboardVisible;
+        return (AndroidUtilities.usingHardwareInput && getTag() != null) || this.keyboardVisible;
     }
 
     public void onSizeChanged(int height, boolean isWidthGreater) {

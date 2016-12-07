@@ -14,14 +14,14 @@ public interface zzb extends IInterface {
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public LineBoxParcel[] zza(zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel, RecognitionOptions recognitionOptions) throws RemoteException {
@@ -42,7 +42,7 @@ public interface zzb extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                     LineBoxParcel[] lineBoxParcelArr = (LineBoxParcel[]) obtain2.createTypedArray(LineBoxParcel.CREATOR);
                     return lineBoxParcelArr;
@@ -52,12 +52,12 @@ public interface zzb extends IInterface {
                 }
             }
 
-            public void zzclx() throws RemoteException {
+            public void zzclw() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.vision.text.internal.client.INativeTextRecognizer");
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -77,7 +77,7 @@ public interface zzb extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     LineBoxParcel[] lineBoxParcelArr = (LineBoxParcel[]) obtain2.createTypedArray(LineBoxParcel.CREATOR);
                     return lineBoxParcelArr;
@@ -88,7 +88,7 @@ public interface zzb extends IInterface {
             }
         }
 
-        public static zzb zzln(IBinder iBinder) {
+        public static zzb zzli(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -101,18 +101,18 @@ public interface zzb extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.text.internal.client.INativeTextRecognizer");
-                    zzd = zzd(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null);
+                    zzd = zzd(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     parcel2.writeTypedArray(zzd, 1);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.vision.text.internal.client.INativeTextRecognizer");
-                    zzclx();
+                    zzclw();
                     parcel2.writeNoException();
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.vision.text.internal.client.INativeTextRecognizer");
-                    zzd = zza(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (RecognitionOptions) RecognitionOptions.CREATOR.createFromParcel(parcel) : null);
+                    zzd = zza(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FrameMetadataParcel) FrameMetadataParcel.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (RecognitionOptions) RecognitionOptions.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     parcel2.writeTypedArray(zzd, 1);
                     return true;
@@ -127,7 +127,7 @@ public interface zzb extends IInterface {
 
     LineBoxParcel[] zza(zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel, RecognitionOptions recognitionOptions) throws RemoteException;
 
-    void zzclx() throws RemoteException;
+    void zzclw() throws RemoteException;
 
     LineBoxParcel[] zzd(zzd com_google_android_gms_dynamic_zzd, FrameMetadataParcel frameMetadataParcel) throws RemoteException;
 }

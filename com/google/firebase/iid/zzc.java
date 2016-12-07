@@ -2,23 +2,24 @@ package com.google.firebase.iid;
 
 import android.support.annotation.Nullable;
 
+@Deprecated
 public class zzc {
-    private final FirebaseInstanceId bhn;
+    private final FirebaseInstanceId bkz;
 
     private zzc(FirebaseInstanceId firebaseInstanceId) {
-        this.bhn = firebaseInstanceId;
+        this.bkz = firebaseInstanceId;
     }
 
-    public static zzc A() {
+    public static zzc C() {
         return new zzc(FirebaseInstanceId.getInstance());
     }
 
     public String getId() {
-        return this.bhn.getId();
+        return this.bkz.getId();
     }
 
     @Nullable
     public String getToken() {
-        return this.bhn.getToken();
+        return this.bkz.getToken();
     }
 }

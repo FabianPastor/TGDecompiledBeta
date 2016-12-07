@@ -10,8 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public final class zzp {
-    private static final Pattern EW = Pattern.compile("\\\\.");
-    private static final Pattern EX = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
+    private static final Pattern GC = Pattern.compile("\\\\.");
+    private static final Pattern GD = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
 
     public static boolean zzf(Object obj, Object obj2) {
         if (obj == null && obj2 == null) {
@@ -68,7 +68,7 @@ public final class zzp {
         if (TextUtils.isEmpty(str)) {
             return str;
         }
-        Matcher matcher = EX.matcher(str);
+        Matcher matcher = GD.matcher(str);
         StringBuffer stringBuffer = null;
         while (matcher.find()) {
             if (stringBuffer == null) {

@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
@@ -38,7 +37,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.C;
@@ -84,7 +82,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     private EditTextBoldCursor editText;
     private EmptyTextProgressView emptyView;
     private int fieldY;
-    private boolean ignoreChange;
     private boolean ignoreScrollEvent;
     private boolean isAlwaysShare;
     private boolean isGroup;
@@ -268,6 +265,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     }
 
     public class GroupCreateAdapter extends FastScrollAdapter {
+        private ArrayList<User> contacts = new ArrayList();
         private Context context;
         private SearchAdapterHelper searchAdapterHelper;
         private ArrayList<User> searchResult = new ArrayList();
@@ -283,6 +281,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         public GroupCreateAdapter(Context ctx) {
             this.context = ctx;
+            ArrayList<TL_contact> arrayList = ContactsController.getInstance().contacts;
+            for (int a = 0; a < arrayList.size(); a++) {
+                User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) arrayList.get(a)).user_id));
+                if (!(user == null || user.self || user.deleted)) {
+                    this.contacts.add(user);
+                }
+            }
             this.searchAdapterHelper = new SearchAdapterHelper();
             this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate(GroupCreateActivity.this) {
                 public void onDataSetChanged() {
@@ -302,13 +307,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public String getLetter(int position) {
-            if (position == 0) {
-                position++;
-            }
-            if (position >= ContactsController.getInstance().contacts.size()) {
+            if (position < 0 || position >= this.contacts.size()) {
                 return null;
             }
-            User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) ContactsController.getInstance().contacts.get(position - 1)).user_id));
+            User user = (User) this.contacts.get(position);
             if (user == null) {
                 return null;
             }
@@ -331,7 +333,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         public int getItemCount() {
             if (!this.searching) {
-                return ContactsController.getInstance().contacts.size() + 1;
+                return this.contacts.size();
             }
             int count = this.searchResult.size();
             int globalCount = this.searchAdapterHelper.getGlobalSearch().size();
@@ -362,10 +364,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     if (this.searching) {
                         cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                         return;
-                    } else {
-                        cell.setText(LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts));
-                        return;
                     }
+                    return;
                 default:
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
@@ -400,7 +400,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                             }
                         }
                     } else {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) ContactsController.getInstance().contacts.get(position - 1)).user_id));
+                        user = (User) this.contacts.get(position);
                     }
                     cell2.setUser(user, name, username);
                     cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
@@ -409,26 +409,14 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public int getItemViewType(int position) {
-            if (!this.searching) {
-                switch (position) {
-                    case 0:
-                        return 0;
-                    default:
-                        return 1;
-                }
-            } else if (position == this.searchResult.size()) {
+            if (this.searching && position == this.searchResult.size()) {
                 return 0;
-            } else {
-                return 1;
             }
+            return 1;
         }
 
         public int getPositionForScrollProgress(float progress) {
-            float progressHeight = ((float) ((AndroidUtilities.dp(40.0f) + ((getItemCount() - 1) * (AndroidUtilities.dp(72.0f) + 1))) - 1)) * progress;
-            if (progressHeight < ((float) AndroidUtilities.dp(40.0f))) {
-                return 0;
-            }
-            return (int) ((progressHeight - ((float) AndroidUtilities.dp(40.0f))) / ((float) (AndroidUtilities.dp(72.0f) + 1)));
+            return (int) ((((float) (getItemCount() * (AndroidUtilities.dp(72.0f) + 1))) * progress) / ((float) (AndroidUtilities.dp(72.0f) + 1)));
         }
 
         public void onViewRecycled(ViewHolder holder) {
@@ -448,7 +436,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             if (query == null) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
-                this.searchAdapterHelper.queryServerSearch(null, false, false);
+                this.searchAdapterHelper.queryServerSearch(null, false, false, false);
                 notifyDataSetChanged();
                 return;
             }
@@ -463,9 +451,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, false, false);
-                            final ArrayList<TL_contact> contactsCopy = new ArrayList();
-                            contactsCopy.addAll(ContactsController.getInstance().contacts);
+                            GroupCreateAdapter.this.searchAdapterHelper.queryServerSearch(query, false, false, false);
                             Utilities.searchQueue.postRunnable(new Runnable() {
                                 public void run() {
                                     String search1 = query.trim().toLowerCase();
@@ -484,34 +470,32 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                     }
                                     ArrayList<User> resultArray = new ArrayList();
                                     ArrayList<CharSequence> resultArrayNames = new ArrayList();
-                                    for (int a = 0; a < contactsCopy.size(); a++) {
-                                        User user = MessagesController.getInstance().getUser(Integer.valueOf(((TL_contact) contactsCopy.get(a)).user_id));
-                                        if (user.id != UserConfig.getClientUserId()) {
-                                            String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
-                                            String tName = LocaleController.getInstance().getTranslitString(name);
-                                            if (name.equals(tName)) {
-                                                tName = null;
+                                    for (int a = 0; a < GroupCreateAdapter.this.contacts.size(); a++) {
+                                        User user = (User) GroupCreateAdapter.this.contacts.get(a);
+                                        String name = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                                        String tName = LocaleController.getInstance().getTranslitString(name);
+                                        if (name.equals(tName)) {
+                                            tName = null;
+                                        }
+                                        int found = 0;
+                                        int length = search.length;
+                                        int i = 0;
+                                        while (i < length) {
+                                            String q = search[i];
+                                            if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
+                                                found = 1;
+                                            } else if (user.username != null && user.username.startsWith(q)) {
+                                                found = 2;
                                             }
-                                            int found = 0;
-                                            int length = search.length;
-                                            int i = 0;
-                                            while (i < length) {
-                                                String q = search[i];
-                                                if (name.startsWith(q) || name.contains(" " + q) || (tName != null && (tName.startsWith(q) || tName.contains(" " + q)))) {
-                                                    found = 1;
-                                                } else if (user.username != null && user.username.startsWith(q)) {
-                                                    found = 2;
-                                                }
-                                                if (found != 0) {
-                                                    if (found == 1) {
-                                                        resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
-                                                    } else {
-                                                        resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
-                                                    }
-                                                    resultArray.add(user);
+                                            if (found != 0) {
+                                                if (found == 1) {
+                                                    resultArrayNames.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, q));
                                                 } else {
-                                                    i++;
+                                                    resultArrayNames.add(AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q));
                                                 }
+                                                resultArray.add(user);
+                                            } else {
+                                                i++;
                                             }
                                         }
                                     }
@@ -659,8 +643,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     return false;
                 }
                 rectangle.offset(child.getLeft() - child.getScrollX(), child.getTop() - child.getScrollY());
-                rectangle.top += GroupCreateActivity.this.fieldY;
-                rectangle.bottom += GroupCreateActivity.this.fieldY + AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+                rectangle.top += GroupCreateActivity.this.fieldY + AndroidUtilities.dp(20.0f);
+                rectangle.bottom += GroupCreateActivity.this.fieldY + AndroidUtilities.dp(50.0f);
                 return super.requestChildRectangleOnScreen(child, rectangle, immediate);
             }
         };
@@ -792,7 +776,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         frameLayout.addView(this.listView);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                boolean z = false;
                 if (view instanceof GroupCreateUserCell) {
                     GroupCreateUserCell cell = (GroupCreateUserCell) view;
                     User user = cell.getUser();
@@ -800,11 +783,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         boolean exists = GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id));
                         if (exists) {
                             GroupCreateActivity.this.spansContainer.removeSpan((GroupCreateSpan) GroupCreateActivity.this.selectedContacts.get(Integer.valueOf(user.id)));
-                            GroupCreateActivity.this.ignoreChange = true;
-                            if (GroupCreateActivity.this.editText.length() > 0) {
-                                GroupCreateActivity.this.editText.setText(null);
-                            }
-                            GroupCreateActivity.this.ignoreChange = false;
                         } else if (GroupCreateActivity.this.maxCount != 0 && GroupCreateActivity.this.selectedContacts.size() == GroupCreateActivity.this.maxCount) {
                             return;
                         } else {
@@ -819,26 +797,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                             GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
                             GroupCreateActivity.this.spansContainer.addSpan(span);
                             span.setOnClickListener(GroupCreateActivity.this);
-                            GroupCreateActivity.this.ignoreChange = true;
-                            if (GroupCreateActivity.this.editText.length() > 0) {
-                                GroupCreateActivity.this.editText.setText(null);
-                            }
-                            GroupCreateActivity.this.ignoreChange = false;
                         }
                         GroupCreateActivity.this.updateHint();
                         if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
-                            GroupCreateActivity.this.ignoreChange = true;
-                            if (GroupCreateActivity.this.editText.length() > 0) {
-                                GroupCreateActivity.this.editText.setText(null);
-                            }
-                            GroupCreateActivity.this.ignoreChange = false;
-                            GroupCreateActivity.this.closeSearch();
-                            return;
+                            AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
+                        } else {
+                            cell.setChecked(!exists, true);
                         }
-                        if (!exists) {
-                            z = true;
+                        if (GroupCreateActivity.this.editText.length() > 0) {
+                            GroupCreateActivity.this.editText.setText(null);
                         }
-                        cell.setChecked(z, true);
                     }
                 }
             }
@@ -852,6 +820,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         });
         updateHint();
         return this.fragmentView;
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (this.editText != null) {
+            this.editText.requestFocus();
+        }
     }
 
     public void didReceivedNotification(int id, Object... args) {

@@ -8,7 +8,7 @@ import com.google.android.gms.vision.barcode.Barcode.DriverLicense;
 
 public class zzf implements Creator<DriverLicense> {
     static void zza(DriverLicense driverLicense, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, driverLicense.versionCode);
         zzb.zza(parcel, 2, driverLicense.documentType, false);
         zzb.zza(parcel, 3, driverLicense.firstName, false);
@@ -24,23 +24,23 @@ public class zzf implements Creator<DriverLicense> {
         zzb.zza(parcel, 13, driverLicense.expiryDate, false);
         zzb.zza(parcel, 14, driverLicense.birthDate, false);
         zzb.zza(parcel, 15, driverLicense.issuingCountry, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzst(parcel);
+        return zzsj(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzabi(i);
+        return zzaay(i);
     }
 
-    public DriverLicense[] zzabi(int i) {
+    public DriverLicense[] zzaay(int i) {
         return new DriverLicense[i];
     }
 
-    public DriverLicense zzst(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public DriverLicense zzsj(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         String str = null;
         String str2 = null;
@@ -56,62 +56,62 @@ public class zzf implements Creator<DriverLicense> {
         String str12 = null;
         String str13 = null;
         String str14 = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    str2 = zza.zzq(parcel, zzcp);
+                    str2 = zza.zzq(parcel, zzcq);
                     break;
                 case 4:
-                    str3 = zza.zzq(parcel, zzcp);
+                    str3 = zza.zzq(parcel, zzcq);
                     break;
                 case 5:
-                    str4 = zza.zzq(parcel, zzcp);
+                    str4 = zza.zzq(parcel, zzcq);
                     break;
                 case 6:
-                    str5 = zza.zzq(parcel, zzcp);
+                    str5 = zza.zzq(parcel, zzcq);
                     break;
                 case 7:
-                    str6 = zza.zzq(parcel, zzcp);
+                    str6 = zza.zzq(parcel, zzcq);
                     break;
                 case 8:
-                    str7 = zza.zzq(parcel, zzcp);
+                    str7 = zza.zzq(parcel, zzcq);
                     break;
                 case 9:
-                    str8 = zza.zzq(parcel, zzcp);
+                    str8 = zza.zzq(parcel, zzcq);
                     break;
                 case 10:
-                    str9 = zza.zzq(parcel, zzcp);
+                    str9 = zza.zzq(parcel, zzcq);
                     break;
                 case 11:
-                    str10 = zza.zzq(parcel, zzcp);
+                    str10 = zza.zzq(parcel, zzcq);
                     break;
                 case 12:
-                    str11 = zza.zzq(parcel, zzcp);
+                    str11 = zza.zzq(parcel, zzcq);
                     break;
                 case 13:
-                    str12 = zza.zzq(parcel, zzcp);
+                    str12 = zza.zzq(parcel, zzcq);
                     break;
                 case 14:
-                    str13 = zza.zzq(parcel, zzcp);
+                    str13 = zza.zzq(parcel, zzcq);
                     break;
                 case 15:
-                    str14 = zza.zzq(parcel, zzcp);
+                    str14 = zza.zzq(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new DriverLicense(i, str, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

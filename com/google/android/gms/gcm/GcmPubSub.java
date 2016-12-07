@@ -8,21 +8,21 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class GcmPubSub {
-    private static GcmPubSub aeH;
-    private static final Pattern aeJ = Pattern.compile("/topics/[a-zA-Z0-9-_.~%]{1,900}");
-    private InstanceID aeI;
+    private static GcmPubSub agP;
+    private static final Pattern agR = Pattern.compile("/topics/[a-zA-Z0-9-_.~%]{1,900}");
+    private InstanceID agQ;
 
     private GcmPubSub(Context context) {
-        this.aeI = InstanceID.getInstance(context);
+        this.agQ = InstanceID.getInstance(context);
     }
 
     public static synchronized GcmPubSub getInstance(Context context) {
         GcmPubSub gcmPubSub;
         synchronized (GcmPubSub.class) {
-            if (aeH == null) {
-                aeH = new GcmPubSub(context);
+            if (agP == null) {
+                agP = new GcmPubSub(context);
             }
-            gcmPubSub = aeH;
+            gcmPubSub = agP;
         }
         return gcmPubSub;
     }
@@ -35,7 +35,7 @@ public class GcmPubSub {
             str3 = "Invalid appInstanceToken: ";
             valueOf = String.valueOf(str);
             throw new IllegalArgumentException(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
-        } else if (str2 == null || !aeJ.matcher(str2).matches()) {
+        } else if (str2 == null || !agR.matcher(str2).matches()) {
             str3 = "Invalid topic name: ";
             valueOf = String.valueOf(str2);
             throw new IllegalArgumentException(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
@@ -44,7 +44,7 @@ public class GcmPubSub {
                 bundle = new Bundle();
             }
             bundle.putString("gcm.topic", str2);
-            this.aeI.getToken(str, str2, bundle);
+            this.agQ.getToken(str, str2, bundle);
         }
     }
 
@@ -52,6 +52,6 @@ public class GcmPubSub {
     public void unsubscribe(String str, String str2) throws IOException {
         Bundle bundle = new Bundle();
         bundle.putString("gcm.topic", str2);
-        this.aeI.zzb(str, str2, bundle);
+        this.agQ.zzb(str, str2, bundle);
     }
 }

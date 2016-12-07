@@ -9,10 +9,10 @@ import com.google.android.gms.vision.barcode.internal.client.zzb;
 import com.google.android.gms.vision.internal.client.FrameMetadataParcel;
 
 public final class BarcodeDetector extends Detector<Barcode> {
-    private final zzb aKM;
+    private final zzb aNX;
 
     public static class Builder {
-        private BarcodeDetectorOptions aKN = new BarcodeDetectorOptions();
+        private BarcodeDetectorOptions aNY = new BarcodeDetectorOptions();
         private Context mContext;
 
         public Builder(Context context) {
@@ -20,11 +20,11 @@ public final class BarcodeDetector extends Detector<Barcode> {
         }
 
         public BarcodeDetector build() {
-            return new BarcodeDetector(new zzb(this.mContext, this.aKN));
+            return new BarcodeDetector(new zzb(this.mContext, this.aNY));
         }
 
         public Builder setBarcodeFormats(int i) {
-            this.aKN.aKO = i;
+            this.aNY.aNZ = i;
             return this;
         }
     }
@@ -34,7 +34,7 @@ public final class BarcodeDetector extends Detector<Barcode> {
     }
 
     private BarcodeDetector(zzb com_google_android_gms_vision_barcode_internal_client_zzb) {
-        this.aKM = com_google_android_gms_vision_barcode_internal_client_zzb;
+        this.aNX = com_google_android_gms_vision_barcode_internal_client_zzb;
     }
 
     public SparseArray<Barcode> detect(Frame frame) {
@@ -44,12 +44,12 @@ public final class BarcodeDetector extends Detector<Barcode> {
         Barcode[] zza;
         FrameMetadataParcel zzc = FrameMetadataParcel.zzc(frame);
         if (frame.getBitmap() != null) {
-            zza = this.aKM.zza(frame.getBitmap(), zzc);
+            zza = this.aNX.zza(frame.getBitmap(), zzc);
             if (zza == null) {
                 throw new IllegalArgumentException("Internal barcode detector error; check logcat output.");
             }
         }
-        zza = this.aKM.zza(frame.getGrayscaleImageData(), zzc);
+        zza = this.aNX.zza(frame.getGrayscaleImageData(), zzc);
         SparseArray<Barcode> sparseArray = new SparseArray(zza.length);
         for (Barcode barcode : zza) {
             sparseArray.append(barcode.rawValue.hashCode(), barcode);
@@ -58,11 +58,11 @@ public final class BarcodeDetector extends Detector<Barcode> {
     }
 
     public boolean isOperational() {
-        return this.aKM.isOperational();
+        return this.aNX.isOperational();
     }
 
     public void release() {
         super.release();
-        this.aKM.zzcls();
+        this.aNX.zzclr();
     }
 }

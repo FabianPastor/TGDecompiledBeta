@@ -12,9 +12,9 @@ import android.support.annotation.AnimRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.BundleCompat;
+import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 
 public final class CustomTabsIntent {
@@ -167,7 +167,7 @@ public final class CustomTabsIntent {
 
     public void launchUrl(Activity context, Uri url) {
         this.intent.setData(url);
-        ActivityCompat.startActivity(context, this.intent, this.startAnimationBundle);
+        ContextCompat.startActivity(context, this.intent, this.startAnimationBundle);
     }
 
     private CustomTabsIntent(Intent intent, Bundle startAnimationBundle) {

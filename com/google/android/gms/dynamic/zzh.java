@@ -7,10 +7,10 @@ import android.view.View;
 import com.google.android.gms.dynamic.zzc.zza;
 
 public final class zzh extends zza {
-    private Fragment Ov;
+    private Fragment Qg;
 
     private zzh(Fragment fragment) {
-        this.Ov = fragment;
+        this.Qg = fragment;
     }
 
     public static zzh zza(Fragment fragment) {
@@ -18,106 +18,106 @@ public final class zzh extends zza {
     }
 
     public Bundle getArguments() {
-        return this.Ov.getArguments();
+        return this.Qg.getArguments();
     }
 
     public int getId() {
-        return this.Ov.getId();
+        return this.Qg.getId();
     }
 
     public boolean getRetainInstance() {
-        return this.Ov.getRetainInstance();
+        return this.Qg.getRetainInstance();
     }
 
     public String getTag() {
-        return this.Ov.getTag();
+        return this.Qg.getTag();
     }
 
     public int getTargetRequestCode() {
-        return this.Ov.getTargetRequestCode();
+        return this.Qg.getTargetRequestCode();
     }
 
     public boolean getUserVisibleHint() {
-        return this.Ov.getUserVisibleHint();
+        return this.Qg.getUserVisibleHint();
     }
 
     public zzd getView() {
-        return zze.zzac(this.Ov.getView());
+        return zze.zzac(this.Qg.getView());
     }
 
     public boolean isAdded() {
-        return this.Ov.isAdded();
+        return this.Qg.isAdded();
     }
 
     public boolean isDetached() {
-        return this.Ov.isDetached();
+        return this.Qg.isDetached();
     }
 
     public boolean isHidden() {
-        return this.Ov.isHidden();
+        return this.Qg.isHidden();
     }
 
     public boolean isInLayout() {
-        return this.Ov.isInLayout();
+        return this.Qg.isInLayout();
     }
 
     public boolean isRemoving() {
-        return this.Ov.isRemoving();
+        return this.Qg.isRemoving();
     }
 
     public boolean isResumed() {
-        return this.Ov.isResumed();
+        return this.Qg.isResumed();
     }
 
     public boolean isVisible() {
-        return this.Ov.isVisible();
+        return this.Qg.isVisible();
     }
 
     public void setHasOptionsMenu(boolean z) {
-        this.Ov.setHasOptionsMenu(z);
+        this.Qg.setHasOptionsMenu(z);
     }
 
     public void setMenuVisibility(boolean z) {
-        this.Ov.setMenuVisibility(z);
+        this.Qg.setMenuVisibility(z);
     }
 
     public void setRetainInstance(boolean z) {
-        this.Ov.setRetainInstance(z);
+        this.Qg.setRetainInstance(z);
     }
 
     public void setUserVisibleHint(boolean z) {
-        this.Ov.setUserVisibleHint(z);
+        this.Qg.setUserVisibleHint(z);
     }
 
     public void startActivity(Intent intent) {
-        this.Ov.startActivity(intent);
+        this.Qg.startActivity(intent);
     }
 
     public void startActivityForResult(Intent intent, int i) {
-        this.Ov.startActivityForResult(intent, i);
+        this.Qg.startActivityForResult(intent, i);
     }
 
     public void zzac(zzd com_google_android_gms_dynamic_zzd) {
-        this.Ov.registerForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
+        this.Qg.registerForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
     }
 
     public void zzad(zzd com_google_android_gms_dynamic_zzd) {
-        this.Ov.unregisterForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
+        this.Qg.unregisterForContextMenu((View) zze.zzae(com_google_android_gms_dynamic_zzd));
     }
 
-    public zzd zzbdu() {
-        return zze.zzac(this.Ov.getActivity());
+    public zzd zzbdp() {
+        return zze.zzac(this.Qg.getActivity());
     }
 
-    public zzc zzbdv() {
-        return zza(this.Ov.getParentFragment());
+    public zzc zzbdq() {
+        return zza(this.Qg.getParentFragment());
     }
 
-    public zzd zzbdw() {
-        return zze.zzac(this.Ov.getResources());
+    public zzd zzbdr() {
+        return zze.zzac(this.Qg.getResources());
     }
 
-    public zzc zzbdx() {
-        return zza(this.Ov.getTargetFragment());
+    public zzc zzbds() {
+        return zza(this.Qg.getTargetFragment());
     }
 }

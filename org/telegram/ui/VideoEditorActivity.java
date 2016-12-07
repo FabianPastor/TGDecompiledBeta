@@ -57,7 +57,6 @@ import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.MentionsAdapter;
@@ -80,7 +79,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     private boolean allowMentions;
     private long audioFramesSize;
     private int bitrate;
-    private ActionBarMenuItem captionDoneItem;
     private PhotoViewerCaptionEnterView captionEditText;
     private ImageView captionItem;
     private ImageView compressItem;
@@ -259,8 +257,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
             }
         });
-        this.captionDoneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        this.captionDoneItem.setVisibility(8);
         this.fragmentView = new SizeNotifierFrameLayoutPhoto(context) {
             int lastWidth;
 
@@ -429,7 +425,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.captionItem.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 VideoEditorActivity.this.captionEditText.setFieldText(VideoEditorActivity.this.currentCaption);
-                VideoEditorActivity.this.captionDoneItem.setVisibility(0);
                 VideoEditorActivity.this.pickerView.setVisibility(8);
                 if (!AndroidUtilities.isTablet()) {
                     VideoEditorActivity.this.videoSeekBarView.setVisibility(8);
@@ -741,10 +736,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
                 if (VideoEditorActivity.this.allowMentions) {
                     VideoEditorActivity.this.mentionListAnimation = new AnimatorSet();
-                    AnimatorSet access$4400 = VideoEditorActivity.this.mentionListAnimation;
+                    AnimatorSet access$4300 = VideoEditorActivity.this.mentionListAnimation;
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f});
-                    access$4400.playTogether(animatorArr);
+                    access$4300.playTogether(animatorArr);
                     VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
                         public void onAnimationEnd(Animator animation) {
                             if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
@@ -809,7 +804,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
 
     public void onPause() {
         super.onPause();
-        if (this.captionDoneItem.getVisibility() != 8) {
+        if (this.pickerView.getVisibility() == 8) {
             closeCaptionEnter(true);
         }
     }
@@ -823,7 +818,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.currentCaption = this.captionEditText.getFieldCharSequence();
         }
         this.actionBar.setSubtitle(this.oldTitle);
-        this.captionDoneItem.setVisibility(8);
         this.pickerView.setVisibility(0);
         if (!AndroidUtilities.isTablet()) {
             this.videoSeekBarView.setVisibility(0);

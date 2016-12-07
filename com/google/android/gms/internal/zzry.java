@@ -1,9 +1,14 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public interface zzry {
-    PendingResult<Status> zzg(GoogleApiClient googleApiClient);
+public abstract class zzry {
+    private static final ExecutorService AF = new ThreadPoolExecutor(0, 4, 60, TimeUnit.SECONDS, new LinkedBlockingQueue(), new zzsw("GAC_Transform"));
+
+    public static ExecutorService zzatf() {
+        return AF;
+    }
 }

@@ -3,6 +3,8 @@ package android.support.v4.content;
 import android.content.Context;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.os.OperationCanceledException;
 import android.support.v4.util.TimeUtils;
 import java.io.FileDescriptor;
@@ -171,6 +173,7 @@ public abstract class AsyncTaskLoader<D> extends Loader<D> {
         return this.mCancellingTask != null;
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public void waitForLoader() {
         LoadTask task = this.mTask;
         if (task != null) {

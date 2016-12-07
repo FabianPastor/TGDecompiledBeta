@@ -15,19 +15,19 @@ public final class Landmark {
     public static final int RIGHT_EAR_TIP = 8;
     public static final int RIGHT_EYE = 10;
     public static final int RIGHT_MOUTH = 11;
-    private final PointF aKP;
-    private final int lN;
+    private final PointF aOa;
+    private final int nV;
 
     public Landmark(PointF pointF, int i) {
-        this.aKP = pointF;
-        this.lN = i;
+        this.aOa = pointF;
+        this.nV = i;
     }
 
     public PointF getPosition() {
-        return this.aKP;
+        return this.aOa;
     }
 
     public int getType() {
-        return this.lN;
+        return this.nV;
     }
 }

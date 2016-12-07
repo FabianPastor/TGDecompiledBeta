@@ -2,18 +2,14 @@ package com.google.android.gms.common.util;
 
 import android.os.SystemClock;
 
-public final class zzh implements zze {
-    private static zzh EK;
+public class zzh implements zze {
+    private static zzh Gq = new zzh();
 
-    public static synchronized zze zzaxj() {
-        zze com_google_android_gms_common_util_zze;
-        synchronized (zzh.class) {
-            if (EK == null) {
-                EK = new zzh();
-            }
-            com_google_android_gms_common_util_zze = EK;
-        }
-        return com_google_android_gms_common_util_zze;
+    private zzh() {
+    }
+
+    public static zze zzayl() {
+        return Gq;
     }
 
     public long currentTimeMillis() {

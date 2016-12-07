@@ -12,14 +12,14 @@ public interface zzm extends IInterface {
     public static abstract class zza extends Binder implements zzm {
 
         private static class zza implements zzm {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public List<UserAttributeParcel> zza(AppMetadata appMetadata, boolean z) throws RemoteException {
@@ -38,10 +38,27 @@ public interface zzm extends IInterface {
                         i = 0;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(7, obtain, obtain2, 0);
+                    this.zzajq.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                     List<UserAttributeParcel> createTypedArrayList = obtain2.createTypedArrayList(UserAttributeParcel.CREATOR);
                     return createTypedArrayList;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void zza(long j, String str, String str2, String str3) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
+                    obtain.writeLong(j);
+                    obtain.writeString(str);
+                    obtain.writeString(str2);
+                    obtain.writeString(str3);
+                    this.zzajq.transact(10, obtain, obtain2, 0);
+                    obtain2.readException();
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -59,7 +76,7 @@ public interface zzm extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(4, obtain, obtain2, 0);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -84,7 +101,7 @@ public interface zzm extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -105,7 +122,7 @@ public interface zzm extends IInterface {
                     }
                     obtain.writeString(str);
                     obtain.writeString(str2);
-                    this.zzajf.transact(5, obtain, obtain2, 0);
+                    this.zzajq.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -130,7 +147,7 @@ public interface zzm extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -150,7 +167,7 @@ public interface zzm extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeString(str);
-                    this.zzajf.transact(9, obtain, obtain2, 0);
+                    this.zzajq.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                     byte[] createByteArray = obtain2.createByteArray();
                     return createByteArray;
@@ -171,7 +188,7 @@ public interface zzm extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(6, obtain, obtain2, 0);
+                    this.zzajq.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -184,7 +201,7 @@ public interface zzm extends IInterface {
             attachInterface(this, "com.google.android.gms.measurement.internal.IMeasurementService");
         }
 
-        public static zzm zzjl(IBinder iBinder) {
+        public static zzm zzjp(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -235,6 +252,11 @@ public interface zzm extends IInterface {
                     parcel2.writeNoException();
                     parcel2.writeByteArray(zza2);
                     return true;
+                case 10:
+                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
+                    zza(parcel.readLong(), parcel.readString(), parcel.readString(), parcel.readString());
+                    parcel2.writeNoException();
+                    return true;
                 case 1598968902:
                     parcel2.writeString("com.google.android.gms.measurement.internal.IMeasurementService");
                     return true;
@@ -245,6 +267,8 @@ public interface zzm extends IInterface {
     }
 
     List<UserAttributeParcel> zza(AppMetadata appMetadata, boolean z) throws RemoteException;
+
+    void zza(long j, String str, String str2, String str3) throws RemoteException;
 
     void zza(AppMetadata appMetadata) throws RemoteException;
 

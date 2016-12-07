@@ -6,18 +6,18 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class SignInButtonConfig extends AbstractSafeParcelable {
-    public static final Creator<SignInButtonConfig> CREATOR = new zzaf();
+    public static final Creator<SignInButtonConfig> CREATOR = new zzad();
     @Deprecated
-    private final Scope[] AX;
-    private final int CY;
-    private final int CZ;
+    private final Scope[] Dg;
+    private final int EL;
+    private final int EM;
     final int mVersionCode;
 
     SignInButtonConfig(int i, int i2, int i3, Scope[] scopeArr) {
         this.mVersionCode = i;
-        this.CY = i2;
-        this.CZ = i3;
-        this.AX = scopeArr;
+        this.EL = i2;
+        this.EM = i3;
+        this.Dg = scopeArr;
     }
 
     public SignInButtonConfig(int i, int i2, Scope[] scopeArr) {
@@ -25,19 +25,19 @@ public class SignInButtonConfig extends AbstractSafeParcelable {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzaf.zza(this, parcel, i);
+        zzad.zza(this, parcel, i);
     }
 
-    public int zzavh() {
-        return this.CY;
+    public int zzawq() {
+        return this.EL;
     }
 
-    public int zzavi() {
-        return this.CZ;
+    public int zzawr() {
+        return this.EM;
     }
 
     @Deprecated
-    public Scope[] zzavj() {
-        return this.AX;
+    public Scope[] zzaws() {
+        return this.Dg;
     }
 }

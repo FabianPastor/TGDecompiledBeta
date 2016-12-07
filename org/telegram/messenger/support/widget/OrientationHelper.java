@@ -1,5 +1,6 @@
 package org.telegram.messenger.support.widget;
 
+import android.graphics.Rect;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -10,6 +11,7 @@ public abstract class OrientationHelper {
     public static final int VERTICAL = 1;
     private int mLastTotalSpace;
     protected final LayoutManager mLayoutManager;
+    final Rect mTmpRect;
 
     public abstract int getDecoratedEnd(View view);
 
@@ -33,12 +35,17 @@ public abstract class OrientationHelper {
 
     public abstract int getTotalSpace();
 
+    public abstract int getTransformedEndWithDecoration(View view);
+
+    public abstract int getTransformedStartWithDecoration(View view);
+
     public abstract void offsetChild(View view, int i);
 
     public abstract void offsetChildren(int i);
 
     private OrientationHelper(LayoutManager layoutManager) {
         this.mLastTotalSpace = Integer.MIN_VALUE;
+        this.mTmpRect = new Rect();
         this.mLayoutManager = layoutManager;
     }
 
@@ -97,6 +104,16 @@ public abstract class OrientationHelper {
                 return this.mLayoutManager.getDecoratedLeft(view) - ((LayoutParams) view.getLayoutParams()).leftMargin;
             }
 
+            public int getTransformedEndWithDecoration(View view) {
+                this.mLayoutManager.getTransformedBoundingBox(view, true, this.mTmpRect);
+                return this.mTmpRect.right;
+            }
+
+            public int getTransformedStartWithDecoration(View view) {
+                this.mLayoutManager.getTransformedBoundingBox(view, true, this.mTmpRect);
+                return this.mTmpRect.left;
+            }
+
             public int getTotalSpace() {
                 return (this.mLayoutManager.getWidth() - this.mLayoutManager.getPaddingLeft()) - this.mLayoutManager.getPaddingRight();
             }
@@ -153,6 +170,16 @@ public abstract class OrientationHelper {
 
             public int getDecoratedStart(View view) {
                 return this.mLayoutManager.getDecoratedTop(view) - ((LayoutParams) view.getLayoutParams()).topMargin;
+            }
+
+            public int getTransformedEndWithDecoration(View view) {
+                this.mLayoutManager.getTransformedBoundingBox(view, true, this.mTmpRect);
+                return this.mTmpRect.bottom;
+            }
+
+            public int getTransformedStartWithDecoration(View view) {
+                this.mLayoutManager.getTransformedBoundingBox(view, true, this.mTmpRect);
+                return this.mTmpRect.top;
             }
 
             public int getTotalSpace() {

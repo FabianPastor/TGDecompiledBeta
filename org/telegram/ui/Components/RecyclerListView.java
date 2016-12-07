@@ -81,6 +81,7 @@ public class RecyclerListView extends RecyclerView {
         private float progress;
         private float[] radii = new float[8];
         private RectF rect = new RectF();
+        private int scrollX;
         private float startDy;
         private float textX;
         private float textY;
@@ -99,6 +100,7 @@ public class RecyclerListView extends RecyclerView {
             this.colors[3] = Color.green(-11361317);
             this.colors[4] = Color.blue(Theme.GROUP_CREATE_INACTIVE_SCROLL_COLOR);
             this.colors[5] = Color.blue(-11361317);
+            this.scrollX = LocaleController.isRTL ? AndroidUtilities.dp(10.0f) : AndroidUtilities.dp(117.0f);
         }
 
         public boolean onTouchEvent(MotionEvent event) {
@@ -107,7 +109,7 @@ public class RecyclerListView extends RecyclerView {
                     float x = event.getX();
                     this.lastY = event.getY();
                     float currectY = ((float) Math.ceil((double) (((float) (getMeasuredHeight() - AndroidUtilities.dp(54.0f))) * this.progress))) + ((float) AndroidUtilities.dp(12.0f));
-                    if (event.getX() < ((float) AndroidUtilities.dp(107.0f)) || this.lastY < currectY || this.lastY > ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + currectY) {
+                    if ((LocaleController.isRTL && x > ((float) AndroidUtilities.dp(25.0f))) || ((!LocaleController.isRTL && x < ((float) AndroidUtilities.dp(107.0f))) || this.lastY < currectY || this.lastY > ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) + currectY)) {
                         return false;
                     }
                     this.startDy = this.lastY - currectY;
@@ -166,7 +168,13 @@ public class RecyclerListView extends RecyclerView {
                         } else if (!newLetter.equals(this.currentLetter)) {
                             this.letterLayout = new StaticLayout(newLetter, this.letterPaint, 1000, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
                             if (this.letterLayout.getLineCount() > 0) {
-                                this.textX = (((float) AndroidUtilities.dp(88.0f)) - this.letterLayout.getLineWidth(0)) / 2.0f;
+                                if (LocaleController.isRTL) {
+                                    float lWidth = this.letterLayout.getLineWidth(0);
+                                    float lleft = this.letterLayout.getLineLeft(0);
+                                    this.textX = ((float) AndroidUtilities.dp(10.0f)) + ((((float) AndroidUtilities.dp(88.0f)) - (this.letterLayout.getLineWidth(0) - this.letterLayout.getLineLeft(0))) / 2.0f);
+                                } else {
+                                    this.textX = (((float) AndroidUtilities.dp(88.0f)) - (this.letterLayout.getLineWidth(0) - this.letterLayout.getLineLeft(0))) / 2.0f;
+                                }
                                 this.textY = (float) ((AndroidUtilities.dp(88.0f) - this.letterLayout.getHeight()) / 2);
                             }
                         }
@@ -182,7 +190,7 @@ public class RecyclerListView extends RecyclerView {
         protected void onDraw(Canvas canvas) {
             this.paint.setColor(Color.argb(255, this.colors[0] + ((int) (((float) (this.colors[1] - this.colors[0])) * this.bubbleProgress)), this.colors[2] + ((int) (((float) (this.colors[3] - this.colors[2])) * this.bubbleProgress)), this.colors[4] + ((int) (((float) (this.colors[5] - this.colors[4])) * this.bubbleProgress))));
             int y = (int) Math.ceil((double) (((float) (getMeasuredHeight() - AndroidUtilities.dp(54.0f))) * this.progress));
-            this.rect.set((float) AndroidUtilities.dp(117.0f), (float) (AndroidUtilities.dp(12.0f) + y), (float) AndroidUtilities.dp(122.0f), (float) (AndroidUtilities.dp(42.0f) + y));
+            this.rect.set((float) this.scrollX, (float) (AndroidUtilities.dp(12.0f) + y), (float) (this.scrollX + AndroidUtilities.dp(5.0f)), (float) (AndroidUtilities.dp(42.0f) + y));
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
             if ((this.pressed || this.bubbleProgress != 0.0f) && this.letterLayout != null) {
                 float raduisTop;
@@ -203,20 +211,38 @@ public class RecyclerListView extends RecyclerView {
                     raduisBottom = (float) AndroidUtilities.dp(44.0f);
                     raduisTop = ((float) AndroidUtilities.dp(4.0f)) + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((diff - ((float) AndroidUtilities.dp(29.0f))) / ((float) AndroidUtilities.dp(29.0f)))) * ((float) AndroidUtilities.dp(40.0f)));
                 }
-                if (!(this.radii[2] == raduisTop && this.radii[4] == raduisBottom)) {
-                    float[] fArr = this.radii;
-                    this.radii[3] = raduisTop;
-                    fArr[2] = raduisTop;
-                    fArr = this.radii;
-                    this.radii[5] = raduisBottom;
-                    fArr[4] = raduisBottom;
+                if ((LocaleController.isRTL && !(this.radii[0] == raduisTop && this.radii[6] == raduisBottom)) || !(LocaleController.isRTL || (this.radii[2] == raduisTop && this.radii[4] == raduisBottom))) {
+                    float f;
+                    float[] fArr;
+                    if (LocaleController.isRTL) {
+                        fArr = this.radii;
+                        this.radii[1] = raduisTop;
+                        fArr[0] = raduisTop;
+                        fArr = this.radii;
+                        this.radii[7] = raduisBottom;
+                        fArr[6] = raduisBottom;
+                    } else {
+                        fArr = this.radii;
+                        this.radii[3] = raduisTop;
+                        fArr[2] = raduisTop;
+                        fArr = this.radii;
+                        this.radii[5] = raduisBottom;
+                        fArr[4] = raduisBottom;
+                    }
                     this.path.reset();
-                    this.rect.set(0.0f, 0.0f, (float) AndroidUtilities.dp(88.0f), (float) AndroidUtilities.dp(88.0f));
+                    RectF rectF = this.rect;
+                    float dp = LocaleController.isRTL ? (float) AndroidUtilities.dp(10.0f) : 0.0f;
+                    if (LocaleController.isRTL) {
+                        f = 98.0f;
+                    } else {
+                        f = 88.0f;
+                    }
+                    rectF.set(dp, 0.0f, (float) AndroidUtilities.dp(f), (float) AndroidUtilities.dp(88.0f));
                     this.path.addRoundRect(this.rect, this.radii, Direction.CW);
                     this.path.close();
                 }
                 canvas.save();
-                canvas.scale(this.bubbleProgress, this.bubbleProgress, (float) AndroidUtilities.dp(117.0f), (float) (progressY - y));
+                canvas.scale(this.bubbleProgress, this.bubbleProgress, (float) this.scrollX, (float) (progressY - y));
                 canvas.drawPath(this.path, this.paint);
                 canvas.translate(this.textX, this.textY);
                 this.letterLayout.draw(canvas);

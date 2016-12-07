@@ -1,55 +1,15 @@
 package com.google.android.gms.internal;
 
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import com.google.android.gms.common.util.zzs;
+import android.os.DeadObjectException;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
-public class zzsh {
-    protected final Context mContext;
+public abstract class zzsh<A extends zzb> {
+    private final zzrr.zzb<?> Bm;
 
-    public zzsh(Context context) {
-        this.mContext = context;
+    public zzrr.zzb<?> zzatz() {
+        return this.Bm;
     }
 
-    public int checkPermission(String str, String str2) {
-        return this.mContext.getPackageManager().checkPermission(str, str2);
-    }
-
-    public ApplicationInfo getApplicationInfo(String str, int i) throws NameNotFoundException {
-        return this.mContext.getPackageManager().getApplicationInfo(str, i);
-    }
-
-    public PackageInfo getPackageInfo(String str, int i) throws NameNotFoundException {
-        return this.mContext.getPackageManager().getPackageInfo(str, i);
-    }
-
-    @TargetApi(19)
-    public boolean zzg(int i, String str) {
-        if (zzs.zzaxr()) {
-            try {
-                ((AppOpsManager) this.mContext.getSystemService("appops")).checkPackage(i, str);
-                return true;
-            } catch (SecurityException e) {
-                return false;
-            }
-        }
-        String[] packagesForUid = this.mContext.getPackageManager().getPackagesForUid(i);
-        if (str == null || packagesForUid == null) {
-            return false;
-        }
-        for (Object equals : packagesForUid) {
-            if (str.equals(equals)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public CharSequence zzik(String str) throws NameNotFoundException {
-        return this.mContext.getPackageManager().getApplicationLabel(this.mContext.getPackageManager().getApplicationInfo(str, 0));
-    }
+    protected abstract void zzc(A a, TaskCompletionSource<Void> taskCompletionSource) throws DeadObjectException;
 }

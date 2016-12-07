@@ -33,6 +33,10 @@ public class Pair<F, S> {
         return hashCode ^ i;
     }
 
+    public String toString() {
+        return "Pair{" + String.valueOf(this.first) + " " + String.valueOf(this.second) + "}";
+    }
+
     public static <A, B> Pair<A, B> create(A a, B b) {
         return new Pair(a, b);
     }

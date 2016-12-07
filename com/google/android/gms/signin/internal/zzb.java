@@ -16,9 +16,9 @@ public class zzb extends zza {
     public void zzb(SignInResponse signInResponse) throws RemoteException {
     }
 
-    public void zzed(Status status) throws RemoteException {
+    public void zzej(Status status) throws RemoteException {
     }
 
-    public void zzee(Status status) throws RemoteException {
+    public void zzek(Status status) throws RemoteException {
     }
 }

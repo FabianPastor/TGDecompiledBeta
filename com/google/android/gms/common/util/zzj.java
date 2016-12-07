@@ -10,22 +10,22 @@ import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public final class zzj {
-    private static IntentFilter EP = new IntentFilter("android.intent.action.BATTERY_CHANGED");
-    private static long EQ;
-    private static float ER = Float.NaN;
+    private static IntentFilter Gv = new IntentFilter("android.intent.action.BATTERY_CHANGED");
+    private static long Gw;
+    private static float Gx = Float.NaN;
 
     @TargetApi(20)
     public static boolean zzb(PowerManager powerManager) {
-        return zzs.zzaxs() ? powerManager.isInteractive() : powerManager.isScreenOn();
+        return zzs.zzayv() ? powerManager.isInteractive() : powerManager.isScreenOn();
     }
 
     @TargetApi(20)
-    public static int zzcn(Context context) {
+    public static int zzck(Context context) {
         int i = 1;
         if (context == null || context.getApplicationContext() == null) {
             return -1;
         }
-        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, EP);
+        Intent registerReceiver = context.getApplicationContext().registerReceiver(null, Gv);
         int i2 = ((registerReceiver == null ? 0 : registerReceiver.getIntExtra("plugged", 0)) & 7) != 0 ? 1 : 0;
         PowerManager powerManager = (PowerManager) context.getSystemService("power");
         if (powerManager == null) {
@@ -38,18 +38,18 @@ public final class zzj {
         return i3 | i;
     }
 
-    public static synchronized float zzco(Context context) {
+    public static synchronized float zzcl(Context context) {
         float f;
         synchronized (zzj.class) {
-            if (SystemClock.elapsedRealtime() - EQ >= HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS || Float.isNaN(ER)) {
-                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, EP);
+            if (SystemClock.elapsedRealtime() - Gw >= HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS || Float.isNaN(Gx)) {
+                Intent registerReceiver = context.getApplicationContext().registerReceiver(null, Gv);
                 if (registerReceiver != null) {
-                    ER = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
+                    Gx = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));
                 }
-                EQ = SystemClock.elapsedRealtime();
-                f = ER;
+                Gw = SystemClock.elapsedRealtime();
+                f = Gx;
             } else {
-                f = ER;
+                f = Gx;
             }
         }
         return f;

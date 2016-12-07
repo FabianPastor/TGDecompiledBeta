@@ -36,6 +36,7 @@ import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.exoplayer.ExoPlayerLibraryInfo;
 import org.telegram.messenger.exoplayer.upstream.DataSource;
 import org.telegram.messenger.exoplayer.upstream.DataSpec;
+import org.telegram.tgnet.TLRPC;
 
 public final class Util {
     public static final String DEVICE = Build.DEVICE;
@@ -501,7 +502,7 @@ public final class Util {
             case '%':
             case '*':
             case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
-            case ':':
+            case TLRPC.LAYER /*58*/:
             case '<':
             case '>':
             case '?':

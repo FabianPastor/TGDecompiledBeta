@@ -165,6 +165,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         requestWindowFeature(1);
         setTheme(R.style.Theme.TMessages);
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+        if (UserConfig.passcodeHash.length() > 0) {
+            try {
+                getWindow().setFlags(8192, 8192);
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+        }
         super.onCreate(savedInstanceState);
         if (VERSION.SDK_INT >= 24) {
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
@@ -398,11 +405,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         this.actionBarLayout.setDelegate(this);
         ApplicationLoader.loadWallpaper();
         this.passcodeView = new PasscodeView(this);
-        this.drawerLayoutContainer.addView(this.passcodeView);
-        LayoutParams layoutParams1 = (FrameLayout.LayoutParams) this.passcodeView.getLayoutParams();
-        layoutParams1.width = -1;
-        layoutParams1.height = -1;
-        this.passcodeView.setLayoutParams(layoutParams1);
+        this.drawerLayoutContainer.addView(this.passcodeView, LayoutHelper.createFrame(-1, -1.0f));
         NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeOtherAppActivities, this);
         this.currentConnectionState = ConnectionsManager.getInstance().getConnectionState();
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
@@ -412,6 +415,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.needShowAlert);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetNewWallpapper);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.didSetPasscode);
         if (this.actionBarLayout.fragmentsStack.isEmpty()) {
             if (UserConfig.isClientActivated()) {
                 this.actionBarLayout.addFragmentToStack(new DialogsActivity(null));
@@ -752,8 +756,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 break;
                         }
                     }
-                } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                } catch (Throwable e2) {
+                    FileLog.e("tmessages", e2);
                 }
             }
         } else {
@@ -804,8 +808,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.onGlobalLayoutListener = anonymousClass6;
                 viewTreeObserver.addOnGlobalLayoutListener(anonymousClass6);
             }
-        } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+        } catch (Throwable e22) {
+            FileLog.e("tmessages", e22);
         }
     }
 
@@ -880,6 +884,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             UserConfig.appLocked = true;
             if (PhotoViewer.getInstance().isVisible()) {
                 PhotoViewer.getInstance().closePhoto(false, true);
+            } else if (ArticleViewer.getInstance().isVisible()) {
+                ArticleViewer.getInstance().close();
             }
             this.passcodeView.onShow();
             UserConfig.isWaitingForPasscodeEnter = true;
@@ -1439,6 +1445,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     pushOpened = true;
                     if (PhotoViewer.getInstance().isVisible()) {
                         PhotoViewer.getInstance().closePhoto(false, true);
+                    } else if (ArticleViewer.getInstance().isVisible()) {
+                        ArticleViewer.getInstance().close();
                     }
                     this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
                     if (AndroidUtilities.isTablet()) {
@@ -1578,6 +1586,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     LaunchActivity.this.actionBarLayout.presentFragment(fragment, removeLast, true, true);
                                     if (PhotoViewer.getInstance().isVisible()) {
                                         PhotoViewer.getInstance().closePhoto(false, true);
+                                    } else if (ArticleViewer.getInstance().isVisible()) {
+                                        ArticleViewer.getInstance().close();
                                     }
                                     LaunchActivity.this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
                                     if (AndroidUtilities.isTablet()) {
@@ -1948,6 +1958,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.needShowAlert);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.wasUnableToFindCurrentLocation);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didSetPasscode);
         }
     }
 
@@ -2073,6 +2084,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     protected void onDestroy() {
         PhotoViewer.getInstance().destroyPhotoViewer();
         SecretPhotoViewer.getInstance().destroyPhotoViewer();
+        ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
         try {
             if (this.visibleDialog != null) {
@@ -2224,10 +2236,28 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             if (!mainFragmentsStack.isEmpty()) {
                 ((BaseFragment) mainFragmentsStack.get(mainFragmentsStack.size() - 1)).showDialog(builder.create());
             }
-        } else if (id == NotificationCenter.didSetNewWallpapper && this.listView != null) {
-            View child = this.listView.getChildAt(0);
-            if (child != null) {
-                child.invalidate();
+        } else if (id == NotificationCenter.didSetNewWallpapper) {
+            if (this.listView != null) {
+                View child = this.listView.getChildAt(0);
+                if (child != null) {
+                    child.invalidate();
+                }
+            }
+        } else if (id != NotificationCenter.didSetPasscode) {
+        } else {
+            if (UserConfig.passcodeHash.length() > 0) {
+                try {
+                    getWindow().setFlags(8192, 8192);
+                    return;
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                    return;
+                }
+            }
+            try {
+                getWindow().clearFlags(8192);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
             }
         }
     }
@@ -2338,6 +2368,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             finish();
         } else if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
+        } else if (ArticleViewer.getInstance().isVisible()) {
+            ArticleViewer.getInstance().close();
         } else if (this.drawerLayoutContainer.isDrawerOpened()) {
             this.drawerLayoutContainer.closeDrawer(false);
         } else if (!AndroidUtilities.isTablet()) {
@@ -2387,16 +2419,23 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     public boolean onPreIme() {
-        if (!PhotoViewer.getInstance().isVisible()) {
+        if (PhotoViewer.getInstance().isVisible()) {
+            PhotoViewer.getInstance().closePhoto(true, false);
+            return true;
+        } else if (!ArticleViewer.getInstance().isVisible()) {
             return false;
+        } else {
+            ArticleViewer.getInstance().close();
+            return true;
         }
-        PhotoViewer.getInstance().closePhoto(true, false);
-        return true;
     }
 
     public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
         if (keyCode == 82 && !UserConfig.isWaitingForPasscodeEnter) {
             if (PhotoViewer.getInstance().isVisible()) {
+                return super.onKeyUp(keyCode, event);
+            }
+            if (ArticleViewer.getInstance().isVisible()) {
                 return super.onKeyUp(keyCode, event);
             }
             if (AndroidUtilities.isTablet()) {

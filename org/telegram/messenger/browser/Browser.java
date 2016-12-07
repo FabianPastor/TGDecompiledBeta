@@ -41,7 +41,6 @@ public class Browser {
         }
 
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
-            FileLog.e("tmessages", "code = " + navigationEvent + " extras " + extras);
         }
     }
 

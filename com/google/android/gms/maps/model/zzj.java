@@ -8,7 +8,7 @@ import java.util.List;
 
 public class zzj implements Creator<PolylineOptions> {
     static void zza(PolylineOptions polylineOptions, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, polylineOptions.getVersionCode());
         zzb.zzc(parcel, 2, polylineOptions.getPoints(), false);
         zzb.zza(parcel, 3, polylineOptions.getWidth());
@@ -17,66 +17,66 @@ public class zzj implements Creator<PolylineOptions> {
         zzb.zza(parcel, 6, polylineOptions.isVisible());
         zzb.zza(parcel, 7, polylineOptions.isGeodesic());
         zzb.zza(parcel, 8, polylineOptions.isClickable());
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzow(parcel);
+        return zzpo(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwb(i);
+        return zzws(i);
     }
 
-    public PolylineOptions zzow(Parcel parcel) {
+    public PolylineOptions zzpo(Parcel parcel) {
         float f = 0.0f;
         boolean z = false;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         List list = null;
         boolean z2 = false;
         boolean z3 = false;
         int i = 0;
         float f2 = 0.0f;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i2 = zza.zzg(parcel, zzcp);
+                    i2 = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    list = zza.zzc(parcel, zzcp, LatLng.CREATOR);
+                    list = zza.zzc(parcel, zzcq, LatLng.CREATOR);
                     break;
                 case 3:
-                    f2 = zza.zzl(parcel, zzcp);
+                    f2 = zza.zzl(parcel, zzcq);
                     break;
                 case 4:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 5:
-                    f = zza.zzl(parcel, zzcp);
+                    f = zza.zzl(parcel, zzcq);
                     break;
                 case 6:
-                    z3 = zza.zzc(parcel, zzcp);
+                    z3 = zza.zzc(parcel, zzcq);
                     break;
                 case 7:
-                    z2 = zza.zzc(parcel, zzcp);
+                    z2 = zza.zzc(parcel, zzcq);
                     break;
                 case 8:
-                    z = zza.zzc(parcel, zzcp);
+                    z = zza.zzc(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new PolylineOptions(i2, list, f2, i, f, z3, z2, z);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public PolylineOptions[] zzwb(int i) {
+    public PolylineOptions[] zzws(int i) {
         return new PolylineOptions[i];
     }
 }

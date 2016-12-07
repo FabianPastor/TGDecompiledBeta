@@ -1,13 +1,13 @@
 package android.support.v4.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build.VERSION;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
@@ -83,7 +83,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     private Animation mScaleAnimation;
     private Animation mScaleDownAnimation;
     private Animation mScaleDownToStartAnimation;
-    float mSpinnerFinalOffset;
+    int mSpinnerOffsetEnd;
     float mStartingScale;
     private View mTarget;
     private float mTotalDragDistance;
@@ -132,14 +132,22 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     public void setProgressViewOffset(boolean scale, int start, int end) {
         this.mScale = scale;
         this.mOriginalOffsetTop = start;
-        this.mSpinnerFinalOffset = (float) end;
+        this.mSpinnerOffsetEnd = end;
         this.mUsingCustomStart = true;
         reset();
         this.mRefreshing = false;
     }
 
+    public int getProgressViewStartOffset() {
+        return this.mOriginalOffsetTop;
+    }
+
+    public int getProgressViewEndOffset() {
+        return this.mSpinnerOffsetEnd;
+    }
+
     public void setProgressViewEndTarget(boolean scale, int end) {
-        this.mSpinnerFinalOffset = (float) end;
+        this.mSpinnerOffsetEnd = end;
         this.mScale = scale;
         this.mCircleView.invalidate();
     }
@@ -194,9 +202,9 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             public void applyTransformation(float interpolatedTime, Transformation t) {
                 int endTarget;
                 if (SwipeRefreshLayout.this.mUsingCustomStart) {
-                    endTarget = (int) SwipeRefreshLayout.this.mSpinnerFinalOffset;
+                    endTarget = SwipeRefreshLayout.this.mSpinnerOffsetEnd;
                 } else {
-                    endTarget = (int) (SwipeRefreshLayout.this.mSpinnerFinalOffset - ((float) Math.abs(SwipeRefreshLayout.this.mOriginalOffsetTop)));
+                    endTarget = SwipeRefreshLayout.this.mSpinnerOffsetEnd - Math.abs(SwipeRefreshLayout.this.mOriginalOffsetTop);
                 }
                 SwipeRefreshLayout.this.setTargetOffsetTopAndBottom((SwipeRefreshLayout.this.mFrom + ((int) (((float) (endTarget - SwipeRefreshLayout.this.mFrom)) * interpolatedTime))) - SwipeRefreshLayout.this.mCircleView.getTop(), false);
                 SwipeRefreshLayout.this.mProgress.setArrowScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolatedTime);
@@ -215,8 +223,8 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         this.mCircleDiameter = (int) (40.0f * metrics.density);
         createProgressView();
         ViewCompat.setChildrenDrawingOrderEnabled(this, true);
-        this.mSpinnerFinalOffset = 64.0f * metrics.density;
-        this.mTotalDragDistance = this.mSpinnerFinalOffset;
+        this.mSpinnerOffsetEnd = (int) (64.0f * metrics.density);
+        this.mTotalDragDistance = (float) this.mSpinnerOffsetEnd;
         this.mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
         this.mNestedScrollingChildHelper = new NestedScrollingChildHelper(this);
         setNestedScrollingEnabled(true);
@@ -267,9 +275,9 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         int endTarget;
         this.mRefreshing = refreshing;
         if (this.mUsingCustomStart) {
-            endTarget = (int) this.mSpinnerFinalOffset;
+            endTarget = this.mSpinnerOffsetEnd;
         } else {
-            endTarget = (int) (this.mSpinnerFinalOffset + ((float) this.mOriginalOffsetTop));
+            endTarget = this.mSpinnerOffsetEnd + this.mOriginalOffsetTop;
         }
         setTargetOffsetTopAndBottom(endTarget - this.mCurrentTargetOffsetTop, true);
         this.mNotify = false;
@@ -358,7 +366,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     }
 
     public void setProgressBackgroundColorSchemeResource(@ColorRes int colorRes) {
-        setProgressBackgroundColorSchemeColor(getResources().getColor(colorRes));
+        setProgressBackgroundColorSchemeColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     public void setProgressBackgroundColorSchemeColor(@ColorInt int color) {
@@ -372,10 +380,10 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     }
 
     public void setColorSchemeResources(@ColorRes int... colorResIds) {
-        Resources res = getResources();
+        Context context = getContext();
         int[] colorRes = new int[colorResIds.length];
         for (int i = 0; i < colorResIds.length; i++) {
-            colorRes[i] = res.getColor(colorResIds[i]);
+            colorRes[i] = ContextCompat.getColor(context, colorResIds[i]);
         }
         setColorSchemeColors(colorRes);
     }
@@ -636,9 +644,9 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         float adjustedPercent = (((float) Math.max(((double) dragPercent) - 0.4d, 0.0d)) * 5.0f) / 3.0f;
         float extraOS = Math.abs(overscrollTop) - this.mTotalDragDistance;
         if (this.mUsingCustomStart) {
-            slingshotDist = this.mSpinnerFinalOffset - ((float) this.mOriginalOffsetTop);
+            slingshotDist = (float) (this.mSpinnerOffsetEnd - this.mOriginalOffsetTop);
         } else {
-            slingshotDist = this.mSpinnerFinalOffset;
+            slingshotDist = (float) this.mSpinnerOffsetEnd;
         }
         float tensionSlingshotPercent = Math.max(0.0f, Math.min(extraOS, DECELERATE_INTERPOLATION_FACTOR * slingshotDist) / slingshotDist);
         float tensionPercent = ((float) (((double) (tensionSlingshotPercent / 4.0f)) - Math.pow((double) (tensionSlingshotPercent / 4.0f), 2.0d))) * DECELERATE_INTERPOLATION_FACTOR;

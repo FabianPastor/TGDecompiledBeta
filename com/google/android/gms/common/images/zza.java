@@ -7,21 +7,21 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 import com.google.android.gms.common.images.ImageManager.OnImageLoadedListener;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.internal.zzrt;
-import com.google.android.gms.internal.zzru;
-import com.google.android.gms.internal.zzrv;
+import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.internal.zzsj;
+import com.google.android.gms.internal.zzsk;
+import com.google.android.gms.internal.zzsl;
 import java.lang.ref.WeakReference;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public abstract class zza {
-    final zza At;
-    protected int Au = 0;
-    protected int Av = 0;
-    protected boolean Aw = false;
-    private boolean Ax = true;
-    private boolean Ay = false;
-    private boolean Az = true;
+    final zza CD;
+    protected int CE = 0;
+    protected int CF = 0;
+    protected boolean CG = false;
+    private boolean CH = true;
+    private boolean CI = false;
+    private boolean CJ = true;
 
     static final class zza {
         public final Uri uri;
@@ -31,47 +31,47 @@ public abstract class zza {
         }
 
         public boolean equals(Object obj) {
-            return !(obj instanceof zza) ? false : this == obj ? true : zzab.equal(((zza) obj).uri, this.uri);
+            return !(obj instanceof zza) ? false : this == obj ? true : zzz.equal(((zza) obj).uri, this.uri);
         }
 
         public int hashCode() {
-            return zzab.hashCode(this.uri);
+            return zzz.hashCode(this.uri);
         }
     }
 
     public static final class zzb extends zza {
-        private WeakReference<ImageView> AA;
+        private WeakReference<ImageView> CK;
 
         public zzb(ImageView imageView, int i) {
             super(null, i);
             com.google.android.gms.common.internal.zzc.zzu(imageView);
-            this.AA = new WeakReference(imageView);
+            this.CK = new WeakReference(imageView);
         }
 
         public zzb(ImageView imageView, Uri uri) {
             super(uri, 0);
             com.google.android.gms.common.internal.zzc.zzu(imageView);
-            this.AA = new WeakReference(imageView);
+            this.CK = new WeakReference(imageView);
         }
 
         private void zza(ImageView imageView, Drawable drawable, boolean z, boolean z2, boolean z3) {
             Object obj = (z2 || z3) ? null : 1;
-            if (obj != null && (imageView instanceof zzru)) {
-                int zzatp = ((zzru) imageView).zzatp();
-                if (this.Av != 0 && zzatp == this.Av) {
+            if (obj != null && (imageView instanceof zzsk)) {
+                int zzauy = ((zzsk) imageView).zzauy();
+                if (this.CF != 0 && zzauy == this.CF) {
                     return;
                 }
             }
             boolean zzc = zzc(z, z2);
             Drawable zza = zzc ? zza(imageView.getDrawable(), drawable) : drawable;
             imageView.setImageDrawable(zza);
-            if (imageView instanceof zzru) {
-                zzru com_google_android_gms_internal_zzru = (zzru) imageView;
-                com_google_android_gms_internal_zzru.zzq(z3 ? this.At.uri : null);
-                com_google_android_gms_internal_zzru.zzgj(obj != null ? this.Av : 0);
+            if (imageView instanceof zzsk) {
+                zzsk com_google_android_gms_internal_zzsk = (zzsk) imageView;
+                com_google_android_gms_internal_zzsk.zzr(z3 ? this.CD.uri : null);
+                com_google_android_gms_internal_zzsk.zzgi(obj != null ? this.CF : 0);
             }
             if (zzc) {
-                ((zzrt) zza).startTransition(Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
+                ((zzsj) zza).startTransition(Callback.DEFAULT_SWIPE_ANIMATION_DURATION);
             }
         }
 
@@ -82,9 +82,9 @@ public abstract class zza {
             if (this == obj) {
                 return true;
             }
-            ImageView imageView = (ImageView) this.AA.get();
-            ImageView imageView2 = (ImageView) ((zzb) obj).AA.get();
-            boolean z = (imageView2 == null || imageView == null || !zzab.equal(imageView2, imageView)) ? false : true;
+            ImageView imageView = (ImageView) this.CK.get();
+            ImageView imageView2 = (ImageView) ((zzb) obj).CK.get();
+            boolean z = (imageView2 == null || imageView == null || !zzz.equal(imageView2, imageView)) ? false : true;
             return z;
         }
 
@@ -93,7 +93,7 @@ public abstract class zza {
         }
 
         protected void zza(Drawable drawable, boolean z, boolean z2, boolean z3) {
-            ImageView imageView = (ImageView) this.AA.get();
+            ImageView imageView = (ImageView) this.CK.get();
             if (imageView != null) {
                 zza(imageView, drawable, z, z2, z3);
             }
@@ -101,12 +101,12 @@ public abstract class zza {
     }
 
     public static final class zzc extends zza {
-        private WeakReference<OnImageLoadedListener> AB;
+        private WeakReference<OnImageLoadedListener> CL;
 
         public zzc(OnImageLoadedListener onImageLoadedListener, Uri uri) {
             super(uri, 0);
             com.google.android.gms.common.internal.zzc.zzu(onImageLoadedListener);
-            this.AB = new WeakReference(onImageLoadedListener);
+            this.CL = new WeakReference(onImageLoadedListener);
         }
 
         public boolean equals(Object obj) {
@@ -117,42 +117,42 @@ public abstract class zza {
                 return true;
             }
             zzc com_google_android_gms_common_images_zza_zzc = (zzc) obj;
-            OnImageLoadedListener onImageLoadedListener = (OnImageLoadedListener) this.AB.get();
-            OnImageLoadedListener onImageLoadedListener2 = (OnImageLoadedListener) com_google_android_gms_common_images_zza_zzc.AB.get();
-            boolean z = onImageLoadedListener2 != null && onImageLoadedListener != null && zzab.equal(onImageLoadedListener2, onImageLoadedListener) && zzab.equal(com_google_android_gms_common_images_zza_zzc.At, this.At);
+            OnImageLoadedListener onImageLoadedListener = (OnImageLoadedListener) this.CL.get();
+            OnImageLoadedListener onImageLoadedListener2 = (OnImageLoadedListener) com_google_android_gms_common_images_zza_zzc.CL.get();
+            boolean z = onImageLoadedListener2 != null && onImageLoadedListener != null && zzz.equal(onImageLoadedListener2, onImageLoadedListener) && zzz.equal(com_google_android_gms_common_images_zza_zzc.CD, this.CD);
             return z;
         }
 
         public int hashCode() {
-            return zzab.hashCode(this.At);
+            return zzz.hashCode(this.CD);
         }
 
         protected void zza(Drawable drawable, boolean z, boolean z2, boolean z3) {
             if (!z2) {
-                OnImageLoadedListener onImageLoadedListener = (OnImageLoadedListener) this.AB.get();
+                OnImageLoadedListener onImageLoadedListener = (OnImageLoadedListener) this.CL.get();
                 if (onImageLoadedListener != null) {
-                    onImageLoadedListener.onImageLoaded(this.At.uri, drawable, z3);
+                    onImageLoadedListener.onImageLoaded(this.CD.uri, drawable, z3);
                 }
             }
         }
     }
 
     public zza(Uri uri, int i) {
-        this.At = new zza(uri);
-        this.Av = i;
+        this.CD = new zza(uri);
+        this.CF = i;
     }
 
-    private Drawable zza(Context context, zzrv com_google_android_gms_internal_zzrv, int i) {
+    private Drawable zza(Context context, zzsl com_google_android_gms_internal_zzsl, int i) {
         return context.getResources().getDrawable(i);
     }
 
-    protected zzrt zza(Drawable drawable, Drawable drawable2) {
+    protected zzsj zza(Drawable drawable, Drawable drawable2) {
         if (drawable == null) {
             drawable = null;
-        } else if (drawable instanceof zzrt) {
-            drawable = ((zzrt) drawable).zzatn();
+        } else if (drawable instanceof zzsj) {
+            drawable = ((zzsj) drawable).zzauw();
         }
-        return new zzrt(drawable, drawable2);
+        return new zzsj(drawable, drawable2);
     }
 
     void zza(Context context, Bitmap bitmap, boolean z) {
@@ -160,16 +160,16 @@ public abstract class zza {
         zza(new BitmapDrawable(context.getResources(), bitmap), z, false, true);
     }
 
-    void zza(Context context, zzrv com_google_android_gms_internal_zzrv) {
-        if (this.Az) {
+    void zza(Context context, zzsl com_google_android_gms_internal_zzsl) {
+        if (this.CJ) {
             zza(null, false, true, false);
         }
     }
 
-    void zza(Context context, zzrv com_google_android_gms_internal_zzrv, boolean z) {
+    void zza(Context context, zzsl com_google_android_gms_internal_zzsl, boolean z) {
         Drawable drawable = null;
-        if (this.Av != 0) {
-            drawable = zza(context, com_google_android_gms_internal_zzrv, this.Av);
+        if (this.CF != 0) {
+            drawable = zza(context, com_google_android_gms_internal_zzsl, this.CF);
         }
         zza(drawable, z, false, false);
     }
@@ -177,10 +177,10 @@ public abstract class zza {
     protected abstract void zza(Drawable drawable, boolean z, boolean z2, boolean z3);
 
     protected boolean zzc(boolean z, boolean z2) {
-        return (!this.Ax || z2 || z) ? false : true;
+        return (!this.CH || z2 || z) ? false : true;
     }
 
-    public void zzgh(int i) {
-        this.Av = i;
+    public void zzgg(int i) {
+        this.CF = i;
     }
 }

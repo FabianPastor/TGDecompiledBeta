@@ -1,9 +1,11 @@
 package com.google.android.gms.common.api;
 
-import android.support.annotation.NonNull;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-public class zze extends zza {
-    public zze(@NonNull Status status) {
-        super(status);
-    }
+public abstract class zze {
+    private static final Map<Object, zze> xX = new WeakHashMap();
+    private static final Object zzaox = new Object();
+
+    public abstract void remove(int i);
 }

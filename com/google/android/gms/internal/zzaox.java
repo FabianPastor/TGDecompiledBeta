@@ -1,12 +1,7 @@
 package com.google.android.gms.internal;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.reflect.Type;
 
-@Target({ElementType.FIELD, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface zzaox {
-    double bf();
+public interface zzaox<T> {
+    T zzb(zzaoy com_google_android_gms_internal_zzaoy, Type type, zzaow com_google_android_gms_internal_zzaow) throws zzapc;
 }

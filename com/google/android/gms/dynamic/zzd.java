@@ -11,14 +11,14 @@ public interface zzd extends IInterface {
     public static abstract class zza extends Binder implements zzd {
 
         private static class zza implements zzd {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
         }
 
@@ -26,7 +26,7 @@ public interface zzd extends IInterface {
             attachInterface(this, "com.google.android.gms.dynamic.IObjectWrapper");
         }
 
-        public static zzd zzfe(IBinder iBinder) {
+        public static zzd zzfd(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

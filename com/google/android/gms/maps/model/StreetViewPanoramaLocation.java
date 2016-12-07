@@ -1,11 +1,12 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
+import com.google.android.gms.common.internal.zzz;
 
 public class StreetViewPanoramaLocation extends AbstractSafeParcelable {
-    public static final zzm CREATOR = new zzm();
+    public static final Creator<StreetViewPanoramaLocation> CREATOR = new zzm();
     public final StreetViewPanoramaLink[] links;
     private final int mVersionCode;
     public final String panoId;
@@ -38,11 +39,11 @@ public class StreetViewPanoramaLocation extends AbstractSafeParcelable {
     }
 
     public int hashCode() {
-        return zzab.hashCode(this.position, this.panoId);
+        return zzz.hashCode(this.position, this.panoId);
     }
 
     public String toString() {
-        return zzab.zzx(this).zzg("panoId", this.panoId).zzg("position", this.position.toString()).toString();
+        return zzz.zzx(this).zzg("panoId", this.panoId).zzg("position", this.position.toString()).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

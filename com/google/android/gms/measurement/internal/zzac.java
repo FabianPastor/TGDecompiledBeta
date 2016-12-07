@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.util.zze;
 import com.google.android.gms.common.util.zzf;
+import com.google.android.gms.measurement.AppMeasurement;
 import com.google.android.gms.measurement.AppMeasurement.zzb;
 import com.google.android.gms.measurement.AppMeasurement.zzc;
 import java.util.Collections;
@@ -23,71 +25,80 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public class zzac extends zzaa {
-    private zza arA;
-    private zzb arB;
-    private final Set<zzc> arC = new CopyOnWriteArraySet();
-    private boolean arD;
+    protected zza auO;
+    private zzb auP;
+    private final Set<zzc> auQ = new CopyOnWriteArraySet();
+    private boolean auR;
 
     @MainThread
     @TargetApi(14)
     private class zza implements ActivityLifecycleCallbacks {
-        final /* synthetic */ zzac arE;
+        final /* synthetic */ zzac auS;
 
         private zza(zzac com_google_android_gms_measurement_internal_zzac) {
-            this.arE = com_google_android_gms_measurement_internal_zzac;
+            this.auS = com_google_android_gms_measurement_internal_zzac;
         }
 
-        private boolean zzmv(String str) {
+        private boolean zzms(String str) {
             if (TextUtils.isEmpty(str)) {
                 return false;
             }
-            this.arE.zzd("auto", "_ldl", str);
+            this.auS.zzd("auto", "_ldl", str);
             return true;
         }
 
         public void onActivityCreated(Activity activity, Bundle bundle) {
             try {
-                this.arE.zzbvg().zzbwj().log("onActivityCreated");
+                this.auS.zzbwb().zzbxe().log("onActivityCreated");
                 Intent intent = activity.getIntent();
                 if (intent != null) {
                     Uri data = intent.getData();
                     if (data != null && data.isHierarchical()) {
                         if (bundle == null) {
-                            Bundle zzt = this.arE.zzbvc().zzt(data);
-                            if (zzt != null) {
-                                this.arE.zzf("auto", "_cmp", zzt);
+                            Bundle zzu = this.auS.zzbvx().zzu(data);
+                            if (zzu != null) {
+                                this.auS.zzf("auto", "_cmp", zzu);
                             }
                         }
                         String queryParameter = data.getQueryParameter("referrer");
                         if (!TextUtils.isEmpty(queryParameter)) {
-                            if (queryParameter.contains("gclid")) {
-                                this.arE.zzbvg().zzbwi().zzj("Activity created with referrer", queryParameter);
-                                zzmv(queryParameter);
+                            Object obj = (queryParameter.contains("gclid") && (queryParameter.contains("utm_campaign") || queryParameter.contains("utm_source") || queryParameter.contains("utm_medium") || queryParameter.contains("utm_term") || queryParameter.contains("utm_content"))) ? 1 : null;
+                            if (obj == null) {
+                                this.auS.zzbwb().zzbxd().log("Activity created with data 'referrer' param without gclid and at least one utm field");
                                 return;
+                            } else {
+                                this.auS.zzbwb().zzbxd().zzj("Activity created with referrer", queryParameter);
+                                zzms(queryParameter);
                             }
-                            this.arE.zzbvg().zzbwi().log("Activity created with data 'referrer' param without gclid");
+                        } else {
+                            return;
                         }
                     }
                 }
             } catch (Throwable th) {
-                this.arE.zzbvg().zzbwc().zzj("Throwable caught in onActivityCreated", th);
+                this.auS.zzbwb().zzbwy().zzj("Throwable caught in onActivityCreated", th);
             }
+            this.auS.zzbvu().onActivityCreated(activity, bundle);
         }
 
         public void onActivityDestroyed(Activity activity) {
+            this.auS.zzbvu().onActivityDestroyed(activity);
         }
 
         @MainThread
         public void onActivityPaused(Activity activity) {
-            this.arE.zzbve().zzbyh();
+            this.auS.zzbvu().onActivityPaused(activity);
+            this.auS.zzbvz().zzbzd();
         }
 
         @MainThread
         public void onActivityResumed(Activity activity) {
-            this.arE.zzbve().zzbyf();
+            this.auS.zzbvu().onActivityResumed(activity);
+            this.auS.zzbvz().zzbzb();
         }
 
         public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+            this.auS.zzbvu().onActivitySaveInstanceState(activity, bundle);
         }
 
         public void onActivityStarted(Activity activity) {
@@ -102,53 +113,61 @@ public class zzac extends zzaa {
     }
 
     private void zza(String str, String str2, Bundle bundle, boolean z, boolean z2, boolean z3, String str3) {
-        zza(str, str2, zzaan().currentTimeMillis(), bundle, z, z2, z3, str3);
+        zza(str, str2, zzabz().currentTimeMillis(), bundle, z, z2, z3, str3);
     }
 
     @WorkerThread
     private void zza(String str, String str2, Object obj, long j) {
-        com.google.android.gms.common.internal.zzac.zzhz(str);
-        com.google.android.gms.common.internal.zzac.zzhz(str2);
-        zzyl();
-        zzaam();
-        zzaax();
-        if (!this.anq.isEnabled()) {
-            zzbvg().zzbwi().log("User property not set since app measurement is disabled");
-        } else if (this.anq.zzbwv()) {
-            zzbvg().zzbwi().zze("Setting user property (FE)", str2, obj);
-            zzbva().zza(new UserAttributeParcel(str2, j, obj, str));
+        zzaa.zzib(str);
+        zzaa.zzib(str2);
+        zzzx();
+        zzaby();
+        zzacj();
+        if (!this.aqw.isEnabled()) {
+            zzbwb().zzbxd().log("User property not set since app measurement is disabled");
+        } else if (this.aqw.zzbxq()) {
+            zzbwb().zzbxd().zze("Setting user property (FE)", str2, obj);
+            zzbvt().zzb(new UserAttributeParcel(str2, j, obj, str));
         }
     }
 
     @WorkerThread
     private void zzb(String str, String str2, long j, Bundle bundle, boolean z, boolean z2, boolean z3, String str3) {
-        com.google.android.gms.common.internal.zzac.zzhz(str);
-        com.google.android.gms.common.internal.zzac.zzhz(str2);
-        com.google.android.gms.common.internal.zzac.zzy(bundle);
-        zzyl();
-        zzaax();
-        if (this.anq.isEnabled()) {
-            if (!this.arD) {
-                this.arD = true;
-                zzbxx();
+        zzaa.zzib(str);
+        zzaa.zzib(str2);
+        zzaa.zzy(bundle);
+        zzzx();
+        zzacj();
+        if (this.aqw.isEnabled()) {
+            if (!this.auR) {
+                this.auR = true;
+                zzbyr();
             }
-            boolean zznh = zzal.zznh(str2);
-            if (z && this.arB != null && !zznh) {
-                zzbvg().zzbwi().zze("Passing event to registered event handler (FE)", str2, bundle);
-                this.arB.zzb(str, str2, bundle, j);
+            boolean zzne = zzal.zzne(str2);
+            if (z && this.auP != null && !zzne) {
+                zzbwb().zzbxd().zze("Passing event to registered event handler (FE)", str2, bundle);
+                this.auP.zzb(str, str2, bundle, j);
                 return;
-            } else if (this.anq.zzbwv()) {
-                int zzmz = zzbvc().zzmz(str2);
-                if (zzmz != 0) {
-                    this.anq.zzbvc().zza(zzmz, "_ev", zzbvc().zza(str2, zzbvi().zzbtn(), true), str2 != null ? str2.length() : 0);
+            } else if (this.aqw.zzbxq()) {
+                int zzmw = zzbvx().zzmw(str2);
+                if (zzmw != 0) {
+                    this.aqw.zzbvx().zza(zzmw, "_ev", zzbvx().zza(str2, zzbwd().zzbud(), true), str2 != null ? str2.length() : 0);
                     return;
                 }
                 bundle.putString("_o", str);
-                Bundle zza = zzbvc().zza(str2, bundle, zzf.zzz("_o"), z3);
+                Bundle zza = zzbvx().zza(str2, bundle, zzf.zzz("_o"), z3);
+                if (!bundle.containsKey("_sc")) {
+                    zzbwd().zzayi();
+                    AppMeasurement.zzf zzbyt = zzbvu().zzbyt();
+                    if (zzbyt != null) {
+                        zzbyt.avr = true;
+                    }
+                    zzad.zza(zzbyt, zza);
+                }
                 Bundle zzam = z2 ? zzam(zza) : zza;
-                zzbvg().zzbwi().zze("Logging event (FE)", str2, zzam);
-                zzbva().zzc(new EventParcel(str2, new EventParams(zzam), str, j), str3);
-                for (zzc zzc : this.arC) {
+                zzbwb().zzbxd().zze("Logging event (FE)", str2, zzam);
+                zzbvt().zzc(new EventParcel(str2, new EventParams(zzam), str, j), str3);
+                for (zzc zzc : this.auQ) {
                     zzc.zzc(str, str2, new Bundle(zzam), j);
                 }
                 return;
@@ -156,30 +175,30 @@ public class zzac extends zzaa {
                 return;
             }
         }
-        zzbvg().zzbwi().log("Event not sent since app measurement is disabled");
+        zzbwb().zzbxd().log("Event not sent since app measurement is disabled");
     }
 
     @WorkerThread
-    private void zzbxx() {
+    private void zzbyr() {
         try {
-            zzg(Class.forName(zzbxy()));
+            zzg(Class.forName(zzbys()));
         } catch (ClassNotFoundException e) {
-            zzbvg().zzbwh().log("Tag Manager is not found and thus will not be used");
+            zzbwb().zzbxc().log("Tag Manager is not found and thus will not be used");
         }
     }
 
-    private String zzbxy() {
+    private String zzbys() {
         return "com.google.android.gms.tagmanager.TagManagerService";
     }
 
     @WorkerThread
-    private void zzch(boolean z) {
-        zzyl();
-        zzaam();
-        zzaax();
-        zzbvg().zzbwi().zzj("Setting app measurement enabled (FE)", Boolean.valueOf(z));
-        zzbvh().setMeasurementEnabled(z);
-        zzbva().zzbxz();
+    private void zzci(boolean z) {
+        zzzx();
+        zzaby();
+        zzacj();
+        zzbwb().zzbxd().zzj("Setting app measurement enabled (FE)", Boolean.valueOf(z));
+        zzbwc().setMeasurementEnabled(z);
+        zzbvt().zzbyv();
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
@@ -187,58 +206,58 @@ public class zzac extends zzaa {
     }
 
     public void setMeasurementEnabled(final boolean z) {
-        zzaax();
-        zzaam();
-        zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzac arE;
+        zzacj();
+        zzaby();
+        zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzac auS;
 
             public void run() {
-                this.arE.zzch(z);
+                this.auS.zzci(z);
             }
         });
     }
 
     public void setMinimumSessionDuration(final long j) {
-        zzaam();
-        zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzac arE;
+        zzaby();
+        zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzac auS;
 
             public void run() {
-                this.arE.zzbvh().apZ.set(j);
-                this.arE.zzbvg().zzbwi().zzj("Minimum session duration set", Long.valueOf(j));
+                this.auS.zzbwc().ati.set(j);
+                this.auS.zzbwb().zzbxd().zzj("Minimum session duration set", Long.valueOf(j));
             }
         });
     }
 
     public void setSessionTimeoutDuration(final long j) {
-        zzaam();
-        zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzac arE;
+        zzaby();
+        zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzac auS;
 
             public void run() {
-                this.arE.zzbvh().aqa.set(j);
-                this.arE.zzbvg().zzbwi().zzj("Session timeout duration set", Long.valueOf(j));
+                this.auS.zzbwc().atj.set(j);
+                this.auS.zzbwb().zzbxd().zzj("Session timeout duration set", Long.valueOf(j));
             }
         });
     }
 
     @WorkerThread
     public void zza(zzb com_google_android_gms_measurement_AppMeasurement_zzb) {
-        zzyl();
-        zzaam();
-        zzaax();
-        if (!(com_google_android_gms_measurement_AppMeasurement_zzb == null || com_google_android_gms_measurement_AppMeasurement_zzb == this.arB)) {
-            com.google.android.gms.common.internal.zzac.zza(this.arB == null, (Object) "EventInterceptor already set.");
+        zzzx();
+        zzaby();
+        zzacj();
+        if (!(com_google_android_gms_measurement_AppMeasurement_zzb == null || com_google_android_gms_measurement_AppMeasurement_zzb == this.auP)) {
+            zzaa.zza(this.auP == null, (Object) "EventInterceptor already set.");
         }
-        this.arB = com_google_android_gms_measurement_AppMeasurement_zzb;
+        this.auP = com_google_android_gms_measurement_AppMeasurement_zzb;
     }
 
     public void zza(zzc com_google_android_gms_measurement_AppMeasurement_zzc) {
-        zzaam();
-        zzaax();
-        com.google.android.gms.common.internal.zzac.zzy(com_google_android_gms_measurement_AppMeasurement_zzc);
-        if (!this.arC.add(com_google_android_gms_measurement_AppMeasurement_zzc)) {
-            zzbvg().zzbwe().log("OnEventListener already registered");
+        zzaby();
+        zzacj();
+        zzaa.zzy(com_google_android_gms_measurement_AppMeasurement_zzc);
+        if (!this.auQ.add(com_google_android_gms_measurement_AppMeasurement_zzc)) {
+            zzbwb().zzbxa().log("OnEventListener already registered");
         }
     }
 
@@ -251,11 +270,11 @@ public class zzac extends zzaa {
         final boolean z5 = z2;
         final boolean z6 = z3;
         final String str6 = str3;
-        zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzac arE;
+        zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzac auS;
 
             public void run() {
-                this.arE.zzb(str4, str5, j2, bundle2, z4, z5, z6, str6);
+                this.auS.zzb(str4, str5, j2, bundle2, z4, z5, z6, str6);
             }
         });
     }
@@ -265,184 +284,192 @@ public class zzac extends zzaa {
         final String str4 = str2;
         final Object obj2 = obj;
         final long j2 = j;
-        zzbvf().zzm(new Runnable(this) {
-            final /* synthetic */ zzac arE;
+        zzbwa().zzm(new Runnable(this) {
+            final /* synthetic */ zzac auS;
 
             public void run() {
-                this.arE.zza(str3, str4, obj2, j2);
+                this.auS.zza(str3, str4, obj2, j2);
             }
         });
     }
 
     public void zza(String str, String str2, Bundle bundle, boolean z) {
-        zzaam();
-        boolean z2 = this.arB == null || zzal.zznh(str2);
+        zzaby();
+        boolean z2 = this.auP == null || zzal.zzne(str2);
         zza(str, str2, bundle, true, z2, z, null);
     }
 
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
     Bundle zzam(Bundle bundle) {
         Bundle bundle2 = new Bundle();
         if (bundle != null) {
             for (String str : bundle.keySet()) {
-                Object zzl = zzbvc().zzl(str, bundle.get(str));
+                Object zzl = zzbvx().zzl(str, bundle.get(str));
                 if (zzl == null) {
-                    zzbvg().zzbwe().zzj("Param value can't be null", str);
+                    zzbwb().zzbxa().zzj("Param value can't be null", str);
                 } else {
-                    zzbvc().zza(bundle2, str, zzl);
+                    zzbvx().zza(bundle2, str, zzl);
                 }
             }
         }
         return bundle2;
     }
 
-    public /* bridge */ /* synthetic */ void zzbuv() {
-        super.zzbuv();
+    public /* bridge */ /* synthetic */ void zzbvo() {
+        super.zzbvo();
     }
 
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
     }
 
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
     }
 
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
     }
 
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
     }
 
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
     }
 
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
     }
 
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
     }
 
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
     }
 
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
     }
 
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
     }
 
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
     }
 
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
     }
 
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
+    }
+
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
     }
 
     @TargetApi(14)
-    public void zzbxv() {
+    public void zzbyp() {
         if (getContext().getApplicationContext() instanceof Application) {
             Application application = (Application) getContext().getApplicationContext();
-            if (this.arA == null) {
-                this.arA = new zza();
+            if (this.auO == null) {
+                this.auO = new zza();
             }
-            application.unregisterActivityLifecycleCallbacks(this.arA);
-            application.registerActivityLifecycleCallbacks(this.arA);
-            zzbvg().zzbwj().log("Registered activity lifecycle callback");
+            application.unregisterActivityLifecycleCallbacks(this.auO);
+            application.registerActivityLifecycleCallbacks(this.auO);
+            zzbwb().zzbxe().log("Registered activity lifecycle callback");
         }
     }
 
     @WorkerThread
-    public void zzbxw() {
-        zzyl();
-        zzaam();
-        zzaax();
-        if (this.anq.zzbwv()) {
-            zzbva().zzbxw();
-            String zzbws = zzbvh().zzbws();
-            if (!TextUtils.isEmpty(zzbws) && !zzbws.equals(zzbuz().zzbvv())) {
+    public void zzbyq() {
+        zzzx();
+        zzaby();
+        zzacj();
+        if (this.aqw.zzbxq()) {
+            zzbvt().zzbyq();
+            String zzbxn = zzbwc().zzbxn();
+            if (!TextUtils.isEmpty(zzbxn) && !zzbxn.equals(zzbvs().zzbws())) {
                 Bundle bundle = new Bundle();
-                bundle.putString("_po", zzbws);
+                bundle.putString("_po", zzbxn);
                 zzf("auto", "_ou", bundle);
             }
         }
     }
 
-    public List<UserAttributeParcel> zzci(final boolean z) {
-        zzaam();
-        zzaax();
-        zzbvg().zzbwi().log("Fetching user attributes (FE)");
+    public List<UserAttributeParcel> zzcj(final boolean z) {
+        zzaby();
+        zzacj();
+        zzbwb().zzbxd().log("Fetching user attributes (FE)");
         final AtomicReference atomicReference = new AtomicReference();
         synchronized (atomicReference) {
-            this.anq.zzbvf().zzm(new Runnable(this) {
-                final /* synthetic */ zzac arE;
+            this.aqw.zzbwa().zzm(new Runnable(this) {
+                final /* synthetic */ zzac auS;
 
                 public void run() {
-                    this.arE.zzbva().zza(atomicReference, z);
+                    this.auS.zzbvt().zza(atomicReference, z);
                 }
             });
             try {
                 atomicReference.wait(HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS);
             } catch (InterruptedException e) {
-                zzbvg().zzbwe().zzj("Interrupted waiting for get user properties", e);
+                zzbwb().zzbxa().zzj("Interrupted waiting for get user properties", e);
             }
         }
         List<UserAttributeParcel> list = (List) atomicReference.get();
         if (list != null) {
             return list;
         }
-        zzbvg().zzbwe().log("Timed out waiting for get user properties");
+        zzbwb().zzbxa().log("Timed out waiting for get user properties");
         return Collections.emptyList();
     }
 
     public void zzd(String str, String str2, Bundle bundle, long j) {
-        zzaam();
+        zzaby();
         zza(str, str2, j, bundle, false, true, true, null);
     }
 
     public void zzd(String str, String str2, Object obj) {
         int i = 0;
-        com.google.android.gms.common.internal.zzac.zzhz(str);
-        long currentTimeMillis = zzaan().currentTimeMillis();
-        int zznb = zzbvc().zznb(str2);
+        zzaa.zzib(str);
+        long currentTimeMillis = zzabz().currentTimeMillis();
+        int zzmy = zzbvx().zzmy(str2);
         String zza;
-        if (zznb != 0) {
-            zza = zzbvc().zza(str2, zzbvi().zzbto(), true);
+        if (zzmy != 0) {
+            zza = zzbvx().zza(str2, zzbwd().zzbue(), true);
             if (str2 != null) {
                 i = str2.length();
             }
-            this.anq.zzbvc().zza(zznb, "_ev", zza, i);
+            this.aqw.zzbvx().zza(zzmy, "_ev", zza, i);
         } else if (obj != null) {
-            zznb = zzbvc().zzm(str2, obj);
-            if (zznb != 0) {
-                zza = zzbvc().zza(str2, zzbvi().zzbto(), true);
+            zzmy = zzbvx().zzm(str2, obj);
+            if (zzmy != 0) {
+                zza = zzbvx().zza(str2, zzbwd().zzbue(), true);
                 if ((obj instanceof String) || (obj instanceof CharSequence)) {
                     i = String.valueOf(obj).length();
                 }
-                this.anq.zzbvc().zza(zznb, "_ev", zza, i);
+                this.aqw.zzbvx().zza(zzmy, "_ev", zza, i);
                 return;
             }
-            Object zzn = zzbvc().zzn(str2, obj);
+            Object zzn = zzbvx().zzn(str2, obj);
             if (zzn != null) {
                 zza(str, str2, currentTimeMillis, zzn);
             }
@@ -452,8 +479,8 @@ public class zzac extends zzaa {
     }
 
     public void zzf(String str, String str2, Bundle bundle) {
-        zzaam();
-        boolean z = this.arB == null || zzal.zznh(str2);
+        zzaby();
+        boolean z = this.auP == null || zzal.zzne(str2);
         zza(str, str2, bundle, true, z, false, null);
     }
 
@@ -462,14 +489,14 @@ public class zzac extends zzaa {
         try {
             cls.getDeclaredMethod("initialize", new Class[]{Context.class}).invoke(null, new Object[]{getContext()});
         } catch (Exception e) {
-            zzbvg().zzbwe().zzj("Failed to invoke Tag Manager's initialize() method", e);
+            zzbwb().zzbxa().zzj("Failed to invoke Tag Manager's initialize() method", e);
         }
     }
 
-    public /* bridge */ /* synthetic */ void zzyl() {
-        super.zzyl();
+    public /* bridge */ /* synthetic */ void zzzx() {
+        super.zzzx();
     }
 
-    protected void zzym() {
+    protected void zzzy() {
     }
 }

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.view.AccessibilityDelegateCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.NestedScrollingChild;
@@ -979,6 +981,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         smoothScrollBy(x - getScrollX(), y - getScrollY());
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeVerticalScrollRange() {
         int contentHeight = (getHeight() - getPaddingBottom()) - getPaddingTop();
         if (getChildCount() == 0) {
@@ -995,22 +998,27 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         return scrollRange;
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeVerticalScrollOffset() {
         return Math.max(0, super.computeVerticalScrollOffset());
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeVerticalScrollExtent() {
         return super.computeVerticalScrollExtent();
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeHorizontalScrollRange() {
         return super.computeHorizontalScrollRange();
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeHorizontalScrollOffset() {
         return super.computeHorizontalScrollOffset();
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public int computeHorizontalScrollExtent() {
         return super.computeHorizontalScrollExtent();
     }

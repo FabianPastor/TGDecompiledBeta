@@ -11,9 +11,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class zzg extends zzaa {
-    private long aon;
-    private String aoo;
-    private Boolean aop;
+    private long arx;
+    private String ary;
+    private Boolean arz;
 
     zzg(zzx com_google_android_gms_measurement_internal_zzx) {
         super(com_google_android_gms_measurement_internal_zzx);
@@ -23,119 +23,124 @@ public class zzg extends zzaa {
         return super.getContext();
     }
 
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
-    public /* bridge */ /* synthetic */ void zzbuv() {
-        super.zzbuv();
+    public /* bridge */ /* synthetic */ void zzbvo() {
+        super.zzbvo();
     }
 
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
     }
 
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
     }
 
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
     }
 
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
     }
 
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
     }
 
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
     }
 
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
     }
 
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
     }
 
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
     }
 
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
     }
 
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
     }
 
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
     }
 
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
     }
 
-    public String zzbvv() {
-        zzaax();
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
+    }
+
+    public String zzbws() {
+        zzacj();
         return VERSION.RELEASE;
     }
 
-    public long zzbvw() {
-        zzaax();
-        return this.aon;
+    public long zzbwt() {
+        zzacj();
+        return this.arx;
     }
 
-    public String zzbvx() {
-        zzaax();
-        return this.aoo;
+    public String zzbwu() {
+        zzacj();
+        return this.ary;
     }
 
-    public boolean zzds(Context context) {
-        if (this.aop == null) {
-            if (zzbvi().zzact()) {
-                this.aop = Boolean.valueOf(true);
-            } else {
-                this.aop = Boolean.valueOf(false);
-                try {
-                    PackageManager packageManager = context.getPackageManager();
-                    if (packageManager != null) {
-                        packageManager.getPackageInfo("com.google.android.gms", 128);
-                        this.aop = Boolean.valueOf(true);
-                    }
-                } catch (NameNotFoundException e) {
+    public boolean zzdp(Context context) {
+        if (this.arz == null) {
+            zzbwd().zzayi();
+            this.arz = Boolean.valueOf(false);
+            try {
+                PackageManager packageManager = context.getPackageManager();
+                if (packageManager != null) {
+                    packageManager.getPackageInfo("com.google.android.gms", 128);
+                    this.arz = Boolean.valueOf(true);
                 }
+            } catch (NameNotFoundException e) {
             }
         }
-        return this.aop.booleanValue();
+        return this.arz.booleanValue();
     }
 
-    public String zzuj() {
-        zzaax();
+    public String zzvt() {
+        zzacj();
         return Build.MODEL;
     }
 
-    public /* bridge */ /* synthetic */ void zzyl() {
-        super.zzyl();
+    public /* bridge */ /* synthetic */ void zzzx() {
+        super.zzzx();
     }
 
-    protected void zzym() {
+    protected void zzzy() {
         Calendar instance = Calendar.getInstance();
-        this.aon = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
+        this.arx = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
         Locale locale = Locale.getDefault();
         String valueOf = String.valueOf(locale.getLanguage().toLowerCase(Locale.ENGLISH));
         String valueOf2 = String.valueOf(locale.getCountry().toLowerCase(Locale.ENGLISH));
-        this.aoo = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
+        this.ary = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
     }
 }

@@ -8,21 +8,21 @@ import android.os.Parcelable.Creator;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
+import com.google.android.gms.common.internal.zzz;
 
 public final class Status extends AbstractSafeParcelable implements Result, ReflectedParcelable {
-    public static final Creator<Status> CREATOR = new zzh();
-    public static final Status vY = new Status(0);
-    public static final Status vZ = new Status(14);
-    public static final Status wa = new Status(8);
-    public static final Status wb = new Status(15);
-    public static final Status wc = new Status(16);
-    public static final Status wd = new Status(17);
-    public static final Status we = new Status(18);
+    public static final Creator<Status> CREATOR = new zzg();
+    public static final Status xZ = new Status(0);
+    public static final Status ya = new Status(14);
+    public static final Status yb = new Status(8);
+    public static final Status yc = new Status(15);
+    public static final Status yd = new Status(16);
+    public static final Status ye = new Status(17);
+    public static final Status yf = new Status(18);
     private final PendingIntent mPendingIntent;
-    private final int mVersionCode;
-    private final int rR;
-    private final String uK;
+    final int mVersionCode;
+    private final int uo;
+    private final String wP;
 
     public Status(int i) {
         this(i, null);
@@ -30,8 +30,8 @@ public final class Status extends AbstractSafeParcelable implements Result, Refl
 
     Status(int i, int i2, String str, PendingIntent pendingIntent) {
         this.mVersionCode = i;
-        this.rR = i2;
-        this.uK = str;
+        this.uo = i2;
+        this.wP = str;
         this.mPendingIntent = pendingIntent;
     }
 
@@ -43,16 +43,12 @@ public final class Status extends AbstractSafeParcelable implements Result, Refl
         this(1, i, str, pendingIntent);
     }
 
-    private String zzaqi() {
-        return this.uK != null ? this.uK : CommonStatusCodes.getStatusCodeString(this.rR);
-    }
-
     public boolean equals(Object obj) {
         if (!(obj instanceof Status)) {
             return false;
         }
         Status status = (Status) obj;
-        return this.mVersionCode == status.mVersionCode && this.rR == status.rR && zzab.equal(this.uK, status.uK) && zzab.equal(this.mPendingIntent, status.mPendingIntent);
+        return this.mVersionCode == status.mVersionCode && this.uo == status.uo && zzz.equal(this.wP, status.wP) && zzz.equal(this.mPendingIntent, status.mPendingIntent);
     }
 
     public PendingIntent getResolution() {
@@ -64,16 +60,12 @@ public final class Status extends AbstractSafeParcelable implements Result, Refl
     }
 
     public int getStatusCode() {
-        return this.rR;
+        return this.uo;
     }
 
     @Nullable
     public String getStatusMessage() {
-        return this.uK;
-    }
-
-    int getVersionCode() {
-        return this.mVersionCode;
+        return this.wP;
     }
 
     public boolean hasResolution() {
@@ -81,19 +73,19 @@ public final class Status extends AbstractSafeParcelable implements Result, Refl
     }
 
     public int hashCode() {
-        return zzab.hashCode(Integer.valueOf(this.mVersionCode), Integer.valueOf(this.rR), this.uK, this.mPendingIntent);
+        return zzz.hashCode(Integer.valueOf(this.mVersionCode), Integer.valueOf(this.uo), this.wP, this.mPendingIntent);
     }
 
     public boolean isCanceled() {
-        return this.rR == 16;
+        return this.uo == 16;
     }
 
     public boolean isInterrupted() {
-        return this.rR == 14;
+        return this.uo == 14;
     }
 
     public boolean isSuccess() {
-        return this.rR <= 0;
+        return this.uo <= 0;
     }
 
     public void startResolutionForResult(Activity activity, int i) throws SendIntentException {
@@ -103,14 +95,18 @@ public final class Status extends AbstractSafeParcelable implements Result, Refl
     }
 
     public String toString() {
-        return zzab.zzx(this).zzg("statusCode", zzaqi()).zzg("resolution", this.mPendingIntent).toString();
+        return zzz.zzx(this).zzg("statusCode", zzark()).zzg("resolution", this.mPendingIntent).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzh.zza(this, parcel, i);
+        zzg.zza(this, parcel, i);
     }
 
-    PendingIntent zzaqh() {
+    PendingIntent zzarj() {
         return this.mPendingIntent;
+    }
+
+    public String zzark() {
+        return this.wP != null ? this.wP : CommonStatusCodes.getStatusCodeString(this.uo);
     }
 }

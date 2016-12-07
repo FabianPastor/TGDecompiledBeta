@@ -12,14 +12,14 @@ public interface zze extends IInterface {
     public static abstract class zza extends Binder implements zze {
 
         private static class zza implements zze {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public zzd zza(zzd com_google_android_gms_dynamic_zzd, FaceSettingsParcel faceSettingsParcel) throws RemoteException {
@@ -34,10 +34,10 @@ public interface zze extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzll = com.google.android.gms.vision.face.internal.client.zzd.zza.zzll(obtain2.readStrongBinder());
-                    return zzll;
+                    zzd zzlg = com.google.android.gms.vision.face.internal.client.zzd.zza.zzlg(obtain2.readStrongBinder());
+                    return zzlg;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -45,7 +45,7 @@ public interface zze extends IInterface {
             }
         }
 
-        public static zze zzlm(IBinder iBinder) {
+        public static zze zzlh(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -58,7 +58,7 @@ public interface zze extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetectorCreator");
-                    zzd zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FaceSettingsParcel) FaceSettingsParcel.CREATOR.createFromParcel(parcel) : null);
+                    zzd zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (FaceSettingsParcel) FaceSettingsParcel.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (zza != null) {
                         iBinder = zza.asBinder();

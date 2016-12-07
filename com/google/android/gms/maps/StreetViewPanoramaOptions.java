@@ -1,6 +1,7 @@
 package com.google.android.gms.maps;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.maps.internal.zza;
@@ -8,73 +9,73 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
 public final class StreetViewPanoramaOptions extends AbstractSafeParcelable implements ReflectedParcelable {
-    public static final zzb CREATOR = new zzb();
-    private Boolean aln;
-    private Boolean alt;
-    private StreetViewPanoramaCamera amc;
-    private String amd;
-    private LatLng ame;
-    private Integer amf;
-    private Boolean amg;
-    private Boolean amh;
-    private Boolean ami;
+    public static final Creator<StreetViewPanoramaOptions> CREATOR = new zzb();
+    private Boolean aoA;
+    private Boolean aou;
+    private StreetViewPanoramaCamera api;
+    private String apj;
+    private LatLng apk;
+    private Integer apl;
+    private Boolean apm;
+    private Boolean apn;
+    private Boolean apo;
     private final int mVersionCode;
 
     public StreetViewPanoramaOptions() {
-        this.amg = Boolean.valueOf(true);
-        this.alt = Boolean.valueOf(true);
-        this.amh = Boolean.valueOf(true);
-        this.ami = Boolean.valueOf(true);
+        this.apm = Boolean.valueOf(true);
+        this.aoA = Boolean.valueOf(true);
+        this.apn = Boolean.valueOf(true);
+        this.apo = Boolean.valueOf(true);
         this.mVersionCode = 1;
     }
 
     StreetViewPanoramaOptions(int i, StreetViewPanoramaCamera streetViewPanoramaCamera, String str, LatLng latLng, Integer num, byte b, byte b2, byte b3, byte b4, byte b5) {
-        this.amg = Boolean.valueOf(true);
-        this.alt = Boolean.valueOf(true);
-        this.amh = Boolean.valueOf(true);
-        this.ami = Boolean.valueOf(true);
+        this.apm = Boolean.valueOf(true);
+        this.aoA = Boolean.valueOf(true);
+        this.apn = Boolean.valueOf(true);
+        this.apo = Boolean.valueOf(true);
         this.mVersionCode = i;
-        this.amc = streetViewPanoramaCamera;
-        this.ame = latLng;
-        this.amf = num;
-        this.amd = str;
-        this.amg = zza.zza(b);
-        this.alt = zza.zza(b2);
-        this.amh = zza.zza(b3);
-        this.ami = zza.zza(b4);
-        this.aln = zza.zza(b5);
+        this.api = streetViewPanoramaCamera;
+        this.apk = latLng;
+        this.apl = num;
+        this.apj = str;
+        this.apm = zza.zza(b);
+        this.aoA = zza.zza(b2);
+        this.apn = zza.zza(b3);
+        this.apo = zza.zza(b4);
+        this.aou = zza.zza(b5);
     }
 
     public Boolean getPanningGesturesEnabled() {
-        return this.amh;
+        return this.apn;
     }
 
     public String getPanoramaId() {
-        return this.amd;
+        return this.apj;
     }
 
     public LatLng getPosition() {
-        return this.ame;
+        return this.apk;
     }
 
     public Integer getRadius() {
-        return this.amf;
+        return this.apl;
     }
 
     public Boolean getStreetNamesEnabled() {
-        return this.ami;
+        return this.apo;
     }
 
     public StreetViewPanoramaCamera getStreetViewPanoramaCamera() {
-        return this.amc;
+        return this.api;
     }
 
     public Boolean getUseViewLifecycleInFragment() {
-        return this.aln;
+        return this.aou;
     }
 
     public Boolean getUserNavigationEnabled() {
-        return this.amg;
+        return this.apm;
     }
 
     int getVersionCode() {
@@ -82,47 +83,47 @@ public final class StreetViewPanoramaOptions extends AbstractSafeParcelable impl
     }
 
     public Boolean getZoomGesturesEnabled() {
-        return this.alt;
+        return this.aoA;
     }
 
     public StreetViewPanoramaOptions panningGesturesEnabled(boolean z) {
-        this.amh = Boolean.valueOf(z);
+        this.apn = Boolean.valueOf(z);
         return this;
     }
 
     public StreetViewPanoramaOptions panoramaCamera(StreetViewPanoramaCamera streetViewPanoramaCamera) {
-        this.amc = streetViewPanoramaCamera;
+        this.api = streetViewPanoramaCamera;
         return this;
     }
 
     public StreetViewPanoramaOptions panoramaId(String str) {
-        this.amd = str;
+        this.apj = str;
         return this;
     }
 
     public StreetViewPanoramaOptions position(LatLng latLng) {
-        this.ame = latLng;
+        this.apk = latLng;
         return this;
     }
 
     public StreetViewPanoramaOptions position(LatLng latLng, Integer num) {
-        this.ame = latLng;
-        this.amf = num;
+        this.apk = latLng;
+        this.apl = num;
         return this;
     }
 
     public StreetViewPanoramaOptions streetNamesEnabled(boolean z) {
-        this.ami = Boolean.valueOf(z);
+        this.apo = Boolean.valueOf(z);
         return this;
     }
 
     public StreetViewPanoramaOptions useViewLifecycleInFragment(boolean z) {
-        this.aln = Boolean.valueOf(z);
+        this.aou = Boolean.valueOf(z);
         return this;
     }
 
     public StreetViewPanoramaOptions userNavigationEnabled(boolean z) {
-        this.amg = Boolean.valueOf(z);
+        this.apm = Boolean.valueOf(z);
         return this;
     }
 
@@ -131,27 +132,27 @@ public final class StreetViewPanoramaOptions extends AbstractSafeParcelable impl
     }
 
     public StreetViewPanoramaOptions zoomGesturesEnabled(boolean z) {
-        this.alt = Boolean.valueOf(z);
+        this.aoA = Boolean.valueOf(z);
         return this;
     }
 
-    byte zzbrk() {
-        return zza.zze(this.aln);
+    byte zzbsf() {
+        return zza.zze(this.aou);
     }
 
-    byte zzbro() {
-        return zza.zze(this.alt);
+    byte zzbsj() {
+        return zza.zze(this.aoA);
     }
 
-    byte zzbry() {
-        return zza.zze(this.amg);
+    byte zzbsr() {
+        return zza.zze(this.apm);
     }
 
-    byte zzbrz() {
-        return zza.zze(this.amh);
+    byte zzbss() {
+        return zza.zze(this.apn);
     }
 
-    byte zzbsa() {
-        return zza.zze(this.ami);
+    byte zzbst() {
+        return zza.zze(this.apo);
     }
 }

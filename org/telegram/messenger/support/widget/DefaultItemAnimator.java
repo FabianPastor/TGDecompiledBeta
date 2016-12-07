@@ -14,17 +14,17 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class DefaultItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
-    private ArrayList<ViewHolder> mAddAnimations = new ArrayList();
-    private ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList();
-    private ArrayList<ViewHolder> mChangeAnimations = new ArrayList();
-    private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList();
-    private ArrayList<ViewHolder> mMoveAnimations = new ArrayList();
-    private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList();
+    ArrayList<ViewHolder> mAddAnimations = new ArrayList();
+    ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList();
+    ArrayList<ViewHolder> mChangeAnimations = new ArrayList();
+    ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList();
+    ArrayList<ViewHolder> mMoveAnimations = new ArrayList();
+    ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList();
     private ArrayList<ViewHolder> mPendingAdditions = new ArrayList();
     private ArrayList<ChangeInfo> mPendingChanges = new ArrayList();
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList();
     private ArrayList<ViewHolder> mPendingRemovals = new ArrayList();
-    private ArrayList<ViewHolder> mRemoveAnimations = new ArrayList();
+    ArrayList<ViewHolder> mRemoveAnimations = new ArrayList();
 
     private static class ChangeInfo {
         public int fromX;
@@ -39,7 +39,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
             this.newHolder = newHolder;
         }
 
-        private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
+        ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
             this(oldHolder, newHolder);
             this.fromX = fromX;
             this.fromY = fromY;
@@ -59,7 +59,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         public int toX;
         public int toY;
 
-        private MoveInfo(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+        MoveInfo(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
             this.holder = holder;
             this.fromX = fromX;
             this.fromY = fromY;
@@ -69,7 +69,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
     }
 
     private static class VpaListenerAdapter implements ViewPropertyAnimatorListener {
-        private VpaListenerAdapter() {
+        VpaListenerAdapter() {
         }
 
         public void onAnimationStart(View view) {
@@ -192,7 +192,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void animateAddImpl(final ViewHolder holder) {
+    void animateAddImpl(final ViewHolder holder) {
         final ViewPropertyAnimatorCompat animation = ViewCompat.animate(holder.itemView);
         this.mAddAnimations.add(holder);
         animation.alpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT).setDuration(getAddDuration()).setListener(new VpaListenerAdapter() {
@@ -234,7 +234,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void animateMoveImpl(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    void animateMoveImpl(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
         View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -293,7 +293,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void animateChangeImpl(final ChangeInfo changeInfo) {
+    void animateChangeImpl(final ChangeInfo changeInfo) {
         View newView;
         ViewHolder holder = changeInfo.oldHolder;
         View view = holder == null ? null : holder.itemView;
@@ -460,7 +460,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    private void dispatchFinishedWhenDone() {
+    void dispatchFinishedWhenDone() {
         if (!isRunning()) {
             dispatchAnimationsFinished();
         }

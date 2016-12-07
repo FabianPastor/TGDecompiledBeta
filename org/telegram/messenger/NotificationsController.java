@@ -498,11 +498,17 @@ public class NotificationsController {
                                 int lower_id = (int) dialog_id;
                                 boolean isChat = lower_id < 0;
                                 if (lower_id != 0) {
-                                    popup = preferences.getInt("popup_" + dialog_id, 0);
+                                    if (preferences.getBoolean("custom_" + dialog_id, false)) {
+                                        popup = preferences.getInt("popup_" + dialog_id, 0);
+                                    } else {
+                                        popup = 0;
+                                    }
                                     if (popup == 0) {
                                         popup = preferences.getInt(((int) dialog_id) < 0 ? "popupGroup" : "popupAll", 0);
                                     } else if (popup == 1) {
                                         popup = 3;
+                                    } else if (popup == 2) {
+                                        popup = 0;
                                     }
                                 }
                                 if (value == null) {
@@ -1371,7 +1377,7 @@ public class NotificationsController {
             boolean notifyDisabled = false;
             int needVibrate = 0;
             String choosenSoundPath = null;
-            int ledColor = -16711936;
+            int ledColor = -16776961;
             boolean inAppPreview = false;
             int priority = 0;
             int notifyOverride = getNotifyOverride(preferences, override_dialog_id);
@@ -1379,8 +1385,15 @@ public class NotificationsController {
                 notifyDisabled = true;
             }
             if (!(notifyDisabled || dialog_id != override_dialog_id || chat == null)) {
-                int notifyMaxCount = preferences.getInt("smart_max_count_" + dialog_id, 2);
-                int notifyDelay = preferences.getInt("smart_delay_" + dialog_id, 180);
+                int notifyMaxCount;
+                int notifyDelay;
+                if (preferences.getBoolean("custom_" + dialog_id, false)) {
+                    notifyMaxCount = preferences.getInt("smart_max_count_" + dialog_id, 2);
+                    notifyDelay = preferences.getInt("smart_delay_" + dialog_id, 180);
+                } else {
+                    notifyMaxCount = 2;
+                    notifyDelay = 180;
+                }
                 if (notifyMaxCount != 0) {
                     Point dialogInfo = (Point) this.smartNotificationsDialogs.get(Long.valueOf(dialog_id));
                     if (dialogInfo == null) {
@@ -1399,14 +1412,23 @@ public class NotificationsController {
             }
             String defaultPath = System.DEFAULT_NOTIFICATION_URI.getPath();
             if (!notifyDisabled) {
+                int vibrateOverride;
+                int priorityOverride;
                 boolean inAppSounds = preferences.getBoolean("EnableInAppSounds", true);
                 boolean inAppVibrate = preferences.getBoolean("EnableInAppVibrate", true);
                 inAppPreview = preferences.getBoolean("EnableInAppPreview", true);
                 boolean inAppPriority = preferences.getBoolean("EnableInAppPriority", false);
-                int vibrateOverride = preferences.getInt("vibrate_" + dialog_id, 0);
-                int priorityOverride = preferences.getInt("priority_" + dialog_id, 3);
+                boolean custom = preferences.getBoolean("custom_" + dialog_id, false);
+                if (custom) {
+                    vibrateOverride = preferences.getInt("vibrate_" + dialog_id, 0);
+                    priorityOverride = preferences.getInt("priority_" + dialog_id, 3);
+                    choosenSoundPath = preferences.getString("sound_path_" + dialog_id, null);
+                } else {
+                    vibrateOverride = 0;
+                    priorityOverride = 3;
+                    choosenSoundPath = null;
+                }
                 boolean vibrateOnlyIfSilent = false;
-                choosenSoundPath = preferences.getString("sound_path_" + dialog_id, null);
                 if (chat_id != 0) {
                     if (choosenSoundPath != null && choosenSoundPath.equals(defaultPath)) {
                         choosenSoundPath = null;
@@ -1415,7 +1437,7 @@ public class NotificationsController {
                     }
                     needVibrate = preferences.getInt("vibrate_group", 0);
                     priority = preferences.getInt("priority_group", 1);
-                    ledColor = preferences.getInt("GroupLed", -16711936);
+                    ledColor = preferences.getInt("GroupLed", -16776961);
                 } else if (user_id != 0) {
                     if (choosenSoundPath != null && choosenSoundPath.equals(defaultPath)) {
                         choosenSoundPath = null;
@@ -1424,9 +1446,9 @@ public class NotificationsController {
                     }
                     needVibrate = preferences.getInt("vibrate_messages", 0);
                     priority = preferences.getInt("priority_group", 1);
-                    ledColor = preferences.getInt("MessagesLed", -16711936);
+                    ledColor = preferences.getInt("MessagesLed", -16776961);
                 }
-                if (preferences.contains("color_" + dialog_id)) {
+                if (custom && preferences.contains("color_" + dialog_id)) {
                     ledColor = preferences.getInt("color_" + dialog_id, 0);
                 }
                 if (priorityOverride != 3) {
@@ -1742,7 +1764,7 @@ public class NotificationsController {
                         } else {
                             replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
                         }
-                        wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).addRemoteInput(remoteInputWear).build();
+                        wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
                     }
                     count = (Integer) this.pushDialogs.get(Long.valueOf(dialog_id));
                     if (count == null) {
@@ -1846,7 +1868,7 @@ public class NotificationsController {
                     } else {
                         replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
                     }
-                    wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).addRemoteInput(remoteInputWear).build();
+                    wearReplyAction = new Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).addRemoteInput(remoteInputWear).build();
                     count = (Integer) this.pushDialogs.get(Long.valueOf(dialog_id));
                     if (count == null) {
                         count = Integer.valueOf(0);

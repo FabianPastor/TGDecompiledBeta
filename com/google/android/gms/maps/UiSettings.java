@@ -5,15 +5,15 @@ import com.google.android.gms.maps.internal.IUiSettingsDelegate;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class UiSettings {
-    private final IUiSettingsDelegate ams;
+    private final IUiSettingsDelegate apy;
 
     UiSettings(IUiSettingsDelegate iUiSettingsDelegate) {
-        this.ams = iUiSettingsDelegate;
+        this.apy = iUiSettingsDelegate;
     }
 
     public boolean isCompassEnabled() {
         try {
-            return this.ams.isCompassEnabled();
+            return this.apy.isCompassEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -21,7 +21,7 @@ public final class UiSettings {
 
     public boolean isIndoorLevelPickerEnabled() {
         try {
-            return this.ams.isIndoorLevelPickerEnabled();
+            return this.apy.isIndoorLevelPickerEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -29,7 +29,7 @@ public final class UiSettings {
 
     public boolean isMapToolbarEnabled() {
         try {
-            return this.ams.isMapToolbarEnabled();
+            return this.apy.isMapToolbarEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -37,7 +37,7 @@ public final class UiSettings {
 
     public boolean isMyLocationButtonEnabled() {
         try {
-            return this.ams.isMyLocationButtonEnabled();
+            return this.apy.isMyLocationButtonEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -45,7 +45,7 @@ public final class UiSettings {
 
     public boolean isRotateGesturesEnabled() {
         try {
-            return this.ams.isRotateGesturesEnabled();
+            return this.apy.isRotateGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -53,7 +53,7 @@ public final class UiSettings {
 
     public boolean isScrollGesturesEnabled() {
         try {
-            return this.ams.isScrollGesturesEnabled();
+            return this.apy.isScrollGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -61,7 +61,7 @@ public final class UiSettings {
 
     public boolean isTiltGesturesEnabled() {
         try {
-            return this.ams.isTiltGesturesEnabled();
+            return this.apy.isTiltGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -69,7 +69,7 @@ public final class UiSettings {
 
     public boolean isZoomControlsEnabled() {
         try {
-            return this.ams.isZoomControlsEnabled();
+            return this.apy.isZoomControlsEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -77,7 +77,7 @@ public final class UiSettings {
 
     public boolean isZoomGesturesEnabled() {
         try {
-            return this.ams.isZoomGesturesEnabled();
+            return this.apy.isZoomGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -85,7 +85,7 @@ public final class UiSettings {
 
     public void setAllGesturesEnabled(boolean z) {
         try {
-            this.ams.setAllGesturesEnabled(z);
+            this.apy.setAllGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -93,7 +93,7 @@ public final class UiSettings {
 
     public void setCompassEnabled(boolean z) {
         try {
-            this.ams.setCompassEnabled(z);
+            this.apy.setCompassEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -101,7 +101,7 @@ public final class UiSettings {
 
     public void setIndoorLevelPickerEnabled(boolean z) {
         try {
-            this.ams.setIndoorLevelPickerEnabled(z);
+            this.apy.setIndoorLevelPickerEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -109,7 +109,7 @@ public final class UiSettings {
 
     public void setMapToolbarEnabled(boolean z) {
         try {
-            this.ams.setMapToolbarEnabled(z);
+            this.apy.setMapToolbarEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -117,7 +117,7 @@ public final class UiSettings {
 
     public void setMyLocationButtonEnabled(boolean z) {
         try {
-            this.ams.setMyLocationButtonEnabled(z);
+            this.apy.setMyLocationButtonEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -125,7 +125,7 @@ public final class UiSettings {
 
     public void setRotateGesturesEnabled(boolean z) {
         try {
-            this.ams.setRotateGesturesEnabled(z);
+            this.apy.setRotateGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -133,7 +133,7 @@ public final class UiSettings {
 
     public void setScrollGesturesEnabled(boolean z) {
         try {
-            this.ams.setScrollGesturesEnabled(z);
+            this.apy.setScrollGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -141,7 +141,7 @@ public final class UiSettings {
 
     public void setTiltGesturesEnabled(boolean z) {
         try {
-            this.ams.setTiltGesturesEnabled(z);
+            this.apy.setTiltGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -149,7 +149,7 @@ public final class UiSettings {
 
     public void setZoomControlsEnabled(boolean z) {
         try {
-            this.ams.setZoomControlsEnabled(z);
+            this.apy.setZoomControlsEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -157,7 +157,7 @@ public final class UiSettings {
 
     public void setZoomGesturesEnabled(boolean z) {
         try {
-            this.ams.setZoomGesturesEnabled(z);
+            this.apy.setZoomGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

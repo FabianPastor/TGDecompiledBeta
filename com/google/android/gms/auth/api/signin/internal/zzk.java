@@ -5,76 +5,76 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONException;
 
 public class zzk {
-    private static final Lock hI = new ReentrantLock();
-    private static zzk hJ;
-    private final Lock hK = new ReentrantLock();
-    private final SharedPreferences hL;
+    private static final Lock jS = new ReentrantLock();
+    private static zzk jT;
+    private final Lock jU = new ReentrantLock();
+    private final SharedPreferences jV;
 
     zzk(Context context) {
-        this.hL = context.getSharedPreferences("com.google.android.gms.signin", 0);
+        this.jV = context.getSharedPreferences("com.google.android.gms.signin", 0);
     }
 
-    public static zzk zzbd(Context context) {
-        zzac.zzy(context);
-        hI.lock();
+    public static zzk zzba(Context context) {
+        zzaa.zzy(context);
+        jS.lock();
         try {
-            if (hJ == null) {
-                hJ = new zzk(context.getApplicationContext());
+            if (jT == null) {
+                jT = new zzk(context.getApplicationContext());
             }
-            zzk com_google_android_gms_auth_api_signin_internal_zzk = hJ;
+            zzk com_google_android_gms_auth_api_signin_internal_zzk = jT;
             return com_google_android_gms_auth_api_signin_internal_zzk;
         } finally {
-            hI.unlock();
+            jS.unlock();
         }
     }
 
-    private String zzy(String str, String str2) {
+    private String zzx(String str, String str2) {
         String valueOf = String.valueOf(":");
         return new StringBuilder(((String.valueOf(str).length() + 0) + String.valueOf(valueOf).length()) + String.valueOf(str2).length()).append(str).append(valueOf).append(str2).toString();
     }
 
     void zza(GoogleSignInAccount googleSignInAccount, GoogleSignInOptions googleSignInOptions) {
-        zzac.zzy(googleSignInAccount);
-        zzac.zzy(googleSignInOptions);
-        String zzahf = googleSignInAccount.zzahf();
-        zzx(zzy("googleSignInAccount", zzahf), googleSignInAccount.zzahh());
-        zzx(zzy("googleSignInOptions", zzahf), googleSignInOptions.zzahg());
+        zzaa.zzy(googleSignInAccount);
+        zzaa.zzy(googleSignInOptions);
+        String zzaip = googleSignInAccount.zzaip();
+        zzw(zzx("googleSignInAccount", zzaip), googleSignInAccount.zzair());
+        zzw(zzx("googleSignInOptions", zzaip), googleSignInOptions.zzaiq());
     }
 
-    public GoogleSignInAccount zzaic() {
-        return zzga(zzgc("defaultGoogleSignInAccount"));
+    public GoogleSignInAccount zzajm() {
+        return zzgd(zzgf("defaultGoogleSignInAccount"));
     }
 
-    public GoogleSignInOptions zzaid() {
-        return zzgb(zzgc("defaultGoogleSignInAccount"));
+    public GoogleSignInOptions zzajn() {
+        return zzge(zzgf("defaultGoogleSignInAccount"));
     }
 
-    public void zzaie() {
-        String zzgc = zzgc("defaultGoogleSignInAccount");
-        zzge("defaultGoogleSignInAccount");
-        zzgd(zzgc);
+    public void zzajo() {
+        String zzgf = zzgf("defaultGoogleSignInAccount");
+        zzgh("defaultGoogleSignInAccount");
+        zzgg(zzgf);
     }
 
     public void zzb(GoogleSignInAccount googleSignInAccount, GoogleSignInOptions googleSignInOptions) {
-        zzac.zzy(googleSignInAccount);
-        zzac.zzy(googleSignInOptions);
-        zzx("defaultGoogleSignInAccount", googleSignInAccount.zzahf());
+        zzaa.zzy(googleSignInAccount);
+        zzaa.zzy(googleSignInOptions);
+        zzw("defaultGoogleSignInAccount", googleSignInAccount.zzaip());
         zza(googleSignInAccount, googleSignInOptions);
     }
 
-    GoogleSignInAccount zzga(String str) {
+    GoogleSignInAccount zzgd(String str) {
         GoogleSignInAccount googleSignInAccount = null;
         if (!TextUtils.isEmpty(str)) {
-            String zzgc = zzgc(zzy("googleSignInAccount", str));
-            if (zzgc != null) {
+            String zzgf = zzgf(zzx("googleSignInAccount", str));
+            if (zzgf != null) {
                 try {
-                    googleSignInAccount = GoogleSignInAccount.zzfw(zzgc);
+                    googleSignInAccount = GoogleSignInAccount.zzfz(zzgf);
                 } catch (JSONException e) {
                 }
             }
@@ -82,13 +82,13 @@ public class zzk {
         return googleSignInAccount;
     }
 
-    GoogleSignInOptions zzgb(String str) {
+    GoogleSignInOptions zzge(String str) {
         GoogleSignInOptions googleSignInOptions = null;
         if (!TextUtils.isEmpty(str)) {
-            String zzgc = zzgc(zzy("googleSignInOptions", str));
-            if (zzgc != null) {
+            String zzgf = zzgf(zzx("googleSignInOptions", str));
+            if (zzgf != null) {
                 try {
-                    googleSignInOptions = GoogleSignInOptions.zzfy(zzgc);
+                    googleSignInOptions = GoogleSignInOptions.zzgb(zzgf);
                 } catch (JSONException e) {
                 }
             }
@@ -96,38 +96,38 @@ public class zzk {
         return googleSignInOptions;
     }
 
-    protected String zzgc(String str) {
-        this.hK.lock();
+    protected String zzgf(String str) {
+        this.jU.lock();
         try {
-            String string = this.hL.getString(str, null);
+            String string = this.jV.getString(str, null);
             return string;
         } finally {
-            this.hK.unlock();
+            this.jU.unlock();
         }
     }
 
-    void zzgd(String str) {
+    void zzgg(String str) {
         if (!TextUtils.isEmpty(str)) {
-            zzge(zzy("googleSignInAccount", str));
-            zzge(zzy("googleSignInOptions", str));
+            zzgh(zzx("googleSignInAccount", str));
+            zzgh(zzx("googleSignInOptions", str));
         }
     }
 
-    protected void zzge(String str) {
-        this.hK.lock();
+    protected void zzgh(String str) {
+        this.jU.lock();
         try {
-            this.hL.edit().remove(str).apply();
+            this.jV.edit().remove(str).apply();
         } finally {
-            this.hK.unlock();
+            this.jU.unlock();
         }
     }
 
-    protected void zzx(String str, String str2) {
-        this.hK.lock();
+    protected void zzw(String str, String str2) {
+        this.jU.lock();
         try {
-            this.hL.edit().putString(str, str2).apply();
+            this.jV.edit().putString(str, str2).apply();
         } finally {
-            this.hK.unlock();
+            this.jU.unlock();
         }
     }
 }

@@ -38,9 +38,9 @@ public class zzw implements zzy {
     }
 
     private static void zza(HttpEntityEnclosingRequestBase httpEntityEnclosingRequestBase, zzk<?> com_google_android_gms_internal_zzk_) throws zza {
-        byte[] zzp = com_google_android_gms_internal_zzk_.zzp();
-        if (zzp != null) {
-            httpEntityEnclosingRequestBase.setEntity(new ByteArrayEntity(zzp));
+        byte[] zzo = com_google_android_gms_internal_zzk_.zzo();
+        if (zzo != null) {
+            httpEntityEnclosingRequestBase.setEntity(new ByteArrayEntity(zzo));
         }
     }
 
@@ -66,12 +66,12 @@ public class zzw implements zzy {
                 return new HttpGet(com_google_android_gms_internal_zzk_.getUrl());
             case 1:
                 httpPost = new HttpPost(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzo());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             case 2:
                 httpPost = new HttpPut(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzo());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             case 3:
@@ -84,7 +84,7 @@ public class zzw implements zzy {
                 return new HttpTrace(com_google_android_gms_internal_zzk_.getUrl());
             case 7:
                 httpPost = new zza(com_google_android_gms_internal_zzk_.getUrl());
-                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzo());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzk_.zzn());
                 zza(httpPost, (zzk) com_google_android_gms_internal_zzk_);
                 return httpPost;
             default:
@@ -98,9 +98,9 @@ public class zzw implements zzy {
         zza(zzb, com_google_android_gms_internal_zzk_.getHeaders());
         zza(zzb);
         HttpParams params = zzb.getParams();
-        int zzs = com_google_android_gms_internal_zzk_.zzs();
+        int zzr = com_google_android_gms_internal_zzk_.zzr();
         HttpConnectionParams.setConnectionTimeout(params, Factory.DEFAULT_MIN_REBUFFER_MS);
-        HttpConnectionParams.setSoTimeout(params, zzs);
+        HttpConnectionParams.setSoTimeout(params, zzr);
         return this.zzcd.execute(zzb);
     }
 

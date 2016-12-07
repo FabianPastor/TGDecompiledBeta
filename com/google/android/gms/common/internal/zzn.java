@@ -1,27 +1,41 @@
 package com.google.android.gms.common.internal;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.ServiceConnection;
+import android.content.Intent;
+import android.net.Uri;
+import android.net.Uri.Builder;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
-public abstract class zzn {
-    private static zzn CA;
-    private static final Object Cz = new Object();
+public class zzn {
+    private static final Uri Ey = Uri.parse("http://plus.google.com/");
+    private static final Uri Ez = Ey.buildUpon().appendPath("circles").appendPath("find").build();
 
-    public static zzn zzcf(Context context) {
-        synchronized (Cz) {
-            if (CA == null) {
-                CA = new zzo(context.getApplicationContext());
-            }
+    private static Uri zzab(String str, @Nullable String str2) {
+        Builder appendQueryParameter = Uri.parse("market://details").buildUpon().appendQueryParameter(TtmlNode.ATTR_ID, str);
+        if (!TextUtils.isEmpty(str2)) {
+            appendQueryParameter.appendQueryParameter("pcampaignid", str2);
         }
-        return CA;
+        return appendQueryParameter.build();
     }
 
-    public abstract boolean zza(ComponentName componentName, ServiceConnection serviceConnection, String str);
+    public static Intent zzac(String str, @Nullable String str2) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setData(zzab(str, str2));
+        intent.setPackage("com.android.vending");
+        intent.addFlags(524288);
+        return intent;
+    }
 
-    public abstract boolean zza(String str, String str2, ServiceConnection serviceConnection, String str3);
+    public static Intent zzawg() {
+        Intent intent = new Intent("com.google.android.clockwork.home.UPDATE_ANDROID_WEAR_ACTION");
+        intent.setPackage("com.google.android.wearable.app");
+        return intent;
+    }
 
-    public abstract void zzb(ComponentName componentName, ServiceConnection serviceConnection, String str);
-
-    public abstract void zzb(String str, String str2, ServiceConnection serviceConnection, String str3);
+    public static Intent zzhy(String str) {
+        Uri fromParts = Uri.fromParts("package", str, null);
+        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(fromParts);
+        return intent;
+    }
 }

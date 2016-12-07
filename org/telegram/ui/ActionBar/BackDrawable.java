@@ -13,6 +13,7 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;
     private boolean animationInProgress;
+    private int color = -1;
     private int currentAnimationTime;
     private float currentRotation;
     private float finalRotation;
@@ -25,6 +26,11 @@ public class BackDrawable extends Drawable {
         this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.alwaysClose = close;
+    }
+
+    public void setColor(int value) {
+        this.color = value;
+        invalidateSelf();
     }
 
     public void setRotation(float rotation, boolean animated) {
@@ -66,7 +72,7 @@ public class BackDrawable extends Drawable {
             invalidateSelf();
         }
         int rD = (int) (-138.0f * this.currentRotation);
-        this.paint.setColor(Color.rgb(rD + 255, rD + 255, rD + 255));
+        this.paint.setColor(Color.rgb(Color.red(this.color) + rD, Color.green(this.color) + rD, Color.blue(this.color) + rD));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         float rotation = this.currentRotation;

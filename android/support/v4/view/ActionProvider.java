@@ -1,6 +1,8 @@
 package android.support.v4.view;
 
 import android.content.Context;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -12,6 +14,7 @@ public abstract class ActionProvider {
     private SubUiVisibilityListener mSubUiVisibilityListener;
     private VisibilityListener mVisibilityListener;
 
+    @RestrictTo({Scope.GROUP_ID})
     public interface SubUiVisibilityListener {
         void onSubUiVisibilityChanged(boolean z);
     }
@@ -59,12 +62,14 @@ public abstract class ActionProvider {
     public void onPrepareSubMenu(SubMenu subMenu) {
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public void subUiVisibilityChanged(boolean isVisible) {
         if (this.mSubUiVisibilityListener != null) {
             this.mSubUiVisibilityListener.onSubUiVisibilityChanged(isVisible);
         }
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public void setSubUiVisibilityListener(SubUiVisibilityListener listener) {
         this.mSubUiVisibilityListener = listener;
     }
@@ -76,6 +81,7 @@ public abstract class ActionProvider {
         this.mVisibilityListener = listener;
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public void reset() {
         this.mVisibilityListener = null;
         this.mSubUiVisibilityListener = null;

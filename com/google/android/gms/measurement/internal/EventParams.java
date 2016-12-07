@@ -2,45 +2,46 @@ package com.google.android.gms.measurement.internal;
 
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.Iterator;
 
 public class EventParams extends AbstractSafeParcelable implements Iterable<String> {
-    public static final zzj CREATOR = new zzj();
-    private final Bundle aow;
+    public static final Creator<EventParams> CREATOR = new zzj();
+    private final Bundle arG;
     public final int versionCode;
 
     EventParams(int i, Bundle bundle) {
         this.versionCode = i;
-        this.aow = bundle;
+        this.arG = bundle;
     }
 
     EventParams(Bundle bundle) {
-        zzac.zzy(bundle);
-        this.aow = bundle;
+        zzaa.zzy(bundle);
+        this.arG = bundle;
         this.versionCode = 1;
     }
 
     Object get(String str) {
-        return this.aow.get(str);
+        return this.arG.get(str);
     }
 
     public Iterator<String> iterator() {
         return new Iterator<String>(this) {
-            Iterator<String> aox = this.aoy.aow.keySet().iterator();
-            final /* synthetic */ EventParams aoy;
+            Iterator<String> arH = this.arI.arG.keySet().iterator();
+            final /* synthetic */ EventParams arI;
 
             {
-                this.aoy = r2;
+                this.arI = r2;
             }
 
             public boolean hasNext() {
-                return this.aox.hasNext();
+                return this.arH.hasNext();
             }
 
             public String next() {
-                return (String) this.aox.next();
+                return (String) this.arH.next();
             }
 
             public void remove() {
@@ -50,18 +51,18 @@ public class EventParams extends AbstractSafeParcelable implements Iterable<Stri
     }
 
     public int size() {
-        return this.aow.size();
+        return this.arG.size();
     }
 
     public String toString() {
-        return this.aow.toString();
+        return this.arG.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzj.zza(this, parcel, i);
     }
 
-    public Bundle zzbvz() {
-        return new Bundle(this.aow);
+    public Bundle zzbww() {
+        return new Bundle(this.arG);
     }
 }

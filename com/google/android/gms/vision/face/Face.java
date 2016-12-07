@@ -7,52 +7,52 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Face {
     public static final float UNCOMPUTED_PROBABILITY = -1.0f;
-    private PointF aKP;
-    private float aKQ;
-    private float aKR;
-    private List<Landmark> aKS;
-    private float aKT;
-    private float aKU;
-    private float aKV;
-    private float amJ;
-    private float amK;
+    private PointF aOa;
+    private float aOb;
+    private float aOc;
+    private List<Landmark> aOd;
+    private float aOe;
+    private float aOf;
+    private float aOg;
+    private float apP;
+    private float apQ;
     private int mId;
 
     public Face(int i, PointF pointF, float f, float f2, float f3, float f4, Landmark[] landmarkArr, float f5, float f6, float f7) {
         this.mId = i;
-        this.aKP = pointF;
-        this.amJ = f;
-        this.amK = f2;
-        this.aKQ = f3;
-        this.aKR = f4;
-        this.aKS = Arrays.asList(landmarkArr);
+        this.aOa = pointF;
+        this.apP = f;
+        this.apQ = f2;
+        this.aOb = f3;
+        this.aOc = f4;
+        this.aOd = Arrays.asList(landmarkArr);
         if (f5 < 0.0f || f5 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aKT = -1.0f;
+            this.aOe = -1.0f;
         } else {
-            this.aKT = f5;
+            this.aOe = f5;
         }
         if (f6 < 0.0f || f6 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aKU = -1.0f;
+            this.aOf = -1.0f;
         } else {
-            this.aKU = f6;
+            this.aOf = f6;
         }
         if (f7 < 0.0f || f7 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.aKV = -1.0f;
+            this.aOg = -1.0f;
         } else {
-            this.aKV = f7;
+            this.aOg = f7;
         }
     }
 
     public float getEulerY() {
-        return this.aKQ;
+        return this.aOb;
     }
 
     public float getEulerZ() {
-        return this.aKR;
+        return this.aOc;
     }
 
     public float getHeight() {
-        return this.amK;
+        return this.apQ;
     }
 
     public int getId() {
@@ -60,26 +60,26 @@ public class Face {
     }
 
     public float getIsLeftEyeOpenProbability() {
-        return this.aKT;
+        return this.aOe;
     }
 
     public float getIsRightEyeOpenProbability() {
-        return this.aKU;
+        return this.aOf;
     }
 
     public float getIsSmilingProbability() {
-        return this.aKV;
+        return this.aOg;
     }
 
     public List<Landmark> getLandmarks() {
-        return this.aKS;
+        return this.aOd;
     }
 
     public PointF getPosition() {
-        return new PointF(this.aKP.x - (this.amJ / 2.0f), this.aKP.y - (this.amK / 2.0f));
+        return new PointF(this.aOa.x - (this.apP / 2.0f), this.aOa.y - (this.apQ / 2.0f));
     }
 
     public float getWidth() {
-        return this.amJ;
+        return this.apP;
     }
 }

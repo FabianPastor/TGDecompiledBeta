@@ -11,14 +11,14 @@ public interface zzf extends IInterface {
     public static abstract class zza extends Binder implements zzf {
 
         private static class zza implements zzf {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void onCameraIdle() throws RemoteException {
@@ -26,7 +26,7 @@ public interface zzf extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnCameraIdleListener");
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -39,7 +39,7 @@ public interface zzf extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnCameraIdleListener");
         }
 
-        public static zzf zzhu(IBinder iBinder) {
+        public static zzf zzhy(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

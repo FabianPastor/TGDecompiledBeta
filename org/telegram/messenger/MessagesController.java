@@ -213,6 +213,7 @@ import org.telegram.tgnet.TLRPC.TL_updateChannel;
 import org.telegram.tgnet.TLRPC.TL_updateChannelMessageViews;
 import org.telegram.tgnet.TLRPC.TL_updateChannelPinnedMessage;
 import org.telegram.tgnet.TLRPC.TL_updateChannelTooLong;
+import org.telegram.tgnet.TLRPC.TL_updateChannelWebPage;
 import org.telegram.tgnet.TLRPC.TL_updateChatAdmins;
 import org.telegram.tgnet.TLRPC.TL_updateChatParticipantAdd;
 import org.telegram.tgnet.TLRPC.TL_updateChatParticipantAdmin;
@@ -362,7 +363,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private HashMap<Integer, ExportedChatInvite> exportedChats = new HashMap();
     public boolean firstGettingTask = false;
     public int fontSize = AndroidUtilities.dp(16.0f);
-    private HashMap<Integer, String> fullUsersAbout = new HashMap();
+    private HashMap<Integer, TL_userFull> fullUsers = new HashMap();
     public boolean gettingDifference = false;
     private HashMap<Integer, Boolean> gettingDifferenceChannels = new HashMap();
     private boolean gettingNewDeleteTask = false;
@@ -770,7 +771,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogs_read_inbox_max.clear();
         this.dialogs_read_outbox_max.clear();
         this.exportedChats.clear();
-        this.fullUsersAbout.clear();
+        this.fullUsers.clear();
         this.dialogs.clear();
         this.joiningToChannels.clear();
         this.channelViewsToSend.clear();
@@ -1077,8 +1078,8 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public String getUserAbout(int uid) {
-        return (String) this.fullUsersAbout.get(Integer.valueOf(uid));
+    public TL_userFull getUserFull(int uid) {
+        return (TL_userFull) this.fullUsers.get(Integer.valueOf(uid));
     }
 
     public void cancelLoadFullUser(int uid) {
@@ -1274,11 +1275,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (userFull.bot_info instanceof TL_botInfo) {
                                         BotQuery.putBotInfo(userFull.bot_info);
                                     }
-                                    if (userFull.about == null || userFull.about.length() <= 0) {
-                                        MessagesController.this.fullUsersAbout.remove(Integer.valueOf(user.id));
-                                    } else {
-                                        MessagesController.this.fullUsersAbout.put(Integer.valueOf(user.id), userFull.about);
-                                    }
+                                    MessagesController.this.fullUsers.put(Integer.valueOf(user.id), userFull);
                                     MessagesController.this.loadingFullUsers.remove(Integer.valueOf(user.id));
                                     MessagesController.this.loadedFullUsers.add(Integer.valueOf(user.id));
                                     String names = user.first_name + user.last_name + user.username;
@@ -1292,7 +1289,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (userFull.bot_info instanceof TL_botInfo) {
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.botInfoDidLoaded, userFull.bot_info, Integer.valueOf(classGuid));
                                     }
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id));
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.userInfoDidLoaded, Integer.valueOf(user.id), userFull);
                                 }
                             });
                         } else {
@@ -2804,7 +2801,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         objects.add(messageObject);
                         if (z) {
                             if (message.media instanceof TL_messageMediaUnsupported) {
-                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 57))) {
+                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 58))) {
                                     messagesToReload.add(Integer.valueOf(message.id));
                                 }
                             } else if (message.media instanceof TL_messageMediaWebPage) {
@@ -3104,8 +3101,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3122,6 +3117,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3149,6 +3145,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3553,7 +3550,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3568,6 +3564,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -4815,8 +4812,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
-        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
+            long newTaskId;
             this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
             TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
             inputPeer.channel_id = channel.id;
@@ -4879,7 +4876,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 MessagesController.this.needShortPollChannels.put(channelId, 0);
                 if (MessagesController.this.shortPollChannels.indexOfKey(channelId) < 0) {
-                    MessagesController.this.getChannelDifference(channelId, 2, 0);
+                    MessagesController.this.getChannelDifference(channelId, 3, 0);
                 }
             }
         });
@@ -4890,17 +4887,17 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
-        Integer channelPts;
         Throwable e;
-        long newTaskId;
-        TL_updates_getChannelDifference req;
-        final int i;
-        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
+            long newTaskId;
+            TL_updates_getChannelDifference req;
+            final int i;
+            final int i2;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -4909,7 +4906,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (channelPts.intValue() != 0) {
                         this.channelsPts.put(Integer.valueOf(channelId), channelPts);
                     }
-                    if (channelPts.intValue() == 0 && newDialogType == 2) {
+                    if (channelPts.intValue() == 0 && (newDialogType == 2 || newDialogType == 3)) {
                         return;
                     }
                 }
@@ -4942,6 +4939,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         req.filter = new TL_channelMessagesFilterEmpty();
                         req.pts = channelPts.intValue();
                         req.limit = limit;
+                        req.force = newDialogType != 3;
                         FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                         i = channelId;
                         i2 = newDialogType;
@@ -5180,6 +5178,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     req.filter = new TL_channelMessagesFilterEmpty();
                     req.pts = channelPts.intValue();
                     req.limit = limit;
+                    if (newDialogType != 3) {
+                    }
+                    req.force = newDialogType != 3;
                     FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                     i = channelId;
                     i2 = newDialogType;
@@ -5195,6 +5196,9 @@ public class MessagesController implements NotificationCenterDelegate {
             req.filter = new TL_channelMessagesFilterEmpty();
             req.pts = channelPts.intValue();
             req.limit = limit;
+            if (newDialogType != 3) {
+            }
+            req.force = newDialogType != 3;
             FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
             i = channelId;
             i2 = newDialogType;
@@ -5584,7 +5588,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (update instanceof TL_updateNewEncryptedMessage) {
             return 1;
         }
-        if ((update instanceof TL_updateNewChannelMessage) || (update instanceof TL_updateDeleteChannelMessages) || (update instanceof TL_updateEditChannelMessage)) {
+        if ((update instanceof TL_updateNewChannelMessage) || (update instanceof TL_updateDeleteChannelMessages) || (update instanceof TL_updateEditChannelMessage) || (update instanceof TL_updateChannelWebPage)) {
             return 2;
         }
         return 3;
@@ -6590,6 +6594,8 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (update instanceof TL_updatePrivacy) {
                 updatesOnMainThread.add(update);
             } else if (update instanceof TL_updateWebPage) {
+                webPages.put(Long.valueOf(update.webpage.id), update.webpage);
+            } else if (update instanceof TL_updateChannelWebPage) {
                 webPages.put(Long.valueOf(update.webpage.id), update.webpage);
             } else if (update instanceof TL_updateChannelTooLong) {
                 if (BuildVars.DEBUG_VERSION) {

@@ -1,73 +1,73 @@
 package com.google.android.gms.common.api;
 
 import com.google.android.gms.common.api.PendingResult.zza;
-import com.google.android.gms.internal.zzqe;
+import com.google.android.gms.internal.zzqq;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Batch extends zzqe<BatchResult> {
-    private int vo;
-    private boolean vp;
-    private boolean vq;
-    private final PendingResult<?>[] vr;
-    private final Object zzakd;
+public final class Batch extends zzqq<BatchResult> {
+    private int xp;
+    private boolean xq;
+    private boolean xr;
+    private final PendingResult<?>[] xs;
+    private final Object zzako;
 
     public static final class Builder {
-        private GoogleApiClient kv;
-        private List<PendingResult<?>> vt = new ArrayList();
+        private GoogleApiClient mD;
+        private List<PendingResult<?>> xu = new ArrayList();
 
         public Builder(GoogleApiClient googleApiClient) {
-            this.kv = googleApiClient;
+            this.mD = googleApiClient;
         }
 
         public <R extends Result> BatchResultToken<R> add(PendingResult<R> pendingResult) {
-            BatchResultToken<R> batchResultToken = new BatchResultToken(this.vt.size());
-            this.vt.add(pendingResult);
+            BatchResultToken<R> batchResultToken = new BatchResultToken(this.xu.size());
+            this.xu.add(pendingResult);
             return batchResultToken;
         }
 
         public Batch build() {
-            return new Batch(this.vt, this.kv);
+            return new Batch(this.xu, this.mD);
         }
     }
 
     private Batch(List<PendingResult<?>> list, GoogleApiClient googleApiClient) {
         super(googleApiClient);
-        this.zzakd = new Object();
-        this.vo = list.size();
-        this.vr = new PendingResult[this.vo];
+        this.zzako = new Object();
+        this.xp = list.size();
+        this.xs = new PendingResult[this.xp];
         if (list.isEmpty()) {
-            zzc(new BatchResult(Status.vY, this.vr));
+            zzc(new BatchResult(Status.xZ, this.xs));
             return;
         }
         for (int i = 0; i < list.size(); i++) {
             PendingResult pendingResult = (PendingResult) list.get(i);
-            this.vr[i] = pendingResult;
+            this.xs[i] = pendingResult;
             pendingResult.zza(new zza(this) {
-                final /* synthetic */ Batch vs;
+                final /* synthetic */ Batch xt;
 
                 {
-                    this.vs = r1;
+                    this.xt = r1;
                 }
 
                 /* JADX WARNING: inconsistent code. */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
-                public void zzv(Status status) {
-                    synchronized (this.vs.zzakd) {
-                        if (this.vs.isCanceled()) {
+                public void zzx(Status status) {
+                    synchronized (this.xt.zzako) {
+                        if (this.xt.isCanceled()) {
                             return;
                         }
                         if (status.isCanceled()) {
-                            this.vs.vq = true;
+                            this.xt.xr = true;
                         } else if (!status.isSuccess()) {
-                            this.vs.vp = true;
+                            this.xt.xq = true;
                         }
-                        this.vs.vo = this.vs.vo - 1;
-                        if (this.vs.vo == 0) {
-                            if (this.vs.vq) {
+                        this.xt.xp = this.xt.xp - 1;
+                        if (this.xt.xp == 0) {
+                            if (this.xt.xr) {
                                 super.cancel();
                             } else {
-                                this.vs.zzc(new BatchResult(this.vs.vp ? new Status(13) : Status.vY, this.vs.vr));
+                                this.xt.zzc(new BatchResult(this.xt.xq ? new Status(13) : Status.xZ, this.xt.xs));
                             }
                         }
                     }
@@ -78,13 +78,13 @@ public final class Batch extends zzqe<BatchResult> {
 
     public void cancel() {
         super.cancel();
-        for (PendingResult cancel : this.vr) {
+        for (PendingResult cancel : this.xs) {
             cancel.cancel();
         }
     }
 
     public BatchResult createFailedResult(Status status) {
-        return new BatchResult(status, this.vr);
+        return new BatchResult(status, this.xs);
     }
 
     public /* synthetic */ Result zzc(Status status) {

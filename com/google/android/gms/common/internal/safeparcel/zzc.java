@@ -3,7 +3,7 @@ package com.google.android.gms.common.internal.safeparcel;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,7 +14,7 @@ public final class zzc {
     }
 
     public static <T extends SafeParcelable> T zza(byte[] bArr, Creator<T> creator) {
-        zzac.zzy(creator);
+        zzaa.zzy(creator);
         Parcel obtain = Parcel.obtain();
         obtain.unmarshall(bArr, 0, bArr.length);
         obtain.setDataPosition(0);

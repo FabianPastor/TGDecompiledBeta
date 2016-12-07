@@ -12,14 +12,14 @@ public interface zzy extends IInterface {
     public static abstract class zza extends Binder implements zzy {
 
         private static class zza implements zzy {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public void zza(PointOfInterest pointOfInterest) throws RemoteException {
@@ -33,7 +33,7 @@ public interface zzy extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -46,7 +46,7 @@ public interface zzy extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.internal.IOnPoiClickListener");
         }
 
-        public static zzy zzin(IBinder iBinder) {
+        public static zzy zzir(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

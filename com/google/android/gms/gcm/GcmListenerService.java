@@ -12,9 +12,9 @@ import android.util.Log;
 import java.util.Iterator;
 
 public abstract class GcmListenerService extends Service {
-    private int aeC;
-    private int aeD = 0;
-    private final Object zzakd = new Object();
+    private int agK;
+    private int agL = 0;
+    private final Object zzako = new Object();
 
     static void zzac(Bundle bundle) {
         Iterator it = bundle.keySet().iterator();
@@ -26,11 +26,11 @@ public abstract class GcmListenerService extends Service {
         }
     }
 
-    private void zzbnx() {
-        synchronized (this.zzakd) {
-            this.aeD--;
-            if (this.aeD == 0) {
-                zztk(this.aeC);
+    private void zzbnp() {
+        synchronized (this.zzako) {
+            this.agL--;
+            if (this.agL == 0) {
+                zztl(this.agK);
             }
         }
     }
@@ -39,18 +39,18 @@ public abstract class GcmListenerService extends Service {
     private void zzl(final Intent intent) {
         if (VERSION.SDK_INT >= 11) {
             AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable(this) {
-                final /* synthetic */ GcmListenerService aeE;
+                final /* synthetic */ GcmListenerService agM;
 
                 public void run() {
-                    this.aeE.zzm(intent);
+                    this.agM.zzm(intent);
                 }
             });
         } else {
             new AsyncTask<Void, Void, Void>(this) {
-                final /* synthetic */ GcmListenerService aeE;
+                final /* synthetic */ GcmListenerService agM;
 
                 protected Void doInBackground(Void... voidArr) {
-                    this.aeE.zzm(intent);
+                    this.agM.zzm(intent);
                     return null;
                 }
             }.execute(new Void[0]);
@@ -80,7 +80,7 @@ public abstract class GcmListenerService extends Service {
                             Log.d(action, valueOf.length() != 0 ? str.concat(valueOf) : new String(str));
                             break;
                     }
-                    zzbnx();
+                    zzbnp();
                     break;
             }
         } finally {
@@ -148,10 +148,10 @@ public abstract class GcmListenerService extends Service {
         extras.remove("message_type");
         extras.remove("android.support.content.wakelockid");
         if (zza.zzad(extras)) {
-            if (zza.zzdd(this)) {
+            if (zza.zzda(this)) {
                 zza.zzae(extras);
             } else {
-                zza.zzdc(this).zzaf(extras);
+                zza.zzcz(this).zzaf(extras);
                 return;
             }
         }
@@ -183,19 +183,19 @@ public abstract class GcmListenerService extends Service {
     }
 
     public final int onStartCommand(Intent intent, int i, int i2) {
-        synchronized (this.zzakd) {
-            this.aeC = i2;
-            this.aeD++;
+        synchronized (this.zzako) {
+            this.agK = i2;
+            this.agL++;
         }
         if (intent == null) {
-            zzbnx();
+            zzbnp();
             return 2;
         }
         zzl(intent);
         return 3;
     }
 
-    boolean zztk(int i) {
+    boolean zztl(int i) {
         return stopSelfResult(i);
     }
 }

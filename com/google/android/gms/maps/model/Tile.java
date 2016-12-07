@@ -1,10 +1,11 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public final class Tile extends AbstractSafeParcelable {
-    public static final zzo CREATOR = new zzo();
+    public static final Creator<Tile> CREATOR = new zzo();
     public final byte[] data;
     public final int height;
     private final int mVersionCode;

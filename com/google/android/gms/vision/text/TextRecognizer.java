@@ -19,10 +19,10 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public final class TextRecognizer extends Detector<TextBlock> {
-    private final zzg aLC;
+    private final zzg aON;
 
     public static class Builder {
-        private TextRecognizerOptions aLD = new TextRecognizerOptions();
+        private TextRecognizerOptions aOO = new TextRecognizerOptions();
         private Context mContext;
 
         public Builder(Context context) {
@@ -30,7 +30,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
         }
 
         public TextRecognizer build() {
-            return new TextRecognizer(new zzg(this.mContext, this.aLD));
+            return new TextRecognizer(new zzg(this.mContext, this.aOO));
         }
     }
 
@@ -39,7 +39,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     private TextRecognizer(zzg com_google_android_gms_vision_text_internal_client_zzg) {
-        this.aLC = com_google_android_gms_vision_text_internal_client_zzg;
+        this.aON = com_google_android_gms_vision_text_internal_client_zzg;
     }
 
     private Bitmap zza(ByteBuffer byteBuffer, int i, int i2, int i3) {
@@ -73,12 +73,12 @@ public final class TextRecognizer extends Detector<TextBlock> {
         int i = 0;
         SparseArray sparseArray = new SparseArray();
         for (LineBoxParcel lineBoxParcel : lineBoxParcelArr) {
-            SparseArray sparseArray2 = (SparseArray) sparseArray.get(lineBoxParcel.aLN);
+            SparseArray sparseArray2 = (SparseArray) sparseArray.get(lineBoxParcel.aOY);
             if (sparseArray2 == null) {
                 sparseArray2 = new SparseArray();
-                sparseArray.append(lineBoxParcel.aLN, sparseArray2);
+                sparseArray.append(lineBoxParcel.aOY, sparseArray2);
             }
-            sparseArray2.append(lineBoxParcel.aLO, lineBoxParcel);
+            sparseArray2.append(lineBoxParcel.aOZ, lineBoxParcel);
         }
         SparseArray<TextBlock> sparseArray3 = new SparseArray(sparseArray.size());
         while (i < sparseArray.size()) {
@@ -88,7 +88,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
         return sparseArray3;
     }
 
-    private int zzabw(int i) {
+    private int zzabm(int i) {
         switch (i) {
             case 0:
                 return 0;
@@ -108,7 +108,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
         int height = bitmap.getHeight();
         if (frameMetadataParcel.rotation != 0) {
             Matrix matrix = new Matrix();
-            matrix.postRotate((float) zzabw(frameMetadataParcel.rotation));
+            matrix.postRotate((float) zzabm(frameMetadataParcel.rotation));
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
         }
         if (frameMetadataParcel.rotation == 1 || frameMetadataParcel.rotation == 3) {
@@ -123,12 +123,12 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     public boolean isOperational() {
-        return this.aLC.isOperational();
+        return this.aON.isOperational();
     }
 
     public void release() {
         super.release();
-        this.aLC.zzcls();
+        this.aON.zzclr();
     }
 
     public SparseArray<TextBlock> zza(Frame frame, RecognitionOptions recognitionOptions) {
@@ -143,10 +143,10 @@ public final class TextRecognizer extends Detector<TextBlock> {
             bitmap = zza(frame.getGrayscaleImageData(), frame.getMetadata().getFormat(), zzc.width, zzc.height);
         }
         bitmap = zzb(bitmap, zzc);
-        if (!recognitionOptions.aLP.isEmpty()) {
-            recognitionOptions.aLP.set(zza(recognitionOptions.aLP, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
+        if (!recognitionOptions.aPa.isEmpty()) {
+            recognitionOptions.aPa.set(zza(recognitionOptions.aPa, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
         }
         zzc.rotation = 0;
-        return zza(this.aLC.zza(bitmap, zzc, recognitionOptions));
+        return zza(this.aON.zza(bitmap, zzc, recognitionOptions));
     }
 }

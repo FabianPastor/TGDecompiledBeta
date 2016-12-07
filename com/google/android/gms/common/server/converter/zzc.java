@@ -8,50 +8,50 @@ import com.google.android.gms.common.server.converter.StringToIntConverter.Entry
 
 public class zzc implements Creator<Entry> {
     static void zza(Entry entry, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, entry.versionCode);
-        zzb.zza(parcel, 2, entry.Dr, false);
-        zzb.zzc(parcel, 3, entry.Ds);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, entry.Fe, false);
+        zzb.zzc(parcel, 3, entry.Ff);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcv(parcel);
+        return zzcw(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzha(i);
+        return zzgz(i);
     }
 
-    public Entry zzcv(Parcel parcel) {
+    public Entry zzcw(Parcel parcel) {
         int i = 0;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         String str = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i2 = zza.zzg(parcel, zzcp);
+                    i2 = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 case 3:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new Entry(i2, str, i);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public Entry[] zzha(int i) {
+    public Entry[] zzgz(int i) {
         return new Entry[i];
     }
 }

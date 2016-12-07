@@ -5,17 +5,21 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.os.BuildCompat;
 import android.support.v4.view.ViewCompatLollipop.OnApplyWindowInsetsListenerBridge;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeProviderCompat;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -66,14 +70,17 @@ public class ViewCompat {
     public static final int SCROLL_INDICATOR_TOP = 1;
     private static final String TAG = "ViewCompat";
 
+    @RestrictTo({Scope.GROUP_ID})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusDirection {
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusRealDirection {
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusRelativeDirection {
     }
@@ -116,6 +123,8 @@ public class ViewCompat {
         Mode getBackgroundTintMode(View view);
 
         Rect getClipBounds(View view);
+
+        Display getDisplay(View view);
 
         float getElevation(View view);
 
@@ -239,6 +248,8 @@ public class ViewCompat {
         void setActivated(View view, boolean z);
 
         void setAlpha(View view, float f);
+
+        void setBackground(View view, Drawable drawable);
 
         void setBackgroundTintList(View view, ColorStateList colorStateList);
 
@@ -699,6 +710,10 @@ public class ViewCompat {
             return false;
         }
 
+        public void setBackground(View view, Drawable background) {
+            view.setBackgroundDrawable(background);
+        }
+
         public ColorStateList getBackgroundTintList(View view) {
             return ViewCompatBase.getBackgroundTintList(view);
         }
@@ -849,6 +864,10 @@ public class ViewCompat {
         }
 
         public void setPointerIcon(View view, PointerIconCompat pointerIcon) {
+        }
+
+        public Display getDisplay(View view) {
+            return ViewCompatBase.getDisplay(view);
         }
     }
 
@@ -1177,6 +1196,10 @@ public class ViewCompat {
         public boolean hasOverlappingRendering(View view) {
             return ViewCompatJB.hasOverlappingRendering(view);
         }
+
+        public void setBackground(View view, Drawable background) {
+            ViewCompatJB.setBackground(view, background);
+        }
     }
 
     static class JbMr1ViewCompatImpl extends JBViewCompatImpl {
@@ -1221,6 +1244,10 @@ public class ViewCompat {
 
         public boolean isPaddingRelative(View view) {
             return ViewCompatJellybeanMr1.isPaddingRelative(view);
+        }
+
+        public Display getDisplay(View view) {
+            return ViewCompatJellybeanMr1.getDisplay(view);
         }
     }
 
@@ -1812,6 +1839,10 @@ public class ViewCompat {
         return IMPL.isPaddingRelative(view);
     }
 
+    public static void setBackground(View view, Drawable background) {
+        IMPL.setBackground(view, background);
+    }
+
     public static ColorStateList getBackgroundTintList(View view) {
         return IMPL.getBackgroundTintList(view);
     }
@@ -1922,6 +1953,10 @@ public class ViewCompat {
 
     public static void setPointerIcon(@NonNull View view, PointerIconCompat pointerIcon) {
         IMPL.setPointerIcon(view, pointerIcon);
+    }
+
+    public static Display getDisplay(@NonNull View view) {
+        return IMPL.getDisplay(view);
     }
 
     protected ViewCompat() {

@@ -1,10 +1,11 @@
 package com.google.android.gms.vision.face.internal.client;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public final class LandmarkParcel extends AbstractSafeParcelable {
-    public static final zzf CREATOR = new zzf();
+    public static final Creator<LandmarkParcel> CREATOR = new zzf();
     public final int type;
     public final int versionCode;
     public final float x;

@@ -82,6 +82,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
     private RecyclerListView gridView;
+    private boolean isFullscreen;
     private boolean isPublicChannel;
     private GridLayoutManager layoutManager;
     private String linkToCopy;
@@ -498,7 +499,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
     }
 
-    public ShareAlert(final Context context, MessageObject messageObject, String text, boolean publicChannel, String copyLink) {
+    public ShareAlert(final Context context, MessageObject messageObject, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
         super(context, true);
         this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
         this.linkToCopy = copyLink;
@@ -506,6 +507,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.searchAdapter = new ShareSearchAdapter(context);
         this.isPublicChannel = publicChannel;
         this.sendingText = text;
+        this.isFullscreen = fullScreen;
         if (publicChannel) {
             this.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
@@ -757,6 +759,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
         if (this.listAdapter.dialogs.isEmpty()) {
             NotificationCenter.getInstance().addObserver(this, NotificationCenter.dialogsNeedReload);
+        }
+        if (this.isFullscreen && VERSION.SDK_INT < 16) {
         }
     }
 

@@ -1,50 +1,91 @@
 package com.google.android.gms.common.internal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.accounts.Account;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class zzab {
+public class zzab implements Creator<ResolveAccountRequest> {
+    static void zza(ResolveAccountRequest resolveAccountRequest, Parcel parcel, int i) {
+        int zzcs = zzb.zzcs(parcel);
+        zzb.zzc(parcel, 1, resolveAccountRequest.mVersionCode);
+        zzb.zza(parcel, 2, resolveAccountRequest.getAccount(), i, false);
+        zzb.zzc(parcel, 3, resolveAccountRequest.getSessionId());
+        zzb.zza(parcel, 4, resolveAccountRequest.zzawl(), i, false);
+        zzb.zzaj(parcel, zzcs);
+    }
 
-    public static final class zza {
-        private final List<String> CU;
-        private final Object zzctc;
+    public /* synthetic */ Object createFromParcel(Parcel parcel) {
+        return zzcm(parcel);
+    }
 
-        private zza(Object obj) {
-            this.zzctc = zzac.zzy(obj);
-            this.CU = new ArrayList();
-        }
+    public /* synthetic */ Object[] newArray(int i) {
+        return zzgq(i);
+    }
 
-        public String toString() {
-            StringBuilder append = new StringBuilder(100).append(this.zzctc.getClass().getSimpleName()).append('{');
-            int size = this.CU.size();
-            for (int i = 0; i < size; i++) {
-                append.append((String) this.CU.get(i));
-                if (i < size - 1) {
-                    append.append(", ");
-                }
+    public ResolveAccountRequest zzcm(Parcel parcel) {
+        GoogleSignInAccount googleSignInAccount = null;
+        int i = 0;
+        int zzcr = zza.zzcr(parcel);
+        Account account = null;
+        int i2 = 0;
+        while (parcel.dataPosition() < zzcr) {
+            int i3;
+            Account account2;
+            int zzg;
+            GoogleSignInAccount googleSignInAccount2;
+            int zzcq = zza.zzcq(parcel);
+            GoogleSignInAccount googleSignInAccount3;
+            switch (zza.zzgu(zzcq)) {
+                case 1:
+                    googleSignInAccount3 = googleSignInAccount;
+                    i3 = i;
+                    account2 = account;
+                    zzg = zza.zzg(parcel, zzcq);
+                    googleSignInAccount2 = googleSignInAccount3;
+                    break;
+                case 2:
+                    zzg = i2;
+                    int i4 = i;
+                    account2 = (Account) zza.zza(parcel, zzcq, Account.CREATOR);
+                    googleSignInAccount2 = googleSignInAccount;
+                    i3 = i4;
+                    break;
+                case 3:
+                    account2 = account;
+                    zzg = i2;
+                    googleSignInAccount3 = googleSignInAccount;
+                    i3 = zza.zzg(parcel, zzcq);
+                    googleSignInAccount2 = googleSignInAccount3;
+                    break;
+                case 4:
+                    googleSignInAccount2 = (GoogleSignInAccount) zza.zza(parcel, zzcq, GoogleSignInAccount.CREATOR);
+                    i3 = i;
+                    account2 = account;
+                    zzg = i2;
+                    break;
+                default:
+                    zza.zzb(parcel, zzcq);
+                    googleSignInAccount2 = googleSignInAccount;
+                    i3 = i;
+                    account2 = account;
+                    zzg = i2;
+                    break;
             }
-            return append.append('}').toString();
+            i2 = zzg;
+            account = account2;
+            i = i3;
+            googleSignInAccount = googleSignInAccount2;
         }
-
-        public zza zzg(String str, Object obj) {
-            List list = this.CU;
-            String str2 = (String) zzac.zzy(str);
-            String valueOf = String.valueOf(String.valueOf(obj));
-            list.add(new StringBuilder((String.valueOf(str2).length() + 1) + String.valueOf(valueOf).length()).append(str2).append("=").append(valueOf).toString());
-            return this;
+        if (parcel.dataPosition() == zzcr) {
+            return new ResolveAccountRequest(i2, account, i, googleSignInAccount);
         }
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public static boolean equal(Object obj, Object obj2) {
-        return obj == obj2 || (obj != null && obj.equals(obj2));
-    }
-
-    public static int hashCode(Object... objArr) {
-        return Arrays.hashCode(objArr);
-    }
-
-    public static zza zzx(Object obj) {
-        return new zza(obj);
+    public ResolveAccountRequest[] zzgq(int i) {
+        return new ResolveAccountRequest[i];
     }
 }

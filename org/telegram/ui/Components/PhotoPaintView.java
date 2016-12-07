@@ -13,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.os.Looper;
-import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,9 +29,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.face.Face;
-import com.google.android.gms.vision.face.FaceDetector;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatorListenerAdapterProxy;
@@ -1236,31 +1232,116 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private void detectFaces() {
         this.queue.postRunnable(new Runnable() {
             public void run() {
-                try {
-                    FaceDetector faceDetector = new FaceDetector.Builder(PhotoPaintView.this.getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
-                    if (faceDetector.isOperational()) {
-                        try {
-                            SparseArray<Face> faces = faceDetector.detect(new Frame.Builder().setBitmap(PhotoPaintView.this.bitmapToEdit).setRotation(PhotoPaintView.this.getFrameRotation()).build());
-                            ArrayList<PhotoFace> result = new ArrayList();
-                            Size targetSize = PhotoPaintView.this.getPaintingSize();
-                            for (int i = 0; i < faces.size(); i++) {
-                                PhotoFace face = new PhotoFace((Face) faces.get(faces.keyAt(i)), PhotoPaintView.this.bitmapToEdit, targetSize, PhotoPaintView.this.isSidewardOrientation());
-                                if (face.isSufficient()) {
-                                    result.add(face);
-                                }
-                            }
-                            PhotoPaintView.this.faces = result;
-                            faceDetector.release();
-                            return;
-                        } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
-                            return;
-                        }
-                    }
-                    FileLog.e("tmessages", "face detection is not operational");
-                } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
-                }
+                /* JADX: method processing error */
+/*
+Error: java.util.NoSuchElementException
+	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1439)
+	at java.util.HashMap$KeyIterator.next(HashMap.java:1461)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.visit(BlockFinallyExtract.java:51)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
+*/
+                /*
+                r12 = this;
+                r3 = 0;
+                r10 = new com.google.android.gms.vision.face.FaceDetector$Builder;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = r11.getContext();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10.<init>(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = 1;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.setMode(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = 1;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.setLandmarkType(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = 0;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.setTrackingEnabled(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r3 = r10.build();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r3.isOperational();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r10 != 0) goto L_0x0032;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x0025:
+                r10 = "tmessages";	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = "face detection is not operational";	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                org.telegram.messenger.FileLog.e(r10, r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r3 == 0) goto L_0x0031;
+            L_0x002e:
+                r3.release();
+            L_0x0031:
+                return;
+            L_0x0032:
+                r10 = new com.google.android.gms.vision.Frame$Builder;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10.<init>();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = r11.bitmapToEdit;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.setBitmap(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = r11.getFrameRotation();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.setRotation(r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r5 = r10.build();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r4 = r3.detect(r5);	 Catch:{ Throwable -> 0x008c }
+                r8 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r8.<init>();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r9 = r10.getPaintingSize();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r6 = 0;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x005f:
+                r10 = r4.size();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r6 >= r10) goto L_0x0098;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x0065:
+                r7 = r4.keyAt(r6);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r1 = r4.get(r7);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r1 = (com.google.android.gms.vision.face.Face) r1;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r2 = new org.telegram.ui.Components.Paint.PhotoFace;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r10.bitmapToEdit;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r11 = r11.isSidewardOrientation();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r2.<init>(r1, r10, r9, r11);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = r2.isSufficient();	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r10 == 0) goto L_0x0089;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x0086:
+                r8.add(r2);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x0089:
+                r6 = r6 + 1;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                goto L_0x005f;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+            L_0x008c:
+                r0 = move-exception;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10 = "tmessages";	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                org.telegram.messenger.FileLog.e(r10, r0);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r3 == 0) goto L_0x0031;
+            L_0x0094:
+                r3.release();
+                goto L_0x0031;
+            L_0x0098:
+                r10 = org.telegram.ui.Components.PhotoPaintView.this;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                r10.faces = r8;	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r3 == 0) goto L_0x0031;
+            L_0x009f:
+                r3.release();
+                goto L_0x0031;
+            L_0x00a3:
+                r0 = move-exception;
+                r10 = "tmessages";	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                org.telegram.messenger.FileLog.e(r10, r0);	 Catch:{ Exception -> 0x00a3, all -> 0x00af }
+                if (r3 == 0) goto L_0x0031;
+            L_0x00ab:
+                r3.release();
+                goto L_0x0031;
+            L_0x00af:
+                r10 = move-exception;
+                if (r3 == 0) goto L_0x00b5;
+            L_0x00b2:
+                r3.release();
+            L_0x00b5:
+                throw r10;
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.28.run():void");
             }
         });
     }

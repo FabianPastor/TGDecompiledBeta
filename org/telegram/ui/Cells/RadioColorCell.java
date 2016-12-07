@@ -63,8 +63,8 @@ public class RadioColorCell extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), C.ENCODING_PCM_32BIT));
     }
 
-    public void setCheckColor(int color) {
-        this.radioButton.setColor(color, color);
+    public void setCheckColor(int color1, int color2) {
+        this.radioButton.setColor(color1, color2);
     }
 
     public void setTextAndValue(String text, boolean checked) {

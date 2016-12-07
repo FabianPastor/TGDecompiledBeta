@@ -9,50 +9,50 @@ import java.util.ArrayList;
 
 public class zzc implements Creator<FieldMappingDictionary> {
     static void zza(FieldMappingDictionary fieldMappingDictionary, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
-        zzb.zzc(parcel, 1, fieldMappingDictionary.getVersionCode());
-        zzb.zzc(parcel, 2, fieldMappingDictionary.zzawf(), false);
-        zzb.zza(parcel, 3, fieldMappingDictionary.zzawg(), false);
-        zzb.zzaj(parcel, zzcr);
+        int zzcs = zzb.zzcs(parcel);
+        zzb.zzc(parcel, 1, fieldMappingDictionary.mVersionCode);
+        zzb.zzc(parcel, 2, fieldMappingDictionary.zzaxm(), false);
+        zzb.zza(parcel, 3, fieldMappingDictionary.zzaxn(), false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcy(parcel);
+        return zzcz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzhd(i);
+        return zzhc(i);
     }
 
-    public FieldMappingDictionary zzcy(Parcel parcel) {
+    public FieldMappingDictionary zzcz(Parcel parcel) {
         String str = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         ArrayList arrayList = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    arrayList = zza.zzc(parcel, zzcp, Entry.CREATOR);
+                    arrayList = zza.zzc(parcel, zzcq, Entry.CREATOR);
                     break;
                 case 3:
-                    str = zza.zzq(parcel, zzcp);
+                    str = zza.zzq(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new FieldMappingDictionary(i, arrayList, str);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public FieldMappingDictionary[] zzhd(int i) {
+    public FieldMappingDictionary[] zzhc(int i) {
         return new FieldMappingDictionary[i];
     }
 }

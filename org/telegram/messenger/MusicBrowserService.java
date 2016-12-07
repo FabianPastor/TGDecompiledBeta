@@ -52,7 +52,6 @@ import org.telegram.ui.LaunchActivity;
 @TargetApi(21)
 public class MusicBrowserService extends MediaBrowserService implements NotificationCenterDelegate {
     public static final String ACTION_CMD = "com.example.android.mediabrowserservice.ACTION_CMD";
-    private static final String AUTO_APP_PACKAGE_NAME = "com.google.android.projection.gearhead";
     public static final String CMD_NAME = "CMD_NAME";
     public static final String CMD_PAUSE = "CMD_PAUSE";
     private static final String MEDIA_ID_ROOT = "__ROOT__";
@@ -224,7 +223,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     public BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints) {
-        if (clientPackageName == null || (1000 != clientUid && Process.myUid() != clientUid && !clientPackageName.equals("com.google.android.mediasimulator") && !clientPackageName.equals(AUTO_APP_PACKAGE_NAME))) {
+        if (clientPackageName == null || (1000 != clientUid && Process.myUid() != clientUid && !clientPackageName.equals("com.google.android.mediasimulator") && !clientPackageName.equals("com.google.android.projection.gearhead"))) {
             return null;
         }
         return new BrowserRoot(MEDIA_ID_ROOT, null);

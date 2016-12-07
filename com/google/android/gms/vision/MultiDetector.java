@@ -6,31 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiDetector extends Detector<Object> {
-    private List<Detector<? extends Object>> aKG;
+    private List<Detector<? extends Object>> aNR;
 
     public static class Builder {
-        private MultiDetector aKH = new MultiDetector();
+        private MultiDetector aNS = new MultiDetector();
 
         public Builder add(Detector<? extends Object> detector) {
-            this.aKH.aKG.add(detector);
+            this.aNS.aNR.add(detector);
             return this;
         }
 
         public MultiDetector build() {
-            if (this.aKH.aKG.size() != 0) {
-                return this.aKH;
+            if (this.aNS.aNR.size() != 0) {
+                return this.aNS;
             }
             throw new RuntimeException("No underlying detectors added to MultiDetector.");
         }
     }
 
     private MultiDetector() {
-        this.aKG = new ArrayList();
+        this.aNR = new ArrayList();
     }
 
     public SparseArray<Object> detect(Frame frame) {
         SparseArray<Object> sparseArray = new SparseArray();
-        for (Detector detect : this.aKG) {
+        for (Detector detect : this.aNR) {
             SparseArray detect2 = detect.detect(frame);
             for (int i = 0; i < detect2.size(); i++) {
                 int keyAt = detect2.keyAt(i);
@@ -44,7 +44,7 @@ public class MultiDetector extends Detector<Object> {
     }
 
     public boolean isOperational() {
-        for (Detector isOperational : this.aKG) {
+        for (Detector isOperational : this.aNR) {
             if (!isOperational.isOperational()) {
                 return false;
             }
@@ -53,16 +53,16 @@ public class MultiDetector extends Detector<Object> {
     }
 
     public void receiveFrame(Frame frame) {
-        for (Detector receiveFrame : this.aKG) {
+        for (Detector receiveFrame : this.aNR) {
             receiveFrame.receiveFrame(frame);
         }
     }
 
     public void release() {
-        for (Detector release : this.aKG) {
+        for (Detector release : this.aNR) {
             release.release();
         }
-        this.aKG.clear();
+        this.aNR.clear();
     }
 
     public void setProcessor(Processor<Object> processor) {

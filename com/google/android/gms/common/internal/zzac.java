@@ -1,107 +1,68 @@
 package com.google.android.gms.common.internal;
 
-import android.os.Looper;
-import android.text.TextUtils;
+import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.common.internal.safeparcel.zzb;
 
-public final class zzac {
-    public static int zza(int i, Object obj) {
-        if (i != 0) {
-            return i;
-        }
-        throw new IllegalArgumentException(String.valueOf(obj));
+public class zzac implements Creator<ResolveAccountResponse> {
+    static void zza(ResolveAccountResponse resolveAccountResponse, Parcel parcel, int i) {
+        int zzcs = zzb.zzcs(parcel);
+        zzb.zzc(parcel, 1, resolveAccountResponse.mVersionCode);
+        zzb.zza(parcel, 2, resolveAccountResponse.Df, false);
+        zzb.zza(parcel, 3, resolveAccountResponse.zzawn(), i, false);
+        zzb.zza(parcel, 4, resolveAccountResponse.zzawo());
+        zzb.zza(parcel, 5, resolveAccountResponse.zzawp());
+        zzb.zzaj(parcel, zzcs);
     }
 
-    public static long zza(long j, Object obj) {
-        if (j != 0) {
-            return j;
-        }
-        throw new IllegalArgumentException(String.valueOf(obj));
+    public /* synthetic */ Object createFromParcel(Parcel parcel) {
+        return zzcn(parcel);
     }
 
-    public static void zza(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalStateException(String.valueOf(obj));
-        }
+    public /* synthetic */ Object[] newArray(int i) {
+        return zzgr(i);
     }
 
-    public static void zza(boolean z, String str, Object... objArr) {
-        if (!z) {
-            throw new IllegalStateException(String.format(str, objArr));
+    public ResolveAccountResponse zzcn(Parcel parcel) {
+        ConnectionResult connectionResult = null;
+        boolean z = false;
+        int zzcr = zza.zzcr(parcel);
+        boolean z2 = false;
+        IBinder iBinder = null;
+        int i = 0;
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
+                case 1:
+                    i = zza.zzg(parcel, zzcq);
+                    break;
+                case 2:
+                    iBinder = zza.zzr(parcel, zzcq);
+                    break;
+                case 3:
+                    connectionResult = (ConnectionResult) zza.zza(parcel, zzcq, ConnectionResult.CREATOR);
+                    break;
+                case 4:
+                    z2 = zza.zzc(parcel, zzcq);
+                    break;
+                case 5:
+                    z = zza.zzc(parcel, zzcq);
+                    break;
+                default:
+                    zza.zzb(parcel, zzcq);
+                    break;
+            }
         }
+        if (parcel.dataPosition() == zzcr) {
+            return new ResolveAccountResponse(i, iBinder, connectionResult, z2, z);
+        }
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public static void zzavb() {
-        zzhr("Must not be called on the main application thread");
-    }
-
-    public static <T> T zzb(T t, Object obj) {
-        if (t != null) {
-            return t;
-        }
-        throw new NullPointerException(String.valueOf(obj));
-    }
-
-    public static void zzb(boolean z, Object obj) {
-        if (!z) {
-            throw new IllegalArgumentException(String.valueOf(obj));
-        }
-    }
-
-    public static void zzb(boolean z, String str, Object... objArr) {
-        if (!z) {
-            throw new IllegalArgumentException(String.format(str, objArr));
-        }
-    }
-
-    public static void zzbr(boolean z) {
-        if (!z) {
-            throw new IllegalStateException();
-        }
-    }
-
-    public static void zzbs(boolean z) {
-        if (!z) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public static int zzgq(int i) {
-        if (i != 0) {
-            return i;
-        }
-        throw new IllegalArgumentException("Given Integer is zero");
-    }
-
-    public static String zzh(String str, Object obj) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
-        }
-        throw new IllegalArgumentException(String.valueOf(obj));
-    }
-
-    public static void zzhq(String str) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            throw new IllegalStateException(str);
-        }
-    }
-
-    public static void zzhr(String str) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException(str);
-        }
-    }
-
-    public static String zzhz(String str) {
-        if (!TextUtils.isEmpty(str)) {
-            return str;
-        }
-        throw new IllegalArgumentException("Given String is empty or null");
-    }
-
-    public static <T> T zzy(T t) {
-        if (t != null) {
-            return t;
-        }
-        throw new NullPointerException("null reference");
+    public ResolveAccountResponse[] zzgr(int i) {
+        return new ResolveAccountResponse[i];
     }
 }

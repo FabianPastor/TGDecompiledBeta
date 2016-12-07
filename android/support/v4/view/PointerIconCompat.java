@@ -3,6 +3,8 @@ package android.support.v4.view;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.os.BuildCompat;
 
 public final class PointerIconCompat {
@@ -78,6 +80,7 @@ public final class PointerIconCompat {
         this.mPointerIcon = pointerIcon;
     }
 
+    @RestrictTo({Scope.GROUP_ID})
     public Object getPointerIcon() {
         return this.mPointerIcon;
     }

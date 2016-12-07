@@ -1,8 +1,11 @@
 package android.support.v4.util;
 
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.util.Log;
 import java.io.Writer;
 
+@RestrictTo({Scope.GROUP_ID})
 public class LogWriter extends Writer {
     private StringBuilder mBuilder = new StringBuilder(128);
     private final String mTag;

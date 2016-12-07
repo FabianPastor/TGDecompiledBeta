@@ -136,9 +136,9 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
 
     public MainThreadCallback<T> getMainThreadProxy(final MainThreadCallback<T> callback) {
         return new MainThreadCallback<T>() {
-            private static final int ADD_TILE = 2;
-            private static final int REMOVE_TILE = 3;
-            private static final int UPDATE_ITEM_COUNT = 1;
+            static final int ADD_TILE = 2;
+            static final int REMOVE_TILE = 3;
+            static final int UPDATE_ITEM_COUNT = 1;
             private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
             private Runnable mMainThreadRunnable = new Runnable() {
                 public void run() {
@@ -162,7 +162,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
                     }
                 }
             };
-            private final MessageQueue mQueue = new MessageQueue();
+            final MessageQueue mQueue = new MessageQueue();
 
             public void updateItemCount(int generation, int itemCount) {
                 sendMessage(SyncQueueItem.obtainMessage(1, generation, itemCount));
@@ -185,10 +185,10 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
 
     public BackgroundCallback<T> getBackgroundProxy(final BackgroundCallback<T> callback) {
         return new BackgroundCallback<T>() {
-            private static final int LOAD_TILE = 3;
-            private static final int RECYCLE_TILE = 4;
-            private static final int REFRESH = 1;
-            private static final int UPDATE_RANGE = 2;
+            static final int LOAD_TILE = 3;
+            static final int RECYCLE_TILE = 4;
+            static final int REFRESH = 1;
+            static final int UPDATE_RANGE = 2;
             private Runnable mBackgroundRunnable = new Runnable() {
                 public void run() {
                     while (true) {
@@ -222,7 +222,7 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             };
             AtomicBoolean mBackgroundRunning = new AtomicBoolean(false);
             private final Executor mExecutor = ParallelExecutorCompat.getParallelExecutor();
-            private final MessageQueue mQueue = new MessageQueue();
+            final MessageQueue mQueue = new MessageQueue();
 
             public void refresh(int generation) {
                 sendMessageAtFrontOfQueue(SyncQueueItem.obtainMessage(1, generation, null));

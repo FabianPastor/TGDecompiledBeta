@@ -5,23 +5,23 @@ import android.graphics.PointF;
 import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.gms.dynamic.zze;
-import com.google.android.gms.internal.zzsu;
+import com.google.android.gms.internal.zztl;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.Landmark;
 import com.google.android.gms.vision.internal.client.FrameMetadataParcel;
 import java.nio.ByteBuffer;
 
 public class zza extends com.google.android.gms.vision.internal.client.zza<zzd> {
-    private final FaceSettingsParcel aLf;
+    private final FaceSettingsParcel aOq;
 
     public zza(Context context, FaceSettingsParcel faceSettingsParcel) {
         super(context, "FaceNativeHandle");
-        this.aLf = faceSettingsParcel;
-        zzclt();
+        this.aOq = faceSettingsParcel;
+        zzcls();
     }
 
     private Face zza(FaceParcel faceParcel) {
-        return new Face(faceParcel.id, new PointF(faceParcel.centerX, faceParcel.centerY), faceParcel.width, faceParcel.height, faceParcel.aLg, faceParcel.aLh, zzb(faceParcel), faceParcel.aLj, faceParcel.aLk, faceParcel.aLl);
+        return new Face(faceParcel.id, new PointF(faceParcel.centerX, faceParcel.centerY), faceParcel.width, faceParcel.height, faceParcel.aOr, faceParcel.aOs, zzb(faceParcel), faceParcel.aOu, faceParcel.aOv, faceParcel.aOw);
     }
 
     private Landmark zza(LandmarkParcel landmarkParcel) {
@@ -30,7 +30,7 @@ public class zza extends com.google.android.gms.vision.internal.client.zza<zzd> 
 
     private Landmark[] zzb(FaceParcel faceParcel) {
         int i = 0;
-        LandmarkParcel[] landmarkParcelArr = faceParcel.aLi;
+        LandmarkParcel[] landmarkParcelArr = faceParcel.aOt;
         if (landmarkParcelArr == null) {
             return new Landmark[0];
         }
@@ -42,20 +42,20 @@ public class zza extends com.google.android.gms.vision.internal.client.zza<zzd> 
         return landmarkArr;
     }
 
-    public boolean zzabr(int i) {
+    public boolean zzabh(int i) {
         if (!isOperational()) {
             return false;
         }
         try {
-            return ((zzd) zzclt()).zzabr(i);
+            return ((zzd) zzcls()).zzabh(i);
         } catch (Throwable e) {
             Log.e("FaceNativeHandle", "Could not call native face detector", e);
             return false;
         }
     }
 
-    protected /* synthetic */ Object zzb(zzsu com_google_android_gms_internal_zzsu, Context context) throws RemoteException, com.google.android.gms.internal.zzsu.zza {
-        return zzc(com_google_android_gms_internal_zzsu, context);
+    protected /* synthetic */ Object zzb(zztl com_google_android_gms_internal_zztl, Context context) throws RemoteException, com.google.android.gms.internal.zztl.zza {
+        return zzc(com_google_android_gms_internal_zztl, context);
     }
 
     public Face[] zzb(ByteBuffer byteBuffer, FrameMetadataParcel frameMetadataParcel) {
@@ -63,7 +63,7 @@ public class zza extends com.google.android.gms.vision.internal.client.zza<zzd> 
             return new Face[0];
         }
         try {
-            FaceParcel[] zzc = ((zzd) zzclt()).zzc(zze.zzac(byteBuffer), frameMetadataParcel);
+            FaceParcel[] zzc = ((zzd) zzcls()).zzc(zze.zzac(byteBuffer), frameMetadataParcel);
             Face[] faceArr = new Face[zzc.length];
             for (int i = 0; i < zzc.length; i++) {
                 faceArr[i] = zza(zzc[i]);
@@ -75,11 +75,11 @@ public class zza extends com.google.android.gms.vision.internal.client.zza<zzd> 
         }
     }
 
-    protected zzd zzc(zzsu com_google_android_gms_internal_zzsu, Context context) throws RemoteException, com.google.android.gms.internal.zzsu.zza {
-        return com.google.android.gms.vision.face.internal.client.zze.zza.zzlm(com_google_android_gms_internal_zzsu.zzjd("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator")).zza(zze.zzac(context), this.aLf);
+    protected zzd zzc(zztl com_google_android_gms_internal_zztl, Context context) throws RemoteException, com.google.android.gms.internal.zztl.zza {
+        return com.google.android.gms.vision.face.internal.client.zze.zza.zzlh(com_google_android_gms_internal_zztl.zzjd("com.google.android.gms.vision.face.ChimeraNativeFaceDetectorCreator")).zza(zze.zzac(context), this.aOq);
     }
 
-    protected void zzclq() throws RemoteException {
-        ((zzd) zzclt()).zzclr();
+    protected void zzclp() throws RemoteException {
+        ((zzd) zzcls()).zzclq();
     }
 }

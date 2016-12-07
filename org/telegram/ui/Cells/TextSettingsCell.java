@@ -1,5 +1,7 @@
 package org.telegram.ui.Cells;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.exoplayer.C;
@@ -144,6 +147,47 @@ public class TextSettingsCell extends FrameLayout {
             z = true;
         }
         setWillNotDraw(z);
+    }
+
+    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (animators != null) {
+            TextView textView = this.textView;
+            String str = "alpha";
+            float[] fArr = new float[1];
+            fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            if (this.valueTextView.getVisibility() == 0) {
+                textView = this.valueTextView;
+                str = "alpha";
+                fArr = new float[1];
+                fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+                animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            }
+            if (this.valueImageView.getVisibility() == 0) {
+                ImageView imageView = this.valueImageView;
+                String str2 = "alpha";
+                float[] fArr2 = new float[1];
+                if (!value) {
+                    f = 0.5f;
+                }
+                fArr2[0] = f;
+                animators.add(ObjectAnimator.ofFloat(imageView, str2, fArr2));
+                return;
+            }
+            return;
+        }
+        this.textView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        if (this.valueTextView.getVisibility() == 0) {
+            this.valueTextView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        }
+        if (this.valueImageView.getVisibility() == 0) {
+            imageView = this.valueImageView;
+            if (!value) {
+                f = 0.5f;
+            }
+            imageView.setAlpha(f);
+        }
     }
 
     protected void onDraw(Canvas canvas) {

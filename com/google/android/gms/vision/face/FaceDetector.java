@@ -20,18 +20,18 @@ public final class FaceDetector extends Detector<Face> {
     public static final int FAST_MODE = 0;
     public static final int NO_CLASSIFICATIONS = 0;
     public static final int NO_LANDMARKS = 0;
-    private final zza aKW;
-    private final com.google.android.gms.vision.face.internal.client.zza aKX;
-    private boolean aKY;
-    private final Object zzakd;
+    private final zza aOh;
+    private final com.google.android.gms.vision.face.internal.client.zza aOi;
+    private boolean aOj;
+    private final Object zzako;
 
     public static class Builder {
-        private int Hh = 0;
-        private int aKZ = 0;
-        private boolean aLa = false;
-        private int aLb = 0;
-        private boolean aLc = true;
-        private float aLd = -1.0f;
+        private int IT = 0;
+        private int aOk = 0;
+        private boolean aOl = false;
+        private int aOm = 0;
+        private boolean aOn = true;
+        private float aOo = -1.0f;
         private final Context mContext;
 
         public Builder(Context context) {
@@ -40,18 +40,18 @@ public final class FaceDetector extends Detector<Face> {
 
         public FaceDetector build() {
             FaceSettingsParcel faceSettingsParcel = new FaceSettingsParcel();
-            faceSettingsParcel.mode = this.Hh;
-            faceSettingsParcel.aLm = this.aKZ;
-            faceSettingsParcel.aLn = this.aLb;
-            faceSettingsParcel.aLo = this.aLa;
-            faceSettingsParcel.aLp = this.aLc;
-            faceSettingsParcel.aLq = this.aLd;
+            faceSettingsParcel.mode = this.IT;
+            faceSettingsParcel.aOx = this.aOk;
+            faceSettingsParcel.aOy = this.aOm;
+            faceSettingsParcel.aOz = this.aOl;
+            faceSettingsParcel.aOA = this.aOn;
+            faceSettingsParcel.aOB = this.aOo;
             return new FaceDetector(new com.google.android.gms.vision.face.internal.client.zza(this.mContext, faceSettingsParcel));
         }
 
         public Builder setClassificationType(int i) {
             if (i == 0 || i == 1) {
-                this.aLb = i;
+                this.aOm = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid classification type: " + i);
@@ -59,7 +59,7 @@ public final class FaceDetector extends Detector<Face> {
 
         public Builder setLandmarkType(int i) {
             if (i == 0 || i == 1) {
-                this.aKZ = i;
+                this.aOk = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid landmark type: " + i);
@@ -69,7 +69,7 @@ public final class FaceDetector extends Detector<Face> {
             if (f < 0.0f || f > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
                 throw new IllegalArgumentException("Invalid proportional face size: " + f);
             }
-            this.aLd = f;
+            this.aOo = f;
             return this;
         }
 
@@ -77,7 +77,7 @@ public final class FaceDetector extends Detector<Face> {
             switch (i) {
                 case 0:
                 case 1:
-                    this.Hh = i;
+                    this.IT = i;
                     return this;
                 default:
                     throw new IllegalArgumentException("Invalid mode: " + i);
@@ -85,28 +85,28 @@ public final class FaceDetector extends Detector<Face> {
         }
 
         public Builder setProminentFaceOnly(boolean z) {
-            this.aLa = z;
+            this.aOl = z;
             return this;
         }
 
         public Builder setTrackingEnabled(boolean z) {
-            this.aLc = z;
+            this.aOn = z;
             return this;
         }
     }
 
     private FaceDetector() {
-        this.aKW = new zza();
-        this.zzakd = new Object();
-        this.aKY = true;
+        this.aOh = new zza();
+        this.zzako = new Object();
+        this.aOj = true;
         throw new IllegalStateException("Default constructor called");
     }
 
     private FaceDetector(com.google.android.gms.vision.face.internal.client.zza com_google_android_gms_vision_face_internal_client_zza) {
-        this.aKW = new zza();
-        this.zzakd = new Object();
-        this.aKY = true;
-        this.aKX = com_google_android_gms_vision_face_internal_client_zza;
+        this.aOh = new zza();
+        this.zzako = new Object();
+        this.aOj = true;
+        this.aOi = com_google_android_gms_vision_face_internal_client_zza;
     }
 
     public SparseArray<Face> detect(Frame frame) {
@@ -115,9 +115,9 @@ public final class FaceDetector extends Detector<Face> {
         }
         Face[] zzb;
         ByteBuffer grayscaleImageData = frame.getGrayscaleImageData();
-        synchronized (this.zzakd) {
-            if (this.aKY) {
-                zzb = this.aKX.zzb(grayscaleImageData, FrameMetadataParcel.zzc(frame));
+        synchronized (this.zzako) {
+            if (this.aOj) {
+                zzb = this.aOi.zzb(grayscaleImageData, FrameMetadataParcel.zzc(frame));
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }
@@ -133,15 +133,15 @@ public final class FaceDetector extends Detector<Face> {
                 i = id;
             }
             hashSet.add(Integer.valueOf(id));
-            sparseArray.append(this.aKW.zzabb(id), face);
+            sparseArray.append(this.aOh.zzaar(id), face);
         }
         return sparseArray;
     }
 
     protected void finalize() throws Throwable {
         try {
-            synchronized (this.zzakd) {
-                if (this.aKY) {
+            synchronized (this.zzako) {
+                if (this.aOj) {
                     Log.w("FaceDetector", "FaceDetector was not released with FaceDetector.release()");
                     release();
                 }
@@ -152,30 +152,30 @@ public final class FaceDetector extends Detector<Face> {
     }
 
     public boolean isOperational() {
-        return this.aKX.isOperational();
+        return this.aOi.isOperational();
     }
 
     public void release() {
         super.release();
-        synchronized (this.zzakd) {
-            if (this.aKY) {
-                this.aKX.zzcls();
-                this.aKY = false;
+        synchronized (this.zzako) {
+            if (this.aOj) {
+                this.aOi.zzclr();
+                this.aOj = false;
                 return;
             }
         }
     }
 
     public boolean setFocus(int i) {
-        boolean zzabr;
-        int zzabc = this.aKW.zzabc(i);
-        synchronized (this.zzakd) {
-            if (this.aKY) {
-                zzabr = this.aKX.zzabr(zzabc);
+        boolean zzabh;
+        int zzaas = this.aOh.zzaas(i);
+        synchronized (this.zzako) {
+            if (this.aOj) {
+                zzabh = this.aOi.zzabh(zzaas);
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }
         }
-        return zzabr;
+        return zzabh;
     }
 }

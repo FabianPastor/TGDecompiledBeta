@@ -1,8 +1,9 @@
 package com.google.android.gms.measurement.internal;
 
 import android.content.Context;
+import android.os.Looper;
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.util.zze;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.BlockingQueue;
@@ -15,60 +16,60 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class zzw extends zzaa {
-    private static final AtomicLong aqI = new AtomicLong(Long.MIN_VALUE);
-    private zzd aqA;
-    private final PriorityBlockingQueue<FutureTask<?>> aqB = new PriorityBlockingQueue();
-    private final BlockingQueue<FutureTask<?>> aqC = new LinkedBlockingQueue();
-    private final UncaughtExceptionHandler aqD = new zzb(this, "Thread death: Uncaught exception on worker thread");
-    private final UncaughtExceptionHandler aqE = new zzb(this, "Thread death: Uncaught exception on network thread");
-    private final Object aqF = new Object();
-    private final Semaphore aqG = new Semaphore(2);
-    private volatile boolean aqH;
-    private zzd aqz;
+    private static final AtomicLong atP = new AtomicLong(Long.MIN_VALUE);
+    private zzd atG;
+    private zzd atH;
+    private final PriorityBlockingQueue<FutureTask<?>> atI = new PriorityBlockingQueue();
+    private final BlockingQueue<FutureTask<?>> atJ = new LinkedBlockingQueue();
+    private final UncaughtExceptionHandler atK = new zzb(this, "Thread death: Uncaught exception on worker thread");
+    private final UncaughtExceptionHandler atL = new zzb(this, "Thread death: Uncaught exception on network thread");
+    private final Object atM = new Object();
+    private final Semaphore atN = new Semaphore(2);
+    private volatile boolean atO;
 
     static class zza extends RuntimeException {
     }
 
     private final class zzb implements UncaughtExceptionHandler {
-        private final String aqJ;
-        final /* synthetic */ zzw aqK;
+        private final String atQ;
+        final /* synthetic */ zzw atR;
 
         public zzb(zzw com_google_android_gms_measurement_internal_zzw, String str) {
-            this.aqK = com_google_android_gms_measurement_internal_zzw;
-            zzac.zzy(str);
-            this.aqJ = str;
+            this.atR = com_google_android_gms_measurement_internal_zzw;
+            zzaa.zzy(str);
+            this.atQ = str;
         }
 
         public synchronized void uncaughtException(Thread thread, Throwable th) {
-            this.aqK.zzbvg().zzbwc().zzj(this.aqJ, th);
+            this.atR.zzbwb().zzbwy().zzj(this.atQ, th);
         }
     }
 
     private final class zzc<V> extends FutureTask<V> implements Comparable<zzc> {
-        private final String aqJ;
-        final /* synthetic */ zzw aqK;
-        private final long aqL = zzw.aqI.getAndIncrement();
-        private final boolean aqM;
+        private final String atQ;
+        final /* synthetic */ zzw atR;
+        private final long atS = zzw.atP.getAndIncrement();
+        private final boolean atT;
 
         zzc(zzw com_google_android_gms_measurement_internal_zzw, Runnable runnable, boolean z, String str) {
-            this.aqK = com_google_android_gms_measurement_internal_zzw;
+            this.atR = com_google_android_gms_measurement_internal_zzw;
             super(runnable, null);
-            zzac.zzy(str);
-            this.aqJ = str;
-            this.aqM = z;
-            if (this.aqL == Long.MAX_VALUE) {
-                com_google_android_gms_measurement_internal_zzw.zzbvg().zzbwc().log("Tasks index overflow");
+            zzaa.zzy(str);
+            this.atQ = str;
+            this.atT = z;
+            if (this.atS == Long.MAX_VALUE) {
+                com_google_android_gms_measurement_internal_zzw.zzbwb().zzbwy().log("Tasks index overflow");
             }
         }
 
         zzc(zzw com_google_android_gms_measurement_internal_zzw, Callable<V> callable, boolean z, String str) {
-            this.aqK = com_google_android_gms_measurement_internal_zzw;
+            this.atR = com_google_android_gms_measurement_internal_zzw;
             super(callable);
-            zzac.zzy(str);
-            this.aqJ = str;
-            this.aqM = z;
-            if (this.aqL == Long.MAX_VALUE) {
-                com_google_android_gms_measurement_internal_zzw.zzbvg().zzbwc().log("Tasks index overflow");
+            zzaa.zzy(str);
+            this.atQ = str;
+            this.atT = z;
+            if (this.atS == Long.MAX_VALUE) {
+                com_google_android_gms_measurement_internal_zzw.zzbwb().zzbwy().log("Tasks index overflow");
             }
         }
 
@@ -77,7 +78,7 @@ public class zzw extends zzaa {
         }
 
         protected void setException(Throwable th) {
-            this.aqK.zzbvg().zzbwc().zzj(this.aqJ, th);
+            this.atR.zzbwb().zzbwy().zzj(this.atQ, th);
             if (th instanceof zza) {
                 Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), th);
             }
@@ -85,43 +86,43 @@ public class zzw extends zzaa {
         }
 
         public int zzb(@NonNull zzc com_google_android_gms_measurement_internal_zzw_zzc) {
-            if (this.aqM != com_google_android_gms_measurement_internal_zzw_zzc.aqM) {
-                return this.aqM ? -1 : 1;
+            if (this.atT != com_google_android_gms_measurement_internal_zzw_zzc.atT) {
+                return this.atT ? -1 : 1;
             } else {
-                if (this.aqL < com_google_android_gms_measurement_internal_zzw_zzc.aqL) {
+                if (this.atS < com_google_android_gms_measurement_internal_zzw_zzc.atS) {
                     return -1;
                 }
-                if (this.aqL > com_google_android_gms_measurement_internal_zzw_zzc.aqL) {
+                if (this.atS > com_google_android_gms_measurement_internal_zzw_zzc.atS) {
                     return 1;
                 }
-                this.aqK.zzbvg().zzbwd().zzj("Two tasks share the same index. index", Long.valueOf(this.aqL));
+                this.atR.zzbwb().zzbwz().zzj("Two tasks share the same index. index", Long.valueOf(this.atS));
                 return 0;
             }
         }
     }
 
     private final class zzd extends Thread {
-        final /* synthetic */ zzw aqK;
-        private final Object aqN = new Object();
-        private final BlockingQueue<FutureTask<?>> aqO;
+        final /* synthetic */ zzw atR;
+        private final Object atU = new Object();
+        private final BlockingQueue<FutureTask<?>> atV;
 
         public zzd(zzw com_google_android_gms_measurement_internal_zzw, String str, BlockingQueue<FutureTask<?>> blockingQueue) {
-            this.aqK = com_google_android_gms_measurement_internal_zzw;
-            zzac.zzy(str);
-            zzac.zzy(blockingQueue);
-            this.aqO = blockingQueue;
+            this.atR = com_google_android_gms_measurement_internal_zzw;
+            zzaa.zzy(str);
+            zzaa.zzy(blockingQueue);
+            this.atV = blockingQueue;
             setName(str);
         }
 
         private void zza(InterruptedException interruptedException) {
-            this.aqK.zzbvg().zzbwe().zzj(String.valueOf(getName()).concat(" was interrupted"), interruptedException);
+            this.atR.zzbwb().zzbxa().zzj(String.valueOf(getName()).concat(" was interrupted"), interruptedException);
         }
 
         public void run() {
             Object obj = null;
             while (obj == null) {
                 try {
-                    this.aqK.aqG.acquire();
+                    this.atR.atN.acquire();
                     obj = 1;
                 } catch (InterruptedException e) {
                     zza(e);
@@ -129,55 +130,55 @@ public class zzw extends zzaa {
             }
             while (true) {
                 try {
-                    FutureTask futureTask = (FutureTask) this.aqO.poll();
+                    FutureTask futureTask = (FutureTask) this.atV.poll();
                     if (futureTask != null) {
                         futureTask.run();
                     } else {
-                        synchronized (this.aqN) {
-                            if (this.aqO.peek() == null && !this.aqK.aqH) {
+                        synchronized (this.atU) {
+                            if (this.atV.peek() == null && !this.atR.atO) {
                                 try {
-                                    this.aqN.wait(30000);
+                                    this.atU.wait(30000);
                                 } catch (InterruptedException e2) {
                                     zza(e2);
                                 }
                             }
                         }
-                        synchronized (this.aqK.aqF) {
-                            if (this.aqO.peek() == null) {
+                        synchronized (this.atR.atM) {
+                            if (this.atV.peek() == null) {
                                 break;
                             }
                         }
                     }
                 } catch (Throwable th) {
-                    synchronized (this.aqK.aqF) {
-                        this.aqK.aqG.release();
-                        this.aqK.aqF.notifyAll();
-                        if (this == this.aqK.aqz) {
-                            this.aqK.aqz = null;
-                        } else if (this == this.aqK.aqA) {
-                            this.aqK.aqA = null;
+                    synchronized (this.atR.atM) {
+                        this.atR.atN.release();
+                        this.atR.atM.notifyAll();
+                        if (this == this.atR.atG) {
+                            this.atR.atG = null;
+                        } else if (this == this.atR.atH) {
+                            this.atR.atH = null;
                         } else {
-                            this.aqK.zzbvg().zzbwc().log("Current scheduler thread is neither worker nor network");
+                            this.atR.zzbwb().zzbwy().log("Current scheduler thread is neither worker nor network");
                         }
                     }
                 }
             }
-            synchronized (this.aqK.aqF) {
-                this.aqK.aqG.release();
-                this.aqK.aqF.notifyAll();
-                if (this == this.aqK.aqz) {
-                    this.aqK.aqz = null;
-                } else if (this == this.aqK.aqA) {
-                    this.aqK.aqA = null;
+            synchronized (this.atR.atM) {
+                this.atR.atN.release();
+                this.atR.atM.notifyAll();
+                if (this == this.atR.atG) {
+                    this.atR.atG = null;
+                } else if (this == this.atR.atH) {
+                    this.atR.atH = null;
                 } else {
-                    this.aqK.zzbvg().zzbwc().log("Current scheduler thread is neither worker nor network");
+                    this.atR.zzbwb().zzbwy().log("Current scheduler thread is neither worker nor network");
                 }
             }
         }
 
-        public void zzoi() {
-            synchronized (this.aqN) {
-                this.aqN.notifyAll();
+        public void zzpi() {
+            synchronized (this.atU) {
+                this.atU.notifyAll();
             }
         }
     }
@@ -187,27 +188,27 @@ public class zzw extends zzaa {
     }
 
     private void zza(zzc<?> com_google_android_gms_measurement_internal_zzw_zzc_) {
-        synchronized (this.aqF) {
-            this.aqB.add(com_google_android_gms_measurement_internal_zzw_zzc_);
-            if (this.aqz == null) {
-                this.aqz = new zzd(this, "Measurement Worker", this.aqB);
-                this.aqz.setUncaughtExceptionHandler(this.aqD);
-                this.aqz.start();
+        synchronized (this.atM) {
+            this.atI.add(com_google_android_gms_measurement_internal_zzw_zzc_);
+            if (this.atG == null) {
+                this.atG = new zzd(this, "Measurement Worker", this.atI);
+                this.atG.setUncaughtExceptionHandler(this.atK);
+                this.atG.start();
             } else {
-                this.aqz.zzoi();
+                this.atG.zzpi();
             }
         }
     }
 
     private void zza(FutureTask<?> futureTask) {
-        synchronized (this.aqF) {
-            this.aqC.add(futureTask);
-            if (this.aqA == null) {
-                this.aqA = new zzd(this, "Measurement Network", this.aqC);
-                this.aqA.setUncaughtExceptionHandler(this.aqE);
-                this.aqA.start();
+        synchronized (this.atM) {
+            this.atJ.add(futureTask);
+            if (this.atH == null) {
+                this.atH = new zzd(this, "Measurement Network", this.atJ);
+                this.atH.setUncaughtExceptionHandler(this.atL);
+                this.atH.start();
             } else {
-                this.aqA.zzoi();
+                this.atH.zzpi();
             }
         }
     }
@@ -216,77 +217,85 @@ public class zzw extends zzaa {
         return super.getContext();
     }
 
-    public /* bridge */ /* synthetic */ void zzaam() {
-        super.zzaam();
+    public /* bridge */ /* synthetic */ void zzaby() {
+        super.zzaby();
     }
 
-    public /* bridge */ /* synthetic */ zze zzaan() {
-        return super.zzaan();
+    public /* bridge */ /* synthetic */ zze zzabz() {
+        return super.zzabz();
     }
 
-    public void zzbuv() {
-        if (Thread.currentThread() != this.aqA) {
+    public void zzbvo() {
+        if (Thread.currentThread() != this.atH) {
             throw new IllegalStateException("Call expected from network thread");
         }
     }
 
-    public /* bridge */ /* synthetic */ zzc zzbuw() {
-        return super.zzbuw();
+    public /* bridge */ /* synthetic */ zzc zzbvp() {
+        return super.zzbvp();
     }
 
-    public /* bridge */ /* synthetic */ zzac zzbux() {
-        return super.zzbux();
+    public /* bridge */ /* synthetic */ zzac zzbvq() {
+        return super.zzbvq();
     }
 
-    public /* bridge */ /* synthetic */ zzn zzbuy() {
-        return super.zzbuy();
+    public /* bridge */ /* synthetic */ zzn zzbvr() {
+        return super.zzbvr();
     }
 
-    public /* bridge */ /* synthetic */ zzg zzbuz() {
-        return super.zzbuz();
+    public /* bridge */ /* synthetic */ zzg zzbvs() {
+        return super.zzbvs();
     }
 
-    public /* bridge */ /* synthetic */ zzad zzbva() {
-        return super.zzbva();
+    public /* bridge */ /* synthetic */ zzae zzbvt() {
+        return super.zzbvt();
     }
 
-    public /* bridge */ /* synthetic */ zze zzbvb() {
-        return super.zzbvb();
+    public /* bridge */ /* synthetic */ zzad zzbvu() {
+        return super.zzbvu();
     }
 
-    public /* bridge */ /* synthetic */ zzal zzbvc() {
-        return super.zzbvc();
+    public /* bridge */ /* synthetic */ zzo zzbvv() {
+        return super.zzbvv();
     }
 
-    public /* bridge */ /* synthetic */ zzv zzbvd() {
-        return super.zzbvd();
+    public /* bridge */ /* synthetic */ zze zzbvw() {
+        return super.zzbvw();
     }
 
-    public /* bridge */ /* synthetic */ zzaf zzbve() {
-        return super.zzbve();
+    public /* bridge */ /* synthetic */ zzal zzbvx() {
+        return super.zzbvx();
     }
 
-    public /* bridge */ /* synthetic */ zzw zzbvf() {
-        return super.zzbvf();
+    public /* bridge */ /* synthetic */ zzv zzbvy() {
+        return super.zzbvy();
     }
 
-    public /* bridge */ /* synthetic */ zzp zzbvg() {
-        return super.zzbvg();
+    public /* bridge */ /* synthetic */ zzag zzbvz() {
+        return super.zzbvz();
     }
 
-    public /* bridge */ /* synthetic */ zzt zzbvh() {
-        return super.zzbvh();
+    public /* bridge */ /* synthetic */ zzw zzbwa() {
+        return super.zzbwa();
     }
 
-    public /* bridge */ /* synthetic */ zzd zzbvi() {
-        return super.zzbvi();
+    public /* bridge */ /* synthetic */ zzq zzbwb() {
+        return super.zzbwb();
+    }
+
+    public /* bridge */ /* synthetic */ zzt zzbwc() {
+        return super.zzbwc();
+    }
+
+    public /* bridge */ /* synthetic */ zzd zzbwd() {
+        return super.zzbwd();
     }
 
     public <V> Future<V> zzd(Callable<V> callable) throws IllegalStateException {
-        zzaax();
-        zzac.zzy(callable);
+        zzacj();
+        zzaa.zzy(callable);
         zzc com_google_android_gms_measurement_internal_zzw_zzc = new zzc(this, (Callable) callable, false, "Task exception on worker thread");
-        if (Thread.currentThread() == this.aqz) {
+        if (Thread.currentThread() == this.atG) {
             com_google_android_gms_measurement_internal_zzw_zzc.run();
         } else {
             zza(com_google_android_gms_measurement_internal_zzw_zzc);
@@ -294,11 +303,15 @@ public class zzw extends zzaa {
         return com_google_android_gms_measurement_internal_zzw_zzc;
     }
 
+    public boolean zzdg() {
+        return Looper.myLooper() == Looper.getMainLooper();
+    }
+
     public <V> Future<V> zze(Callable<V> callable) throws IllegalStateException {
-        zzaax();
-        zzac.zzy(callable);
+        zzacj();
+        zzaa.zzy(callable);
         zzc com_google_android_gms_measurement_internal_zzw_zzc = new zzc(this, (Callable) callable, true, "Task exception on worker thread");
-        if (Thread.currentThread() == this.aqz) {
+        if (Thread.currentThread() == this.atG) {
             com_google_android_gms_measurement_internal_zzw_zzc.run();
         } else {
             zza(com_google_android_gms_measurement_internal_zzw_zzc);
@@ -307,23 +320,23 @@ public class zzw extends zzaa {
     }
 
     public void zzm(Runnable runnable) throws IllegalStateException {
-        zzaax();
-        zzac.zzy(runnable);
+        zzacj();
+        zzaa.zzy(runnable);
         zza(new zzc(this, runnable, false, "Task exception on worker thread"));
     }
 
     public void zzn(Runnable runnable) throws IllegalStateException {
-        zzaax();
-        zzac.zzy(runnable);
+        zzacj();
+        zzaa.zzy(runnable);
         zza(new zzc(this, runnable, false, "Task exception on network thread"));
     }
 
-    public void zzyl() {
-        if (Thread.currentThread() != this.aqz) {
+    public void zzzx() {
+        if (Thread.currentThread() != this.atG) {
             throw new IllegalStateException("Call expected from worker thread");
         }
     }
 
-    protected void zzym() {
+    protected void zzzy() {
     }
 }

@@ -3,11 +3,14 @@ package android.support.v4.app;
 import android.content.Intent;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput.Factory;
 import android.util.Log;
 
 public final class RemoteInput extends android.support.v4.app.RemoteInputCompatBase.RemoteInput {
     public static final String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
+    @RestrictTo({Scope.GROUP_ID})
     public static final Factory FACTORY = new Factory() {
         public RemoteInput build(String resultKey, CharSequence label, CharSequence[] choices, boolean allowFreeFormInput, Bundle extras) {
             return new RemoteInput(resultKey, label, choices, allowFreeFormInput, extras);

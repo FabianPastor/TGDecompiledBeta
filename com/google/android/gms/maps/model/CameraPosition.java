@@ -3,15 +3,16 @@ package com.google.android.gms.maps.model;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import android.util.AttributeSet;
 import com.google.android.gms.R;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzz;
 
 public final class CameraPosition extends AbstractSafeParcelable implements ReflectedParcelable {
-    public static final zza CREATOR = new zza();
+    public static final Creator<CameraPosition> CREATOR = new zza();
     public final float bearing;
     private final int mVersionCode;
     public final LatLng target;
@@ -19,47 +20,47 @@ public final class CameraPosition extends AbstractSafeParcelable implements Refl
     public final float zoom;
 
     public static final class Builder {
-        private LatLng amw;
-        private float amx;
-        private float amy;
-        private float amz;
+        private LatLng apC;
+        private float apD;
+        private float apE;
+        private float apF;
 
         public Builder(CameraPosition cameraPosition) {
-            this.amw = cameraPosition.target;
-            this.amx = cameraPosition.zoom;
-            this.amy = cameraPosition.tilt;
-            this.amz = cameraPosition.bearing;
+            this.apC = cameraPosition.target;
+            this.apD = cameraPosition.zoom;
+            this.apE = cameraPosition.tilt;
+            this.apF = cameraPosition.bearing;
         }
 
         public Builder bearing(float f) {
-            this.amz = f;
+            this.apF = f;
             return this;
         }
 
         public CameraPosition build() {
-            return new CameraPosition(this.amw, this.amx, this.amy, this.amz);
+            return new CameraPosition(this.apC, this.apD, this.apE, this.apF);
         }
 
         public Builder target(LatLng latLng) {
-            this.amw = latLng;
+            this.apC = latLng;
             return this;
         }
 
         public Builder tilt(float f) {
-            this.amy = f;
+            this.apE = f;
             return this;
         }
 
         public Builder zoom(float f) {
-            this.amx = f;
+            this.apD = f;
             return this;
         }
     }
 
     CameraPosition(int i, LatLng latLng, float f, float f2, float f3) {
-        zzac.zzb((Object) latLng, (Object) "null camera target");
+        zzaa.zzb((Object) latLng, (Object) "null camera target");
         boolean z = 0.0f <= f2 && f2 <= 90.0f;
-        zzac.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
+        zzaa.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
         this.mVersionCode = i;
         this.target = latLng;
         this.zoom = f;
@@ -122,11 +123,11 @@ public final class CameraPosition extends AbstractSafeParcelable implements Refl
     }
 
     public int hashCode() {
-        return zzab.hashCode(this.target, Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing));
+        return zzz.hashCode(this.target, Float.valueOf(this.zoom), Float.valueOf(this.tilt), Float.valueOf(this.bearing));
     }
 
     public String toString() {
-        return zzab.zzx(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
+        return zzz.zzx(this).zzg("target", this.target).zzg("zoom", Float.valueOf(this.zoom)).zzg("tilt", Float.valueOf(this.tilt)).zzg("bearing", Float.valueOf(this.bearing)).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

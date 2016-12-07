@@ -11,14 +11,14 @@ public interface IUiSettingsDelegate extends IInterface {
     public static abstract class zza extends Binder implements IUiSettingsDelegate {
 
         private static class zza implements IUiSettingsDelegate {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public boolean isCompassEnabled() throws RemoteException {
@@ -27,7 +27,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(10, obtain, obtain2, 0);
+                    this.zzajq.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -47,7 +47,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(17, obtain, obtain2, 0);
+                    this.zzajq.transact(17, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -67,7 +67,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(19, obtain, obtain2, 0);
+                    this.zzajq.transact(19, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -87,7 +87,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(11, obtain, obtain2, 0);
+                    this.zzajq.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -107,7 +107,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(15, obtain, obtain2, 0);
+                    this.zzajq.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -127,7 +127,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(12, obtain, obtain2, 0);
+                    this.zzajq.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -147,7 +147,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(14, obtain, obtain2, 0);
+                    this.zzajq.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -167,7 +167,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(9, obtain, obtain2, 0);
+                    this.zzajq.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -187,7 +187,7 @@ public interface IUiSettingsDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IUiSettingsDelegate");
-                    this.zzajf.transact(13, obtain, obtain2, 0);
+                    this.zzajq.transact(13, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -211,7 +211,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(8, obtain, obtain2, 0);
+                    this.zzajq.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -229,7 +229,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(2, obtain, obtain2, 0);
+                    this.zzajq.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -247,7 +247,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(16, obtain, obtain2, 0);
+                    this.zzajq.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -265,7 +265,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(18, obtain, obtain2, 0);
+                    this.zzajq.transact(18, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -283,7 +283,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(3, obtain, obtain2, 0);
+                    this.zzajq.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -301,7 +301,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(7, obtain, obtain2, 0);
+                    this.zzajq.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -319,7 +319,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(4, obtain, obtain2, 0);
+                    this.zzajq.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -337,7 +337,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(6, obtain, obtain2, 0);
+                    this.zzajq.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -355,7 +355,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 0;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -373,7 +373,7 @@ public interface IUiSettingsDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzajf.transact(5, obtain, obtain2, 0);
+                    this.zzajq.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -382,7 +382,7 @@ public interface IUiSettingsDelegate extends IInterface {
             }
         }
 
-        public static IUiSettingsDelegate zzja(IBinder iBinder) {
+        public static IUiSettingsDelegate zzje(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

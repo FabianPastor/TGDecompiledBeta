@@ -7,40 +7,40 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzh implements Creator<TextRecognizerOptions> {
     static void zza(TextRecognizerOptions textRecognizerOptions, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, textRecognizerOptions.versionCode);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zztk(parcel);
+        return zzta(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzacb(i);
+        return zzabr(i);
     }
 
-    public TextRecognizerOptions[] zzacb(int i) {
+    public TextRecognizerOptions[] zzabr(int i) {
         return new TextRecognizerOptions[i];
     }
 
-    public TextRecognizerOptions zztk(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public TextRecognizerOptions zzta(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new TextRecognizerOptions(i);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 }

@@ -17,8 +17,6 @@ public final class Scopes {
     public static final String GAMES = "https://www.googleapis.com/auth/games";
     public static final String PLUS_LOGIN = "https://www.googleapis.com/auth/plus.login";
     public static final String PLUS_ME = "https://www.googleapis.com/auth/plus.me";
-    @Deprecated
-    public static final String PLUS_MOMENTS = "https://www.googleapis.com/auth/plus.moments.write";
     public static final String PROFILE = "profile";
 
     private Scopes() {

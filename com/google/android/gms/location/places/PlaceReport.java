@@ -5,22 +5,22 @@ import android.os.Parcelable.Creator;
 import android.support.v4.os.EnvironmentCompat;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
-import com.google.android.gms.common.internal.zzab.zza;
-import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.internal.zzaa;
+import com.google.android.gms.common.internal.zzz;
+import com.google.android.gms.common.internal.zzz.zza;
 
 public class PlaceReport extends AbstractSafeParcelable implements ReflectedParcelable {
     public static final Creator<PlaceReport> CREATOR = new zzi();
-    private final String I;
-    private final String aiY;
+    private final String alV;
+    private final String bQ;
     private final String mTag;
     final int mVersionCode;
 
     PlaceReport(int i, String str, String str2, String str3) {
         this.mVersionCode = i;
-        this.aiY = str;
+        this.alV = str;
         this.mTag = str2;
-        this.I = str3;
+        this.bQ = str3;
     }
 
     public static PlaceReport create(String str, String str2) {
@@ -28,10 +28,10 @@ public class PlaceReport extends AbstractSafeParcelable implements ReflectedParc
     }
 
     public static PlaceReport zzj(String str, String str2, String str3) {
-        zzac.zzy(str);
-        zzac.zzhz(str2);
-        zzac.zzhz(str3);
-        zzac.zzb(zzla(str3), (Object) "Invalid source");
+        zzaa.zzy(str);
+        zzaa.zzib(str2);
+        zzaa.zzib(str3);
+        zzaa.zzb(zzla(str3), (Object) "Invalid source");
         return new PlaceReport(1, str, str2, str3);
     }
 
@@ -93,15 +93,15 @@ public class PlaceReport extends AbstractSafeParcelable implements ReflectedParc
             return false;
         }
         PlaceReport placeReport = (PlaceReport) obj;
-        return zzab.equal(this.aiY, placeReport.aiY) && zzab.equal(this.mTag, placeReport.mTag) && zzab.equal(this.I, placeReport.I);
+        return zzz.equal(this.alV, placeReport.alV) && zzz.equal(this.mTag, placeReport.mTag) && zzz.equal(this.bQ, placeReport.bQ);
     }
 
     public String getPlaceId() {
-        return this.aiY;
+        return this.alV;
     }
 
     public String getSource() {
-        return this.I;
+        return this.bQ;
     }
 
     public String getTag() {
@@ -109,15 +109,15 @@ public class PlaceReport extends AbstractSafeParcelable implements ReflectedParc
     }
 
     public int hashCode() {
-        return zzab.hashCode(this.aiY, this.mTag, this.I);
+        return zzz.hashCode(this.alV, this.mTag, this.bQ);
     }
 
     public String toString() {
-        zza zzx = zzab.zzx(this);
-        zzx.zzg("placeId", this.aiY);
+        zza zzx = zzz.zzx(this);
+        zzx.zzg("placeId", this.alV);
         zzx.zzg("tag", this.mTag);
-        if (!EnvironmentCompat.MEDIA_UNKNOWN.equals(this.I)) {
-            zzx.zzg("source", this.I);
+        if (!EnvironmentCompat.MEDIA_UNKNOWN.equals(this.bQ)) {
+            zzx.zzg("source", this.bQ);
         }
         return zzx.toString();
     }

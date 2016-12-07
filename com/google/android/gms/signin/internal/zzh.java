@@ -8,45 +8,45 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzh implements Creator<SignInRequest> {
     static void zza(SignInRequest signInRequest, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, signInRequest.mVersionCode);
-        zzb.zza(parcel, 2, signInRequest.zzcdk(), i, false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, signInRequest.zzcdm(), i, false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzsm(parcel);
+        return zzsc(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzaah(i);
+        return zzzx(i);
     }
 
-    public SignInRequest[] zzaah(int i) {
-        return new SignInRequest[i];
-    }
-
-    public SignInRequest zzsm(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public SignInRequest zzsc(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         ResolveAccountRequest resolveAccountRequest = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    resolveAccountRequest = (ResolveAccountRequest) zza.zza(parcel, zzcp, ResolveAccountRequest.CREATOR);
+                    resolveAccountRequest = (ResolveAccountRequest) zza.zza(parcel, zzcq, ResolveAccountRequest.CREATOR);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new SignInRequest(i, resolveAccountRequest);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
+    }
+
+    public SignInRequest[] zzzx(int i) {
+        return new SignInRequest[i];
     }
 }

@@ -833,6 +833,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             ArrayList<Integer> ids = new ArrayList();
             HashMap<Long, Message> messagesByRandomIds = new HashMap();
             InputPeer inputPeer = MessagesController.getInputPeer(lower_id);
+            boolean toMyself = peer == ((long) UserConfig.getClientUserId());
             int a = 0;
             while (a < messages.size()) {
                 MessageObject msgObj = (MessageObject) messages.get(a);
@@ -966,6 +967,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     final HashMap<Long, Message> messagesByRandomIdsFinal = messagesByRandomIds;
                     final boolean isMegagroupFinal = isMegagroup;
                     final long j = peer;
+                    final boolean z2 = toMyself;
                     ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             int a;
@@ -1005,6 +1007,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             }
                                         }
                                         message.unread = value.intValue() < message.id;
+                                        if (z2) {
+                                            message.out = true;
+                                            message.unread = false;
+                                        }
                                         Long random_id = (Long) newMessagesByIds.get(Integer.valueOf(message.id));
                                         if (random_id != null) {
                                             newMsgObj = (Message) messagesByRandomIdsFinal.get(random_id);

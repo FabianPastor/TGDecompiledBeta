@@ -5,7 +5,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
 public class zza {
-    public static KeyPair zzboo() {
+    public static KeyPair zzboh() {
         try {
             KeyPairGenerator instance = KeyPairGenerator.getInstance("RSA");
             instance.initialize(2048);

@@ -30,7 +30,7 @@ public class AppMeasurementContentProvider extends ContentProvider {
     }
 
     public boolean onCreate() {
-        zzx.zzdt(getContext());
+        zzx.zzdq(getContext());
         return false;
     }
 

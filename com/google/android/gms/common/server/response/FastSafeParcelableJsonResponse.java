@@ -7,11 +7,11 @@ public abstract class FastSafeParcelableJsonResponse extends FastJsonResponse im
         return 0;
     }
 
-    public Object zzia(String str) {
+    public Object zzic(String str) {
         return null;
     }
 
-    public boolean zzib(String str) {
+    public boolean zzid(String str) {
         return false;
     }
 }

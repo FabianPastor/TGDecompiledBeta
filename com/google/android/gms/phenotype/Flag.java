@@ -3,7 +3,7 @@ package com.google.android.gms.phenotype;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
-import com.google.android.gms.common.internal.zzab;
+import com.google.android.gms.common.internal.zzz;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,14 +11,14 @@ import java.util.Comparator;
 public class Flag extends AbstractSafeParcelable implements Comparable<Flag> {
     public static final Creator<Flag> CREATOR = new zzb();
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    public static final zza axt = new zza();
-    final String Dr;
-    final double afA;
-    final boolean afy;
-    final long axp;
-    final byte[] axq;
-    public final int axr;
-    public final int axs;
+    public static final zza aAA = new zza();
+    final String Fe;
+    final long aAw;
+    final byte[] aAx;
+    public final int aAy;
+    public final int aAz;
+    final boolean ahI;
+    final double ahK;
     final int mVersionCode;
     public final String name;
 
@@ -28,20 +28,20 @@ public class Flag extends AbstractSafeParcelable implements Comparable<Flag> {
         }
 
         public int zza(Flag flag, Flag flag2) {
-            return flag.axs == flag2.axs ? flag.name.compareTo(flag2.name) : flag.axs - flag2.axs;
+            return flag.aAz == flag2.aAz ? flag.name.compareTo(flag2.name) : flag.aAz - flag2.aAz;
         }
     }
 
     Flag(int i, String str, long j, boolean z, double d, String str2, byte[] bArr, int i2, int i3) {
         this.mVersionCode = i;
         this.name = str;
-        this.axp = j;
-        this.afy = z;
-        this.afA = d;
-        this.Dr = str2;
-        this.axq = bArr;
-        this.axr = i2;
-        this.axs = i3;
+        this.aAw = j;
+        this.ahI = z;
+        this.ahK = d;
+        this.Fe = str2;
+        this.aAx = bArr;
+        this.aAy = i2;
+        this.aAz = i3;
     }
 
     private static int compare(byte b, byte b2) {
@@ -73,63 +73,28 @@ public class Flag extends AbstractSafeParcelable implements Comparable<Flag> {
             return false;
         }
         Flag flag = (Flag) obj;
-        if (this.mVersionCode != flag.mVersionCode || !zzab.equal(this.name, flag.name) || this.axr != flag.axr || this.axs != flag.axs) {
+        if (this.mVersionCode != flag.mVersionCode || !zzz.equal(this.name, flag.name) || this.aAy != flag.aAy || this.aAz != flag.aAz) {
             return false;
         }
-        switch (this.axr) {
+        switch (this.aAy) {
             case 1:
-                return this.axp == flag.axp;
+                return this.aAw == flag.aAw;
             case 2:
-                return this.afy == flag.afy;
+                return this.ahI == flag.ahI;
             case 3:
-                return this.afA == flag.afA;
+                return this.ahK == flag.ahK;
             case 4:
-                return zzab.equal(this.Dr, flag.Dr);
+                return zzz.equal(this.Fe, flag.Fe);
             case 5:
-                return Arrays.equals(this.axq, flag.axq);
+                return Arrays.equals(this.aAx, flag.aAx);
             default:
-                throw new AssertionError("Invalid enum value: " + this.axr);
+                throw new AssertionError("Invalid enum value: " + this.aAy);
         }
     }
 
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("Flag(");
-        stringBuilder.append(this.mVersionCode);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.name);
-        stringBuilder.append(", ");
-        switch (this.axr) {
-            case 1:
-                stringBuilder.append(this.axp);
-                break;
-            case 2:
-                stringBuilder.append(this.afy);
-                break;
-            case 3:
-                stringBuilder.append(this.afA);
-                break;
-            case 4:
-                stringBuilder.append("'");
-                stringBuilder.append(this.Dr);
-                stringBuilder.append("'");
-                break;
-            case 5:
-                if (this.axq != null) {
-                    stringBuilder.append("'");
-                    stringBuilder.append(new String(this.axq, UTF_8));
-                    stringBuilder.append("'");
-                    break;
-                }
-                stringBuilder.append("null");
-                break;
-            default:
-                throw new AssertionError("Invalid enum value: " + this.axr);
-        }
-        stringBuilder.append(", ");
-        stringBuilder.append(this.axr);
-        stringBuilder.append(", ");
-        stringBuilder.append(this.axs);
-        stringBuilder.append(")");
+        StringBuilder stringBuilder = new StringBuilder();
+        zza(stringBuilder);
         return stringBuilder.toString();
     }
 
@@ -143,39 +108,81 @@ public class Flag extends AbstractSafeParcelable implements Comparable<Flag> {
         if (compareTo != 0) {
             return compareTo;
         }
-        compareTo = compare(this.axr, flag.axr);
+        compareTo = compare(this.aAy, flag.aAy);
         if (compareTo != 0) {
             return compareTo;
         }
-        switch (this.axr) {
+        switch (this.aAy) {
             case 1:
-                return compare(this.axp, flag.axp);
+                return compare(this.aAw, flag.aAw);
             case 2:
-                return compare(this.afy, flag.afy);
+                return compare(this.ahI, flag.ahI);
             case 3:
-                return Double.compare(this.afA, flag.afA);
+                return Double.compare(this.ahK, flag.ahK);
             case 4:
-                return compare(this.Dr, flag.Dr);
+                return compare(this.Fe, flag.Fe);
             case 5:
-                if (this.axq == flag.axq) {
+                if (this.aAx == flag.aAx) {
                     return 0;
                 }
-                if (this.axq == null) {
+                if (this.aAx == null) {
                     return -1;
                 }
-                if (flag.axq == null) {
+                if (flag.aAx == null) {
                     return 1;
                 }
-                while (i < Math.min(this.axq.length, flag.axq.length)) {
-                    compareTo = compare(this.axq[i], flag.axq[i]);
+                while (i < Math.min(this.aAx.length, flag.aAx.length)) {
+                    compareTo = compare(this.aAx[i], flag.aAx[i]);
                     if (compareTo != 0) {
                         return compareTo;
                     }
                     i++;
                 }
-                return compare(this.axq.length, flag.axq.length);
+                return compare(this.aAx.length, flag.aAx.length);
             default:
-                throw new AssertionError("Invalid enum value: " + this.axr);
+                throw new AssertionError("Invalid enum value: " + this.aAy);
         }
+    }
+
+    public String zza(StringBuilder stringBuilder) {
+        stringBuilder.append("Flag(");
+        stringBuilder.append(this.mVersionCode);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.name);
+        stringBuilder.append(", ");
+        switch (this.aAy) {
+            case 1:
+                stringBuilder.append(this.aAw);
+                break;
+            case 2:
+                stringBuilder.append(this.ahI);
+                break;
+            case 3:
+                stringBuilder.append(this.ahK);
+                break;
+            case 4:
+                stringBuilder.append("'");
+                stringBuilder.append(this.Fe);
+                stringBuilder.append("'");
+                break;
+            case 5:
+                if (this.aAx != null) {
+                    stringBuilder.append("'");
+                    stringBuilder.append(new String(this.aAx, UTF_8));
+                    stringBuilder.append("'");
+                    break;
+                }
+                stringBuilder.append("null");
+                break;
+            default:
+                String str = this.name;
+                throw new AssertionError(new StringBuilder(String.valueOf(str).length() + 27).append("Invalid type: ").append(str).append(", ").append(this.aAy).toString());
+        }
+        stringBuilder.append(", ");
+        stringBuilder.append(this.aAy);
+        stringBuilder.append(", ");
+        stringBuilder.append(this.aAz);
+        stringBuilder.append(")");
+        return stringBuilder.toString();
     }
 }

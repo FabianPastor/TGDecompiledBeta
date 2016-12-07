@@ -1,59 +1,60 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public final class CircleOptions extends AbstractSafeParcelable {
-    public static final zzb CREATOR = new zzb();
-    private LatLng amB;
-    private double amC;
-    private float amD;
-    private boolean amE;
-    private boolean amF;
+    public static final Creator<CircleOptions> CREATOR = new zzb();
+    private LatLng apH;
+    private double apI;
+    private float apJ;
+    private boolean apK;
+    private boolean apL;
     private int mFillColor;
     private int mStrokeColor;
     private float mStrokeWidth;
     private final int mVersionCode;
 
     public CircleOptions() {
-        this.amB = null;
-        this.amC = 0.0d;
+        this.apH = null;
+        this.apI = 0.0d;
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.apL = false;
         this.mVersionCode = 1;
     }
 
     CircleOptions(int i, LatLng latLng, double d, float f, int i2, int i3, float f2, boolean z, boolean z2) {
-        this.amB = null;
-        this.amC = 0.0d;
+        this.apH = null;
+        this.apI = 0.0d;
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.amD = 0.0f;
-        this.amE = true;
-        this.amF = false;
+        this.apJ = 0.0f;
+        this.apK = true;
+        this.apL = false;
         this.mVersionCode = i;
-        this.amB = latLng;
-        this.amC = d;
+        this.apH = latLng;
+        this.apI = d;
         this.mStrokeWidth = f;
         this.mStrokeColor = i2;
         this.mFillColor = i3;
-        this.amD = f2;
-        this.amE = z;
-        this.amF = z2;
+        this.apJ = f2;
+        this.apK = z;
+        this.apL = z2;
     }
 
     public CircleOptions center(LatLng latLng) {
-        this.amB = latLng;
+        this.apH = latLng;
         return this;
     }
 
     public CircleOptions clickable(boolean z) {
-        this.amF = z;
+        this.apL = z;
         return this;
     }
 
@@ -63,7 +64,7 @@ public final class CircleOptions extends AbstractSafeParcelable {
     }
 
     public LatLng getCenter() {
-        return this.amB;
+        return this.apH;
     }
 
     public int getFillColor() {
@@ -71,7 +72,7 @@ public final class CircleOptions extends AbstractSafeParcelable {
     }
 
     public double getRadius() {
-        return this.amC;
+        return this.apI;
     }
 
     public int getStrokeColor() {
@@ -87,19 +88,19 @@ public final class CircleOptions extends AbstractSafeParcelable {
     }
 
     public float getZIndex() {
-        return this.amD;
+        return this.apJ;
     }
 
     public boolean isClickable() {
-        return this.amF;
+        return this.apL;
     }
 
     public boolean isVisible() {
-        return this.amE;
+        return this.apK;
     }
 
     public CircleOptions radius(double d) {
-        this.amC = d;
+        this.apI = d;
         return this;
     }
 
@@ -114,7 +115,7 @@ public final class CircleOptions extends AbstractSafeParcelable {
     }
 
     public CircleOptions visible(boolean z) {
-        this.amE = z;
+        this.apK = z;
         return this;
     }
 
@@ -123,7 +124,7 @@ public final class CircleOptions extends AbstractSafeParcelable {
     }
 
     public CircleOptions zIndex(float f) {
-        this.amD = f;
+        this.apJ = f;
         return this;
     }
 }

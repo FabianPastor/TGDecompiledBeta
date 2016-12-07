@@ -1,10 +1,11 @@
 package com.google.android.gms.vision.text.internal.client;
 
 import android.os.Parcel;
+import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 
 public class TextRecognizerOptions extends AbstractSafeParcelable {
-    public static final zzh CREATOR = new zzh();
+    public static final Creator<TextRecognizerOptions> CREATOR = new zzh();
     final int versionCode;
 
     public TextRecognizerOptions() {

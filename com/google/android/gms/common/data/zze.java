@@ -9,62 +9,62 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zze implements Creator<DataHolder> {
     static void zza(DataHolder dataHolder, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
-        zzb.zza(parcel, 1, dataHolder.zzatf(), false);
-        zzb.zza(parcel, 2, dataHolder.zzatg(), i, false);
+        int zzcs = zzb.zzcs(parcel);
+        zzb.zza(parcel, 1, dataHolder.zzauo(), false);
+        zzb.zza(parcel, 2, dataHolder.zzaup(), i, false);
         zzb.zzc(parcel, 3, dataHolder.getStatusCode());
-        zzb.zza(parcel, 4, dataHolder.zzasz(), false);
-        zzb.zzc(parcel, 1000, dataHolder.getVersionCode());
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 4, dataHolder.zzaui(), false);
+        zzb.zzc(parcel, 1000, dataHolder.mVersionCode);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzcg(parcel);
+        return zzch(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzge(i);
+        return zzgd(i);
     }
 
-    public DataHolder zzcg(Parcel parcel) {
+    public DataHolder zzch(Parcel parcel) {
         int i = 0;
         Bundle bundle = null;
-        int zzcq = zza.zzcq(parcel);
+        int zzcr = zza.zzcr(parcel);
         CursorWindow[] cursorWindowArr = null;
         String[] strArr = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    strArr = zza.zzac(parcel, zzcp);
+                    strArr = zza.zzac(parcel, zzcq);
                     break;
                 case 2:
-                    cursorWindowArr = (CursorWindow[]) zza.zzb(parcel, zzcp, CursorWindow.CREATOR);
+                    cursorWindowArr = (CursorWindow[]) zza.zzb(parcel, zzcq, CursorWindow.CREATOR);
                     break;
                 case 3:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 4:
-                    bundle = zza.zzs(parcel, zzcp);
+                    bundle = zza.zzs(parcel, zzcq);
                     break;
                 case 1000:
-                    i2 = zza.zzg(parcel, zzcp);
+                    i2 = zza.zzg(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() != zzcq) {
-            throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        if (parcel.dataPosition() != zzcr) {
+            throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
         }
         DataHolder dataHolder = new DataHolder(i2, strArr, cursorWindowArr, i, bundle);
-        dataHolder.zzate();
+        dataHolder.zzaun();
         return dataHolder;
     }
 
-    public DataHolder[] zzge(int i) {
+    public DataHolder[] zzgd(int i) {
         return new DataHolder[i];
     }
 }

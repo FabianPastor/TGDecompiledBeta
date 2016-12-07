@@ -8,45 +8,45 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 
 public class zzj implements Creator<EventParams> {
     static void zza(EventParams eventParams, Parcel parcel, int i) {
-        int zzcr = zzb.zzcr(parcel);
+        int zzcs = zzb.zzcs(parcel);
         zzb.zzc(parcel, 1, eventParams.versionCode);
-        zzb.zza(parcel, 2, eventParams.zzbvz(), false);
-        zzb.zzaj(parcel, zzcr);
+        zzb.zza(parcel, 2, eventParams.zzbww(), false);
+        zzb.zzaj(parcel, zzcs);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzpf(parcel);
+        return zzpx(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzwl(i);
+        return zzxc(i);
     }
 
-    public EventParams zzpf(Parcel parcel) {
-        int zzcq = zza.zzcq(parcel);
+    public EventParams zzpx(Parcel parcel) {
+        int zzcr = zza.zzcr(parcel);
         int i = 0;
         Bundle bundle = null;
-        while (parcel.dataPosition() < zzcq) {
-            int zzcp = zza.zzcp(parcel);
-            switch (zza.zzgv(zzcp)) {
+        while (parcel.dataPosition() < zzcr) {
+            int zzcq = zza.zzcq(parcel);
+            switch (zza.zzgu(zzcq)) {
                 case 1:
-                    i = zza.zzg(parcel, zzcp);
+                    i = zza.zzg(parcel, zzcq);
                     break;
                 case 2:
-                    bundle = zza.zzs(parcel, zzcp);
+                    bundle = zza.zzs(parcel, zzcq);
                     break;
                 default:
-                    zza.zzb(parcel, zzcp);
+                    zza.zzb(parcel, zzcq);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzcq) {
+        if (parcel.dataPosition() == zzcr) {
             return new EventParams(i, bundle);
         }
-        throw new zza.zza("Overread allowed size end=" + zzcq, parcel);
+        throw new zza.zza("Overread allowed size end=" + zzcr, parcel);
     }
 
-    public EventParams[] zzwl(int i) {
+    public EventParams[] zzxc(int i) {
         return new EventParams[i];
     }
 }

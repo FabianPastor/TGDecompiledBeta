@@ -11,14 +11,14 @@ public interface zzd extends IInterface {
     public static abstract class zza extends Binder implements zzd {
 
         private static class zza implements zzd {
-            private IBinder zzajf;
+            private IBinder zzajq;
 
             zza(IBinder iBinder) {
-                this.zzajf = iBinder;
+                this.zzajq = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzajf;
+                return this.zzajq;
             }
 
             public zzc zza(com.google.android.gms.dynamic.zzd com_google_android_gms_dynamic_zzd, BarcodeDetectorOptions barcodeDetectorOptions) throws RemoteException {
@@ -33,10 +33,10 @@ public interface zzd extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzajf.transact(1, obtain, obtain2, 0);
+                    this.zzajq.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzc zzlj = com.google.android.gms.vision.barcode.internal.client.zzc.zza.zzlj(obtain2.readStrongBinder());
-                    return zzlj;
+                    zzc zzle = com.google.android.gms.vision.barcode.internal.client.zzc.zza.zzle(obtain2.readStrongBinder());
+                    return zzle;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -44,7 +44,7 @@ public interface zzd extends IInterface {
             }
         }
 
-        public static zzd zzlk(IBinder iBinder) {
+        public static zzd zzlf(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -57,7 +57,7 @@ public interface zzd extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetectorCreator");
-                    zzc zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfe(parcel.readStrongBinder()), parcel.readInt() != 0 ? (BarcodeDetectorOptions) BarcodeDetectorOptions.CREATOR.createFromParcel(parcel) : null);
+                    zzc zza = zza(com.google.android.gms.dynamic.zzd.zza.zzfd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (BarcodeDetectorOptions) BarcodeDetectorOptions.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (zza != null) {
                         iBinder = zza.asBinder();
