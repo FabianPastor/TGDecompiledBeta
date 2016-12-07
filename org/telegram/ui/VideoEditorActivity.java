@@ -678,7 +678,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         };
         this.mentionLayoutManager.setOrientation(1);
         this.mentionListView.setLayoutManager(this.mentionLayoutManager);
-        this.mentionListView.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        this.mentionListView.setBackgroundColor(NUM);
         this.mentionListView.setVisibility(8);
         this.mentionListView.setClipToPadding(true);
         this.mentionListView.setOverScrollMode(2);

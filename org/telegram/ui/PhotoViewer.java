@@ -1184,7 +1184,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.windowLayoutParams.flags = 8;
             }
             this.actionBar = new ActionBar(activity);
-            this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.actionBar.setBackgroundColor(NUM);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -1375,7 +1375,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
             this.menuItem.addSubItem(6, LocaleController.getString("Delete", R.string.Delete), 0);
             this.bottomLayout = new FrameLayout(this.actvityContext);
-            this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.bottomLayout.setBackgroundColor(NUM);
             this.containerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
             this.captionTextViewOld = new TextView(this.actvityContext) {
                 public boolean onTouchEvent(MotionEvent event) {
@@ -1383,7 +1383,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
             };
             this.captionTextViewOld.setMaxLines(10);
-            this.captionTextViewOld.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.captionTextViewOld.setBackgroundColor(NUM);
             this.captionTextViewOld.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
             this.captionTextViewOld.setLinkTextColor(-1);
             this.captionTextViewOld.setTextColor(-1);
@@ -1406,7 +1406,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.captionTextViewNew = anonymousClass7;
             this.captionTextView = anonymousClass7;
             this.captionTextViewNew.setMaxLines(10);
-            this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.captionTextViewNew.setBackgroundColor(NUM);
             this.captionTextViewNew.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
             this.captionTextViewNew.setLinkTextColor(-1);
             this.captionTextViewNew.setTextColor(-1);
@@ -1545,7 +1545,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
                 }
             };
-            this.pickerView.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.pickerView.setBackgroundColor(NUM);
             this.containerView.addView(this.pickerView, LayoutHelper.createFrame(-1, 48, 83));
             this.pickerView.cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
@@ -1598,7 +1598,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
             });
             this.editorDoneLayout = new PickerBottomLayoutViewer(this.actvityContext);
-            this.editorDoneLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.editorDoneLayout.setBackgroundColor(NUM);
             this.editorDoneLayout.updateSelectedCount(0, false);
             this.editorDoneLayout.setVisibility(8);
             this.containerView.addView(this.editorDoneLayout, LayoutHelper.createFrame(-1, 48, 83));
@@ -1756,7 +1756,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             };
             this.mentionLayoutManager.setOrientation(1);
             this.mentionListView.setLayoutManager(this.mentionLayoutManager);
-            this.mentionListView.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.mentionListView.setBackgroundColor(NUM);
             this.mentionListView.setVisibility(8);
             this.mentionListView.setClipToPadding(true);
             this.mentionListView.setOverScrollMode(2);

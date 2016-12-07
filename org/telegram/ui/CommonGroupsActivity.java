@@ -223,7 +223,6 @@ public class CommonGroupsActivity extends BaseFragment {
                             if (error == null) {
                                 boolean z;
                                 messages_Chats res = response;
-                                MessagesController.getInstance().putUsers(res.users, false);
                                 MessagesController.getInstance().putChats(res.chats, false);
                                 CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
                                 if (res.chats.isEmpty() || res.chats.size() != count) {

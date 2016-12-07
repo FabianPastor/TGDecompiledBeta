@@ -274,7 +274,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             launchLayout.addView(this.shadowTabletSide);
             this.shadowTablet = new FrameLayout(this);
             this.shadowTablet.setVisibility(layerFragmentsStack.isEmpty() ? 8 : 0);
-            this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.shadowTablet.setBackgroundColor(NUM);
             launchLayout.addView(this.shadowTablet);
             this.shadowTablet.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -2585,7 +2585,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     this.shadowTabletSide.setVisibility(8);
                     this.shadowTablet.setBackgroundColor(0);
                 } else {
-                    this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+                    this.shadowTablet.setBackgroundColor(NUM);
                 }
                 this.layersActionBarLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, false);
                 return false;
@@ -2661,7 +2661,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     this.shadowTabletSide.setVisibility(8);
                     this.shadowTablet.setBackgroundColor(0);
                 } else {
-                    this.shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+                    this.shadowTablet.setBackgroundColor(NUM);
                 }
                 this.layersActionBarLayout.addFragmentToStack(fragment);
                 return false;

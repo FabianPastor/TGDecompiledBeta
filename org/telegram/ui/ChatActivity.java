@@ -812,6 +812,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             }
                         }
                     }
+
+                    public void didPressedInstantButton(ChatMessageCell cell) {
+                        MessageObject messageObject = cell.getMessageObject();
+                        if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.cached_page != null) {
+                            ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity());
+                            ArticleViewer.getInstance().open(messageObject);
+                        }
+                    }
                 });
                 if (ChatActivity.this.currentEncryptedChat == null) {
                     chatMessageCell.setAllowAssistant(true);

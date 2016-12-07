@@ -142,6 +142,7 @@ import org.telegram.tgnet.TLRPC.TL_textUrl;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
@@ -297,7 +298,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
     private Scroller scroller;
     private ImageView shareButton;
-    private ImageView sharePhotoButton;
     private PlaceProviderObject showAfterAnimation;
     private int switchImageAfterAnimation;
     private boolean textureUploaded;
@@ -620,8 +620,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private class BlockEmbedCell extends FrameLayout {
         private TL_pageBlockEmbed currentBlock;
         private int lastCreatedWidth;
+        private int listX;
         private StaticLayout textLayout;
-        private int textX = AndroidUtilities.dp(18.0f);
+        private int textX;
         private int textY;
         private WebView webView;
 
@@ -670,26 +671,35 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public void setBlock(TL_pageBlockEmbed block) {
             this.currentBlock = block;
             this.lastCreatedWidth = 0;
+            try {
+                if (this.currentBlock.html != null) {
+                    this.webView.loadDataWithBaseURL("https://tbot.xyz/", this.currentBlock.html, "text/html", "UTF-8", "https://tbot.xyz/");
+                } else {
+                    HashMap<String, String> args = new HashMap();
+                    args.put("Referer", "http://youtube.com");
+                    this.webView.loadUrl(this.currentBlock.url, args);
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
             requestLayout();
         }
 
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
+            if (!ArticleViewer.this.isVisible) {
+                this.currentBlock = null;
+                try {
+                    this.webView.stopLoading();
+                    this.webView.loadUrl("about:blank");
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+            }
         }
 
         protected void onAttachedToWindow() {
             super.onAttachedToWindow();
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    try {
-                        HashMap<String, String> args = new HashMap();
-                        args.put("Referer", "http://youtube.com");
-                        BlockEmbedCell.this.webView.loadUrl(BlockEmbedCell.this.currentBlock.url, args);
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
-                    }
-                }
-            });
         }
 
         public boolean onTouchEvent(MotionEvent event) {
@@ -700,14 +710,38 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             int height;
             int width = MeasureSpec.getSize(widthMeasureSpec);
             if (this.currentBlock != null) {
-                height = (int) (((float) this.currentBlock.h) * (((float) width) / ((float) this.currentBlock.w)));
-                this.webView.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
+                int textWidth;
+                float scale;
+                int listWidth = width;
+                if (this.currentBlock.level > 0) {
+                    int dp = AndroidUtilities.dp((float) (this.currentBlock.level * 14)) + AndroidUtilities.dp(18.0f);
+                    this.listX = dp;
+                    this.textX = dp;
+                    listWidth -= this.listX + AndroidUtilities.dp(18.0f);
+                    textWidth = listWidth;
+                } else {
+                    this.listX = 0;
+                    this.textX = AndroidUtilities.dp(18.0f);
+                    textWidth = width - AndroidUtilities.dp(36.0f);
+                }
+                if (this.currentBlock.w == 0) {
+                    scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                } else {
+                    scale = ((float) width) / ((float) this.currentBlock.w);
+                }
+                height = (int) (((float) this.currentBlock.h) * scale);
+                this.webView.measure(MeasureSpec.makeMeasureSpec(listWidth, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
                 if (this.lastCreatedWidth != width) {
-                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, width - AndroidUtilities.dp(36.0f), this.currentBlock);
+                    this.textLayout = ArticleViewer.this.createLayoutForText(null, this.currentBlock.caption, textWidth, this.currentBlock);
                     if (this.textLayout != null) {
                         this.textY = AndroidUtilities.dp(8.0f) + height;
-                        height += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
+                        height += AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
                     }
+                }
+                if (this.currentBlock.level > 0 && !this.currentBlock.bottom) {
+                    height += AndroidUtilities.dp(8.0f);
+                } else if (this.currentBlock.level == 0 && this.textLayout != null) {
+                    height += AndroidUtilities.dp(8.0f);
                 }
             } else {
                 height = 1;
@@ -716,16 +750,21 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            this.webView.layout(0, 0, this.webView.getMeasuredWidth(), this.webView.getMeasuredHeight());
+            this.webView.layout(this.listX, 0, this.listX + this.webView.getMeasuredWidth(), this.webView.getMeasuredHeight());
         }
 
         protected void onDraw(Canvas canvas) {
-            if (this.currentBlock != null && this.textLayout != null) {
-                canvas.save();
-                canvas.translate((float) this.textX, (float) this.textY);
-                ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
-                this.textLayout.draw(canvas);
-                canvas.restore();
+            if (this.currentBlock != null) {
+                if (this.textLayout != null) {
+                    canvas.save();
+                    canvas.translate((float) this.textX, (float) this.textY);
+                    ArticleViewer.this.drawLayoutLink(canvas, this.textLayout);
+                    this.textLayout.draw(canvas);
+                    canvas.restore();
+                }
+                if (this.currentBlock.level > 0) {
+                    canvas.drawRect((float) AndroidUtilities.dp(18.0f), 0.0f, (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - (this.currentBlock.bottom ? AndroidUtilities.dp(6.0f) : 0)), ArticleViewer.quoteLinePaint);
+                }
             }
         }
     }
@@ -2732,7 +2771,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.animatingImageView.setVisibility(8);
             this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
             this.actionBar = new ActionBar(activity);
-            this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.actionBar.setBackgroundColor(NUM);
             this.actionBar.setOccupyStatusBar(false);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -2779,51 +2818,41 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     return f != null && f.exists();
                 }
             });
-            this.menuItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_other);
+            ActionBarMenu menu = this.actionBar.createMenu();
+            menu.addItem(2, (int) R.drawable.share);
+            this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
             this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp), 0);
-            this.menuItem.addSubItem(2, LocaleController.getString("ShareFile", R.string.ShareFile), 0);
             this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
             this.bottomLayout = new FrameLayout(this.parentActivity);
-            this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
             this.captionTextViewOld = new TextView(activity);
             this.captionTextViewOld.setMaxLines(10);
-            this.captionTextViewOld.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.captionTextViewOld.setBackgroundColor(NUM);
             this.captionTextViewOld.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
             this.captionTextViewOld.setLinkTextColor(-1);
             this.captionTextViewOld.setTextColor(-1);
             this.captionTextViewOld.setGravity(19);
             this.captionTextViewOld.setTextSize(1, 16.0f);
             this.captionTextViewOld.setVisibility(4);
-            this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+            this.photoContainerView.addView(this.captionTextViewOld, LayoutHelper.createFrame(-1, -2, 83));
             TextView textView = new TextView(activity);
             this.captionTextViewNew = textView;
             this.captionTextView = textView;
             this.captionTextViewNew.setMaxLines(10);
-            this.captionTextViewNew.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            this.captionTextViewNew.setBackgroundColor(NUM);
             this.captionTextViewNew.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
             this.captionTextViewNew.setLinkTextColor(-1);
             this.captionTextViewNew.setTextColor(-1);
             this.captionTextViewNew.setGravity(19);
             this.captionTextViewNew.setTextSize(1, 16.0f);
             this.captionTextViewNew.setVisibility(4);
-            this.photoContainerView.addView(this.captionTextViewNew, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+            this.photoContainerView.addView(this.captionTextViewNew, LayoutHelper.createFrame(-1, -2, 83));
             this.radialProgressViews[0] = new RadialProgressView(activity, this.photoContainerView);
             this.radialProgressViews[0].setBackgroundState(0, false);
             this.radialProgressViews[1] = new RadialProgressView(activity, this.photoContainerView);
             this.radialProgressViews[1].setBackgroundState(0, false);
             this.radialProgressViews[2] = new RadialProgressView(activity, this.photoContainerView);
             this.radialProgressViews[2].setBackgroundState(0, false);
-            this.sharePhotoButton = new ImageView(activity);
-            this.sharePhotoButton.setImageResource(R.drawable.share);
-            this.sharePhotoButton.setScaleType(ScaleType.CENTER);
-            this.sharePhotoButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-            this.bottomLayout.addView(this.sharePhotoButton, LayoutHelper.createFrame(50, -1, 53));
-            this.sharePhotoButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ArticleViewer.this.onSharePressed();
-                }
-            });
             this.videoPlayerSeekbar = new SeekBar(activity);
             this.videoPlayerSeekbar.setColors(NUM, -1, -1);
             this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
@@ -3424,8 +3453,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             }
             if (this.videoPlayerControlFrameLayout != null) {
                 this.videoPlayerControlFrameLayout.setVisibility(0);
-                this.sharePhotoButton.setVisibility(8);
-                this.menuItem.showSubItem(2);
             }
             if (this.videoTextureView.getSurfaceTexture() != null) {
                 this.videoPlayer.setSurface(new Surface(this.videoTextureView.getSurfaceTexture()));
@@ -3458,8 +3485,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
         if (this.videoPlayerControlFrameLayout != null) {
             this.videoPlayerControlFrameLayout.setVisibility(8);
-            this.sharePhotoButton.setVisibility(0);
-            this.menuItem.hideSubItem(2);
         }
     }
 
@@ -3641,8 +3666,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.menuItem.setVisibility(0);
         this.bottomLayout.setVisibility(0);
         this.bottomLayout.setTranslationY(0.0f);
-        this.sharePhotoButton.setVisibility(8);
-        this.menuItem.hideSubItem(2);
         this.menuItem.hideSubItem(3);
         this.actionBar.setTranslationY(0.0f);
         this.captionTextView.setTag(null);
@@ -3694,8 +3717,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 setCurrentCaption(getText(this.currentMedia.caption, this.currentMedia.caption, this.currentMedia));
                 if (this.currentAnimation != null) {
                     this.menuItem.hideSubItem(1);
-                    this.menuItem.hideSubItem(2);
-                    this.sharePhotoButton.setVisibility(0);
                     this.actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
                 } else {
                     if (this.imagesArr.size() != 1) {
@@ -3706,14 +3727,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         this.actionBar.setTitle(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
                     }
                     this.menuItem.showSubItem(1);
-                    ImageView imageView = this.sharePhotoButton;
-                    int i = (this.videoPlayerControlFrameLayout == null || this.videoPlayerControlFrameLayout.getVisibility() != 0) ? 0 : 8;
-                    imageView.setVisibility(i);
-                    if (this.sharePhotoButton.getVisibility() == 0) {
-                        this.menuItem.hideSubItem(2);
-                    } else {
-                        this.menuItem.showSubItem(2);
-                    }
                 }
             }
             if (this.currentPlaceObject != null) {
@@ -3820,11 +3833,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 int i = 4;
                 ArticleViewer.this.captionTextViewOld.setTag(null);
                 ArticleViewer.this.captionTextViewOld.setVisibility(4);
-                TextView access$7200 = ArticleViewer.this.captionTextViewNew;
+                TextView access$7000 = ArticleViewer.this.captionTextViewNew;
                 if (ArticleViewer.this.bottomLayout.getVisibility() == 0) {
                     i = 0;
                 }
-                access$7200.setVisibility(i);
+                access$7000.setVisibility(i);
             }
         });
     }

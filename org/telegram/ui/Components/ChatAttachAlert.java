@@ -820,7 +820,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         if (VERSION.SDK_INT >= 16) {
             this.recordTime = new TextView(context);
             this.recordTime.setBackgroundResource(R.drawable.system);
-            this.recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(NUM, Mode.MULTIPLY));
+            this.recordTime.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.MSG_MEDIA_WEB_PREVIEW_INSTANT_BACKGROUND_COLOR, Mode.MULTIPLY));
             this.recordTime.setText("00:00");
             this.recordTime.setTextSize(1, 15.0f);
             this.recordTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -1287,7 +1287,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void onResume() {
         this.paused = false;
         if (isShowing() && !isDismissed()) {
-            checkCamera(true);
+            checkCamera(false);
         }
     }
 

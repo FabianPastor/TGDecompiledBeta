@@ -75,7 +75,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, View window) {
         super(context);
-        setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+        setBackgroundColor(NUM);
         setFocusable(true);
         setFocusableInTouchMode(true);
         this.windowView = window;

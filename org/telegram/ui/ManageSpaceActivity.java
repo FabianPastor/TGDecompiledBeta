@@ -69,7 +69,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(-1, -1));
             launchLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
             FrameLayout shadowTablet = new FrameLayout(this);
-            shadowTablet.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            shadowTablet.setBackgroundColor(NUM);
             launchLayout.addView(shadowTablet, LayoutHelper.createRelative(-1, -1));
             shadowTablet.setOnTouchListener(new OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {

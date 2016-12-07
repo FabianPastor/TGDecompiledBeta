@@ -16,7 +16,6 @@ import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -38,7 +37,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(0);
-            linearLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
+            linearLayout.setBackgroundColor(NUM);
             addView(linearLayout, LayoutHelper.createFrame(-1, 28, 83));
             this.nameTextView = new TextView(context);
             this.nameTextView.setTextSize(1, 13.0f);
