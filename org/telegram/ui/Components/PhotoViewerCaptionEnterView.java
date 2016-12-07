@@ -37,6 +37,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
@@ -428,7 +429,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     public void onClearEmojiRecent() {
                     }
 
-                    public void onShowStickerSet(StickerSet stickerSet) {
+                    public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
                     }
 
                     public void onStickerSetAdd(StickerSetCovered stickerSet) {

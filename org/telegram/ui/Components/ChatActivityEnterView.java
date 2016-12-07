@@ -77,6 +77,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.Peer;
@@ -2341,12 +2342,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
 
-                public void onShowStickerSet(StickerSet stickerSet) {
+                public void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet) {
                     if (ChatActivityEnterView.this.parentFragment != null && ChatActivityEnterView.this.parentActivity != null) {
-                        TL_inputStickerSetID inputStickerSetID = new TL_inputStickerSetID();
-                        inputStickerSetID.access_hash = stickerSet.access_hash;
-                        inputStickerSetID.id = stickerSet.id;
-                        ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSetID, null, ChatActivityEnterView.this));
+                        if (stickerSet != null) {
+                            inputStickerSet = new TL_inputStickerSetID();
+                            inputStickerSet.access_hash = stickerSet.access_hash;
+                            inputStickerSet.id = stickerSet.id;
+                        }
+                        ChatActivityEnterView.this.parentFragment.showDialog(new StickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, inputStickerSet, null, ChatActivityEnterView.this));
                     }
                 }
 

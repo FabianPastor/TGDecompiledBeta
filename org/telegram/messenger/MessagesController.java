@@ -2662,7 +2662,7 @@ public class MessagesController implements NotificationCenterDelegate {
         TLObject req = new TL_messages_getHistory();
         req.peer = getInputPeer(lower_part);
         if (load_type == 4) {
-            req.add_offset = -1;
+            req.add_offset = -count;
         } else if (load_type == 3) {
             req.add_offset = (-count) / 2;
         } else if (load_type == 1) {
@@ -2697,14 +2697,8 @@ public class MessagesController implements NotificationCenterDelegate {
                         res.messages.remove(0);
                     }
                     int mid = i2;
-                    if (i3 != 0) {
-                        for (int a = 0; a < res.messages.size(); a++) {
-                            Message message = (Message) res.messages.get(a);
-                            if (message.date > i3) {
-                                mid = message.id;
-                                break;
-                            }
-                        }
+                    if (!(i3 == 0 || res.messages.isEmpty())) {
+                        mid = ((Message) res.messages.get(res.messages.size() - 1)).id;
                     }
                     MessagesController.this.processLoadedMessages(res, j, i, mid, i3, false, i4, i5, i6, i7, i8, i9, z, false, i10, z2);
                 }
@@ -3167,6 +3161,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3183,7 +3179,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3211,7 +3206,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -4882,8 +4876,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
+        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
-            long newTaskId;
             this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
             TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
             inputPeer.channel_id = channel.id;
@@ -4957,17 +4951,17 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
-        Integer channelPts;
         Throwable e;
-        long newTaskId;
-        TL_updates_getChannelDifference req;
-        final int i;
-        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
+            long newTaskId;
+            TL_updates_getChannelDifference req;
+            final int i;
+            final int i2;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));

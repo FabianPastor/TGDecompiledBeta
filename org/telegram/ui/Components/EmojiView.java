@@ -68,6 +68,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.StickerSet;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
@@ -132,12 +133,27 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             EmojiView.this.listener.onStickerSelected(sticker);
         }
 
-        public void openSet(TL_messages_stickerSet set) {
-            int position = EmojiView.this.stickersGridAdapter.getPositionForPack(set);
-            if (position != -1) {
-                EmojiView.this.stickersLayoutManager.scrollToPositionWithOffset(position, 0);
-            } else {
-                EmojiView.this.listener.onShowStickerSet(set.set);
+        public void openSet(InputStickerSet set) {
+            if (set != null) {
+                TL_messages_stickerSet stickerSet;
+                int position;
+                if (set.id != 0) {
+                    stickerSet = StickersQuery.getStickerSetById(Long.valueOf(set.id));
+                } else if (set.short_name != null) {
+                    stickerSet = StickersQuery.getStickerSetByName(set.short_name);
+                } else {
+                    stickerSet = null;
+                }
+                if (stickerSet != null) {
+                    position = EmojiView.this.stickersGridAdapter.getPositionForPack(stickerSet);
+                } else {
+                    position = -1;
+                }
+                if (position != -1) {
+                    EmojiView.this.stickersLayoutManager.scrollToPositionWithOffset(position, 0);
+                } else {
+                    EmojiView.this.listener.onShowStickerSet(null, set);
+                }
             }
         }
     };
@@ -647,7 +663,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
         void onGifTab(boolean z);
 
-        void onShowStickerSet(StickerSet stickerSet);
+        void onShowStickerSet(StickerSet stickerSet, InputStickerSet inputStickerSet);
 
         void onStickerSelected(Document document);
 
@@ -1187,7 +1203,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 public void onItemClick(View view, int position) {
                     StickerSetCovered pack = (StickerSetCovered) EmojiView.this.trendingGridAdapter.positionsToSets.get(Integer.valueOf(position));
                     if (pack != null) {
-                        EmojiView.this.listener.onShowStickerSet(pack.set);
+                        EmojiView.this.listener.onShowStickerSet(pack.set, null);
                     }
                 }
             });

@@ -2871,7 +2871,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     private void updateInterfaceForCurrentPage(boolean back) {
-        if (this.currentPage != null) {
+        if (this.currentPage != null && this.currentPage.cached_page != null) {
             this.blocks.clear();
             this.photoBlocks.clear();
             for (int a = 0; a < this.currentPage.cached_page.blocks.size(); a++) {
@@ -3533,7 +3533,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             });
             this.listView.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(View view, int position) {
-                    if (position == ArticleViewer.this.blocks.size() && ArticleViewer.this.previewsReqId == 0) {
+                    if (position == ArticleViewer.this.blocks.size() && ArticleViewer.this.currentPage != null && ArticleViewer.this.previewsReqId == 0) {
                         User user = MessagesController.getInstance().getUser("previews");
                         if (user != null) {
                             ArticleViewer.this.openPreviewsChat(user, ArticleViewer.this.currentPage.id);
@@ -3906,22 +3906,24 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 public void run(TLObject response, TL_error error) {
                     if (response instanceof TL_webPage) {
                         final TL_webPage webPage = (TL_webPage) response;
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == messageObject.messageOwner.media.webpage) {
-                                    messageObject.messageOwner.media.webpage = webPage;
-                                    ArticleViewer.this.pagesStack.set(0, webPage);
-                                    if (ArticleViewer.this.pagesStack.size() == 1) {
-                                        ArticleViewer.this.currentPage = webPage;
-                                        ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + ArticleViewer.this.currentPage.id).commit();
-                                        ArticleViewer.this.updateInterfaceForCurrentPage(false);
+                        if (webPage.cached_page != null) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    if (!ArticleViewer.this.pagesStack.isEmpty() && ArticleViewer.this.pagesStack.get(0) == messageObject.messageOwner.media.webpage && webPage.cached_page != null) {
+                                        messageObject.messageOwner.media.webpage = webPage;
+                                        ArticleViewer.this.pagesStack.set(0, webPage);
+                                        if (ArticleViewer.this.pagesStack.size() == 1) {
+                                            ArticleViewer.this.currentPage = webPage;
+                                            ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().remove("article" + ArticleViewer.this.currentPage.id).commit();
+                                            ArticleViewer.this.updateInterfaceForCurrentPage(false);
+                                        }
                                     }
                                 }
-                            }
-                        });
-                        HashMap<Long, WebPage> webpages = new HashMap();
-                        webpages.put(Long.valueOf(webPage.id), webPage);
-                        MessagesStorage.getInstance().putWebPages(webpages);
+                            });
+                            HashMap<Long, WebPage> webpages = new HashMap();
+                            webpages.put(Long.valueOf(webPage.id), webPage);
+                            MessagesStorage.getInstance().putWebPages(webpages);
+                        }
                     }
                 }
             });

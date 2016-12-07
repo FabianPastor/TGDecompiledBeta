@@ -26,13 +26,14 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer.DefaultLoadControl;
-import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
-import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
+import org.telegram.tgnet.TLRPC.TL_inputStickerSetShortName;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.StickerCell;
@@ -46,7 +47,7 @@ public class StickerPreviewViewer {
     private ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
     private ImageReceiver centerImage = new ImageReceiver();
     private FrameLayoutDrawer containerView;
-    private TL_messages_stickerSet currentSet;
+    private InputStickerSet currentSet;
     private Document currentSticker;
     private View currentStickerPreviewCell;
     private StickerPreviewViewerDelegate delegate;
@@ -100,7 +101,7 @@ public class StickerPreviewViewer {
     }
 
     public interface StickerPreviewViewerDelegate {
-        void openSet(TL_messages_stickerSet tL_messages_stickerSet);
+        void openSet(InputStickerSet inputStickerSet);
 
         void sentSticker(Document document);
     }
@@ -383,30 +384,43 @@ public class StickerPreviewViewer {
 
     public void open(Document sticker, boolean isRecent) {
         if (this.parentActivity != null && sticker != null) {
-            TL_messages_stickerSet newSet = null;
+            InputStickerSet newSet = null;
             if (isRecent) {
-                for (int a = 0; a < sticker.attributes.size(); a++) {
+                int a = 0;
+                while (a < sticker.attributes.size()) {
                     DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
                     if (attribute instanceof TL_documentAttributeSticker) {
                         if (attribute.stickerset.id != 0) {
-                            newSet = StickersQuery.getStickerSetById(Long.valueOf(attribute.stickerset.id));
+                            newSet = new TL_inputStickerSetID();
+                            newSet.id = attribute.stickerset.id;
+                            newSet.access_hash = attribute.stickerset.access_hash;
                         } else {
-                            newSet = StickersQuery.getStickerSetByName(attribute.stickerset.short_name);
+                            newSet = new TL_inputStickerSetShortName();
+                            newSet.short_name = attribute.stickerset.short_name;
+                            newSet.access_hash = attribute.stickerset.access_hash;
                         }
+                        if (!(newSet == null || this.currentSet == newSet)) {
+                            if (this.visibleDialog != null) {
+                                this.visibleDialog.setOnDismissListener(null);
+                                this.visibleDialog.dismiss();
+                            }
+                            AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                            AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+                        }
+                    } else {
+                        a++;
                     }
                 }
-                if (!(newSet == null || this.currentSet == newSet)) {
-                    try {
-                        if (this.visibleDialog != null) {
-                            this.visibleDialog.setOnDismissListener(null);
-                            this.visibleDialog.dismiss();
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.setOnDismissListener(null);
+                        this.visibleDialog.dismiss();
                     }
-                    AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
                 }
+                AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
             }
             this.currentSet = newSet;
             this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", true);
@@ -439,6 +453,14 @@ public class StickerPreviewViewer {
             this.showProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
             this.lastUpdateTime = System.currentTimeMillis();
             this.containerView.invalidate();
+            try {
+                if (this.visibleDialog != null) {
+                    this.visibleDialog.dismiss();
+                    this.visibleDialog = null;
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
             this.currentSticker = null;
             this.currentSet = null;
             this.delegate = null;
