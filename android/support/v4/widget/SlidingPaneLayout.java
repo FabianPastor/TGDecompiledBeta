@@ -37,7 +37,6 @@ import android.view.accessibility.AccessibilityEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SlidingPaneLayout extends ViewGroup {
@@ -553,7 +552,6 @@ public class SlidingPaneLayout extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
-        int childHeightSpec;
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -580,7 +578,7 @@ public class SlidingPaneLayout extends ViewGroup {
             case Integer.MIN_VALUE:
                 maxLayoutHeight = (heightSize - getPaddingTop()) - getPaddingBottom();
                 break;
-            case C.ENCODING_PCM_32BIT /*1073741824*/:
+            case 1073741824:
                 maxLayoutHeight = (heightSize - getPaddingTop()) - getPaddingBottom();
                 layoutHeight = maxLayoutHeight;
                 break;
@@ -596,6 +594,7 @@ public class SlidingPaneLayout extends ViewGroup {
         this.mSlideableView = null;
         for (i = 0; i < childCount; i++) {
             int childWidthSpec;
+            int childHeightSpec;
             View child = getChildAt(i);
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
             if (child.getVisibility() == 8) {
@@ -610,16 +609,16 @@ public class SlidingPaneLayout extends ViewGroup {
                 if (lp.width == -2) {
                     childWidthSpec = MeasureSpec.makeMeasureSpec(widthAvailable - horizontalMargin, Integer.MIN_VALUE);
                 } else if (lp.width == -1) {
-                    childWidthSpec = MeasureSpec.makeMeasureSpec(widthAvailable - horizontalMargin, C.ENCODING_PCM_32BIT);
+                    childWidthSpec = MeasureSpec.makeMeasureSpec(widthAvailable - horizontalMargin, NUM);
                 } else {
-                    childWidthSpec = MeasureSpec.makeMeasureSpec(lp.width, C.ENCODING_PCM_32BIT);
+                    childWidthSpec = MeasureSpec.makeMeasureSpec(lp.width, NUM);
                 }
                 if (lp.height == -2) {
                     childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, Integer.MIN_VALUE);
                 } else if (lp.height == -1) {
-                    childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, C.ENCODING_PCM_32BIT);
+                    childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, NUM);
                 } else {
-                    childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, C.ENCODING_PCM_32BIT);
+                    childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, NUM);
                 }
                 child.measure(childWidthSpec, childHeightSpec);
                 int childWidth = child.getMeasuredWidth();
@@ -648,35 +647,35 @@ public class SlidingPaneLayout extends ViewGroup {
                         if (!canSlide || child == this.mSlideableView) {
                             if (lp.weight > 0.0f) {
                                 if (lp.width != 0) {
-                                    childHeightSpec = MeasureSpec.makeMeasureSpec(child.getMeasuredHeight(), C.ENCODING_PCM_32BIT);
+                                    childHeightSpec = MeasureSpec.makeMeasureSpec(child.getMeasuredHeight(), NUM);
                                 } else if (lp.height == -2) {
                                     childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, Integer.MIN_VALUE);
                                 } else if (lp.height == -1) {
-                                    childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, C.ENCODING_PCM_32BIT);
+                                    childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, NUM);
                                 } else {
-                                    childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, C.ENCODING_PCM_32BIT);
+                                    childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, NUM);
                                 }
                                 if (canSlide) {
                                     int newWidth = widthAvailable - (lp.leftMargin + lp.rightMargin);
-                                    childWidthSpec = MeasureSpec.makeMeasureSpec(newWidth, C.ENCODING_PCM_32BIT);
+                                    childWidthSpec = MeasureSpec.makeMeasureSpec(newWidth, NUM);
                                     if (measuredWidth != newWidth) {
                                         child.measure(childWidthSpec, childHeightSpec);
                                     }
                                 } else {
-                                    child.measure(MeasureSpec.makeMeasureSpec(measuredWidth + ((int) ((lp.weight * ((float) Math.max(0, widthRemaining))) / weightSum)), C.ENCODING_PCM_32BIT), childHeightSpec);
+                                    child.measure(MeasureSpec.makeMeasureSpec(measuredWidth + ((int) ((lp.weight * ((float) Math.max(0, widthRemaining))) / weightSum)), NUM), childHeightSpec);
                                 }
                             }
                         } else if (lp.width < 0 && (measuredWidth > fixedPanelWidthLimit || lp.weight > 0.0f)) {
                             if (!skippedFirstPass) {
-                                childHeightSpec = MeasureSpec.makeMeasureSpec(child.getMeasuredHeight(), C.ENCODING_PCM_32BIT);
+                                childHeightSpec = MeasureSpec.makeMeasureSpec(child.getMeasuredHeight(), NUM);
                             } else if (lp.height == -2) {
                                 childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, Integer.MIN_VALUE);
                             } else if (lp.height == -1) {
-                                childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, C.ENCODING_PCM_32BIT);
+                                childHeightSpec = MeasureSpec.makeMeasureSpec(maxLayoutHeight, NUM);
                             } else {
-                                childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, C.ENCODING_PCM_32BIT);
+                                childHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, NUM);
                             }
-                            child.measure(MeasureSpec.makeMeasureSpec(fixedPanelWidthLimit, C.ENCODING_PCM_32BIT), childHeightSpec);
+                            child.measure(MeasureSpec.makeMeasureSpec(fixedPanelWidthLimit, NUM), childHeightSpec);
                         }
                     }
                 }

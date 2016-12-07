@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class BackDrawable extends Drawable {
@@ -90,7 +91,7 @@ public class BackDrawable extends Drawable {
             canvas.rotate((((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation) + 135.0f);
             rotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
         } else {
-            canvas.rotate(((float) (this.reverseAngle ? -225 : 135)) * this.currentRotation);
+            canvas.rotate(((float) (this.reverseAngle ? -225 : TsExtractor.TS_STREAM_TYPE_E_AC3)) * this.currentRotation);
         }
         canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * rotation), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         float startYDiff = (float) (-AndroidUtilities.dp(0.5f));

@@ -36,8 +36,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 
 public class zzrh implements Callback {
     public static final Status AG = new Status(4, "Sign-out occurred while this API call was in progress.");
@@ -320,13 +320,13 @@ public class zzrh implements Callback {
     }
 
     private zzrh(Context context, GoogleApiAvailability googleApiAvailability) {
-        this.Ag = HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS;
+        this.Ag = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
         this.Af = 120000;
         this.AI = 10000;
         this.AK = -1;
         this.AL = new AtomicInteger(1);
         this.AM = new AtomicInteger(0);
-        this.zj = new ConcurrentHashMap(5, AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, 1);
+        this.zj = new ConcurrentHashMap(5, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 1);
         this.AN = null;
         this.AO = new com.google.android.gms.common.util.zza();
         this.AP = new com.google.android.gms.common.util.zza();

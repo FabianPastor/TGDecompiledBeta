@@ -12,7 +12,8 @@ import android.os.Message;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 final class zzm extends zzl implements Callback {
     private final HashMap<zza, zzb> En = new HashMap();
@@ -144,7 +145,7 @@ final class zzm extends zzl implements Callback {
         @TargetApi(14)
         public void zzhw(String str) {
             this.mState = 3;
-            this.Eu = this.Ew.Eo.zza(this.Ew.zzatc, str, this.Ev.zzawe(), this.Es, 129);
+            this.Eu = this.Ew.Eo.zza(this.Ew.zzatc, str, this.Ev.zzawe(), this.Es, TsExtractor.TS_STREAM_TYPE_AC3);
             if (!this.Eu) {
                 this.mState = 2;
                 try {
@@ -165,7 +166,7 @@ final class zzm extends zzl implements Callback {
         this.zzatc = context.getApplicationContext();
         this.mHandler = new Handler(context.getMainLooper(), this);
         this.Eo = com.google.android.gms.common.stats.zza.zzaxr();
-        this.Ep = HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS;
+        this.Ep = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     }
 
     private boolean zza(zza com_google_android_gms_common_internal_zzm_zza, ServiceConnection serviceConnection, String str) {

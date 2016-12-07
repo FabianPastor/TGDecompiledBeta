@@ -4,7 +4,7 @@ import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.boxes.mp4.samplegrouping.GroupEntry;
 import java.nio.ByteBuffer;
-import org.telegram.messenger.exoplayer.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public class SyncSampleEntry extends GroupEntry {
     public static final String TYPE = "sync";

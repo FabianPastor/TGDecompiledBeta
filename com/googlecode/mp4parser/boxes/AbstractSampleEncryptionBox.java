@@ -18,7 +18,7 @@ import java.util.List;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
-import org.telegram.messenger.exoplayer.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public abstract class AbstractSampleEncryptionBox extends AbstractFullBox {
     private static final /* synthetic */ StaticPart ajc$tjp_0 = null;

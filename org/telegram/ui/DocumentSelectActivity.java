@@ -29,14 +29,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -45,6 +48,7 @@ import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.Cells.GreySectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
@@ -82,6 +86,7 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     };
     private boolean receiverRegistered = false;
+    private ArrayList<ListItem> recentItems = new ArrayList();
     private boolean scrolling;
     private HashMap<String, ListItem> selectedFiles = new HashMap();
     private NumberTextView selectedMessagesCountTextView;
@@ -104,6 +109,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     private class ListItem {
+        long date;
         String ext;
         File file;
         int icon;
@@ -125,11 +131,24 @@ public class DocumentSelectActivity extends BaseFragment {
         }
 
         public int getCount() {
-            return DocumentSelectActivity.this.items.size();
+            int count = DocumentSelectActivity.this.items.size();
+            if (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) {
+                return count;
+            }
+            return count + (DocumentSelectActivity.this.recentItems.size() + 1);
         }
 
-        public Object getItem(int position) {
-            return DocumentSelectActivity.this.items.get(position);
+        public ListItem getItem(int position) {
+            if (position < DocumentSelectActivity.this.items.size()) {
+                return (ListItem) DocumentSelectActivity.this.items.get(position);
+            }
+            if (!(!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty() || position == DocumentSelectActivity.this.items.size())) {
+                position -= DocumentSelectActivity.this.items.size() + 1;
+                if (position < DocumentSelectActivity.this.recentItems.size()) {
+                    return (ListItem) DocumentSelectActivity.this.recentItems.get(position);
+                }
+            }
+            return null;
         }
 
         public long getItemId(int position) {
@@ -140,28 +159,30 @@ public class DocumentSelectActivity extends BaseFragment {
             return 2;
         }
 
-        public int getItemViewType(int pos) {
-            return ((ListItem) DocumentSelectActivity.this.items.get(pos)).subtitle.length() > 0 ? 0 : 1;
+        public int getItemViewType(int position) {
+            return getItem(position) != null ? 1 : 0;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View view, ViewGroup parent) {
             boolean z = true;
-            if (convertView == null) {
-                convertView = new SharedDocumentCell(this.mContext);
-            }
-            SharedDocumentCell textDetailCell = (SharedDocumentCell) convertView;
-            ListItem item = (ListItem) DocumentSelectActivity.this.items.get(position);
-            if (item.icon != 0) {
-                ((SharedDocumentCell) convertView).setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, item.icon);
-            } else {
-                ((SharedDocumentCell) convertView).setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0);
-            }
-            if (item.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
-                if (DocumentSelectActivity.this.scrolling) {
-                    z = false;
+            ListItem item = getItem(position);
+            if (item != null) {
+                if (view == null) {
+                    view = new SharedDocumentCell(this.mContext);
                 }
-                textDetailCell.setChecked(false, z);
-            } else {
+                SharedDocumentCell documentCell = (SharedDocumentCell) view;
+                if (item.icon != 0) {
+                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, item.icon);
+                } else {
+                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0);
+                }
+                if (item.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                    if (DocumentSelectActivity.this.scrolling) {
+                        z = false;
+                    }
+                    documentCell.setChecked(false, z);
+                    return view;
+                }
                 boolean z2;
                 boolean containsKey = DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString());
                 if (DocumentSelectActivity.this.scrolling) {
@@ -169,10 +190,21 @@ public class DocumentSelectActivity extends BaseFragment {
                 } else {
                     z2 = true;
                 }
-                textDetailCell.setChecked(containsKey, z2);
+                documentCell.setChecked(containsKey, z2);
+                return view;
+            } else if (view != null) {
+                return view;
+            } else {
+                view = new GreySectionCell(this.mContext);
+                ((GreySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
+                return view;
             }
-            return convertView;
         }
+    }
+
+    public boolean onFragmentCreate() {
+        loadRecentFiles();
+        return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
@@ -219,6 +251,11 @@ public class DocumentSelectActivity extends BaseFragment {
                     ArrayList<String> files = new ArrayList();
                     files.addAll(DocumentSelectActivity.this.selectedFiles.keySet());
                     DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
+                    for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
+                        item.date = System.currentTimeMillis();
+                    }
+                    DocumentSelectActivity.this.recentItems.addAll(0, DocumentSelectActivity.this.selectedFiles.values());
+                    DocumentSelectActivity.this.saveRecentFiles();
                 }
             }
         });
@@ -257,10 +294,13 @@ public class DocumentSelectActivity extends BaseFragment {
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
-                if (DocumentSelectActivity.this.actionBar.isActionModeShowed() || i < 0 || i >= DocumentSelectActivity.this.items.size()) {
+                if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
                     return false;
                 }
-                ListItem item = (ListItem) DocumentSelectActivity.this.items.get(i);
+                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(i);
+                if (item == null) {
+                    return false;
+                }
                 File file = item.file;
                 if (!(file == null || file.isDirectory())) {
                     if (!file.canRead()) {
@@ -296,8 +336,8 @@ public class DocumentSelectActivity extends BaseFragment {
         });
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i >= 0 && i < DocumentSelectActivity.this.items.size()) {
-                    ListItem item = (ListItem) DocumentSelectActivity.this.items.get(i);
+                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(i);
+                if (item != null) {
                     File file = item.file;
                     HistoryEntry he;
                     if (file == null) {
@@ -357,6 +397,9 @@ public class DocumentSelectActivity extends BaseFragment {
                                 ArrayList<String> files = new ArrayList();
                                 files.add(file.getAbsolutePath());
                                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
+                                item.date = System.currentTimeMillis();
+                                DocumentSelectActivity.this.recentItems.add(0, item);
+                                DocumentSelectActivity.this.saveRecentFiles();
                             }
                         }
                     }
@@ -365,6 +408,51 @@ public class DocumentSelectActivity extends BaseFragment {
         });
         listRoots();
         return this.fragmentView;
+    }
+
+    public void loadRecentFiles() {
+        Set<String> recent = ApplicationLoader.applicationContext.getSharedPreferences("recentfiles", 0).getStringSet("files", null);
+        if (recent != null) {
+            for (String path : recent) {
+                String path2;
+                long date;
+                int index = path2.indexOf("|");
+                if (index != -1) {
+                    date = Utilities.parseLong(path2).longValue();
+                    path2 = path2.substring(index + 1);
+                } else {
+                    date = 0;
+                }
+                File file = new File(path2);
+                ListItem item = new ListItem();
+                item.title = file.getName();
+                item.file = file;
+                item.date = date;
+                String fname = file.getName();
+                String[] sp = fname.split("\\.");
+                item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
+                item.subtitle = AndroidUtilities.formatFileSize(file.length());
+                fname = fname.toLowerCase();
+                if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
+                    item.thumb = file.getAbsolutePath();
+                }
+                this.recentItems.add(item);
+            }
+        }
+        Collections.sort(this.recentItems, new Comparator<ListItem>() {
+            public int compare(ListItem o1, ListItem o2) {
+                if (o1.date > o2.date) {
+                    return -1;
+                }
+                if (o1.date < o2.date) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+    }
+
+    public void saveRecentFiles() {
     }
 
     public void onResume() {

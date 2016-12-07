@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -162,7 +161,7 @@ public class StickerView extends EntityView {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec((int) this.baseSize.width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((int) this.baseSize.height, C.ENCODING_PCM_32BIT));
+        super.onMeasure(MeasureSpec.makeMeasureSpec((int) this.baseSize.width, NUM), MeasureSpec.makeMeasureSpec((int) this.baseSize.height, NUM));
     }
 
     protected Rect getSelectionBounds() {

@@ -28,8 +28,7 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ActionBarLayout extends FrameLayout {
@@ -270,7 +269,7 @@ public class ActionBarLayout extends FrameLayout {
                 layerShadowDrawable.setAlpha((int) (255.0f * alpha));
                 layerShadowDrawable.draw(canvas);
             } else if (child == this.containerViewBack) {
-                float opacity = Math.min(DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD, ((float) (width - translationX)) / ((float) width));
+                float opacity = Math.min(0.8f, ((float) (width - translationX)) / ((float) width));
                 if (opacity < 0.0f) {
                     opacity = 0.0f;
                 }

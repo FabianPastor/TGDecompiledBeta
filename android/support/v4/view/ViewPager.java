@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ViewPager extends ViewGroup {
@@ -1288,20 +1287,20 @@ public class ViewPager extends ViewGroup {
                     boolean consumeVertical = vgrav == 48 || vgrav == 80;
                     boolean consumeHorizontal = hgrav == 3 || hgrav == 5;
                     if (consumeVertical) {
-                        widthMode = C.ENCODING_PCM_32BIT;
+                        widthMode = NUM;
                     } else if (consumeHorizontal) {
-                        heightMode = C.ENCODING_PCM_32BIT;
+                        heightMode = NUM;
                     }
                     int widthSize = childWidthSize;
                     int heightSize = childHeightSize;
                     if (lp.width != -2) {
-                        widthMode = C.ENCODING_PCM_32BIT;
+                        widthMode = NUM;
                         if (lp.width != -1) {
                             widthSize = lp.width;
                         }
                     }
                     if (lp.height != -2) {
-                        heightMode = C.ENCODING_PCM_32BIT;
+                        heightMode = NUM;
                         if (lp.height != -1) {
                             heightSize = lp.height;
                         }
@@ -1315,8 +1314,8 @@ public class ViewPager extends ViewGroup {
                 }
             }
         }
-        this.mChildWidthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, C.ENCODING_PCM_32BIT);
-        this.mChildHeightMeasureSpec = MeasureSpec.makeMeasureSpec(childHeightSize, C.ENCODING_PCM_32BIT);
+        this.mChildWidthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, NUM);
+        this.mChildHeightMeasureSpec = MeasureSpec.makeMeasureSpec(childHeightSize, NUM);
         this.mInLayout = true;
         populate();
         this.mInLayout = false;
@@ -1326,7 +1325,7 @@ public class ViewPager extends ViewGroup {
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
                 if (lp == null || !lp.isDecor) {
-                    child.measure(MeasureSpec.makeMeasureSpec((int) (((float) childWidthSize) * lp.widthFactor), C.ENCODING_PCM_32BIT), this.mChildHeightMeasureSpec);
+                    child.measure(MeasureSpec.makeMeasureSpec((int) (((float) childWidthSize) * lp.widthFactor), NUM), this.mChildHeightMeasureSpec);
                 }
             }
         }
@@ -1356,7 +1355,6 @@ public class ViewPager extends ViewGroup {
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int i;
-        LayoutParams lp;
         int childLeft;
         int childTop;
         int count = getChildCount();
@@ -1369,6 +1367,7 @@ public class ViewPager extends ViewGroup {
         int scrollX = getScrollX();
         int decorCount = 0;
         for (i = 0; i < count; i++) {
+            LayoutParams lp;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
@@ -1424,7 +1423,7 @@ public class ViewPager extends ViewGroup {
                         childTop = paddingTop;
                         if (lp.needsMeasure) {
                             lp.needsMeasure = false;
-                            child.measure(MeasureSpec.makeMeasureSpec((int) (((float) childWidth) * lp.widthFactor), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((height - paddingTop) - paddingBottom, C.ENCODING_PCM_32BIT));
+                            child.measure(MeasureSpec.makeMeasureSpec((int) (((float) childWidth) * lp.widthFactor), NUM), MeasureSpec.makeMeasureSpec((height - paddingTop) - paddingBottom, NUM));
                         }
                         child.layout(childLeft, childTop, child.getMeasuredWidth() + childLeft, child.getMeasuredHeight() + childTop);
                     }

@@ -19,8 +19,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
 import java.lang.ref.WeakReference;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @DecorView
@@ -263,7 +261,7 @@ public class PagerTitleStrip extends ViewGroup {
             text = adapter.getPageTitle(currentItem + 1);
         }
         this.mNextText.setText(text);
-        int childWidthSpec = MeasureSpec.makeMeasureSpec(Math.max(0, (int) (((float) ((getWidth() - getPaddingLeft()) - getPaddingRight())) * DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD)), Integer.MIN_VALUE);
+        int childWidthSpec = MeasureSpec.makeMeasureSpec(Math.max(0, (int) (((float) ((getWidth() - getPaddingLeft()) - getPaddingRight())) * 0.8f)), Integer.MIN_VALUE);
         int childHeightSpec = MeasureSpec.makeMeasureSpec(Math.max(0, (getHeight() - getPaddingTop()) - getPaddingBottom()), Integer.MIN_VALUE);
         this.mPrevText.measure(childWidthSpec, childHeightSpec);
         this.mCurrText.measure(childWidthSpec, childHeightSpec);
@@ -364,18 +362,18 @@ public class PagerTitleStrip extends ViewGroup {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (MeasureSpec.getMode(widthMeasureSpec) != C.ENCODING_PCM_32BIT) {
+        if (MeasureSpec.getMode(widthMeasureSpec) != NUM) {
             throw new IllegalStateException("Must measure with an exact width");
         }
         int height;
         int heightPadding = getPaddingTop() + getPaddingBottom();
         int childHeightSpec = getChildMeasureSpec(heightMeasureSpec, heightPadding, -2);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int childWidthSpec = getChildMeasureSpec(widthMeasureSpec, (int) (((float) widthSize) * DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD), -2);
+        int childWidthSpec = getChildMeasureSpec(widthMeasureSpec, (int) (((float) widthSize) * 0.2f), -2);
         this.mPrevText.measure(childWidthSpec, childHeightSpec);
         this.mCurrText.measure(childWidthSpec, childHeightSpec);
         this.mNextText.measure(childWidthSpec, childHeightSpec);
-        if (MeasureSpec.getMode(heightMeasureSpec) == C.ENCODING_PCM_32BIT) {
+        if (MeasureSpec.getMode(heightMeasureSpec) == NUM) {
             height = MeasureSpec.getSize(heightMeasureSpec);
         } else {
             height = Math.max(getMinHeight(), this.mCurrText.getMeasuredHeight() + heightPadding);

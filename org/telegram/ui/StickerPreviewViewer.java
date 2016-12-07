@@ -25,7 +25,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -486,7 +485,7 @@ public class StickerPreviewViewer {
             int size = (int) (((float) Math.min(this.containerView.getWidth(), this.containerView.getHeight())) / 1.8f);
             canvas.translate((float) (this.containerView.getWidth() / 2), (float) Math.max((size / 2) + AndroidUtilities.statusBarHeight, (this.containerView.getHeight() - this.keyboardHeight) / 2));
             if (this.centerImage.getBitmap() != null) {
-                size = (int) (((float) size) * ((DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD * this.showProgress) / DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD));
+                size = (int) (((float) size) * ((0.8f * this.showProgress) / 0.8f));
                 this.centerImage.setAlpha(this.showProgress);
                 this.centerImage.setImageCoords((-size) / 2, (-size) / 2, size, size);
                 this.centerImage.draw(canvas);

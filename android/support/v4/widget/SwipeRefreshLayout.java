@@ -27,7 +27,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingParent, NestedScrollingChild {
@@ -440,8 +439,8 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             ensureTarget();
         }
         if (this.mTarget != null) {
-            this.mTarget.measure(MeasureSpec.makeMeasureSpec((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight(), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((getMeasuredHeight() - getPaddingTop()) - getPaddingBottom(), C.ENCODING_PCM_32BIT));
-            this.mCircleView.measure(MeasureSpec.makeMeasureSpec(this.mCircleDiameter, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(this.mCircleDiameter, C.ENCODING_PCM_32BIT));
+            this.mTarget.measure(MeasureSpec.makeMeasureSpec((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec((getMeasuredHeight() - getPaddingTop()) - getPaddingBottom(), NUM));
+            this.mCircleView.measure(MeasureSpec.makeMeasureSpec(this.mCircleDiameter, NUM), MeasureSpec.makeMeasureSpec(this.mCircleDiameter, NUM));
             this.mCircleViewIndex = -1;
             for (int index = 0; index < getChildCount(); index++) {
                 if (getChildAt(index) == this.mCircleView) {
@@ -672,7 +671,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
                 startProgressAlphaMaxAnimation();
             }
         }
-        this.mProgress.setStartEndTrim(0.0f, Math.min(0.8f, adjustedPercent * 0.8f));
+        this.mProgress.setStartEndTrim(0.0f, Math.min(MAX_PROGRESS_ANGLE, adjustedPercent * MAX_PROGRESS_ANGLE));
         this.mProgress.setArrowScale(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, adjustedPercent));
         this.mProgress.setProgressRotation(((-0.25f + (0.4f * adjustedPercent)) + (DECELERATE_INTERPOLATION_FACTOR * tensionPercent)) * DRAG_RATE);
         setTargetOffsetTopAndBottom(targetY - this.mCurrentTargetOffsetTop, true);

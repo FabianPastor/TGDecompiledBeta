@@ -32,8 +32,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -624,19 +623,19 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         if (this.drawLinkImageView) {
             canvas.save();
-            if ((this.scaled && this.scale != DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
+            if ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
                 long newTime = System.currentTimeMillis();
                 long dt = newTime - this.lastUpdateTime;
                 this.lastUpdateTime = newTime;
-                if (!this.scaled || this.scale == DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
+                if (!this.scaled || this.scale == 0.8f) {
                     this.scale += ((float) dt) / 400.0f;
                     if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
                         this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
                     }
                 } else {
                     this.scale -= ((float) dt) / 400.0f;
-                    if (this.scale < DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
-                        this.scale = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD;
+                    if (this.scale < 0.8f) {
+                        this.scale = 0.8f;
                     }
                 }
                 invalidate();

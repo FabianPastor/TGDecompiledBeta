@@ -11,7 +11,6 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.internal.zzrh;
-import org.telegram.messenger.exoplayer.C;
 
 public class GoogleApiActivity extends Activity implements OnCancelListener {
     protected int xD = 0;
@@ -21,7 +20,7 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
     }
 
     public static PendingIntent zza(Context context, PendingIntent pendingIntent, int i, boolean z) {
-        return PendingIntent.getActivity(context, 0, zzb(context, pendingIntent, i, z), C.SAMPLE_FLAG_DECODE_ONLY);
+        return PendingIntent.getActivity(context, 0, zzb(context, pendingIntent, i, z), 134217728);
     }
 
     private void zza(int i, zzrh com_google_android_gms_internal_zzrh) {

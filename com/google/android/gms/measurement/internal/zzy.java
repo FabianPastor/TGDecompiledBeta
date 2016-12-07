@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.exoplayer2.C;
 
 public class zzy extends zza {
     private final zzx aqw;

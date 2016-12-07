@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class LocationPoweredCell extends FrameLayout {
@@ -33,6 +32,6 @@ public class LocationPoweredCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), C.ENCODING_PCM_32BIT));
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 }

@@ -8,7 +8,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.util.SparseArray;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
     private static final String EXTRA_WAKE_LOCK_ID = "android.support.content.wakelockid";
@@ -30,7 +29,7 @@ public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
             } else {
                 WakeLock wl = ((PowerManager) context.getSystemService("power")).newWakeLock(1, "wake:" + comp.flattenToShortString());
                 wl.setReferenceCounted(false);
-                wl.acquire(HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS);
+                wl.acquire(60000);
                 mActiveWakeLocks.put(id, wl);
             }
         }

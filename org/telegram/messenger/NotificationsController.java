@@ -44,8 +44,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import org.aspectj.lang.JoinPoint;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -1510,7 +1509,7 @@ public class NotificationsController {
             } else if (this.pushDialogs.size() == 1) {
                 intent.putExtra("encId", (int) (dialog_id >> 32));
             }
-            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, C.ENCODING_PCM_32BIT);
+            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
             boolean replace = true;
             if (((int) dialog_id) == 0 || this.pushDialogs.size() > 1 || AndroidUtilities.needShowPasscode(false) || UserConfig.isWaitingForPasscodeEnter) {
                 name = LocaleController.getString("AppName", R.string.AppName);
@@ -1575,7 +1574,7 @@ public class NotificationsController {
             mBuilder.setStyle(inboxStyle);
             intent = new Intent(ApplicationLoader.applicationContext, NotificationDismissReceiver.class);
             intent.putExtra("messageDate", lastMessageObject.messageOwner.date);
-            mBuilder.setDeleteIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 1, intent, C.SAMPLE_FLAG_DECODE_ONLY));
+            mBuilder.setDeleteIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 1, intent, 134217728));
             if (photoPath != null) {
                 BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                 if (img != null) {
@@ -1645,9 +1644,9 @@ public class NotificationsController {
             if (VERSION.SDK_INT < 24 && UserConfig.passcodeHash.length() == 0 && hasMessagesToReply()) {
                 intent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
                 if (VERSION.SDK_INT <= 19) {
-                    mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, C.SAMPLE_FLAG_DECODE_ONLY));
+                    mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
                 } else {
-                    mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, C.SAMPLE_FLAG_DECODE_ONLY));
+                    mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, intent, 134217728));
                 }
             }
             showExtraNotifications(mBuilder, notifyAboutLast);
@@ -1745,7 +1744,7 @@ public class NotificationsController {
                     msgHeardIntent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
                     msgHeardIntent.putExtra("dialog_id", dialog_id);
                     msgHeardIntent.putExtra("max_id", max_id);
-                    unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgHeardIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+                    unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgHeardIntent, 134217728));
                     wearReplyAction = null;
                     if (!((ChatObject.isChannel(chat) && (chat == null || !chat.megagroup)) || AndroidUtilities.needShowPasscode(false) || UserConfig.isWaitingForPasscodeEnter)) {
                         msgReplyIntent = new Intent();
@@ -1753,11 +1752,11 @@ public class NotificationsController {
                         msgReplyIntent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
                         msgReplyIntent.putExtra("dialog_id", dialog_id);
                         msgReplyIntent.putExtra("max_id", max_id);
-                        unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgReplyIntent, C.SAMPLE_FLAG_DECODE_ONLY), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
+                        unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgReplyIntent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
                         intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
                         intent.putExtra("dialog_id", dialog_id);
                         intent.putExtra("max_id", max_id);
-                        replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), intent, C.SAMPLE_FLAG_DECODE_ONLY);
+                        replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), intent, 134217728);
                         remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
                         if (chat == null) {
                             replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
@@ -1797,7 +1796,7 @@ public class NotificationsController {
                     } else if (user != null) {
                         intent.putExtra("userId", user.id);
                     }
-                    contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, C.ENCODING_PCM_32BIT);
+                    contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
                     wearableExtender = new WearableExtender();
                     if (wearReplyAction != null) {
                         wearableExtender.addAction(wearReplyAction);
@@ -1850,18 +1849,18 @@ public class NotificationsController {
                     msgHeardIntent.setAction("org.telegram.messenger.ACTION_MESSAGE_HEARD");
                     msgHeardIntent.putExtra("dialog_id", dialog_id);
                     msgHeardIntent.putExtra("max_id", max_id);
-                    unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgHeardIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+                    unreadConvBuilder.setReadPendingIntent(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgHeardIntent, 134217728));
                     wearReplyAction = null;
                     msgReplyIntent = new Intent();
                     msgReplyIntent.addFlags(32);
                     msgReplyIntent.setAction("org.telegram.messenger.ACTION_MESSAGE_REPLY");
                     msgReplyIntent.putExtra("dialog_id", dialog_id);
                     msgReplyIntent.putExtra("max_id", max_id);
-                    unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgReplyIntent, C.SAMPLE_FLAG_DECODE_ONLY), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
+                    unreadConvBuilder.setReplyAction(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), msgReplyIntent, 134217728), new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build());
                     intent = new Intent(ApplicationLoader.applicationContext, WearReplyReceiver.class);
                     intent.putExtra("dialog_id", dialog_id);
                     intent.putExtra("max_id", max_id);
-                    replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), intent, C.SAMPLE_FLAG_DECODE_ONLY);
+                    replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, notificationId.intValue(), intent, 134217728);
                     remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
                     if (chat == null) {
                         replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
@@ -1900,7 +1899,7 @@ public class NotificationsController {
                     } else if (user != null) {
                         intent.putExtra("userId", user.id);
                     }
-                    contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, C.ENCODING_PCM_32BIT);
+                    contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM);
                     wearableExtender = new WearableExtender();
                     if (wearReplyAction != null) {
                         wearableExtender.addAction(wearReplyAction);

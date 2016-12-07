@@ -17,7 +17,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.telegram.messenger.exoplayer.ExoPlayer.Factory;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.volley.toolbox.HttpClientStack.HttpPatch;
 
 public class zzw implements zzy {
@@ -99,7 +99,7 @@ public class zzw implements zzy {
         zza(zzb);
         HttpParams params = zzb.getParams();
         int zzr = com_google_android_gms_internal_zzk_.zzr();
-        HttpConnectionParams.setConnectionTimeout(params, Factory.DEFAULT_MIN_REBUFFER_MS);
+        HttpConnectionParams.setConnectionTimeout(params, DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
         HttpConnectionParams.setSoTimeout(params, zzr);
         return this.zzcd.execute(zzb);
     }

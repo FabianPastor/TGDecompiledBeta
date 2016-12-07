@@ -65,8 +65,8 @@ import java.util.concurrent.Semaphore;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.video.InputSurface;
 import org.telegram.messenger.video.MP4Builder;
@@ -743,7 +743,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             if (this.audioFocus != 1) {
                 volume = 1.0f;
             } else {
-                volume = 0.2f;
+                volume = VOLUME_DUCK;
             }
             if (this.audioPlayer != null) {
                 this.audioPlayer.setVolume(volume, volume);
@@ -1097,7 +1097,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             this.stopMediaObserverRunnable = new StopMediaObserverRunnable();
         }
         this.stopMediaObserverRunnable.currentObserverToken = this.startObserverToken;
-        ApplicationLoader.applicationHandler.postDelayed(this.stopMediaObserverRunnable, HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS);
+        ApplicationLoader.applicationHandler.postDelayed(this.stopMediaObserverRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
     }
 
     public void processMediaObserver(Uri uri) {
@@ -1524,9 +1524,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 this.gravity[0] = (float) ((((double) this.gravity[0]) * alpha) + ((1.0d - alpha) * ((double) event.values[0])));
                 this.gravity[1] = (float) ((((double) this.gravity[1]) * alpha) + ((1.0d - alpha) * ((double) event.values[1])));
                 this.gravity[2] = (float) ((((double) this.gravity[2]) * alpha) + ((1.0d - alpha) * ((double) event.values[2])));
-                this.gravityFast[0] = (DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD * this.gravity[0]) + (0.19999999f * event.values[0]);
-                this.gravityFast[1] = (DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD * this.gravity[1]) + (0.19999999f * event.values[1]);
-                this.gravityFast[2] = (DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD * this.gravity[2]) + (0.19999999f * event.values[2]);
+                this.gravityFast[0] = (0.8f * this.gravity[0]) + (0.19999999f * event.values[0]);
+                this.gravityFast[1] = (0.8f * this.gravity[1]) + (0.19999999f * event.values[1]);
+                this.gravityFast[2] = (0.8f * this.gravity[2]) + (0.19999999f * event.values[2]);
                 this.linearAcceleration[0] = event.values[0] - this.gravity[0];
                 this.linearAcceleration[1] = event.values[1] - this.gravity[1];
                 this.linearAcceleration[2] = event.values[2] - this.gravity[2];
@@ -1738,13 +1738,13 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 Utilities.globalQueue.postRunnable(new Runnable() {
                     public void run() {
                         if (MediaController.this.gravitySensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.gravitySensor, DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS);
+                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.gravitySensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
                         }
                         if (MediaController.this.linearSensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.linearSensor, DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS);
+                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.linearSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
                         }
                         if (MediaController.this.accelerometerSensor != null) {
-                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.accelerometerSensor, DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS);
+                            MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.accelerometerSensor, DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
                         }
                         MediaController.this.sensorManager.registerListener(MediaController.this, MediaController.this.proximitySensor, 3);
                     }

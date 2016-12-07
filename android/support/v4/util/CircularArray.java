@@ -1,7 +1,5 @@
 package android.support.v4.util;
 
-import org.telegram.messenger.exoplayer.C;
-
 public final class CircularArray<E> {
     private int mCapacityBitmask;
     private E[] mElements;
@@ -31,7 +29,7 @@ public final class CircularArray<E> {
     public CircularArray(int minCapacity) {
         if (minCapacity < 1) {
             throw new IllegalArgumentException("capacity must be >= 1");
-        } else if (minCapacity > C.ENCODING_PCM_32BIT) {
+        } else if (minCapacity > NUM) {
             throw new IllegalArgumentException("capacity must be <= 2^30");
         } else {
             int arrayCapacity;

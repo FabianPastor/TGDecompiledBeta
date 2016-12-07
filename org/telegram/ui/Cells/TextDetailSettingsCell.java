@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -75,7 +74,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         if (this.needDivider) {
             i = 1;
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, C.ENCODING_PCM_32BIT));
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
     }
 
     public void setMultilineDetail(boolean value) {

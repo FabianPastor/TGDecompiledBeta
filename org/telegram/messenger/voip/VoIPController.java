@@ -33,13 +33,17 @@ public class VoIPController {
 
     private native void nativeConnect(long j);
 
+    private native void nativeDebugCtl(long j, int i, int i2);
+
     private native String nativeGetDebugString(long j);
+
+    private static native String nativeGetVersion();
 
     private native long nativeInit();
 
     private native void nativeRelease(long j);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i);
+    private native void nativeSetConfig(long j, double d, double d2, int i, int i2);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr);
 
@@ -141,8 +145,17 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, mute);
     }
 
-    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
+    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, int frameSize) {
         ensureNativeInstance();
-        nativeSetConfig(this.nativeInst, recvTimeout, initTimeout, dataSavingOption);
+        nativeSetConfig(this.nativeInst, recvTimeout, initTimeout, dataSavingOption, frameSize);
+    }
+
+    public void debugCtl(int request, int param) {
+        ensureNativeInstance();
+        nativeDebugCtl(this.nativeInst, request, param);
+    }
+
+    public static String getVersion() {
+        return nativeGetVersion();
     }
 }

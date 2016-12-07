@@ -26,7 +26,7 @@ import com.google.android.gms.measurement.AppMeasurement.zzf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public class zzae extends zzaa {
     private final zza avs;
@@ -178,7 +178,7 @@ public class zzae extends zzaa {
                     return;
                 }
                 this.avE = true;
-                zzaxr.zza(context, intent, this.avz.avs, 129);
+                zzaxr.zza(context, intent, this.avz.avs, (int) TsExtractor.TS_STREAM_TYPE_AC3);
             }
         }
 
@@ -290,7 +290,7 @@ public class zzae extends zzaa {
         } else {
             this.avx.add(runnable);
             zzx com_google_android_gms_measurement_internal_zzx = this.aqw;
-            this.avy.zzx(HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS);
+            this.avy.zzx(60000);
             zzadl();
         }
     }

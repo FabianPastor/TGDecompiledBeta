@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import java.util.Arrays;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.State;
@@ -592,7 +591,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             maxSize = 0;
             for (i = 0; i < count; i++) {
                 view = this.mSet[i];
-                measureChild(view, C.ENCODING_PCM_32BIT, true);
+                measureChild(view, NUM, true);
                 size = this.mOrientationHelper.getDecoratedMeasurement(view);
                 if (size > maxSize) {
                     maxSize = size;
@@ -610,11 +609,11 @@ public class GridLayoutManager extends LinearLayoutManager {
                 int horizontalInsets = ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin;
                 int totalSpaceInOther = getSpaceForSpanRange(lp.mSpanIndex, lp.mSpanSize);
                 if (this.mOrientation == 1) {
-                    wSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, C.ENCODING_PCM_32BIT, horizontalInsets, lp.width, false);
-                    hSpec = MeasureSpec.makeMeasureSpec(maxSize - verticalInsets, C.ENCODING_PCM_32BIT);
+                    wSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, NUM, horizontalInsets, lp.width, false);
+                    hSpec = MeasureSpec.makeMeasureSpec(maxSize - verticalInsets, NUM);
                 } else {
-                    wSpec = MeasureSpec.makeMeasureSpec(maxSize - horizontalInsets, C.ENCODING_PCM_32BIT);
-                    hSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, C.ENCODING_PCM_32BIT, verticalInsets, lp.height, false);
+                    wSpec = MeasureSpec.makeMeasureSpec(maxSize - horizontalInsets, NUM);
+                    hSpec = LayoutManager.getChildMeasureSpec(totalSpaceInOther, NUM, verticalInsets, lp.height, false);
                 }
                 measureChildWithDecorationsAndMargin(view, wSpec, hSpec, true);
             }

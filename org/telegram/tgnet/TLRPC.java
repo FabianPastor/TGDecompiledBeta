@@ -3,8 +3,7 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
@@ -15530,7 +15529,7 @@ public class TLRPC {
                 z = false;
             }
             this.post = z;
-            if ((this.flags & C.ENCODING_PCM_32BIT) != 0) {
+            if ((this.flags & NUM) != 0) {
                 z = true;
             } else {
                 z = false;
@@ -15623,7 +15622,7 @@ public class TLRPC {
             this.flags = this.silent ? this.flags | 8192 : this.flags & -8193;
             this.flags = this.post ? this.flags | 16384 : this.flags & -16385;
             if (this.with_my_score) {
-                i = this.flags | C.ENCODING_PCM_32BIT;
+                i = this.flags | NUM;
             } else {
                 i = this.flags & -NUM;
             }

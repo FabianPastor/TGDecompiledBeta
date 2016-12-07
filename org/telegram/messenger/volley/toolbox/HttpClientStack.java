@@ -21,7 +21,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.telegram.messenger.exoplayer.ExoPlayer.Factory;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.volley.AuthFailureError;
 import org.telegram.messenger.volley.Request;
 
@@ -70,7 +70,7 @@ public class HttpClientStack implements HttpStack {
         onPrepareRequest(httpRequest);
         HttpParams httpParams = httpRequest.getParams();
         int timeoutMs = request.getTimeoutMs();
-        HttpConnectionParams.setConnectionTimeout(httpParams, Factory.DEFAULT_MIN_REBUFFER_MS);
+        HttpConnectionParams.setConnectionTimeout(httpParams, DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
         HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
         return this.mClient.execute(httpRequest);
     }

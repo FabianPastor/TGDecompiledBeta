@@ -27,7 +27,6 @@ import net.hockeyapp.android.utils.AsyncTaskUtils;
 import net.hockeyapp.android.utils.HockeyLog;
 import net.hockeyapp.android.utils.PrefsUtil;
 import net.hockeyapp.android.utils.Util;
-import org.telegram.messenger.exoplayer.C;
 
 public class FeedbackManager {
     private static final String BROADCAST_ACTION = "net.hockeyapp.android.SCREENSHOT";
@@ -235,7 +234,7 @@ public class FeedbackManager {
         int iconId = currentActivity.getResources().getIdentifier("ic_menu_camera", "drawable", "android");
         Intent intent = new Intent();
         intent.setAction(BROADCAST_ACTION);
-        notificationManager.notify(1, Util.createNotification(currentActivity, PendingIntent.getBroadcast(currentActivity, 1, intent, C.ENCODING_PCM_32BIT), "HockeyApp Feedback", "Take a screenshot for your feedback.", iconId));
+        notificationManager.notify(1, Util.createNotification(currentActivity, PendingIntent.getBroadcast(currentActivity, 1, intent, NUM), "HockeyApp Feedback", "Take a screenshot for your feedback.", iconId));
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {

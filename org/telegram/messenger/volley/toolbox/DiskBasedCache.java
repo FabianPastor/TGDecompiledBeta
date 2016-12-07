@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import org.telegram.messenger.volley.Cache;
 import org.telegram.messenger.volley.Cache.Entry;
 import org.telegram.messenger.volley.VolleyLog;
@@ -129,7 +129,7 @@ public class DiskBasedCache implements Cache {
     }
 
     public DiskBasedCache(File rootDirectory, int maxCacheSizeInBytes) {
-        this.mEntries = new LinkedHashMap(16, AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, true);
+        this.mEntries = new LinkedHashMap(16, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
         this.mTotalSize = 0;
         this.mRootDirectory = rootDirectory;
         this.mMaxCacheSizeInBytes = maxCacheSizeInBytes;

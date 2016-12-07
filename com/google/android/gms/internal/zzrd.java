@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 
 public final class zzrd extends GoogleApiClient implements com.google.android.gms.internal.zzrm.zza {
     private final zzk Ab;
@@ -48,7 +48,7 @@ public final class zzrd extends GoogleApiClient implements com.google.android.gm
     final Queue<com.google.android.gms.internal.zzqo.zza<?, ?>> Ad = new LinkedList();
     private volatile boolean Ae;
     private long Af = 120000;
-    private long Ag = HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS;
+    private long Ag = ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
     private final zza Ah;
     zzrj Ai;
     final Map<zzc<?>, zze> Aj;

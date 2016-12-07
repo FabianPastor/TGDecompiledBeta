@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import org.telegram.messenger.exoplayer.C;
 
 public class Space extends View {
     public Space(Context context, AttributeSet attrs, int defStyle) {
@@ -35,7 +34,7 @@ public class Space extends View {
                 return Math.min(size, specSize);
             case 0:
                 return size;
-            case C.ENCODING_PCM_32BIT /*1073741824*/:
+            case 1073741824:
                 return specSize;
             default:
                 return result;

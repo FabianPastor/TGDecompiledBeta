@@ -18,7 +18,6 @@ import net.hockeyapp.android.objects.FeedbackMessage;
 import net.hockeyapp.android.objects.FeedbackResponse;
 import net.hockeyapp.android.utils.FeedbackParser;
 import net.hockeyapp.android.utils.Util;
-import org.telegram.messenger.exoplayer.C;
 
 public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
     public static final String BUNDLE_PARSE_FEEDBACK_RESPONSE = "parse_feedback_response";
@@ -107,7 +106,7 @@ public class ParseFeedbackTask extends AsyncTask<Void, Void, FeedbackResponse> {
             intent.setFlags(805306368);
             intent.setClass(context, activityClass);
             intent.putExtra("url", this.mUrlString);
-            Notification notification = Util.createNotification(context, PendingIntent.getActivity(context, 0, intent, C.ENCODING_PCM_32BIT), "HockeyApp Feedback", "A new answer to your feedback is available.", iconId);
+            Notification notification = Util.createNotification(context, PendingIntent.getActivity(context, 0, intent, NUM), "HockeyApp Feedback", "A new answer to your feedback is available.", iconId);
             if (notification != null) {
                 notificationManager.notify(2, notification);
             }

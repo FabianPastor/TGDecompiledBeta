@@ -3,6 +3,7 @@ package com.google.android.gms.internal;
 import android.support.v4.view.MotionEventCompat;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 
 public interface zzwc {
 
@@ -1038,7 +1039,7 @@ public interface zzwc {
                     case 114:
                         this.zzcs = com_google_android_gms_internal_zzars.readString();
                         continue;
-                    case 130:
+                    case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                         this.aii = com_google_android_gms_internal_zzars.readString();
                         continue;
                     case 136:

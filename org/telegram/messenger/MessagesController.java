@@ -27,9 +27,8 @@ import java.util.concurrent.Semaphore;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
-import org.telegram.messenger.exoplayer.ExoPlayer.Factory;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.query.BotQuery;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
@@ -330,7 +329,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public static final int UPDATE_MASK_USER_PRINT = 64;
     public boolean allowBigEmoji;
     public ArrayList<Integer> blockedUsers = new ArrayList();
-    public int callConnectTimeout = DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS;
+    public int callConnectTimeout = DefaultLoadControl.DEFAULT_MAX_BUFFER_MS;
     public int callPacketTimeout = 10000;
     public int callReceiveTimeout = 20000;
     public int callRingTimeout = 90000;
@@ -397,7 +396,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public int maxBroadcastCount = 100;
     public int maxEditTime = 172800;
     public int maxGroupCount = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
-    public int maxMegagroupCount = Factory.DEFAULT_MIN_REBUFFER_MS;
+    public int maxMegagroupCount = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
     public int maxRecentGifsCount = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
     public int maxRecentStickersCount = 30;
     private boolean migratingDialogs = false;
@@ -524,7 +523,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.callsEnabled = preferences.getBoolean("callsEnabled", false);
         this.callReceiveTimeout = preferences.getInt("callReceiveTimeout", 20000);
         this.callRingTimeout = preferences.getInt("callRingTimeout", 90000);
-        this.callConnectTimeout = preferences.getInt("callConnectTimeout", DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS);
+        this.callConnectTimeout = preferences.getInt("callConnectTimeout", DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
         this.callPacketTimeout = preferences.getInt("callPacketTimeout", 10000);
         String disabledFeaturesString = preferences.getString("disabledFeatures", null);
         if (disabledFeaturesString != null && disabledFeaturesString.length() != 0) {
@@ -2278,7 +2277,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 MessagesController.this.offlineSent = false;
                                 MessagesController.this.statusSettingState = 0;
                             } else if (MessagesController.this.lastStatusUpdateTime != 0) {
-                                MessagesController.this.lastStatusUpdateTime = MessagesController.this.lastStatusUpdateTime + HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS;
+                                MessagesController.this.lastStatusUpdateTime = MessagesController.this.lastStatusUpdateTime + ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
                             }
                             MessagesController.this.statusRequest = 0;
                         }
@@ -2296,7 +2295,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (error == null) {
                             MessagesController.this.offlineSent = true;
                         } else if (MessagesController.this.lastStatusUpdateTime != 0) {
-                            MessagesController.this.lastStatusUpdateTime = MessagesController.this.lastStatusUpdateTime + HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS;
+                            MessagesController.this.lastStatusUpdateTime = MessagesController.this.lastStatusUpdateTime + ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
                         }
                         MessagesController.this.statusRequest = 0;
                     }
@@ -2322,7 +2321,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 a++;
             }
         }
-        if (!(this.channelViewsToSend.size() == 0 && this.channelViewsToReload.size() == 0) && Math.abs(System.currentTimeMillis() - this.lastViewsCheckTime) >= HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS) {
+        if (!(this.channelViewsToSend.size() == 0 && this.channelViewsToReload.size() == 0) && Math.abs(System.currentTimeMillis() - this.lastViewsCheckTime) >= ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
             this.lastViewsCheckTime = System.currentTimeMillis();
             b = 0;
             while (b < 2) {
@@ -2412,7 +2411,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     int timeToRemove;
                     PrintingUser user = (PrintingUser) arr.get(a);
                     if (user.action instanceof TL_sendMessageGamePlayAction) {
-                        timeToRemove = DefaultLoadControl.DEFAULT_HIGH_WATERMARK_MS;
+                        timeToRemove = DefaultLoadControl.DEFAULT_MAX_BUFFER_MS;
                     } else {
                         timeToRemove = 5900;
                     }
@@ -3161,6 +3160,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3205,7 +3205,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3504,6 +3503,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -3515,8 +3516,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -3610,7 +3609,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3625,6 +3623,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -6158,6 +6157,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        ArrayList<Integer> arrayList3;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6211,7 +6211,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            ArrayList<Integer> arrayList3;
             Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("tmessages", "process update " + update);

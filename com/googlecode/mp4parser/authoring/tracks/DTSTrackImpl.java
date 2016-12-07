@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import org.telegram.messenger.exoplayer.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public class DTSTrackImpl extends AbstractTrack {
     private static final int BUFFER = 67108864;
@@ -119,7 +119,7 @@ public class DTSTrackImpl extends AbstractTrack {
         }
 
         private boolean nextFourEquals0x64582025() throws IOException {
-            return nextFourEquals((byte) 100, (byte) 88, ClosedCaptionCtrl.RESUME_CAPTION_LOADING, ClosedCaptionCtrl.ROLL_UP_CAPTIONS_2_ROWS);
+            return nextFourEquals((byte) 100, (byte) 88, (byte) 32, (byte) 37);
         }
 
         private boolean nextFourEquals0x7FFE8001() throws IOException {
@@ -140,7 +140,7 @@ public class DTSTrackImpl extends AbstractTrack {
         }
 
         private boolean nextFourEquals0x64582025orEof() throws IOException {
-            return nextFourEqualsOrEof((byte) 100, (byte) 88, ClosedCaptionCtrl.RESUME_CAPTION_LOADING, ClosedCaptionCtrl.ROLL_UP_CAPTIONS_2_ROWS);
+            return nextFourEqualsOrEof((byte) 100, (byte) 88, (byte) 32, (byte) 37);
         }
 
         private boolean nextFourEquals0x7FFE8001orEof() throws IOException {

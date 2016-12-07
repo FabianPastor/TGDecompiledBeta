@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Locale;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class NumberPicker extends LinearLayout {
@@ -731,10 +730,10 @@ public class NumberPicker extends LinearLayout {
         int mode = MeasureSpec.getMode(measureSpec);
         switch (mode) {
             case Integer.MIN_VALUE:
-                return MeasureSpec.makeMeasureSpec(Math.min(size, maxSize), C.ENCODING_PCM_32BIT);
+                return MeasureSpec.makeMeasureSpec(Math.min(size, maxSize), NUM);
             case 0:
-                return MeasureSpec.makeMeasureSpec(maxSize, C.ENCODING_PCM_32BIT);
-            case C.ENCODING_PCM_32BIT /*1073741824*/:
+                return MeasureSpec.makeMeasureSpec(maxSize, NUM);
+            case 1073741824:
                 return measureSpec;
             default:
                 throw new IllegalArgumentException("Unknown measure mode: " + mode);
@@ -763,7 +762,7 @@ public class NumberPicker extends LinearLayout {
             case 0:
                 result = size;
                 break;
-            case C.ENCODING_PCM_32BIT /*1073741824*/:
+            case 1073741824:
                 result = specSize;
                 break;
         }

@@ -56,7 +56,7 @@ public class TfrfBox extends AbstractFullBox {
     }
 
     public byte[] getUserType() {
-        return new byte[]{(byte) -44, Byte.MIN_VALUE, (byte) 126, (byte) -14, (byte) -54, (byte) 57, (byte) 70, (byte) -107, (byte) -114, (byte) 84, ClosedCaptionCtrl.ROLL_UP_CAPTIONS_3_ROWS, (byte) -53, (byte) -98, (byte) 70, (byte) -89, (byte) -97};
+        return new byte[]{(byte) -44, Byte.MIN_VALUE, (byte) 126, (byte) -14, (byte) -54, (byte) 57, (byte) 70, (byte) -107, (byte) -114, (byte) 84, (byte) 38, (byte) -53, (byte) -98, (byte) 70, (byte) -89, (byte) -97};
     }
 
     protected long getContentSize() {

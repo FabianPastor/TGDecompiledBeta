@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.telegram.messenger.exoplayer.C;
 
 class zza {
     static zza agO;
@@ -130,7 +129,7 @@ class zza {
                 intent.removeExtra(str);
             }
         }
-        return PendingIntent.getActivity(this.mContext, zzbnr(), intent, C.ENCODING_PCM_32BIT);
+        return PendingIntent.getActivity(this.mContext, zzbnr(), intent, NUM);
     }
 
     private int zzbnr() {

@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(16)

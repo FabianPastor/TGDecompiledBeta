@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MotionEventCompat;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -67,7 +68,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -130,6 +130,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private AvatarUpdater avatarUpdater = new AvatarUpdater();
     private int backgroundRow;
     private int cacheRow;
+    private int callsFrameSizeRow;
     private int clearLogsRow;
     private int contactsReimportRow;
     private int contactsSectionRow;
@@ -242,22 +243,26 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                                                         if (position != SettingsActivity.this.cacheRow) {
                                                                             if (position != SettingsActivity.this.privacyPolicyRow) {
                                                                                 if (position != SettingsActivity.this.emojiRow) {
-                                                                                    if (position == SettingsActivity.this.useLessDataForCallsRow) {
-                                                                                        value = null;
-                                                                                        switch (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0)) {
-                                                                                            case 0:
-                                                                                                value = LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever);
-                                                                                                break;
-                                                                                            case 1:
-                                                                                                value = LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile);
-                                                                                                break;
-                                                                                            case 2:
-                                                                                                value = LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways);
-                                                                                                break;
+                                                                                    if (position != SettingsActivity.this.useLessDataForCallsRow) {
+                                                                                        if (position == SettingsActivity.this.callsFrameSizeRow) {
+                                                                                            textCell.setTextAndValue("Audio frame size", ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipTestFrameSize", 60) + "", false);
+                                                                                            break;
                                                                                         }
-                                                                                        textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, false);
-                                                                                        break;
                                                                                     }
+                                                                                    value = null;
+                                                                                    switch (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0)) {
+                                                                                        case 0:
+                                                                                            value = LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever);
+                                                                                            break;
+                                                                                        case 1:
+                                                                                            value = LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile);
+                                                                                            break;
+                                                                                        case 2:
+                                                                                            value = LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways);
+                                                                                            break;
+                                                                                    }
+                                                                                    textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, true);
+                                                                                    break;
                                                                                 }
                                                                                 textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
                                                                                 break;
@@ -454,7 +459,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!checkBackground) {
                 return;
             }
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.wifiDownloadRow || position == SettingsActivity.this.mobileDownloadRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.roamingDownloadRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.wifiDownloadRow || position == SettingsActivity.this.mobileDownloadRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.roamingDownloadRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow || position == SettingsActivity.this.callsFrameSizeRow) {
                 if (holder.itemView.getBackground() == null) {
                     holder.itemView.setBackgroundResource(R.drawable.list_selector);
                 }
@@ -553,7 +558,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow) {
                 return 3;
             }
-            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow) {
+            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow || position == SettingsActivity.this.callsFrameSizeRow) {
                 return 2;
             }
             if (position == SettingsActivity.this.versionRow) {
@@ -712,8 +717,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             i = this.rowCount;
             this.rowCount = i + 1;
             this.useLessDataForCallsRow = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsFrameSizeRow = i;
         } else {
             this.useLessDataForCallsRow = -1;
+            this.callsFrameSizeRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -1166,9 +1175,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                     } else if (position == SettingsActivity.this.useLessDataForCallsRow) {
                         preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                        final SharedPreferences sharedPreferences = preferences;
+                        r1 = preferences;
                         i = position;
-                        Dialog dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever), LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile), LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways)}, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), preferences.getInt("VoipDataSaving", 0), new OnClickListener() {
+                        dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever), LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile), LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways)}, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), preferences.getInt("VoipDataSaving", 0), new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 int val = -1;
                                 switch (which) {
@@ -1183,8 +1192,46 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                         break;
                                 }
                                 if (val != -1) {
-                                    sharedPreferences.edit().putInt("VoipDataSaving", val).commit();
+                                    r1.edit().putInt("VoipDataSaving", val).commit();
                                 }
+                                if (SettingsActivity.this.listAdapter != null) {
+                                    SettingsActivity.this.listAdapter.notifyItemChanged(i);
+                                }
+                            }
+                        });
+                        SettingsActivity.this.setVisibleDialog(dlg);
+                        dlg.show();
+                    } else if (position == SettingsActivity.this.callsFrameSizeRow) {
+                        int sel;
+                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                        switch (preferences.getInt("VoipTestFrameSize", 60)) {
+                            case 20:
+                                sel = 0;
+                                break;
+                            case MotionEventCompat.AXIS_GENERIC_9 /*40*/:
+                                sel = 1;
+                                break;
+                            default:
+                                sel = 2;
+                                break;
+                        }
+                        r1 = preferences;
+                        i = position;
+                        dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{"20", "40", "60"}, "Frame size (ms)", sel, new OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                int val = 60;
+                                switch (which) {
+                                    case 0:
+                                        val = 20;
+                                        break;
+                                    case 1:
+                                        val = 40;
+                                        break;
+                                    case 2:
+                                        val = 60;
+                                        break;
+                                }
+                                r1.edit().putInt("VoipTestFrameSize", val).commit();
                                 if (SettingsActivity.this.listAdapter != null) {
                                     SettingsActivity.this.listAdapter.notifyItemChanged(i);
                                 }
@@ -1559,7 +1606,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.extraHeightView.setScaleY(diff);
             this.shadowView.setTranslationY((float) (this.extraHeight + newTop));
             this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.dp(29.5f)));
-            final boolean setVisible = diff > DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD;
+            final boolean setVisible = diff > 0.2f;
             if (setVisible != (this.writeButton.getTag() == null)) {
                 if (setVisible) {
                     this.writeButton.setTag(null);
@@ -1587,8 +1634,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     this.writeButtonAnimation.setInterpolator(new AccelerateInterpolator());
                     animatorSet = this.writeButtonAnimation;
                     animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD});
-                    animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD});
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{0.2f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{0.2f});
                     animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                 }

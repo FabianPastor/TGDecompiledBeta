@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import java.util.List;
-import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.Properties;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -1253,7 +1253,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     }
 
     boolean shouldMeasureTwice() {
-        return (getHeightMode() == C.ENCODING_PCM_32BIT || getWidthMode() == C.ENCODING_PCM_32BIT || !hasFlexibleChildInBothOrientations()) ? false : true;
+        return (getHeightMode() == NUM || getWidthMode() == NUM || !hasFlexibleChildInBothOrientations()) ? false : true;
     }
 
     int convertFocusDirectionToLayoutDirection(int focusDirection) {
@@ -1288,7 +1288,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
                     i2 = Integer.MIN_VALUE;
                 }
                 return i2;
-            case 130:
+            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 if (this.mOrientation == 1) {
                     i = 1;
                 }

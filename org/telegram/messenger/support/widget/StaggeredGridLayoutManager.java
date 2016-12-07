@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
-import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.Properties;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
@@ -1211,7 +1211,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     private void repositionToWrapContentIfNecessary() {
-        if (this.mSecondaryOrientation.getMode() != C.ENCODING_PCM_32BIT) {
+        if (this.mSecondaryOrientation.getMode() != NUM) {
             int i;
             View child;
             float maxSize = 0.0f;
@@ -1531,7 +1531,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             return spec;
         }
         int mode = MeasureSpec.getMode(spec);
-        if (mode == Integer.MIN_VALUE || mode == C.ENCODING_PCM_32BIT) {
+        if (mode == Integer.MIN_VALUE || mode == NUM) {
             return MeasureSpec.makeMeasureSpec(Math.max(0, (MeasureSpec.getSize(spec) - startInset) - endInset), mode);
         }
         return spec;
@@ -2534,7 +2534,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                     i2 = Integer.MIN_VALUE;
                 }
                 return i2;
-            case 130:
+            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 if (this.mOrientation == 1) {
                     i = 1;
                 }

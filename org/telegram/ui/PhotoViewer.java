@@ -19,7 +19,6 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -38,9 +37,7 @@ import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.TextureView;
-import android.view.TextureView.SurfaceTextureListener;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -87,10 +84,9 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.AspectRatioFrameLayout;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
-import org.telegram.messenger.exoplayer.util.PlayerControl;
+import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -140,8 +136,7 @@ import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.VideoPlayer;
-import org.telegram.ui.Components.VideoPlayer.ExtractorRendererBuilder;
-import org.telegram.ui.Components.VideoPlayer.Listener;
+import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 
 public class PhotoViewer implements NotificationCenterDelegate, OnGestureListener, OnDoubleTapListener {
     @SuppressLint({"StaticFieldLeak"})
@@ -271,7 +266,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private float pinchStartX;
     private float pinchStartY;
     private PhotoViewerProvider placeProvider;
-    private boolean playerNeedsPrepare;
     private RadialProgressView[] radialProgressViews = new RadialProgressView[3];
     private ImageReceiver rightImage = new ImageReceiver();
     private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
@@ -290,8 +284,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private Runnable updateProgressRunnable = new Runnable() {
         public void run() {
             if (!(PhotoViewer.this.videoPlayer == null || PhotoViewer.this.videoPlayerSeekbar == null || PhotoViewer.this.videoPlayerSeekbar.isDragging())) {
-                PlayerControl playerControl = PhotoViewer.this.videoPlayer.getPlayerControl();
-                PhotoViewer.this.videoPlayerSeekbar.setProgress(((float) playerControl.getCurrentPosition()) / ((float) playerControl.getDuration()));
+                PhotoViewer.this.videoPlayerSeekbar.setProgress(((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration()));
                 PhotoViewer.this.videoPlayerControlFrameLayout.invalidate();
                 PhotoViewer.this.updateVideoPlayerTime();
             }
@@ -591,11 +584,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     if (!PhotoViewer.this.captionEditText.isPopupView(child)) {
                         measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
                     } else if (!AndroidUtilities.isInMultiwindow) {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, C.ENCODING_PCM_32BIT));
+                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, NUM));
                     } else if (AndroidUtilities.isTablet()) {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight), C.ENCODING_PCM_32BIT));
+                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight), NUM));
                     } else {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, C.ENCODING_PCM_32BIT));
+                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, NUM));
                     }
                 }
             }
@@ -1079,7 +1072,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     setMeasuredDimension(widthSize, heightSize);
                     ViewGroup.LayoutParams layoutParams = PhotoViewer.this.animatingImageView.getLayoutParams();
                     PhotoViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
-                    PhotoViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(heightSize, C.ENCODING_PCM_32BIT));
+                    PhotoViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
                 }
 
                 protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -1461,7 +1454,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.videoPlayerSeekbar.setDelegate(new SeekBarDelegate() {
                     public void onSeekBarDrag(float progress) {
                         if (PhotoViewer.this.videoPlayer != null) {
-                            PhotoViewer.this.videoPlayer.getPlayerControl().seekTo((int) (((float) PhotoViewer.this.videoPlayer.getDuration()) * progress));
+                            PhotoViewer.this.videoPlayer.seekTo((long) ((int) (((float) PhotoViewer.this.videoPlayer.getDuration()) * progress)));
                         }
                     }
                 });
@@ -1482,7 +1475,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                         if (PhotoViewer.this.videoPlayer != null) {
                             duration = PhotoViewer.this.videoPlayer.getDuration();
-                            if (duration == -1) {
+                            if (duration == C.TIME_UNSET) {
                                 duration = 0;
                             }
                         } else {
@@ -1496,8 +1489,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         super.onLayout(changed, left, top, right, bottom);
                         float progress = 0.0f;
                         if (PhotoViewer.this.videoPlayer != null) {
-                            PlayerControl playerControl = PhotoViewer.this.videoPlayer.getPlayerControl();
-                            progress = ((float) playerControl.getCurrentPosition()) / ((float) playerControl.getDuration());
+                            progress = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
                         }
                         PhotoViewer.this.videoPlayerSeekbar.setProgress(progress);
                     }
@@ -1520,9 +1512,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             return;
                         }
                         if (PhotoViewer.this.isPlaying) {
-                            PhotoViewer.this.videoPlayer.getPlayerControl().pause();
+                            PhotoViewer.this.videoPlayer.pause();
                         } else {
-                            PhotoViewer.this.videoPlayer.getPlayerControl().start();
+                            PhotoViewer.this.videoPlayer.play();
                         }
                     }
                 });
@@ -1903,7 +1895,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.muteItem.setVisibility(0);
                 }
             }
-            if (total / 1000 == -1 || current == -1) {
+            if (total / 1000 == C.TIME_UNSET || current == C.TIME_UNSET) {
                 newText = "00:00 / 00:00";
             } else {
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(current / 60), Long.valueOf(current % 60), Long.valueOf(total / 60), Long.valueOf(total % 60)});
@@ -1924,30 +1916,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.containerView.addView(this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
                 this.videoTextureView = new TextureView(this.parentActivity);
                 this.videoTextureView.setOpaque(false);
-                this.videoTextureView.setSurfaceTextureListener(new SurfaceTextureListener() {
-                    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                        if (PhotoViewer.this.videoPlayer != null) {
-                            PhotoViewer.this.videoPlayer.setSurface(new Surface(PhotoViewer.this.videoTextureView.getSurfaceTexture()));
-                        }
-                    }
-
-                    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    }
-
-                    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                        if (PhotoViewer.this.videoPlayer != null) {
-                            PhotoViewer.this.videoPlayer.blockingClearSurface();
-                        }
-                        return true;
-                    }
-
-                    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-                        if (!PhotoViewer.this.textureUploaded) {
-                            PhotoViewer.this.textureUploaded = true;
-                            PhotoViewer.this.containerView.invalidate();
-                        }
-                    }
-                });
                 this.aspectRatioFrameLayout.addView(this.videoTextureView, LayoutHelper.createFrame(-1, -1, 17));
             }
             this.textureUploaded = false;
@@ -1958,11 +1926,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
             if (this.videoPlayer == null) {
                 long duration;
-                this.videoPlayer = new VideoPlayer(new ExtractorRendererBuilder(this.parentActivity, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36", Uri.fromFile(file)));
-                this.videoPlayer.addListener(new Listener() {
+                this.videoPlayer = new VideoPlayer();
+                this.videoPlayer.setTextureView(this.videoTextureView);
+                this.videoPlayer.setDelegate(new VideoPlayerDelegate() {
                     public void onStateChanged(boolean playWhenReady, int playbackState) {
                         if (PhotoViewer.this.videoPlayer != null) {
-                            if (playbackState == 5 || playbackState == 1) {
+                            if (playbackState == 4 || playbackState == 1) {
                                 try {
                                     PhotoViewer.this.parentActivity.getWindow().clearFlags(128);
                                 } catch (Throwable e) {
@@ -1975,19 +1944,19 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                     FileLog.e("tmessages", e2);
                                 }
                             }
-                            if (playbackState == 4 && PhotoViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
+                            if (playbackState == 3 && PhotoViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
                                 PhotoViewer.this.aspectRatioFrameLayout.setVisibility(0);
                             }
-                            if (!PhotoViewer.this.videoPlayer.getPlayerControl().isPlaying() || playbackState == 5) {
+                            if (!PhotoViewer.this.videoPlayer.isPlaying() || playbackState == 4) {
                                 if (PhotoViewer.this.isPlaying) {
                                     PhotoViewer.this.isPlaying = false;
                                     PhotoViewer.this.videoPlayButton.setImageResource(R.drawable.inline_video_play);
                                     AndroidUtilities.cancelRunOnUIThread(PhotoViewer.this.updateProgressRunnable);
-                                    if (playbackState == 5 && !PhotoViewer.this.videoPlayerSeekbar.isDragging()) {
+                                    if (playbackState == 4 && !PhotoViewer.this.videoPlayerSeekbar.isDragging()) {
                                         PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
                                         PhotoViewer.this.videoPlayerControlFrameLayout.invalidate();
                                         PhotoViewer.this.videoPlayer.seekTo(0);
-                                        PhotoViewer.this.videoPlayer.getPlayerControl().pause();
+                                        PhotoViewer.this.videoPlayer.pause();
                                     }
                                 }
                             } else if (!PhotoViewer.this.isPlaying) {
@@ -2013,23 +1982,26 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             PhotoViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
                         }
                     }
+
+                    public void onRenderedFirstFrame() {
+                        if (!PhotoViewer.this.textureUploaded) {
+                            PhotoViewer.this.textureUploaded = true;
+                            PhotoViewer.this.containerView.invalidate();
+                        }
+                    }
                 });
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
-                    if (duration == -1) {
+                    if (duration == C.TIME_UNSET) {
                         duration = 0;
                     }
                 } else {
                     duration = 0;
                 }
                 duration /= 1000;
-                int size = (int) Math.ceil((double) this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})));
-                this.playerNeedsPrepare = true;
+                int ceil = (int) Math.ceil((double) this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})));
             }
-            if (this.playerNeedsPrepare) {
-                this.videoPlayer.prepare();
-                this.playerNeedsPrepare = false;
-            }
+            this.videoPlayer.preparePlayer(Uri.fromFile(file));
             if (this.videoPlayerControlFrameLayout != null) {
                 if (this.currentBotInlineResult != null && (this.currentBotInlineResult.type.equals(MimeTypes.BASE_TYPE_VIDEO) || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
                     this.bottomLayout.setVisibility(0);
@@ -2043,16 +2015,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.menuItem.showSubItem(10);
                 }
             }
-            if (this.videoTextureView.getSurfaceTexture() != null) {
-                this.videoPlayer.setSurface(new Surface(this.videoTextureView.getSurfaceTexture()));
-            }
             this.videoPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 
     private void releasePlayer() {
         if (this.videoPlayer != null) {
-            this.videoPlayer.release();
+            this.videoPlayer.releasePlayer();
             this.videoPlayer = null;
         }
         try {

@@ -35,7 +35,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
@@ -156,7 +155,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 case 0:
                     view = new StickerEmojiCell(this.context) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), C.ENCODING_PCM_32BIT));
+                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                         }
                     };
                     break;
@@ -385,7 +384,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     StickersAlert.this.emptyView.setPadding(0, padding, 0, 0);
                     StickersAlert.this.ignoreLayout = false;
                 }
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), C.ENCODING_PCM_32BIT));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {

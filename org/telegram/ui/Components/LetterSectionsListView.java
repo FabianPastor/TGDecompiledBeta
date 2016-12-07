@@ -16,7 +16,6 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Adapters.BaseSectionsAdapter;
 
@@ -158,7 +157,7 @@ public class LetterSectionsListView extends ListView implements OnScrollListener
         if (header.isLayoutRequested() || forceLayout) {
             LayoutParams layoutParams = header.getLayoutParams();
             try {
-                header.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(layoutParams.height, C.ENCODING_PCM_32BIT));
+                header.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
             } catch (Throwable e) {
                 FileLog.e("tmessages", e);
             }

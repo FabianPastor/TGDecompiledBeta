@@ -66,8 +66,8 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
 import org.telegram.messenger.query.StickersQuery;
@@ -270,11 +270,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.scale <= 0.5f) {
                 sc = this.scale / 0.5f;
                 alpha = sc;
-            } else if (this.scale <= AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION) {
+            } else if (this.scale <= AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) {
                 sc = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (((this.scale - 0.5f) / 0.25f) * 0.1f);
                 alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
             } else {
-                sc = 0.9f + (((this.scale - AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
+                sc = 0.9f + (((this.scale - AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
                 alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
             }
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
@@ -636,7 +636,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;
                     }
-                    if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && message.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS && !ChatActivityEnterView.this.ignoreTextChange) {
+                    if (ChatActivityEnterView.this.editingMessageObject == null && !ChatActivityEnterView.this.canWriteToChannel && message.length() != 0 && ChatActivityEnterView.this.lastTypingTimeSend < System.currentTimeMillis() - ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS && !ChatActivityEnterView.this.ignoreTextChange) {
                         int currentTime = ConnectionsManager.getInstance().getCurrentTime();
                         User currentUser = null;
                         if (((int) ChatActivityEnterView.this.dialog_id) > 0) {

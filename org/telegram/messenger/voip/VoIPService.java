@@ -58,8 +58,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.VoIPController.ConnectionStateListener;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
@@ -217,7 +216,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         try {
             this.controller = new VoIPController();
             this.controller.setConnectionStateListener(this);
-            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0));
+            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, preferences.getInt("VoipDataSaving", 0), preferences.getInt("VoipTestFrameSize", 60));
             this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
             this.cpuWakelock.acquire();
             IntentFilter filter = new IntentFilter();
@@ -694,7 +694,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             int nextInt = Utilities.random.nextInt();
             this.endHash = nextInt;
             endIntent.putExtra("end_hash", nextInt);
-            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
             builder.setPriority(2);
         }
         if (VERSION.SDK_INT >= 17) {
@@ -740,11 +740,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             Intent answerIntent = new Intent();
             answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
             answerIntent.putExtra("end_hash", this.endHash);
-            builder.addAction(R.drawable.ic_call_white_24dp, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall), PendingIntent.getBroadcast(this, 0, answerIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+            builder.addAction(R.drawable.ic_call_white_24dp, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall), PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
             Intent endIntent = new Intent();
             endIntent.setAction(getPackageName() + ".END_CALL");
             endIntent.putExtra("end_hash", this.endHash);
-            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall), PendingIntent.getBroadcast(this, 0, endIntent, C.SAMPLE_FLAG_DECODE_ONLY));
+            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall), PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
             builder.setPriority(2);
         }
         if (VERSION.SDK_INT >= 17) {
@@ -968,6 +968,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         Iterator it = this.stateListeners.iterator();
         while (it.hasNext()) {
             ((StateListener) it.next()).onAudioSettingsChanged();
+        }
+    }
+
+    public void debugCtl(int request, int param) {
+        if (this.controller != null) {
+            this.controller.debugCtl(request, param);
         }
     }
 }

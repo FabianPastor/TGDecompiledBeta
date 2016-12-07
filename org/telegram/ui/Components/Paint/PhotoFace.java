@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.Landmark;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Size;
 
@@ -46,7 +45,7 @@ public class PhotoFace {
             this.eyesDistance = (float) Math.hypot((double) (rightEyePoint.x - leftEyePoint.x), (double) (rightEyePoint.y - leftEyePoint.y));
             this.angle = (float) Math.toDegrees(3.141592653589793d + Math.atan2((double) (rightEyePoint.y - leftEyePoint.y), (double) (rightEyePoint.x - leftEyePoint.x)));
             this.width = this.eyesDistance * 2.35f;
-            float foreheadHeight = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD * this.eyesDistance;
+            float foreheadHeight = 0.8f * this.eyesDistance;
             float upAngle = (float) Math.toRadians((double) (this.angle - 90.0f));
             this.foreheadPoint = new Point(this.eyesCenterPoint.x + (((float) Math.cos((double) upAngle)) * foreheadHeight), this.eyesCenterPoint.y + (((float) Math.sin((double) upAngle)) * foreheadHeight));
         }

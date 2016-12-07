@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.messenger.FileLoader.FileLoaderDelegate;
-import org.telegram.messenger.exoplayer.ExoPlayer.Factory;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
@@ -312,8 +312,8 @@ public class ImageLoader {
                 httpConnection = new URL(this.url).openConnection();
                 httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36");
                 httpConnection.addRequestProperty("Referer", "google.com");
-                httpConnection.setConnectTimeout(Factory.DEFAULT_MIN_REBUFFER_MS);
-                httpConnection.setReadTimeout(Factory.DEFAULT_MIN_REBUFFER_MS);
+                httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                 if (httpConnection instanceof HttpURLConnection) {
                     HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
                     httpURLConnection.setInstanceFollowRedirects(true);
@@ -466,8 +466,8 @@ public class ImageLoader {
                     this.httpConnection = new URL(this.cacheImage.httpUrl).openConnection();
                     this.httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36");
                     this.httpConnection.addRequestProperty("Referer", "google.com");
-                    this.httpConnection.setConnectTimeout(Factory.DEFAULT_MIN_REBUFFER_MS);
-                    this.httpConnection.setReadTimeout(Factory.DEFAULT_MIN_REBUFFER_MS);
+                    this.httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                    this.httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
                     if (this.httpConnection instanceof HttpURLConnection) {
                         ((HttpURLConnection) this.httpConnection).setInstanceFollowRedirects(true);
                     }

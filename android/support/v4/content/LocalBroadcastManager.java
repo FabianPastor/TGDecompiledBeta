@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import org.telegram.messenger.exoplayer.SampleSource;
+import org.telegram.messenger.exoplayer2.C;
 
 public final class LocalBroadcastManager {
     private static final boolean DEBUG = false;
@@ -172,10 +172,10 @@ public final class LocalBroadcastManager {
                         } else if (debug) {
                             String reason;
                             switch (match) {
-                                case SampleSource.FORMAT_READ /*-4*/:
+                                case C.RESULT_BUFFER_READ /*-4*/:
                                     reason = "category";
                                     break;
-                                case SampleSource.SAMPLE_READ /*-3*/:
+                                case C.RESULT_NOTHING_READ /*-3*/:
                                     reason = "action";
                                     break;
                                 case -2:

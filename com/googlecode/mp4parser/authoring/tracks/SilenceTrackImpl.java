@@ -36,7 +36,7 @@ public class SilenceTrackImpl implements Track {
             while (true) {
                 numFrames = numFrames2 - 1;
                 if (numFrames2 > 0) {
-                    this.samples.add(new SampleImpl((ByteBuffer) ByteBuffer.wrap(new byte[]{ClosedCaptionCtrl.BACKSPACE, (byte) 16, (byte) 4, (byte) 96, (byte) -116, ClosedCaptionCtrl.MISC_CHAN_2}).rewind()));
+                    this.samples.add(new SampleImpl((ByteBuffer) ByteBuffer.wrap(new byte[]{(byte) 33, (byte) 16, (byte) 4, (byte) 96, (byte) -116, (byte) 28}).rewind()));
                     numFrames2 = numFrames;
                 } else {
                     return;

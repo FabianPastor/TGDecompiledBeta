@@ -183,7 +183,7 @@ public abstract class AutoScrollHelper implements OnTouchListener {
         setMinimumVelocity((float) minVelocity, (float) minVelocity);
         setEdgeType(1);
         setMaximumEdges(Float.MAX_VALUE, Float.MAX_VALUE);
-        setRelativeEdges(0.2f, 0.2f);
+        setRelativeEdges(DEFAULT_RELATIVE_EDGE, DEFAULT_RELATIVE_EDGE);
         setRelativeVelocity(1.0f, 1.0f);
         setActivationDelay(DEFAULT_ACTIVATION_DELAY);
         setRampUpDuration(500);

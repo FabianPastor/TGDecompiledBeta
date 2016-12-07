@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.SparseArray;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -168,7 +167,7 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
             size.height = 100.0f;
         }
         float aspect = size.width / size.height;
-        if (aspect > 4.0f || aspect < DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD) {
+        if (aspect > 4.0f || aspect < 0.2f) {
             float max = Math.max(size.width, size.height);
             size.width = max;
             size.height = max;

@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.exoplayer.metadata.id3.ApicFrame;
+import org.telegram.messenger.exoplayer2.metadata.id3.ApicFrame;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class ID3v2Info extends AudioInfo {

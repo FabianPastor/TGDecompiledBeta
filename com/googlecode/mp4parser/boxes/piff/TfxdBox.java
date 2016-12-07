@@ -31,7 +31,7 @@ public class TfxdBox extends AbstractFullBox {
     }
 
     public byte[] getUserType() {
-        return new byte[]{(byte) 109, (byte) 29, (byte) -101, (byte) 5, (byte) 66, (byte) -43, (byte) 68, (byte) -26, Byte.MIN_VALUE, (byte) -30, ClosedCaptionCtrl.MISC_CHAN_1, (byte) 29, (byte) -81, (byte) -9, (byte) 87, (byte) -78};
+        return new byte[]{(byte) 109, (byte) 29, (byte) -101, (byte) 5, (byte) 66, (byte) -43, (byte) 68, (byte) -26, Byte.MIN_VALUE, (byte) -30, (byte) 20, (byte) 29, (byte) -81, (byte) -9, (byte) 87, (byte) -78};
     }
 
     protected long getContentSize() {

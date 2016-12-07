@@ -8,8 +8,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.Components.BackupImageView;
@@ -32,7 +30,7 @@ public class StickerCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(76.0f) + getPaddingLeft()) + getPaddingRight(), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), C.ENCODING_PCM_32BIT));
+        super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
     public void setPressed(boolean pressed) {
@@ -82,19 +80,19 @@ public class StickerCell extends FrameLayout {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && ((this.scaled && this.scale != DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) {
+        if (child == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) {
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
-            if (!this.scaled || this.scale == DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
+            if (!this.scaled || this.scale == 0.8f) {
                 this.scale += ((float) dt) / 400.0f;
                 if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
                     this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
                 }
             } else {
                 this.scale -= ((float) dt) / 400.0f;
-                if (this.scale < DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
-                    this.scale = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD;
+                if (this.scale < 0.8f) {
+                    this.scale = 0.8f;
                 }
             }
             this.imageView.setScaleX(this.scale);

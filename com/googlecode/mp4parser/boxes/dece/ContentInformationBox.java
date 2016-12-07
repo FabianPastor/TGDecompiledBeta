@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.reflect.Factory;
-import org.telegram.messenger.exoplayer.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public class ContentInformationBox extends AbstractFullBox {
     public static final String TYPE = "cinf";

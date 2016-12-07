@@ -54,6 +54,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -901,7 +902,7 @@ public class PasscodeView extends FrameLayout {
                 this.checkImage.setVisibility(8);
             } else if (UserConfig.passcodeType == 1) {
                 this.passwordEditText.setFilters(new InputFilter[0]);
-                this.passwordEditText.setInputType(129);
+                this.passwordEditText.setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                 this.numbersFrameLayout.setVisibility(8);
                 this.passwordEditText.setFocusable(true);
                 this.passwordEditText.setFocusableInTouchMode(true);

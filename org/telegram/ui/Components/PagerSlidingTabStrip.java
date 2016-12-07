@@ -18,7 +18,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
@@ -172,7 +171,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (this.shouldExpand && MeasureSpec.getMode(widthMeasureSpec) != 0) {
-            this.tabsContainer.measure(C.ENCODING_PCM_32BIT | getMeasuredWidth(), heightMeasureSpec);
+            this.tabsContainer.measure(NUM | getMeasuredWidth(), heightMeasureSpec);
         }
     }
 

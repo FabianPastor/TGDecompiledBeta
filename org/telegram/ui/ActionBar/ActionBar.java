@@ -17,7 +17,6 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatorListenerAdapterProxy;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -400,18 +399,18 @@ public class ActionBar extends FrameLayout {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int actionBarHeight = getCurrentActionBarHeight();
-        int actionBarHeightSpec = MeasureSpec.makeMeasureSpec(actionBarHeight, C.ENCODING_PCM_32BIT);
+        int actionBarHeightSpec = MeasureSpec.makeMeasureSpec(actionBarHeight, NUM);
         setMeasuredDimension(width, ((this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0) + actionBarHeight) + this.extraHeight);
         if (this.backButtonImageView == null || this.backButtonImageView.getVisibility() == 8) {
             textLeft = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 26.0f : 18.0f);
         } else {
-            this.backButtonImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(54.0f), C.ENCODING_PCM_32BIT), actionBarHeightSpec);
+            this.backButtonImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(54.0f), NUM), actionBarHeightSpec);
             textLeft = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 80.0f : 72.0f);
         }
         if (!(this.menu == null || this.menu.getVisibility() == 8)) {
             int menuWidth;
             if (this.isSearchFieldVisible) {
-                menuWidth = MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74.0f : 66.0f), C.ENCODING_PCM_32BIT);
+                menuWidth = MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74.0f : 66.0f), NUM);
             } else {
                 menuWidth = MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE);
             }
@@ -438,7 +437,7 @@ public class ActionBar extends FrameLayout {
         for (int i2 = 0; i2 < childCount; i2++) {
             View child = getChildAt(i2);
             if (!(child.getVisibility() == 8 || child == this.titleTextView || child == this.subtitleTextView || child == this.menu || child == this.backButtonImageView)) {
-                measureChildWithMargins(child, widthMeasureSpec, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), C.ENCODING_PCM_32BIT), 0);
+                measureChildWithMargins(child, widthMeasureSpec, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM), 0);
             }
         }
     }

@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
@@ -115,7 +114,7 @@ public class StickerEmojiCell extends FrameLayout {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)))) {
+        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)))) {
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
@@ -130,15 +129,15 @@ public class StickerEmojiCell extends FrameLayout {
                     this.alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
                 }
                 this.imageView.getImageReceiver().setAlpha(this.alpha);
-            } else if (!this.scaled || this.scale == DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
+            } else if (!this.scaled || this.scale == 0.8f) {
                 this.scale += ((float) dt) / 400.0f;
                 if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
                     this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
                 }
             } else {
                 this.scale -= ((float) dt) / 400.0f;
-                if (this.scale < DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD) {
-                    this.scale = DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD;
+                if (this.scale < 0.8f) {
+                    this.scale = 0.8f;
                 }
             }
             this.imageView.setScaleX(this.scale);

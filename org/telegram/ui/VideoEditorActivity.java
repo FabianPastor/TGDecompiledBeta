@@ -50,8 +50,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
@@ -298,11 +296,11 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     if (!(child.getVisibility() == 8 || child == VideoEditorActivity.this.captionEditText)) {
                         if (VideoEditorActivity.this.captionEditText.isPopupView(child)) {
                             if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, NUM));
                             } else if (AndroidUtilities.isTablet()) {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), MeasureSpec.getSize(heightMeasureSpec) - inputFieldHeight), C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), MeasureSpec.getSize(heightMeasureSpec) - inputFieldHeight), NUM));
                             } else {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, NUM));
                             }
                         } else if (child == VideoEditorActivity.this.textureView) {
                             int width = widthSize;
@@ -315,7 +313,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             } else {
                                 height = (int) (((float) width) / ar);
                             }
-                            child.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
+                            child.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
                         } else {
                             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
                         }
@@ -933,7 +931,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 this.needCompressVideo = true;
                 this.compressItem.setImageResource(R.drawable.hd_off);
                 this.compressItem.setClickable(false);
-                this.compressItem.setAlpha(DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD);
+                this.compressItem.setAlpha(0.8f);
                 this.compressItem.setEnabled(false);
                 return;
             }

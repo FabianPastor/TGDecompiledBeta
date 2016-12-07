@@ -38,7 +38,8 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -279,7 +280,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.passwordEditText.setLines(1);
         this.passwordEditText.setGravity(1);
         this.passwordEditText.setSingleLine(true);
-        this.passwordEditText.setInputType(129);
+        this.passwordEditText.setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
         this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         this.passwordEditText.setTypeface(Typeface.DEFAULT);
         AndroidUtilities.clearCursorDrawable(this.passwordEditText);
@@ -557,7 +558,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                     }
                                 }
                             };
-                            AndroidUtilities.runOnUIThread(TwoStepVerificationActivity.this.shortPollRunnable, HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS);
+                            AndroidUtilities.runOnUIThread(TwoStepVerificationActivity.this.shortPollRunnable, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
                         }
                         TwoStepVerificationActivity.this.updateRows();
                     }

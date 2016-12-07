@@ -2,7 +2,7 @@ package com.google.android.gms.measurement.internal;
 
 import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.internal.zzsi;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public final class zzl {
@@ -19,19 +19,19 @@ public final class zzl {
     public static zza<Integer> arW = zza.zzab("measurement.upload.max_batch_size", 65536);
     public static zza<Integer> arX = zza.zzab("measurement.upload.max_bundle_size", 65536);
     public static zza<Integer> arY = zza.zzab("measurement.upload.max_events_per_bundle", 1000);
-    public static zza<Integer> arZ = zza.zzab("measurement.upload.max_events_per_day", 100000);
+    public static zza<Integer> arZ = zza.zzab("measurement.upload.max_events_per_day", DefaultOggSeeker.MATCH_BYTE_RANGE);
     public static zza<Integer> asa = zza.zzab("measurement.upload.max_error_events_per_day", 1000);
     public static zza<Integer> asb = zza.zzab("measurement.upload.max_public_events_per_day", 50000);
     public static zza<Integer> asc = zza.zzab("measurement.upload.max_conversions_per_day", 500);
     public static zza<Integer> asd = zza.zzab("measurement.upload.max_realtime_events_per_day", 10);
-    public static zza<Integer> ase = zza.zzab("measurement.store.max_stored_events_per_app", 100000);
+    public static zza<Integer> ase = zza.zzab("measurement.store.max_stored_events_per_app", DefaultOggSeeker.MATCH_BYTE_RANGE);
     public static zza<String> asf = zza.zzav("measurement.upload.url", "https://app-measurement.com/a");
     public static zza<Long> asg = zza.zzf("measurement.upload.backoff_period", 43200000);
     public static zza<Long> ash = zza.zzf("measurement.upload.window_interval", 3600000);
     public static zza<Long> asi = zza.zzf("measurement.upload.interval", 3600000);
     public static zza<Long> asj = zza.zzf("measurement.upload.realtime_upload_interval", 10000);
     public static zza<Long> ask = zza.zzf("measurement.upload.minimum_delay", 500);
-    public static zza<Long> asl = zza.zzf("measurement.alarm_manager.minimum_interval", HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS);
+    public static zza<Long> asl = zza.zzf("measurement.alarm_manager.minimum_interval", 60000);
     public static zza<Long> asm = zza.zzf("measurement.upload.stale_data_deletion_interval", 86400000);
     public static zza<Long> asn = zza.zzf("measurement.upload.refresh_blacklisted_config_interval", 604800000);
     public static zza<Long> aso = zza.zzf("measurement.upload.initial_upload_delay_time", 15000);
@@ -40,7 +40,7 @@ public final class zzl {
     public static zza<Long> asr = zza.zzf("measurement.upload.max_queue_time", 2419200000L);
     public static zza<Integer> ass = zza.zzab("measurement.lifetimevalue.max_currency_tracked", 4);
     public static zza<Integer> ast = zza.zzab("measurement.audience.filter_result_max_count", Callback.DEFAULT_DRAG_ANIMATION_DURATION);
-    public static zza<Long> asu = zza.zzf("measurement.service_client.idle_disconnect_millis", HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS);
+    public static zza<Long> asu = zza.zzf("measurement.service_client.idle_disconnect_millis", ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
 
     public static final class zza<V> {
         private final V fc;

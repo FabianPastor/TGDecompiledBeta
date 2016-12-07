@@ -14,7 +14,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -141,6 +140,6 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
             layoutParams.gravity = 51;
             this.albumViews[a].setLayoutParams(layoutParams);
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(4.0f) + itemWidth, C.ENCODING_PCM_32BIT));
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(4.0f) + itemWidth, NUM));
     }
 }

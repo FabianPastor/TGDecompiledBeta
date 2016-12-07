@@ -92,8 +92,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.util.MimeTypes;
+import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.query.BotQuery;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
@@ -1497,7 +1496,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 } else if (id == 11) {
                     args = new Bundle();
                     args.putBoolean("onlySelect", true);
-                    args.putInt("dialogsType", 1);
                     BaseFragment dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(ChatActivity.this);
                     ChatActivity.this.presentFragment(dialogsActivity);
@@ -1812,16 +1810,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     View child = getChildAt(i);
                     if (!(child == null || child.getVisibility() == 8 || child == ChatActivity.this.chatActivityEnterView || child == ChatActivity.this.actionBar)) {
                         if (child == ChatActivity.this.chatListView || child == ChatActivity.this.progressView) {
-                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.dp((float) ((ChatActivity.this.chatActivityEnterView.isTopViewVisible() ? 48 : 0) + 2)) + (heightSize - this.inputFieldHeight)), C.ENCODING_PCM_32BIT));
+                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.dp((float) ((ChatActivity.this.chatActivityEnterView.isTopViewVisible() ? 48 : 0) + 2)) + (heightSize - this.inputFieldHeight)), NUM));
                         } else if (child == ChatActivity.this.emptyViewContainer) {
-                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(heightSize, C.ENCODING_PCM_32BIT));
+                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
                         } else if (ChatActivity.this.chatActivityEnterView.isPopupView(child)) {
                             if (!AndroidUtilities.isInMultiwindow) {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, NUM));
                             } else if (AndroidUtilities.isTablet()) {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (((heightSize - this.inputFieldHeight) + actionBarHeight) - AndroidUtilities.statusBarHeight) + getPaddingTop()), C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (((heightSize - this.inputFieldHeight) + actionBarHeight) - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                             } else {
-                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((((heightSize - this.inputFieldHeight) + actionBarHeight) - AndroidUtilities.statusBarHeight) + getPaddingTop(), C.ENCODING_PCM_32BIT));
+                                child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec((((heightSize - this.inputFieldHeight) + actionBarHeight) - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                             }
                         } else if (child == ChatActivity.this.mentionContainer) {
                             int height;
@@ -1853,7 +1851,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             layoutParams.height = height;
                             layoutParams.topMargin = 0;
                             ChatActivity.this.mentionListViewIgnoreLayout = false;
-                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(layoutParams.height, C.ENCODING_PCM_32BIT));
+                            child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
                         } else {
                             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
                         }
@@ -8141,7 +8139,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     this.forwaringMessage = this.selectedObject;
                     args = new Bundle();
                     args.putBoolean("onlySelect", true);
-                    args.putInt("dialogsType", 1);
                     BaseFragment dialogsActivity = new DialogsActivity(args);
                     dialogsActivity.setDelegate(this);
                     presentFragment(dialogsActivity);
@@ -8226,7 +8223,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     getParentActivity().requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
                     this.selectedObject = null;
                     return;
-                    break;
                 case 8:
                     showReplyPanel(true, this.selectedObject, null, null, false, true);
                     break;
@@ -8446,30 +8442,29 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
             if (did != this.dialog_id) {
                 int lower_part = (int) did;
-                if (lower_part != 0) {
-                    Bundle args = new Bundle();
-                    args.putBoolean("scrollToTopOnResume", this.scrollToTopOnResume);
-                    if (lower_part > 0) {
-                        args.putInt("user_id", lower_part);
-                    } else if (lower_part < 0) {
-                        args.putInt("chat_id", -lower_part);
-                    }
-                    if (MessagesController.checkCanOpenChat(args, activity)) {
-                        ChatActivity chatActivity = new ChatActivity(args);
-                        if (presentFragment(chatActivity, true)) {
-                            chatActivity.showReplyPanel(true, null, fmessages, null, false, false);
-                            if (!AndroidUtilities.isTablet()) {
-                                removeSelfFromStack();
-                                return;
-                            }
+                int high_part = (int) (did >> 32);
+                Bundle args = new Bundle();
+                args.putBoolean("scrollToTopOnResume", this.scrollToTopOnResume);
+                if (lower_part == 0) {
+                    args.putInt("enc_id", high_part);
+                } else if (lower_part > 0) {
+                    args.putInt("user_id", lower_part);
+                } else if (lower_part < 0) {
+                    args.putInt("chat_id", -lower_part);
+                }
+                if (lower_part == 0 || MessagesController.checkCanOpenChat(args, activity)) {
+                    ChatActivity chatActivity = new ChatActivity(args);
+                    if (presentFragment(chatActivity, true)) {
+                        chatActivity.showReplyPanel(true, null, fmessages, null, false, false);
+                        if (!AndroidUtilities.isTablet()) {
+                            removeSelfFromStack();
                             return;
                         }
-                        activity.finishFragment();
                         return;
                     }
+                    activity.finishFragment();
                     return;
                 }
-                activity.finishFragment();
                 return;
             }
             activity.finishFragment();

@@ -26,8 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -278,7 +276,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                     float dx = (float) ((int) (ev.getX() - ((float) this.startedTrackingX)));
                     float dy = (float) Math.abs(((int) ev.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(ev);
-                    if (this.maybeStartTracking && !this.startedTracking && ((dx > 0.0f && dx / 3.0f > Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD, true)) || (dx < 0.0f && Math.abs(dx) >= Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.4f, true)))) {
+                    if (this.maybeStartTracking && !this.startedTracking && ((dx > 0.0f && dx / 3.0f > Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.2f, true)) || (dx < 0.0f && Math.abs(dx) >= Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.4f, true)))) {
                         prepareForDrawerOpen(ev);
                         this.startedTrackingX = (int) ev.getX();
                         requestDisallowInterceptTouchEvent(true);
@@ -409,7 +407,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                     }
                 }
                 if (this.drawerLayout != child) {
-                    child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, C.ENCODING_PCM_32BIT));
+                    child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, NUM), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, NUM));
                 } else {
                     child.setPadding(0, 0, 0, 0);
                     child.measure(getChildMeasureSpec(widthMeasureSpec, (this.minDrawerMargin + lp.leftMargin) + lp.rightMargin, lp.width), getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height));

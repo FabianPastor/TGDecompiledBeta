@@ -39,8 +39,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -607,14 +606,14 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             renderHeight = (float) maxHeight;
             renderWidth = (float) Math.floor((double) ((renderHeight * bitmapW) / bitmapH));
         }
-        this.renderView.measure(MeasureSpec.makeMeasureSpec((int) renderWidth, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((int) renderHeight, C.ENCODING_PCM_32BIT));
-        this.entitiesView.measure(MeasureSpec.makeMeasureSpec((int) this.paintingSize.width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((int) this.paintingSize.height, C.ENCODING_PCM_32BIT));
+        this.renderView.measure(MeasureSpec.makeMeasureSpec((int) renderWidth, NUM), MeasureSpec.makeMeasureSpec((int) renderHeight, NUM));
+        this.entitiesView.measure(MeasureSpec.makeMeasureSpec((int) this.paintingSize.width, NUM), MeasureSpec.makeMeasureSpec((int) this.paintingSize.height, NUM));
         this.dimView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, Integer.MIN_VALUE));
-        this.selectionContainerView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, C.ENCODING_PCM_32BIT));
-        this.colorPicker.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(maxHeight, C.ENCODING_PCM_32BIT));
-        this.toolsView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), C.ENCODING_PCM_32BIT));
+        this.selectionContainerView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(maxHeight, NUM));
+        this.colorPicker.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(maxHeight, NUM));
+        this.toolsView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
         if (this.stickersView != null) {
-            this.stickersView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(fullHeight, C.ENCODING_PCM_32BIT));
+            this.stickersView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(fullHeight, NUM));
         }
     }
 
@@ -1355,7 +1354,7 @@ Error: java.util.NoSuchElementException
                 break;
             }
         }
-        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, 0.0f);
+        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, 0.0f);
         if (maskCoords == null || this.faces == null || this.faces.size() == 0) {
             return defaultPosition;
         }

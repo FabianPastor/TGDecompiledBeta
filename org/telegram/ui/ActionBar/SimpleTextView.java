@@ -16,7 +16,6 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SimpleTextView extends View implements Callback {
@@ -125,7 +124,7 @@ public class SimpleTextView extends View implements Callback {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         createLayout((width - getPaddingLeft()) - getPaddingRight());
-        if (MeasureSpec.getMode(heightMeasureSpec) == C.ENCODING_PCM_32BIT) {
+        if (MeasureSpec.getMode(heightMeasureSpec) == NUM) {
             finalHeight = height;
         } else {
             finalHeight = this.textHeight;

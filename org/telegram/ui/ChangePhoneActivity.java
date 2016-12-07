@@ -58,7 +58,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -97,7 +97,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
         private EditText codeField;
-        private volatile int codeTime = DefaultLoadControl.DEFAULT_LOW_WATERMARK_MS;
+        private volatile int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
         private TextView confirmTextView;
         private Bundle currentParams;
@@ -411,7 +411,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
         private void createCodeTimer() {
             if (this.codeTimer == null) {
-                this.codeTime = DefaultLoadControl.DEFAULT_LOW_WATERMARK_MS;
+                this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
                 this.codeTimer.schedule(new TimerTask() {

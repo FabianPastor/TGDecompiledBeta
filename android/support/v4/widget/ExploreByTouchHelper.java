@@ -24,6 +24,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import java.util.ArrayList;
 import java.util.List;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.tgnet.ConnectionsManager;
 
 public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
@@ -195,7 +196,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
             case 22:
                 return 66;
             default:
-                return 130;
+                return TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
         }
     }
 
@@ -222,7 +223,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
             case 17:
             case 33:
             case 66:
-            case 130:
+            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 Rect selectedRect = new Rect();
                 if (this.mKeyboardFocusedVirtualViewId != Integer.MIN_VALUE) {
                     getBoundsInParent(this.mKeyboardFocusedVirtualViewId, selectedRect);
@@ -267,7 +268,7 @@ public abstract class ExploreByTouchHelper extends AccessibilityDelegateCompat {
             case 66:
                 outBounds.set(-1, 0, -1, h);
                 break;
-            case 130:
+            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 outBounds.set(0, -1, w, -1);
                 break;
             default:

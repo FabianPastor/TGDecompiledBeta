@@ -117,10 +117,10 @@ public class GroupCreateCheckBox extends View {
             float roundProgress = this.progress >= 0.5f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : this.progress / 0.5f;
             float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
             float roundProgressCheckState = this.isCheckAnimation ? this.progress : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress;
-            if (roundProgressCheckState < 0.2f) {
-                radDiff = (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / 0.2f;
+            if (roundProgressCheckState < progressBounceDiff) {
+                radDiff = (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
             } else if (roundProgressCheckState < 0.4f) {
-                radDiff = ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (roundProgressCheckState - 0.2f)) / 0.2f);
+                radDiff = ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (roundProgressCheckState - progressBounceDiff)) / progressBounceDiff);
             } else {
                 radDiff = 0.0f;
             }

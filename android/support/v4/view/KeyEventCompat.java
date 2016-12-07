@@ -5,7 +5,7 @@ import android.view.KeyEvent;
 import android.view.KeyEvent.Callback;
 import android.view.KeyEvent.DispatcherState;
 import android.view.View;
-import org.telegram.messenger.exoplayer.extractor.ts.PsExtractor;
+import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public final class KeyEventCompat {
     static final KeyEventVersionImpl IMPL;

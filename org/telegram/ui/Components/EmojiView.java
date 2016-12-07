@@ -53,8 +53,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.GridLayoutManager;
 import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
@@ -625,7 +623,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 } else if (event.getAction() == 2) {
                     boolean ignore = false;
                     if (this.touchedX != -10000.0f) {
-                        if (Math.abs(this.touchedX - event.getX()) > AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD, true) || Math.abs(this.touchedY - event.getY()) > AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD, false)) {
+                        if (Math.abs(this.touchedX - event.getX()) > AndroidUtilities.getPixelsInCM(0.2f, true) || Math.abs(this.touchedY - event.getY()) > AndroidUtilities.getPixelsInCM(0.2f, false)) {
                             this.touchedX = -10000.0f;
                             this.touchedY = -10000.0f;
                         } else {
@@ -818,7 +816,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 case 0:
                     view = new StickerEmojiCell(this.context) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), C.ENCODING_PCM_32BIT));
+                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                         }
                     };
                     break;
@@ -934,7 +932,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 case 0:
                     view = new StickerEmojiCell(this.context) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), C.ENCODING_PCM_32BIT));
+                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                         }
                     };
                     break;
@@ -1991,7 +1989,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.emojiTab.setLayoutParams(layoutParams);
             this.oldWidth = layoutParams.width;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(layoutParams.width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), C.ENCODING_PCM_32BIT));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), NUM));
         this.isLayout = false;
     }
 

@@ -68,7 +68,8 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -153,7 +154,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setMaxLines(1);
             this.codeField.setPadding(0, 0, 0, 0);
-            this.codeField.setInputType(129);
+            this.codeField.setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
             this.codeField.setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.codeField.setTypeface(Typeface.DEFAULT);
             this.codeField.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -1027,7 +1028,7 @@ public class LoginActivity extends BaseFragment {
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
         private EditText codeField;
-        private volatile int codeTime = DefaultLoadControl.DEFAULT_LOW_WATERMARK_MS;
+        private volatile int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
         private TextView confirmTextView;
         private Bundle currentParams;
@@ -1341,7 +1342,7 @@ public class LoginActivity extends BaseFragment {
 
         private void createCodeTimer() {
             if (this.codeTimer == null) {
-                this.codeTime = DefaultLoadControl.DEFAULT_LOW_WATERMARK_MS;
+                this.codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
                 this.codeTimer = new Timer();
                 this.lastCodeTime = (double) System.currentTimeMillis();
                 this.codeTimer.schedule(new TimerTask() {

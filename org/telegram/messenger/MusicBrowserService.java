@@ -39,7 +39,6 @@ import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
@@ -200,7 +199,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         this.mediaSession.setCallback(new MediaSessionCallback());
         this.mediaSession.setFlags(3);
         Context context = getApplicationContext();
-        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), C.SAMPLE_FLAG_DECODE_ONLY));
+        this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), 134217728));
         Bundle extras = new Bundle();
         extras.putBoolean(SLOT_RESERVATION_QUEUE, true);
         extras.putBoolean(SLOT_RESERVATION_SKIP_TO_PREV, true);

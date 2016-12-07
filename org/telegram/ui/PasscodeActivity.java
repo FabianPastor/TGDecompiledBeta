@@ -43,6 +43,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -611,7 +612,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         } else if ((this.type == 1 && this.currentPasswordType == 1) || (this.type == 2 && UserConfig.passcodeType == 1)) {
             this.passwordEditText.setFilters(new InputFilter[0]);
             this.passwordEditText.setKeyListener(null);
-            this.passwordEditText.setInputType(129);
+            this.passwordEditText.setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
         }
         this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
     }

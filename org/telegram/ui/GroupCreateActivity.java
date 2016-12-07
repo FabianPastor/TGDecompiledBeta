@@ -39,8 +39,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.ExoPlayer.Factory;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
@@ -88,7 +87,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     private boolean isNeverShare;
     private GroupCreateDividerItemDecoration itemDecoration;
     private RecyclerListView listView;
-    private int maxCount = Factory.DEFAULT_MIN_REBUFFER_MS;
+    private int maxCount = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS;
     private ScrollView scrollView;
     private boolean searchWas;
     private boolean searching;
@@ -122,7 +121,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             for (int a = 0; a < count; a++) {
                 View child = getChildAt(a);
                 if (child instanceof GroupCreateSpan) {
-                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), C.ENCODING_PCM_32BIT));
+                    child.measure(MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
                     if (child != this.removingSpan && child.getMeasuredWidth() + currentLineWidth > maxWidth) {
                         y += child.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
                         currentLineWidth = 0;
@@ -166,7 +165,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             if (maxWidth - allCurrentLineWidth < minWidth) {
                 allY += AndroidUtilities.dp(44.0f);
             }
-            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), C.ENCODING_PCM_32BIT));
+            GroupCreateActivity.this.editText.measure(MeasureSpec.makeMeasureSpec(maxWidth - currentLineWidth, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
             if (!this.animationStarted) {
                 int currentHeight = allY + AndroidUtilities.dp(44.0f);
                 int fieldX = currentLineWidth + AndroidUtilities.dp(16.0f);
@@ -357,6 +356,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -366,7 +366,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     return;
                 default:
-                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;
@@ -616,9 +615,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 } else {
                     maxSize = AndroidUtilities.dp(56.0f);
                 }
-                GroupCreateActivity.this.scrollView.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(maxSize, Integer.MIN_VALUE));
-                GroupCreateActivity.this.listView.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height - GroupCreateActivity.this.scrollView.getMeasuredHeight(), C.ENCODING_PCM_32BIT));
-                GroupCreateActivity.this.emptyView.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height - GroupCreateActivity.this.scrollView.getMeasuredHeight(), C.ENCODING_PCM_32BIT));
+                GroupCreateActivity.this.scrollView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(maxSize, Integer.MIN_VALUE));
+                GroupCreateActivity.this.listView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - GroupCreateActivity.this.scrollView.getMeasuredHeight(), NUM));
+                GroupCreateActivity.this.emptyView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height - GroupCreateActivity.this.scrollView.getMeasuredHeight(), NUM));
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {

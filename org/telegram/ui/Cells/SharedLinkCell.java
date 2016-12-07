@@ -26,7 +26,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.MessageEntity;
@@ -293,7 +292,7 @@ public class SharedLinkCell extends FrameLayout {
         if (hasPhoto) {
             height = Math.max(AndroidUtilities.dp(48.0f), height);
         }
-        this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), C.ENCODING_PCM_32BIT));
+        this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + Math.max(AndroidUtilities.dp(72.0f), AndroidUtilities.dp(16.0f) + height));
     }
 

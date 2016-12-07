@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 
@@ -92,7 +91,7 @@ public class SeekBarWaveform {
                     this.thumbX = this.width;
                 }
             }
-            if (this.startX == -1.0f || Math.abs(x - this.startX) <= AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD, true)) {
+            if (this.startX == -1.0f || Math.abs(x - this.startX) <= AndroidUtilities.getPixelsInCM(0.2f, true)) {
                 return true;
             }
             if (!(this.parentView == null || this.parentView.getParent() == null)) {

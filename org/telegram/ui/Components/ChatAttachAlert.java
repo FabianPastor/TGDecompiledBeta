@@ -53,7 +53,6 @@ import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -207,7 +206,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(85.0f), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), C.ENCODING_PCM_32BIT));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(85.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
         }
 
         private void onLongPress() {
@@ -312,7 +311,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(85.0f), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), C.ENCODING_PCM_32BIT));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(85.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
         }
 
         public void setTextAndIcon(CharSequence text, Drawable drawable) {
@@ -595,7 +594,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     setPadding(ChatAttachAlert.backgroundPaddingLeft, padding, ChatAttachAlert.backgroundPaddingLeft, 0);
                     ChatAttachAlert.this.ignoreLayout = false;
                 }
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), C.ENCODING_PCM_32BIT));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -691,7 +690,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.attachView = new FrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(294.0f), C.ENCODING_PCM_32BIT));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(294.0f), NUM));
             }
 
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -1186,15 +1185,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
         if (view == this.cameraView) {
             if (this.cameraOpened && !this.cameraAnimationInProgress) {
-                this.cameraView.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
+                this.cameraView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, NUM));
                 return true;
             }
         } else if (view == this.cameraPanel) {
             if (isPortrait) {
-                this.cameraPanel.measure(MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), C.ENCODING_PCM_32BIT));
+                this.cameraPanel.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
                 return true;
             }
-            this.cameraPanel.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT));
+            this.cameraPanel.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(height, NUM));
             return true;
         }
         return false;

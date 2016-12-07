@@ -13,7 +13,6 @@ import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.exoplayer.C;
 import org.telegram.ui.Adapters.BaseSectionsAdapter;
 
 public class SectionsListView extends ListView implements OnScrollListener {
@@ -113,7 +112,7 @@ public class SectionsListView extends ListView implements OnScrollListener {
     private void ensurePinnedHeaderLayout(View header, boolean forceLayout) {
         if (header.isLayoutRequested() || forceLayout) {
             try {
-                header.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(0, 0));
+                header.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
             } catch (Throwable e) {
                 FileLog.e("tmessages", e);
             }

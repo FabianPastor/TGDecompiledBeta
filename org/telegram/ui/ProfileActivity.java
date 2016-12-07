@@ -66,7 +66,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.messenger.query.BotQuery;
 import org.telegram.messenger.query.SharedMediaQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -1677,7 +1676,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (this.writeButton != null) {
                 this.writeButton.setTranslationY((float) ((((this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight()) + this.extraHeight) - AndroidUtilities.dp(29.5f)));
                 if (!this.openAnimationInProgress) {
-                    boolean setVisible = diff > DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD;
+                    boolean setVisible = diff > 0.2f;
                     if (setVisible != (this.writeButton.getTag() == null)) {
                         if (setVisible) {
                             this.writeButton.setTag(null);
@@ -1704,8 +1703,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             this.writeButtonAnimation.setInterpolator(new AccelerateInterpolator());
                             animatorSet = this.writeButtonAnimation;
                             animatorArr = new Animator[3];
-                            animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD});
-                            animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD});
+                            animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{0.2f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{0.2f});
                             animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{0.0f});
                             animatorSet.playTogether(animatorArr);
                         }
@@ -2052,8 +2051,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             animators = new ArrayList();
             animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
             if (this.writeButton != null) {
-                this.writeButton.setScaleX(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD);
-                this.writeButton.setScaleY(DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD);
+                this.writeButton.setScaleX(0.2f);
+                this.writeButton.setScaleY(0.2f);
                 this.writeButton.setAlpha(0.0f);
                 animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
                 animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
@@ -2085,8 +2084,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             animators = new ArrayList();
             animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}));
             if (this.writeButton != null) {
-                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD}));
-                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultLoadControl.DEFAULT_LOW_BUFFER_LOAD}));
+                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{0.2f}));
+                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{0.2f}));
                 animators.add(ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{0.0f}));
             }
             a = 0;

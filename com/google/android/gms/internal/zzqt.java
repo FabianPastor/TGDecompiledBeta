@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
-import org.telegram.messenger.exoplayer.C;
 
 final class zzqt implements zzrm {
     private final Context mContext;
@@ -272,7 +271,7 @@ final class zzqt implements zzrm {
 
     @Nullable
     private PendingIntent zzasg() {
-        return this.zb == null ? null : PendingIntent.getActivity(this.mContext, this.yW.getSessionId(), this.zb.zzajd(), C.SAMPLE_FLAG_DECODE_ONLY);
+        return this.zb == null ? null : PendingIntent.getActivity(this.mContext, this.yW.getSessionId(), this.zb.zzajd(), 134217728);
     }
 
     private void zzb(int i, boolean z) {

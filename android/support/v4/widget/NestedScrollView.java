@@ -43,7 +43,7 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.List;
-import org.telegram.messenger.exoplayer.C;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class NestedScrollView extends FrameLayout implements NestedScrollingParent, NestedScrollingChild, ScrollingView {
@@ -402,7 +402,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             View child = getChildAt(0);
             int height = getMeasuredHeight();
             if (child.getMeasuredHeight() < height) {
-                child.measure(getChildMeasureSpec(widthMeasureSpec, getPaddingLeft() + getPaddingRight(), ((FrameLayout.LayoutParams) child.getLayoutParams()).width), MeasureSpec.makeMeasureSpec((height - getPaddingTop()) - getPaddingBottom(), C.ENCODING_PCM_32BIT));
+                child.measure(getChildMeasureSpec(widthMeasureSpec, getPaddingLeft() + getPaddingRight(), ((FrameLayout.LayoutParams) child.getLayoutParams()).width), MeasureSpec.makeMeasureSpec((height - getPaddingTop()) - getPaddingBottom(), NUM));
             }
         }
     }
@@ -426,13 +426,13 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                         break;
                     case 20:
                         if (!event.isAltPressed()) {
-                            handled = arrowScroll(130);
+                            handled = arrowScroll(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                             break;
                         }
-                        handled = fullScroll(130);
+                        handled = fullScroll(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
                     case 62:
-                        pageScroll(event.isShiftPressed() ? 33 : 130);
+                        pageScroll(event.isShiftPressed() ? 33 : TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
                 }
             }
@@ -444,8 +444,8 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             if (currentFocused == this) {
                 currentFocused = null;
             }
-            View nextFocused = FocusFinder.getInstance().findNextFocus(this, currentFocused, 130);
-            if (nextFocused == null || nextFocused == this || !nextFocused.requestFocus(130)) {
+            View nextFocused = FocusFinder.getInstance().findNextFocus(this, currentFocused, TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
+            if (nextFocused == null || nextFocused == this || !nextFocused.requestFocus(TsExtractor.TS_STREAM_TYPE_HDMV_DTS)) {
                 return false;
             }
             return true;
@@ -829,7 +829,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
 
     public boolean pageScroll(int direction) {
         boolean down;
-        if (direction == 130) {
+        if (direction == TsExtractor.TS_STREAM_TYPE_HDMV_DTS) {
             down = true;
         } else {
             down = false;
@@ -856,7 +856,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
 
     public boolean fullScroll(int direction) {
         boolean down;
-        if (direction == 130) {
+        if (direction == TsExtractor.TS_STREAM_TYPE_HDMV_DTS) {
             down = true;
         } else {
             down = false;
@@ -907,7 +907,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             int scrollDelta = maxJump;
             if (direction == 33 && getScrollY() < scrollDelta) {
                 scrollDelta = getScrollY();
-            } else if (direction == 130 && getChildCount() > 0) {
+            } else if (direction == TsExtractor.TS_STREAM_TYPE_HDMV_DTS && getChildCount() > 0) {
                 int daBottom = getChildAt(0).getBottom();
                 int screenBottom = (getScrollY() + getHeight()) - getPaddingBottom();
                 if (daBottom - screenBottom < maxJump) {
@@ -918,7 +918,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                 return false;
             }
             int i;
-            if (direction == 130) {
+            if (direction == TsExtractor.TS_STREAM_TYPE_HDMV_DTS) {
                 i = scrollDelta;
             } else {
                 i = -scrollDelta;
@@ -1131,7 +1131,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
         View nextFocus;
         if (direction == 2) {
-            direction = 130;
+            direction = TsExtractor.TS_STREAM_TYPE_HDMV_DTS;
         } else if (direction == 1) {
             direction = 33;
         }

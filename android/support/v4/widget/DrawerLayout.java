@@ -40,7 +40,6 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.exoplayer.C;
 
 public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
     private static final boolean ALLOW_EDGE_LOCK = false;
@@ -974,7 +973,7 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
                     }
                 }
                 if (isContentView(child)) {
-                    child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, C.ENCODING_PCM_32BIT));
+                    child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, NUM), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, NUM));
                 } else if (isDrawerView(child)) {
                     if (SET_DRAWER_SHADOW_FROM_ELEVATION && ViewCompat.getElevation(child) != this.mDrawerElevation) {
                         ViewCompat.setElevation(child, this.mDrawerElevation);

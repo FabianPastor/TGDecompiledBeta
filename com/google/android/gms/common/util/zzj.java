@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public final class zzj {
     private static IntentFilter Gv = new IntentFilter("android.intent.action.BATTERY_CHANGED");
@@ -41,7 +40,7 @@ public final class zzj {
     public static synchronized float zzcl(Context context) {
         float f;
         synchronized (zzj.class) {
-            if (SystemClock.elapsedRealtime() - Gw >= HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS || Float.isNaN(Gx)) {
+            if (SystemClock.elapsedRealtime() - Gw >= 60000 || Float.isNaN(Gx)) {
                 Intent registerReceiver = context.getApplicationContext().registerReceiver(null, Gv);
                 if (registerReceiver != null) {
                     Gx = ((float) registerReceiver.getIntExtra(Param.LEVEL, -1)) / ((float) registerReceiver.getIntExtra("scale", -1));

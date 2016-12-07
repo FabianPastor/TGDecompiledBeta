@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 
 public class zzv implements zzb {
     private final Map<String, zza> zzbw;
@@ -127,7 +127,7 @@ public class zzv implements zzb {
     }
 
     public zzv(File file, int i) {
-        this.zzbw = new LinkedHashMap(16, AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, true);
+        this.zzbw = new LinkedHashMap(16, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
         this.zzbx = 0;
         this.zzby = file;
         this.zzbz = i;
@@ -271,22 +271,22 @@ public class zzv implements zzb {
     }
 
     public synchronized void initialize() {
-        BufferedInputStream bufferedInputStream;
         Throwable th;
         if (this.zzby.exists()) {
             File[] listFiles = this.zzby.listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
-                    BufferedInputStream bufferedInputStream2 = null;
+                    BufferedInputStream bufferedInputStream = null;
+                    BufferedInputStream bufferedInputStream2;
                     try {
-                        bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                        bufferedInputStream2 = new BufferedInputStream(new FileInputStream(file));
                         try {
-                            zza zzf = zza.zzf(bufferedInputStream);
+                            zza zzf = zza.zzf(bufferedInputStream2);
                             zzf.zzca = file.length();
                             zza(zzf.zzcb, zzf);
-                            if (bufferedInputStream != null) {
+                            if (bufferedInputStream2 != null) {
                                 try {
-                                    bufferedInputStream.close();
+                                    bufferedInputStream2.close();
                                 } catch (IOException e) {
                                 }
                             }
@@ -296,24 +296,24 @@ public class zzv implements zzb {
                                     file.delete();
                                 } catch (Throwable th2) {
                                     Throwable th3 = th2;
-                                    bufferedInputStream2 = bufferedInputStream;
+                                    bufferedInputStream = bufferedInputStream2;
                                     th = th3;
                                 }
                             }
-                            if (bufferedInputStream != null) {
+                            if (bufferedInputStream2 != null) {
                                 try {
-                                    bufferedInputStream.close();
+                                    bufferedInputStream2.close();
                                 } catch (IOException e3) {
                                 }
                             }
                         }
                     } catch (IOException e4) {
-                        bufferedInputStream = null;
+                        bufferedInputStream2 = null;
                         if (file != null) {
                             file.delete();
                         }
-                        if (bufferedInputStream != null) {
-                            bufferedInputStream.close();
+                        if (bufferedInputStream2 != null) {
+                            bufferedInputStream2.close();
                         }
                     } catch (Throwable th4) {
                         th = th4;
@@ -324,9 +324,9 @@ public class zzv implements zzb {
             zzs.zzc("Unable to create cache dir %s", this.zzby.getAbsolutePath());
         }
         return;
-        if (bufferedInputStream2 != null) {
+        if (bufferedInputStream != null) {
             try {
-                bufferedInputStream2.close();
+                bufferedInputStream.close();
             } catch (IOException e5) {
             }
         }

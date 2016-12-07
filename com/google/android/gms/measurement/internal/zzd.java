@@ -15,7 +15,6 @@ import com.google.android.gms.common.zzc;
 import com.google.android.gms.internal.zzrk;
 import com.google.android.gms.measurement.internal.zzl.zza;
 import java.lang.reflect.InvocationTargetException;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public class zzd extends zzz {
     static final String ari = String.valueOf(zzc.GOOGLE_PLAY_SERVICES_VERSION_CODE / 1000).replaceAll("(\\d+)(\\d)(\\d\\d)", "$1.$2.$3");
@@ -182,7 +181,7 @@ public class zzd extends zzz {
     }
 
     long zzbuq() {
-        return HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS;
+        return 60000;
     }
 
     long zzbur() {
@@ -227,7 +226,7 @@ public class zzd extends zzz {
     }
 
     public int zzbvb() {
-        return 100000;
+        return DefaultOggSeeker.MATCH_BYTE_RANGE;
     }
 
     public String zzbvc() {

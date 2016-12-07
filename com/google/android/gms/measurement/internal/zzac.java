@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 
 public class zzac extends zzaa {
     protected zza auO;
@@ -429,7 +429,7 @@ public class zzac extends zzaa {
                 }
             });
             try {
-                atomicReference.wait(HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS);
+                atomicReference.wait(ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
             } catch (InterruptedException e) {
                 zzbwb().zzbxa().zzj("Interrupted waiting for get user properties", e);
             }

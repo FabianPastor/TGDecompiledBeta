@@ -1,7 +1,6 @@
 package com.google.android.gms.common.stats;
 
 import android.support.v4.util.SimpleArrayMap;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
 
 public class zzd {
     private final long FX;
@@ -9,7 +8,7 @@ public class zzd {
     private final SimpleArrayMap<String, Long> FZ;
 
     public zzd() {
-        this.FX = HlsChunkSource.DEFAULT_PLAYLIST_BLACKLIST_MS;
+        this.FX = 60000;
         this.FY = 10;
         this.FZ = new SimpleArrayMap(10);
     }

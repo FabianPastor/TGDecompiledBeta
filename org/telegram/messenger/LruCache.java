@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 
 public class LruCache {
     private final LinkedHashMap<String, BitmapDrawable> map;
@@ -18,7 +18,7 @@ public class LruCache {
             throw new IllegalArgumentException("maxSize <= 0");
         }
         this.maxSize = maxSize;
-        this.map = new LinkedHashMap(0, AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, true);
+        this.map = new LinkedHashMap(0, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
         this.mapFilters = new LinkedHashMap();
     }
 

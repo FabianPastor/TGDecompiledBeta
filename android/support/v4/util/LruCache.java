@@ -3,7 +3,7 @@ package android.support.v4.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.telegram.messenger.exoplayer.chunk.FormatEvaluator.AdaptiveEvaluator;
+import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 
 public class LruCache<K, V> {
     private int createCount;
@@ -20,7 +20,7 @@ public class LruCache<K, V> {
             throw new IllegalArgumentException("maxSize <= 0");
         }
         this.maxSize = maxSize;
-        this.map = new LinkedHashMap(0, AdaptiveEvaluator.DEFAULT_BANDWIDTH_FRACTION, true);
+        this.map = new LinkedHashMap(0, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, true);
     }
 
     public void resize(int maxSize) {

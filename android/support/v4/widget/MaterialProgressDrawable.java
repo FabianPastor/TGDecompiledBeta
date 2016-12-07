@@ -463,7 +463,7 @@ class MaterialProgressDrawable extends Drawable implements Animatable {
 
     void applyFinishTranslation(float interpolatedTime, Ring ring) {
         updateRingColor(interpolatedTime, ring);
-        float targetRotation = (float) (Math.floor((double) (ring.getStartingRotation() / 0.8f)) + 1.0d);
+        float targetRotation = (float) (Math.floor((double) (ring.getStartingRotation() / MAX_PROGRESS_ARC)) + 1.0d);
         ring.setStartTrim(ring.getStartingStartTrim() + (((ring.getStartingEndTrim() - getMinProgressArc(ring)) - ring.getStartingStartTrim()) * interpolatedTime));
         ring.setEndTrim(ring.getStartingEndTrim());
         ring.setRotation(ring.getStartingRotation() + ((targetRotation - ring.getStartingRotation()) * interpolatedTime));
@@ -483,10 +483,10 @@ class MaterialProgressDrawable extends Drawable implements Animatable {
                 float startingRotation = ring.getStartingRotation();
                 MaterialProgressDrawable.this.updateRingColor(interpolatedTime, ring);
                 if (interpolatedTime <= 0.5f) {
-                    ring.setStartTrim(startingTrim + ((0.8f - minProgressArc) * MaterialProgressDrawable.MATERIAL_INTERPOLATOR.getInterpolation(interpolatedTime / 0.5f)));
+                    ring.setStartTrim(startingTrim + ((MaterialProgressDrawable.MAX_PROGRESS_ARC - minProgressArc) * MaterialProgressDrawable.MATERIAL_INTERPOLATOR.getInterpolation(interpolatedTime / 0.5f)));
                 }
                 if (interpolatedTime > 0.5f) {
-                    ring.setEndTrim(startingEndTrim + (MaterialProgressDrawable.MATERIAL_INTERPOLATOR.getInterpolation((interpolatedTime - 0.5f) / 0.5f) * (0.8f - minProgressArc)));
+                    ring.setEndTrim(startingEndTrim + (MaterialProgressDrawable.MATERIAL_INTERPOLATOR.getInterpolation((interpolatedTime - 0.5f) / 0.5f) * (MaterialProgressDrawable.MAX_PROGRESS_ARC - minProgressArc)));
                 }
                 ring.setRotation(startingRotation + (0.25f * interpolatedTime));
                 MaterialProgressDrawable.this.setRotation((216.0f * interpolatedTime) + (MaterialProgressDrawable.FULL_ROTATION * (MaterialProgressDrawable.this.mRotationCount / 5.0f)));

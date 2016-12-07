@@ -7,7 +7,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.internal.Conversions;
 import org.aspectj.runtime.reflect.Factory;
-import org.telegram.messenger.exoplayer.C;
 
 public class GenericMediaHeaderTextAtom extends AbstractBox {
     public static final String TYPE = "text";
@@ -37,7 +36,7 @@ public class GenericMediaHeaderTextAtom extends AbstractBox {
     int unknown_6;
     int unknown_7;
     int unknown_8;
-    int unknown_9 = C.ENCODING_PCM_32BIT;
+    int unknown_9 = NUM;
 
     static {
         ajc$preClinit();

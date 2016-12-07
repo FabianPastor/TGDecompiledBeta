@@ -29,7 +29,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.exoplayer.hls.HlsChunkSource;
+import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.tgnet.TLRPC.TL_config;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.Updates;
@@ -184,7 +184,6 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
                         public void run(int response, int errorCode, String errorText) {
-                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -192,8 +191,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e2) {
-                                    e = e2;
+                                } catch (Exception e) {
+                                    e = e;
                                     FileLog.e("tmessages", e);
                                     return;
                                 }
@@ -204,10 +203,11 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e("tmessages", tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e3) {
-                                    e = e3;
+                                } catch (Exception e2) {
+                                    Throwable e3;
+                                    e3 = e2;
                                     error = error2;
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e("tmessages", e3);
                                     return;
                                 }
                             }
@@ -319,7 +319,7 @@ public class ConnectionsManager {
             native_pauseNetwork();
         } else if (!this.appPaused) {
             FileLog.e("tmessages", "reset app pause time");
-            if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > HlsChunkSource.DEFAULT_MIN_BUFFER_TO_SWITCH_UP_MS) {
+            if (this.lastPauseTime != 0 && System.currentTimeMillis() - this.lastPauseTime > ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS) {
                 ContactsController.getInstance().checkContacts();
             }
             this.lastPauseTime = 0;

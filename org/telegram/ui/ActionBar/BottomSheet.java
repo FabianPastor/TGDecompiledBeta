@@ -42,8 +42,6 @@ import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.DefaultLoadControl;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class BottomSheet extends Dialog {
@@ -108,7 +106,7 @@ public class BottomSheet extends Dialog {
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), C.ENCODING_PCM_32BIT));
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
         }
 
         public void setTextColor(int color) {
@@ -292,7 +290,7 @@ public class BottomSheet extends Dialog {
         private void checkDismiss(float velX, float velY) {
             boolean backAnimation;
             float translationY = BottomSheet.this.containerView.getTranslationY();
-            if ((translationY >= AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD, false) || (velY >= 3500.0f && Math.abs(velY) >= Math.abs(velX))) && (velY >= 0.0f || Math.abs(velY) < 3500.0f)) {
+            if ((translationY >= AndroidUtilities.getPixelsInCM(0.8f, false) || (velY >= 3500.0f && Math.abs(velY) >= Math.abs(velX))) && (velY >= 0.0f || Math.abs(velY) < 3500.0f)) {
                 backAnimation = false;
             } else {
                 backAnimation = true;
@@ -303,7 +301,7 @@ public class BottomSheet extends Dialog {
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(BottomSheet.this.containerView, "translationY", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
-                this.currentAnimation.setDuration((long) ((int) ((translationY / AndroidUtilities.getPixelsInCM(DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD, false)) * 150.0f)));
+                this.currentAnimation.setDuration((long) ((int) ((translationY / AndroidUtilities.getPixelsInCM(0.8f, false)) * 150.0f)));
                 this.currentAnimation.setInterpolator(new DecelerateInterpolator());
                 this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
                     public void onAnimationEnd(Animator animation) {
@@ -410,13 +408,13 @@ public class BottomSheet extends Dialog {
             }
             if (BottomSheet.this.containerView != null) {
                 if (BottomSheet.this.fullWidth) {
-                    BottomSheet.this.containerView.measure(MeasureSpec.makeMeasureSpec((BottomSheet.backgroundPaddingLeft * 2) + width, C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
+                    BottomSheet.this.containerView.measure(MeasureSpec.makeMeasureSpec((BottomSheet.backgroundPaddingLeft * 2) + width, NUM), MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
                 } else {
                     int widthSpec;
                     if (AndroidUtilities.isTablet()) {
-                        widthSpec = MeasureSpec.makeMeasureSpec(((int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD)) + (BottomSheet.backgroundPaddingLeft * 2), C.ENCODING_PCM_32BIT);
+                        widthSpec = MeasureSpec.makeMeasureSpec(((int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.8f)) + (BottomSheet.backgroundPaddingLeft * 2), NUM);
                     } else {
-                        widthSpec = MeasureSpec.makeMeasureSpec(isPortrait ? (BottomSheet.backgroundPaddingLeft * 2) + width : ((int) Math.max(((float) width) * DefaultLoadControl.DEFAULT_HIGH_BUFFER_LOAD, (float) Math.min(AndroidUtilities.dp(480.0f), width))) + (BottomSheet.backgroundPaddingLeft * 2), C.ENCODING_PCM_32BIT);
+                        widthSpec = MeasureSpec.makeMeasureSpec(isPortrait ? (BottomSheet.backgroundPaddingLeft * 2) + width : ((int) Math.max(((float) width) * 0.8f, (float) Math.min(AndroidUtilities.dp(480.0f), width))) + (BottomSheet.backgroundPaddingLeft * 2), NUM);
                     }
                     BottomSheet.this.containerView.measure(widthSpec, MeasureSpec.makeMeasureSpec(height, Integer.MIN_VALUE));
                 }
@@ -425,7 +423,7 @@ public class BottomSheet extends Dialog {
             for (int i = 0; i < childCount; i++) {
                 View child = getChildAt(i);
                 if (!(child.getVisibility() == 8 || child == BottomSheet.this.containerView || BottomSheet.this.onCustomMeasure(child, width, height))) {
-                    measureChildWithMargins(child, MeasureSpec.makeMeasureSpec(width, C.ENCODING_PCM_32BIT), 0, MeasureSpec.makeMeasureSpec(height, C.ENCODING_PCM_32BIT), 0);
+                    measureChildWithMargins(child, MeasureSpec.makeMeasureSpec(width, NUM), 0, MeasureSpec.makeMeasureSpec(height, NUM), 0);
                 }
             }
         }

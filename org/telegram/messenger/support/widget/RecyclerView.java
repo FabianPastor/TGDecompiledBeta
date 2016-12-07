@@ -67,8 +67,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.exoplayer.C;
-import org.telegram.messenger.exoplayer.text.Cue;
+import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -616,8 +616,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 this.mWidth = recyclerView.getWidth();
                 this.mHeight = recyclerView.getHeight();
             }
-            this.mWidthMode = C.ENCODING_PCM_32BIT;
-            this.mHeightMode = C.ENCODING_PCM_32BIT;
+            this.mWidthMode = NUM;
+            this.mHeightMode = NUM;
         }
 
         void setMeasureSpecs(int wSpec, int hSpec) {
@@ -687,7 +687,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             switch (mode) {
                 case Integer.MIN_VALUE:
                     return Math.min(size, Math.max(desired, min));
-                case C.ENCODING_PCM_32BIT /*1073741824*/:
+                case 1073741824:
                     return size;
                 default:
                     return Math.max(desired, min);
@@ -1205,7 +1205,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return true;
                 case 0:
                     return true;
-                case C.ENCODING_PCM_32BIT /*1073741824*/:
+                case 1073741824:
                     if (specSize != childSize) {
                         return false;
                     }
@@ -1234,17 +1234,17 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (canScroll) {
                 if (childDimension >= 0) {
                     resultSize = childDimension;
-                    resultMode = C.ENCODING_PCM_32BIT;
+                    resultMode = NUM;
                 } else {
                     resultSize = 0;
                     resultMode = 0;
                 }
             } else if (childDimension >= 0) {
                 resultSize = childDimension;
-                resultMode = C.ENCODING_PCM_32BIT;
+                resultMode = NUM;
             } else if (childDimension == -1) {
                 resultSize = size;
-                resultMode = C.ENCODING_PCM_32BIT;
+                resultMode = NUM;
             } else if (childDimension == -2) {
                 resultSize = size;
                 resultMode = Integer.MIN_VALUE;
@@ -1258,12 +1258,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             int resultMode = 0;
             if (childDimension >= 0) {
                 resultSize = childDimension;
-                resultMode = C.ENCODING_PCM_32BIT;
+                resultMode = NUM;
             } else if (canScroll) {
                 if (childDimension == -1) {
                     switch (parentMode) {
                         case Integer.MIN_VALUE:
-                        case C.ENCODING_PCM_32BIT /*1073741824*/:
+                        case 1073741824:
                             resultSize = size;
                             resultMode = parentMode;
                             break;
@@ -1283,7 +1283,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 resultMode = parentMode;
             } else if (childDimension == -2) {
                 resultSize = size;
-                resultMode = (parentMode == Integer.MIN_VALUE || parentMode == C.ENCODING_PCM_32BIT) ? Integer.MIN_VALUE : 0;
+                resultMode = (parentMode == Integer.MIN_VALUE || parentMode == NUM) ? Integer.MIN_VALUE : 0;
             }
             return MeasureSpec.makeMeasureSpec(resultSize, resultMode);
         }
@@ -1666,7 +1666,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         void setExactMeasureSpecsFrom(RecyclerView recyclerView) {
-            setMeasureSpecs(MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(recyclerView.getHeight(), C.ENCODING_PCM_32BIT));
+            setMeasureSpecs(MeasureSpec.makeMeasureSpec(recyclerView.getWidth(), NUM), MeasureSpec.makeMeasureSpec(recyclerView.getHeight(), NUM));
         }
 
         boolean shouldMeasureTwice() {
@@ -2273,13 +2273,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         }
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
-            View view;
+            ViewHolder vh;
+            int layoutIndex;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
-                ViewHolder vh;
-                int layoutIndex;
+                View view;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {
                     i++;
@@ -4747,7 +4747,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         if (canRunFocusFailure && (direction == 2 || direction == 1)) {
             boolean needsFocusFailureLayout = false;
             if (this.mLayout.canScrollVertically()) {
-                if (ff.findNextFocus(this, focused, direction == 2 ? 130 : 33) == null) {
+                if (ff.findNextFocus(this, focused, direction == 2 ? TsExtractor.TS_STREAM_TYPE_HDMV_DTS : 33) == null) {
                     needsFocusFailureLayout = true;
                 } else {
                     needsFocusFailureLayout = false;
@@ -4824,7 +4824,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return true;
         }
         if (direction == 2) {
-            return isPreferredNextFocusAbsolute(focused, next, 130);
+            return isPreferredNextFocusAbsolute(focused, next, TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
         }
         return isPreferredNextFocusAbsolute(focused, next, 33);
     }
@@ -4850,7 +4850,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     return true;
                 }
                 return false;
-            case 130:
+            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
                 if ((this.mTempRect.top < this.mTempRect2.top || this.mTempRect.bottom <= this.mTempRect2.top) && this.mTempRect.bottom < this.mTempRect2.bottom) {
                     return true;
                 }
@@ -5352,7 +5352,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         } else if (this.mLayout.mAutoMeasure) {
             int widthMode = MeasureSpec.getMode(widthSpec);
             int heightMode = MeasureSpec.getMode(heightSpec);
-            if (widthMode == C.ENCODING_PCM_32BIT && heightMode == C.ENCODING_PCM_32BIT) {
+            if (widthMode == NUM && heightMode == NUM) {
                 skipMeasure = true;
             }
             this.mLayout.onMeasure(this.mRecycler, this.mState, widthSpec, heightSpec);
@@ -5365,7 +5365,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 dispatchLayoutStep2();
                 this.mLayout.setMeasuredDimensionFromChildren(widthSpec, heightSpec);
                 if (this.mLayout.shouldMeasureTwice()) {
-                    this.mLayout.setMeasureSpecs(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), C.ENCODING_PCM_32BIT), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), C.ENCODING_PCM_32BIT));
+                    this.mLayout.setMeasureSpecs(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
                     this.mState.mIsMeasuring = true;
                     dispatchLayoutStep2();
                     this.mLayout.setMeasuredDimensionFromChildren(widthSpec, heightSpec);

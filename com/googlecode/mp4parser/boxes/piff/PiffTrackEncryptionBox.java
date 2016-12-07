@@ -24,7 +24,7 @@ public class PiffTrackEncryptionBox extends AbstractTrackEncryptionBox {
     }
 
     public byte[] getUserType() {
-        return new byte[]{(byte) -119, (byte) 116, (byte) -37, (byte) -50, (byte) 123, (byte) -25, (byte) 76, (byte) 81, (byte) -124, (byte) -7, (byte) 113, (byte) 72, (byte) -7, (byte) -120, ClosedCaptionCtrl.ROLL_UP_CAPTIONS_2_ROWS, (byte) 84};
+        return new byte[]{(byte) -119, (byte) 116, (byte) -37, (byte) -50, (byte) 123, (byte) -25, (byte) 76, (byte) 81, (byte) -124, (byte) -7, (byte) 113, (byte) 72, (byte) -7, (byte) -120, (byte) 37, (byte) 84};
     }
 
     public int getFlags() {
