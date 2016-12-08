@@ -37,6 +37,7 @@ import org.telegram.tgnet.TLRPC.ChatParticipant;
 import org.telegram.tgnet.TLRPC.ChatParticipants;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.InputChannel;
 import org.telegram.tgnet.TLRPC.InputMedia;
 import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.Message;
@@ -696,6 +697,8 @@ public class MessagesStorage {
                         AbstractSerializedData data = cursor.byteBufferValue(1);
                         if (data != null) {
                             int type = data.readInt32(false);
+                            final int channelId;
+                            final int newDialogType;
                             switch (type) {
                                 case 0:
                                     Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
@@ -710,11 +713,11 @@ public class MessagesStorage {
                                     }
                                     break;
                                 case 1:
-                                    final int channelId = data.readInt32(false);
-                                    final int newDialogType = data.readInt32(false);
+                                    channelId = data.readInt32(false);
+                                    newDialogType = data.readInt32(false);
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
-                                            MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId);
+                                            MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId, null);
                                         }
                                     });
                                     break;
@@ -753,6 +756,16 @@ public class MessagesStorage {
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             MessagesController.getInstance().pinDialog(did, pin, TLdeserialize, j2);
+                                        }
+                                    });
+                                    break;
+                                case 6:
+                                    channelId = data.readInt32(false);
+                                    newDialogType = data.readInt32(false);
+                                    final InputChannel inputChannel = InputChannel.TLdeserialize(data, data.readInt32(false), false);
+                                    Utilities.stageQueue.postRunnable(new Runnable() {
+                                        public void run() {
+                                            MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId, inputChannel);
                                         }
                                     });
                                     break;
@@ -4448,12 +4461,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
+        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
-                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -5844,7 +5857,6 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                Message message;
                 messages_Dialogs dialogs = new messages_Dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -5855,6 +5867,7 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
+                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

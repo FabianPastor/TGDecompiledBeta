@@ -616,11 +616,11 @@ public class SimpleExoPlayer implements ExoPlayer {
     }
 
     protected void buildAudioRenderers(Context context, Handler mainHandler, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, int extensionRendererMode, AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
+        int extensionRendererIndex;
         Exception e;
         ArrayList<Renderer> arrayList = out;
         arrayList.add(new MediaCodecAudioRenderer(MediaCodecSelector.DEFAULT, drmSessionManager, true, mainHandler, eventListener, AudioCapabilities.getCapabilities(context)));
         if (extensionRendererMode != 0) {
-            int extensionRendererIndex;
             int extensionRendererIndex2 = out.size();
             if (extensionRendererMode == 2) {
                 extensionRendererIndex = extensionRendererIndex2 - 1;

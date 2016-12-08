@@ -1148,78 +1148,89 @@ public class MessagesController implements NotificationCenterDelegate {
     private void reloadDialogsReadValue(ArrayList<TL_dialog> dialogs, long did) {
         if (did != 0 || (dialogs != null && !dialogs.isEmpty())) {
             TL_messages_getPeerDialogs req = new TL_messages_getPeerDialogs();
+            InputPeer inputPeer;
             if (dialogs != null) {
                 for (int a = 0; a < dialogs.size(); a++) {
-                    req.peers.add(getInputPeer((int) ((TL_dialog) dialogs.get(a)).id));
-                }
-            } else {
-                req.peers.add(getInputPeer((int) did));
-            }
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (response != null) {
-                        TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
-                        ArrayList<Update> arrayList = new ArrayList();
-                        for (int a = 0; a < res.dialogs.size(); a++) {
-                            TL_dialog dialog = (TL_dialog) res.dialogs.get(a);
-                            if (dialog.read_inbox_max_id == 0) {
-                                dialog.read_inbox_max_id = 1;
-                            }
-                            if (dialog.read_outbox_max_id == 0) {
-                                dialog.read_outbox_max_id = 1;
-                            }
-                            if (dialog.id == 0 && dialog.peer != null) {
-                                if (dialog.peer.user_id != 0) {
-                                    dialog.id = (long) dialog.peer.user_id;
-                                } else if (dialog.peer.chat_id != 0) {
-                                    dialog.id = (long) (-dialog.peer.chat_id);
-                                } else if (dialog.peer.channel_id != 0) {
-                                    dialog.id = (long) (-dialog.peer.channel_id);
-                                }
-                            }
-                            Integer value = (Integer) MessagesController.this.dialogs_read_inbox_max.get(Long.valueOf(dialog.id));
-                            if (value == null) {
-                                value = Integer.valueOf(0);
-                            }
-                            MessagesController.this.dialogs_read_inbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(dialog.read_inbox_max_id, value.intValue())));
-                            if (value.intValue() == 0) {
-                                if (dialog.peer.channel_id != 0) {
-                                    TL_updateReadChannelInbox update = new TL_updateReadChannelInbox();
-                                    update.channel_id = dialog.peer.channel_id;
-                                    update.max_id = dialog.read_inbox_max_id;
-                                    arrayList.add(update);
-                                } else {
-                                    TL_updateReadHistoryInbox update2 = new TL_updateReadHistoryInbox();
-                                    update2.peer = dialog.peer;
-                                    update2.max_id = dialog.read_inbox_max_id;
-                                    arrayList.add(update2);
-                                }
-                            }
-                            value = (Integer) MessagesController.this.dialogs_read_outbox_max.get(Long.valueOf(dialog.id));
-                            if (value == null) {
-                                value = Integer.valueOf(0);
-                            }
-                            MessagesController.this.dialogs_read_outbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(dialog.read_outbox_max_id, value.intValue())));
-                            if (value.intValue() == 0) {
-                                if (dialog.peer.channel_id != 0) {
-                                    TL_updateReadChannelOutbox update3 = new TL_updateReadChannelOutbox();
-                                    update3.channel_id = dialog.peer.channel_id;
-                                    update3.max_id = dialog.read_outbox_max_id;
-                                    arrayList.add(update3);
-                                } else {
-                                    TL_updateReadHistoryOutbox update4 = new TL_updateReadHistoryOutbox();
-                                    update4.peer = dialog.peer;
-                                    update4.max_id = dialog.read_outbox_max_id;
-                                    arrayList.add(update4);
-                                }
-                            }
-                        }
-                        if (!arrayList.isEmpty()) {
-                            MessagesController.this.processUpdateArray(arrayList, null, null, false);
-                        }
+                    inputPeer = getInputPeer((int) ((TL_dialog) dialogs.get(a)).id);
+                    if (!(inputPeer instanceof TL_inputPeerChannel) || inputPeer.access_hash != 0) {
+                        req.peers.add(inputPeer);
                     }
                 }
-            });
+            } else {
+                inputPeer = getInputPeer((int) did);
+                if (!(inputPeer instanceof TL_inputPeerChannel) || inputPeer.access_hash != 0) {
+                    req.peers.add(inputPeer);
+                } else {
+                    return;
+                }
+            }
+            if (!req.peers.isEmpty()) {
+                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        if (response != null) {
+                            TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
+                            ArrayList<Update> arrayList = new ArrayList();
+                            for (int a = 0; a < res.dialogs.size(); a++) {
+                                TL_dialog dialog = (TL_dialog) res.dialogs.get(a);
+                                if (dialog.read_inbox_max_id == 0) {
+                                    dialog.read_inbox_max_id = 1;
+                                }
+                                if (dialog.read_outbox_max_id == 0) {
+                                    dialog.read_outbox_max_id = 1;
+                                }
+                                if (dialog.id == 0 && dialog.peer != null) {
+                                    if (dialog.peer.user_id != 0) {
+                                        dialog.id = (long) dialog.peer.user_id;
+                                    } else if (dialog.peer.chat_id != 0) {
+                                        dialog.id = (long) (-dialog.peer.chat_id);
+                                    } else if (dialog.peer.channel_id != 0) {
+                                        dialog.id = (long) (-dialog.peer.channel_id);
+                                    }
+                                }
+                                Integer value = (Integer) MessagesController.this.dialogs_read_inbox_max.get(Long.valueOf(dialog.id));
+                                if (value == null) {
+                                    value = Integer.valueOf(0);
+                                }
+                                MessagesController.this.dialogs_read_inbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(dialog.read_inbox_max_id, value.intValue())));
+                                if (value.intValue() == 0) {
+                                    if (dialog.peer.channel_id != 0) {
+                                        TL_updateReadChannelInbox update = new TL_updateReadChannelInbox();
+                                        update.channel_id = dialog.peer.channel_id;
+                                        update.max_id = dialog.read_inbox_max_id;
+                                        arrayList.add(update);
+                                    } else {
+                                        TL_updateReadHistoryInbox update2 = new TL_updateReadHistoryInbox();
+                                        update2.peer = dialog.peer;
+                                        update2.max_id = dialog.read_inbox_max_id;
+                                        arrayList.add(update2);
+                                    }
+                                }
+                                value = (Integer) MessagesController.this.dialogs_read_outbox_max.get(Long.valueOf(dialog.id));
+                                if (value == null) {
+                                    value = Integer.valueOf(0);
+                                }
+                                MessagesController.this.dialogs_read_outbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(dialog.read_outbox_max_id, value.intValue())));
+                                if (value.intValue() == 0) {
+                                    if (dialog.peer.channel_id != 0) {
+                                        TL_updateReadChannelOutbox update3 = new TL_updateReadChannelOutbox();
+                                        update3.channel_id = dialog.peer.channel_id;
+                                        update3.max_id = dialog.read_outbox_max_id;
+                                        arrayList.add(update3);
+                                    } else {
+                                        TL_updateReadHistoryOutbox update4 = new TL_updateReadHistoryOutbox();
+                                        update4.peer = dialog.peer;
+                                        update4.max_id = dialog.read_outbox_max_id;
+                                        arrayList.add(update4);
+                                    }
+                                }
+                            }
+                            if (!arrayList.isEmpty()) {
+                                MessagesController.this.processUpdateArray(arrayList, null, null, false);
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -2811,7 +2822,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (MessagesController.this.needShortPollChannels.indexOfKey(channelId) < 0 || MessagesController.this.shortPollChannels.indexOfKey(channelId) >= 0) {
                             MessagesController.this.getChannelDifference(channelId);
                         } else {
-                            MessagesController.this.getChannelDifference(channelId, 2, 0);
+                            MessagesController.this.getChannelDifference(channelId, 2, 0, null);
                         }
                     }
                     for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Messages.chats.size(); a++) {
@@ -3185,6 +3196,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
@@ -3202,7 +3214,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3638,7 +3649,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3653,6 +3663,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -4904,58 +4915,62 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
-        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
-            this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
-            TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
-            inputPeer.channel_id = channel.id;
-            inputPeer.access_hash = channel.access_hash;
-            TL_messages_getPeerDialogs req = new TL_messages_getPeerDialogs();
-            req.peers.add(inputPeer);
-            if (taskId == 0) {
-                NativeByteBuffer data = null;
-                try {
-                    NativeByteBuffer data2 = new NativeByteBuffer(channel.getObjectSize() + 4);
+            if (channel.access_hash != 0) {
+                long newTaskId;
+                TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
+                inputPeer.channel_id = channel.id;
+                inputPeer.access_hash = channel.access_hash;
+                this.gettingUnknownChannels.put(Integer.valueOf(channel.id), Boolean.valueOf(true));
+                TL_messages_getPeerDialogs req = new TL_messages_getPeerDialogs();
+                req.peers.add(inputPeer);
+                if (taskId == 0) {
+                    NativeByteBuffer data = null;
                     try {
-                        data2.writeInt32(0);
-                        channel.serializeToStream(data2);
-                        data = data2;
-                    } catch (Exception e2) {
-                        e = e2;
-                        data = data2;
+                        NativeByteBuffer data2 = new NativeByteBuffer(channel.getObjectSize() + 4);
+                        try {
+                            data2.writeInt32(0);
+                            channel.serializeToStream(data2);
+                            data = data2;
+                        } catch (Exception e2) {
+                            e = e2;
+                            data = data2;
+                            FileLog.e("tmessages", e);
+                            newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    if (response != null) {
+                                        TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
+                                        if (!(res.dialogs.isEmpty() || res.chats.isEmpty())) {
+                                            TL_messages_dialogs dialogs = new TL_messages_dialogs();
+                                            dialogs.dialogs.addAll(res.dialogs);
+                                            dialogs.messages.addAll(res.messages);
+                                            dialogs.users.addAll(res.users);
+                                            dialogs.chats.addAll(res.chats);
+                                            MessagesController.this.processLoadedDialogs(dialogs, null, 0, 1, 2, false, false);
+                                        }
+                                    }
+                                    if (newTaskId != 0) {
+                                        MessagesStorage.getInstance().removePendingTask(newTaskId);
+                                    }
+                                    MessagesController.this.gettingUnknownChannels.remove(Integer.valueOf(channel.id));
+                                }
+                            });
+                        }
+                    } catch (Exception e3) {
+                        e = e3;
                         FileLog.e("tmessages", e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (response != null) {
-                                    TL_messages_peerDialogs res = (TL_messages_peerDialogs) response;
-                                    if (!(res.dialogs.isEmpty() || res.chats.isEmpty())) {
-                                        TL_messages_dialogs dialogs = new TL_messages_dialogs();
-                                        dialogs.dialogs.addAll(res.dialogs);
-                                        dialogs.messages.addAll(res.messages);
-                                        dialogs.users.addAll(res.users);
-                                        dialogs.chats.addAll(res.chats);
-                                        MessagesController.this.processLoadedDialogs(dialogs, null, 0, 1, 2, false, false);
-                                    }
-                                }
-                                if (newTaskId != 0) {
-                                    MessagesStorage.getInstance().removePendingTask(newTaskId);
-                                }
-                                MessagesController.this.gettingUnknownChannels.remove(Integer.valueOf(channel.id));
-                            }
-                        });
+                        ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                     }
-                } catch (Exception e3) {
-                    e = e3;
-                    FileLog.e("tmessages", e);
                     newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                    ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+                } else {
+                    newTaskId = taskId;
                 }
-                newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-            } else {
-                newTaskId = taskId;
+                ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+            } else if (taskId != 0) {
+                MessagesStorage.getInstance().removePendingTask(taskId);
             }
-            ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
         }
     }
 
@@ -4968,28 +4983,24 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 MessagesController.this.needShortPollChannels.put(channelId, 0);
                 if (MessagesController.this.shortPollChannels.indexOfKey(channelId) < 0) {
-                    MessagesController.this.getChannelDifference(channelId, 3, 0);
+                    MessagesController.this.getChannelDifference(channelId, 3, 0, null);
                 }
             }
         });
     }
 
     private void getChannelDifference(int channelId) {
-        getChannelDifference(channelId, 0, 0);
+        getChannelDifference(channelId, 0, 0, null);
     }
 
-    protected void getChannelDifference(int channelId, int newDialogType, long taskId) {
-        Integer channelPts;
+    protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
         Throwable e;
-        long newTaskId;
-        TL_updates_getChannelDifference req;
-        final int i;
-        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5011,107 +5022,198 @@ public class MessagesController implements NotificationCenterDelegate {
             } else {
                 return;
             }
-            if (taskId == 0) {
-                NativeByteBuffer data = null;
-                try {
-                    NativeByteBuffer data2 = new NativeByteBuffer(12);
+            if (inputChannel == null) {
+                inputChannel = getInputChannel(channelId);
+            }
+            if (inputChannel != null && inputChannel.access_hash != 0) {
+                long newTaskId;
+                TL_updates_getChannelDifference req;
+                final int i;
+                final int i2;
+                if (taskId == 0) {
+                    NativeByteBuffer data = null;
                     try {
-                        data2.writeInt32(1);
-                        data2.writeInt32(channelId);
-                        data2.writeInt32(newDialogType);
-                        data = data2;
-                    } catch (Exception e2) {
-                        e = e2;
-                        data = data2;
-                        FileLog.e("tmessages", e);
-                        newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                        this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
-                        req = new TL_updates_getChannelDifference();
-                        req.channel = getInputChannel(channelId);
-                        req.filter = new TL_channelMessagesFilterEmpty();
-                        req.pts = channelPts.intValue();
-                        req.limit = limit;
-                        req.force = newDialogType != 3;
-                        FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
-                        i = channelId;
-                        i2 = newDialogType;
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    int a;
-                                    final updates_ChannelDifference res = (updates_ChannelDifference) response;
-                                    final HashMap<Integer, User> usersDict = new HashMap();
-                                    for (a = 0; a < res.users.size(); a++) {
-                                        User user = (User) res.users.get(a);
-                                        usersDict.put(Integer.valueOf(user.id), user);
-                                    }
-                                    Chat channel = null;
-                                    for (a = 0; a < res.chats.size(); a++) {
-                                        Chat chat = (Chat) res.chats.get(a);
-                                        if (chat.id == i) {
-                                            channel = chat;
-                                            break;
+                        NativeByteBuffer data2 = new NativeByteBuffer(inputChannel.getObjectSize() + 12);
+                        try {
+                            data2.writeInt32(6);
+                            data2.writeInt32(channelId);
+                            data2.writeInt32(newDialogType);
+                            inputChannel.serializeToStream(data2);
+                            data = data2;
+                        } catch (Exception e2) {
+                            e = e2;
+                            data = data2;
+                            FileLog.e("tmessages", e);
+                            newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                            this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
+                            req = new TL_updates_getChannelDifference();
+                            req.channel = inputChannel;
+                            req.filter = new TL_channelMessagesFilterEmpty();
+                            req.pts = channelPts.intValue();
+                            req.limit = limit;
+                            req.force = newDialogType != 3;
+                            FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                            i = channelId;
+                            i2 = newDialogType;
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    if (error == null) {
+                                        int a;
+                                        final updates_ChannelDifference res = (updates_ChannelDifference) response;
+                                        final HashMap<Integer, User> usersDict = new HashMap();
+                                        for (a = 0; a < res.users.size(); a++) {
+                                            User user = (User) res.users.get(a);
+                                            usersDict.put(Integer.valueOf(user.id), user);
                                         }
-                                    }
-                                    final Chat channelFinal = channel;
-                                    final ArrayList<TL_updateMessageID> msgUpdates = new ArrayList();
-                                    if (!res.other_updates.isEmpty()) {
-                                        a = 0;
-                                        while (a < res.other_updates.size()) {
-                                            Update upd = (Update) res.other_updates.get(a);
-                                            if (upd instanceof TL_updateMessageID) {
-                                                msgUpdates.add((TL_updateMessageID) upd);
-                                                res.other_updates.remove(a);
-                                                a--;
+                                        Chat channel = null;
+                                        for (a = 0; a < res.chats.size(); a++) {
+                                            Chat chat = (Chat) res.chats.get(a);
+                                            if (chat.id == i) {
+                                                channel = chat;
+                                                break;
                                             }
-                                            a++;
                                         }
-                                    }
-                                    MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
-                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                        public void run() {
-                                            MessagesController.this.putUsers(res.users, false);
-                                            MessagesController.this.putChats(res.chats, false);
+                                        final Chat channelFinal = channel;
+                                        final ArrayList<TL_updateMessageID> msgUpdates = new ArrayList();
+                                        if (!res.other_updates.isEmpty()) {
+                                            a = 0;
+                                            while (a < res.other_updates.size()) {
+                                                Update upd = (Update) res.other_updates.get(a);
+                                                if (upd instanceof TL_updateMessageID) {
+                                                    msgUpdates.add((TL_updateMessageID) upd);
+                                                    res.other_updates.remove(a);
+                                                    a--;
+                                                }
+                                                a++;
+                                            }
                                         }
-                                    });
-                                    MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
-                                        public void run() {
-                                            if (!msgUpdates.isEmpty()) {
-                                                final HashMap<Integer, long[]> corrected = new HashMap();
-                                                Iterator it = msgUpdates.iterator();
-                                                while (it.hasNext()) {
-                                                    TL_updateMessageID update = (TL_updateMessageID) it.next();
-                                                    long[] ids = MessagesStorage.getInstance().updateMessageStateAndId(update.random_id, null, update.id, 0, false, i);
-                                                    if (ids != null) {
-                                                        corrected.put(Integer.valueOf(update.id), ids);
+                                        MessagesStorage.getInstance().putUsersAndChats(res.users, res.chats, true, true);
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                MessagesController.this.putUsers(res.users, false);
+                                                MessagesController.this.putChats(res.chats, false);
+                                            }
+                                        });
+                                        MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                                            public void run() {
+                                                if (!msgUpdates.isEmpty()) {
+                                                    final HashMap<Integer, long[]> corrected = new HashMap();
+                                                    Iterator it = msgUpdates.iterator();
+                                                    while (it.hasNext()) {
+                                                        TL_updateMessageID update = (TL_updateMessageID) it.next();
+                                                        long[] ids = MessagesStorage.getInstance().updateMessageStateAndId(update.random_id, null, update.id, 0, false, i);
+                                                        if (ids != null) {
+                                                            corrected.put(Integer.valueOf(update.id), ids);
+                                                        }
+                                                    }
+                                                    if (!corrected.isEmpty()) {
+                                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                                            public void run() {
+                                                                for (Entry<Integer, long[]> entry : corrected.entrySet()) {
+                                                                    Integer newId = (Integer) entry.getKey();
+                                                                    SendMessagesHelper.getInstance().processSentMessage(Integer.valueOf((int) ((long[]) entry.getValue())[1]).intValue());
+                                                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageReceivedByServer, oldId, newId, null, Long.valueOf(ids[0]));
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
-                                                if (!corrected.isEmpty()) {
-                                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                                        public void run() {
-                                                            for (Entry<Integer, long[]> entry : corrected.entrySet()) {
-                                                                Integer newId = (Integer) entry.getKey();
-                                                                SendMessagesHelper.getInstance().processSentMessage(Integer.valueOf((int) ((long[]) entry.getValue())[1]).intValue());
-                                                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageReceivedByServer, oldId, newId, null, Long.valueOf(ids[0]));
+                                                Utilities.stageQueue.postRunnable(new Runnable() {
+                                                    public void run() {
+                                                        long dialog_id;
+                                                        Integer inboxValue;
+                                                        Integer outboxValue;
+                                                        int a;
+                                                        Message message;
+                                                        Integer num;
+                                                        boolean z;
+                                                        if ((res instanceof TL_updates_channelDifference) || (res instanceof TL_updates_channelDifferenceEmpty)) {
+                                                            if (!res.new_messages.isEmpty()) {
+                                                                final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
+                                                                ImageLoader.saveMessagesThumbs(res.new_messages);
+                                                                final ArrayList<MessageObject> pushMessages = new ArrayList();
+                                                                dialog_id = (long) (-i);
+                                                                inboxValue = (Integer) MessagesController.this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
+                                                                if (inboxValue == null) {
+                                                                    inboxValue = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(false, dialog_id));
+                                                                    MessagesController.this.dialogs_read_inbox_max.put(Long.valueOf(dialog_id), inboxValue);
+                                                                }
+                                                                outboxValue = (Integer) MessagesController.this.dialogs_read_outbox_max.get(Long.valueOf(dialog_id));
+                                                                if (outboxValue == null) {
+                                                                    outboxValue = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, dialog_id));
+                                                                    MessagesController.this.dialogs_read_outbox_max.put(Long.valueOf(dialog_id), outboxValue);
+                                                                }
+                                                                for (a = 0; a < res.new_messages.size(); a++) {
+                                                                    MessageObject obj;
+                                                                    long uid;
+                                                                    ArrayList<MessageObject> arr;
+                                                                    message = (Message) res.new_messages.get(a);
+                                                                    if (channelFinal == null || !channelFinal.left) {
+                                                                        if (message.out) {
+                                                                            num = outboxValue;
+                                                                        } else {
+                                                                            num = inboxValue;
+                                                                        }
+                                                                        if (num.intValue() < message.id && !(message.action instanceof TL_messageActionChannelCreate)) {
+                                                                            z = true;
+                                                                            message.unread = z;
+                                                                            if (channelFinal != null && channelFinal.megagroup) {
+                                                                                message.flags |= Integer.MIN_VALUE;
+                                                                            }
+                                                                            obj = new MessageObject(message, usersDict, MessagesController.this.createdDialogIds.contains(Long.valueOf(dialog_id)));
+                                                                            if (!obj.isOut() && obj.isUnread()) {
+                                                                                pushMessages.add(obj);
+                                                                            }
+                                                                            uid = (long) (-i);
+                                                                            arr = (ArrayList) messages.get(Long.valueOf(uid));
+                                                                            if (arr == null) {
+                                                                                arr = new ArrayList();
+                                                                                messages.put(Long.valueOf(uid), arr);
+                                                                            }
+                                                                            arr.add(obj);
+                                                                        }
+                                                                    }
+                                                                    z = false;
+                                                                    message.unread = z;
+                                                                    message.flags |= Integer.MIN_VALUE;
+                                                                    obj = new MessageObject(message, usersDict, MessagesController.this.createdDialogIds.contains(Long.valueOf(dialog_id)));
+                                                                    pushMessages.add(obj);
+                                                                    uid = (long) (-i);
+                                                                    arr = (ArrayList) messages.get(Long.valueOf(uid));
+                                                                    if (arr == null) {
+                                                                        arr = new ArrayList();
+                                                                        messages.put(Long.valueOf(uid), arr);
+                                                                    }
+                                                                    arr.add(obj);
+                                                                }
+                                                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                                                    public void run() {
+                                                                        for (Entry<Long, ArrayList<MessageObject>> pair : messages.entrySet()) {
+                                                                            ArrayList<MessageObject> value = (ArrayList) pair.getValue();
+                                                                            MessagesController.this.updateInterfaceWithMessages(((Long) pair.getKey()).longValue(), value);
+                                                                        }
+                                                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+                                                                    }
+                                                                });
+                                                                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                                                                    public void run() {
+                                                                        if (!pushMessages.isEmpty()) {
+                                                                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                                                                public void run() {
+                                                                                    NotificationsController.getInstance().processNewMessages(pushMessages, true);
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                        MessagesStorage.getInstance().putMessages(res.new_messages, true, false, false, MediaController.getInstance().getAutodownloadMask());
+                                                                    }
+                                                                });
                                                             }
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                            Utilities.stageQueue.postRunnable(new Runnable() {
-                                                public void run() {
-                                                    long dialog_id;
-                                                    Integer inboxValue;
-                                                    Integer outboxValue;
-                                                    int a;
-                                                    Message message;
-                                                    Integer num;
-                                                    boolean z;
-                                                    if ((res instanceof TL_updates_channelDifference) || (res instanceof TL_updates_channelDifferenceEmpty)) {
-                                                        if (!res.new_messages.isEmpty()) {
-                                                            final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
-                                                            ImageLoader.saveMessagesThumbs(res.new_messages);
-                                                            final ArrayList<MessageObject> pushMessages = new ArrayList();
+                                                            if (!res.other_updates.isEmpty()) {
+                                                                MessagesController.this.processUpdateArray(res.other_updates, res.users, res.chats, true);
+                                                            }
+                                                            MessagesController.this.processChannelsUpdatesQueue(i, 1);
+                                                            MessagesStorage.getInstance().saveChannelPts(i, res.pts);
+                                                        } else if (res instanceof TL_updates_channelDifferenceTooLong) {
                                                             dialog_id = (long) (-i);
                                                             inboxValue = (Integer) MessagesController.this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
                                                             if (inboxValue == null) {
@@ -5123,178 +5225,99 @@ public class MessagesController implements NotificationCenterDelegate {
                                                                 outboxValue = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, dialog_id));
                                                                 MessagesController.this.dialogs_read_outbox_max.put(Long.valueOf(dialog_id), outboxValue);
                                                             }
-                                                            for (a = 0; a < res.new_messages.size(); a++) {
-                                                                MessageObject obj;
-                                                                long uid;
-                                                                ArrayList<MessageObject> arr;
-                                                                message = (Message) res.new_messages.get(a);
-                                                                if (channelFinal == null || !channelFinal.left) {
+                                                            for (a = 0; a < res.messages.size(); a++) {
+                                                                message = (Message) res.messages.get(a);
+                                                                message.dialog_id = (long) (-i);
+                                                                if (!(message.action instanceof TL_messageActionChannelCreate) && (channelFinal == null || !channelFinal.left)) {
                                                                     if (message.out) {
                                                                         num = outboxValue;
                                                                     } else {
                                                                         num = inboxValue;
                                                                     }
-                                                                    if (num.intValue() < message.id && !(message.action instanceof TL_messageActionChannelCreate)) {
+                                                                    if (num.intValue() < message.id) {
                                                                         z = true;
                                                                         message.unread = z;
                                                                         if (channelFinal != null && channelFinal.megagroup) {
                                                                             message.flags |= Integer.MIN_VALUE;
                                                                         }
-                                                                        obj = new MessageObject(message, usersDict, MessagesController.this.createdDialogIds.contains(Long.valueOf(dialog_id)));
-                                                                        if (!obj.isOut() && obj.isUnread()) {
-                                                                            pushMessages.add(obj);
-                                                                        }
-                                                                        uid = (long) (-i);
-                                                                        arr = (ArrayList) messages.get(Long.valueOf(uid));
-                                                                        if (arr == null) {
-                                                                            arr = new ArrayList();
-                                                                            messages.put(Long.valueOf(uid), arr);
-                                                                        }
-                                                                        arr.add(obj);
                                                                     }
                                                                 }
                                                                 z = false;
                                                                 message.unread = z;
                                                                 message.flags |= Integer.MIN_VALUE;
-                                                                obj = new MessageObject(message, usersDict, MessagesController.this.createdDialogIds.contains(Long.valueOf(dialog_id)));
-                                                                pushMessages.add(obj);
-                                                                uid = (long) (-i);
-                                                                arr = (ArrayList) messages.get(Long.valueOf(uid));
-                                                                if (arr == null) {
-                                                                    arr = new ArrayList();
-                                                                    messages.put(Long.valueOf(uid), arr);
-                                                                }
-                                                                arr.add(obj);
                                                             }
-                                                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                                                public void run() {
-                                                                    for (Entry<Long, ArrayList<MessageObject>> pair : messages.entrySet()) {
-                                                                        ArrayList<MessageObject> value = (ArrayList) pair.getValue();
-                                                                        MessagesController.this.updateInterfaceWithMessages(((Long) pair.getKey()).longValue(), value);
-                                                                    }
-                                                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                                                                }
-                                                            });
-                                                            MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
-                                                                public void run() {
-                                                                    if (!pushMessages.isEmpty()) {
-                                                                        AndroidUtilities.runOnUIThread(new Runnable() {
-                                                                            public void run() {
-                                                                                NotificationsController.getInstance().processNewMessages(pushMessages, true);
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                    MessagesStorage.getInstance().putMessages(res.new_messages, true, false, false, MediaController.getInstance().getAutodownloadMask());
-                                                                }
-                                                            });
+                                                            MessagesStorage.getInstance().overwriteChannel(i, (TL_updates_channelDifferenceTooLong) res, i2);
                                                         }
-                                                        if (!res.other_updates.isEmpty()) {
-                                                            MessagesController.this.processUpdateArray(res.other_updates, res.users, res.chats, true);
+                                                        MessagesController.this.gettingDifferenceChannels.remove(Integer.valueOf(i));
+                                                        MessagesController.this.channelsPts.put(Integer.valueOf(i), Integer.valueOf(res.pts));
+                                                        if ((res.flags & 2) != 0) {
+                                                            MessagesController.this.shortPollChannels.put(i, ((int) (System.currentTimeMillis() / 1000)) + res.timeout);
                                                         }
-                                                        MessagesController.this.processChannelsUpdatesQueue(i, 1);
-                                                        MessagesStorage.getInstance().saveChannelPts(i, res.pts);
-                                                    } else if (res instanceof TL_updates_channelDifferenceTooLong) {
-                                                        dialog_id = (long) (-i);
-                                                        inboxValue = (Integer) MessagesController.this.dialogs_read_inbox_max.get(Long.valueOf(dialog_id));
-                                                        if (inboxValue == null) {
-                                                            inboxValue = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(false, dialog_id));
-                                                            MessagesController.this.dialogs_read_inbox_max.put(Long.valueOf(dialog_id), inboxValue);
+                                                        if (!res.isFinal) {
+                                                            MessagesController.this.getChannelDifference(i);
                                                         }
-                                                        outboxValue = (Integer) MessagesController.this.dialogs_read_outbox_max.get(Long.valueOf(dialog_id));
-                                                        if (outboxValue == null) {
-                                                            outboxValue = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, dialog_id));
-                                                            MessagesController.this.dialogs_read_outbox_max.put(Long.valueOf(dialog_id), outboxValue);
+                                                        FileLog.e("tmessages", "received channel difference with pts = " + res.pts + " channelId = " + i);
+                                                        FileLog.e("tmessages", "new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+                                                        if (newTaskId != 0) {
+                                                            MessagesStorage.getInstance().removePendingTask(newTaskId);
                                                         }
-                                                        for (a = 0; a < res.messages.size(); a++) {
-                                                            message = (Message) res.messages.get(a);
-                                                            message.dialog_id = (long) (-i);
-                                                            if (!(message.action instanceof TL_messageActionChannelCreate) && (channelFinal == null || !channelFinal.left)) {
-                                                                if (message.out) {
-                                                                    num = outboxValue;
-                                                                } else {
-                                                                    num = inboxValue;
-                                                                }
-                                                                if (num.intValue() < message.id) {
-                                                                    z = true;
-                                                                    message.unread = z;
-                                                                    if (channelFinal != null && channelFinal.megagroup) {
-                                                                        message.flags |= Integer.MIN_VALUE;
-                                                                    }
-                                                                }
-                                                            }
-                                                            z = false;
-                                                            message.unread = z;
-                                                            message.flags |= Integer.MIN_VALUE;
-                                                        }
-                                                        MessagesStorage.getInstance().overwriteChannel(i, (TL_updates_channelDifferenceTooLong) res, i2);
                                                     }
-                                                    MessagesController.this.gettingDifferenceChannels.remove(Integer.valueOf(i));
-                                                    MessagesController.this.channelsPts.put(Integer.valueOf(i), Integer.valueOf(res.pts));
-                                                    if ((res.flags & 2) != 0) {
-                                                        MessagesController.this.shortPollChannels.put(i, ((int) (System.currentTimeMillis() / 1000)) + res.timeout);
-                                                    }
-                                                    if (!res.isFinal) {
-                                                        MessagesController.this.getChannelDifference(i);
-                                                    }
-                                                    FileLog.e("tmessages", "received channel difference with pts = " + res.pts + " channelId = " + i);
-                                                    FileLog.e("tmessages", "new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
-                                                    if (newTaskId != 0) {
-                                                        MessagesStorage.getInstance().removePendingTask(newTaskId);
-                                                    }
-                                                }
-                                            });
+                                                });
+                                            }
+                                        });
+                                        return;
+                                    }
+                                    final TL_error tL_error = error;
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            MessagesController.this.checkChannelError(tL_error.text, i);
                                         }
                                     });
-                                    return;
-                                }
-                                final TL_error tL_error = error;
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        MessagesController.this.checkChannelError(tL_error.text, i);
+                                    MessagesController.this.gettingDifferenceChannels.remove(Integer.valueOf(i));
+                                    if (newTaskId != 0) {
+                                        MessagesStorage.getInstance().removePendingTask(newTaskId);
                                     }
-                                });
-                                MessagesController.this.gettingDifferenceChannels.remove(Integer.valueOf(i));
-                                if (newTaskId != 0) {
-                                    MessagesStorage.getInstance().removePendingTask(newTaskId);
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } catch (Exception e3) {
+                        e = e3;
+                        FileLog.e("tmessages", e);
+                        newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                        this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
+                        req = new TL_updates_getChannelDifference();
+                        req.channel = inputChannel;
+                        req.filter = new TL_channelMessagesFilterEmpty();
+                        req.pts = channelPts.intValue();
+                        req.limit = limit;
+                        if (newDialogType != 3) {
+                        }
+                        req.force = newDialogType != 3;
+                        FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                        i = channelId;
+                        i2 = newDialogType;
+                        ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                     }
-                } catch (Exception e3) {
-                    e = e3;
-                    FileLog.e("tmessages", e);
                     newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-                    this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
-                    req = new TL_updates_getChannelDifference();
-                    req.channel = getInputChannel(channelId);
-                    req.filter = new TL_channelMessagesFilterEmpty();
-                    req.pts = channelPts.intValue();
-                    req.limit = limit;
-                    if (newDialogType != 3) {
-                    }
-                    req.force = newDialogType != 3;
-                    FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
-                    i = channelId;
-                    i2 = newDialogType;
-                    ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+                } else {
+                    newTaskId = taskId;
                 }
-                newTaskId = MessagesStorage.getInstance().createPendingTask(data);
-            } else {
-                newTaskId = taskId;
+                this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
+                req = new TL_updates_getChannelDifference();
+                req.channel = inputChannel;
+                req.filter = new TL_channelMessagesFilterEmpty();
+                req.pts = channelPts.intValue();
+                req.limit = limit;
+                if (newDialogType != 3) {
+                }
+                req.force = newDialogType != 3;
+                FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                i = channelId;
+                i2 = newDialogType;
+                ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+            } else if (taskId != 0) {
+                MessagesStorage.getInstance().removePendingTask(taskId);
             }
-            this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
-            req = new TL_updates_getChannelDifference();
-            req.channel = getInputChannel(channelId);
-            req.filter = new TL_channelMessagesFilterEmpty();
-            req.pts = channelPts.intValue();
-            req.limit = limit;
-            if (newDialogType != 3) {
-            }
-            req.force = newDialogType != 3;
-            FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
-            i = channelId;
-            i2 = newDialogType;
-            ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
         }
     }
 
@@ -5567,6 +5590,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
         int lower_id = (int) did;
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
         if (dialog != null && dialog.pinned != pin) {
@@ -5598,7 +5622,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
-                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -7384,7 +7407,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     final Update update2 = update;
                                     Utilities.stageQueue.postRunnable(new Runnable() {
                                         public void run() {
-                                            MessagesController.this.getChannelDifference(update2.channel_id, 1, 0);
+                                            MessagesController.this.getChannelDifference(update2.channel_id, 1, 0, null);
                                         }
                                     });
                                 } else if (chat.left && dialog != null) {
