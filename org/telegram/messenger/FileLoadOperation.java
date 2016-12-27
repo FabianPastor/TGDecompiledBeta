@@ -578,14 +578,16 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass5 = new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             requestInfo.response = (TL_upload_file) response;
-                            if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
-                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 3, (long) (response.getObjectSize() + 4));
-                            } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
-                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 2, (long) (response.getObjectSize() + 4));
-                            } else if (FileLoadOperation.this.currentType == 16777216) {
-                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 4, (long) (response.getObjectSize() + 4));
-                            } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
-                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 5, (long) (response.getObjectSize() + 4));
+                            if (response != null) {
+                                if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                    StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 3, (long) (response.getObjectSize() + 4));
+                                } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                    StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 2, (long) (response.getObjectSize() + 4));
+                                } else if (FileLoadOperation.this.currentType == 16777216) {
+                                    StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 4, (long) (response.getObjectSize() + 4));
+                                } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                    StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 5, (long) (response.getObjectSize() + 4));
+                                }
                             }
                             FileLoadOperation.this.processRequestResult(requestInfo, error);
                         }

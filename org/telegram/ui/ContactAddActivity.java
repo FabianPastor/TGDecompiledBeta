@@ -84,7 +84,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                     ContactAddActivity.this.finishFragment();
                     ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("spam3_" + ContactAddActivity.this.user_id, 1).commit();
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
-                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, Integer.valueOf(ContactAddActivity.this.user_id));
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.peerSettingsDidLoaded, Long.valueOf((long) ContactAddActivity.this.user_id));
                 }
             }
         });

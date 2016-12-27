@@ -566,7 +566,7 @@ public class MessagesQuery {
                 if (index == -1) {
                     break;
                 } else if (start == -1) {
-                    if (!checkInclusion(index, entities) && (start == 0 || message[0].charAt(index - 1) == ' ')) {
+                    if (!checkInclusion(index, entities) && (index == 0 || message[0].charAt(index - 1) == ' ')) {
                         start = index;
                     }
                     lastIndex = index + 1;
