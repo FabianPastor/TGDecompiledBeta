@@ -26,7 +26,7 @@ import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Emoji {
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
-    private static final int[][] cols = new int[][]{new int[]{12, 12, 12, 12}, new int[]{6, 6, 6, 6}, new int[]{9, 9, 9, 9}, new int[]{9, 9, 9, 9}, new int[]{8, 8, 8, 7}};
+    private static final int[][] cols = new int[][]{new int[]{15, 15, 15, 15}, new int[]{6, 6, 6, 6}, new int[]{8, 8, 8, 8}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
     private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
     private static boolean inited = false;
@@ -207,7 +207,7 @@ public class Emoji {
                     imageFile.delete();
                 }
             }
-            for (a = 8; a < 10; a++) {
+            for (a = 8; a < 11; a++) {
                 imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
                 if (imageFile.exists()) {
                     imageFile.delete();
@@ -221,7 +221,7 @@ public class Emoji {
         }
         Bitmap bitmap = null;
         try {
-            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v10_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
+            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v11_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
             Options opts = new Options();
             opts.inJustDecodeBounds = false;
             opts.inSampleSize = imageResize;
@@ -332,6 +332,7 @@ public class Emoji {
         int startLength = 0;
         int previousGoodIndex = 0;
         StringBuilder emojiCode = new StringBuilder(16);
+        StringBuilder addionalCode = new StringBuilder(2);
         int length = cs.length();
         boolean doneEmoji = false;
         int i = 0;
@@ -345,7 +346,7 @@ public class Emoji {
                     emojiCode.append(c);
                     startLength++;
                     buf = (buf << 16) | ((long) c);
-                } else if (emojiCode.length() > 0 && (c == '♀' || c == '♂')) {
+                } else if (emojiCode.length() > 0 && (c == '♀' || c == '♂' || c == '⚕')) {
                     emojiCode.append(c);
                     startLength++;
                     buf = 0;
@@ -382,6 +383,14 @@ public class Emoji {
                     emojiOnly[0] = 0;
                     emojiOnly = null;
                 }
+                if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
+                    char next = cs.charAt(i + 2);
+                    if (next >= '?' && next <= '?') {
+                        emojiCode.append(cs.subSequence(i + 1, i + 3));
+                        startLength += 2;
+                        i += 2;
+                    }
+                }
                 previousGoodIndex = i;
                 for (int a = 0; a < 3; a++) {
                     if (i + 1 < length) {
@@ -402,16 +411,6 @@ public class Emoji {
                 if (doneEmoji) {
                     if (emojiOnly != null) {
                         emojiOnly[0] = emojiOnly[0] + 1;
-                    }
-                    if (i + 2 < length && cs.charAt(i + 1) == '?' && cs.charAt(i + 2) >= '?' && cs.charAt(i + 2) <= '?') {
-                        emojiCode.append(cs.subSequence(i + 1, i + 3));
-                        startLength += 2;
-                        i += 2;
-                    }
-                    if (i + 2 < length && cs.charAt(i + 1) == '‍' && (cs.charAt(i + 2) == '♀' || cs.charAt(i + 2) == '♂')) {
-                        emojiCode.append(cs.subSequence(i + 1, i + 3));
-                        startLength += 2;
-                        i += 2;
                     }
                     EmojiDrawable drawable = getEmojiDrawable(emojiCode.subSequence(0, emojiCode.length()));
                     if (drawable != null) {

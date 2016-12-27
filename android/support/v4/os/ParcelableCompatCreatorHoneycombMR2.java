@@ -1,8 +1,12 @@
 package android.support.v4.os;
 
+import android.annotation.TargetApi;
 import android.os.Parcel;
 import android.os.Parcelable.ClassLoaderCreator;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(13)
+@RequiresApi(13)
 /* compiled from: ParcelableCompatHoneycombMR2 */
 class ParcelableCompatCreatorHoneycombMR2<T> implements ClassLoaderCreator<T> {
     private final ParcelableCompatCreatorCallbacks<T> mCallbacks;

@@ -1,5 +1,6 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -12,7 +13,10 @@ import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.Drawable.ConstantState;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(9)
+@RequiresApi(9)
 class DrawableWrapperGingerbread extends Drawable implements Callback, DrawableWrapper, TintAwareDrawable {
     static final Mode DEFAULT_TINT_MODE = Mode.SRC_IN;
     private boolean mColorFilterSet;

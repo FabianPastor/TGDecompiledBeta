@@ -1,12 +1,15 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
@@ -18,6 +21,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
+import android.support.v4.internal.view.SupportMenu;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -30,6 +34,8 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
@@ -61,11 +67,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
@@ -82,7 +89,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final int AUDIO_FOCUSED = 2;
     private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
     private static final int AUDIO_NO_FOCUS_NO_DUCK = 0;
-    public static final Pattern coubIdRegex = Pattern.compile("(?:coub:|https?://(?:coub\\.com/(?:view|embed|coubs)/|c-cdn\\.coub\\.com/fb-player\\.swf\\?.*\\bcoub(?:ID|id)=))([\\da-z]+)");
+    private static final Pattern aparatFileListPattern = Pattern.compile("fileList\\s*=\\s*JSON\\.parse\\('([^']+)'\\)");
+    private static final Pattern aparatIdRegex = Pattern.compile("^https?://(?:www\\.)?aparat\\.com/(?:v/|video/video/embed/videohash/)([a-zA-Z0-9]+)");
+    private static final Pattern coubIdRegex = Pattern.compile("(?:coub:|https?://(?:coub\\.com/(?:view|embed|coubs)/|c-cdn\\.coub\\.com/fb-player\\.swf\\?.*\\bcoub(?:ID|id)=))([\\da-z]+)");
     private static final String exprName = "[a-zA-Z_$][a-zA-Z_$0-9]*";
     private static final Pattern exprParensPattern = Pattern.compile("[()]");
     private static final Pattern jsPattern = Pattern.compile("\"assets\":.+?\"js\":\\s*(\"[^\"]+\")");
@@ -91,15 +100,16 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final Pattern stmtReturnPattern = Pattern.compile("return(?:\\s+|$)");
     private static final Pattern stmtVarPattern = Pattern.compile("var\\s");
     private static final Pattern stsPattern = Pattern.compile("\"sts\"\\s*:\\s*(\\d+)");
-    public static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
-    public static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
+    private static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
+    private static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private int audioFocus;
     private Paint backgroundPaint = new Paint();
     private TextureView changedTextureView;
-    private int changingTextureView;
+    private boolean changingTextureView;
     private ControlsView controlsView;
     private float currentAlpha;
+    private Bitmap currentBitmap;
     private AsyncTask currentTask;
     private WebPlayerViewDelegate delegate;
     private boolean drawImage;
@@ -133,8 +143,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     };
     private RadialProgressView progressView;
     private boolean resumeAudioOnFocusGain;
+    private int seekToTime;
     private ImageView shareButton;
-    SurfaceTextureListener surfaceTextureListener = new SurfaceTextureListener() {
+    private SurfaceTextureListener surfaceTextureListener = new SurfaceTextureListener() {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         }
 
@@ -142,26 +153,137 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            if (WebPlayerView.this.changingTextureView == 1) {
-                WebPlayerView.this.textureView.setSurfaceTexture(surface);
-                WebPlayerView.this.changingTextureView = 0;
-                return false;
-            } else if (WebPlayerView.this.changingTextureView != 2) {
+            if (!WebPlayerView.this.changingTextureView) {
                 return true;
-            } else {
-                WebPlayerView.this.changedTextureView.setSurfaceTexture(surface);
-                WebPlayerView.this.changedTextureView.setSurfaceTextureListener(WebPlayerView.this.surfaceTextureListener);
-                WebPlayerView.this.changingTextureView = 0;
-                return false;
             }
+            if (WebPlayerView.this.switchingInlineMode) {
+                WebPlayerView.this.waitingForFirstTextureUpload = 2;
+            }
+            WebPlayerView.this.textureView.setSurfaceTexture(surface);
+            WebPlayerView.this.textureView.setVisibility(0);
+            WebPlayerView.this.changingTextureView = false;
+            return false;
         }
 
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
+                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+                    public boolean onPreDraw() {
+                        WebPlayerView.this.changedTextureView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        WebPlayerView.this.textureImageView.setVisibility(4);
+                        WebPlayerView.this.textureImageView.setImageDrawable(null);
+                        if (WebPlayerView.this.currentBitmap != null) {
+                            WebPlayerView.this.currentBitmap.recycle();
+                            WebPlayerView.this.currentBitmap = null;
+                        }
+                        WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
+                        WebPlayerView.this.waitingForFirstTextureUpload = 0;
+                        return true;
+                    }
+                });
+            }
         }
     };
+    private Runnable switchToInlineRunnable = new Runnable() {
+        public void run() {
+            WebPlayerView.this.switchingInlineMode = false;
+            if (WebPlayerView.this.currentBitmap != null) {
+                WebPlayerView.this.currentBitmap.recycle();
+                WebPlayerView.this.currentBitmap = null;
+            }
+            WebPlayerView.this.changingTextureView = true;
+            try {
+                WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
+                WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
+            } catch (Throwable e) {
+                if (WebPlayerView.this.currentBitmap != null) {
+                    WebPlayerView.this.currentBitmap.recycle();
+                    WebPlayerView.this.currentBitmap = null;
+                }
+                FileLog.e("tmessages", e);
+            }
+            if (WebPlayerView.this.currentBitmap != null) {
+                WebPlayerView.this.textureImageView.setVisibility(0);
+                WebPlayerView.this.textureImageView.setImageBitmap(WebPlayerView.this.currentBitmap);
+            } else {
+                WebPlayerView.this.textureImageView.setImageDrawable(null);
+            }
+            WebPlayerView.this.isInline = true;
+            WebPlayerView.this.updatePlayButton();
+            WebPlayerView.this.updateShareButton();
+            WebPlayerView.this.updateFullscreenButton();
+            WebPlayerView.this.updateInlineButton();
+            ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+            if (viewGroup != null) {
+                viewGroup.removeView(WebPlayerView.this.controlsView);
+            }
+            WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+            WebPlayerView.this.changedTextureView.setVisibility(4);
+            ViewGroup parent = (ViewGroup) WebPlayerView.this.textureView.getParent();
+            if (parent != null) {
+                parent.removeView(WebPlayerView.this.textureView);
+            }
+            WebPlayerView.this.controlsView.show(false, false);
+        }
+    };
+    private boolean switchingInlineMode;
+    private ImageView textureImageView;
     private TextureView textureView;
+    private ViewGroup textureViewContainer;
     private VideoPlayer videoPlayer;
+    private int waitingForFirstTextureUpload;
     private WebView webView;
+
+    private class AparatVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
+        private String[] results = new String[2];
+        private String videoId;
+
+        public AparatVideoTask(String vid) {
+            this.videoId = vid;
+        }
+
+        protected String doInBackground(Void... voids) {
+            String playerCode = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "http://www.aparat.com/video/video/embed/vt/frame/showvideo/yes/videohash/%s", new Object[]{this.videoId}));
+            if (isCancelled()) {
+                return null;
+            }
+            try {
+                Matcher filelist = WebPlayerView.aparatFileListPattern.matcher(playerCode);
+                if (filelist.find()) {
+                    JSONArray json = new JSONArray(filelist.group(1));
+                    for (int a = 0; a < json.length(); a++) {
+                        JSONArray array = json.getJSONArray(a);
+                        if (array.length() != 0) {
+                            JSONObject object = array.getJSONObject(0);
+                            if (object.has("file")) {
+                                this.results[0] = object.getString("file");
+                                this.results[1] = "other";
+                            }
+                        }
+                    }
+                }
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
+            return isCancelled() ? null : this.results[0];
+        }
+
+        protected void onPostExecute(String result) {
+            if (result != null) {
+                WebPlayerView.this.initied = true;
+                WebPlayerView.this.playVideoUrl = result;
+                WebPlayerView.this.playVideoType = this.results[1];
+                if (WebPlayerView.this.isAutoplay) {
+                    WebPlayerView.this.preparePlayer();
+                }
+                WebPlayerView.this.showProgress(false, true);
+                WebPlayerView.this.controlsView.show(true, true);
+            } else if (!isCancelled()) {
+                WebPlayerView.this.delegate.onInitFailed();
+            }
+        }
+    }
 
     public interface CallJavaResultInterface {
         void jsCallFinished(String str);
@@ -247,7 +369,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
-                        this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                        this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 ControlsView.this.currentAnimation = null;
                             }
@@ -263,7 +385,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
-                    this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                    this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ControlsView.this.currentAnimation = null;
                         }
@@ -812,17 +934,23 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     public interface WebPlayerViewDelegate {
         boolean checkInlinePermissons();
 
+        ViewGroup getTextureViewContainer();
+
         void onInitFailed();
+
+        void onInlineSurfaceTextureReady();
 
         void onPlayStateChanged(WebPlayerView webPlayerView, boolean z);
 
         void onSharePressed();
 
+        TextureView onSwitchInlineMode(View view, boolean z, float f, int i);
+
         TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
 
-        TextureView onSwtichToInline(View view, boolean z, float f, int i, Rect rect, boolean z2);
-
         void onVideoSizeChanged(float f, int i);
+
+        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f);
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String> {
@@ -1147,11 +1275,29 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    public WebPlayerView(Context context, boolean allowInline, boolean allowShare) {
+    public WebPlayerView(Context context, boolean allowInline, boolean allowShare, WebPlayerViewDelegate webPlayerViewDelegate) {
         super(context);
         setWillNotDraw(false);
+        this.delegate = webPlayerViewDelegate;
         this.backgroundPaint.setColor(-16777216);
-        this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context);
+        this.aspectRatioFrameLayout = new AspectRatioFrameLayout(context) {
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                if (WebPlayerView.this.textureViewContainer != null) {
+                    LayoutParams layoutParams = WebPlayerView.this.textureView.getLayoutParams();
+                    layoutParams.width = getMeasuredWidth();
+                    layoutParams.height = getMeasuredHeight();
+                    layoutParams = WebPlayerView.this.textureImageView.getLayoutParams();
+                    layoutParams.width = getMeasuredWidth();
+                    layoutParams.height = getMeasuredHeight();
+                    if (WebPlayerView.this.controlsView.getParent() == WebPlayerView.this.textureViewContainer) {
+                        layoutParams = WebPlayerView.this.controlsView.getLayoutParams();
+                        layoutParams.width = getMeasuredWidth();
+                        layoutParams.height = (WebPlayerView.this.inFullscreen ? 0 : AndroidUtilities.dp(10.0f)) + getMeasuredHeight();
+                    }
+                }
+            }
+        };
         addView(this.aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
         this.interfaceName = "JavaScriptInterface";
         this.webView = new WebView(context);
@@ -1165,13 +1311,32 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         WebSettings webSettings = this.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("utf-8");
+        this.textureViewContainer = this.delegate.getTextureViewContainer();
         this.textureView = new TextureView(context);
-        this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
+        this.textureView.setPivotX(0.0f);
+        this.textureView.setPivotY(0.0f);
+        if (this.textureViewContainer != null) {
+            this.textureViewContainer.addView(this.textureView);
+        } else {
+            this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
+        }
+        if (this.textureViewContainer != null) {
+            this.textureImageView = new ImageView(context);
+            this.textureImageView.setBackgroundColor(SupportMenu.CATEGORY_MASK);
+            this.textureImageView.setPivotX(0.0f);
+            this.textureImageView.setPivotY(0.0f);
+            this.textureImageView.setVisibility(4);
+            this.textureViewContainer.addView(this.textureImageView);
+        }
         this.videoPlayer = new VideoPlayer();
         this.videoPlayer.setDelegate(this);
         this.videoPlayer.setTextureView(this.textureView);
         this.controlsView = new ControlsView(context);
-        addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
+        if (this.textureViewContainer != null) {
+            this.textureViewContainer.addView(this.controlsView);
+        } else {
+            addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
+        }
         this.progressView = new RadialProgressView(context);
         addView(this.progressView, LayoutHelper.createFrame(48, 48, 17));
         this.fullscreenButton = new ImageView(context);
@@ -1179,7 +1344,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         this.controlsView.addView(this.fullscreenButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
         this.fullscreenButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (WebPlayerView.this.initied && WebPlayerView.this.changingTextureView == 0) {
+                if (WebPlayerView.this.initied && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
                     WebPlayerView.this.inFullscreen = !WebPlayerView.this.inFullscreen;
                     WebPlayerView.this.updateFullscreenState(true);
                 }
@@ -1210,49 +1375,50 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.controlsView.addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons() && WebPlayerView.this.changingTextureView == 0) {
-                        Rect rect;
-                        int[] location = new int[2];
-                        if (WebPlayerView.this.inFullscreen) {
-                            WebPlayerView.this.changedTextureView.getLocationOnScreen(location);
-                            WebPlayerView.this.changingTextureView = 2;
-                            WebPlayerView.this.inFullscreen = false;
-                            rect = new Rect((float) location[0], (float) location[1], (float) WebPlayerView.this.changedTextureView.getMeasuredWidth(), (float) WebPlayerView.this.changedTextureView.getMeasuredHeight());
-                        } else {
-                            WebPlayerView.this.changingTextureView = 1;
-                            WebPlayerView.this.textureView.getLocationOnScreen(location);
-                            rect = new Rect((float) location[0], (float) location[1], (float) WebPlayerView.this.textureView.getMeasuredWidth(), (float) WebPlayerView.this.textureView.getMeasuredHeight());
-                        }
-                        WebPlayerView.this.isInline = !WebPlayerView.this.isInline;
-                        WebPlayerView.this.updatePlayButton();
-                        WebPlayerView.this.updateShareButton();
-                        WebPlayerView.this.updateFullscreenButton();
-                        WebPlayerView.this.updateInlineButton();
+                    if (WebPlayerView.this.textureView != null && WebPlayerView.this.delegate.checkInlinePermissons() && !WebPlayerView.this.changingTextureView && !WebPlayerView.this.switchingInlineMode && WebPlayerView.this.firstFrameRendered) {
+                        WebPlayerView.this.switchingInlineMode = true;
                         if (WebPlayerView.this.isInline) {
-                            ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
-                            if (viewGroup != null) {
-                                viewGroup.removeView(WebPlayerView.this.controlsView);
+                            ViewGroup parent = (ViewGroup) WebPlayerView.this.aspectRatioFrameLayout.getParent();
+                            if (parent != WebPlayerView.this) {
+                                if (parent != null) {
+                                    parent.removeView(WebPlayerView.this.aspectRatioFrameLayout);
+                                }
+                                WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
+                                WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight(), NUM));
                             }
-                        } else {
-                            ViewGroup parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                            if (WebPlayerView.this.currentBitmap != null) {
+                                WebPlayerView.this.currentBitmap.recycle();
+                                WebPlayerView.this.currentBitmap = null;
+                            }
+                            WebPlayerView.this.changingTextureView = true;
+                            WebPlayerView.this.isInline = false;
+                            WebPlayerView.this.updatePlayButton();
+                            WebPlayerView.this.updateShareButton();
+                            WebPlayerView.this.updateFullscreenButton();
+                            WebPlayerView.this.updateInlineButton();
+                            WebPlayerView.this.textureView.setVisibility(4);
+                            if (WebPlayerView.this.textureViewContainer != null) {
+                                WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.textureView);
+                            } else {
+                                WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
+                            }
+                            parent = (ViewGroup) WebPlayerView.this.controlsView.getParent();
                             if (parent != WebPlayerView.this) {
                                 if (parent != null) {
                                     parent.removeView(WebPlayerView.this.controlsView);
                                 }
-                                WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
+                                if (WebPlayerView.this.textureViewContainer != null) {
+                                    WebPlayerView.this.textureViewContainer.addView(WebPlayerView.this.controlsView);
+                                } else {
+                                    WebPlayerView.this.addView(WebPlayerView.this.controlsView, 1);
+                                }
                             }
+                            WebPlayerView.this.controlsView.show(false, false);
+                            WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
+                            return;
                         }
-                        if (!WebPlayerView.this.isInline) {
-                            WebPlayerView.this.aspectRatioFrameLayout.addView(WebPlayerView.this.textureView);
-                        }
-                        WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwtichToInline(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), rect, WebPlayerView.this.changingTextureView == 2);
-                        if (WebPlayerView.this.changingTextureView == 2) {
-                            WebPlayerView.this.delegate.onSwitchToFullscreen(null, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), false);
-                        }
-                        if (WebPlayerView.this.isInline) {
-                            WebPlayerView.this.aspectRatioFrameLayout.removeView(WebPlayerView.this.textureView);
-                        }
-                        WebPlayerView.this.controlsView.checkNeedHide();
+                        WebPlayerView.this.inFullscreen = false;
+                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
                     }
                 }
             });
@@ -1274,6 +1440,27 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         updateFullscreenButton();
         updateInlineButton();
         updateShareButton();
+    }
+
+    public void updateTextureImageView() {
+        if (this.textureImageView != null) {
+            try {
+                this.currentBitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
+                this.changedTextureView.getBitmap(this.currentBitmap);
+            } catch (Throwable e) {
+                if (this.currentBitmap != null) {
+                    this.currentBitmap.recycle();
+                    this.currentBitmap = null;
+                }
+                FileLog.e("tmessages", e);
+            }
+            if (this.currentBitmap != null) {
+                this.textureImageView.setVisibility(0);
+                this.textureImageView.setImageBitmap(this.currentBitmap);
+                return;
+            }
+            this.textureImageView.setImageDrawable(null);
+        }
     }
 
     public void onStateChanged(boolean playWhenReady, int playbackState) {
@@ -1330,16 +1517,43 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-        if (this.changingTextureView == 0) {
-            return false;
+        if (this.changingTextureView) {
+            this.changingTextureView = false;
+            if (this.inFullscreen || this.isInline) {
+                if (this.isInline) {
+                    this.waitingForFirstTextureUpload = 1;
+                }
+                this.changedTextureView.setSurfaceTexture(surfaceTexture);
+                this.changedTextureView.setSurfaceTextureListener(this.surfaceTextureListener);
+                this.changedTextureView.setVisibility(0);
+                return true;
+            }
         }
-        this.changingTextureView = 0;
-        if (!this.inFullscreen && !this.isInline) {
-            return false;
+        return false;
+    }
+
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        if (this.waitingForFirstTextureUpload == 2) {
+            this.textureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    WebPlayerView.this.textureView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            WebPlayerView.this.textureImageView.setVisibility(4);
+                            WebPlayerView.this.textureImageView.setImageDrawable(null);
+                            if (WebPlayerView.this.currentBitmap != null) {
+                                WebPlayerView.this.currentBitmap.recycle();
+                                WebPlayerView.this.currentBitmap = null;
+                            }
+                        }
+                    });
+                    WebPlayerView.this.switchingInlineMode = false;
+                    WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+                    WebPlayerView.this.waitingForFirstTextureUpload = 0;
+                    return true;
+                }
+            });
         }
-        this.changedTextureView.setSurfaceTexture(surfaceTexture);
-        this.changedTextureView.setSurfaceTextureListener(this.surfaceTextureListener);
-        return true;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -1457,10 +1671,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
     }
 
-    public void setDelegate(WebPlayerViewDelegate webPlayerViewDelegate) {
-        this.delegate = webPlayerViewDelegate;
-    }
-
     private void preparePlayer() {
         if (this.playVideoUrl != null) {
             if (this.playVideoUrl == null || this.playAudioUrl == null) {
@@ -1479,6 +1689,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             updateShareButton();
             updateInlineButton();
             this.controlsView.invalidate();
+            if (this.seekToTime != -1) {
+                this.videoPlayer.seekTo((long) (this.seekToTime * 1000));
+            }
         }
     }
 
@@ -1491,29 +1704,61 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private void updateFullscreenState(boolean byButton) {
         if (this.textureView != null) {
             updateFullscreenButton();
-            this.changingTextureView = 1;
+            ViewGroup viewGroup;
+            ViewGroup parent;
+            if (this.textureViewContainer == null) {
+                this.changingTextureView = true;
+                if (!this.inFullscreen) {
+                    if (this.textureViewContainer != null) {
+                        this.textureViewContainer.addView(this.textureView);
+                    } else {
+                        this.aspectRatioFrameLayout.addView(this.textureView);
+                    }
+                }
+                if (this.inFullscreen) {
+                    viewGroup = (ViewGroup) this.controlsView.getParent();
+                    if (viewGroup != null) {
+                        viewGroup.removeView(this.controlsView);
+                    }
+                } else {
+                    parent = (ViewGroup) this.controlsView.getParent();
+                    if (parent != this) {
+                        if (parent != null) {
+                            parent.removeView(this.controlsView);
+                        }
+                        if (this.textureViewContainer != null) {
+                            this.textureViewContainer.addView(this.controlsView);
+                        } else {
+                            addView(this.controlsView, 1);
+                        }
+                    }
+                }
+                this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
+                this.changedTextureView.setVisibility(4);
+                if (this.inFullscreen && this.changedTextureView != null) {
+                    parent = (ViewGroup) this.textureView.getParent();
+                    if (parent != null) {
+                        parent.removeView(this.textureView);
+                    }
+                }
+                this.controlsView.checkNeedHide();
+                return;
+            }
             if (this.inFullscreen) {
-                ViewGroup viewGroup = (ViewGroup) this.controlsView.getParent();
+                viewGroup = (ViewGroup) this.aspectRatioFrameLayout.getParent();
                 if (viewGroup != null) {
-                    viewGroup.removeView(this.controlsView);
+                    viewGroup.removeView(this.aspectRatioFrameLayout);
                 }
             } else {
-                ViewGroup parent = (ViewGroup) this.controlsView.getParent();
+                parent = (ViewGroup) this.aspectRatioFrameLayout.getParent();
                 if (parent != this) {
                     if (parent != null) {
-                        parent.removeView(this.controlsView);
+                        parent.removeView(this.aspectRatioFrameLayout);
                     }
-                    addView(this.controlsView, 1);
+                    addView(this.aspectRatioFrameLayout, 0);
                 }
             }
-            if (!this.inFullscreen) {
-                this.aspectRatioFrameLayout.addView(this.textureView);
-            }
-            this.changedTextureView = this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
-            if (this.inFullscreen) {
-                this.aspectRatioFrameLayout.removeView(this.textureView);
-            }
-            this.controlsView.checkNeedHide();
+            this.delegate.onSwitchToFullscreen(this.controlsView, this.inFullscreen, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), byButton);
         }
     }
 
@@ -1530,7 +1775,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     public boolean isInline() {
-        return this.isInline;
+        return this.isInline || this.switchingInlineMode;
     }
 
     public void enterFullscreen() {
@@ -1545,36 +1790,64 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         return this.inFullscreen;
     }
 
-    public boolean loadVideo(String url, Photo thumb, boolean autoplay) {
+    public boolean loadVideo(String url, Photo thumb, String originalUrl, boolean autoplay) {
         String youtubeId = null;
         String vimeoId = null;
+        String aparatId = null;
+        String mp4File = null;
+        this.seekToTime = -1;
         if (url != null) {
-            Matcher matcher;
-            String id;
-            try {
-                matcher = youtubeIdRegex.matcher(url);
-                id = null;
-                if (matcher.find()) {
-                    id = matcher.group(1);
+            if (url.endsWith(".mp4")) {
+                mp4File = url;
+            } else {
+                Matcher matcher;
+                String id;
+                if (originalUrl != null) {
+                    try {
+                        this.seekToTime = Utilities.parseInt(Uri.parse(originalUrl).getQueryParameter("t")).intValue();
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
                 }
-                if (id != null) {
-                    youtubeId = id;
-                }
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-            }
-            if (youtubeId == null) {
                 try {
-                    matcher = vimeoIdRegex.matcher(url);
+                    matcher = youtubeIdRegex.matcher(url);
                     id = null;
                     if (matcher.find()) {
-                        id = matcher.group(3);
+                        id = matcher.group(1);
                     }
                     if (id != null) {
-                        vimeoId = id;
+                        youtubeId = id;
                     }
                 } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
+                }
+                if (youtubeId == null) {
+                    try {
+                        matcher = vimeoIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(3);
+                        }
+                        if (id != null) {
+                            vimeoId = id;
+                        }
+                    } catch (Throwable e22) {
+                        FileLog.e("tmessages", e22);
+                    }
+                }
+                if (youtubeId == null && vimeoId == null) {
+                    try {
+                        matcher = aparatIdRegex.matcher(url);
+                        id = null;
+                        if (matcher.find()) {
+                            id = matcher.group(1);
+                        }
+                        if (id != null) {
+                            aparatId = id;
+                        }
+                    } catch (Throwable e222) {
+                        FileLog.e("tmessages", e222);
+                    }
                 }
             }
         }
@@ -1603,31 +1876,63 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         } else {
             this.drawImage = false;
         }
-        if (youtubeId != null) {
-            YoutubeVideoTask task = new YoutubeVideoTask(youtubeId);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            this.currentTask = task;
-        } else if (vimeoId != null) {
-            VimeoVideoTask task2 = new VimeoVideoTask(vimeoId);
-            task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            this.currentTask = task2;
-        } else if (null != null) {
-            CoubVideoTask task3 = new CoubVideoTask(null);
-            task3.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-            this.currentTask = task3;
-        }
-        this.isLoading = true;
-        this.controlsView.show(false, false);
         if (this.progressAnimation != null) {
             this.progressAnimation.cancel();
             this.progressAnimation = null;
         }
+        this.isLoading = true;
         this.controlsView.setProgress(0);
-        showProgress(true, false);
-        if (youtubeId == null && vimeoId == null && null == null) {
+        if (mp4File != null) {
+            this.initied = true;
+            this.playVideoUrl = mp4File;
+            this.playVideoType = "other";
+            if (this.isAutoplay) {
+                preparePlayer();
+            }
+            showProgress(false, false);
+            this.controlsView.show(true, true);
+        } else {
+            AsyncTask youtubeVideoTask;
+            if (youtubeId != null) {
+                youtubeVideoTask = new YoutubeVideoTask(youtubeId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (vimeoId != null) {
+                youtubeVideoTask = new VimeoVideoTask(vimeoId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (null != null) {
+                youtubeVideoTask = new CoubVideoTask(null);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            } else if (aparatId != null) {
+                youtubeVideoTask = new AparatVideoTask(aparatId);
+                youtubeVideoTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                this.currentTask = youtubeVideoTask;
+            }
+            this.controlsView.show(false, false);
+            showProgress(true, false);
+        }
+        if (youtubeId == null && vimeoId == null && null == null && aparatId == null && mp4File == null) {
             return false;
         }
         return true;
+    }
+
+    public View getAspectRatioView() {
+        return this.aspectRatioFrameLayout;
+    }
+
+    public TextureView getTextureView() {
+        return this.textureView;
+    }
+
+    public ImageView getTextureImageView() {
+        return this.textureImageView;
+    }
+
+    public View getControlsView() {
+        return this.controlsView;
     }
 
     public void destroy() {
@@ -1658,7 +1963,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             animatorArr[0] = ObjectAnimator.ofFloat(radialProgressView, str, fArr);
             animatorSet.playTogether(animatorArr);
             this.progressAnimation.setDuration(150);
-            this.progressAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.progressAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     WebPlayerView.this.progressAnimation = null;
                 }

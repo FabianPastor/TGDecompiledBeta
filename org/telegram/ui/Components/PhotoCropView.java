@@ -173,7 +173,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getRectY() {
-        return this.cropView.getCropTop() - ((float) AndroidUtilities.dp(14.0f));
+        return (this.cropView.getCropTop() - ((float) AndroidUtilities.dp(14.0f))) - ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
     }
 
     public float getRectSizeX() {

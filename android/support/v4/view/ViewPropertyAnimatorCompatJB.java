@@ -2,8 +2,12 @@ package android.support.v4.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 
+@TargetApi(16)
+@RequiresApi(16)
 class ViewPropertyAnimatorCompatJB {
     ViewPropertyAnimatorCompatJB() {
     }

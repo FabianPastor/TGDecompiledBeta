@@ -18,6 +18,7 @@ import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
 import android.support.v4.os.BuildCompat;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -94,32 +95,32 @@ public class NotificationCompat {
 
     public static class Builder {
         private static final int MAX_CHARSEQUENCE_LENGTH = 5120;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public ArrayList<Action> mActions = new ArrayList();
         RemoteViews mBigContentView;
         String mCategory;
         int mColor = 0;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public CharSequence mContentInfo;
         PendingIntent mContentIntent;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public CharSequence mContentText;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public CharSequence mContentTitle;
         RemoteViews mContentView;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public Context mContext;
         Bundle mExtras;
         PendingIntent mFullScreenIntent;
         String mGroupKey;
         boolean mGroupSummary;
         RemoteViews mHeadsUpContentView;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public Bitmap mLargeIcon;
         boolean mLocalOnly = false;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public Notification mNotification = new Notification();
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public int mNumber;
         public ArrayList<String> mPeople;
         int mPriority;
@@ -127,16 +128,16 @@ public class NotificationCompat {
         boolean mProgressIndeterminate;
         int mProgressMax;
         Notification mPublicVersion;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public CharSequence[] mRemoteInputHistory;
         boolean mShowWhen = true;
         String mSortKey;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public Style mStyle;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public CharSequence mSubText;
         RemoteViews mTickerView;
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public boolean mUseChronometer;
         int mVisibility = 0;
 
@@ -441,7 +442,7 @@ public class NotificationCompat {
             return NotificationCompat.IMPL.build(this, getExtender());
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         protected BuilderExtender getExtender() {
             return new BuilderExtender();
         }
@@ -453,48 +454,48 @@ public class NotificationCompat {
             return cs;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public RemoteViews getContentView() {
             return this.mContentView;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public RemoteViews getBigContentView() {
             return this.mBigContentView;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public RemoteViews getHeadsUpContentView() {
             return this.mHeadsUpContentView;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public long getWhenIfShowing() {
             return this.mShowWhen ? this.mNotification.when : 0;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public int getPriority() {
             return this.mPriority;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public int getColor() {
             return this.mColor;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         protected CharSequence resolveText() {
             return this.mContentText;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         protected CharSequence resolveTitle() {
             return this.mContentTitle;
         }
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     protected static class BuilderExtender {
         protected BuilderExtender() {
         }
@@ -562,17 +563,17 @@ public class NotificationCompat {
             return null;
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public void addCompatExtras(Bundle extras) {
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         protected void restoreFromCompatExtras(Bundle extras) {
         }
     }
 
     public static class Action extends android.support.v4.app.NotificationCompatBase.Action {
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         public static final android.support.v4.app.NotificationCompatBase.Action.Factory FACTORY = new android.support.v4.app.NotificationCompatBase.Action.Factory() {
             public android.support.v4.app.NotificationCompatBase.Action build(int icon, CharSequence title, PendingIntent actionIntent, Bundle extras, RemoteInput[] remoteInputs, boolean allowGeneratedReplies) {
                 return new Action(icon, title, actionIntent, extras, (RemoteInput[]) remoteInputs, allowGeneratedReplies);
@@ -598,18 +599,27 @@ public class NotificationCompat {
             private final CharSequence mTitle;
 
             public Builder(int icon, CharSequence title, PendingIntent intent) {
-                this(icon, title, intent, new Bundle());
+                this(icon, title, intent, new Bundle(), null, true);
             }
 
             public Builder(Action action) {
-                this(action.icon, action.title, action.actionIntent, new Bundle(action.mExtras));
+                this(action.icon, action.title, action.actionIntent, new Bundle(action.mExtras), action.getRemoteInputs(), action.getAllowGeneratedReplies());
             }
 
-            private Builder(int icon, CharSequence title, PendingIntent intent, Bundle extras) {
+            private Builder(int icon, CharSequence title, PendingIntent intent, Bundle extras, RemoteInput[] remoteInputs, boolean allowGeneratedReplies) {
+                ArrayList arrayList;
+                this.mAllowGeneratedReplies = true;
                 this.mIcon = icon;
                 this.mTitle = Builder.limitCharSequenceLength(title);
                 this.mIntent = intent;
                 this.mExtras = extras;
+                if (remoteInputs == null) {
+                    arrayList = null;
+                } else {
+                    arrayList = new ArrayList(Arrays.asList(remoteInputs));
+                }
+                this.mRemoteInputs = arrayList;
+                this.mAllowGeneratedReplies = allowGeneratedReplies;
             }
 
             public Builder addExtras(Bundle extras) {
@@ -766,11 +776,10 @@ public class NotificationCompat {
         }
 
         public Action(int icon, CharSequence title, PendingIntent intent) {
-            this(icon, title, intent, new Bundle(), null, false);
+            this(icon, title, intent, new Bundle(), null, true);
         }
 
         Action(int icon, CharSequence title, PendingIntent intent, Bundle extras, RemoteInput[] remoteInputs, boolean allowGeneratedReplies) {
-            this.mAllowGeneratedReplies = false;
             this.icon = icon;
             this.title = Builder.limitCharSequenceLength(title);
             this.actionIntent = intent;
@@ -1222,7 +1231,7 @@ public class NotificationCompat {
             }
         }
 
-        @RestrictTo({Scope.GROUP_ID})
+        @RestrictTo({Scope.LIBRARY_GROUP})
         protected void restoreFromCompatExtras(Bundle extras) {
             this.mMessages.clear();
             this.mUserDisplayName = extras.getString(NotificationCompat.EXTRA_SELF_DISPLAY_NAME);

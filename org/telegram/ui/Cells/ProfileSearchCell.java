@@ -75,6 +75,7 @@ public class ProfileSearchCell extends BaseCell {
     private int nameTop;
     private StaticLayout onlineLayout;
     private int onlineLeft;
+    private int paddingRight;
     private CharSequence subLabel;
     public boolean useSeparator = false;
     private User user = null;
@@ -137,6 +138,10 @@ public class ProfileSearchCell extends BaseCell {
         update(0);
     }
 
+    public void setPaddingRight(int padding) {
+        this.paddingRight = padding;
+    }
+
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarImage.onDetachedFromWindow();
@@ -164,7 +169,6 @@ public class ProfileSearchCell extends BaseCell {
         TextPaint currentNamePaint;
         int nameWidth;
         int onlineWidth;
-        int nameWidth2;
         int avatarLeft;
         this.drawNameBroadcast = false;
         this.drawNameLock = false;
@@ -265,15 +269,19 @@ public class ProfileSearchCell extends BaseCell {
             onlineWidth = nameWidth;
         }
         if (this.drawNameLock) {
-            nameWidth2 = nameWidth - (AndroidUtilities.dp(6.0f) + lockDrawable.getIntrinsicWidth());
+            nameWidth -= AndroidUtilities.dp(6.0f) + lockDrawable.getIntrinsicWidth();
         } else if (this.drawNameBroadcast) {
-            nameWidth2 = nameWidth - (AndroidUtilities.dp(6.0f) + broadcastDrawable.getIntrinsicWidth());
+            nameWidth -= AndroidUtilities.dp(6.0f) + broadcastDrawable.getIntrinsicWidth();
         } else if (this.drawNameGroup) {
-            nameWidth2 = nameWidth - (AndroidUtilities.dp(6.0f) + groupDrawable.getIntrinsicWidth());
+            nameWidth -= AndroidUtilities.dp(6.0f) + groupDrawable.getIntrinsicWidth();
         } else if (this.drawNameBot) {
-            nameWidth2 = nameWidth - (AndroidUtilities.dp(6.0f) + botDrawable.getIntrinsicWidth());
-        } else {
-            nameWidth2 = nameWidth;
+            nameWidth -= AndroidUtilities.dp(6.0f) + botDrawable.getIntrinsicWidth();
+        }
+        int nameWidth2 = nameWidth - this.paddingRight;
+        onlineWidth -= this.paddingRight;
+        if (LocaleController.isRTL) {
+            this.nameLeft += this.paddingRight;
+            this.onlineLeft += this.paddingRight;
         }
         if (this.drawCount) {
             TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));

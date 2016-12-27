@@ -13,4 +13,8 @@ public class BuildCompat {
     public static boolean isAtLeastNMR1() {
         return VERSION.SDK_INT >= 25;
     }
+
+    public static boolean isAtLeastO() {
+        return !"REL".equals(VERSION.CODENAME) && ("O".equals(VERSION.CODENAME) || VERSION.CODENAME.startsWith("OMR"));
+    }
 }

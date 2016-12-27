@@ -173,7 +173,7 @@ public abstract class AsyncTaskLoader<D> extends Loader<D> {
         return this.mCancellingTask != null;
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public void waitForLoader() {
         LoadTask task = this.mTask;
         if (task != null) {

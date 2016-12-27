@@ -9,7 +9,7 @@ import android.support.annotation.RestrictTo.Scope;
 import android.support.annotation.StyleableRes;
 import android.util.TypedValue;
 
-@RestrictTo({Scope.GROUP_ID})
+@RestrictTo({Scope.LIBRARY_GROUP})
 public class TypedArrayUtils {
     public static boolean getBoolean(TypedArray a, @StyleableRes int index, @StyleableRes int fallbackIndex, boolean defaultValue) {
         return a.getBoolean(index, a.getBoolean(fallbackIndex, defaultValue));
@@ -36,6 +36,14 @@ public class TypedArrayUtils {
         String val = a.getString(index);
         if (val == null) {
             return a.getString(fallbackIndex);
+        }
+        return val;
+    }
+
+    public static CharSequence getText(TypedArray a, @StyleableRes int index, @StyleableRes int fallbackIndex) {
+        CharSequence val = a.getText(index);
+        if (val == null) {
+            return a.getText(fallbackIndex);
         }
         return val;
     }

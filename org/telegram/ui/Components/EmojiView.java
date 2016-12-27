@@ -1069,9 +1069,13 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     private static String addColorToCode(String code, String color) {
         String end = null;
-        if (code.endsWith("‍♀") || code.endsWith("‍♂")) {
+        int lenght = code.length();
+        if (lenght > 2 && code.charAt(code.length() - 2) == '‍') {
             end = code.substring(code.length() - 2);
             code = code.substring(0, code.length() - 2);
+        } else if (lenght > 3 && code.charAt(code.length() - 3) == '‍') {
+            end = code.substring(code.length() - 3);
+            code = code.substring(0, code.length() - 3);
         }
         code = code + color;
         if (end != null) {

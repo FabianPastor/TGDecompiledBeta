@@ -56,6 +56,7 @@ public class SimpleExoPlayer implements ExoPlayer {
     private final ComponentListener componentListener = new ComponentListener();
     private final Handler mainHandler = new Handler();
     private Output metadataOutput;
+    private boolean needSetSurface = true;
     private boolean ownsSurface;
     private PlaybackParamsHolder playbackParamsHolder;
     private final ExoPlayer player;
@@ -88,6 +89,8 @@ public class SimpleExoPlayer implements ExoPlayer {
         void onRenderedFirstFrame();
 
         boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture);
+
+        void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture);
 
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
@@ -211,7 +214,10 @@ public class SimpleExoPlayer implements ExoPlayer {
         }
 
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-            SimpleExoPlayer.this.setVideoSurfaceInternal(new Surface(surfaceTexture), true);
+            if (SimpleExoPlayer.this.needSetSurface) {
+                SimpleExoPlayer.this.setVideoSurfaceInternal(new Surface(surfaceTexture), true);
+                SimpleExoPlayer.this.needSetSurface = false;
+            }
         }
 
         public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
@@ -222,10 +228,12 @@ public class SimpleExoPlayer implements ExoPlayer {
                 return false;
             }
             SimpleExoPlayer.this.setVideoSurfaceInternal(null, true);
+            SimpleExoPlayer.this.needSetSurface = true;
             return true;
         }
 
         public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+            SimpleExoPlayer.this.videoListener.onSurfaceTextureUpdated(surfaceTexture);
         }
     }
 
@@ -321,6 +329,9 @@ public class SimpleExoPlayer implements ExoPlayer {
                 surface = new Surface(surfaceTexture);
             }
             setVideoSurfaceInternal(surface, true);
+            if (surfaceTexture != null) {
+                this.needSetSurface = false;
+            }
             textureView.setSurfaceTextureListener(this.componentListener);
         }
         return this.componentListener;

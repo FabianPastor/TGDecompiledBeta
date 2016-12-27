@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -131,7 +132,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.listView.setDivider(null);
         this.listView.setDividerHeight(0);
         this.listView.setFastScrollEnabled(true);
-        this.listView.setScrollBarStyle(33554432);
+        this.listView.setScrollBarStyle(ConnectionsManager.FileTypeVideo);
         this.listView.setAdapter(this.listViewAdapter);
         this.listView.setFastScrollAlwaysVisible(true);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);

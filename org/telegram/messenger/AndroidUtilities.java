@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -278,8 +279,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -766,7 +767,7 @@ public class AndroidUtilities {
             }
         }
         intent.setAction("com.tmessages.openchat" + did);
-        intent.addFlags(67108864);
+        intent.addFlags(ConnectionsManager.FileTypeFile);
         Intent addIntent = new Intent();
         addIntent.putExtra("android.intent.extra.shortcut.INTENT", intent);
         addIntent.putExtra("android.intent.extra.shortcut.NAME", name);
@@ -1096,7 +1097,7 @@ public class AndroidUtilities {
         animatorArr[0] = ObjectAnimator.ofFloat(view, "translationX", new float[]{(float) dp(x)});
         animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(50);
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 AndroidUtilities.shakeView(view, num == 5 ? 0.0f : -x, num + 1);
             }

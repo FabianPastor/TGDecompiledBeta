@@ -46,6 +46,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -239,7 +240,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.listView.setDivider(null);
         this.listView.setDividerHeight(0);
         this.listView.setFastScrollEnabled(true);
-        this.listView.setScrollBarStyle(33554432);
+        this.listView.setScrollBarStyle(ConnectionsManager.FileTypeVideo);
         this.listView.setAdapter(this.listViewAdapter);
         this.listView.setFastScrollAlwaysVisible(true);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);

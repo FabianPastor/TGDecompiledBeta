@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -28,7 +29,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -774,7 +774,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         animatorArr[0] = ObjectAnimator.ofFloat(this.stickerPreviewLayout, "alpha", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         animatorSet.setDuration(200);
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 StickersAlert.this.stickerPreviewLayout.setVisibility(8);
             }
@@ -802,7 +802,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 animatorArr[0] = ObjectAnimator.ofFloat(obj, str, fArr);
                 animatorSet.playTogether(animatorArr);
                 this.shadowAnimation[num].setDuration(150);
-                this.shadowAnimation[num].addListener(new AnimatorListenerAdapterProxy() {
+                this.shadowAnimation[num].addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (StickersAlert.this.shadowAnimation[num] != null && StickersAlert.this.shadowAnimation[num].equals(animation)) {
                             if (!show) {

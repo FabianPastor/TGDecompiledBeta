@@ -1,16 +1,19 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.media.session.MediaController;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import java.util.List;
 import java.util.Map;
 
+@TargetApi(21)
+@RequiresApi(21)
 class ActivityCompatApi21 {
 
     public static abstract class SharedElementCallback21 {
@@ -60,10 +63,6 @@ class ActivityCompatApi21 {
     }
 
     ActivityCompatApi21() {
-    }
-
-    public static void setMediaController(Activity activity, Object mediaControllerObj) {
-        activity.setMediaController((MediaController) mediaControllerObj);
     }
 
     public static void finishAfterTransition(Activity activity) {

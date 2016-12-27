@@ -30,7 +30,9 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
+import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
+import org.telegram.tgnet.TLRPC.TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC.TL_messages_getMessages;
 import org.telegram.tgnet.TLRPC.User;
@@ -459,6 +461,20 @@ public class MessagesQuery {
         Collections.sort(entities, entityComparator);
     }
 
+    private static boolean checkInclusion(int index, ArrayList<MessageEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return false;
+        }
+        int count = entities.size();
+        for (int a = 0; a < count; a++) {
+            MessageEntity entity = (MessageEntity) entities.get(a);
+            if (entity.offset <= index && entity.offset + entity.length > index) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static ArrayList<MessageEntity> getEntities(CharSequence[] message) {
         if (message == null || message[0] == null) {
             return null;
@@ -469,7 +485,10 @@ public class MessagesQuery {
         boolean isPre = false;
         String mono = "`";
         String pre = "```";
+        String bold = "*";
+        String italic = "_";
         while (true) {
+            int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
             if (index == -1) {
                 break;
@@ -481,7 +500,7 @@ public class MessagesQuery {
                 if (entities == null) {
                     entities = new ArrayList();
                 }
-                int a = index + (isPre ? 3 : 1);
+                a = index + (isPre ? 3 : 1);
                 while (a < message[0].length() && message[0].charAt(a) == '`') {
                     index++;
                     a++;
@@ -536,6 +555,53 @@ public class MessagesQuery {
             entity2.length = 1;
             entities.add(entity2);
         }
+        lastIndex = 0;
+        start = -1;
+        int c = 0;
+        while (c < 2) {
+            String checkString = c == 0 ? "*" : "_";
+            char checkChar = c == 0 ? '*' : '_';
+            while (true) {
+                index = TextUtils.indexOf(message[0], checkString, lastIndex);
+                if (index == -1) {
+                    break;
+                } else if (start == -1) {
+                    if (!checkInclusion(index, entities) && (start == 0 || message[0].charAt(index - 1) == ' ')) {
+                        start = index;
+                    }
+                    lastIndex = index + 1;
+                } else {
+                    if (entities == null) {
+                        entities = new ArrayList();
+                    }
+                    a = index + 1;
+                    while (a < message[0].length() && message[0].charAt(a) == checkChar) {
+                        index++;
+                        a++;
+                    }
+                    lastIndex = index + 1;
+                    if (checkInclusion(index, entities)) {
+                        start = -1;
+                    } else {
+                        if (start + 1 != index) {
+                            MessageEntity entity3;
+                            message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 1, index), TextUtils.substring(message[0], index + 1, message[0].length())});
+                            if (c == 0) {
+                                entity3 = new TL_messageEntityBold();
+                            } else {
+                                entity3 = new TL_messageEntityItalic();
+                            }
+                            entity3.offset = start;
+                            entity3.length = (index - start) - 1;
+                            entities.add(entity3);
+                            lastIndex -= 2;
+                        }
+                        start = -1;
+                    }
+                }
+            }
+            c++;
+        }
         if (!(message[0] instanceof Spannable)) {
             return entities;
         }
@@ -546,15 +612,15 @@ public class MessagesQuery {
         }
         entities = new ArrayList();
         for (int b = 0; b < spans.length; b++) {
-            TL_inputMessageEntityMentionName entity3 = new TL_inputMessageEntityMentionName();
-            entity3.user_id = MessagesController.getInputUser(Utilities.parseInt(spans[b].getURL()).intValue());
-            if (entity3.user_id != null) {
-                entity3.offset = spannable.getSpanStart(spans[b]);
-                entity3.length = Math.min(spannable.getSpanEnd(spans[b]), message[0].length()) - entity3.offset;
-                if (message[0].charAt((entity3.offset + entity3.length) - 1) == ' ') {
-                    entity3.length--;
+            TL_inputMessageEntityMentionName entity4 = new TL_inputMessageEntityMentionName();
+            entity4.user_id = MessagesController.getInputUser(Utilities.parseInt(spans[b].getURL()).intValue());
+            if (entity4.user_id != null) {
+                entity4.offset = spannable.getSpanStart(spans[b]);
+                entity4.length = Math.min(spannable.getSpanEnd(spans[b]), message[0].length()) - entity4.offset;
+                if (message[0].charAt((entity4.offset + entity4.length) - 1) == ' ') {
+                    entity4.length--;
                 }
-                entities.add(entity3);
+                entities.add(entity4);
             }
         }
         return entities;

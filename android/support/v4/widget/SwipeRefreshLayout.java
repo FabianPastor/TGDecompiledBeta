@@ -1,5 +1,6 @@
 package android.support.v4.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build.VERSION;
@@ -123,6 +124,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         reset();
     }
 
+    @SuppressLint({"NewApi"})
     private void setColorViewAlpha(int targetAlpha) {
         this.mCircleView.getBackground().setAlpha(targetAlpha);
         this.mProgress.setAlpha(targetAlpha);
@@ -184,6 +186,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             public void onAnimationRepeat(Animation animation) {
             }
 
+            @SuppressLint({"NewApi"})
             public void onAnimationEnd(Animation animation) {
                 if (SwipeRefreshLayout.this.mRefreshing) {
                     SwipeRefreshLayout.this.mProgress.setAlpha(255);
@@ -283,6 +286,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         startScaleUpAnimation(this.mRefreshListener);
     }
 
+    @SuppressLint({"NewApi"})
     private void startScaleUpAnimation(AnimationListener listener) {
         this.mCircleView.setVisibility(0);
         if (VERSION.SDK_INT >= 11) {
@@ -335,14 +339,17 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         this.mCircleView.startAnimation(this.mScaleDownAnimation);
     }
 
+    @SuppressLint({"NewApi"})
     private void startProgressAlphaStartAnimation() {
         this.mAlphaStartAnimation = startAlphaAnimation(this.mProgress.getAlpha(), STARTING_PROGRESS_ALPHA);
     }
 
+    @SuppressLint({"NewApi"})
     private void startProgressAlphaMaxAnimation() {
         this.mAlphaMaxAnimation = startAlphaAnimation(this.mProgress.getAlpha(), 255);
     }
 
+    @SuppressLint({"NewApi"})
     private Animation startAlphaAnimation(final int startingAlpha, final int endingAlpha) {
         if (this.mScale && isAlphaUsedForScale()) {
             return null;
@@ -636,6 +643,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         return (animation == null || !animation.hasStarted() || animation.hasEnded()) ? false : true;
     }
 
+    @SuppressLint({"NewApi"})
     private void moveSpinner(float overscrollTop) {
         float slingshotDist;
         this.mProgress.showArrow(true);
@@ -766,6 +774,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         return true;
     }
 
+    @SuppressLint({"NewApi"})
     private void startDragging(float y) {
         if (y - this.mInitialDownY > ((float) this.mTouchSlop) && !this.mIsBeingDragged) {
             this.mInitialMotionY = this.mInitialDownY + ((float) this.mTouchSlop);
@@ -806,6 +815,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         setTargetOffsetTopAndBottom((this.mFrom + ((int) (((float) (this.mOriginalOffsetTop - this.mFrom)) * interpolatedTime))) - this.mCircleView.getTop(), false);
     }
 
+    @SuppressLint({"NewApi"})
     private void startScaleDownReturnToStartAnimation(int from, AnimationListener listener) {
         this.mFrom = from;
         if (isAlphaUsedForScale()) {

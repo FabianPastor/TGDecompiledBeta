@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -16,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
@@ -117,7 +117,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 animatorArr[1] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
                 animatorSet.playTogether(animatorArr);
                 this.animator.setDuration(200);
-                this.animator.addListener(new AnimatorListenerAdapterProxy() {
+                this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PhotoVideoView.this.animator != null && PhotoVideoView.this.animator.equals(animation)) {
                             PhotoVideoView.this.animator = null;

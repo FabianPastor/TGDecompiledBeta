@@ -31,6 +31,8 @@ public abstract class DocumentFile {
 
     public abstract boolean isFile();
 
+    public abstract boolean isVirtual();
+
     public abstract long lastModified();
 
     public abstract long length();

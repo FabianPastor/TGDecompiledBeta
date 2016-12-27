@@ -7,7 +7,7 @@ import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.view.MenuItem;
 import android.view.View;
 
-@RestrictTo({Scope.GROUP_ID})
+@RestrictTo({Scope.LIBRARY_GROUP})
 public interface SupportMenuItem extends MenuItem {
     public static final int SHOW_AS_ACTION_ALWAYS = 2;
     public static final int SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW = 8;

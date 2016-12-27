@@ -2,8 +2,12 @@ package android.support.v4.view;
 
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 
+@TargetApi(19)
+@RequiresApi(19)
 class ViewPropertyAnimatorCompatKK {
     ViewPropertyAnimatorCompatKK() {
     }

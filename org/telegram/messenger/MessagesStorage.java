@@ -2706,7 +2706,15 @@ Error: java.util.NoSuchElementException
                     int lower_id = (int) j;
                     if (lower_id != 0) {
                         boolean containMessage;
-                        if (!(i3 == 1 || i3 == 3 || i3 == 4 || i4 != 0)) {
+                        if (i3 == 3 && i4 == 0) {
+                            cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date FROM dialogs WHERE did = " + j, new Object[0]);
+                            if (cursor.next()) {
+                                min_unread_id = cursor.intValue(0) + 1;
+                                count_unread = cursor.intValue(1);
+                                max_unread_date = cursor.intValue(2);
+                            }
+                            cursor.dispose();
+                        } else if (!(i3 == 1 || i3 == 3 || i3 == 4 || i4 != 0)) {
                             if (i3 == 2) {
                                 cursor = MessagesStorage.this.database.queryFinalized("SELECT inbox_max, unread_count, date FROM dialogs WHERE did = " + j, new Object[0]);
                                 if (cursor.next()) {
@@ -3936,7 +3944,7 @@ Error: java.util.NoSuchElementException
                             state.bindInteger(8, 0);
                             state.bindInteger(9, dialog.pts);
                             state.bindInteger(10, 0);
-                            state.bindInteger(11, 0);
+                            state.bindInteger(11, dialog.pinnedNum);
                             state.step();
                             state.dispose();
                         }
@@ -4293,63 +4301,64 @@ Error: java.util.NoSuchElementException
             this.storageQueue.postRunnable(new Runnable() {
                 public void run() {
                     try {
-                        String ids = TextUtils.join(",", webPages.keySet());
-                        SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM webpage_pending WHERE id IN (%s)", new Object[]{ids}), new Object[0]);
-                        ArrayList<Long> mids = new ArrayList();
-                        while (cursor.next()) {
-                            mids.add(Long.valueOf(cursor.longValue(0)));
-                        }
-                        cursor.dispose();
-                        if (!mids.isEmpty()) {
-                            NativeByteBuffer data;
-                            Message message;
-                            final ArrayList<Message> messages = new ArrayList();
-                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data FROM messages WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)}), new Object[0]);
+                        NativeByteBuffer data;
+                        Message message;
+                        final ArrayList<Message> messages = new ArrayList();
+                        for (Entry<Long, WebPage> entry : webPages.entrySet()) {
+                            SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT mid FROM webpage_pending WHERE id = " + entry.getKey(), new Object[0]);
+                            ArrayList<Long> mids = new ArrayList();
                             while (cursor.next()) {
-                                int mid = cursor.intValue(0);
-                                data = cursor.byteBufferValue(1);
-                                if (data != null) {
-                                    message = Message.TLdeserialize(data, data.readInt32(false), false);
-                                    data.reuse();
-                                    if (message.media instanceof TL_messageMediaWebPage) {
-                                        message.id = mid;
-                                        message.media.webpage = (WebPage) webPages.get(Long.valueOf(message.media.webpage.id));
-                                        messages.add(message);
-                                    }
-                                }
+                                mids.add(Long.valueOf(cursor.longValue(0)));
                             }
                             cursor.dispose();
-                            if (!messages.isEmpty()) {
-                                MessagesStorage.this.database.beginTransaction();
-                                SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
-                                SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("UPDATE media_v2 SET data = ? WHERE mid = ?");
-                                for (int a = 0; a < messages.size(); a++) {
-                                    message = (Message) messages.get(a);
-                                    data = new NativeByteBuffer(message.getObjectSize());
-                                    message.serializeToStream(data);
-                                    long messageId = (long) message.id;
-                                    if (message.to_id.channel_id != 0) {
-                                        messageId |= ((long) message.to_id.channel_id) << 32;
+                            if (!mids.isEmpty()) {
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT mid, data FROM messages WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)}), new Object[0]);
+                                while (cursor.next()) {
+                                    int mid = cursor.intValue(0);
+                                    data = cursor.byteBufferValue(1);
+                                    if (data != null) {
+                                        message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                        data.reuse();
+                                        if (message.media instanceof TL_messageMediaWebPage) {
+                                            message.id = mid;
+                                            message.media.webpage = (WebPage) entry.getValue();
+                                            messages.add(message);
+                                        }
                                     }
-                                    state.requery();
-                                    state.bindByteBuffer(1, data);
-                                    state.bindLong(2, messageId);
-                                    state.step();
-                                    state2.requery();
-                                    state2.bindByteBuffer(1, data);
-                                    state2.bindLong(2, messageId);
-                                    state2.step();
-                                    data.reuse();
                                 }
-                                state.dispose();
-                                state2.dispose();
-                                MessagesStorage.this.database.commitTransaction();
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReceivedWebpages, messages);
-                                    }
-                                });
+                                cursor.dispose();
                             }
+                        }
+                        if (!messages.isEmpty()) {
+                            MessagesStorage.this.database.beginTransaction();
+                            SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("UPDATE messages SET data = ? WHERE mid = ?");
+                            SQLitePreparedStatement state2 = MessagesStorage.this.database.executeFast("UPDATE media_v2 SET data = ? WHERE mid = ?");
+                            for (int a = 0; a < messages.size(); a++) {
+                                message = (Message) messages.get(a);
+                                data = new NativeByteBuffer(message.getObjectSize());
+                                message.serializeToStream(data);
+                                long messageId = (long) message.id;
+                                if (message.to_id.channel_id != 0) {
+                                    messageId |= ((long) message.to_id.channel_id) << 32;
+                                }
+                                state.requery();
+                                state.bindByteBuffer(1, data);
+                                state.bindLong(2, messageId);
+                                state.step();
+                                state2.requery();
+                                state2.bindByteBuffer(1, data);
+                                state2.bindLong(2, messageId);
+                                state2.step();
+                                data.reuse();
+                            }
+                            state.dispose();
+                            state2.dispose();
+                            MessagesStorage.this.database.commitTransaction();
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.didReceivedWebpages, messages);
+                                }
+                            });
                         }
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
@@ -4889,6 +4898,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -4941,7 +4951,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5232,7 +5241,6 @@ Error: java.util.NoSuchElementException
 
     private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         String ids;
-        long did;
         int unread_count = 0;
         if (channelId != 0) {
             try {
@@ -5254,6 +5262,7 @@ Error: java.util.NoSuchElementException
         SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
         ArrayList<File> filesToDelete = new ArrayList();
         while (cursor.next()) {
+            long did;
             try {
                 did = cursor.longValue(0);
                 if (channelId != 0 && cursor.intValue(2) == 0) {
@@ -5452,12 +5461,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 61;
+                    message.media.bytes[0] = (byte) 62;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 61;
+                message.media.bytes[0] = (byte) 62;
                 message.flags |= 512;
             }
         }

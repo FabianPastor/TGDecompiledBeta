@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -61,6 +62,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
+import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageActionTTLChange;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
@@ -95,6 +97,7 @@ import org.telegram.tgnet.TLRPC.TL_message_old2;
 import org.telegram.tgnet.TLRPC.TL_message_old3;
 import org.telegram.tgnet.TLRPC.TL_message_old4;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
 import org.telegram.tgnet.TLRPC.TL_webPage;
@@ -128,6 +131,7 @@ public class MessageObject {
     public boolean deleted;
     public boolean forceUpdate;
     private int generatedWithMinSize;
+    public boolean isDateObject;
     public int lastLineWidth;
     private boolean layoutCreated;
     public CharSequence linkDescription;
@@ -189,7 +193,7 @@ public class MessageObject {
         if (message.replyMessage != null) {
             this.replyMessageObject = new MessageObject(message.replyMessage, users, chats, false);
         }
-        User fromUser = null;
+        TLObject fromUser = null;
         if (message.from_id > 0) {
             if (users != null) {
                 fromUser = (User) users.get(Integer.valueOf(message.from_id));
@@ -379,6 +383,38 @@ public class MessageObject {
                     this.messageText = LocaleController.getString("HistoryCleared", R.string.HistoryCleared);
                 } else if (message.action instanceof TL_messageActionGameScore) {
                     generateGameMessageText(fromUser);
+                } else if (message.action instanceof TL_messageActionPhoneCall) {
+                    TL_messageActionPhoneCall call = this.messageOwner.action;
+                    boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
+                    if (this.messageOwner.from_id == UserConfig.getClientUserId()) {
+                        if (isMissed) {
+                            this.messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
+                        } else {
+                            this.messageText = LocaleController.getString("CallMessageOutgoing", R.string.CallMessageOutgoing);
+                        }
+                    } else if (isMissed) {
+                        this.messageText = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                    } else {
+                        this.messageText = LocaleController.getString("CallMessageIncoming", R.string.CallMessageIncoming);
+                    }
+                    if (call.duration > 0) {
+                        String duration = formatDuration(call.duration);
+                        this.messageText = LocaleController.formatString("CallMessageWithDuration", R.string.CallMessageWithDuration, this.messageText, duration);
+                        String _messageText = this.messageText.toString();
+                        int start = _messageText.indexOf(duration);
+                        if (start != -1) {
+                            CharSequence spannableString = new SpannableString(this.messageText);
+                            int end = start + duration.length();
+                            if (start > 0 && _messageText.charAt(start - 1) == '(') {
+                                start--;
+                            }
+                            if (end < _messageText.length() && _messageText.charAt(end) == ')') {
+                                end++;
+                            }
+                            spannableString.setSpan(new TypefaceSpan(Typeface.DEFAULT), start, end, 0);
+                            this.messageText = spannableString;
+                        }
+                    }
                 }
             }
         } else if (isMediaEmpty()) {
@@ -543,6 +579,16 @@ public class MessageObject {
         } else {
             this.messageText = LocaleController.formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
         }
+    }
+
+    private String formatDuration(int duration) {
+        if (duration > 3600) {
+            return LocaleController.formatPluralString("Hours", duration / 3600) + ", " + LocaleController.formatPluralString("Minutes", (duration % 3600) / 60);
+        }
+        if (duration > 60) {
+            return LocaleController.formatPluralString("Minutes", duration / 60);
+        }
+        return LocaleController.formatPluralString("Seconds", duration);
     }
 
     public void generatePinMessageText(User fromUser, Chat chat) {

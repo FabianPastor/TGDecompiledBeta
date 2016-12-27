@@ -1,6 +1,9 @@
 package org.telegram.messenger.camera;
 
+import android.graphics.Rect;
 import android.hardware.Camera;
+import android.hardware.Camera.Area;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.media.CamcorderProfile;
@@ -13,11 +16,18 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
 public class CameraSession {
+    private AutoFocusCallback autoFocusCallback = new AutoFocusCallback() {
+        public void onAutoFocus(boolean success, Camera camera) {
+            if (!success) {
+            }
+        }
+    };
     protected CameraInfo cameraInfo;
     private String currentFlashMode = "off";
     private boolean initied;
     private boolean isVideo;
     private int lastOrientation = -1;
+    private boolean meteringAreaSupported;
     private OrientationEventListener orientationEventListener;
     private final int pictureFormat;
     private final Size pictureSize;
@@ -160,7 +170,44 @@ public class CameraSession {
                     camera.setParameters(params);
                 } catch (Exception e4) {
                 }
+                if (params.getMaxNumMeteringAreas() > 0) {
+                    this.meteringAreaSupported = true;
+                }
             }
+        }
+    }
+
+    protected void focusToRect(Rect focusRect, Rect meteringRect) {
+        try {
+            Camera camera = this.cameraInfo.camera;
+            if (camera != null) {
+                camera.cancelAutoFocus();
+                Parameters parameters = null;
+                try {
+                    parameters = camera.getParameters();
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
+                if (parameters != null) {
+                    parameters.setFocusMode("auto");
+                    ArrayList<Area> meteringAreas = new ArrayList();
+                    meteringAreas.add(new Area(focusRect, 1000));
+                    parameters.setFocusAreas(meteringAreas);
+                    if (this.meteringAreaSupported) {
+                        meteringAreas = new ArrayList();
+                        meteringAreas.add(new Area(meteringRect, 1000));
+                        parameters.setMeteringAreas(meteringAreas);
+                    }
+                    try {
+                        camera.setParameters(parameters);
+                        camera.autoFocus(this.autoFocusCallback);
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
+                    }
+                }
+            }
+        } catch (Throwable e22) {
+            FileLog.e("tmessages", e22);
         }
     }
 
@@ -220,6 +267,12 @@ public class CameraSession {
             return 90;
         }
         return displayOrientation;
+    }
+
+    public int getDisplayOrientation() {
+        CameraInfo info = new CameraInfo();
+        Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
+        return getDisplayOrientation(info, true);
     }
 
     public void destroy() {

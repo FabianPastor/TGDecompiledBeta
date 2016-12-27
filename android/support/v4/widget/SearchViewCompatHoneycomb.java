@@ -1,14 +1,18 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.SearchView.OnCloseListener;
 import android.widget.SearchView.OnQueryTextListener;
 import com.google.firebase.analytics.FirebaseAnalytics.Event;
 
+@TargetApi(11)
+@RequiresApi(11)
 class SearchViewCompatHoneycomb {
 
     interface OnCloseListenerCompatBridge {

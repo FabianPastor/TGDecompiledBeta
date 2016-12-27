@@ -1,10 +1,14 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
 import android.graphics.Rect;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.List;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityNodeInfoCompatIcs {
     AccessibilityNodeInfoCompatIcs() {
     }

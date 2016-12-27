@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.PendingIntent;
@@ -8,9 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.Pair;
 import android.view.View;
 
+@TargetApi(24)
+@RequiresApi(24)
 class ActivityOptionsCompat24 {
     private final ActivityOptions mActivityOptions;
 

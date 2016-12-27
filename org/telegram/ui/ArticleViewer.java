@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -75,7 +76,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -734,26 +734,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public BlockEmbedCell(Context context) {
             super(context);
             setWillNotDraw(false);
-            this.videoView = new WebPlayerView(context, false, false);
-            this.videoView.setDelegate(new WebPlayerViewDelegate(ArticleViewer.this) {
+            this.videoView = new WebPlayerView(context, false, false, new WebPlayerViewDelegate(ArticleViewer.this) {
                 public void onInitFailed() {
                     BlockEmbedCell.this.webView.setVisibility(0);
                     BlockEmbedCell.this.videoView.setVisibility(4);
-                    BlockEmbedCell.this.videoView.loadVideo(null, null, false);
+                    BlockEmbedCell.this.videoView.loadVideo(null, null, null, false);
                     HashMap<String, String> args = new HashMap();
                     args.put("Referer", "http://youtube.com");
                     BlockEmbedCell.this.webView.loadUrl(BlockEmbedCell.this.currentBlock.url, args);
                 }
 
-                public void onVideoSizeChanged(float aspectRation, int rotation) {
-                    ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
+                public void onVideoSizeChanged(float aspectRatio, int rotation) {
+                    ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRatio, rotation);
                 }
 
-                public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRation, int rotation, boolean byButton) {
+                public void onInlineSurfaceTextureReady() {
+                }
+
+                public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRatio, int rotation, boolean byButton) {
                     if (fullscreen) {
                         ArticleViewer.this.fullscreenAspectRatioView.addView(ArticleViewer.this.fullscreenTextureView, LayoutHelper.createFrame(-1, -1.0f));
                         ArticleViewer.this.fullscreenAspectRatioView.setVisibility(0);
-                        ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRation, rotation);
+                        ArticleViewer.this.fullscreenAspectRatioView.setAspectRatio(aspectRatio, rotation);
                         ArticleViewer.this.fullscreenedVideo = BlockEmbedCell.this.videoView;
                         ArticleViewer.this.fullscreenVideoContainer.addView(controlsView, LayoutHelper.createFrame(-1, -1.0f));
                         ArticleViewer.this.fullscreenVideoContainer.setVisibility(0);
@@ -766,7 +768,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     return ArticleViewer.this.fullscreenTextureView;
                 }
 
-                public TextureView onSwtichToInline(View controlsView, boolean inline, float aspectRation, int rotation, org.telegram.ui.Components.Rect videoRect, boolean fromFullscreen) {
+                public void prepareToSwitchInlineMode(boolean inline, Runnable switchInlineModeRunnable, float aspectRatio) {
+                }
+
+                public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation) {
                     return null;
                 }
 
@@ -802,6 +807,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
                 public boolean checkInlinePermissons() {
                     return false;
+                }
+
+                public ViewGroup getTextureViewContainer() {
+                    return null;
                 }
             });
             addView(this.videoView);
@@ -889,13 +898,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         if (this.currentBlock.poster_photo_id != 0) {
                             thumb = ArticleViewer.this.getPhotoWithId(this.currentBlock.poster_photo_id);
                         }
-                        if (this.videoView.loadVideo(block.url, thumb, this.currentBlock.autoplay)) {
+                        if (this.videoView.loadVideo(block.url, thumb, null, this.currentBlock.autoplay)) {
                             this.webView.setVisibility(4);
                             this.videoView.setVisibility(0);
                         } else {
                             this.webView.setVisibility(0);
                             this.videoView.setVisibility(4);
-                            this.videoView.loadVideo(null, null, false);
+                            this.videoView.loadVideo(null, null, null, false);
                             HashMap<String, String> args = new HashMap();
                             args.put("Referer", "http://youtube.com");
                             this.webView.loadUrl(this.currentBlock.url, args);
@@ -2374,7 +2383,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         animatorSet.playTogether(animatorArr);
                     }
                     animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) ArticleViewer.this.containerView.getMeasuredWidth())) * distToMove), 50));
-                    animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             if (!backAnimation) {
                                 ArticleViewer.this.saveCurrentPagePosition();
@@ -4022,6 +4031,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
         LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
@@ -4081,7 +4091,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {
@@ -4142,7 +4151,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         };
                         animatorSet.setDuration(150);
                         animatorSet.setInterpolator(this.interpolator);
-                        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -4273,7 +4282,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             animatorArr[5] = ObjectAnimator.ofFloat(this.shareButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
             animatorSet.playTogether(animatorArr);
         }
-        this.progressViewAnimation.addListener(new AnimatorListenerAdapterProxy() {
+        this.progressViewAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (ArticleViewer.this.progressViewAnimation != null && ArticleViewer.this.progressViewAnimation.equals(animation)) {
                     if (show) {
@@ -4358,7 +4367,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             };
             animatorSet.setInterpolator(new DecelerateInterpolator());
             animatorSet.setDuration(250);
-            animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (ArticleViewer.this.animationEndRunnable != null) {
                         ArticleViewer.this.animationEndRunnable.run();
@@ -4406,7 +4415,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             };
             animatorSet.setDuration(250);
             animatorSet.setInterpolator(new DecelerateInterpolator());
-            animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (ArticleViewer.this.animationEndRunnable != null) {
                         ArticleViewer.this.animationEndRunnable.run();
@@ -4514,7 +4523,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 };
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(this.interpolator);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (ArticleViewer.this.animationEndRunnable != null) {
                             ArticleViewer.this.animationEndRunnable.run();
@@ -4766,6 +4775,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
                         return false;
                     }
+
+                    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                    }
                 });
                 if (this.videoPlayer != null) {
                     duration = this.videoPlayer.getDuration();
@@ -4848,7 +4860,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.currentActionBarAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (ArticleViewer.this.currentActionBarAnimation != null && ArticleViewer.this.currentActionBarAnimation.equals(animation)) {
                             ArticleViewer.this.actionBar.setVisibility(8);
@@ -5431,7 +5443,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             }
         };
         animatorSet.setDuration(200);
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -5599,7 +5611,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
                 };
                 animatorSet.setDuration(200);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -5643,7 +5655,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
                 };
                 animatorSet.setDuration(200);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (ArticleViewer.this.photoAnimationEndRunnable != null) {
                             ArticleViewer.this.photoAnimationEndRunnable.run();
@@ -5951,7 +5963,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
             this.imageMoveAnimation.setDuration((long) duration);
-            this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     ArticleViewer.this.imageMoveAnimation = null;
                     ArticleViewer.this.photoContainerView.invalidate();

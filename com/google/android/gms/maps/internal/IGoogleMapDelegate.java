@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.internal.zzf;
 import com.google.android.gms.maps.model.internal.zzg;
 import com.google.android.gms.maps.model.internal.zzh;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
-import org.telegram.tgnet.TLRPC;
 
 public interface IGoogleMapDelegate extends IInterface {
 
@@ -1612,7 +1611,7 @@ public interface IGoogleMapDelegate extends IInterface {
                     }
                     parcel2.writeInt(0);
                     return true;
-                case TLRPC.LAYER /*61*/:
+                case 61:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IGoogleMapDelegate");
                     setContentDescription(parcel.readString());
                     parcel2.writeNoException();

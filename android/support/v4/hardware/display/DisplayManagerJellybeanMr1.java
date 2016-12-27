@@ -1,9 +1,13 @@
 package android.support.v4.hardware.display;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.display.DisplayManager;
+import android.support.annotation.RequiresApi;
 import android.view.Display;
 
+@TargetApi(17)
+@RequiresApi(17)
 final class DisplayManagerJellybeanMr1 {
     DisplayManagerJellybeanMr1() {
     }

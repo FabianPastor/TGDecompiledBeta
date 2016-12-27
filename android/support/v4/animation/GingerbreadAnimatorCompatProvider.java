@@ -1,10 +1,14 @@
 package android.support.v4.animation;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
+@TargetApi(9)
+@RequiresApi(9)
 class GingerbreadAnimatorCompatProvider implements AnimatorProvider {
 
     private static class GingerbreadFloatValueAnimator implements ValueAnimatorCompat {

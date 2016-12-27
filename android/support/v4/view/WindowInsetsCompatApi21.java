@@ -1,8 +1,12 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.graphics.Rect;
+import android.support.annotation.RequiresApi;
 import android.view.WindowInsets;
 
+@TargetApi(21)
+@RequiresApi(21)
 class WindowInsetsCompatApi21 {
     WindowInsetsCompatApi21() {
     }

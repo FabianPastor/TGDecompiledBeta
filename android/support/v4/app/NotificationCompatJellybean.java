@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.Notification.BigPictureStyle;
 import android.app.Notification.BigTextStyle;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompatBase.Action;
 import android.support.v4.app.NotificationCompatBase.Action.Factory;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@TargetApi(16)
+@RequiresApi(16)
 class NotificationCompatJellybean {
     static final String EXTRA_ACTION_EXTRAS = "android.support.actionExtras";
     static final String EXTRA_ALLOW_GENERATED_REPLIES = "android.support.allowGeneratedReplies";

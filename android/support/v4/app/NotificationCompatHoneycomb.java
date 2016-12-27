@@ -1,12 +1,16 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.Notification.Builder;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.RequiresApi;
 import android.widget.RemoteViews;
 
+@TargetApi(11)
+@RequiresApi(11)
 class NotificationCompatHoneycomb {
     NotificationCompatHoneycomb() {
     }

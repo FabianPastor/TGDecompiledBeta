@@ -1,15 +1,19 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnApplyWindowInsetsListener;
 import android.view.ViewParent;
 import android.view.WindowInsets;
 
+@TargetApi(21)
+@RequiresApi(21)
 class ViewCompatLollipop {
     private static ThreadLocal<Rect> sThreadLocalRect;
 

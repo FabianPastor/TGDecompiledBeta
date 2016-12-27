@@ -1,11 +1,15 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(18)
+@RequiresApi(18)
 class ActionBarDrawerToggleJellybeanMR2 {
     private static final String TAG = "ActionBarDrawerToggleImplJellybeanMR2";
     private static final int[] THEME_ATTRS = new int[]{16843531};

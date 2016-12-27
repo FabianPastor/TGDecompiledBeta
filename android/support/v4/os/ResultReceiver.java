@@ -10,7 +10,7 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.os.IResultReceiver.Stub;
 
-@RestrictTo({Scope.GROUP_ID})
+@RestrictTo({Scope.LIBRARY_GROUP})
 public class ResultReceiver implements Parcelable {
     public static final Creator<ResultReceiver> CREATOR = new Creator<ResultReceiver>() {
         public ResultReceiver createFromParcel(Parcel in) {

@@ -1,7 +1,11 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.ViewGroup.MarginLayoutParams;
 
+@TargetApi(17)
+@RequiresApi(17)
 class MarginLayoutParamsCompatJellybeanMr1 {
     MarginLayoutParamsCompatJellybeanMr1() {
     }

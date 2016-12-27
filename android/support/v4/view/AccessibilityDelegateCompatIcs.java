@@ -1,11 +1,15 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.AccessibilityDelegate;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityDelegateCompatIcs {
 
     public interface AccessibilityDelegateBridge {

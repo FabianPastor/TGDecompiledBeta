@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -31,7 +32,6 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DispatchQueue;
@@ -512,7 +512,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.colorPickerAnimator = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{this.colorPicker.getAlpha(), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
             this.colorPickerAnimator.setStartDelay(200);
             this.colorPickerAnimator.setDuration(200);
-            this.colorPickerAnimator.addListener(new AnimatorListenerAdapterProxy() {
+            this.colorPickerAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (PhotoPaintView.this.colorPickerAnimator != null) {
                         PhotoPaintView.this.colorPickerAnimator = null;
@@ -537,7 +537,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         } else {
             animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
         }
-        animator.addListener(new AnimatorListenerAdapterProxy() {
+        animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (!visible) {
                     PhotoPaintView.this.dimView.setVisibility(8);
@@ -570,7 +570,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         } else {
             animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
         }
-        animator.addListener(new AnimatorListenerAdapterProxy() {
+        animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (!visible) {
                     PhotoPaintView.this.textDimView.setVisibility(8);
@@ -830,7 +830,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.pickingSticker = false;
             Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
             a.setDuration(200);
-            a.addListener(new AnimatorListenerAdapterProxy() {
+            a.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     PhotoPaintView.this.stickersView.setVisibility(8);
                 }

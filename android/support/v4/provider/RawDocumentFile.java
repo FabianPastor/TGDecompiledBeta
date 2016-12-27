@@ -61,6 +61,10 @@ class RawDocumentFile extends DocumentFile {
         return this.mFile.isFile();
     }
 
+    public boolean isVirtual() {
+        return false;
+    }
+
     public long lastModified() {
         return this.mFile.lastModified();
     }

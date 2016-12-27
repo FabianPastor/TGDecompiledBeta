@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -106,6 +105,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private ChatAttachViewDelegate delegate;
     private boolean deviceHasGoodCamera;
+    private boolean dragging;
     private boolean flashAnimationInProgress;
     private ImageView[] flashModeButton = new ImageView[2];
     private Runnable hideHintRunnable;
@@ -120,6 +120,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private RecyclerListView listView;
     private boolean loading = true;
     private boolean maybeStartDraging;
+    private boolean mediaCaptured;
     private boolean paused;
     private PhotoAttachAdapter photoAttachAdapter;
     private boolean pressed;
@@ -139,6 +140,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private boolean useRevealAnimation;
     private Runnable videoRecordRunnable;
     private int videoRecordTime;
+    private int[] viewPosition = new int[2];
     private View[] views = new View[20];
     private ArrayList<Holder> viewsCache = new ArrayList(8);
 
@@ -330,6 +332,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         void didSelectBot(User user);
 
         View getRevealView();
+
+        void onCameraOpened();
     }
 
     private class InnerAnimator {
@@ -859,7 +863,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.cameraPanel.addView(this.shutterButton, LayoutHelper.createFrame(84, 84, 17));
             this.shutterButton.setDelegate(new ShutterButtonDelegate() {
                 public boolean shutterLongPressed() {
-                    if (ChatAttachAlert.this.takingPhoto || ChatAttachAlert.this.baseFragment == null || ChatAttachAlert.this.baseFragment.getParentActivity() == null) {
+                    if (ChatAttachAlert.this.mediaCaptured || ChatAttachAlert.this.takingPhoto || ChatAttachAlert.this.baseFragment == null || ChatAttachAlert.this.baseFragment.getParentActivity() == null) {
                         return false;
                     }
                     if (VERSION.SDK_INT < 23 || ChatAttachAlert.this.baseFragment.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
@@ -919,6 +923,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                                 ChatAttachAlert.this.cameraFile = null;
                                             }
                                         }
+
+                                        public void willHidePhotoViewer() {
+                                            ChatAttachAlert.this.mediaCaptured = false;
+                                        }
                                     }, ChatAttachAlert.this.baseFragment);
                                 }
                             }
@@ -936,13 +944,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 }
 
                 public void shutterCancel() {
-                    ChatAttachAlert.this.cameraFile.delete();
-                    ChatAttachAlert.this.resetRecordState();
-                    CameraController.getInstance().stopVideoRecording(ChatAttachAlert.this.cameraView.getCameraSession(), true);
+                    if (!ChatAttachAlert.this.mediaCaptured) {
+                        ChatAttachAlert.this.cameraFile.delete();
+                        ChatAttachAlert.this.resetRecordState();
+                        CameraController.getInstance().stopVideoRecording(ChatAttachAlert.this.cameraView.getCameraSession(), true);
+                    }
                 }
 
                 public void shutterReleased() {
-                    if (!ChatAttachAlert.this.takingPhoto && ChatAttachAlert.this.cameraView != null) {
+                    if (!ChatAttachAlert.this.takingPhoto && ChatAttachAlert.this.cameraView != null && !ChatAttachAlert.this.mediaCaptured) {
+                        ChatAttachAlert.this.mediaCaptured = true;
                         if (ChatAttachAlert.this.shutterButton.getState() == ShutterButton.State.RECORDING) {
                             ChatAttachAlert.this.resetRecordState();
                             CameraController.getInstance().stopVideoRecording(ChatAttachAlert.this.cameraView.getCameraSession(), false);
@@ -1005,6 +1016,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         public boolean scaleToFill() {
                                             return true;
                                         }
+
+                                        public void willHidePhotoViewer() {
+                                            ChatAttachAlert.this.mediaCaptured = false;
+                                        }
                                     }, ChatAttachAlert.this.baseFragment);
                                 }
                             }
@@ -1021,7 +1036,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         ChatAttachAlert.this.cameraInitied = false;
                         ChatAttachAlert.this.cameraView.switchCamera();
                         ObjectAnimator animator = ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{0.0f}).setDuration(100);
-                        animator.addListener(new AnimatorListenerAdapterProxy() {
+                        animator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 ChatAttachAlert.this.switchCameraButton.setImageResource(ChatAttachAlert.this.cameraView.isFrontface() ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
                                 ObjectAnimator.ofFloat(ChatAttachAlert.this.switchCameraButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}).setDuration(100).start();
@@ -1055,7 +1070,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                 r4[3] = ObjectAnimator.ofFloat(nextImage, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                                 animatorSet.playTogether(r4);
                                 animatorSet.setDuration(200);
-                                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                                animatorSet.addListener(new AnimatorListenerAdapter() {
                                     public void onAnimationEnd(Animator animator) {
                                         ChatAttachAlert.this.flashAnimationInProgress = false;
                                         currentImage.setVisibility(4);
@@ -1078,7 +1093,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 if (event.getActionMasked() == 2) {
                     float newY = event.getY();
                     float dy = newY - this.lastY;
-                    if (!this.maybeStartDraging) {
+                    if (this.maybeStartDraging) {
+                        if (Math.abs(dy) > AndroidUtilities.getPixelsInCM(0.4f, false)) {
+                            this.maybeStartDraging = false;
+                            this.dragging = true;
+                        }
+                    } else if (this.dragging) {
                         this.cameraView.setTranslationY(this.cameraView.getTranslationY() + dy);
                         this.lastY = newY;
                         if (this.cameraPanel.getTag() == null) {
@@ -1092,25 +1112,29 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             animatorSet.setDuration(200);
                             animatorSet.start();
                         }
-                    } else if (Math.abs(dy) > AndroidUtilities.getPixelsInCM(0.4f, false)) {
-                        this.maybeStartDraging = false;
                     }
                 } else if (event.getActionMasked() == 3 || event.getActionMasked() == 1 || event.getActionMasked() == 6) {
                     this.pressed = false;
-                    if (Math.abs(this.cameraView.getTranslationY()) > ((float) this.cameraView.getMeasuredHeight()) / 6.0f) {
-                        closeCamera(true);
+                    if (this.dragging) {
+                        this.dragging = false;
+                        if (Math.abs(this.cameraView.getTranslationY()) > ((float) this.cameraView.getMeasuredHeight()) / 6.0f) {
+                            closeCamera(true);
+                        } else {
+                            animatorSet = new AnimatorSet();
+                            animatorArr = new Animator[4];
+                            animatorArr[0] = ObjectAnimator.ofFloat(this.cameraView, "translationY", new float[]{0.0f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this.cameraPanel, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                            animatorArr[2] = ObjectAnimator.ofFloat(this.flashModeButton[0], "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                            animatorArr[3] = ObjectAnimator.ofFloat(this.flashModeButton[1], "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                            animatorSet.playTogether(animatorArr);
+                            animatorSet.setDuration(250);
+                            animatorSet.setInterpolator(this.interpolator);
+                            animatorSet.start();
+                            this.cameraPanel.setTag(null);
+                        }
                     } else {
-                        animatorSet = new AnimatorSet();
-                        animatorArr = new Animator[4];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this.cameraView, "translationY", new float[]{0.0f});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this.cameraPanel, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                        animatorArr[2] = ObjectAnimator.ofFloat(this.flashModeButton[0], "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                        animatorArr[3] = ObjectAnimator.ofFloat(this.flashModeButton[1], "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                        animatorSet.playTogether(animatorArr);
-                        animatorSet.setDuration(250);
-                        animatorSet.setInterpolator(this.interpolator);
-                        animatorSet.start();
-                        this.cameraPanel.setTag(null);
+                        this.cameraView.getLocationOnScreen(this.viewPosition);
+                        this.cameraView.focusToPoint((int) (event.getRawX() - ((float) this.viewPosition[0])), (int) (event.getRawY() - ((float) this.viewPosition[1])));
                     }
                 }
             }
@@ -1251,7 +1275,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             animatorArr[0] = ObjectAnimator.ofFloat(this.hintTextView, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.currentHintAnimation.setInterpolator(this.decelerateInterpolator);
-            this.currentHintAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.currentHintAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (ChatAttachAlert.this.currentHintAnimation != null && ChatAttachAlert.this.currentHintAnimation.equals(animation)) {
                         ChatAttachAlert.this.currentHintAnimation = null;
@@ -1322,9 +1346,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(animators);
             animatorSet.setDuration(200);
-            animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     ChatAttachAlert.this.cameraAnimationInProgress = false;
+                    if (ChatAttachAlert.this.cameraOpened) {
+                        ChatAttachAlert.this.delegate.onCameraOpened();
+                    }
                 }
             });
             animatorSet.start();
@@ -1362,7 +1389,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.playTogether(animators);
                 animatorSet.setDuration(200);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         ChatAttachAlert.this.cameraAnimationInProgress = false;
                         ChatAttachAlert.this.cameraPanel.setVisibility(8);
@@ -1643,7 +1670,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.currentHintAnimation = new AnimatorSet();
             this.currentHintAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.hintTextView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
             this.currentHintAnimation.setInterpolator(this.decelerateInterpolator);
-            this.currentHintAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.currentHintAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (ChatAttachAlert.this.currentHintAnimation != null && ChatAttachAlert.this.currentHintAnimation.equals(animation)) {
                         ChatAttachAlert.this.currentHintAnimation = null;
@@ -1724,10 +1751,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.sendPhotosButton.imageView.setPadding(AndroidUtilities.dp(2.0f), 0, 0, 0);
             this.sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_send_states);
             this.sendPhotosButton.imageView.setImageResource(R.drawable.attach_send2);
-            TextView access$6400 = this.sendPhotosButton.textView;
+            TextView access$6500 = this.sendPhotosButton.textView;
             Object[] objArr = new Object[1];
             objArr[0] = String.format("(%d)", new Object[]{Integer.valueOf(count)});
-            access$6400.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
+            access$6500.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
         }
         if (VERSION.SDK_INT < 23 || getContext().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             this.progressView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));

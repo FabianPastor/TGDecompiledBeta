@@ -29,17 +29,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -254,8 +251,6 @@ public class DocumentSelectActivity extends BaseFragment {
                     for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
                         item.date = System.currentTimeMillis();
                     }
-                    DocumentSelectActivity.this.recentItems.addAll(0, DocumentSelectActivity.this.selectedFiles.values());
-                    DocumentSelectActivity.this.saveRecentFiles();
                 }
             }
         });
@@ -397,9 +392,6 @@ public class DocumentSelectActivity extends BaseFragment {
                                 ArrayList<String> files = new ArrayList();
                                 files.add(file.getAbsolutePath());
                                 DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, files);
-                                item.date = System.currentTimeMillis();
-                                DocumentSelectActivity.this.recentItems.add(0, item);
-                                DocumentSelectActivity.this.saveRecentFiles();
                             }
                         }
                     }
@@ -411,48 +403,46 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     public void loadRecentFiles() {
-        Set<String> recent = ApplicationLoader.applicationContext.getSharedPreferences("recentfiles", 0).getStringSet("files", null);
-        if (recent != null) {
-            for (String path : recent) {
-                String path2;
-                long date;
-                int index = path2.indexOf("|");
-                if (index != -1) {
-                    date = Utilities.parseLong(path2).longValue();
-                    path2 = path2.substring(index + 1);
-                } else {
-                    date = 0;
+        try {
+            File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
+            Arrays.sort(files, new Comparator<File>() {
+                public int compare(File lhs, File rhs) {
+                    if (lhs.isDirectory() == rhs.isDirectory()) {
+                        long lm = lhs.lastModified();
+                        long rm = lhs.lastModified();
+                        if (lm == rm) {
+                            return 0;
+                        }
+                        if (lm >= rm) {
+                            return 1;
+                        }
+                        return -1;
+                    } else if (lhs.isDirectory()) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
                 }
-                File file = new File(path2);
-                ListItem item = new ListItem();
-                item.title = file.getName();
-                item.file = file;
-                item.date = date;
-                String fname = file.getName();
-                String[] sp = fname.split("\\.");
-                item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
-                item.subtitle = AndroidUtilities.formatFileSize(file.length());
-                fname = fname.toLowerCase();
-                if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
-                    item.thumb = file.getAbsolutePath();
+            });
+            for (File file : files) {
+                if (!file.isDirectory()) {
+                    ListItem item = new ListItem();
+                    item.title = file.getName();
+                    item.file = file;
+                    String fname = file.getName();
+                    String[] sp = fname.split("\\.");
+                    item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
+                    item.subtitle = AndroidUtilities.formatFileSize(file.length());
+                    fname = fname.toLowerCase();
+                    if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
+                        item.thumb = file.getAbsolutePath();
+                    }
+                    this.recentItems.add(item);
                 }
-                this.recentItems.add(item);
             }
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
         }
-        Collections.sort(this.recentItems, new Comparator<ListItem>() {
-            public int compare(ListItem o1, ListItem o2) {
-                if (o1.date > o2.date) {
-                    return -1;
-                }
-                if (o1.date < o2.date) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
-    }
-
-    public void saveRecentFiles() {
     }
 
     public void onResume() {

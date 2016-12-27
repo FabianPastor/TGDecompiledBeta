@@ -182,7 +182,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                     this.uploadingAvatar = FileLoader.getInstance().getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
                     NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidUpload);
                     NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailUpload);
-                    FileLoader.getInstance().uploadFile(this.uploadingAvatar, false, true);
+                    FileLoader.getInstance().uploadFile(this.uploadingAvatar, false, true, 16777216);
                 } else if (this.delegate != null) {
                     this.delegate.didUploadedPhoto(null, this.smallPhoto, this.bigPhoto);
                 }

@@ -13,7 +13,7 @@ public final class zzbul {
     private int zzcrS = ConnectionsManager.DEFAULT_DATACENTER_ID;
     private int zzcrT;
     private int zzcrU = 64;
-    private int zzcrV = 67108864;
+    private int zzcrV = ConnectionsManager.FileTypeFile;
 
     private zzbul(byte[] bArr, int i, int i2) {
         this.buffer = bArr;

@@ -51,6 +51,7 @@ public class LocaleController {
     public FastDateFormat formatterDay;
     public FastDateFormat formatterMonth;
     public FastDateFormat formatterMonthYear;
+    public FastDateFormat formatterStats;
     public FastDateFormat formatterWeek;
     public FastDateFormat formatterYear;
     public FastDateFormat formatterYearMax;
@@ -988,6 +989,30 @@ public class LocaleController {
         }
     }
 
+    public static String formatDateCallLog(long date) {
+        try {
+            Calendar rightNow = Calendar.getInstance();
+            int day = rightNow.get(6);
+            int year = rightNow.get(1);
+            rightNow.setTimeInMillis(1000 * date);
+            int dateDay = rightNow.get(6);
+            int dateYear = rightNow.get(1);
+            if (dateDay == day && year == dateYear) {
+                return getInstance().formatterDay.format(new Date(1000 * date));
+            }
+            if (dateDay + 1 == day && year == dateYear) {
+                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(1000 * date))});
+            } else if (year == dateYear) {
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatDate.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+            } else {
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+            }
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+            return "LOC_ERR";
+        }
+    }
+
     public static String formatDateOnline(long date) {
         try {
             Calendar rightNow = Calendar.getInstance();
@@ -1042,10 +1067,12 @@ public class LocaleController {
         this.chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
         this.formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
         this.formatterMonthYear = createFormatter(locale, getStringInternal("formatterMonthYear", R.string.formatterMonthYear), "MMMM yyyy");
+        Locale locale2 = (lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko")) ? locale : Locale.US;
+        this.formatterDay = createFormatter(locale2, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
         if (!(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko"))) {
             locale = Locale.US;
         }
-        this.formatterDay = createFormatter(locale, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
+        this.formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
     }
 
     public static String stringForMessageListDate(long date) {

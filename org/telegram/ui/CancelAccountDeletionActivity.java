@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog.Builder;
@@ -38,7 +39,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -804,7 +804,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         animatorArr[0] = ObjectAnimator.ofFloat(outView, str, fArr);
         animatorArr[1] = ObjectAnimator.ofFloat(newView, "translationX", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animation) {
                 newView.setVisibility(0);
             }

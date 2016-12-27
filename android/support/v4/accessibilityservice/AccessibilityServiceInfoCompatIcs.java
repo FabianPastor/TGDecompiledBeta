@@ -1,8 +1,12 @@
 package android.support.v4.accessibilityservice;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.annotation.TargetApi;
 import android.content.pm.ResolveInfo;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityServiceInfoCompatIcs {
     AccessibilityServiceInfoCompatIcs() {
     }

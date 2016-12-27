@@ -1,10 +1,14 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewParent;
 
+@TargetApi(16)
+@RequiresApi(16)
 class ViewCompatJB {
     ViewCompatJB() {
     }

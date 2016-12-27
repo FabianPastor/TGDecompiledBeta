@@ -1,12 +1,16 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.CompoundButton;
 import java.lang.reflect.Field;
 
+@TargetApi(9)
+@RequiresApi(9)
 class CompoundButtonCompatGingerbread {
     private static final String TAG = "CompoundButtonCompatGingerbread";
     private static Field sButtonDrawableField;

@@ -1,9 +1,13 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.annotation.RequiresApi;
 import android.widget.EdgeEffect;
 
+@TargetApi(14)
+@RequiresApi(14)
 class EdgeEffectCompatIcs {
     EdgeEffectCompatIcs() {
     }

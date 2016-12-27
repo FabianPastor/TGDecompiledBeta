@@ -1,5 +1,6 @@
 package android.support.v4.print;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -29,12 +30,15 @@ import android.print.PrintDocumentAdapter.WriteResultCallback;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@TargetApi(19)
+@RequiresApi(19)
 class PrintHelperKitkat {
     public static final int COLOR_MODE_COLOR = 2;
     public static final int COLOR_MODE_MONOCHROME = 1;
@@ -170,9 +174,9 @@ class PrintHelperKitkat {
         final WriteResultCallback writeResultCallback2 = writeResultCallback;
         new AsyncTask<Void, Void, Throwable>() {
             protected Throwable doInBackground(Void... params) {
+                Bitmap maybeGrayscale;
                 Throwable th = null;
                 PrintedPdfDocument pdfDocument;
-                Bitmap maybeGrayscale;
                 try {
                     if (!cancellationSignal2.isCanceled()) {
                         pdfDocument = new PrintedPdfDocument(PrintHelperKitkat.this.mContext, pdfAttributes);

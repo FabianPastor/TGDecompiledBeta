@@ -70,17 +70,17 @@ public class ViewCompat {
     public static final int SCROLL_INDICATOR_TOP = 1;
     private static final String TAG = "ViewCompat";
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusDirection {
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusRealDirection {
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface FocusRelativeDirection {
     }
@@ -1452,7 +1452,7 @@ public class ViewCompat {
         }
 
         public void setPointerIcon(View view, PointerIconCompat pointerIconCompat) {
-            ViewCompatApi24.setPointerIcon(view, pointerIconCompat.getPointerIcon());
+            ViewCompatApi24.setPointerIcon(view, pointerIconCompat != null ? pointerIconCompat.getPointerIcon() : null);
         }
     }
 

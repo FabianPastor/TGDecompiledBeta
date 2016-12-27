@@ -1,11 +1,15 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.RequiresApi;
 import android.widget.RemoteViews;
 
+@TargetApi(14)
+@RequiresApi(14)
 class NotificationCompatIceCreamSandwich {
 
     public static class Builder implements NotificationBuilderWithBuilderAccessor {

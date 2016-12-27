@@ -1,12 +1,16 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput.Factory;
 
+@TargetApi(16)
+@RequiresApi(16)
 class RemoteInputCompatJellybean {
     public static final String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
     private static final String KEY_ALLOW_FREE_FORM_INPUT = "allowFreeFormInput";

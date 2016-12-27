@@ -1,10 +1,14 @@
 package android.support.v4.view.animation;
 
+import android.annotation.TargetApi;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.support.annotation.RequiresApi;
 import android.view.animation.Interpolator;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
+@TargetApi(9)
+@RequiresApi(9)
 class PathInterpolatorGingerbread implements Interpolator {
     private static final float PRECISION = 0.002f;
     private final float[] mX;

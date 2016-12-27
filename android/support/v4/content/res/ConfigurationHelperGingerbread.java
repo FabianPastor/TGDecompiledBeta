@@ -1,9 +1,13 @@
 package android.support.v4.content.res;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 
+@TargetApi(9)
+@RequiresApi(9)
 class ConfigurationHelperGingerbread {
     ConfigurationHelperGingerbread() {
     }

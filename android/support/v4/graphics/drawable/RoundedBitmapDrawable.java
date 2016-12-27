@@ -1,5 +1,6 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -11,8 +12,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 
+@TargetApi(9)
+@RequiresApi(9)
 public abstract class RoundedBitmapDrawable extends Drawable {
     private static final int DEFAULT_PAINT_FLAGS = 3;
     private boolean mApplyGravity = true;

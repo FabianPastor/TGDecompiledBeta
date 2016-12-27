@@ -1,10 +1,14 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import java.util.List;
 
+@TargetApi(21)
+@RequiresApi(21)
 class AccessibilityNodeInfoCompatApi21 {
 
     static class CollectionInfo {

@@ -1,7 +1,11 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityEvent;
 
+@TargetApi(16)
+@RequiresApi(16)
 class AccessibilityEventCompatJellyBean {
     AccessibilityEventCompatJellyBean() {
     }

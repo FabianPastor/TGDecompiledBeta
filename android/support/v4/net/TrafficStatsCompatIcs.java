@@ -1,11 +1,15 @@
 package android.support.v4.net;
 
+import android.annotation.TargetApi;
 import android.net.TrafficStats;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.RequiresApi;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+@TargetApi(14)
+@RequiresApi(14)
 class TrafficStatsCompatIcs {
     TrafficStatsCompatIcs() {
     }

@@ -65,6 +65,8 @@ public class VideoPlayer implements EventListener, VideoListener {
 
         boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture);
 
+        void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture);
+
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
@@ -291,6 +293,10 @@ public class VideoPlayer implements EventListener, VideoListener {
 
     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
         return this.delegate.onSurfaceDestroyed(surfaceTexture);
+    }
+
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        this.delegate.onSurfaceTextureUpdated(surfaceTexture);
     }
 
     private void maybeReportPlayerState() {

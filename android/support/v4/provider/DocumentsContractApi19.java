@@ -1,13 +1,18 @@
 package android.support.v4.provider;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.DocumentsContract;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
+@TargetApi(19)
+@RequiresApi(19)
 class DocumentsContractApi19 {
+    private static final int FLAG_VIRTUAL_DOCUMENT = 512;
     private static final String TAG = "DocumentFile";
 
     public static boolean exists(android.content.Context r10, android.net.Uri r11) {
@@ -80,6 +85,13 @@ Error: java.lang.NullPointerException
         return DocumentsContract.isDocumentUri(context, self);
     }
 
+    public static boolean isVirtual(Context context, Uri self) {
+        if (isDocumentUri(context, self) && (getFlags(context, self) & 512) != 0) {
+            return true;
+        }
+        return false;
+    }
+
     public static String getName(Context context, Uri self) {
         return queryForString(context, self, "_display_name", null);
     }
@@ -94,6 +106,10 @@ Error: java.lang.NullPointerException
             return null;
         }
         return rawType;
+    }
+
+    public static long getFlags(Context context, Uri self) {
+        return queryForLong(context, self, "flags", 0);
     }
 
     public static boolean isDirectory(Context context, Uri self) {

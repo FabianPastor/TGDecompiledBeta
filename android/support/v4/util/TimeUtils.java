@@ -4,7 +4,7 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import java.io.PrintWriter;
 
-@RestrictTo({Scope.GROUP_ID})
+@RestrictTo({Scope.LIBRARY_GROUP})
 public final class TimeUtils {
     public static final int HUNDRED_DAY_FIELD_LEN = 19;
     private static final int SECONDS_PER_DAY = 86400;

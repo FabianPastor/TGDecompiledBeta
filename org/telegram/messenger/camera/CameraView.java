@@ -3,26 +3,45 @@ package org.telegram.messenger.camera;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.tgnet.ConnectionsManager;
 
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private CameraSession cameraSession;
     private int clipLeft;
     private int clipTop;
+    private int cx;
+    private int cy;
     private CameraViewDelegate delegate;
+    private int focusAreaSize;
+    private float focusProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
     private boolean initied;
+    private float innerAlpha;
+    private Paint innerPaint = new Paint(1);
+    private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private boolean isFrontface;
+    private long lastDrawTime;
+    private Matrix matrix = new Matrix();
     private boolean mirror;
+    private float outerAlpha;
+    private Paint outerPaint = new Paint(1);
     private Size previewSize;
     private TextureView textureView;
     private Matrix txform = new Matrix();
@@ -36,6 +55,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
+        this.focusAreaSize = AndroidUtilities.dp(96.0f);
+        this.outerPaint.setColor(-1);
+        this.outerPaint.setStyle(Style.STROKE);
+        this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.innerPaint.setColor(ConnectionsManager.DEFAULT_DATACENTER_ID);
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -195,6 +219,41 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
         }
         this.textureView.setTransform(this.txform);
+        Matrix matrix = new Matrix();
+        matrix.postRotate((float) this.cameraSession.getDisplayOrientation());
+        matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
+        matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
+        matrix.invert(this.matrix);
+    }
+
+    private Rect calculateTapArea(float x, float y, float coefficient) {
+        int areaSize = Float.valueOf(((float) this.focusAreaSize) * coefficient).intValue();
+        int left = clamp(((int) x) - (areaSize / 2), 0, getWidth() - areaSize);
+        int top = clamp(((int) y) - (areaSize / 2), 0, getHeight() - areaSize);
+        RectF rectF = new RectF((float) left, (float) top, (float) (left + areaSize), (float) (top + areaSize));
+        this.matrix.mapRect(rectF);
+        return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
+    }
+
+    private int clamp(int x, int min, int max) {
+        if (x > max) {
+            return max;
+        }
+        if (x < min) {
+            return min;
+        }
+        return x;
+    }
+
+    public void focusToPoint(int x, int y) {
+        this.cameraSession.focusToRect(calculateTapArea((float) x, (float) y, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), calculateTapArea((float) x, (float) y, 1.5f));
+        this.focusProgress = 0.0f;
+        this.innerAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.outerAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.cx = x;
+        this.cy = y;
+        this.lastDrawTime = System.currentTimeMillis();
+        invalidate();
     }
 
     public void setDelegate(CameraViewDelegate cameraViewDelegate) {
@@ -214,5 +273,43 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.cameraSession.destroy();
             CameraController.getInstance().close(this.cameraSession, !async ? new Semaphore(0) : null);
         }
+    }
+
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean result = super.drawChild(canvas, child, drawingTime);
+        if (!(this.focusProgress == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
+            int baseRad = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+            long newTime = System.currentTimeMillis();
+            long dt = newTime - this.lastDrawTime;
+            if (dt < 0 || dt > 17) {
+                dt = 17;
+            }
+            this.lastDrawTime = newTime;
+            this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
+            this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
+            float interpolated = this.interpolator.getInterpolation(this.focusProgress);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
+            if (this.focusProgress < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                this.focusProgress += ((float) dt) / 200.0f;
+                if (this.focusProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    this.focusProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                }
+                invalidate();
+            } else if (this.innerAlpha != 0.0f) {
+                this.innerAlpha -= ((float) dt) / 150.0f;
+                if (this.innerAlpha < 0.0f) {
+                    this.innerAlpha = 0.0f;
+                }
+                invalidate();
+            } else if (this.outerAlpha != 0.0f) {
+                this.outerAlpha -= ((float) dt) / 150.0f;
+                if (this.outerAlpha < 0.0f) {
+                    this.outerAlpha = 0.0f;
+                }
+                invalidate();
+            }
+        }
+        return result;
     }
 }

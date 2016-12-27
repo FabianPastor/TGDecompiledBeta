@@ -1,13 +1,17 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff.Mode;
+import android.support.annotation.RequiresApi;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import java.lang.reflect.Field;
 
+@TargetApi(9)
+@RequiresApi(9)
 class ViewCompatBase {
     private static final String TAG = "ViewCompatBase";
     private static Field sMinHeightField;

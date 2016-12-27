@@ -1,11 +1,15 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.TextView;
 import java.lang.reflect.Field;
 
+@TargetApi(9)
+@RequiresApi(9)
 class TextViewCompatGingerbread {
     private static final int LINES = 1;
     private static final String LOG_TAG = "TextViewCompatGingerbread";

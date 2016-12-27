@@ -1,13 +1,17 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnApplyWindowInsetsListener;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.WindowInsets;
 
+@TargetApi(21)
+@RequiresApi(21)
 class DrawerLayoutCompatApi21 {
     private static final int[] THEME_ATTRS = new int[]{16843828};
 

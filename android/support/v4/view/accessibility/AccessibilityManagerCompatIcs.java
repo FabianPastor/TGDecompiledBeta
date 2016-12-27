@@ -1,10 +1,14 @@
 package android.support.v4.view.accessibility;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener;
 import java.util.List;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityManagerCompatIcs {
 
     interface AccessibilityStateChangeListenerBridge {

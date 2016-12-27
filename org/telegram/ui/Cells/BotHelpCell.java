@@ -81,11 +81,12 @@ public class BotHelpCell extends View {
             String help = LocaleController.getString("BotInfoTitle", R.string.BotInfoTitle);
             stringBuilder.append(help);
             stringBuilder.append("\n\n");
-            for (String trim : lines) {
-                stringBuilder.append(trim.trim());
-                stringBuilder.append("\n");
+            for (a = 0; a < lines.length; a++) {
+                stringBuilder.append(lines[a].trim());
+                if (a != lines.length - 1) {
+                    stringBuilder.append("\n");
+                }
             }
-            stringBuilder.append(text);
             MessageObject.addLinks(stringBuilder);
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
             Emoji.replaceEmoji(stringBuilder, this.textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);

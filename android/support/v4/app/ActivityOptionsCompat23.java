@@ -1,14 +1,18 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Pair;
 import android.view.View;
 
+@TargetApi(23)
+@RequiresApi(23)
 class ActivityOptionsCompat23 {
     private final ActivityOptions mActivityOptions;
 

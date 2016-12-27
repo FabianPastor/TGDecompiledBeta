@@ -35,7 +35,7 @@ public class PipVideoView {
     private WindowManager windowManager;
     private FrameLayout windowView;
 
-    public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRation, int rotation, Rect videoRect, boolean fromFullscreen) {
+    public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation) {
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
             private float startX;
@@ -55,6 +55,10 @@ public class PipVideoView {
                     return true;
                 }
                 return super.onInterceptTouchEvent(event);
+            }
+
+            public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                super.requestDisallowInterceptTouchEvent(disallowIntercept);
             }
 
             public boolean onTouchEvent(MotionEvent event) {
@@ -100,18 +104,17 @@ public class PipVideoView {
                 return true;
             }
         };
-        if (videoRect.width > videoRect.height) {
+        if (aspectRatio > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
             this.videoWidth = AndroidUtilities.dp(192.0f);
-            this.videoHeight = (int) (videoRect.height / (videoRect.width / ((float) this.videoWidth)));
+            this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
         } else {
             this.videoHeight = AndroidUtilities.dp(192.0f);
-            this.videoWidth = (int) (videoRect.width / (videoRect.height / ((float) this.videoHeight)));
+            this.videoWidth = (int) (((float) this.videoHeight) / aspectRatio);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
-        aspectRatioFrameLayout.setAspectRatio(aspectRation, rotation);
+        aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
         this.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        TextureView textureView = new TextureView(activity) {
-        };
+        TextureView textureView = new TextureView(activity);
         aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
         this.controlsView = controls;
         this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
@@ -125,8 +128,8 @@ public class PipVideoView {
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.width = this.videoWidth;
             this.windowLayoutParams.height = this.videoHeight;
-            this.windowLayoutParams.x = getSideCoord(true, sidex, px);
-            this.windowLayoutParams.y = getSideCoord(false, sidey, py);
+            this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
+            this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
             this.windowLayoutParams.type = 2003;
@@ -134,11 +137,6 @@ public class PipVideoView {
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.parentSheet = sheet;
             this.parentActivity = activity;
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    PipVideoView.this.parentSheet.dismissInternal();
-                }
-            });
             return textureView;
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
@@ -146,13 +144,13 @@ public class PipVideoView {
         }
     }
 
-    private int getSideCoord(boolean isX, int side, float p) {
+    private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
         int total;
         int result;
         if (isX) {
-            total = AndroidUtilities.displaySize.x - this.videoWidth;
+            total = AndroidUtilities.displaySize.x - sideSize;
         } else {
-            total = (AndroidUtilities.displaySize.y - this.videoHeight) - ActionBar.getCurrentActionBarHeight();
+            total = (AndroidUtilities.displaySize.y - sideSize) - ActionBar.getCurrentActionBarHeight();
         }
         if (side == 0) {
             result = AndroidUtilities.dp(10.0f);
@@ -167,14 +165,10 @@ public class PipVideoView {
         return result + ActionBar.getCurrentActionBarHeight();
     }
 
-    public void close(boolean restore) {
+    public void close() {
         try {
             this.windowManager.removeView(this.windowView);
         } catch (Exception e) {
-        }
-        if (restore) {
-            this.parentSheet.setShowWithoutAnimation(true);
-            this.parentSheet.show();
         }
         this.parentSheet = null;
         this.parentActivity = null;
@@ -185,16 +179,16 @@ public class PipVideoView {
         int sidey = this.preferences.getInt("sidey", 0);
         float px = this.preferences.getFloat("px", 0.0f);
         float py = this.preferences.getFloat("py", 0.0f);
-        this.windowLayoutParams.x = getSideCoord(true, sidex, px);
-        this.windowLayoutParams.y = getSideCoord(false, sidey, py);
+        this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
+        this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
     private void animateToBoundsMaybe() {
-        int startX = getSideCoord(true, 0, 0.0f);
-        int endX = getSideCoord(true, 1, 0.0f);
-        int startY = getSideCoord(false, 0, 0.0f);
-        int endY = getSideCoord(false, 1, 0.0f);
+        int startX = getSideCoord(true, 0, 0.0f, this.videoWidth);
+        int endX = getSideCoord(true, 1, 0.0f, this.videoWidth);
+        int startY = getSideCoord(false, 0, 0.0f, this.videoHeight);
+        int endY = getSideCoord(false, 1, 0.0f, this.videoHeight);
         ArrayList<Animator> animators = null;
         Editor editor = this.preferences.edit();
         int maxDiff = AndroidUtilities.dp(20.0f);
@@ -268,6 +262,24 @@ public class PipVideoView {
             animatorSet.playTogether(animators);
             animatorSet.start();
         }
+    }
+
+    public static Rect getPipRect(float aspectRatio) {
+        int videoWidth;
+        int videoHeight;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
+        int sidex = preferences.getInt("sidex", 1);
+        int sidey = preferences.getInt("sidey", 0);
+        float px = preferences.getFloat("px", 0.0f);
+        float py = preferences.getFloat("py", 0.0f);
+        if (aspectRatio > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            videoWidth = AndroidUtilities.dp(192.0f);
+            videoHeight = (int) (((float) videoWidth) / aspectRatio);
+        } else {
+            videoHeight = AndroidUtilities.dp(192.0f);
+            videoWidth = (int) (((float) videoHeight) / aspectRatio);
+        }
+        return new Rect((float) getSideCoord(true, sidex, px, videoWidth), (float) getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);
     }
 
     public int getX() {

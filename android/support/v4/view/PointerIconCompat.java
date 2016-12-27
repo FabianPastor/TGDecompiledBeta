@@ -80,7 +80,7 @@ public final class PointerIconCompat {
         this.mPointerIcon = pointerIcon;
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public Object getPointerIcon() {
         return this.mPointerIcon;
     }

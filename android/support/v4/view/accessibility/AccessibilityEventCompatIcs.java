@@ -1,8 +1,12 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityRecord;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityEventCompatIcs {
     AccessibilityEventCompatIcs() {
     }

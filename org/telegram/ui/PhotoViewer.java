@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -64,7 +65,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -205,6 +205,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private TextView dateTextView;
     private boolean disableShowCheck;
     private boolean discardTap;
+    private boolean doneButtonPressed;
     private boolean dontResetZoomOnFirstLayout;
     private boolean doubleTap;
     private float dragY;
@@ -1315,7 +1316,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                                     random_ids.add(Long.valueOf(obj.messageOwner.random_id));
                                                     encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (obj.getDialogId() >> 32)));
                                                 }
-                                                MessagesController.getInstance().deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id);
+                                                MessagesController.getInstance().deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id, false);
                                             }
                                         }
                                     }
@@ -1559,7 +1560,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             });
             this.pickerView.doneButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (PhotoViewer.this.placeProvider != null) {
+                    if (PhotoViewer.this.placeProvider != null && !PhotoViewer.this.doneButtonPressed) {
+                        PhotoViewer.this.doneButtonPressed = true;
                         PhotoViewer.this.placeProvider.sendButtonPressed(PhotoViewer.this.currentIndex);
                         PhotoViewer.this.closePhoto(false, false);
                     }
@@ -1790,7 +1792,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             PhotoViewer.this.mentionListView.setVisibility(0);
                             PhotoViewer.this.mentionListAnimation = new AnimatorSet();
                             PhotoViewer.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
-                            PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                            PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animation) {
                                     if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
                                         PhotoViewer.this.mentionListAnimation = null;
@@ -1814,11 +1816,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$7000 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$7100 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$7000.playTogether(animatorArr);
-                        PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                        access$7100.playTogether(animatorArr);
+                        PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
                                     PhotoViewer.this.mentionListView.setVisibility(8);
@@ -1892,7 +1894,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (this.videoPlayer == null) {
             newText = "00:00 / 00:00";
         } else {
-            long current = this.videoPlayer.getCurrentPosition() / 1000;
+            long current = this.videoPlayer.getCurrentPosition();
             long total = this.videoPlayer.getDuration();
             if (this.muteItemAvailable) {
                 if (total >= 30000) {
@@ -1903,9 +1905,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.muteItem.setVisibility(0);
                 }
             }
-            if (total / 1000 == C.TIME_UNSET || current == C.TIME_UNSET) {
+            if (total == C.TIME_UNSET || current == C.TIME_UNSET) {
                 newText = "00:00 / 00:00";
             } else {
+                current /= 1000;
+                total /= 1000;
                 newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(current / 60), Long.valueOf(current % 60), Long.valueOf(total / 60), Long.valueOf(total % 60)});
             }
         }
@@ -2000,6 +2004,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
                     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
                         return false;
+                    }
+
+                    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
                     }
                 });
                 if (this.videoPlayer != null) {
@@ -2284,7 +2291,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
                 this.imageMoveAnimation.setDuration(200);
                 i = mode;
-                this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PhotoViewer.this.currentEditMode == 1) {
                             PhotoViewer.this.editorDoneLayout.setVisibility(8);
@@ -2317,7 +2324,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         }
                         animatorSet.playTogether(arrayList);
                         animatorSet.setDuration(200);
-                        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationStart(Animator animation) {
                                 PhotoViewer.this.pickerView.setVisibility(0);
                                 PhotoViewer.this.actionBar.setVisibility(0);
@@ -2377,7 +2384,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.changeModeAnimation.playTogether(arrayList);
             this.changeModeAnimation.setDuration(200);
             i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     PhotoViewer.this.changeModeAnimation = null;
                     PhotoViewer.this.pickerView.setVisibility(8);
@@ -2425,16 +2432,16 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                    access$7900.playTogether(r13);
+                    access$8000.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
                             PhotoViewer.this.editorDoneLayout.setVisibility(0);
                             PhotoViewer.this.photoCropView.setVisibility(0);
@@ -2499,7 +2506,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.changeModeAnimation.playTogether(arrayList);
             this.changeModeAnimation.setDuration(200);
             i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     PhotoViewer.this.changeModeAnimation = null;
                     PhotoViewer.this.pickerView.setVisibility(8);
@@ -2536,14 +2543,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$7900.playTogether(r12);
+                    access$8000.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
                         }
 
@@ -2599,7 +2606,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.changeModeAnimation.playTogether(arrayList);
             this.changeModeAnimation.setDuration(200);
             i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     PhotoViewer.this.changeModeAnimation = null;
                     PhotoViewer.this.pickerView.setVisibility(8);
@@ -2635,7 +2642,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$7900 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[4];
                     float[] fArr = new float[2];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
@@ -2647,9 +2654,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     fArr2[0] = (float) ((-ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
                     fArr2[1] = 0.0f;
                     r13[3] = ObjectAnimator.ofFloat(actionBar, str, fArr2);
-                    access$7900.playTogether(r13);
+                    access$8000.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
                         }
 
@@ -2748,7 +2755,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.currentActionBarAnimation = new AnimatorSet();
             this.currentActionBarAnimation.playTogether(arrayList);
             if (!show) {
-                this.currentActionBarAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.currentActionBarAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PhotoViewer.this.currentActionBarAnimation != null && PhotoViewer.this.currentActionBarAnimation.equals(animation)) {
                             PhotoViewer.this.actionBar.setVisibility(8);
@@ -3730,6 +3737,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.windowView.setFocusable(false);
             this.containerView.setFocusable(false);
             wm.addView(this.windowView, this.windowLayoutParams);
+            this.doneButtonPressed = false;
             this.parentChatActivity = chatActivity;
             this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
             NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
@@ -3854,7 +3862,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                 };
                 animatorSet.setDuration(200);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -4061,7 +4069,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             }
                         };
                         animatorSet.setDuration(200);
-                        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public void run() {
@@ -4102,7 +4110,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             }
                         };
                         animatorSet.setDuration(200);
-                        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.animationEndRunnable != null) {
                                     PhotoViewer.this.animationEndRunnable.run();
@@ -4567,7 +4575,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
             this.imageMoveAnimation.setDuration((long) duration);
-            this.imageMoveAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     PhotoViewer.this.imageMoveAnimation = null;
                     PhotoViewer.this.containerView.invalidate();

@@ -27,6 +27,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
@@ -44,7 +45,12 @@ public class ConnectionsManager {
     public static final int ConnectionTypeGeneric = 1;
     public static final int ConnectionTypePush = 8;
     public static final int ConnectionTypeUpload = 4;
+    public static final int ConnectionTypeUpload2 = 65540;
     public static final int DEFAULT_DATACENTER_ID = Integer.MAX_VALUE;
+    public static final int FileTypeAudio = 50331648;
+    public static final int FileTypeFile = 67108864;
+    public static final int FileTypePhoto = 16777216;
+    public static final int FileTypeVideo = 33554432;
     private static volatile ConnectionsManager Instance = null;
     public static final int RequestFlagCanCompress = 4;
     public static final int RequestFlagEnableUnauthorized = 1;
@@ -54,6 +60,7 @@ public class ConnectionsManager {
     public static final int RequestFlagNeedQuickAck = 128;
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
+    private static ConnectivityManager connectivityManager;
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState = native_getConnectionState();
@@ -133,6 +140,7 @@ public class ConnectionsManager {
         try {
             this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(1, JoinPoint.SYNCHRONIZATION_LOCK);
             this.wakeLock.setReferenceCounted(false);
+            connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }
@@ -389,6 +397,32 @@ public class ConnectionsManager {
         });
     }
 
+    public static void onBytesSent(int amount) {
+        try {
+            StatsController.getInstance().incrementSentBytesCount(getCurrentNetworkType(), 6, (long) amount);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
+    }
+
+    public static int getCurrentNetworkType() {
+        if (isConnectedToWiFi()) {
+            return 1;
+        }
+        if (isRoaming()) {
+            return 2;
+        }
+        return 0;
+    }
+
+    public static void onBytesReceived(int amount) {
+        try {
+            StatsController.getInstance().incrementReceivedBytesCount(getCurrentNetworkType(), 6, (long) amount);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
+    }
+
     public static void onUpdateConfig(int address) {
         try {
             NativeByteBuffer buff = NativeByteBuffer.wrap(address);
@@ -429,7 +463,7 @@ public class ConnectionsManager {
 
     public static boolean isRoaming() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
             if (netInfo != null) {
                 return netInfo.isRoaming();
             }
@@ -441,7 +475,7 @@ public class ConnectionsManager {
 
     public static boolean isConnectedToWiFi() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
+            NetworkInfo netInfo = connectivityManager.getNetworkInfo(1);
             if (netInfo != null && netInfo.getState() == State.CONNECTED) {
                 return true;
             }
@@ -532,16 +566,15 @@ public class ConnectionsManager {
 
     public static boolean isNetworkOnline() {
         try {
-            ConnectivityManager cm = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
             if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
                 return true;
             }
-            netInfo = cm.getNetworkInfo(0);
+            netInfo = connectivityManager.getNetworkInfo(0);
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
                 return true;
             }
-            netInfo = cm.getNetworkInfo(1);
+            netInfo = connectivityManager.getNetworkInfo(1);
             if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
                 return false;
             }

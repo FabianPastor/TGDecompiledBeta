@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.RemoteInput;
@@ -7,11 +8,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompatBase.Action;
 import android.support.v4.app.NotificationCompatBase.Action.Factory;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
 
+@TargetApi(20)
+@RequiresApi(20)
 class NotificationCompatApi20 {
 
     public static class Builder implements NotificationBuilderWithBuilderAccessor, NotificationBuilderWithActions {

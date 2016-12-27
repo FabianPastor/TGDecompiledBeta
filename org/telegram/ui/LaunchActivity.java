@@ -331,17 +331,17 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Bundle args;
-                if (position == 0) {
+                if (id == 0) {
                     args = new Bundle();
                     args.putInt("user_id", UserConfig.getClientUserId());
                     LaunchActivity.this.presentFragment(new ChatActivity(args));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (position == 2) {
+                } else if (id == 2) {
                     if (MessagesController.isFeatureEnabled("chat_create", (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1))) {
                         LaunchActivity.this.presentFragment(new GroupCreateActivity());
                         LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                     }
-                } else if (position == 3) {
+                } else if (id == 3) {
                     args = new Bundle();
                     args.putBoolean("onlyUsers", true);
                     args.putBoolean("destroyAfterSelect", true);
@@ -349,7 +349,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     args.putBoolean("allowBots", false);
                     LaunchActivity.this.presentFragment(new ContactsActivity(args));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (position == 4) {
+                } else if (id == 4) {
                     if (MessagesController.isFeatureEnabled("broadcast_create", (BaseFragment) LaunchActivity.this.actionBarLayout.fragmentsStack.get(LaunchActivity.this.actionBarLayout.fragmentsStack.size() - 1))) {
                         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                         if (preferences.getBoolean("channel_intro", false)) {
@@ -362,10 +362,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         }
                         LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                     }
-                } else if (position == 6) {
+                } else if (id == 6) {
                     LaunchActivity.this.presentFragment(new ContactsActivity(null));
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (position == 7) {
+                } else if (id == 7) {
                     try {
                         Intent intent = new Intent("android.intent.action.SEND");
                         intent.setType("text/plain");
@@ -375,11 +375,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         FileLog.e("tmessages", e);
                     }
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (position == 8) {
+                } else if (id == 8) {
                     LaunchActivity.this.presentFragment(new SettingsActivity());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
-                } else if (position == 9) {
+                } else if (id == 9) {
                     Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                    LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 10) {
+                    LaunchActivity.this.presentFragment(new CallLogFragment());
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 }
             }
@@ -805,12 +808,16 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             return;
         }
         int a;
+        BaseFragment chatFragment;
         if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
             this.tabletFullSize = true;
             if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
                 a = 0;
                 while (this.rightActionBarLayout.fragmentsStack.size() > 0) {
-                    BaseFragment chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
+                    chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
+                    if (chatFragment instanceof ChatActivity) {
+                        ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
+                    }
                     chatFragment.onPause();
                     this.rightActionBarLayout.fragmentsStack.remove(a);
                     this.actionBarLayout.fragmentsStack.add(chatFragment);
@@ -834,6 +841,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         if (this.actionBarLayout.fragmentsStack.size() >= 2) {
             for (a = 1; a < this.actionBarLayout.fragmentsStack.size(); a = (a - 1) + 1) {
                 chatFragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(a);
+                if (chatFragment instanceof ChatActivity) {
+                    ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
+                }
                 chatFragment.onPause();
                 this.actionBarLayout.fragmentsStack.remove(a);
                 this.rightActionBarLayout.fragmentsStack.add(chatFragment);
@@ -906,6 +916,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             Integer push_chat_id = Integer.valueOf(0);
             Integer push_enc_id = Integer.valueOf(0);
             Integer open_settings = Integer.valueOf(0);
+            Integer open_new_dialog = Integer.valueOf(0);
             long dialogId = (intent == null || intent.getExtras() == null) ? 0 : intent.getExtras().getLong("dialogId", 0);
             boolean showDialogsList = false;
             boolean showPlayer = false;
@@ -1334,6 +1345,8 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     }
                 } else if (intent.getAction().equals("org.telegram.messenger.OPEN_ACCOUNT")) {
                     open_settings = Integer.valueOf(1);
+                } else if (intent.getAction().equals("new_dialog")) {
+                    open_new_dialog = Integer.valueOf(1);
                 } else if (intent.getAction().startsWith("com.tmessages.openchat")) {
                     int chatId = intent.getIntExtra("chatId", 0);
                     userId = intent.getIntExtra("userId", 0);
@@ -1450,6 +1463,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             } else if (open_settings.intValue() != 0) {
                 this.actionBarLayout.presentFragment(new SettingsActivity(), false, true, true);
+                if (AndroidUtilities.isTablet()) {
+                    this.actionBarLayout.showLastFragment();
+                    this.rightActionBarLayout.showLastFragment();
+                    this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                } else {
+                    this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                }
+                pushOpened = true;
+            } else if (open_new_dialog.intValue() != 0) {
+                args2 = new Bundle();
+                args2.putBoolean("destroyAfterSelect", true);
+                this.actionBarLayout.presentFragment(new ContactsActivity(args2), false, true, true);
                 if (AndroidUtilities.isTablet()) {
                     this.actionBarLayout.showLastFragment();
                     this.rightActionBarLayout.showLastFragment();
@@ -1897,13 +1922,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             captions.add(this.sendingText);
                             this.sendingText = null;
                         }
-                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null);
+                        SendMessagesHelper.prepareSendingPhotos(null, this.photoPathsArray, dialog_id, null, captions, null, null);
                     }
                     if (this.sendingText != null) {
                         SendMessagesHelper.prepareSendingText(this.sendingText, dialog_id);
                     }
                     if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                        SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null);
+                        SendMessagesHelper.prepareSendingDocuments(this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, this.documentsMimeType, dialog_id, null, null);
                     }
                     if (!(this.contactsToSend == null || this.contactsToSend.isEmpty())) {
                         Iterator it = this.contactsToSend.iterator();

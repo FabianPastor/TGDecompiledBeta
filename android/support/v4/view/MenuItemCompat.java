@@ -145,10 +145,9 @@ public final class MenuItemCompat {
     }
 
     static {
-        int version = VERSION.SDK_INT;
-        if (version >= 14) {
+        if (VERSION.SDK_INT >= 14) {
             IMPL = new IcsMenuVersionImpl();
-        } else if (version >= 11) {
+        } else if (VERSION.SDK_INT >= 11) {
             IMPL = new HoneycombMenuVersionImpl();
         } else {
             IMPL = new BaseMenuVersionImpl();

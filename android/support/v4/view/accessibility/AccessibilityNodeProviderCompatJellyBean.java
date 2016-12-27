@@ -1,10 +1,14 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeProvider;
 import java.util.List;
 
+@TargetApi(16)
+@RequiresApi(16)
 class AccessibilityNodeProviderCompatJellyBean {
 
     interface AccessibilityNodeInfoBridge {

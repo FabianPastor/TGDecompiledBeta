@@ -1,6 +1,7 @@
 package org.telegram.ui.ActionBar;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -39,7 +40,6 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -311,7 +311,7 @@ public class BottomSheet extends Dialog {
                 animatorSet.playTogether(animatorArr);
                 this.currentAnimation.setDuration((long) ((int) ((translationY / AndroidUtilities.getPixelsInCM(0.8f, false)) * 150.0f)));
                 this.currentAnimation.setInterpolator(new DecelerateInterpolator());
-                this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (ContainerView.this.currentAnimation != null && ContainerView.this.currentAnimation.equals(animation)) {
                             ContainerView.this.currentAnimation = null;
@@ -572,6 +572,11 @@ public class BottomSheet extends Dialog {
                 public boolean hasOverlappingRendering() {
                     return false;
                 }
+
+                public void setTranslationY(float translationY) {
+                    super.setTranslationY(translationY);
+                    BottomSheet.this.onContainerTranslationYChanged(translationY);
+                }
             };
             this.containerView.setBackgroundDrawable(this.shadowDrawable);
             ViewGroup viewGroup = this.containerView;
@@ -727,6 +732,9 @@ public class BottomSheet extends Dialog {
         return true;
     }
 
+    protected void onContainerTranslationYChanged(float translationY) {
+    }
+
     private void cancelSheetAnimation() {
         if (this.currentSheetAnimation != null) {
             this.currentSheetAnimation.cancel();
@@ -750,7 +758,7 @@ public class BottomSheet extends Dialog {
                 animatorSet.setDuration(200);
                 animatorSet.setStartDelay(20);
                 animatorSet.setInterpolator(new DecelerateInterpolator());
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
                             BottomSheet.this.currentSheetAnimation = null;
@@ -810,7 +818,7 @@ public class BottomSheet extends Dialog {
             animatorSet.playTogether(r1);
             animatorSet.setDuration(180);
             animatorSet.setInterpolator(new AccelerateInterpolator());
-            animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
                         BottomSheet.this.currentSheetAnimation = null;
@@ -858,7 +866,7 @@ public class BottomSheet extends Dialog {
                     animatorSet.setDuration(180);
                 }
                 animatorSet.setInterpolator(new AccelerateInterpolator());
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
                             BottomSheet.this.currentSheetAnimation = null;

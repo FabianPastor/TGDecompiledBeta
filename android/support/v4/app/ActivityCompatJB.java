@@ -1,11 +1,15 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(16)
+@RequiresApi(16)
 class ActivityCompatJB {
     ActivityCompatJB() {
     }

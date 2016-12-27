@@ -7,7 +7,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 61;
+    public static final int LAYER = 62;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -1883,6 +1883,9 @@ public class TLRPC {
         public static MessageAction TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             MessageAction result = null;
             switch (constructor) {
+                case -2132731265:
+                    result = new TL_messageActionPhoneCall();
+                    break;
                 case -1834538890:
                     result = new TL_messageActionGameScore();
                     break;
@@ -2163,9 +2166,15 @@ public class TLRPC {
     }
 
     public static class MessagesFilter extends TLObject {
+        public int flags;
+        public boolean missed;
+
         public static MessagesFilter TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             MessagesFilter result = null;
             switch (constructor) {
+                case -2134272152:
+                    result = new TL_inputMessagesFilterPhoneCalls();
+                    break;
                 case -1777752804:
                     result = new TL_inputMessagesFilterPhotos();
                     break;
@@ -7277,8 +7286,10 @@ public class TLRPC {
     }
 
     public static class TL_messages_deleteMessages extends TLObject {
-        public static int constructor = -NUM;
+        public static int constructor = -443640366;
+        public int flags;
         public ArrayList<Integer> id = new ArrayList();
+        public boolean revoke;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_messages_affectedMessages.TLdeserialize(stream, constructor, exception);
@@ -7286,6 +7297,8 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+            this.flags = this.revoke ? this.flags | 1 : this.flags & -2;
+            stream.writeInt32(this.flags);
             stream.writeInt32(481674261);
             int count = this.id.size();
             stream.writeInt32(count);
@@ -8526,6 +8539,20 @@ public class TLRPC {
             for (int a = 0; a < count; a++) {
                 stream.writeInt64(((Long) this.order.get(a)).longValue());
             }
+        }
+    }
+
+    public static class TL_messages_reportEncryptedSpam extends TLObject {
+        public static int constructor = NUM;
+        public TL_inputEncryptedChat peer;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.peer.serializeToStream(stream);
         }
     }
 
@@ -9857,6 +9884,13 @@ public class TLRPC {
             this.type = storage_FileType.TLdeserialize(stream, stream.readInt32(exception), exception);
             this.mtime = stream.readInt32(exception);
             this.bytes = stream.readByteBuffer(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.type.serializeToStream(stream);
+            stream.writeInt32(this.mtime);
+            stream.writeByteBuffer(this.bytes);
         }
 
         public void freeResources() {
@@ -15050,6 +15084,21 @@ public class TLRPC {
         }
     }
 
+    public static class TL_inputMessagesFilterPhoneCalls extends MessagesFilter {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.flags = stream.readInt32(exception);
+            this.missed = (this.flags & 1) != 0;
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.flags = this.missed ? this.flags | 1 : this.flags & -2;
+            stream.writeInt32(this.flags);
+        }
+    }
+
     public static class TL_inputMessagesFilterPhotoVideo extends MessagesFilter {
         public static int constructor = NUM;
 
@@ -16020,6 +16069,37 @@ public class TLRPC {
             stream.writeInt32(constructor);
             stream.writeString(this.title);
             stream.writeString(this.address);
+        }
+    }
+
+    public static class TL_messageActionPhoneCall extends MessageAction {
+        public static int constructor = -NUM;
+        public long call_id;
+        public int duration;
+        public int flags;
+        public PhoneCallDiscardReason reason;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.flags = stream.readInt32(exception);
+            this.call_id = stream.readInt64(exception);
+            if ((this.flags & 1) != 0) {
+                this.reason = PhoneCallDiscardReason.TLdeserialize(stream, stream.readInt32(exception), exception);
+            }
+            if ((this.flags & 2) != 0) {
+                this.duration = stream.readInt32(exception);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(this.flags);
+            stream.writeInt64(this.call_id);
+            if ((this.flags & 1) != 0) {
+                this.reason.serializeToStream(stream);
+            }
+            if ((this.flags & 2) != 0) {
+                stream.writeInt32(this.duration);
+            }
         }
     }
 

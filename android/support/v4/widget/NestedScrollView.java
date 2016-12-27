@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.tgnet.TLRPC;
 
 public class NestedScrollView extends FrameLayout implements NestedScrollingParent, NestedScrollingChild, ScrollingView {
     private static final AccessibilityDelegate ACCESSIBILITY_DELEGATE = new AccessibilityDelegate();
@@ -431,7 +432,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                         }
                         handled = fullScroll(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
-                    case 62:
+                    case TLRPC.LAYER /*62*/:
                         pageScroll(event.isShiftPressed() ? 33 : TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
                 }
@@ -981,7 +982,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         smoothScrollBy(x - getScrollX(), y - getScrollY());
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeVerticalScrollRange() {
         int contentHeight = (getHeight() - getPaddingBottom()) - getPaddingTop();
         if (getChildCount() == 0) {
@@ -998,27 +999,27 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         return scrollRange;
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeVerticalScrollOffset() {
         return Math.max(0, super.computeVerticalScrollOffset());
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeVerticalScrollExtent() {
         return super.computeVerticalScrollExtent();
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeHorizontalScrollRange() {
         return super.computeHorizontalScrollRange();
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeHorizontalScrollOffset() {
         return super.computeHorizontalScrollOffset();
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public int computeHorizontalScrollExtent() {
         return super.computeHorizontalScrollExtent();
     }

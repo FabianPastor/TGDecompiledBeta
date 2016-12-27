@@ -10,6 +10,7 @@ import android.os.Build.VERSION;
 import android.support.annotation.Nullable;
 import android.support.v4.content.IntentCompat;
 import android.util.Log;
+import org.telegram.tgnet.ConnectionsManager;
 
 public final class NavUtils {
     private static final NavUtilsImpl IMPL;
@@ -54,7 +55,7 @@ public final class NavUtils {
         }
 
         public void navigateUpTo(Activity activity, Intent upIntent) {
-            upIntent.addFlags(67108864);
+            upIntent.addFlags(ConnectionsManager.FileTypeFile);
             activity.startActivity(upIntent);
             activity.finish();
         }

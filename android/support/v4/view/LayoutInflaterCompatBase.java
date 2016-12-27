@@ -1,11 +1,15 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.LayoutInflater.Factory;
 import android.view.View;
 
+@TargetApi(9)
+@RequiresApi(9)
 class LayoutInflaterCompatBase {
 
     static class FactoryWrapper implements Factory {

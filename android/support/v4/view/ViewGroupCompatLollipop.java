@@ -1,7 +1,11 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.ViewGroup;
 
+@TargetApi(21)
+@RequiresApi(21)
 class ViewGroupCompatLollipop {
     ViewGroupCompatLollipop() {
     }

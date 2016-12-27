@@ -5,7 +5,7 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import android.view.View;
 
-@RestrictTo({Scope.GROUP_ID})
+@RestrictTo({Scope.LIBRARY_GROUP})
 public final class AnimatorCompatHelper {
     private static final AnimatorProvider IMPL;
 

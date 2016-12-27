@@ -1,8 +1,12 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
 import android.graphics.Rect;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityWindowInfo;
 
+@TargetApi(21)
+@RequiresApi(21)
 class AccessibilityWindowInfoCompatApi21 {
     AccessibilityWindowInfoCompatApi21() {
     }

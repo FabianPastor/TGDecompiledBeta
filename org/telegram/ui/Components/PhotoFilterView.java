@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -42,7 +43,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -1774,7 +1774,7 @@ public class PhotoFilterView extends FrameLayout {
         Animator[] animatorArr = new Animator[1];
         animatorArr[0] = ObjectAnimator.ofFloat(viewFrom, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(126.0f)});
         animatorSet.playTogether(animatorArr);
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 viewFrom.setVisibility(8);
                 viewTo.setVisibility(0);
@@ -1783,7 +1783,7 @@ public class PhotoFilterView extends FrameLayout {
                 Animator[] animatorArr = new Animator[1];
                 animatorArr[0] = ObjectAnimator.ofFloat(viewTo, "translationY", new float[]{0.0f});
                 animatorSet.playTogether(animatorArr);
-                animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PhotoFilterView.this.selectedTool == PhotoFilterView.this.enhanceTool) {
                             PhotoFilterView.this.checkEnhance();

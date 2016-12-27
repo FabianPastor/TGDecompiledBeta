@@ -153,15 +153,16 @@ public class FileLoader {
         });
     }
 
-    public void uploadFile(String location, boolean encrypted, boolean small) {
-        uploadFile(location, encrypted, small, 0);
+    public void uploadFile(String location, boolean encrypted, boolean small, int type) {
+        uploadFile(location, encrypted, small, 0, type);
     }
 
-    public void uploadFile(String location, boolean encrypted, boolean small, int estimatedSize) {
+    public void uploadFile(String location, boolean encrypted, boolean small, int estimatedSize, int type) {
         if (location != null) {
             final boolean z = encrypted;
             final String str = location;
             final int i = estimatedSize;
+            final int i2 = type;
             final boolean z2 = small;
             this.fileLoaderQueue.postRunnable(new Runnable() {
                 public void run() {
@@ -177,7 +178,7 @@ public class FileLoader {
                         esimated = 0;
                         FileLoader.this.uploadSizes.remove(str);
                     }
-                    FileUploadOperation operation = new FileUploadOperation(str, z, esimated);
+                    FileUploadOperation operation = new FileUploadOperation(str, z, esimated, i2);
                     if (z) {
                         FileLoader.this.uploadOperationPathsEnc.put(str, operation);
                     } else {

@@ -21,7 +21,7 @@ public final class ConnectivityManagerCompat {
         boolean isActiveNetworkMetered(ConnectivityManager connectivityManager);
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface RestrictBackgroundStatus {
     }

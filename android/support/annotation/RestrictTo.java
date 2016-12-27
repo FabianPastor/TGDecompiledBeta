@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 public @interface RestrictTo {
 
     public enum Scope {
+        LIBRARY,
+        LIBRARY_GROUP,
         GROUP_ID,
         TESTS,
         SUBCLASSES

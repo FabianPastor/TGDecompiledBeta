@@ -1,5 +1,6 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
@@ -9,11 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.DrawableContainer.DrawableContainerState;
 import android.graphics.drawable.InsetDrawable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+@TargetApi(21)
+@RequiresApi(21)
 class DrawableCompatLollipop {
     DrawableCompatLollipop() {
     }

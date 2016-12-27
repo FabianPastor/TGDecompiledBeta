@@ -11,7 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
-public final class AspectRatioFrameLayout extends FrameLayout {
+public class AspectRatioFrameLayout extends FrameLayout {
     private static final float MAX_ASPECT_RATIO_DEFORMATION_FRACTION = 0.01f;
     public static final int RESIZE_MODE_FILL = 3;
     public static final int RESIZE_MODE_FIT = 0;

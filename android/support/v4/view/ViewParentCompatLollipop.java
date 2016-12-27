@@ -1,9 +1,13 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
+@TargetApi(21)
+@RequiresApi(21)
 class ViewParentCompatLollipop {
     private static final String TAG = "ViewParentCompat";
 

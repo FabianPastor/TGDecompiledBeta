@@ -1,8 +1,12 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 
+@TargetApi(24)
+@RequiresApi(24)
 class AccessibilityNodeInfoCompatApi24 {
     AccessibilityNodeInfoCompatApi24() {
     }

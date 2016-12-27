@@ -1,6 +1,7 @@
 package org.telegram.ui.ActionBar;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -26,7 +27,6 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
@@ -438,7 +438,7 @@ public class ActionBarLayout extends FrameLayout {
                             animatorSet.playTogether(animatorArr);
                         }
                         animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.containerView.getMeasuredWidth())) * distToMove), 50));
-                        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 ActionBarLayout.this.onSlideAnimationEnd(backAnimation);
                             }
@@ -697,7 +697,7 @@ public class ActionBarLayout extends FrameLayout {
             this.currentAnimation.playTogether(animators);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
-            this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
+            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     ActionBarLayout.this.onAnimationEndCheck(false);
                 }
@@ -932,7 +932,7 @@ public class ActionBarLayout extends FrameLayout {
                 this.currentAnimation.playTogether(animators);
                 this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
                 this.currentAnimation.setDuration(200);
-                this.currentAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationStart(Animator animation) {
                         ActionBarLayout.this.transitionAnimationStartTime = System.currentTimeMillis();
                     }

@@ -1,7 +1,11 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityRecord;
 
+@TargetApi(15)
+@RequiresApi(15)
 class AccessibilityRecordCompatIcsMr1 {
     AccessibilityRecordCompatIcsMr1() {
     }

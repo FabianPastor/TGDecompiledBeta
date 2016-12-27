@@ -964,7 +964,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                             }
                                         }
                                     }
-                                    MessagesController.getInstance().deleteMessages(ids, random_ids, currentEncryptedChat, channelId);
+                                    MessagesController.getInstance().deleteMessages(ids, random_ids, currentEncryptedChat, channelId, false);
                                     MediaActivity.this.selectedFiles[a].clear();
                                 }
                                 MediaActivity.this.actionBar.hideActionMode();

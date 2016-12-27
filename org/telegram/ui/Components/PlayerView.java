@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -15,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
@@ -153,7 +153,7 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
                 r5[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
                 animatorSet.playTogether(r5);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PlayerView.this.animatorSet != null && PlayerView.this.animatorSet.equals(animation)) {
                             PlayerView.this.setVisibility(8);
@@ -184,7 +184,7 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
                 r5[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp(36.0f)});
                 animatorSet.playTogether(r5);
                 this.animatorSet.setDuration(200);
-                this.animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+                this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (PlayerView.this.animatorSet != null && PlayerView.this.animatorSet.equals(animation)) {
                             PlayerView.this.animatorSet = null;

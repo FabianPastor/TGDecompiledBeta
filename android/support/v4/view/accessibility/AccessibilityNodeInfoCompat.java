@@ -4,6 +4,8 @@ import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.annotation.RestrictTo.Scope;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +52,8 @@ public class AccessibilityNodeInfoCompat {
     public static final int MOVEMENT_GRANULARITY_PARAGRAPH = 8;
     public static final int MOVEMENT_GRANULARITY_WORD = 2;
     private final Object mInfo;
+    @RestrictTo({Scope.LIBRARY_GROUP})
+    public int mParentVirtualDescendantId = -1;
 
     public static class AccessibilityActionCompat {
         public static final AccessibilityActionCompat ACTION_ACCESSIBILITY_FOCUS = new AccessibilityActionCompat(64, null);
@@ -1801,6 +1805,7 @@ public class AccessibilityNodeInfoCompat {
     }
 
     public void setParent(View root, int virtualDescendantId) {
+        this.mParentVirtualDescendantId = virtualDescendantId;
         IMPL.setParent(this.mInfo, root, virtualDescendantId);
     }
 

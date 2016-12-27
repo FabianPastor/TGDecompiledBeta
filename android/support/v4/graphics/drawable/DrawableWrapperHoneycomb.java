@@ -1,10 +1,14 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(11)
+@RequiresApi(11)
 class DrawableWrapperHoneycomb extends DrawableWrapperGingerbread {
 
     private static class DrawableWrapperStateHoneycomb extends DrawableWrapperState {

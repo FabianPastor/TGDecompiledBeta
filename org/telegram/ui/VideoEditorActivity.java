@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -42,7 +43,6 @@ import com.googlecode.mp4parser.util.Path;
 import java.io.File;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -777,7 +777,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         VideoEditorActivity.this.mentionListView.setVisibility(0);
                         VideoEditorActivity.this.mentionListAnimation = new AnimatorSet();
                         VideoEditorActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
-                        VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                        VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
                                     VideoEditorActivity.this.mentionListAnimation = null;
@@ -805,7 +805,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f});
                     access$4300.playTogether(animatorArr);
-                    VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                    VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {
                             if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
                                 VideoEditorActivity.this.mentionListView.setVisibility(8);

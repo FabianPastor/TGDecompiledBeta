@@ -94,7 +94,7 @@ public class AudioRecordJNI {
                 }
                 while (AudioRecordJNI.this.running) {
                     try {
-                        AudioRecordJNI.this.audioRecord.read(AudioRecordJNI.this.buffer, AudioRecordJNI.this.bufferSize);
+                        AudioRecordJNI.this.audioRecord.read(AudioRecordJNI.this.buffer, 1920);
                         if (!AudioRecordJNI.this.running) {
                             AudioRecordJNI.this.audioRecord.stop();
                             break;

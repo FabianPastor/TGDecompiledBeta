@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
@@ -48,7 +49,6 @@ import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -1431,19 +1431,29 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     }
 
     private boolean processOnClickOrPress(final int position) {
-        final User user;
+        User user;
         Builder builder;
-        if (position == this.usernameRow) {
-            user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
-            if (user == null || user.username == null) {
-                return false;
+        if (position == this.usernameRow || position == this.channelNameRow) {
+            String username;
+            if (position == this.usernameRow) {
+                user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
+                if (user == null || user.username == null) {
+                    return false;
+                }
+                username = user.username;
+            } else {
+                Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.chat_id));
+                if (chat == null || chat.username == null) {
+                    return false;
+                }
+                username = chat.username;
             }
             builder = new Builder(getParentActivity());
             builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (i == 0) {
                         try {
-                            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "@" + user.username));
+                            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "@" + username));
                         } catch (Throwable e) {
                             FileLog.e("tmessages", e);
                         }
@@ -1709,7 +1719,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             animatorSet.playTogether(animatorArr);
                         }
                         this.writeButtonAnimation.setDuration(150);
-                        this.writeButtonAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                        this.writeButtonAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (ProfileActivity.this.writeButtonAnimation != null && ProfileActivity.this.writeButtonAnimation.equals(animation)) {
                                     ProfileActivity.this.writeButtonAnimation = null;
@@ -2108,7 +2118,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
             animatorSet.playTogether(animators);
         }
-        animatorSet.addListener(new AnimatorListenerAdapterProxy() {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (VERSION.SDK_INT > 15) {
                     ProfileActivity.this.listView.setLayerType(0, null);

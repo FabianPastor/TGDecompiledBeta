@@ -1,9 +1,13 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import java.lang.reflect.Method;
 
+@TargetApi(17)
+@RequiresApi(17)
 class DrawableCompatJellybeanMr1 {
     private static final String TAG = "DrawableCompatJellybeanMr1";
     private static Method sGetLayoutDirectionMethod;

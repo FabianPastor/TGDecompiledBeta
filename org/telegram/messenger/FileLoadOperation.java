@@ -39,6 +39,7 @@ public class FileLoadOperation {
     private File cacheIvTemp;
     private int currentDownloadChunkSize;
     private int currentMaxDownloadRequests;
+    private int currentType;
     private int datacenter_id;
     private ArrayList<RequestInfo> delayedRequestInfos;
     private FileLoadOperationDelegate delegate;
@@ -95,6 +96,7 @@ public class FileLoadOperation {
             this.location.local_id = photoLocation.local_id;
             this.datacenter_id = photoLocation.dc_id;
         }
+        this.currentType = 16777216;
         this.totalBytesCount = size;
         if (extension == null) {
             extension = "jpg";
@@ -131,6 +133,13 @@ public class FileLoadOperation {
                 int idx = this.ext.lastIndexOf(46);
                 if (idx != -1) {
                     this.ext = this.ext.substring(idx);
+                    if ("audio/ogg".equals(documentLocation.mime_type)) {
+                        this.currentType = ConnectionsManager.FileTypeAudio;
+                    } else if (MimeTypes.VIDEO_MP4.equals(documentLocation.mime_type)) {
+                        this.currentType = ConnectionsManager.FileTypeFile;
+                    } else {
+                        this.currentType = ConnectionsManager.FileTypeVideo;
+                    }
                     if (this.ext.length() > 1) {
                     }
                     if (documentLocation.mime_type == null) {
@@ -166,6 +175,13 @@ public class FileLoadOperation {
                 }
             }
             this.ext = "";
+            if ("audio/ogg".equals(documentLocation.mime_type)) {
+                this.currentType = ConnectionsManager.FileTypeAudio;
+            } else if (MimeTypes.VIDEO_MP4.equals(documentLocation.mime_type)) {
+                this.currentType = ConnectionsManager.FileTypeFile;
+            } else {
+                this.currentType = ConnectionsManager.FileTypeVideo;
+            }
             if (this.ext.length() > 1) {
                 if (documentLocation.mime_type == null) {
                     this.ext = "";
@@ -268,7 +284,7 @@ public class FileLoadOperation {
         if (this.cacheFileFinal.exists()) {
             this.started = true;
             try {
-                onFinishLoadingFile();
+                onFinishLoadingFile(false);
             } catch (Exception e) {
                 onFail(true, 0);
             }
@@ -318,7 +334,7 @@ public class FileLoadOperation {
                         return;
                     }
                     try {
-                        FileLoadOperation.this.onFinishLoadingFile();
+                        FileLoadOperation.this.onFinishLoadingFile(false);
                     } catch (Exception e) {
                         FileLoadOperation.this.onFail(true, 0);
                     }
@@ -380,7 +396,7 @@ public class FileLoadOperation {
         }
     }
 
-    private void onFinishLoadingFile() throws Exception {
+    private void onFinishLoadingFile(final boolean increment) throws Exception {
         if (this.state == 1) {
             this.state = 3;
             cleanup();
@@ -398,7 +414,7 @@ public class FileLoadOperation {
                     Utilities.stageQueue.postRunnable(new Runnable() {
                         public void run() {
                             try {
-                                FileLoadOperation.this.onFinishLoadingFile();
+                                FileLoadOperation.this.onFinishLoadingFile(increment);
                             } catch (Exception e) {
                                 FileLoadOperation.this.onFail(false, 0);
                             }
@@ -412,6 +428,18 @@ public class FileLoadOperation {
                 FileLog.e("tmessages", "finished downloading file to " + this.cacheFileFinal);
             }
             this.delegate.didFinishLoadingFile(this, this.cacheFileFinal);
+            if (!increment) {
+                return;
+            }
+            if (this.currentType == ConnectionsManager.FileTypeAudio) {
+                StatsController.getInstance().incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 3, 1);
+            } else if (this.currentType == ConnectionsManager.FileTypeVideo) {
+                StatsController.getInstance().incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 2, 1);
+            } else if (this.currentType == 16777216) {
+                StatsController.getInstance().incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 4, 1);
+            } else if (this.currentType == ConnectionsManager.FileTypeFile) {
+                StatsController.getInstance().incrementReceivedItemsCount(ConnectionsManager.getCurrentNetworkType(), 5, 1);
+            }
         }
     }
 
@@ -425,7 +453,7 @@ public class FileLoadOperation {
                         requestInfo.response.disableFree = true;
                     }
                 } else if (requestInfo.response.bytes == null || requestInfo.response.bytes.limit() == 0) {
-                    onFinishLoadingFile();
+                    onFinishLoadingFile(true);
                 } else {
                     int currentBytesSize = requestInfo.response.bytes.limit();
                     this.downloadedBytes += currentBytesSize;
@@ -457,7 +485,7 @@ public class FileLoadOperation {
                         }
                     }
                     if (finishedDownloading) {
-                        onFinishLoadingFile();
+                        onFinishLoadingFile(true);
                     } else {
                         startDownloadRequest();
                     }
@@ -485,7 +513,7 @@ public class FileLoadOperation {
         } else if (error.text.contains("OFFSET_INVALID")) {
             if (this.downloadedBytes % this.currentDownloadChunkSize == 0) {
                 try {
-                    onFinishLoadingFile();
+                    onFinishLoadingFile(true);
                     return;
                 } catch (Throwable e3) {
                     FileLog.e("tmessages", e3);
@@ -532,6 +560,7 @@ public class FileLoadOperation {
                 if (this.totalBytesCount <= 0 || this.nextDownloadOffset < this.totalBytesCount) {
                     boolean isLast;
                     int i;
+                    int i2;
                     if (this.totalBytesCount <= 0 || a == count - 1 || (this.totalBytesCount > 0 && this.nextDownloadOffset + this.currentDownloadChunkSize >= this.totalBytesCount)) {
                         isLast = true;
                     } else {
@@ -549,6 +578,15 @@ public class FileLoadOperation {
                     RequestDelegate anonymousClass5 = new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             requestInfo.response = (TL_upload_file) response;
+                            if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 3, (long) (response.getObjectSize() + 4));
+                            } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 2, (long) (response.getObjectSize() + 4));
+                            } else if (FileLoadOperation.this.currentType == 16777216) {
+                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 4, (long) (response.getObjectSize() + 4));
+                            } else if (FileLoadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                StatsController.getInstance().incrementReceivedBytesCount(ConnectionsManager.getCurrentNetworkType(), 5, (long) (response.getObjectSize() + 4));
+                            }
                             FileLoadOperation.this.processRequestResult(requestInfo, error);
                         }
                     };
@@ -557,7 +595,14 @@ public class FileLoadOperation {
                     } else {
                         i = 0;
                     }
-                    requestInfo.requestToken = instance.sendRequest(req, anonymousClass5, null, i | 2, this.datacenter_id, this.requestsCount % 2 == 0 ? 2 : ConnectionsManager.ConnectionTypeDownload2, isLast);
+                    i |= 2;
+                    int i3 = this.datacenter_id;
+                    if (this.requestsCount % 2 == 0) {
+                        i2 = 2;
+                    } else {
+                        i2 = ConnectionsManager.ConnectionTypeDownload2;
+                    }
+                    requestInfo.requestToken = instance.sendRequest(req, anonymousClass5, null, i, i3, i2, isLast);
                     this.requestsCount++;
                     a++;
                 } else {

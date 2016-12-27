@@ -1,5 +1,6 @@
 package android.support.v4.graphics.drawable;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Outline;
@@ -12,7 +13,10 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.Build.VERSION;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
+@TargetApi(21)
+@RequiresApi(21)
 class DrawableWrapperLollipop extends DrawableWrapperKitKat {
 
     private static class DrawableWrapperStateLollipop extends DrawableWrapperState {

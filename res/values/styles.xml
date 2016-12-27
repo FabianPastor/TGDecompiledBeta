@@ -188,6 +188,22 @@
         <item>false</item>
         <item>false</item>
     </style>
+    <style name="Theme.TMessages.TransparentWithAlerts">
+        <item>?unknown_ref: 106000d</item>
+        <item>true</item>
+        <item>true</item>
+        <item>?unknown_ref: 0</item>
+        <item>?unknown_ref: 0</item>
+        <item>false</item>
+    </style>
+    <style name="Theme.TMessages.TransparentWithAlerts">
+        <item>?unknown_ref: 106000d</item>
+        <item>true</item>
+        <item>true</item>
+        <item>?unknown_ref: 0</item>
+        <item>?unknown_ref: 0</item>
+        <item>false</item>
+    </style>
     <style name="TransparentDialog">
         <item>?unknown_ref: 106000d</item>
         <item>true</item>

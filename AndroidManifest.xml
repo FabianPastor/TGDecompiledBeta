@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="8843" android:versionName="3.15.0" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="24" platformBuildVersionName="7.0">
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="24" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="8853" android:versionName="3.15.0" android:installLocation="auto" package="org.telegram.messenger.beta" platformBuildVersionCode="25" platformBuildVersionName="7.1.1">
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="25" />
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -158,6 +158,7 @@
         </activity>
         <activity android:name="org.telegram.ui.VoIPActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:theme="@style/Theme_TMessages_Transparent" android:name="org.telegram.ui.VoIPPermissionActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:theme="@style/Theme_TMessages_TransparentWithAlerts" android:name="org.telegram.ui.VoIPFeedbackActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <receiver android:name="org.telegram.messenger.AutoMessageHeardReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="org.telegram.messenger.ACTION_MESSAGE_HEARD" />

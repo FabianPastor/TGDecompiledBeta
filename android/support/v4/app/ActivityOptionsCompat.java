@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.util.Pair;
 import android.view.View;
 
@@ -15,6 +17,8 @@ public class ActivityOptionsCompat {
     public static final String EXTRA_USAGE_TIME_REPORT = "android.activity.usage_time";
     public static final String EXTRA_USAGE_TIME_REPORT_PACKAGES = "android.usage_time_packages";
 
+    @RequiresApi(21)
+    @TargetApi(21)
     private static class ActivityOptionsImpl21 extends ActivityOptionsCompat {
         private final ActivityOptionsCompat21 mImpl;
 
@@ -33,6 +37,8 @@ public class ActivityOptionsCompat {
         }
     }
 
+    @RequiresApi(23)
+    @TargetApi(23)
     private static class ActivityOptionsImpl23 extends ActivityOptionsCompat {
         private final ActivityOptionsCompat23 mImpl;
 
@@ -55,6 +61,8 @@ public class ActivityOptionsCompat {
         }
     }
 
+    @RequiresApi(24)
+    @TargetApi(24)
     private static class ActivityOptionsImpl24 extends ActivityOptionsCompat {
         private final ActivityOptionsCompat24 mImpl;
 
@@ -85,6 +93,8 @@ public class ActivityOptionsCompat {
         }
     }
 
+    @RequiresApi(16)
+    @TargetApi(16)
     private static class ActivityOptionsImplJB extends ActivityOptionsCompat {
         private final ActivityOptionsCompatJB mImpl;
 

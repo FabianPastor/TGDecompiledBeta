@@ -1,5 +1,6 @@
 package org.telegram.messenger.voip;
 
+import android.os.Build.VERSION;
 import android.os.SystemClock;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 
@@ -7,6 +8,9 @@ public class VoIPController {
     public static final int DATA_SAVING_ALWAYS = 2;
     public static final int DATA_SAVING_MOBILE = 1;
     public static final int DATA_SAVING_NEVER = 0;
+    public static final int ERROR_INCOMPATIBLE = 1;
+    public static final int ERROR_TIMEOUT = 2;
+    public static final int ERROR_UNKNOWN = 0;
     public static final int NET_TYPE_3G = 3;
     public static final int NET_TYPE_DIALUP = 10;
     public static final int NET_TYPE_EDGE = 2;
@@ -31,17 +35,32 @@ public class VoIPController {
         void onConnectionStateChanged(int i);
     }
 
+    public static class Stats {
+        public long bytesRecvdMobile;
+        public long bytesRecvdWifi;
+        public long bytesSentMobile;
+        public long bytesSentWifi;
+
+        public String toString() {
+            return "Stats{bytesRecvdMobile=" + this.bytesRecvdMobile + ", bytesSentWifi=" + this.bytesSentWifi + ", bytesRecvdWifi=" + this.bytesRecvdWifi + ", bytesSentMobile=" + this.bytesSentMobile + '}';
+        }
+    }
+
     private native void nativeConnect(long j);
 
     private native void nativeDebugCtl(long j, int i, int i2);
 
     private native String nativeGetDebugString(long j);
 
+    private native int nativeGetLastError(long j);
+
     private native long nativeGetPreferredRelayID(long j);
+
+    private native void nativeGetStats(long j, Stats stats);
 
     private static native String nativeGetVersion();
 
-    private native long nativeInit();
+    private native long nativeInit(int i);
 
     private native void nativeRelease(long j);
 
@@ -61,7 +80,7 @@ public class VoIPController {
 
     public VoIPController() {
         this.nativeInst = 0;
-        this.nativeInst = nativeInit();
+        this.nativeInst = nativeInit(VERSION.SDK_INT);
     }
 
     public void start() {
@@ -160,6 +179,19 @@ public class VoIPController {
     public long getPreferredRelayID() {
         ensureNativeInstance();
         return nativeGetPreferredRelayID(this.nativeInst);
+    }
+
+    public int getLastError() {
+        ensureNativeInstance();
+        return nativeGetLastError(this.nativeInst);
+    }
+
+    public void getStats(Stats stats) {
+        ensureNativeInstance();
+        if (stats == null) {
+            throw new NullPointerException("You're not supposed to pass null here");
+        }
+        nativeGetStats(this.nativeInst, stats);
     }
 
     public static String getVersion() {

@@ -17,7 +17,7 @@ public final class ServiceCompat {
         void stopForeground(Service service, int i);
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface StopForegroundFlags {
     }

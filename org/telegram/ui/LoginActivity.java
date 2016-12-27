@@ -380,6 +380,7 @@ public class LoginActivity extends BaseFragment {
                                     MessagesController.getInstance().putUser(res.user, false);
                                     ContactsController.getInstance().checkAppAccount();
                                     MessagesController.getInstance().getBlockedUsers(true);
+                                    ConnectionsManager.getInstance().updateDcSettings();
                                     LoginActivity.this.needFinishActivity();
                                 } else if (error.text.equals("PASSWORD_HASH_INVALID")) {
                                     LoginActivityPasswordView.this.onPasscodeError(true);
@@ -589,6 +590,7 @@ public class LoginActivity extends BaseFragment {
                                     MessagesController.getInstance().putUser(res.user, false);
                                     ContactsController.getInstance().checkAppAccount();
                                     MessagesController.getInstance().getBlockedUsers(true);
+                                    ConnectionsManager.getInstance().updateDcSettings();
                                     LoginActivityRecoverView.this.this$0.needFinishActivity();
                                 } else if (error.text.startsWith("CODE_INVALID")) {
                                     LoginActivityRecoverView.this.onPasscodeError(true);
@@ -777,6 +779,7 @@ public class LoginActivity extends BaseFragment {
                                     MessagesController.getInstance().putUser(res.user, false);
                                     ContactsController.getInstance().checkAppAccount();
                                     MessagesController.getInstance().getBlockedUsers(true);
+                                    ConnectionsManager.getInstance().updateDcSettings();
                                     LoginActivity.this.needFinishActivity();
                                 } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
                                     LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
@@ -1497,6 +1500,7 @@ public class LoginActivity extends BaseFragment {
                                     MessagesController.getInstance().putUser(res.user, false);
                                     ContactsController.getInstance().checkAppAccount();
                                     MessagesController.getInstance().getBlockedUsers(true);
+                                    ConnectionsManager.getInstance().updateDcSettings();
                                     LoginActivity.this.needFinishActivity();
                                     return;
                                 }

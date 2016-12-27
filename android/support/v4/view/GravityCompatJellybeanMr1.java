@@ -1,8 +1,12 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.graphics.Rect;
+import android.support.annotation.RequiresApi;
 import android.view.Gravity;
 
+@TargetApi(17)
+@RequiresApi(17)
 class GravityCompatJellybeanMr1 {
     GravityCompatJellybeanMr1() {
     }

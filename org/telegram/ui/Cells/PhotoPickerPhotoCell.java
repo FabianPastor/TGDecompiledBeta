@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -8,7 +9,6 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.BackupImageView;
@@ -70,7 +70,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
             animatorArr[1] = ObjectAnimator.ofFloat(backupImageView2, str2, fArr2);
             animatorSet.playTogether(animatorArr);
             this.animator.setDuration(200);
-            this.animator.addListener(new AnimatorListenerAdapterProxy() {
+            this.animator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
                     if (PhotoPickerPhotoCell.this.animator != null && PhotoPickerPhotoCell.this.animator.equals(animation)) {
                         PhotoPickerPhotoCell.this.animator = null;

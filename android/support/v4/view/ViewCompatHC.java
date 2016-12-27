@@ -1,12 +1,16 @@
 package android.support.v4.view;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewParent;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
+@TargetApi(11)
+@RequiresApi(11)
 class ViewCompatHC {
     ViewCompatHC() {
     }

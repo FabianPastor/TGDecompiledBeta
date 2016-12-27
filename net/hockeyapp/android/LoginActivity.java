@@ -21,6 +21,7 @@ import java.util.Map;
 import net.hockeyapp.android.tasks.LoginTask;
 import net.hockeyapp.android.utils.AsyncTaskUtils;
 import net.hockeyapp.android.utils.Util;
+import org.telegram.tgnet.ConnectionsManager;
 
 public class LoginActivity extends Activity {
     public static final String EXTRA_MODE = "mode";
@@ -87,7 +88,7 @@ public class LoginActivity extends Activity {
                 LoginManager.listener.onBack();
             } else {
                 Intent intent = new Intent(this, LoginManager.mainActivity);
-                intent.setFlags(67108864);
+                intent.setFlags(ConnectionsManager.FileTypeFile);
                 intent.putExtra("net.hockeyapp.android.EXIT", true);
                 startActivity(intent);
                 return true;

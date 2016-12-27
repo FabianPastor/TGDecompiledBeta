@@ -1,8 +1,12 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
 
+@TargetApi(19)
+@RequiresApi(19)
 class AccessibilityManagerCompatKitKat {
 
     interface TouchExplorationStateChangeListenerBridge {

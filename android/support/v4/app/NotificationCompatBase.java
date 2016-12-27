@@ -1,15 +1,22 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-@RestrictTo({Scope.GROUP_ID})
+@RequiresApi(9)
+@RestrictTo({Scope.LIBRARY_GROUP})
+@TargetApi(9)
 public class NotificationCompatBase {
+    private static Method sSetLatestEventInfo;
 
     public static abstract class Action {
 
@@ -54,8 +61,24 @@ public class NotificationCompatBase {
     }
 
     public static Notification add(Notification notification, Context context, CharSequence contentTitle, CharSequence contentText, PendingIntent contentIntent, PendingIntent fullScreenIntent) {
-        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-        notification.fullScreenIntent = fullScreenIntent;
-        return notification;
+        ReflectiveOperationException e;
+        if (sSetLatestEventInfo == null) {
+            try {
+                sSetLatestEventInfo = Notification.class.getMethod("setLatestEventInfo", new Class[]{Context.class, CharSequence.class, CharSequence.class, PendingIntent.class});
+            } catch (NoSuchMethodException e2) {
+                throw new RuntimeException(e2);
+            }
+        }
+        try {
+            sSetLatestEventInfo.invoke(notification, new Object[]{context, contentTitle, contentText, contentIntent});
+            notification.fullScreenIntent = fullScreenIntent;
+            return notification;
+        } catch (IllegalAccessException e3) {
+            e = e3;
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e4) {
+            e = e4;
+            throw new RuntimeException(e);
+        }
     }
 }

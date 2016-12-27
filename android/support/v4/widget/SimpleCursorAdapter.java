@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 public class SimpleCursorAdapter extends ResourceCursorAdapter {
     private CursorToStringConverter mCursorToStringConverter;
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     protected int[] mFrom;
     String[] mOriginalFrom;
     private int mStringConversionColumn = -1;
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     protected int[] mTo;
     private ViewBinder mViewBinder;
 

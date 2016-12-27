@@ -10,7 +10,7 @@ import android.util.Log;
 
 public final class RemoteInput extends android.support.v4.app.RemoteInputCompatBase.RemoteInput {
     public static final String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public static final Factory FACTORY = new Factory() {
         public RemoteInput build(String resultKey, CharSequence label, CharSequence[] choices, boolean allowFreeFormInput, Bundle extras) {
             return new RemoteInput(resultKey, label, choices, allowFreeFormInput, extras);

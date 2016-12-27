@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -317,6 +318,7 @@ public class VoIPActivity extends Activity implements StateListener {
         this.nameText = anonymousClass10;
         frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 43.0f, 18.0f, 0.0f));
         anonymousClass10 = new TextView(this);
+        anonymousClass10.setTextColor(-855638017);
         anonymousClass10.setSingleLine();
         anonymousClass10.setEllipsize(TruncateAt.END);
         anonymousClass10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -520,7 +522,7 @@ public class VoIPActivity extends Activity implements StateListener {
             }
             hash.append("\n\n");
         }
-        hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", R.string.EncryptionKeyDescription, this.user.first_name, this.user.first_name)));
+        hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
         this.keyText.setText(hash);
     }
 
@@ -539,7 +541,7 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void showDebugCtlAlert() {
-        new Builder(this).setItems(new String[]{"Set audio bitrate", "Set expect packet loss %", "Disable p2p", "Enable p2p"}, new DialogInterface.OnClickListener() {
+        new Builder(this).setItems(new String[]{"Set audio bitrate", "Set expect packet loss %", "Disable p2p", "Enable p2p", "Disable AEC", "Enable AEC"}, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -563,6 +565,12 @@ public class VoIPActivity extends Activity implements StateListener {
                         return;
                     case 3:
                         VoIPService.getSharedInstance().debugCtl(3, 1);
+                        return;
+                    case 4:
+                        VoIPService.getSharedInstance().debugCtl(4, 0);
+                        return;
+                    case 5:
+                        VoIPService.getSharedInstance().debugCtl(4, 1);
                         return;
                     default:
                         return;
@@ -736,11 +744,19 @@ public class VoIPActivity extends Activity implements StateListener {
                     }
                 } else if (state == 4) {
                     VoIPActivity.this.stateText.setText(LocaleController.getString("VoipFailed", R.string.VoipFailed));
-                    VoIPActivity.this.stateText.postDelayed(new Runnable() {
-                        public void run() {
-                            VoIPActivity.this.finish();
-                        }
-                    }, 1000);
+                    if (VoIPService.getSharedInstance().getLastError() == 1) {
+                        new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show().setOnDismissListener(new OnDismissListener() {
+                            public void onDismiss(DialogInterface dialog) {
+                                VoIPActivity.this.finish();
+                            }
+                        });
+                    } else {
+                        VoIPActivity.this.stateText.postDelayed(new Runnable() {
+                            public void run() {
+                                VoIPActivity.this.finish();
+                            }
+                        }, 1000);
+                    }
                 }
             }
         });

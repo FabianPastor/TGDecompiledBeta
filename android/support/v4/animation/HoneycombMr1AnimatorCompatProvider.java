@@ -5,9 +5,13 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
+@TargetApi(12)
+@RequiresApi(12)
 class HoneycombMr1AnimatorCompatProvider implements AnimatorProvider {
     private TimeInterpolator mDefaultInterpolator;
 

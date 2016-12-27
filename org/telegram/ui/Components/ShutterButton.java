@@ -17,7 +17,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ShutterButton extends View {
-    private static final int LONG_PRESS_TIME = 220;
+    private static final int LONG_PRESS_TIME = 800;
     private ShutterButtonDelegate delegate;
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastUpdateTime;
@@ -137,7 +137,7 @@ public class ShutterButton extends View {
         float y = motionEvent.getX();
         switch (motionEvent.getAction()) {
             case 0:
-                AndroidUtilities.runOnUIThread(this.longPressed, 220);
+                AndroidUtilities.runOnUIThread(this.longPressed, 800);
                 this.pressed = true;
                 this.processRelease = true;
                 setHighlighted(true);

@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.Notification.MessagingStyle;
 import android.app.Notification.MessagingStyle.Message;
@@ -9,12 +10,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompatBase.Action;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@TargetApi(24)
+@RequiresApi(24)
 class NotificationCompatApi24 {
     public static final String CATEGORY_ALARM = "alarm";
     public static final String CATEGORY_CALL = "call";

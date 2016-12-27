@@ -361,7 +361,7 @@ public class CacheControlActivity extends BaseFragment {
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("CacheSettings", R.string.CacheSettings));
+        this.actionBar.setTitle(LocaleController.getString("StorageUsage", R.string.StorageUsage));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {

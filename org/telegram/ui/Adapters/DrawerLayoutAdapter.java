@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -15,10 +16,28 @@ import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.EmptyCell;
 
 public class DrawerLayoutAdapter extends BaseAdapter {
+    private ArrayList<Item> items = new ArrayList(11);
     private Context mContext;
+
+    private class Item {
+        public int icon;
+        public int id;
+        public String text;
+
+        public Item(int id, String text, int icon) {
+            this.icon = icon;
+            this.id = id;
+            this.text = text;
+        }
+
+        public void bind(DrawerActionCell actionCell) {
+            actionCell.setTextAndIcon(this.text, this.icon);
+        }
+    }
 
     public DrawerLayoutAdapter(Context context) {
         this.mContext = context;
+        resetItems();
     }
 
     public boolean areAllItemsEnabled() {
@@ -30,7 +49,7 @@ public class DrawerLayoutAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return UserConfig.isClientActivated() ? 10 : 0;
+        return this.items.size();
     }
 
     public Object getItem(int i) {
@@ -38,11 +57,20 @@ public class DrawerLayoutAdapter extends BaseAdapter {
     }
 
     public long getItemId(int i) {
-        return (long) i;
+        Item item = (Item) this.items.get(i);
+        if (item != null) {
+            return (long) item.id;
+        }
+        return (long) (-i);
     }
 
     public boolean hasStableIds() {
         return true;
+    }
+
+    public void notifyDataSetChanged() {
+        resetItems();
+        super.notifyDataSetChanged();
     }
 
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -74,30 +102,12 @@ public class DrawerLayoutAdapter extends BaseAdapter {
                 view = new DrawerActionCell(this.mContext);
             }
             DrawerActionCell actionCell = (DrawerActionCell) view;
-            if (i == 2) {
-                actionCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup);
-                return view;
-            } else if (i == 3) {
-                actionCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret);
-                return view;
-            } else if (i == 4) {
-                actionCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast);
-                return view;
-            } else if (i == 6) {
-                actionCell.setTextAndIcon(LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts);
-                return view;
-            } else if (i == 7) {
-                actionCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite);
-                return view;
-            } else if (i == 8) {
-                actionCell.setTextAndIcon(LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings);
-                return view;
-            } else if (i != 9) {
-                return view;
-            } else {
-                actionCell.setTextAndIcon(LocaleController.getString("TelegramFaq", R.string.TelegramFaq), R.drawable.menu_help);
+            Item item = (Item) this.items.get(i);
+            if (item == null) {
                 return view;
             }
+            item.bind(actionCell);
+            return view;
         }
     }
 
@@ -119,6 +129,25 @@ public class DrawerLayoutAdapter extends BaseAdapter {
     }
 
     public boolean isEmpty() {
-        return !UserConfig.isClientActivated();
+        return this.items.size() > 0;
+    }
+
+    private void resetItems() {
+        this.items.clear();
+        if (UserConfig.isClientActivated()) {
+            this.items.add(null);
+            this.items.add(null);
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup));
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast));
+            this.items.add(null);
+            this.items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts));
+            if (MessagesController.getInstance().callsEnabled) {
+                this.items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), R.drawable.menu_calls));
+            }
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite));
+            this.items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), R.drawable.menu_settings));
+            this.items.add(new Item(9, LocaleController.getString("TelegramFaq", R.string.TelegramFaq), R.drawable.menu_help));
+        }
     }
 }

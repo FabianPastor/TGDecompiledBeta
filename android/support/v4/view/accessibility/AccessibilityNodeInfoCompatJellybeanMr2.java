@@ -1,8 +1,12 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.List;
 
+@TargetApi(18)
+@RequiresApi(18)
 class AccessibilityNodeInfoCompatJellybeanMr2 {
     AccessibilityNodeInfoCompatJellybeanMr2() {
     }

@@ -43,6 +43,10 @@ class TreeDocumentFile extends DocumentFile {
         return DocumentsContractApi19.isFile(this.mContext, this.mUri);
     }
 
+    public boolean isVirtual() {
+        return DocumentsContractApi19.isVirtual(this.mContext, this.mUri);
+    }
+
     public long lastModified() {
         return DocumentsContractApi19.lastModified(this.mContext, this.mUri);
     }

@@ -1,10 +1,14 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.widget.TextView;
 
+@TargetApi(17)
+@RequiresApi(17)
 class TextViewCompatJbMr1 {
     TextViewCompatJbMr1() {
     }

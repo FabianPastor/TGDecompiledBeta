@@ -12,6 +12,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -672,7 +673,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
         ArrayList<Integer> messages2 = new ArrayList();
         messages2.add(Integer.valueOf(object.getId()));
-        MessagesController.getInstance().deleteMessages(messages2, null, null, object.messageOwner.to_id.channel_id);
+        MessagesController.getInstance().deleteMessages(messages2, null, null, object.messageOwner.to_id.channel_id, false);
     }
 
     public boolean retrySendMessage(MessageObject messageObject, boolean unsent) {
@@ -994,6 +995,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         value = Integer.valueOf(MessagesStorage.getInstance().getDialogReadMax(true, j));
                                         MessagesController.getInstance().dialogs_read_outbox_max.put(Long.valueOf(j), value);
                                     }
+                                    int sentCount = 0;
                                     for (a = 0; a < updates.updates.size(); a++) {
                                         update = (Update) updates.updates.get(a);
                                         if ((update instanceof TL_updateNewMessage) || (update instanceof TL_updateNewChannelMessage)) {
@@ -1026,6 +1028,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                         final ArrayList<Message> sentMessages = new ArrayList();
                                                         sentMessages.add(message);
                                                         newMsgObj.id = message.id;
+                                                        sentCount++;
                                                         SendMessagesHelper.this.updateMediaPaths(msgObj, message, null, true);
                                                         MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                                                             public void run() {
@@ -1050,6 +1053,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             }
                                         }
                                     }
+                                    StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, sentCount);
                                 } else {
                                     final TL_error tL_error = error;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1269,8 +1273,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -2521,6 +2525,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     private void performSendDelayedMessage(DelayedMessage message) {
+        boolean z = true;
+        boolean z2 = false;
         String location;
         if (message.type == 0) {
             if (message.httpLocation != null) {
@@ -2529,7 +2535,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             } else if (message.sendRequest != null) {
                 location = FileLoader.getPathToAttach(message.location).toString();
                 putToDelayedMessages(location, message);
-                FileLoader.getInstance().uploadFile(location, false, true);
+                FileLoader.getInstance().uploadFile(location, false, true, 16777216);
             } else {
                 location = FileLoader.getPathToAttach(message.location).toString();
                 if (!(message.sendEncryptedRequest == null || message.location.dc_id == 0)) {
@@ -2545,7 +2551,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }
                 putToDelayedMessages(location, message);
-                FileLoader.getInstance().uploadFile(location, true, true);
+                FileLoader.getInstance().uploadFile(location, true, true, 16777216);
             }
         } else if (message.type == 1) {
             if (message.videoEditedInfo != null) {
@@ -2568,16 +2574,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                     putToDelayedMessages(location, message);
                     if (message.obj.videoEditedInfo != null) {
-                        FileLoader.getInstance().uploadFile(location, false, false, message.documentLocation.size);
-                        return;
-                    } else {
-                        FileLoader.getInstance().uploadFile(location, false, false);
+                        FileLoader.getInstance().uploadFile(location, false, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
                         return;
                     }
+                    FileLoader.getInstance().uploadFile(location, false, false, ConnectionsManager.FileTypeVideo);
+                    return;
                 }
                 location = FileLoader.getInstance().getDirectory(4) + "/" + message.location.volume_id + "_" + message.location.local_id + ".jpg";
                 putToDelayedMessages(location, message);
-                FileLoader.getInstance().uploadFile(location, false, true);
+                FileLoader.getInstance().uploadFile(location, false, true, 16777216);
             } else {
                 location = message.obj.messageOwner.attachPath;
                 if (location == null) {
@@ -2586,12 +2591,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (message.sendEncryptedRequest == null || message.documentLocation.dc_id == 0 || new File(location).exists()) {
                     putToDelayedMessages(location, message);
                     if (message.obj.videoEditedInfo != null) {
-                        FileLoader.getInstance().uploadFile(location, true, false, message.documentLocation.size);
-                        return;
-                    } else {
-                        FileLoader.getInstance().uploadFile(location, true, false);
+                        FileLoader.getInstance().uploadFile(location, true, false, message.documentLocation.size, ConnectionsManager.FileTypeVideo);
                         return;
                     }
+                    FileLoader.getInstance().uploadFile(location, true, false, ConnectionsManager.FileTypeVideo);
+                    return;
                 }
                 putToDelayedMessages(FileLoader.getAttachFileName(message.documentLocation), message);
                 FileLoader.getInstance().loadFile(message.documentLocation, true, false);
@@ -2609,21 +2613,21 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (media.file == null) {
                     location = message.obj.messageOwner.attachPath;
                     putToDelayedMessages(location, message);
+                    r0 = FileLoader.getInstance();
                     if (message.sendRequest != null) {
-                        FileLoader.getInstance().uploadFile(location, false, false);
-                    } else {
-                        FileLoader.getInstance().uploadFile(location, true, false);
+                        z = false;
                     }
+                    r0.uploadFile(location, z, false, ConnectionsManager.FileTypeFile);
                 } else if (media.thumb == null && message.location != null) {
                     location = FileLoader.getInstance().getDirectory(4) + "/" + message.location.volume_id + "_" + message.location.local_id + ".jpg";
                     putToDelayedMessages(location, message);
-                    FileLoader.getInstance().uploadFile(location, false, true);
+                    FileLoader.getInstance().uploadFile(location, false, true, 16777216);
                 }
             } else {
                 location = message.obj.messageOwner.attachPath;
                 if (message.sendEncryptedRequest == null || message.documentLocation.dc_id == 0 || new File(location).exists()) {
                     putToDelayedMessages(location, message);
-                    FileLoader.getInstance().uploadFile(location, true, false);
+                    FileLoader.getInstance().uploadFile(location, true, false, ConnectionsManager.FileTypeFile);
                     return;
                 }
                 putToDelayedMessages(FileLoader.getAttachFileName(message.documentLocation), message);
@@ -2632,11 +2636,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         } else if (message.type == 3) {
             location = message.obj.messageOwner.attachPath;
             putToDelayedMessages(location, message);
-            if (message.sendRequest != null) {
-                FileLoader.getInstance().uploadFile(location, false, true);
-            } else {
-                FileLoader.getInstance().uploadFile(location, true, true);
+            r0 = FileLoader.getInstance();
+            if (message.sendRequest == null) {
+                z2 = true;
             }
+            r0.uploadFile(location, z2, true, ConnectionsManager.FileTypeAudio);
         }
     }
 
@@ -2761,6 +2765,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                             if (!isSentError) {
                                 int i2;
+                                StatsController.getInstance().incrementSentItemsCount(ConnectionsManager.getCurrentNetworkType(), 1, 1);
                                 newMsgObj.send_state = 0;
                                 NotificationCenter instance = NotificationCenter.getInstance();
                                 i = NotificationCenter.messageReceivedByServer;
@@ -3072,8 +3077,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
         MimeTypeMap myMime = MimeTypeMap.getSingleton();
         TL_documentAttributeAudio attributeAudio = null;
+        String extension = null;
         if (uri != null) {
-            String extension = null;
             if (mime != null) {
                 extension = myMime.getExtensionFromMimeType(mime);
             }
@@ -3093,9 +3098,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         boolean allowSticker = !isEncrypted;
         String name = file.getName();
         String ext = "";
-        int idx = path.lastIndexOf(46);
-        if (idx != -1) {
-            ext = path.substring(idx + 1);
+        if (extension != null) {
+            ext = extension;
+        } else {
+            int idx = path.lastIndexOf(46);
+            if (idx != -1) {
+                ext = path.substring(idx + 1);
+            }
         }
         if (ext.toLowerCase().equals("mp3") || ext.toLowerCase().equals("m4a")) {
             AudioInfo audioInfo = AudioInfo.getAudioInfo(file);
@@ -3220,17 +3229,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return true;
     }
 
-    public static void prepareSendingDocument(String path, String originalPath, Uri uri, String mine, long dialog_id, MessageObject reply_to_msg) {
+    public static void prepareSendingDocument(String path, String originalPath, Uri uri, String mine, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
         if ((path != null && originalPath != null) || uri != null) {
             ArrayList<String> paths = new ArrayList();
             ArrayList<String> originalPaths = new ArrayList();
             ArrayList<Uri> uris = null;
             if (uri != null) {
                 uris = new ArrayList();
+                uris.add(uri);
             }
             paths.add(path);
             originalPaths.add(originalPath);
-            prepareSendingDocuments(paths, originalPaths, uris, mine, dialog_id, reply_to_msg);
+            prepareSendingDocuments(paths, originalPaths, uris, mine, dialog_id, reply_to_msg, inputContent);
         }
     }
 
@@ -3286,7 +3296,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }).start();
     }
 
-    public static void prepareSendingDocuments(ArrayList<String> paths, ArrayList<String> originalPaths, ArrayList<Uri> uris, String mime, long dialog_id, MessageObject reply_to_msg) {
+    public static void prepareSendingDocuments(ArrayList<String> paths, ArrayList<String> originalPaths, ArrayList<Uri> uris, String mime, long dialog_id, MessageObject reply_to_msg, InputContentInfoCompat inputContent) {
         if (paths != null || originalPaths != null || uris != null) {
             if (paths == null || originalPaths == null || paths.size() == originalPaths.size()) {
                 final ArrayList<String> arrayList = paths;
@@ -3295,6 +3305,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 final long j = dialog_id;
                 final MessageObject messageObject = reply_to_msg;
                 final ArrayList<Uri> arrayList3 = uris;
+                final InputContentInfoCompat inputContentInfoCompat = inputContent;
                 new Thread(new Runnable() {
                     public void run() {
                         int a;
@@ -3313,6 +3324,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                             }
                         }
+                        if (inputContentInfoCompat != null) {
+                            inputContentInfoCompat.releasePermission();
+                        }
                         if (error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -3330,7 +3344,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    public static void prepareSendingPhoto(String imageFilePath, Uri imageUri, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<InputDocument> stickers) {
+    public static void prepareSendingPhoto(String imageFilePath, Uri imageUri, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<InputDocument> stickers, InputContentInfoCompat inputContent) {
         ArrayList<String> paths = null;
         ArrayList<Uri> uris = null;
         ArrayList<String> captions = null;
@@ -3351,7 +3365,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             masks = new ArrayList();
             masks.add(new ArrayList(stickers));
         }
-        prepareSendingPhotos(paths, uris, dialog_id, reply_to_msg, captions, masks);
+        prepareSendingPhotos(paths, uris, dialog_id, reply_to_msg, captions, masks, inputContent);
     }
 
     public static void prepareSendingBotContextResult(BotInlineResult result, HashMap<String, String> params, long dialog_id, MessageObject reply_to_msg) {
@@ -3874,7 +3888,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         });
     }
 
-    public static void prepareSendingPhotos(ArrayList<String> paths, ArrayList<Uri> uris, long dialog_id, MessageObject reply_to_msg, ArrayList<String> captions, ArrayList<ArrayList<InputDocument>> masks) {
+    public static void prepareSendingPhotos(ArrayList<String> paths, ArrayList<Uri> uris, long dialog_id, MessageObject reply_to_msg, ArrayList<String> captions, ArrayList<ArrayList<InputDocument>> masks, InputContentInfoCompat inputContent) {
         if (paths != null || uris != null) {
             if (paths != null && paths.isEmpty()) {
                 return;
@@ -3892,6 +3906,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 final ArrayList<String> arrayList = captions;
                 final ArrayList<ArrayList<InputDocument>> arrayList2 = masks;
                 final MessageObject messageObject = reply_to_msg;
+                final InputContentInfoCompat inputContentInfoCompat = inputContent;
                 new Thread(new Runnable() {
                     /* JADX WARNING: inconsistent code. */
                     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -3909,6 +3924,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3957,7 +3973,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;
@@ -4091,6 +4106,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 }
                                 sendAsDocumentsCaptions.add(obj);
                             }
+                        }
+                        if (inputContentInfoCompat != null) {
+                            inputContentInfoCompat.releasePermission();
                         }
                         if (sendAsDocuments != null && !sendAsDocuments.isEmpty()) {
                             for (a = 0; a < sendAsDocuments.size(); a++) {

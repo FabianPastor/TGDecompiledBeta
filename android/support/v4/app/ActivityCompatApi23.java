@@ -1,5 +1,6 @@
 package android.support.v4.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.app.SharedElementCallback.OnSharedElementsReadyListener;
@@ -7,11 +8,14 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompatApi21.SharedElementCallback21;
 import android.view.View;
 import java.util.List;
 import java.util.Map;
 
+@TargetApi(23)
+@RequiresApi(23)
 class ActivityCompatApi23 {
 
     public interface OnSharedElementsReadyListenerBridge {

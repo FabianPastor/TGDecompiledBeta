@@ -130,7 +130,7 @@ abstract class ModernAsyncTask<Params, Progress, Result> {
         return handler;
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public static void setDefaultExecutor(Executor exec) {
         sDefaultExecutor = exec;
     }

@@ -1,6 +1,8 @@
 package android.support.v4.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.LayoutInflater.Factory2;
 import android.view.View;
 import java.lang.reflect.Field;
 
+@TargetApi(11)
+@RequiresApi(11)
 class LayoutInflaterCompatHC {
     private static final String TAG = "LayoutInflaterCompatHC";
     private static boolean sCheckedField;

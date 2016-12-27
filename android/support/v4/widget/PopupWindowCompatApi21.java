@@ -1,9 +1,13 @@
 package android.support.v4.widget;
 
+import android.annotation.TargetApi;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.PopupWindow;
 import java.lang.reflect.Field;
 
+@TargetApi(21)
+@RequiresApi(21)
 class PopupWindowCompatApi21 {
     private static final String TAG = "PopupWindowCompatApi21";
     private static Field sOverlapAnchorField;

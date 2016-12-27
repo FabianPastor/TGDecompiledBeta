@@ -11,6 +11,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build.VERSION;
+import android.text.Layout.Alignment;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -21,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -41,6 +46,7 @@ import org.telegram.ui.Components.RecyclerListView;
 public class StickerPreviewViewer {
     @SuppressLint({"StaticFieldLeak"})
     private static volatile StickerPreviewViewer Instance = null;
+    private static TextPaint textPaint;
     private ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
     private ImageReceiver centerImage = new ImageReceiver();
     private FrameLayoutDrawer containerView;
@@ -82,6 +88,7 @@ public class StickerPreviewViewer {
     };
     private int startX;
     private int startY;
+    private StaticLayout stickerEmojiLayout;
     private Dialog visibleDialog;
     private LayoutParams windowLayoutParams;
     private FrameLayout windowView;
@@ -381,10 +388,16 @@ public class StickerPreviewViewer {
 
     public void open(Document sticker, boolean isRecent) {
         if (this.parentActivity != null && sticker != null) {
+            int a;
+            DocumentAttribute attribute;
+            if (textPaint == null) {
+                textPaint = new TextPaint(1);
+                textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
+            }
             InputStickerSet newSet = null;
             if (isRecent) {
-                for (int a = 0; a < sticker.attributes.size(); a++) {
-                    DocumentAttribute attribute = (DocumentAttribute) sticker.attributes.get(a);
+                for (a = 0; a < sticker.attributes.size(); a++) {
+                    attribute = (DocumentAttribute) sticker.attributes.get(a);
                     if ((attribute instanceof TL_documentAttributeSticker) && attribute.stickerset != null) {
                         newSet = attribute.stickerset;
                         break;
@@ -405,6 +418,14 @@ public class StickerPreviewViewer {
             }
             this.currentSet = newSet;
             this.centerImage.setImage((TLObject) sticker, null, sticker.thumb.location, null, "webp", true);
+            this.stickerEmojiLayout = null;
+            for (a = 0; a < sticker.attributes.size(); a++) {
+                attribute = (DocumentAttribute) sticker.attributes.get(a);
+                if ((attribute instanceof TL_documentAttributeSticker) && !TextUtils.isEmpty(attribute.alt)) {
+                    this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    break;
+                }
+            }
             this.currentSticker = sticker;
             this.containerView.invalidate();
             if (!this.isVisible) {
@@ -489,6 +510,10 @@ public class StickerPreviewViewer {
                 this.centerImage.setAlpha(this.showProgress);
                 this.centerImage.setImageCoords((-size) / 2, (-size) / 2, size, size);
                 this.centerImage.draw(canvas);
+            }
+            if (this.stickerEmojiLayout != null) {
+                canvas.translate((float) (-AndroidUtilities.dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)));
+                this.stickerEmojiLayout.draw(canvas);
             }
             canvas.restore();
             long newTime;

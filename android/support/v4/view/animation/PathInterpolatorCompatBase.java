@@ -1,8 +1,12 @@
 package android.support.v4.view.animation;
 
+import android.annotation.TargetApi;
 import android.graphics.Path;
+import android.support.annotation.RequiresApi;
 import android.view.animation.Interpolator;
 
+@TargetApi(9)
+@RequiresApi(9)
 class PathInterpolatorCompatBase {
     private PathInterpolatorCompatBase() {
     }

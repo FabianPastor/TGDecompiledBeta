@@ -1,10 +1,14 @@
 package android.support.v4.view.accessibility;
 
+import android.annotation.TargetApi;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.accessibility.AccessibilityRecord;
 import java.util.List;
 
+@TargetApi(14)
+@RequiresApi(14)
 class AccessibilityRecordCompatIcs {
     AccessibilityRecordCompatIcs() {
     }

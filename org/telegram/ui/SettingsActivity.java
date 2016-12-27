@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
@@ -50,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimatorListenerAdapterProxy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
@@ -129,13 +129,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private BackupImageView avatarImage;
     private AvatarUpdater avatarUpdater = new AvatarUpdater();
     private int backgroundRow;
-    private int cacheRow;
     private int callsFrameSizeRow;
     private int clearLogsRow;
     private int contactsReimportRow;
     private int contactsSectionRow;
     private int contactsSortRow;
     private int customTabsRow;
+    private int dataRow;
     private int directShareRow;
     private int emojiRow;
     private int emptyRow;
@@ -146,11 +146,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
-    private int mediaDownloadSection;
-    private int mediaDownloadSection2;
     private int messagesSectionRow;
     private int messagesSectionRow2;
-    private int mobileDownloadRow;
     private TextView nameTextView;
     private int notificationRow;
     private int numberRow;
@@ -160,7 +157,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int privacyPolicyRow;
     private int privacyRow;
     private int raiseToSpeakRow;
-    private int roamingDownloadRow;
     private int rowCount;
     private int saveToGalleryRow;
     private int sendByEnterRow;
@@ -174,10 +170,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int switchBackendButtonRow;
     private int telegramFaqRow;
     private int textSizeRow;
-    private int useLessDataForCallsRow;
     private int usernameRow;
     private int versionRow;
-    private int wifiDownloadRow;
     private ImageView writeButton;
     private AnimatorSet writeButtonAnimation;
 
@@ -215,7 +209,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         public void onBindViewHolder(ViewHolder holder, int position) {
             boolean checkBackground = true;
             String value;
-            SharedPreferences preferences;
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == SettingsActivity.this.overscrollRow) {
@@ -236,33 +229,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                             if (position != SettingsActivity.this.clearLogsRow) {
                                                 if (position != SettingsActivity.this.askQuestionRow) {
                                                     if (position != SettingsActivity.this.privacyRow) {
-                                                        if (position != SettingsActivity.this.switchBackendButtonRow) {
-                                                            if (position != SettingsActivity.this.telegramFaqRow) {
-                                                                if (position != SettingsActivity.this.contactsReimportRow) {
-                                                                    if (position != SettingsActivity.this.stickersRow) {
-                                                                        if (position != SettingsActivity.this.cacheRow) {
+                                                        if (position != SettingsActivity.this.dataRow) {
+                                                            if (position != SettingsActivity.this.switchBackendButtonRow) {
+                                                                if (position != SettingsActivity.this.telegramFaqRow) {
+                                                                    if (position != SettingsActivity.this.contactsReimportRow) {
+                                                                        if (position != SettingsActivity.this.stickersRow) {
                                                                             if (position != SettingsActivity.this.privacyPolicyRow) {
                                                                                 if (position != SettingsActivity.this.emojiRow) {
-                                                                                    if (position != SettingsActivity.this.useLessDataForCallsRow) {
-                                                                                        if (position == SettingsActivity.this.callsFrameSizeRow) {
-                                                                                            textCell.setTextAndValue("Audio frame size", ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipTestFrameSize", 60) + "", false);
-                                                                                            break;
-                                                                                        }
+                                                                                    if (position == SettingsActivity.this.callsFrameSizeRow) {
+                                                                                        textCell.setTextAndValue("Audio frame size", ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipTestFrameSize", 60) + "", true);
+                                                                                        break;
                                                                                     }
-                                                                                    value = null;
-                                                                                    switch (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0)) {
-                                                                                        case 0:
-                                                                                            value = LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever);
-                                                                                            break;
-                                                                                        case 1:
-                                                                                            value = LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile);
-                                                                                            break;
-                                                                                        case 2:
-                                                                                            value = LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways);
-                                                                                            break;
-                                                                                    }
-                                                                                    textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, true);
-                                                                                    break;
                                                                                 }
                                                                                 textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
                                                                                 break;
@@ -270,19 +247,19 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                                                             textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
                                                                             break;
                                                                         }
-                                                                        textCell.setText(LocaleController.getString("CacheSettings", R.string.CacheSettings), true);
+                                                                        textCell.setTextAndValue(LocaleController.getString("Stickers", R.string.Stickers), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
                                                                         break;
                                                                     }
-                                                                    textCell.setTextAndValue(LocaleController.getString("Stickers", R.string.Stickers), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
+                                                                    textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
                                                                     break;
                                                                 }
-                                                                textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
+                                                                textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFaq), true);
                                                                 break;
                                                             }
-                                                            textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFaq), true);
+                                                            textCell.setText("Switch Backend", true);
                                                             break;
                                                         }
-                                                        textCell.setText("Switch Backend", true);
+                                                        textCell.setText(LocaleController.getString("DataSettings", R.string.DataSettings), true);
                                                         break;
                                                     }
                                                     textCell.setText(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), true);
@@ -323,7 +300,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 3:
                     TextCheckCell textCell2 = holder.itemView;
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                     if (position != SettingsActivity.this.enableAnimationsRow) {
                         if (position != SettingsActivity.this.sendByEnterRow) {
                             if (position != SettingsActivity.this.saveToGalleryRow) {
@@ -347,7 +324,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             textCell2.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), MediaController.getInstance().canSaveToGallery(), false);
                             break;
                         }
-                        textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), SettingsActivity.this.useLessDataForCallsRow != -1);
+                        textCell2.setTextAndCheck(LocaleController.getString("SendByEnter", R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
                         break;
                     }
                     textCell2.setTextAndCheck(LocaleController.getString("EnableAnimations", R.string.EnableAnimations), preferences.getBoolean("view_animations", true), false);
@@ -357,14 +334,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     if (position != SettingsActivity.this.settingsSectionRow2) {
                         if (position != SettingsActivity.this.supportSectionRow2) {
                             if (position != SettingsActivity.this.messagesSectionRow2) {
-                                if (position != SettingsActivity.this.mediaDownloadSection2) {
-                                    if (position == SettingsActivity.this.numberSectionRow) {
-                                        ((HeaderCell) holder.itemView).setText(LocaleController.getString("Info", R.string.Info));
-                                        break;
-                                    }
+                                if (position == SettingsActivity.this.numberSectionRow) {
+                                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("Info", R.string.Info));
+                                    break;
                                 }
-                                ((HeaderCell) holder.itemView).setText(LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload));
-                                break;
                             }
                             ((HeaderCell) holder.itemView).setText(LocaleController.getString("MessagesSettings", R.string.MessagesSettings));
                             break;
@@ -377,79 +350,26 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 6:
                     TextDetailSettingsCell textCell3 = holder.itemView;
-                    if (position != SettingsActivity.this.mobileDownloadRow && position != SettingsActivity.this.wifiDownloadRow && position != SettingsActivity.this.roamingDownloadRow) {
-                        User user;
-                        if (position != SettingsActivity.this.numberRow) {
-                            if (position == SettingsActivity.this.usernameRow) {
-                                user = UserConfig.getCurrentUser();
-                                if (user == null || user.username == null || user.username.length() == 0) {
-                                    value = LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty);
-                                } else {
-                                    value = "@" + user.username;
-                                }
-                                textCell3.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), false);
-                                break;
+                    User user;
+                    if (position != SettingsActivity.this.numberRow) {
+                        if (position == SettingsActivity.this.usernameRow) {
+                            user = UserConfig.getCurrentUser();
+                            if (user == null || user.username == null || user.username.length() == 0) {
+                                value = LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty);
+                            } else {
+                                value = "@" + user.username;
                             }
+                            textCell3.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), false);
+                            break;
                         }
-                        user = UserConfig.getCurrentUser();
-                        if (user == null || user.phone == null || user.phone.length() == 0) {
-                            value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
-                        } else {
-                            value = PhoneFormat.getInstance().format("+" + user.phone);
-                        }
-                        textCell3.setTextAndValue(value, LocaleController.getString("Phone", R.string.Phone), true);
-                        break;
                     }
-                    int mask;
-                    preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                    if (position == SettingsActivity.this.mobileDownloadRow) {
-                        value = LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData);
-                        mask = MediaController.getInstance().mobileDataDownloadMask;
-                    } else if (position == SettingsActivity.this.wifiDownloadRow) {
-                        value = LocaleController.getString("WhenConnectedOnWiFi", R.string.WhenConnectedOnWiFi);
-                        mask = MediaController.getInstance().wifiDownloadMask;
+                    user = UserConfig.getCurrentUser();
+                    if (user == null || user.phone == null || user.phone.length() == 0) {
+                        value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                     } else {
-                        value = LocaleController.getString("WhenRoaming", R.string.WhenRoaming);
-                        mask = MediaController.getInstance().roamingDownloadMask;
+                        value = PhoneFormat.getInstance().format("+" + user.phone);
                     }
-                    String text = "";
-                    if ((mask & 1) != 0) {
-                        text = text + LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
-                    }
-                    if ((mask & 2) != 0) {
-                        if (text.length() != 0) {
-                            text = text + ", ";
-                        }
-                        text = text + LocaleController.getString("AttachAudio", R.string.AttachAudio);
-                    }
-                    if ((mask & 4) != 0) {
-                        if (text.length() != 0) {
-                            text = text + ", ";
-                        }
-                        text = text + LocaleController.getString("AttachVideo", R.string.AttachVideo);
-                    }
-                    if ((mask & 8) != 0) {
-                        if (text.length() != 0) {
-                            text = text + ", ";
-                        }
-                        text = text + LocaleController.getString("AttachDocument", R.string.AttachDocument);
-                    }
-                    if ((mask & 16) != 0) {
-                        if (text.length() != 0) {
-                            text = text + ", ";
-                        }
-                        text = text + LocaleController.getString("AttachMusic", R.string.AttachMusic);
-                    }
-                    if ((mask & 32) != 0) {
-                        if (text.length() != 0) {
-                            text = text + ", ";
-                        }
-                        text = text + LocaleController.getString("AttachGif", R.string.AttachGif);
-                    }
-                    if (text.length() == 0) {
-                        text = LocaleController.getString("NoMediaAutoDownload", R.string.NoMediaAutoDownload);
-                    }
-                    textCell3.setTextAndValue(value, text, true);
+                    textCell3.setTextAndValue(value, LocaleController.getString("Phone", R.string.Phone), true);
                     break;
                     break;
                 default:
@@ -459,7 +379,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!checkBackground) {
                 return;
             }
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.wifiDownloadRow || position == SettingsActivity.this.mobileDownloadRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.roamingDownloadRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow || position == SettingsActivity.this.callsFrameSizeRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.callsFrameSizeRow || position == SettingsActivity.this.dataRow) {
                 if (holder.itemView.getBackground() == null) {
                     holder.itemView.setBackgroundResource(R.drawable.list_selector);
                 }
@@ -552,22 +472,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.emptyRow || position == SettingsActivity.this.overscrollRow) {
                 return 0;
             }
-            if (position == SettingsActivity.this.settingsSectionRow || position == SettingsActivity.this.supportSectionRow || position == SettingsActivity.this.messagesSectionRow || position == SettingsActivity.this.mediaDownloadSection || position == SettingsActivity.this.contactsSectionRow) {
+            if (position == SettingsActivity.this.settingsSectionRow || position == SettingsActivity.this.supportSectionRow || position == SettingsActivity.this.messagesSectionRow || position == SettingsActivity.this.contactsSectionRow) {
                 return 1;
             }
             if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow) {
                 return 3;
             }
-            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.cacheRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.useLessDataForCallsRow || position == SettingsActivity.this.callsFrameSizeRow) {
+            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.callsFrameSizeRow || position == SettingsActivity.this.dataRow) {
                 return 2;
             }
             if (position == SettingsActivity.this.versionRow) {
                 return 5;
             }
-            if (position == SettingsActivity.this.wifiDownloadRow || position == SettingsActivity.this.mobileDownloadRow || position == SettingsActivity.this.roamingDownloadRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.usernameRow) {
+            if (position == SettingsActivity.this.numberRow || position == SettingsActivity.this.usernameRow) {
                 return 6;
             }
-            if (position == SettingsActivity.this.settingsSectionRow2 || position == SettingsActivity.this.messagesSectionRow2 || position == SettingsActivity.this.supportSectionRow2 || position == SettingsActivity.this.numberSectionRow || position == SettingsActivity.this.mediaDownloadSection2) {
+            if (position == SettingsActivity.this.settingsSectionRow2 || position == SettingsActivity.this.messagesSectionRow2 || position == SettingsActivity.this.supportSectionRow2 || position == SettingsActivity.this.numberSectionRow) {
                 return 4;
             }
             return 2;
@@ -656,6 +576,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.privacyRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
+        this.dataRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
         this.backgroundRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
@@ -663,27 +586,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.enableAnimationsRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mediaDownloadSection = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mediaDownloadSection2 = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.mobileDownloadRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.wifiDownloadRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.roamingDownloadRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.autoplayGifsRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.saveToGalleryRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.messagesSectionRow = i;
@@ -704,26 +606,25 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.textSizeRow = i;
-        i = this.rowCount;
-        this.rowCount = i + 1;
-        this.cacheRow = i;
+        if (MessagesController.getInstance().callsEnabled) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.callsFrameSizeRow = i;
+        } else {
+            this.callsFrameSizeRow = -1;
+        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.raiseToSpeakRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.sendByEnterRow = i;
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.useLessDataForCallsRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsFrameSizeRow = i;
-        } else {
-            this.useLessDataForCallsRow = -1;
-            this.callsFrameSizeRow = -1;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.autoplayGifsRow = i;
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.saveToGalleryRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.supportSectionRow = i;
@@ -948,6 +849,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                 } else if (position == SettingsActivity.this.privacyRow) {
                     SettingsActivity.this.presentFragment(new PrivacySettingsActivity());
+                } else if (position == SettingsActivity.this.dataRow) {
+                    SettingsActivity.this.presentFragment(new DataSettingsActivity());
                 } else if (position == SettingsActivity.this.languageRow) {
                     SettingsActivity.this.presentFragment(new LanguageSelectActivity());
                 } else if (position == SettingsActivity.this.switchBackendButtonRow) {
@@ -987,132 +890,25 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             SettingsActivity.this.showDialog(builder.create());
                         }
-                    } else if (position == SettingsActivity.this.wifiDownloadRow || position == SettingsActivity.this.mobileDownloadRow || position == SettingsActivity.this.roamingDownloadRow) {
-                        if (SettingsActivity.this.getParentActivity() != null) {
-                            maskValues = new boolean[6];
-                            builder = new BottomSheet.Builder(SettingsActivity.this.getParentActivity());
-                            int mask = 0;
-                            if (position == SettingsActivity.this.mobileDownloadRow) {
-                                mask = MediaController.getInstance().mobileDataDownloadMask;
-                            } else if (position == SettingsActivity.this.wifiDownloadRow) {
-                                mask = MediaController.getInstance().wifiDownloadMask;
-                            } else if (position == SettingsActivity.this.roamingDownloadRow) {
-                                mask = MediaController.getInstance().roamingDownloadMask;
-                            }
-                            builder.setApplyTopPadding(false);
-                            builder.setApplyBottomPadding(false);
-                            numberPicker = new LinearLayout(SettingsActivity.this.getParentActivity());
-                            numberPicker.setOrientation(1);
-                            for (a = 0; a < 6; a++) {
-                                name = null;
-                                if (a == 0) {
-                                    maskValues[a] = (mask & 1) != 0;
-                                    name = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
-                                } else if (a == 1) {
-                                    maskValues[a] = (mask & 2) != 0;
-                                    name = LocaleController.getString("AttachAudio", R.string.AttachAudio);
-                                } else if (a == 2) {
-                                    maskValues[a] = (mask & 4) != 0;
-                                    name = LocaleController.getString("AttachVideo", R.string.AttachVideo);
-                                } else if (a == 3) {
-                                    maskValues[a] = (mask & 8) != 0;
-                                    name = LocaleController.getString("AttachDocument", R.string.AttachDocument);
-                                } else if (a == 4) {
-                                    maskValues[a] = (mask & 16) != 0;
-                                    name = LocaleController.getString("AttachMusic", R.string.AttachMusic);
-                                } else if (a == 5) {
-                                    maskValues[a] = (mask & 32) != 0;
-                                    name = LocaleController.getString("AttachGif", R.string.AttachGif);
-                                }
-                                checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
-                                checkBoxCell.setTag(Integer.valueOf(a));
-                                checkBoxCell.setBackgroundResource(R.drawable.list_selector);
-                                numberPicker.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
-                                checkBoxCell.setText(name, "", maskValues[a], true);
-                                r1 = maskValues;
-                                checkBoxCell.setOnClickListener(new View.OnClickListener() {
-                                    public void onClick(View v) {
-                                        CheckBoxCell cell = (CheckBoxCell) v;
-                                        int num = ((Integer) cell.getTag()).intValue();
-                                        r1[num] = !r1[num];
-                                        cell.setChecked(r1[num], true);
-                                    }
-                                });
-                            }
-                            cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
-                            cell.setBackgroundResource(R.drawable.list_selector);
-                            cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
-                            cell.setTextColor(-12940081);
-                            r1 = maskValues;
-                            i = position;
-                            cell.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    try {
-                                        if (SettingsActivity.this.visibleDialog != null) {
-                                            SettingsActivity.this.visibleDialog.dismiss();
-                                        }
-                                    } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
-                                    }
-                                    int newMask = 0;
-                                    for (int a = 0; a < 6; a++) {
-                                        if (r1[a]) {
-                                            if (a == 0) {
-                                                newMask |= 1;
-                                            } else if (a == 1) {
-                                                newMask |= 2;
-                                            } else if (a == 2) {
-                                                newMask |= 4;
-                                            } else if (a == 3) {
-                                                newMask |= 8;
-                                            } else if (a == 4) {
-                                                newMask |= 16;
-                                            } else if (a == 5) {
-                                                newMask |= 32;
-                                            }
-                                        }
-                                    }
-                                    Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                                    if (i == SettingsActivity.this.mobileDownloadRow) {
-                                        editor.putInt("mobileDataDownloadMask", newMask);
-                                        MediaController.getInstance().mobileDataDownloadMask = newMask;
-                                    } else if (i == SettingsActivity.this.wifiDownloadRow) {
-                                        editor.putInt("wifiDownloadMask", newMask);
-                                        MediaController.getInstance().wifiDownloadMask = newMask;
-                                    } else if (i == SettingsActivity.this.roamingDownloadRow) {
-                                        editor.putInt("roamingDownloadMask", newMask);
-                                        MediaController.getInstance().roamingDownloadMask = newMask;
-                                    }
-                                    editor.commit();
-                                    if (SettingsActivity.this.listAdapter != null) {
-                                        SettingsActivity.this.listAdapter.notifyItemChanged(i);
-                                    }
-                                }
-                            });
-                            numberPicker.addView(cell, LayoutHelper.createLinear(-1, 48));
-                            builder.setCustomView(numberPicker);
-                            SettingsActivity.this.showDialog(builder.create());
-                        }
                     } else if (position == SettingsActivity.this.usernameRow) {
                         SettingsActivity.this.presentFragment(new ChangeUsernameActivity());
                     } else if (position == SettingsActivity.this.numberRow) {
                         SettingsActivity.this.presentFragment(new ChangePhoneHelpActivity());
                     } else if (position == SettingsActivity.this.stickersRow) {
                         SettingsActivity.this.presentFragment(new StickersActivity(0));
-                    } else if (position == SettingsActivity.this.cacheRow) {
-                        SettingsActivity.this.presentFragment(new CacheControlActivity());
                     } else if (position == SettingsActivity.this.emojiRow) {
                         if (SettingsActivity.this.getParentActivity() != null) {
-                            maskValues = new boolean[2];
-                            builder = new BottomSheet.Builder(SettingsActivity.this.getParentActivity());
-                            builder.setApplyTopPadding(false);
-                            builder.setApplyBottomPadding(false);
+                            boolean[] maskValues = new boolean[2];
+                            BottomSheet.Builder builder2 = new BottomSheet.Builder(SettingsActivity.this.getParentActivity());
+                            builder2.setApplyTopPadding(false);
+                            builder2.setApplyBottomPadding(false);
                             numberPicker = new LinearLayout(SettingsActivity.this.getParentActivity());
                             numberPicker.setOrientation(1);
                             a = 0;
                             while (true) {
+                                final boolean[] zArr;
                                 if (a < (VERSION.SDK_INT >= 19 ? 2 : 1)) {
-                                    name = null;
+                                    String name = null;
                                     if (a == 0) {
                                         maskValues[a] = MessagesController.getInstance().allowBigEmoji;
                                         name = LocaleController.getString("EmojiBigSize", R.string.EmojiBigSize);
@@ -1120,27 +916,27 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                         maskValues[a] = MessagesController.getInstance().useSystemEmoji;
                                         name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
                                     }
-                                    checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
+                                    CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
                                     checkBoxCell.setTag(Integer.valueOf(a));
                                     checkBoxCell.setBackgroundResource(R.drawable.list_selector);
                                     numberPicker.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                                     checkBoxCell.setText(name, "", maskValues[a], true);
-                                    r1 = maskValues;
+                                    zArr = maskValues;
                                     checkBoxCell.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
                                             CheckBoxCell cell = (CheckBoxCell) v;
                                             int num = ((Integer) cell.getTag()).intValue();
-                                            r1[num] = !r1[num];
-                                            cell.setChecked(r1[num], true);
+                                            zArr[num] = !zArr[num];
+                                            cell.setChecked(zArr[num], true);
                                         }
                                     });
                                     a++;
                                 } else {
-                                    cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
+                                    BottomSheetCell cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
                                     cell.setBackgroundResource(R.drawable.list_selector);
                                     cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
                                     cell.setTextColor(-12940081);
-                                    r1 = maskValues;
+                                    zArr = maskValues;
                                     i = position;
                                     cell.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
@@ -1153,11 +949,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                             }
                                             Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                                             MessagesController instance = MessagesController.getInstance();
-                                            boolean z = r1[0];
+                                            boolean z = zArr[0];
                                             instance.allowBigEmoji = z;
                                             editor.putBoolean("allowBigEmoji", z);
                                             instance = MessagesController.getInstance();
-                                            z = r1[1];
+                                            z = zArr[1];
                                             instance.useSystemEmoji = z;
                                             editor.putBoolean("useSystemEmoji", z);
                                             editor.commit();
@@ -1167,40 +963,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                         }
                                     });
                                     numberPicker.addView(cell, LayoutHelper.createLinear(-1, 48));
-                                    builder.setCustomView(numberPicker);
-                                    SettingsActivity.this.showDialog(builder.create());
+                                    builder2.setCustomView(numberPicker);
+                                    SettingsActivity.this.showDialog(builder2.create());
                                     return;
                                 }
                             }
                         }
-                    } else if (position == SettingsActivity.this.useLessDataForCallsRow) {
-                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                        r1 = preferences;
-                        i = position;
-                        dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever), LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile), LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways)}, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), preferences.getInt("VoipDataSaving", 0), new OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                int val = -1;
-                                switch (which) {
-                                    case 0:
-                                        val = 0;
-                                        break;
-                                    case 1:
-                                        val = 1;
-                                        break;
-                                    case 2:
-                                        val = 2;
-                                        break;
-                                }
-                                if (val != -1) {
-                                    r1.edit().putInt("VoipDataSaving", val).commit();
-                                }
-                                if (SettingsActivity.this.listAdapter != null) {
-                                    SettingsActivity.this.listAdapter.notifyItemChanged(i);
-                                }
-                            }
-                        });
-                        SettingsActivity.this.setVisibleDialog(dlg);
-                        dlg.show();
                     } else if (position == SettingsActivity.this.callsFrameSizeRow) {
                         int sel;
                         preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
@@ -1215,9 +983,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 sel = 2;
                                 break;
                         }
-                        r1 = preferences;
+                        final SharedPreferences sharedPreferences = preferences;
                         i = position;
-                        dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{"20", "40", "60"}, "Frame size (ms)", sel, new OnClickListener() {
+                        Dialog dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{"20", "40", "60"}, "Frame size (ms)", sel, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 int val = 60;
                                 switch (which) {
@@ -1231,7 +999,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                         val = 60;
                                         break;
                                 }
-                                r1.edit().putInt("VoipTestFrameSize", val).commit();
+                                sharedPreferences.edit().putInt("VoipTestFrameSize", val).commit();
                                 if (SettingsActivity.this.listAdapter != null) {
                                     SettingsActivity.this.listAdapter.notifyItemChanged(i);
                                 }
@@ -1394,10 +1162,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
         });
         return this.fragmentView;
-    }
-
-    protected void onDialogDismiss(Dialog dialog) {
-        MediaController.getInstance().checkAutodownloadSettings();
     }
 
     public void updatePhotoAtIndex(int index) {
@@ -1640,7 +1404,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     animatorSet.playTogether(animatorArr);
                 }
                 this.writeButtonAnimation.setDuration(150);
-                this.writeButtonAnimation.addListener(new AnimatorListenerAdapterProxy() {
+                this.writeButtonAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
                         if (SettingsActivity.this.writeButtonAnimation != null && SettingsActivity.this.writeButtonAnimation.equals(animation)) {
                             SettingsActivity.this.writeButton.setVisibility(setVisible ? 0 : 8);
