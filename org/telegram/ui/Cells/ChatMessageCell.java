@@ -1803,13 +1803,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        int linkPreviewMaxWidth;
-        int duration;
+        String description;
+        Photo photo;
+        TLObject document;
+        String type;
         boolean smallImage;
-        int height;
         int width;
         Throwable e;
         int restLinesCount;
+        int a;
+        boolean authorIsRTL;
         boolean hasRTL;
         int maxPhotoWidth;
         DocumentAttribute attribute;
@@ -1819,23 +1822,19 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int durationWidth;
         ArrayList arrayList;
         int i;
-        float scale;
         ImageReceiver imageReceiver;
         TLObject tLObject;
         String str;
         FileLocation fileLocation;
-        String fileName;
-        int seconds;
         String str2;
         int mWidth;
+        int timeWidthTotal;
         int rows;
-        boolean fullWidth;
         int maxButtonsWidth;
         TL_keyboardButtonRow row;
+        int buttonsCount;
         int buttonWidth;
-        int b;
         ChatMessageCell chatMessageCell;
-        BotButton botButton;
         String key;
         BotButton oldButton;
         if (messageObject.checkLayout()) {
@@ -1845,12 +1844,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int a;
-            int timeWidthTotal;
+            boolean fullWidth;
             float f;
             int maxButtonWidth;
-            int buttonsCount;
             int dp2;
+            int b;
+            BotButton botButton;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1919,7 +1918,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             boolean z;
+            float scale;
             boolean photoExist;
+            String fileName;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1973,16 +1974,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
                     String author;
-                    String description;
-                    Photo photo;
-                    TLObject document;
-                    String type;
+                    int duration;
+                    int height;
                     int restLines;
                     int lineLeft;
-                    boolean authorIsRTL;
+                    int seconds;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

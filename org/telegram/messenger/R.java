@@ -941,7 +941,6 @@ public final class R {
         public static final int BytesSent = NUM;
         public static final int CacheClear = NUM;
         public static final int CacheEmpty = NUM;
-        public static final int CacheSettings = NUM;
         public static final int CalculatingSize = NUM;
         public static final int Call = NUM;
         public static final int CallEncryptionKeyDescription = NUM;

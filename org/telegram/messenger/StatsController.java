@@ -17,6 +17,11 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
+    private static final ThreadLocal<Long> lastStatsSaveTime = new ThreadLocal<Long>() {
+        protected Long initialValue() {
+            return Long.valueOf(System.currentTimeMillis() - 1000);
+        }
+    };
     private int[] callsTotalTime = new int[3];
     private Editor editor;
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
@@ -24,6 +29,7 @@ public class StatsController {
     private long[] resetStatsDate = new long[3];
     private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
+    private DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
 
     public static StatsController getInstance() {
         StatsController localInstance = Instance;
@@ -67,42 +73,41 @@ public class StatsController {
             if (this.resetStatsDate[a] == 0) {
                 save = true;
                 this.resetStatsDate[a] = System.currentTimeMillis();
-                this.editor.putLong("resetStatsDate" + a, this.resetStatsDate[a]);
             }
         }
         if (save) {
-            this.editor.commit();
+            saveStats();
         }
     }
 
     public void incrementReceivedItemsCount(int networkType, int dataType, int value) {
         int[] iArr = this.receivedItems[networkType];
         iArr[dataType] = iArr[dataType] + value;
-        this.editor.putInt("receivedItems" + networkType + "_" + dataType, this.receivedItems[networkType][dataType]).apply();
+        saveStats();
     }
 
     public void incrementSentItemsCount(int networkType, int dataType, int value) {
         int[] iArr = this.sentItems[networkType];
         iArr[dataType] = iArr[dataType] + value;
-        this.editor.putInt("sentItems" + networkType + "_" + dataType, this.sentItems[networkType][dataType]).apply();
+        saveStats();
     }
 
     public void incrementReceivedBytesCount(int networkType, int dataType, long value) {
         long[] jArr = this.receivedBytes[networkType];
         jArr[dataType] = jArr[dataType] + value;
-        this.editor.putLong("receivedBytes" + networkType + "_" + dataType, this.receivedBytes[networkType][dataType]).apply();
+        saveStats();
     }
 
     public void incrementSentBytesCount(int networkType, int dataType, long value) {
         long[] jArr = this.sentBytes[networkType];
         jArr[dataType] = jArr[dataType] + value;
-        this.editor.putLong("sentBytes" + networkType + "_" + dataType, this.sentBytes[networkType][dataType]).apply();
+        saveStats();
     }
 
     public void incrementTotalCallsTime(int networkType, int value) {
         int[] iArr = this.callsTotalTime;
         iArr[networkType] = iArr[networkType] + value;
-        this.editor.putInt("callsTotalTime" + networkType, this.callsTotalTime[networkType]).apply();
+        saveStats();
     }
 
     public int getRecivedItemsCount(int networkType, int dataType) {
@@ -142,13 +147,34 @@ public class StatsController {
             this.receivedBytes[networkType][a] = 0;
             this.sentItems[networkType][a] = 0;
             this.receivedItems[networkType][a] = 0;
-            this.editor.putInt("receivedItems" + networkType + "_" + a, this.receivedItems[networkType][a]);
-            this.editor.putInt("sentItems" + networkType + "_" + a, this.sentItems[networkType][a]);
-            this.editor.putLong("receivedBytes" + networkType + "_" + a, this.receivedBytes[networkType][a]);
-            this.editor.putLong("sentBytes" + networkType + "_" + a, this.sentBytes[networkType][a]);
         }
         this.callsTotalTime[networkType] = 0;
-        this.editor.putInt("callsTotalTime" + networkType, this.callsTotalTime[networkType]);
-        this.editor.putLong("resetStatsDate" + networkType, this.resetStatsDate[networkType]).apply();
+        saveStats();
+    }
+
+    private void saveStats() {
+        long newTime = System.currentTimeMillis();
+        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 1000) {
+            lastStatsSaveTime.set(Long.valueOf(newTime));
+            this.statsSaveQueue.postRunnable(new Runnable() {
+                public void run() {
+                    for (int networkType = 0; networkType < 3; networkType++) {
+                        for (int a = 0; a < 7; a++) {
+                            StatsController.this.sentBytes[networkType][a] = 0;
+                            StatsController.this.receivedBytes[networkType][a] = 0;
+                            StatsController.this.sentItems[networkType][a] = 0;
+                            StatsController.this.receivedItems[networkType][a] = 0;
+                            StatsController.this.editor.putInt("receivedItems" + networkType + "_" + a, StatsController.this.receivedItems[networkType][a]);
+                            StatsController.this.editor.putInt("sentItems" + networkType + "_" + a, StatsController.this.sentItems[networkType][a]);
+                            StatsController.this.editor.putLong("receivedBytes" + networkType + "_" + a, StatsController.this.receivedBytes[networkType][a]);
+                            StatsController.this.editor.putLong("sentBytes" + networkType + "_" + a, StatsController.this.sentBytes[networkType][a]);
+                        }
+                        StatsController.this.callsTotalTime[networkType] = 0;
+                        StatsController.this.editor.putInt("callsTotalTime" + networkType, StatsController.this.callsTotalTime[networkType]);
+                        StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]).commit();
+                    }
+                }
+            });
+        }
     }
 }

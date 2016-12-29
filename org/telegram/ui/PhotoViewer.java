@@ -1258,56 +1258,58 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 }
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                 final boolean[] deleteForAll = new boolean[1];
-                                int lower_id = (int) PhotoViewer.this.currentMessageObject.getDialogId();
-                                if (lower_id != 0) {
-                                    User currentUser;
-                                    Chat currentChat;
-                                    if (lower_id > 0) {
-                                        currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
-                                        currentChat = null;
-                                    } else {
-                                        currentUser = null;
-                                        currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
-                                    }
-                                    if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                                        int currentDate = ConnectionsManager.getInstance().getCurrentTime();
-                                        if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentDate - PhotoViewer.this.currentMessageObject.messageOwner.date <= 172800)) {
-                                            int dp;
-                                            View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
-                                            CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity);
-                                            cell.setBackgroundResource(R.drawable.list_selector);
-                                            if (currentChat != null) {
-                                                cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
-                                            } else {
-                                                cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
-                                            }
-                                            if (LocaleController.isRTL) {
-                                                r2 = AndroidUtilities.dp(16.0f);
-                                            } else {
-                                                r2 = AndroidUtilities.dp(8.0f);
-                                            }
-                                            if (LocaleController.isRTL) {
-                                                dp = AndroidUtilities.dp(8.0f);
-                                            } else {
-                                                dp = AndroidUtilities.dp(16.0f);
-                                            }
-                                            cell.setPadding(r2, 0, dp, 0);
-                                            frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                                            cell.setOnClickListener(new OnClickListener() {
-                                                public void onClick(View v) {
-                                                    boolean z;
-                                                    CheckBoxCell cell = (CheckBoxCell) v;
-                                                    boolean[] zArr = deleteForAll;
-                                                    if (deleteForAll[0]) {
-                                                        z = false;
-                                                    } else {
-                                                        z = true;
-                                                    }
-                                                    zArr[0] = z;
-                                                    cell.setChecked(deleteForAll[0], true);
+                                if (PhotoViewer.this.currentMessageObject != null) {
+                                    int lower_id = (int) PhotoViewer.this.currentMessageObject.getDialogId();
+                                    if (lower_id != 0) {
+                                        User currentUser;
+                                        Chat currentChat;
+                                        if (lower_id > 0) {
+                                            currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                                            currentChat = null;
+                                        } else {
+                                            currentUser = null;
+                                            currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                                        }
+                                        if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
+                                            int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                                            if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentDate - PhotoViewer.this.currentMessageObject.messageOwner.date <= 172800)) {
+                                                int dp;
+                                                View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
+                                                CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity);
+                                                cell.setBackgroundResource(R.drawable.list_selector);
+                                                if (currentChat != null) {
+                                                    cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
+                                                } else {
+                                                    cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
                                                 }
-                                            });
-                                            builder.setView(frameLayout);
+                                                if (LocaleController.isRTL) {
+                                                    r2 = AndroidUtilities.dp(16.0f);
+                                                } else {
+                                                    r2 = AndroidUtilities.dp(8.0f);
+                                                }
+                                                if (LocaleController.isRTL) {
+                                                    dp = AndroidUtilities.dp(8.0f);
+                                                } else {
+                                                    dp = AndroidUtilities.dp(16.0f);
+                                                }
+                                                cell.setPadding(r2, 0, dp, 0);
+                                                frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                                                cell.setOnClickListener(new OnClickListener() {
+                                                    public void onClick(View v) {
+                                                        boolean z;
+                                                        CheckBoxCell cell = (CheckBoxCell) v;
+                                                        boolean[] zArr = deleteForAll;
+                                                        if (deleteForAll[0]) {
+                                                            z = false;
+                                                        } else {
+                                                            z = true;
+                                                        }
+                                                        zArr[0] = z;
+                                                        cell.setChecked(deleteForAll[0], true);
+                                                    }
+                                                });
+                                                builder.setView(frameLayout);
+                                            }
                                         }
                                     }
                                 }
