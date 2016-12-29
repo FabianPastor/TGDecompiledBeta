@@ -14,7 +14,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
@@ -78,8 +77,8 @@ public class ShutterButton extends View {
             animatorSet.playTogether(animatorArr);
         } else {
             animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[1] = ObjectAnimator.ofFloat(this, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[0] = ObjectAnimator.ofFloat(this, "scaleX", new float[]{1.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this, "scaleY", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
             animatorSet.setStartDelay(40);
         }
@@ -102,12 +101,12 @@ public class ShutterButton extends View {
         int cy = getMeasuredHeight() / 2;
         this.shadowDrawable.setBounds(cx - AndroidUtilities.dp(36.0f), cy - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + cx, AndroidUtilities.dp(36.0f) + cy);
         this.shadowDrawable.draw(canvas);
-        if (this.pressed || getScaleX() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            float scale = (getScaleX() - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) / 0.06f;
+        if (this.pressed || getScaleX() != 1.0f) {
+            float scale = (getScaleX() - 1.0f) / 0.06f;
             this.whitePaint.setAlpha((int) (255.0f * scale));
             canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(26.0f), this.whitePaint);
             if (this.state == State.RECORDING) {
-                if (this.redProgress != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.redProgress != 1.0f) {
                     long dt = Math.abs(System.currentTimeMillis() - this.lastUpdateTime);
                     if (dt > 17) {
                         dt = 17;
@@ -178,7 +177,7 @@ public class ShutterButton extends View {
                     this.redProgress = 0.0f;
                 }
             } else if (this.state == State.RECORDING) {
-                this.redProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.redProgress = 1.0f;
             } else {
                 this.redProgress = 0.0f;
             }

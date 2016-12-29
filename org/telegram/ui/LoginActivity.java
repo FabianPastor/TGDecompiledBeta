@@ -70,7 +70,6 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -142,7 +141,7 @@ public class LoginActivity extends BaseFragment {
             this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.confirmTextView.setText(LocaleController.getString("LoginPasswordText", R.string.LoginPasswordText));
             addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             this.codeField = new EditText(context);
@@ -173,7 +172,7 @@ public class LoginActivity extends BaseFragment {
             cancelButton.setTextColor(-11697229);
             cancelButton.setText(LocaleController.getString("ForgotPassword", R.string.ForgotPassword));
             cancelButton.setTextSize(1, 14.0f);
-            cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
             addView(cancelButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48));
             cancelButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
@@ -233,7 +232,7 @@ public class LoginActivity extends BaseFragment {
             this.resetAccountButton.setText(LocaleController.getString("ResetMyAccount", R.string.ResetMyAccount));
             this.resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.resetAccountButton.setTextSize(1, 14.0f);
-            this.resetAccountButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.resetAccountButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.resetAccountButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
             addView(this.resetAccountButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 0, 34, 0, 0));
             this.resetAccountButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
@@ -287,7 +286,7 @@ public class LoginActivity extends BaseFragment {
             this.resetAccountText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.resetAccountText.setText(LocaleController.getString("ResetMyAccountText", R.string.ResetMyAccountText));
             this.resetAccountText.setTextSize(1, 14.0f);
-            this.resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             addView(this.resetAccountText, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 0, 7, 0, 14));
         }
 
@@ -461,7 +460,7 @@ public class LoginActivity extends BaseFragment {
             this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.confirmTextView.setText(LocaleController.getString("RestoreEmailSentInfo", R.string.RestoreEmailSentInfo));
             View view = this.confirmTextView;
             if (LocaleController.isRTL) {
@@ -497,7 +496,7 @@ public class LoginActivity extends BaseFragment {
             this.cancelButton.setGravity((LocaleController.isRTL ? 5 : 3) | 80);
             this.cancelButton.setTextColor(-11697229);
             this.cancelButton.setTextSize(1, 14.0f);
-            this.cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
             View view2 = this.cancelButton;
             if (!LocaleController.isRTL) {
@@ -702,7 +701,7 @@ public class LoginActivity extends BaseFragment {
             wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
             wrongNumber.setTextColor(-11697229);
             wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
             linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
             wrongNumber.setOnClickListener(new OnClickListener(LoginActivity.this) {
@@ -860,7 +859,7 @@ public class LoginActivity extends BaseFragment {
                 i = 3;
             }
             textView.setGravity(i);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             View view = this.confirmTextView;
             if (LocaleController.isRTL) {
                 i = 5;
@@ -878,7 +877,7 @@ public class LoginActivity extends BaseFragment {
             resetAccountText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             resetAccountText.setText(LocaleController.getString("ResetAccountStatus", R.string.ResetAccountStatus));
             resetAccountText.setTextSize(1, 14.0f);
-            resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             if (LocaleController.isRTL) {
                 i = 5;
             } else {
@@ -895,7 +894,7 @@ public class LoginActivity extends BaseFragment {
             textView.setGravity(i | 48);
             this.resetAccountTime.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.resetAccountTime.setTextSize(1, 14.0f);
-            this.resetAccountTime.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.resetAccountTime.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             View view2 = this.resetAccountTime;
             if (LocaleController.isRTL) {
                 i = 5;
@@ -914,7 +913,7 @@ public class LoginActivity extends BaseFragment {
             this.resetAccountButton.setText(LocaleController.getString("ResetAccountButton", R.string.ResetAccountButton));
             this.resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.resetAccountButton.setTextSize(1, 14.0f);
-            this.resetAccountButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.resetAccountButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.resetAccountButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
             view2 = this.resetAccountButton;
             if (!LocaleController.isRTL) {
@@ -1089,7 +1088,7 @@ public class LoginActivity extends BaseFragment {
             this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             if (this.currentType == 3) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 ImageView imageView = new ImageView(context);
@@ -1146,7 +1145,7 @@ public class LoginActivity extends BaseFragment {
             this.timeText = new TextView(context);
             this.timeText.setTextSize(1, 14.0f);
             this.timeText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
             addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
             if (this.currentType == 3) {
@@ -1158,7 +1157,7 @@ public class LoginActivity extends BaseFragment {
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
             this.problemText.setTextColor(-11697229);
-            this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 20, 0, 0));
             this.problemText.setOnClickListener(new OnClickListener(LoginActivity.this) {
@@ -1191,7 +1190,7 @@ public class LoginActivity extends BaseFragment {
             wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
             wrongNumber.setTextColor(-11697229);
             wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
             linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
             wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
@@ -1398,13 +1397,13 @@ public class LoginActivity extends BaseFragment {
                                             LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                                         }
                                         if (LoginActivitySmsView.this.progressView != null) {
-                                            LoginActivitySmsView.this.progressView.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
+                                            LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
                                             return;
                                         }
                                         return;
                                     }
                                     if (LoginActivitySmsView.this.progressView != null) {
-                                        LoginActivitySmsView.this.progressView.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                        LoginActivitySmsView.this.progressView.setProgress(1.0f);
                                     }
                                     LoginActivitySmsView.this.destroyTimer();
                                     if (LoginActivitySmsView.this.currentType == 3) {
@@ -1924,7 +1923,7 @@ public class LoginActivity extends BaseFragment {
             view.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             view.setTextSize(1, 14.0f);
             view.setGravity(LocaleController.isRTL ? 5 : 3);
-            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             addView(view, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
             HashMap<String, String> languageMap = new HashMap();
             try {
@@ -2093,6 +2092,8 @@ public class LoginActivity extends BaseFragment {
                                     } else if (error.text != null) {
                                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
                                             LoginActivity.this.needShowInvalidAlert(req.phone_number, false);
+                                        } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
                                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
                                             LoginActivity.this.needShowInvalidAlert(req.phone_number, true);
                                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {

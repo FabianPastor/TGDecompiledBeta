@@ -7,7 +7,6 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SendingFileExDrawable extends Drawable {
@@ -36,8 +35,8 @@ public class SendingFileExDrawable extends Drawable {
             dt = 50;
         }
         this.progress += ((float) dt) / 500.0f;
-        while (this.progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.progress -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        while (this.progress > 1.0f) {
+            this.progress -= 1.0f;
         }
         invalidateSelf();
     }
@@ -58,7 +57,7 @@ public class SendingFileExDrawable extends Drawable {
             if (a == 0) {
                 this.paint.setAlpha((int) (this.progress * 255.0f));
             } else if (a == 2) {
-                this.paint.setAlpha((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress) * 255.0f));
+                this.paint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
             } else {
                 this.paint.setAlpha(255);
             }

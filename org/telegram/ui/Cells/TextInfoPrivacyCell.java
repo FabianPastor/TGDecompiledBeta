@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -60,7 +59,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
         if (animators != null) {
             TextView textView = this.textView;
             String str = "alpha";

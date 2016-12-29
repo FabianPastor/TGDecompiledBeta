@@ -4,7 +4,6 @@ import android.graphics.Matrix;
 import android.view.MotionEvent;
 import java.util.Vector;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Input {
     private boolean beganDrawing;
@@ -97,7 +96,7 @@ public class Input {
                 Point midPoint2 = cur.multiplySum(prev1, 0.5d);
                 int numberOfSegments = (int) Math.min(48.0d, Math.max(Math.floor((double) (midPoint1.getDistanceTo(midPoint2) / ((float) 1))), 24.0d));
                 float t = 0.0f;
-                float step = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) numberOfSegments);
+                float step = 1.0f / ((float) numberOfSegments);
                 for (int j = 0; j < numberOfSegments; j++) {
                     Point point = smoothPoint(midPoint1, midPoint2, prev1, t);
                     if (this.isFirst) {
@@ -131,8 +130,8 @@ public class Input {
     }
 
     private Point smoothPoint(Point midPoint1, Point midPoint2, Point prev1, float t) {
-        double a1 = Math.pow((double) (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - t), 2.0d);
-        double a2 = (double) ((2.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - t)) * t);
+        double a1 = Math.pow((double) (1.0f - t), 2.0d);
+        double a2 = (double) ((2.0f * (1.0f - t)) * t);
         double a3 = (double) (t * t);
         return new Point(((midPoint1.x * a1) + (prev1.x * a2)) + (midPoint2.x * a3), ((midPoint1.y * a1) + (prev1.y * a2)) + (midPoint2.y * a3), 1.0d);
     }

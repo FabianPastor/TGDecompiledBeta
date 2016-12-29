@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
 @SuppressLint({"NewApi"})
@@ -31,7 +30,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private int cy;
     private CameraViewDelegate delegate;
     private int focusAreaSize;
-    private float focusProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float focusProgress = 1.0f;
     private boolean initied;
     private float innerAlpha;
     private Paint innerPaint = new Paint(1);
@@ -213,7 +212,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.txform.postRotate(BitmapDescriptorFactory.HUE_CYAN, viewCenterX, viewCenterY);
         }
         if (this.mirror) {
-            this.txform.postScale(-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, viewCenterX, viewCenterY);
+            this.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
         }
         if (!(this.clipTop == 0 && this.clipLeft == 0)) {
             this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
@@ -246,10 +245,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void focusToPoint(int x, int y) {
-        this.cameraSession.focusToRect(calculateTapArea((float) x, (float) y, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), calculateTapArea((float) x, (float) y, 1.5f));
+        this.cameraSession.focusToRect(calculateTapArea((float) x, (float) y, 1.0f), calculateTapArea((float) x, (float) y, 1.5f));
         this.focusProgress = 0.0f;
-        this.innerAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        this.outerAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.innerAlpha = 1.0f;
+        this.outerAlpha = 1.0f;
         this.cx = x;
         this.cy = y;
         this.lastDrawTime = System.currentTimeMillis();
@@ -277,7 +276,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (!(this.focusProgress == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
+        if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
             int baseRad = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastDrawTime;
@@ -288,12 +287,12 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
             this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
             float interpolated = this.interpolator.getInterpolation(this.focusProgress);
-            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
             canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
-            if (this.focusProgress < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (this.focusProgress < 1.0f) {
                 this.focusProgress += ((float) dt) / 200.0f;
-                if (this.focusProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.focusProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.focusProgress > 1.0f) {
+                    this.focusProgress = 1.0f;
                 }
                 invalidate();
             } else if (this.innerAlpha != 0.0f) {

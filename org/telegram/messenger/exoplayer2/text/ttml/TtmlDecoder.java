@@ -18,7 +18,6 @@ import org.telegram.messenger.exoplayer2.text.SubtitleDecoderException;
 import org.telegram.messenger.exoplayer2.util.ColorParser;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.util.XmlPullParserUtil;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -128,7 +127,7 @@ public final class TtmlDecoder extends SimpleSubtitleDecoder {
         if (frameRateString != null) {
             frameRate = Integer.parseInt(frameRateString);
         }
-        float frameRateMultiplier = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float frameRateMultiplier = 1.0f;
         String frameRateMultiplierString = xmlParser.getAttributeValue(TTP, "frameRateMultiplier");
         if (frameRateMultiplierString != null) {
             String[] parts = frameRateMultiplierString.split(" ");

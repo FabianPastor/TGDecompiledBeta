@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class AC3TrackImpl extends AbstractTrack {
     static int[][][][] bitRateAndFrameSizeTable = ((int[][][][]) Array.newInstance(Integer.TYPE, new int[]{19, 2, 3, 2}));
@@ -74,7 +73,7 @@ public class AC3TrackImpl extends AbstractTrack {
         this.trackMetaData.setModificationTime(new Date());
         this.trackMetaData.setLanguage(lang);
         this.trackMetaData.setTimescale(ase.getSampleRate());
-        this.trackMetaData.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.trackMetaData.setVolume(1.0f);
     }
 
     public void close() throws IOException {

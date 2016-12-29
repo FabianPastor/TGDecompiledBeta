@@ -30,7 +30,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow.OnDispatchKeyEventListener;
 import org.telegram.ui.Components.LayoutHelper;
@@ -384,7 +383,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchContainer = new FrameLayout(getContext());
                 this.parentMenu.addView(this.searchContainer, 0);
                 LayoutParams layoutParams = (LayoutParams) this.searchContainer.getLayoutParams();
-                layoutParams.weight = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                layoutParams.weight = 1.0f;
                 layoutParams.width = 0;
                 layoutParams.height = -1;
                 layoutParams.leftMargin = AndroidUtilities.dp(6.0f);
@@ -435,7 +434,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         }
                         if (ActionBarMenuItem.this.clearButton != null) {
                             ImageView access$800 = ActionBarMenuItem.this.clearButton;
-                            float f = (s == null || s.length() == 0) ? 0.6f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                            float f = (s == null || s.length() == 0) ? 0.6f : 1.0f;
                             access$800.setAlpha(f);
                         }
                     }

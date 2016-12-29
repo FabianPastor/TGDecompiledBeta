@@ -53,7 +53,6 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.PhotoEditToolCell;
 import org.telegram.ui.Components.PhotoEditorSeekBar.PhotoEditorSeekBarDelegate;
@@ -215,7 +214,7 @@ public class PhotoFilterView extends FrameLayout {
 
         public float[] interpolateCurve() {
             int a;
-            float[] points = new float[]{-0.001f, this.blacksLevel / 100.0f, 0.0f, this.blacksLevel / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, this.highlightsLevel / 100.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, this.whitesLevel / 100.0f, 1.001f, this.whitesLevel / 100.0f};
+            float[] points = new float[]{-0.001f, this.blacksLevel / 100.0f, 0.0f, this.blacksLevel / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION, this.highlightsLevel / 100.0f, 1.0f, this.whitesLevel / 100.0f, 1.001f, this.whitesLevel / 100.0f};
             ArrayList<Float> dataPoints = new ArrayList(PhotoFilterView.curveGranularity);
             ArrayList<Float> interpolatedPoints = new ArrayList(PhotoFilterView.curveGranularity);
             interpolatedPoints.add(Float.valueOf(points[0]));
@@ -234,7 +233,7 @@ public class PhotoFilterView extends FrameLayout {
                     float tt = t * t;
                     float ttt = tt * t;
                     float pix = 0.5f * ((((2.0f * point1x) + ((point2x - point0x) * t)) + (((((2.0f * point0x) - (5.0f * point1x)) + (4.0f * point2x)) - point3x) * tt)) + (((((3.0f * point1x) - point0x) - (3.0f * point2x)) + point3x) * ttt));
-                    float piy = Math.max(0.0f, Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.5f * ((((2.0f * point1y) + ((point2y - point0y) * t)) + (((((2.0f * point0y) - (5.0f * point1y)) + (4.0f * point2y)) - point3y) * tt)) + (((((3.0f * point1y) - point0y) - (3.0f * point2y)) + point3y) * ttt))));
+                    float piy = Math.max(0.0f, Math.min(1.0f, 0.5f * ((((2.0f * point1y) + ((point2y - point0y) * t)) + (((((2.0f * point0y) - (5.0f * point1y)) + (4.0f * point2y)) - point3y) * tt)) + (((((3.0f * point1y) - point0y) - (3.0f * point2y)) + point3y) * ttt))));
                     if (pix > point0x) {
                         interpolatedPoints.add(Float.valueOf(pix));
                         interpolatedPoints.add(Float.valueOf(piy));
@@ -452,19 +451,19 @@ public class PhotoFilterView extends FrameLayout {
                         }
                         if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                             this.gl = this.eglContext.getGL();
-                            float[] squareCoordinates = new float[]{-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, -1.0f, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, -1.0f};
+                            float[] squareCoordinates = new float[]{-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
                             ByteBuffer bb = ByteBuffer.allocateDirect(squareCoordinates.length * 4);
                             bb.order(ByteOrder.nativeOrder());
                             this.vertexBuffer = bb.asFloatBuffer();
                             this.vertexBuffer.put(squareCoordinates);
                             this.vertexBuffer.position(0);
-                            float[] squareCoordinates2 = new float[]{-1.0f, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, -1.0f, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+                            float[] squareCoordinates2 = new float[]{-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
                             bb = ByteBuffer.allocateDirect(squareCoordinates2.length * 4);
                             bb.order(ByteOrder.nativeOrder());
                             this.vertexInvertBuffer = bb.asFloatBuffer();
                             this.vertexInvertBuffer.put(squareCoordinates2);
                             this.vertexInvertBuffer.position(0);
-                            float[] textureCoordinates = new float[]{0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+                            float[] textureCoordinates = new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
                             bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
                             bb.order(ByteOrder.nativeOrder());
                             this.textureBuffer = bb.asFloatBuffer();
@@ -804,7 +803,7 @@ public class PhotoFilterView extends FrameLayout {
         }
 
         private void drawCustomParamsPass() {
-            float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float f = 1.0f;
             GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[1]);
             GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[1], 0);
             GLES20.glClear(0);
@@ -813,11 +812,11 @@ public class PhotoFilterView extends FrameLayout {
             GLES20.glBindTexture(3553, this.renderTexture[0]);
             GLES20.glUniform1i(this.sourceImageHandle, 0);
             if (PhotoFilterView.this.showOriginal) {
-                GLES20.glUniform1f(this.shadowsHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                GLES20.glUniform1f(this.highlightsHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                GLES20.glUniform1f(this.shadowsHandle, 1.0f);
+                GLES20.glUniform1f(this.highlightsHandle, 1.0f);
                 GLES20.glUniform1f(this.exposureHandle, 0.0f);
-                GLES20.glUniform1f(this.contrastHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                GLES20.glUniform1f(this.saturationHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                GLES20.glUniform1f(this.contrastHandle, 1.0f);
+                GLES20.glUniform1f(this.saturationHandle, 1.0f);
                 GLES20.glUniform1f(this.warmthHandle, 0.0f);
                 GLES20.glUniform1f(this.vignetteHandle, 0.0f);
                 GLES20.glUniform1f(this.grainHandle, 0.0f);
@@ -826,7 +825,7 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glUniform1f(this.highlightsTintIntensityHandle, 0.0f);
                 GLES20.glUniform3f(this.shadowsTintColorHandle, 0.0f, 0.0f, 0.0f);
                 GLES20.glUniform1f(this.shadowsTintIntensityHandle, 0.0f);
-                GLES20.glUniform1f(this.skipToneHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                GLES20.glUniform1f(this.skipToneHandle, 1.0f);
             } else {
                 GLES20.glUniform1f(this.shadowsHandle, PhotoFilterView.this.getShadowsValue());
                 GLES20.glUniform1f(this.highlightsHandle, PhotoFilterView.this.getHighlightsValue());
@@ -885,14 +884,14 @@ public class PhotoFilterView extends FrameLayout {
                 GLES20.glActiveTexture(33984);
                 GLES20.glBindTexture(3553, this.renderTexture[1]);
                 GLES20.glUniform1f(this.blurWidthHandle, 0.0f);
-                GLES20.glUniform1f(this.blurHeightHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) this.renderBufferHeight));
+                GLES20.glUniform1f(this.blurHeightHandle, 1.0f / ((float) this.renderBufferHeight));
                 GLES20.glDrawArrays(5, 0, 4);
                 GLES20.glBindFramebuffer(36160, this.renderFrameBuffer[2]);
                 GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.renderTexture[2], 0);
                 GLES20.glClear(0);
                 GLES20.glActiveTexture(33984);
                 GLES20.glBindTexture(3553, this.renderTexture[0]);
-                GLES20.glUniform1f(this.blurWidthHandle, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) this.renderBufferWidth));
+                GLES20.glUniform1f(this.blurWidthHandle, 1.0f / ((float) this.renderBufferWidth));
                 GLES20.glUniform1f(this.blurHeightHandle, 0.0f);
                 GLES20.glDrawArrays(5, 0, 4);
                 this.needUpdateBlurTexture = false;
@@ -984,7 +983,7 @@ public class PhotoFilterView extends FrameLayout {
             this.renderBufferHeight = bitmap.getHeight();
             float maxSize = (float) AndroidUtilities.getPhotoSize();
             if (((float) this.renderBufferWidth) > maxSize || ((float) this.renderBufferHeight) > maxSize || PhotoFilterView.this.orientation % 360 != 0) {
-                float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                float scale = 1.0f;
                 if (((float) this.renderBufferWidth) > maxSize || ((float) this.renderBufferHeight) > maxSize) {
                     float scaleX = maxSize / ((float) bitmap.getWidth());
                     float scaleY = maxSize / ((float) bitmap.getHeight());
@@ -1359,7 +1358,7 @@ public class PhotoFilterView extends FrameLayout {
         imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.edit_doneblue);
         imageView.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false));
-        imageView.setPadding(AndroidUtilities.dp(22.0f), AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), AndroidUtilities.dp(22.0f), 0);
+        imageView.setPadding(AndroidUtilities.dp(22.0f), AndroidUtilities.dp(1.0f), AndroidUtilities.dp(22.0f), 0);
         frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -1, 53));
         imageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -1494,7 +1493,7 @@ public class PhotoFilterView extends FrameLayout {
             RadioButton radioButton = new RadioButton(context);
             radioButton.setSize(AndroidUtilities.dp(20.0f));
             radioButton.setTag(Integer.valueOf(a));
-            this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) this.tintShadowColors.length)));
+            this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
             radioButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     RadioButton radioButton = (RadioButton) v;
@@ -1883,7 +1882,7 @@ public class PhotoFilterView extends FrameLayout {
     }
 
     private float getContrastValue() {
-        return ((this.contrastValue / 100.0f) * 0.3f) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        return ((this.contrastValue / 100.0f) * 0.3f) + 1.0f;
     }
 
     private float getWarmthValue() {
@@ -1919,7 +1918,7 @@ public class PhotoFilterView extends FrameLayout {
         if (parameterValue > 0.0f) {
             parameterValue *= 1.05f;
         }
-        return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + parameterValue;
+        return 1.0f + parameterValue;
     }
 
     public FrameLayout getToolsView() {

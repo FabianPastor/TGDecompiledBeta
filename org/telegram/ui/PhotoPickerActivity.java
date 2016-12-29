@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,13 +27,19 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.google.firebase.analytics.FirebaseAnalytics.Event;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import net.hockeyapp.android.UpdateActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -53,13 +59,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.AuthFailureError;
-import org.telegram.messenger.volley.RequestQueue;
-import org.telegram.messenger.volley.Response.ErrorListener;
-import org.telegram.messenger.volley.Response.Listener;
-import org.telegram.messenger.volley.VolleyError;
-import org.telegram.messenger.volley.toolbox.JsonObjectRequest;
-import org.telegram.messenger.volley.toolbox.Volley;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -89,7 +89,9 @@ import org.telegram.ui.VideoEditorActivity.VideoEditorActivityDelegate;
 
 public class PhotoPickerActivity extends BaseFragment implements NotificationCenterDelegate, PhotoViewerProvider {
     private boolean allowCaption = true;
+    private boolean bingSearchEndReached = true;
     private ChatActivity chatActivity;
+    private AsyncTask<Void, Void, JSONObject> currentBingTask;
     private PhotoPickerActivityDelegate delegate;
     private TextView emptyView;
     private int giphyReqId;
@@ -101,11 +103,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private GridView listView;
     private boolean loadingRecent;
     private int nextGiphySearchOffset;
-    private String nextSearchBingString;
     private PickerBottomLayout pickerBottomLayout;
     private FrameLayout progressView;
     private ArrayList<SearchImage> recentImages;
-    private RequestQueue requestQueue;
     private ActionBarMenuItem searchItem;
     private ArrayList<SearchImage> searchResult = new ArrayList();
     private HashMap<String, SearchImage> searchResultKeys = new HashMap();
@@ -162,7 +162,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 int size;
                 if (PhotoPickerActivity.this.type == 0) {
                     size = PhotoPickerActivity.this.searchResult.size();
-                    if (PhotoPickerActivity.this.nextSearchBingString != null) {
+                    if (!PhotoPickerActivity.this.bingSearchEndReached) {
                         i = 1;
                     }
                     return i + size;
@@ -340,12 +340,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public boolean onFragmentCreate() {
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.recentImagesDidLoaded);
-        if (this.selectedAlbum == null) {
-            this.requestQueue = Volley.newRequestQueue(ApplicationLoader.applicationContext);
-            if (this.recentImages.isEmpty()) {
-                MessagesStorage.getInstance().loadWebRecent(this.type);
-                this.loadingRecent = true;
-            }
+        if (this.selectedAlbum == null && this.recentImages.isEmpty()) {
+            MessagesStorage.getInstance().loadWebRecent(this.type);
+            this.loadingRecent = true;
         }
         return super.onFragmentCreate();
     }
@@ -353,9 +350,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public void onFragmentDestroy() {
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recentImagesDidLoaded);
-        if (this.requestQueue != null) {
-            this.requestQueue.cancelAll(Event.SEARCH);
-            this.requestQueue.stop();
+        if (this.currentBingTask != null) {
+            this.currentBingTask.cancel(true);
+            this.currentBingTask = null;
+        }
+        if (this.giphyReqId != 0) {
+            ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
+            this.giphyReqId = 0;
         }
         super.onFragmentDestroy();
     }
@@ -394,10 +395,17 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         PhotoPickerActivity.this.searchResult.clear();
                         PhotoPickerActivity.this.searchResultKeys.clear();
                         PhotoPickerActivity.this.lastSearchString = null;
-                        PhotoPickerActivity.this.nextSearchBingString = null;
+                        PhotoPickerActivity.this.bingSearchEndReached = true;
                         PhotoPickerActivity.this.giphySearchEndReached = true;
                         PhotoPickerActivity.this.searching = false;
-                        PhotoPickerActivity.this.requestQueue.cancelAll(Event.SEARCH);
+                        if (PhotoPickerActivity.this.currentBingTask != null) {
+                            PhotoPickerActivity.this.currentBingTask.cancel(true);
+                            PhotoPickerActivity.this.currentBingTask = null;
+                        }
+                        if (PhotoPickerActivity.this.giphyReqId != 0) {
+                            ConnectionsManager.getInstance().cancelRequest(PhotoPickerActivity.this.giphyReqId, true);
+                            PhotoPickerActivity.this.giphyReqId = 0;
+                        }
                         if (PhotoPickerActivity.this.type == 0) {
                             PhotoPickerActivity.this.emptyView.setText(LocaleController.getString("NoRecentPhotos", R.string.NoRecentPhotos));
                         } else if (PhotoPickerActivity.this.type == 1) {
@@ -411,7 +419,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     if (editText.getText().toString().length() != 0) {
                         PhotoPickerActivity.this.searchResult.clear();
                         PhotoPickerActivity.this.searchResultKeys.clear();
-                        PhotoPickerActivity.this.nextSearchBingString = null;
+                        PhotoPickerActivity.this.bingSearchEndReached = true;
                         PhotoPickerActivity.this.giphySearchEndReached = true;
                         if (PhotoPickerActivity.this.type == 0) {
                             PhotoPickerActivity.this.searchBingImages(editText.getText().toString(), 0, 53);
@@ -585,7 +593,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
                 public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                     if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount > totalItemCount - 2 && !PhotoPickerActivity.this.searching) {
-                        if (PhotoPickerActivity.this.type == 0 && PhotoPickerActivity.this.nextSearchBingString != null) {
+                        if (PhotoPickerActivity.this.type == 0 && !PhotoPickerActivity.this.bingSearchEndReached) {
                             PhotoPickerActivity.this.searchBingImages(PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.searchResult.size(), 54);
                         } else if (PhotoPickerActivity.this.type == 1 && !PhotoPickerActivity.this.giphySearchEndReached) {
                             PhotoPickerActivity.this.searchGiphyImages(PhotoPickerActivity.this.searchItem.getSearchField().getText().toString(), PhotoPickerActivity.this.nextGiphySearchOffset);
@@ -943,7 +951,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
                 this.giphyReqId = 0;
             }
-            this.requestQueue.cancelAll(Event.SEARCH);
+            if (this.currentBingTask != null) {
+                this.currentBingTask.cancel(true);
+                this.currentBingTask = null;
+            }
         }
         this.searching = true;
         TL_messages_searchGifs req = new TL_messages_searchGifs();
@@ -1013,96 +1024,233 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     private void searchBingImages(String query, int offset, int count) {
-        boolean adult = true;
         if (this.searching) {
             this.searching = false;
             if (this.giphyReqId != 0) {
                 ConnectionsManager.getInstance().cancelRequest(this.giphyReqId, true);
                 this.giphyReqId = 0;
             }
-            this.requestQueue.cancelAll(Event.SEARCH);
+            if (this.currentBingTask != null) {
+                this.currentBingTask.cancel(true);
+                this.currentBingTask = null;
+            }
         }
         try {
-            String url;
+            boolean adult;
             this.searching = true;
-            if (this.nextSearchBingString != null) {
-                url = this.nextSearchBingString;
+            String phone = UserConfig.getCurrentUser().phone;
+            if (phone.startsWith("44") || phone.startsWith("49") || phone.startsWith("43") || phone.startsWith("31") || phone.startsWith("1")) {
+                adult = true;
             } else {
-                String phone = UserConfig.getCurrentUser().phone;
-                if (!(phone.startsWith("44") || phone.startsWith("49") || phone.startsWith("43") || phone.startsWith("31") || phone.startsWith("1"))) {
-                    adult = false;
-                }
-                Locale locale = Locale.US;
-                String str = "https://api.datamarket.azure.com/Bing/Search/v1/Image?Query='%s'&$skip=%d&$top=%d&$format=json%s";
-                Object[] objArr = new Object[4];
-                objArr[0] = URLEncoder.encode(query, "UTF-8");
-                objArr[1] = Integer.valueOf(offset);
-                objArr[2] = Integer.valueOf(count);
-                objArr[3] = adult ? "" : "&Adult='Off'";
-                url = String.format(locale, str, objArr);
+                adult = false;
             }
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(0, url, null, new Listener<JSONObject>() {
-                public void onResponse(JSONObject response) {
-                    PhotoPickerActivity.this.nextSearchBingString = null;
-                    JSONObject d = response.getJSONObject("d");
-                    JSONArray result = d.getJSONArray("results");
+            Locale locale = Locale.US;
+            String str = "https://api.cognitive.microsoft.com/bing/v5.0/images/search?q='%s'&offset=%d&count=%d&$format=json&safeSearch=%s";
+            Object[] objArr = new Object[4];
+            objArr[0] = URLEncoder.encode(query, "UTF-8");
+            objArr[1] = Integer.valueOf(offset);
+            objArr[2] = Integer.valueOf(count);
+            objArr[3] = adult ? "Strict" : "Off";
+            final String url = String.format(locale, str, objArr);
+            this.currentBingTask = new AsyncTask<Void, Void, JSONObject>() {
+                private boolean canRetry = true;
+
+                /* JADX WARNING: inconsistent code. */
+                /* Code decompiled incorrectly, please refer to instructions dump. */
+                private String downloadUrlContent(String url) {
+                    Throwable e;
+                    boolean canRetry = true;
+                    InputStream httpConnectionStream = null;
+                    boolean done = false;
+                    StringBuilder result = null;
+                    URLConnection httpConnection = null;
                     try {
-                        PhotoPickerActivity.this.nextSearchBingString = d.getString("__next");
-                    } catch (Throwable e) {
-                        PhotoPickerActivity.this.nextSearchBingString = null;
-                        FileLog.e("tmessages", e);
-                    }
-                    int a = 0;
-                    while (a < result.length()) {
-                        try {
-                            try {
-                                JSONObject object = result.getJSONObject(a);
-                                String id = Utilities.MD5(object.getString("MediaUrl"));
-                                if (!PhotoPickerActivity.this.searchResultKeys.containsKey(id)) {
-                                    SearchImage bingImage = new SearchImage();
-                                    bingImage.id = id;
-                                    bingImage.width = object.getInt("Width");
-                                    bingImage.height = object.getInt("Height");
-                                    bingImage.size = object.getInt("FileSize");
-                                    bingImage.imageUrl = object.getString("MediaUrl");
-                                    bingImage.thumbUrl = object.getJSONObject("Thumbnail").getString("MediaUrl");
-                                    PhotoPickerActivity.this.searchResult.add(bingImage);
-                                    PhotoPickerActivity.this.searchResultKeys.put(id, bingImage);
-                                }
-                            } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                        httpConnection = new URL(url).openConnection();
+                        httpConnection.addRequestProperty("Ocp-Apim-Subscription-Key", BuildVars.BING_SEARCH_KEY);
+                        httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+                        httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+                        httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                        httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+                        httpConnection.setConnectTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                        httpConnection.setReadTimeout(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+                        if (httpConnection instanceof HttpURLConnection) {
+                            HttpURLConnection httpURLConnection = (HttpURLConnection) httpConnection;
+                            httpURLConnection.setInstanceFollowRedirects(true);
+                            int status = httpURLConnection.getResponseCode();
+                            if (status == 302 || status == 301 || status == 303) {
+                                String newUrl = httpURLConnection.getHeaderField("Location");
+                                String cookies = httpURLConnection.getHeaderField("Set-Cookie");
+                                httpConnection = new URL(newUrl).openConnection();
+                                httpConnection.setRequestProperty("Cookie", cookies);
+                                httpConnection.addRequestProperty("Ocp-Apim-Subscription-Key", BuildVars.BING_SEARCH_KEY);
+                                httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)");
+                                httpConnection.addRequestProperty("Accept-Language", "en-us,en;q=0.5");
+                                httpConnection.addRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                                httpConnection.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
                             }
-                            a++;
-                        } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
+                        }
+                        httpConnection.connect();
+                        httpConnectionStream = httpConnection.getInputStream();
+                    } catch (Throwable e2) {
+                        if (e2 instanceof SocketTimeoutException) {
+                            if (ConnectionsManager.isNetworkOnline()) {
+                                canRetry = false;
+                            }
+                        } else if (e2 instanceof UnknownHostException) {
+                            canRetry = false;
+                        } else if (e2 instanceof SocketException) {
+                            if (e2.getMessage() != null && e2.getMessage().contains("ECONNRESET")) {
+                                canRetry = false;
+                            }
+                        } else if (e2 instanceof FileNotFoundException) {
+                            canRetry = false;
+                        }
+                        FileLog.e("tmessages", e2);
+                    }
+                    if (canRetry) {
+                        if (httpConnection != null) {
+                            try {
+                                if (httpConnection instanceof HttpURLConnection) {
+                                    int code = ((HttpURLConnection) httpConnection).getResponseCode();
+                                    if (code != 200) {
+                                        if (code != 202) {
+                                        }
+                                    }
+                                }
+                            } catch (Throwable e22) {
+                                FileLog.e("tmessages", e22);
+                            }
+                        }
+                        if (httpConnectionStream != null) {
+                            try {
+                                byte[] data = new byte[32768];
+                                StringBuilder result2 = null;
+                                while (!isCancelled()) {
+                                    try {
+                                        try {
+                                            int read = httpConnectionStream.read(data);
+                                            if (read > 0) {
+                                                if (result2 == null) {
+                                                    result = new StringBuilder();
+                                                } else {
+                                                    result = result2;
+                                                }
+                                                try {
+                                                    result.append(new String(data, 0, read, "UTF-8"));
+                                                    result2 = result;
+                                                } catch (Exception e3) {
+                                                    e22 = e3;
+                                                }
+                                            } else if (read == -1) {
+                                                done = true;
+                                                result = result2;
+                                            } else {
+                                                result = result2;
+                                            }
+                                        } catch (Exception e4) {
+                                            e22 = e4;
+                                            result = result2;
+                                        }
+                                    } catch (Throwable th) {
+                                        e22 = th;
+                                        result = result2;
+                                    }
+                                }
+                                result = result2;
+                            } catch (Throwable th2) {
+                                e22 = th2;
+                                FileLog.e("tmessages", e22);
+                                if (httpConnectionStream != null) {
+                                    try {
+                                        httpConnectionStream.close();
+                                    } catch (Throwable e222) {
+                                        FileLog.e("tmessages", e222);
+                                    }
+                                }
+                                if (done) {
+                                    return null;
+                                }
+                                return result.toString();
+                            }
+                        }
+                        if (httpConnectionStream != null) {
+                            httpConnectionStream.close();
                         }
                     }
-                    PhotoPickerActivity.this.searching = false;
-                    if (!(PhotoPickerActivity.this.nextSearchBingString == null || PhotoPickerActivity.this.nextSearchBingString.contains(UpdateActivity.EXTRA_JSON))) {
-                        PhotoPickerActivity.this.nextSearchBingString = PhotoPickerActivity.this.nextSearchBingString + "&$format=json";
+                    if (done) {
+                        return result.toString();
                     }
-                    PhotoPickerActivity.this.updateSearchInterface();
+                    return null;
+                    FileLog.e("tmessages", e222);
+                    if (httpConnectionStream != null) {
+                        httpConnectionStream.close();
+                    }
+                    if (done) {
+                        return result.toString();
+                    }
+                    return null;
                 }
-            }, new ErrorListener() {
-                public void onErrorResponse(VolleyError error) {
-                    FileLog.e("tmessages", "Error: " + error.getMessage());
-                    PhotoPickerActivity.this.nextSearchBingString = null;
+
+                protected JSONObject doInBackground(Void... voids) {
+                    String code = downloadUrlContent(url);
+                    if (isCancelled()) {
+                        return null;
+                    }
+                    try {
+                        return new JSONObject(code);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                        return null;
+                    }
+                }
+
+                protected void onPostExecute(JSONObject response) {
+                    boolean z = true;
+                    if (response != null) {
+                        try {
+                            JSONArray result = response.getJSONArray(Param.VALUE);
+                            boolean added = false;
+                            for (int a = 0; a < result.length(); a++) {
+                                try {
+                                    JSONObject object = result.getJSONObject(a);
+                                    String id = Utilities.MD5(object.getString("contentUrl"));
+                                    if (!PhotoPickerActivity.this.searchResultKeys.containsKey(id)) {
+                                        SearchImage bingImage = new SearchImage();
+                                        bingImage.id = id;
+                                        bingImage.width = object.getInt("width");
+                                        bingImage.height = object.getInt("height");
+                                        bingImage.size = Utilities.parseInt(object.getString("contentSize")).intValue();
+                                        bingImage.imageUrl = object.getString("contentUrl");
+                                        bingImage.thumbUrl = object.getString("thumbnailUrl");
+                                        PhotoPickerActivity.this.searchResult.add(bingImage);
+                                        PhotoPickerActivity.this.searchResultKeys.put(id, bingImage);
+                                        added = true;
+                                    }
+                                } catch (Throwable e) {
+                                    FileLog.e("tmessages", e);
+                                }
+                            }
+                            PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
+                            if (added) {
+                                z = false;
+                            }
+                            photoPickerActivity.bingSearchEndReached = z;
+                        } catch (Throwable e2) {
+                            FileLog.e("tmessages", e2);
+                        }
+                        PhotoPickerActivity.this.searching = false;
+                        PhotoPickerActivity.this.updateSearchInterface();
+                        return;
+                    }
+                    PhotoPickerActivity.this.bingSearchEndReached = true;
                     PhotoPickerActivity.this.searching = false;
                     PhotoPickerActivity.this.updateSearchInterface();
-                }
-            }) {
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap();
-                    headers.put("Authorization", "Basic " + Base64.encodeToString((BuildVars.BING_SEARCH_KEY + ":" + BuildVars.BING_SEARCH_KEY).getBytes(), 2));
-                    return headers;
                 }
             };
-            jsonObjReq.setShouldCache(false);
-            jsonObjReq.setTag(Event.SEARCH);
-            this.requestQueue.add(jsonObjReq);
+            this.currentBingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
-            this.nextSearchBingString = null;
+            this.bingSearchEndReached = true;
             this.searching = false;
             updateSearchInterface();
         }

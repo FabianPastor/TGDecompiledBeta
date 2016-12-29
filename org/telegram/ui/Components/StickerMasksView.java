@@ -24,7 +24,6 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
@@ -248,10 +247,10 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         this.stickersGridView.setEmptyView(this.stickersEmptyView);
         this.scrollSlidingTabStrip = new ScrollSlidingTabStrip(context);
         this.scrollSlidingTabStrip.setBackgroundColor(-16777216);
-        this.scrollSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.scrollSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(1.0f));
         this.scrollSlidingTabStrip.setIndicatorColor(-10305560);
         this.scrollSlidingTabStrip.setUnderlineColor(-15066598);
-        this.scrollSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) + 1);
+        this.scrollSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(1.0f) + 1);
         addView(this.scrollSlidingTabStrip, LayoutHelper.createFrame(-1, 48, 51));
         updateStickerTabs();
         this.scrollSlidingTabStrip.setDelegate(new ScrollSlidingTabStripDelegate() {

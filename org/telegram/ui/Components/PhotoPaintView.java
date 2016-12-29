@@ -40,7 +40,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputDocument;
@@ -392,7 +391,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     }
 
     private void setMenuItemEnabled(boolean enabled) {
-        this.undoItem.setAlpha(enabled ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.3f);
+        this.undoItem.setAlpha(enabled ? 1.0f : 0.3f);
         this.undoItem.setEnabled(enabled);
     }
 
@@ -509,7 +508,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
 
     private void setColorPickerVisibilityFade(boolean visible) {
         if (visible) {
-            this.colorPickerAnimator = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{this.colorPicker.getAlpha(), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            this.colorPickerAnimator = ObjectAnimator.ofFloat(this.colorPicker, "alpha", new float[]{this.colorPicker.getAlpha(), 1.0f});
             this.colorPickerAnimator.setStartDelay(200);
             this.colorPickerAnimator.setDuration(200);
             this.colorPickerAnimator.addListener(new AnimatorListenerAdapter() {
@@ -533,9 +532,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         Animator animator;
         if (visible) {
             this.dimView.setVisibility(0);
-            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{0.0f, 1.0f});
         } else {
-            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+            animator = ObjectAnimator.ofFloat(this.dimView, "alpha", new float[]{1.0f, 0.0f});
         }
         animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
@@ -566,9 +565,9 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         view.setSelectionVisibility(z);
         if (visible) {
             this.textDimView.setVisibility(0);
-            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{0.0f, 1.0f});
         } else {
-            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+            animator = ObjectAnimator.ofFloat(this.textDimView, "alpha", new float[]{1.0f, 0.0f});
         }
         animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
@@ -802,7 +801,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 addView(this.stickersView, LayoutHelper.createFrame(-1, -1, 51));
             }
             this.stickersView.setVisibility(0);
-            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{0.0f, 1.0f});
             a.setDuration(200);
             a.start();
             this.undoItem.setVisibility(8);
@@ -828,7 +827,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
     private void closeStickersView() {
         if (this.stickersView != null && this.stickersView.getVisibility() == 0) {
             this.pickingSticker = false;
-            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+            Animator a = ObjectAnimator.ofFloat(this.stickersView, "alpha", new float[]{1.0f, 0.0f});
             a.setDuration(200);
             a.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -875,7 +874,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
 
     private void createText() {
         Swatch currentSwatch = this.colorPicker.getSwatch();
-        Swatch whiteSwatch = new Swatch(-1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, currentSwatch.brushWeight);
+        Swatch whiteSwatch = new Swatch(-1, 1.0f, currentSwatch.brushWeight);
         Swatch blackSwatch = new Swatch(-16777216, 0.85f, currentSwatch.brushWeight);
         if (!this.selectedStroke) {
             blackSwatch = whiteSwatch;
@@ -901,7 +900,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             this.editedTextScale = textPaintView.getScale();
             textPaintView.setPosition(centerPositionForEntity());
             textPaintView.setRotation(0.0f);
-            textPaintView.setScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            textPaintView.setScale(1.0f);
             this.undoItem.setVisibility(8);
             this.doneItem.setVisibility(0);
             this.actionBar.setTitle(LocaleController.getString("PaintText", R.string.PaintText));
@@ -959,7 +958,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
             if (stroke && currentSwatch.color == -1) {
                 setCurrentSwatch(new Swatch(-16777216, 0.85f, currentSwatch.brushWeight), true);
             } else if (!stroke && currentSwatch.color == -16777216) {
-                setCurrentSwatch(new Swatch(-1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, currentSwatch.brushWeight), true);
+                setCurrentSwatch(new Swatch(-1, 1.0f, currentSwatch.brushWeight), true);
             }
             ((TextPaintView) this.currentEntityView).setStroke(stroke);
         }

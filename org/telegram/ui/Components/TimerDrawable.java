@@ -10,7 +10,6 @@ import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class TimerDrawable extends Drawable {
     private static Drawable emptyTimerDrawable;
@@ -65,7 +64,7 @@ public class TimerDrawable extends Drawable {
         }
         this.timeWidth = timePaint.measureText(timeString);
         try {
-            this.timeLayout = new StaticLayout(timeString, timePaint, (int) Math.ceil((double) this.timeWidth), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.timeLayout = new StaticLayout(timeString, timePaint, (int) Math.ceil((double) this.timeWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.timeHeight = this.timeLayout.getHeight();
         } catch (Throwable e) {
             this.timeLayout = null;

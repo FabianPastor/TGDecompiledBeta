@@ -5,7 +5,6 @@ import android.support.annotation.RequiresApi;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(9)
 @RequiresApi(9)
@@ -18,13 +17,13 @@ class GingerbreadAnimatorCompatProvider implements AnimatorProvider {
         List<AnimatorListenerCompat> mListeners = new ArrayList();
         private Runnable mLoopRunnable = new Runnable() {
             public void run() {
-                float fraction = (((float) (GingerbreadFloatValueAnimator.this.getTime() - GingerbreadFloatValueAnimator.this.mStartTime)) * DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) / ((float) GingerbreadFloatValueAnimator.this.mDuration);
-                if (fraction > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || GingerbreadFloatValueAnimator.this.mTarget.getParent() == null) {
-                    fraction = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                float fraction = (((float) (GingerbreadFloatValueAnimator.this.getTime() - GingerbreadFloatValueAnimator.this.mStartTime)) * 1.0f) / ((float) GingerbreadFloatValueAnimator.this.mDuration);
+                if (fraction > 1.0f || GingerbreadFloatValueAnimator.this.mTarget.getParent() == null) {
+                    fraction = 1.0f;
                 }
                 GingerbreadFloatValueAnimator.this.mFraction = fraction;
                 GingerbreadFloatValueAnimator.this.notifyUpdateListeners();
-                if (GingerbreadFloatValueAnimator.this.mFraction >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (GingerbreadFloatValueAnimator.this.mFraction >= 1.0f) {
                     GingerbreadFloatValueAnimator.this.dispatchEnd();
                 } else {
                     GingerbreadFloatValueAnimator.this.mTarget.postDelayed(GingerbreadFloatValueAnimator.this.mLoopRunnable, 16);

@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -24,7 +23,7 @@ public class ChatUnreadCell extends FrameLayout {
         imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 10.0f, 0.0f));
         this.textView = new TextView(context);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTextColor(Theme.CHAT_UNREAD_TEXT_COLOR);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

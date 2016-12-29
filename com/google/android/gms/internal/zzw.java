@@ -18,7 +18,6 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.volley.toolbox.HttpClientStack.HttpPatch;
 
 public class zzw implements zzy {
     protected final HttpClient zzaC;
@@ -29,7 +28,7 @@ public class zzw implements zzy {
         }
 
         public String getMethod() {
-            return HttpPatch.METHOD_NAME;
+            return "PATCH";
         }
     }
 

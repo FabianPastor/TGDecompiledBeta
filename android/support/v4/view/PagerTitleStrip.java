@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
 import java.lang.ref.WeakReference;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @DecorView
 public class PagerTitleStrip extends ViewGroup {
@@ -319,8 +318,8 @@ public class PagerTitleStrip extends ViewGroup {
         int textPaddedRight = paddingRight + halfCurrWidth;
         int contentWidth = (stripWidth - (paddingLeft + halfCurrWidth)) - textPaddedRight;
         float currOffset = positionOffset + 0.5f;
-        if (currOffset > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            currOffset -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (currOffset > 1.0f) {
+            currOffset -= 1.0f;
         }
         int currLeft = ((stripWidth - textPaddedRight) - ((int) (((float) contentWidth) * currOffset))) - (currWidth / 2);
         int currRight = currLeft + currWidth;

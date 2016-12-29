@@ -4,12 +4,11 @@ import android.content.Context;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Scroller {
     private static float DECELERATION_RATE = ((float) (Math.log(0.75d) / Math.log(0.9d)));
     private static final int DEFAULT_DURATION = 250;
-    private static float END_TENSION = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - START_TENSION);
+    private static float END_TENSION = (1.0f - START_TENSION);
     private static final int FLING_MODE = 1;
     private static final int NB_SAMPLES = 100;
     private static final int SCROLL_MODE = 0;
@@ -46,11 +45,11 @@ public class Scroller {
             float x;
             float coef;
             float t = ((float) i) / 100.0f;
-            float x_max = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float x_max = 1.0f;
             while (true) {
                 x = x_min + ((x_max - x_min) / 2.0f);
-                coef = (3.0f * x) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - x);
-                float tx = ((((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - x) * START_TENSION) + (END_TENSION * x)) * coef) + ((x * x) * x);
+                coef = (3.0f * x) * (1.0f - x);
+                float tx = ((((1.0f - x) * START_TENSION) + (END_TENSION * x)) * coef) + ((x * x) * x);
                 if (((double) Math.abs(tx - t)) < 1.0E-5d) {
                     break;
                 } else if (tx > t) {
@@ -61,9 +60,9 @@ public class Scroller {
             }
             SPLINE[i] = coef + ((x * x) * x);
         }
-        SPLINE[NB_SAMPLES] = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        sViscousFluidNormalize = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        sViscousFluidNormalize = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / viscousFluid(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        SPLINE[NB_SAMPLES] = 1.0f;
+        sViscousFluidNormalize = 1.0f;
+        sViscousFluidNormalize = 1.0f / viscousFluid(1.0f);
     }
 
     public Scroller(Context context) {
@@ -190,7 +189,7 @@ public class Scroller {
         this.mFinalY = startY + dy;
         this.mDeltaX = (float) dx;
         this.mDeltaY = (float) dy;
-        this.mDurationReciprocal = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) this.mDuration);
+        this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
     }
 
     public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
@@ -215,8 +214,8 @@ public class Scroller {
         this.mStartTime = AnimationUtils.currentAnimationTimeMillis();
         this.mStartX = startX;
         this.mStartY = startY;
-        float coeffX = velocity == 0.0f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : ((float) velocityX) / velocity;
-        float coeffY = velocity == 0.0f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : ((float) velocityY) / velocity;
+        float coeffX = velocity == 0.0f ? 1.0f : ((float) velocityX) / velocity;
+        float coeffY = velocity == 0.0f ? 1.0f : ((float) velocityY) / velocity;
         int totalDistance = (int) (((double) NUM) * Math.exp((((double) DECELERATION_RATE) / (((double) DECELERATION_RATE) - 1.0d)) * l));
         this.mMinX = minX;
         this.mMaxX = maxX;
@@ -232,10 +231,10 @@ public class Scroller {
 
     static float viscousFluid(float x) {
         x *= sViscousFluidScale;
-        if (x < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            x -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((float) Math.exp((double) (-x)));
+        if (x < 1.0f) {
+            x -= 1.0f - ((float) Math.exp((double) (-x)));
         } else {
-            x = 0.36787945f + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - 0.36787945f) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((float) Math.exp((double) (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - x)))));
+            x = 0.36787945f + ((1.0f - 0.36787945f) * (1.0f - ((float) Math.exp((double) (1.0f - x)))));
         }
         return x * sViscousFluidNormalize;
     }
@@ -248,7 +247,7 @@ public class Scroller {
 
     public void extendDuration(int extend) {
         this.mDuration = timePassed() + extend;
-        this.mDurationReciprocal = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) this.mDuration);
+        this.mDurationReciprocal = 1.0f / ((float) this.mDuration);
         this.mFinished = false;
     }
 

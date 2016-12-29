@@ -21,7 +21,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
@@ -111,7 +110,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 String str2 = "scaleY";
                 float[] fArr2 = new float[1];
                 if (!checked) {
-                    f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    f = 1.0f;
                 }
                 fArr2[0] = f;
                 animatorArr[1] = ObjectAnimator.ofFloat(frameLayout2, str2, fArr2);
@@ -136,14 +135,21 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 this.animator.start();
                 return;
             }
+            float f2;
             if (!checked) {
                 i = 0;
             }
             setBackgroundColor(i);
-            this.container.setScaleX(checked ? 0.85f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            FrameLayout frameLayout3 = this.container;
+            if (checked) {
+                f2 = 0.85f;
+            } else {
+                f2 = 1.0f;
+            }
+            frameLayout3.setScaleX(f2);
             frameLayout2 = this.container;
             if (!checked) {
-                f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                f = 1.0f;
             }
             frameLayout2.setScaleY(f);
         }

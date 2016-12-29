@@ -52,7 +52,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -388,7 +387,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             }
                         } else if (VideoEditorActivity.this.captionEditText.isPopupView(child)) {
                             if (AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) {
-                                childTop = (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                childTop = (VideoEditorActivity.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(1.0f);
                             } else {
                                 childTop = VideoEditorActivity.this.captionEditText.getBottom();
                             }
@@ -769,14 +768,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         VideoEditorActivity.this.mentionListAnimation = null;
                     }
                     if (VideoEditorActivity.this.mentionListView.getVisibility() == 0) {
-                        VideoEditorActivity.this.mentionListView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        VideoEditorActivity.this.mentionListView.setAlpha(1.0f);
                         return;
                     }
                     VideoEditorActivity.this.mentionLayoutManager.scrollToPositionWithOffset(0, 10000);
                     if (VideoEditorActivity.this.allowMentions) {
                         VideoEditorActivity.this.mentionListView.setVisibility(0);
                         VideoEditorActivity.this.mentionListAnimation = new AnimatorSet();
-                        VideoEditorActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+                        VideoEditorActivity.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f, 1.0f})});
                         VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
@@ -788,7 +787,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         VideoEditorActivity.this.mentionListAnimation.start();
                         return;
                     }
-                    VideoEditorActivity.this.mentionListView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    VideoEditorActivity.this.mentionListView.setAlpha(1.0f);
                     VideoEditorActivity.this.mentionListView.setVisibility(4);
                     return;
                 }
@@ -918,7 +917,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
 
     public void updateMuteButton() {
         if (this.videoPlayer != null) {
-            float volume = this.muteVideo ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float volume = this.muteVideo ? 0.0f : 1.0f;
             if (this.videoPlayer != null) {
                 this.videoPlayer.setVolume(volume, volume);
             }
@@ -942,7 +941,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.muteItem.setImageResource(R.drawable.volume_on);
         if (this.captionItem.getVisibility() == 0) {
             this.compressItem.setClickable(true);
-            this.compressItem.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.compressItem.setAlpha(1.0f);
             this.compressItem.setEnabled(true);
         }
     }
@@ -984,7 +983,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             } else {
                 this.startTime = ((long) (this.videoTimelineView.getLeftProgress() * this.videoDuration)) * 1000;
             }
-            if (this.videoTimelineView.getRightProgress() == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (this.videoTimelineView.getRightProgress() == 1.0f) {
                 this.endTime = -1;
             } else {
                 this.endTime = ((long) (this.videoTimelineView.getRightProgress() * this.videoDuration)) * 1000;

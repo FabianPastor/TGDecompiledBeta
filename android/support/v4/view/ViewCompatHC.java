@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewParent;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(11)
 @RequiresApi(11)
@@ -183,7 +182,7 @@ class ViewCompatHC {
 
     private static void tickleInvalidationFlag(View view) {
         float y = view.getTranslationY();
-        view.setTranslationY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + y);
+        view.setTranslationY(1.0f + y);
         view.setTranslationY(y);
     }
 }

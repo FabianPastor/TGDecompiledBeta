@@ -7,7 +7,6 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Render {
     public static RectF RenderPath(Path path, RenderState state) {
@@ -44,11 +43,11 @@ public class Render {
             vectorAngle = (float) Math.atan2(vector.y, vector.x);
         }
         float brushWeight = state.baseWeight * state.scale;
-        double step = (double) Math.max(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, state.spacing * brushWeight);
+        double step = (double) Math.max(1.0f, state.spacing * brushWeight);
         if (distance > 0.0d) {
             unitVector = vector.multiplyByScalar(1.0d / distance);
         }
-        float boldenedAlpha = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, state.alpha * 1.15f);
+        float boldenedAlpha = Math.min(1.0f, state.alpha * 1.15f);
         boolean boldenHead = lastPoint.edge;
         boolean boldenTail = point.edge;
         int count = (int) Math.ceil((distance - state.remainder) / step);
@@ -129,27 +128,27 @@ public class Render {
                 n++;
                 vertexData.put(points[2]);
                 vertexData.put(points[3]);
-                vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                vertexData.put(1.0f);
                 vertexData.put(0.0f);
                 vertexData.put(alpha);
                 n++;
                 vertexData.put(points[4]);
                 vertexData.put(points[5]);
                 vertexData.put(0.0f);
-                vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                vertexData.put(1.0f);
                 vertexData.put(alpha);
                 n++;
                 vertexData.put(points[6]);
                 vertexData.put(points[7]);
-                vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                vertexData.put(1.0f);
+                vertexData.put(1.0f);
                 vertexData.put(alpha);
                 n++;
                 if (i != count - 1) {
                     vertexData.put(points[6]);
                     vertexData.put(points[7]);
-                    vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    vertexData.put(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    vertexData.put(1.0f);
+                    vertexData.put(1.0f);
                     vertexData.put(alpha);
                     n++;
                 }

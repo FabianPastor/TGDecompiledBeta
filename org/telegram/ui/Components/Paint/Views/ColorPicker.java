@@ -22,13 +22,12 @@ import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ui.SubtitleView;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
 public class ColorPicker extends FrameLayout {
     private static final int[] COLORS = new int[]{-1431751, -2409774, -13610525, -11942419, -8337308, -205211, -223667, -16777216, -1};
-    private static final float[] LOCATIONS = new float[]{0.0f, 0.14f, 0.24f, 0.39f, 0.49f, 0.62f, 0.73f, 0.85f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+    private static final float[] LOCATIONS = new float[]{0.0f, 0.14f, 0.24f, 0.39f, 0.49f, 0.62f, 0.73f, 0.85f, 1.0f};
     private Paint backgroundPaint = new Paint(1);
     private boolean changingWeight;
     private ColorPickerDelegate delegate;
@@ -37,7 +36,7 @@ public class ColorPicker extends FrameLayout {
     private Paint gradientPaint = new Paint(1);
     private boolean interacting;
     private OvershootInterpolator interpolator = new OvershootInterpolator(1.02f);
-    private float location = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float location = 1.0f;
     private RectF rectF = new RectF();
     private ImageView settingsButton;
     private Drawable shadowDrawable;
@@ -62,7 +61,7 @@ public class ColorPicker extends FrameLayout {
         this.shadowDrawable = getResources().getDrawable(R.drawable.knob_shadow);
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Style.STROKE);
-        this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.settingsButton = new ImageView(context);
         this.settingsButton.setScaleType(ScaleType.CENTER);
         this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
@@ -74,7 +73,7 @@ public class ColorPicker extends FrameLayout {
                 }
             }
         });
-        this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.location = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
         setLocation(this.location);
     }
 
@@ -103,7 +102,7 @@ public class ColorPicker extends FrameLayout {
         if (location <= 0.0f) {
             return COLORS[0];
         }
-        if (location >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (location >= 1.0f) {
             return COLORS[COLORS.length - 1];
         }
         int leftIndex = -1;
@@ -120,7 +119,7 @@ public class ColorPicker extends FrameLayout {
     }
 
     private int interpolateColors(int leftColor, int rightColor, float factor) {
-        factor = Math.min(Math.max(factor, 0.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        factor = Math.min(Math.max(factor, 0.0f), 1.0f);
         int r1 = Color.red(leftColor);
         int r2 = Color.red(rightColor);
         int g1 = Color.green(leftColor);
@@ -138,7 +137,7 @@ public class ColorPicker extends FrameLayout {
         if (((double) hsv[0]) >= 0.001d || ((double) hsv[1]) >= 0.001d || hsv[2] <= 0.92f) {
             this.swatchStrokePaint.setColor(color);
         } else {
-            int c = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (((hsv[2] - 0.92f) / SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION) * 0.22f)) * 255.0f);
+            int c = (int) ((1.0f - (((hsv[2] - 0.92f) / SubtitleView.DEFAULT_BOTTOM_PADDING_FRACTION) * 0.22f)) * 255.0f);
             this.swatchStrokePaint.setColor(Color.rgb(c, c, c));
         }
         invalidate();
@@ -178,11 +177,11 @@ public class ColorPicker extends FrameLayout {
                     this.delegate.onBeganColorPicking();
                 }
             }
-            setLocation(Math.max(0.0f, Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, y / this.rectF.height())));
+            setLocation(Math.max(0.0f, Math.min(1.0f, y / this.rectF.height())));
             setDragging(true, true);
             if (x < ((float) (-AndroidUtilities.dp(10.0f)))) {
                 this.changingWeight = true;
-                setWeight(Math.max(0.0f, Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, ((-x) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
+                setWeight(Math.max(0.0f, Math.min(1.0f, ((-x) - ((float) AndroidUtilities.dp(10.0f))) / ((float) AndroidUtilities.dp(190.0f)))));
             }
             if (this.delegate != null) {
                 this.delegate.onColorValueChanged();
@@ -207,11 +206,11 @@ public class ColorPicker extends FrameLayout {
         canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.gradientPaint);
         int cx = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f)))) + this.rectF.centerX()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));
         int cy = ((int) ((this.rectF.top - ((float) AndroidUtilities.dp(22.0f))) + (this.rectF.height() * this.location))) + AndroidUtilities.dp(22.0f);
-        int side = (int) (((float) AndroidUtilities.dp(24.0f)) * ((this.draggingFactor + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * 0.5f));
+        int side = (int) (((float) AndroidUtilities.dp(24.0f)) * ((this.draggingFactor + 1.0f) * 0.5f));
         this.shadowDrawable.setBounds(cx - side, cy - side, cx + side, cy + side);
         this.shadowDrawable.draw(canvas);
-        float swatchRadius = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.dp(4.0f)) + (((float) (AndroidUtilities.dp(19.0f) - AndroidUtilities.dp(4.0f))) * this.weight))))) * (this.draggingFactor + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) / 2.0f;
-        canvas.drawCircle((float) cx, (float) cy, ((float) (AndroidUtilities.dp(22.0f) / 2)) * (this.draggingFactor + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), this.backgroundPaint);
+        float swatchRadius = (((float) ((int) Math.floor((double) (((float) AndroidUtilities.dp(4.0f)) + (((float) (AndroidUtilities.dp(19.0f) - AndroidUtilities.dp(4.0f))) * this.weight))))) * (this.draggingFactor + 1.0f)) / 2.0f;
+        canvas.drawCircle((float) cx, (float) cy, ((float) (AndroidUtilities.dp(22.0f) / 2)) * (this.draggingFactor + 1.0f), this.backgroundPaint);
         canvas.drawCircle((float) cx, (float) cy, swatchRadius, this.swatchPaint);
         canvas.drawCircle((float) cx, (float) cy, swatchRadius - ((float) AndroidUtilities.dp(0.5f)), this.swatchStrokePaint);
     }
@@ -228,7 +227,7 @@ public class ColorPicker extends FrameLayout {
     private void setDragging(boolean value, boolean animated) {
         if (this.dragging != value) {
             this.dragging = value;
-            float target = this.dragging ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+            float target = this.dragging ? 1.0f : 0.0f;
             if (animated) {
                 Animator a = ObjectAnimator.ofFloat(this, "draggingFactor", new float[]{this.draggingFactor, target});
                 a.setInterpolator(this.interpolator);

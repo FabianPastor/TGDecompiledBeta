@@ -26,7 +26,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -82,7 +81,7 @@ public class SharedLinkCell extends FrameLayout {
             descriptionTextPaint = new TextPaint(1);
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
             urlPaint = new Paint();
             urlPaint.setColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
         }
@@ -195,7 +194,7 @@ public class SharedLinkCell extends FrameLayout {
         }
         if (title != null) {
             try {
-                this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), titleTextPaint, (float) Math.min((int) Math.ceil((double) titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), titleTextPaint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), titleTextPaint, (float) Math.min((int) Math.ceil((double) titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), titleTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             } catch (Throwable e2) {
                 FileLog.e("tmessages", e2);
             }
@@ -205,7 +204,7 @@ public class SharedLinkCell extends FrameLayout {
             try {
                 this.descriptionLayout = ChatMessageCell.generateStaticLayout(description, descriptionTextPaint, maxWidth, maxWidth, 0, 3);
                 if (this.descriptionLayout.getLineCount() > 0) {
-                    this.description2Y = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    this.description2Y = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                 }
             } catch (Throwable e22) {
                 FileLog.e("tmessages", e22);
@@ -226,10 +225,10 @@ public class SharedLinkCell extends FrameLayout {
             for (a = 0; a < this.links.size(); a++) {
                 try {
                     link = (String) this.links.get(a);
-                    StaticLayout layout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', ' '), descriptionTextPaint, (float) Math.min((int) Math.ceil((double) descriptionTextPaint.measureText(link)), maxWidth), TruncateAt.MIDDLE), descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    StaticLayout layout = new StaticLayout(TextUtils.ellipsize(link.replace('\n', ' '), descriptionTextPaint, (float) Math.min((int) Math.ceil((double) descriptionTextPaint.measureText(link)), maxWidth), TruncateAt.MIDDLE), descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.linkY = this.description2Y;
                     if (!(this.descriptionLayout2 == null || this.descriptionLayout2.getLineCount() == 0)) {
-                        this.linkY += this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        this.linkY += this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(1.0f);
                     }
                     this.linkLayout.add(layout);
                 } catch (Throwable e2222) {

@@ -12,7 +12,6 @@ import java.nio.FloatBuffer;
 import java.util.Map;
 import java.util.UUID;
 import org.telegram.messenger.DispatchQueue;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.Size;
 
 public class Painting {
@@ -61,7 +60,7 @@ public class Painting {
     public Painting(Size sz) {
         this.size = sz;
         this.dataBuffer = ByteBuffer.allocateDirect((((int) this.size.width) * ((int) this.size.height)) * 4);
-        this.projection = GLMatrix.LoadOrtho(0.0f, this.size.width, 0.0f, this.size.height, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.projection = GLMatrix.LoadOrtho(0.0f, this.size.width, 0.0f, this.size.height, -1.0f, 1.0f);
         if (this.vertexBuffer == null) {
             this.vertexBuffer = ByteBuffer.allocateDirect(32);
             this.vertexBuffer.order(ByteOrder.nativeOrder());
@@ -80,12 +79,12 @@ public class Painting {
             this.textureBuffer.order(ByteOrder.nativeOrder());
             this.textureBuffer.putFloat(0.0f);
             this.textureBuffer.putFloat(0.0f);
-            this.textureBuffer.putFloat(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.textureBuffer.putFloat(1.0f);
             this.textureBuffer.putFloat(0.0f);
             this.textureBuffer.putFloat(0.0f);
-            this.textureBuffer.putFloat(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.textureBuffer.putFloat(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.textureBuffer.putFloat(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.textureBuffer.putFloat(1.0f);
+            this.textureBuffer.putFloat(1.0f);
+            this.textureBuffer.putFloat(1.0f);
             this.textureBuffer.rewind();
         }
     }

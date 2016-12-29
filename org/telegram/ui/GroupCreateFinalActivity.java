@@ -37,7 +37,6 @@ import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFile;
@@ -453,9 +452,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.doneItem.getImageView().setVisibility(0);
@@ -465,9 +464,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             }
             this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {

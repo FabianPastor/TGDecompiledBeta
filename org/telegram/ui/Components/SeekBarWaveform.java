@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 
 public class SeekBarWaveform {
@@ -157,12 +156,12 @@ public class SeekBarWaveform {
                         for (int b = 0; b < drawBarCount; b++) {
                             int x = barNum * AndroidUtilities.dp(3.0f);
                             if (x >= this.thumbX || AndroidUtilities.dp(2.0f) + x >= this.thumbX) {
-                                canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.dp(2.0f) + x), (float) (AndroidUtilities.dp(14.0f) + y), paintInner);
+                                canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.dp(2.0f) + x), (float) (AndroidUtilities.dp(14.0f) + y), paintInner);
                                 if (x < this.thumbX) {
-                                    canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (14.0f * ((float) value)) / 31.0f)) + y), (float) this.thumbX, (float) (AndroidUtilities.dp(14.0f) + y), paintOuter);
+                                    canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) this.thumbX, (float) (AndroidUtilities.dp(14.0f) + y), paintOuter);
                                 }
                             } else {
-                                canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.dp(2.0f) + x), (float) (AndroidUtilities.dp(14.0f) + y), paintOuter);
+                                canvas.drawRect((float) x, (float) (AndroidUtilities.dp(14.0f - Math.max(1.0f, (14.0f * ((float) value)) / 31.0f)) + y), (float) (AndroidUtilities.dp(2.0f) + x), (float) (AndroidUtilities.dp(14.0f) + y), paintOuter);
                             }
                             barNum++;
                         }

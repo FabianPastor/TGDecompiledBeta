@@ -10,13 +10,12 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class RadialProgress {
     private static DecelerateInterpolator decelerateInterpolator;
     private static Paint progressPaint;
     private boolean alphaForPrevious = true;
-    private float animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float animatedAlphaValue = 1.0f;
     private float animatedProgressValue = 0.0f;
     private float animationProgressStart = 0.0f;
     private RectF cicleRect = new RectF();
@@ -57,7 +56,7 @@ public class RadialProgress {
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
         if (progress) {
-            if (this.animatedProgressValue != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (this.animatedProgressValue != 1.0f) {
                 this.radOffset += ((float) (360 * dt)) / 3000.0f;
                 float progressDiff = this.currentProgress - this.animationProgressStart;
                 if (progressDiff > 0.0f) {
@@ -72,7 +71,7 @@ public class RadialProgress {
                 }
                 invalidateParent();
             }
-            if (this.animatedProgressValue >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.previousDrawable != null) {
+            if (this.animatedProgressValue >= 1.0f && this.previousDrawable != null) {
                 this.animatedAlphaValue -= ((float) dt) / 200.0f;
                 if (this.animatedAlphaValue <= 0.0f) {
                     this.animatedAlphaValue = 0.0f;
@@ -99,7 +98,7 @@ public class RadialProgress {
     }
 
     public void setProgress(float value, boolean animated) {
-        if (!(value == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || this.animatedAlphaValue == 0.0f || this.previousDrawable == null)) {
+        if (!(value == 1.0f || this.animatedAlphaValue == 0.0f || this.previousDrawable == null)) {
             this.animatedAlphaValue = 0.0f;
             this.previousDrawable = null;
         }
@@ -130,8 +129,8 @@ public class RadialProgress {
         } else {
             this.previousDrawable = this.currentDrawable;
             this.previousWithRound = this.currentWithRound;
-            this.animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-            setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, animated);
+            this.animatedAlphaValue = 1.0f;
+            setProgress(1.0f, animated);
         }
         this.currentWithRound = withRound;
         this.currentDrawable = drawable;
@@ -166,7 +165,7 @@ public class RadialProgress {
         }
         if (!(this.hideCurrentDrawable || this.currentDrawable == null)) {
             if (this.previousDrawable != null) {
-                this.currentDrawable.setAlpha((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.animatedAlphaValue) * 255.0f));
+                this.currentDrawable.setAlpha((int) ((1.0f - this.animatedAlphaValue) * 255.0f));
             } else {
                 this.currentDrawable.setAlpha(255);
             }

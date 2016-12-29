@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public abstract class SharedElementCallback {
     private static final String BUNDLE_SNAPSHOT_BITMAP = "sharedElement:snapshot:bitmap";
@@ -67,7 +66,7 @@ public abstract class SharedElementCallback {
         int bitmapHeight = Math.round(screenBounds.height());
         bitmap = null;
         if (bitmapWidth > 0 && bitmapHeight > 0) {
-            float scale = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, ((float) MAX_IMAGE_SIZE) / ((float) (bitmapWidth * bitmapHeight)));
+            float scale = Math.min(1.0f, ((float) MAX_IMAGE_SIZE) / ((float) (bitmapWidth * bitmapHeight)));
             bitmapWidth = (int) (((float) bitmapWidth) * scale);
             bitmapHeight = (int) (((float) bitmapHeight) * scale);
             if (this.mTempMatrix == null) {
@@ -90,8 +89,8 @@ public abstract class SharedElementCallback {
         if (width <= 0 || height <= 0) {
             return null;
         }
-        float scale = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, ((float) MAX_IMAGE_SIZE) / ((float) (width * height)));
-        if ((drawable instanceof BitmapDrawable) && scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        float scale = Math.min(1.0f, ((float) MAX_IMAGE_SIZE) / ((float) (width * height)));
+        if ((drawable instanceof BitmapDrawable) && scale == 1.0f) {
             return ((BitmapDrawable) drawable).getBitmap();
         }
         int bitmapWidth = (int) (((float) width) * scale);

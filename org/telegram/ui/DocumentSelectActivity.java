@@ -38,7 +38,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BackDrawable;
@@ -266,7 +265,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 return true;
             }
         });
-        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 65, 0, 0, 0));
+        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         this.actionModeViews.add(actionMode.addItem(3, R.drawable.ic_ab_done_gray, Theme.ACTION_BAR_MODE_SELECTOR_COLOR, null, AndroidUtilities.dp(54.0f)));
         this.fragmentView = getParentActivity().getLayoutInflater().inflate(R.layout.document_select_layout, null, false);
         this.listAdapter = new ListAdapter(context);
@@ -314,7 +313,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         for (int a = 0; a < DocumentSelectActivity.this.actionModeViews.size(); a++) {
                             View view2 = (View) DocumentSelectActivity.this.actionModeViews.get(a);
                             AndroidUtilities.clearDrawableAnimation(view2);
-                            animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                            animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
                         }
                         animatorSet.playTogether(animators);
                         animatorSet.setDuration(250);

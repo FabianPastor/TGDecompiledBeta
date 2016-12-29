@@ -79,7 +79,6 @@ import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -280,11 +279,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 sc = this.scale / 0.5f;
                 alpha = sc;
             } else if (this.scale <= AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) {
-                sc = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (((this.scale - 0.5f) / 0.25f) * 0.1f);
-                alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                sc = 1.0f - (((this.scale - 0.5f) / 0.25f) * 0.1f);
+                alpha = 1.0f;
             } else {
                 sc = 0.9f + (((this.scale - AdaptiveVideoTrackSelection.DEFAULT_BANDWIDTH_FRACTION) / 0.25f) * 0.1f);
-                alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                alpha = 1.0f;
             }
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
             if (this.animateToAmplitude != this.amplitude) {
@@ -320,7 +319,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         public void resetAlpha() {
-            this.alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            this.alpha = 1.0f;
             this.lastUpdateTime = System.currentTimeMillis();
             this.isIncr = false;
             invalidate();
@@ -332,8 +331,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
             if (this.isIncr) {
                 this.alpha += ((float) dt) / 400.0f;
-                if (this.alpha >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.alpha >= 1.0f) {
+                    this.alpha = 1.0f;
                     this.isIncr = false;
                 }
             } else {
@@ -450,7 +449,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         CharSequence captionFinal = TextUtils.ellipsize(this.caption, paint, (float) (width - size), TruncateAt.END);
                         this.xOffset = size;
                         try {
-                            this.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                            this.captionLayout = new StaticLayout(captionFinal, getPaint(), width - size, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             if (this.captionLayout.getLineCount() > 0) {
                                 this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
                             }
@@ -523,7 +522,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.textFieldContainer.setOrientation(0);
         addView(this.textFieldContainer, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 2.0f, 0.0f, 0.0f));
         FrameLayout frameLayout = new FrameLayout(context);
-        this.textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
         this.emojiButton = new ImageView(context) {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -536,7 +535,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         };
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
-        this.emojiButton.setPadding(0, AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), 0, 0);
+        this.emojiButton.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
         if (VERSION.SDK_INT >= 21) {
             this.emojiButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
         }
@@ -907,9 +906,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.recordCircle.setTranslationX(dist);
                         params.leftMargin = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE) + ((int) dist);
                         ChatActivityEnterView.this.slideText.setLayoutParams(params);
-                        float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (dist / ChatActivityEnterView.this.distCanMove);
-                        if (alpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                            alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                        float alpha = 1.0f + (dist / ChatActivityEnterView.this.distCanMove);
+                        if (alpha > 1.0f) {
+                            alpha = 1.0f;
                         } else if (alpha < 0.0f) {
                             alpha = 0.0f;
                         }
@@ -928,7 +927,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         params.leftMargin = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
                         ChatActivityEnterView.this.recordCircle.setTranslationX(0.0f);
                         ChatActivityEnterView.this.slideText.setLayoutParams(params);
-                        ChatActivityEnterView.this.slideText.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        ChatActivityEnterView.this.slideText.setAlpha(1.0f);
                         ChatActivityEnterView.this.startedDraggingX = -1.0f;
                     }
                 }
@@ -1154,9 +1153,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animatorArr[0] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.doneButtonImage, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonProgress, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonProgress, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.doneButtonImage.setVisibility(0);
@@ -1166,9 +1165,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animatorArr[0] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.doneButtonProgress, "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.doneButtonProgress, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonImage, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.doneButtonImage, "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.doneButtonImage, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             }
             this.doneButtonAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1194,9 +1193,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.doneButtonImage.setScaleX(0.1f);
             this.doneButtonImage.setScaleY(0.1f);
             this.doneButtonImage.setAlpha(0.0f);
-            this.doneButtonProgress.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.doneButtonProgress.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.doneButtonProgress.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonProgress.setScaleX(1.0f);
+            this.doneButtonProgress.setScaleY(1.0f);
+            this.doneButtonProgress.setAlpha(1.0f);
             this.doneButtonImage.setVisibility(4);
             this.doneButtonProgress.setVisibility(0);
             this.doneButtonContainer.setEnabled(false);
@@ -1204,9 +1203,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.doneButtonProgress.setScaleX(0.1f);
             this.doneButtonProgress.setScaleY(0.1f);
             this.doneButtonProgress.setAlpha(0.0f);
-            this.doneButtonImage.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.doneButtonImage.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.doneButtonImage.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.doneButtonImage.setScaleX(1.0f);
+            this.doneButtonImage.setScaleY(1.0f);
+            this.doneButtonImage.setAlpha(1.0f);
             this.doneButtonImage.setVisibility(0);
             this.doneButtonProgress.setVisibility(4);
             this.doneButtonContainer.setEnabled(true);
@@ -1545,18 +1544,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.sendButton.setScaleX(0.1f);
                         this.sendButton.setScaleY(0.1f);
                         this.sendButton.setAlpha(0.0f);
-                        this.cancelBotButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        this.cancelBotButton.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        this.cancelBotButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        this.cancelBotButton.setScaleX(1.0f);
+                        this.cancelBotButton.setScaleY(1.0f);
+                        this.cancelBotButton.setAlpha(1.0f);
                         this.cancelBotButton.setVisibility(0);
                         this.sendButton.setVisibility(8);
                     } else {
                         this.cancelBotButton.setScaleX(0.1f);
                         this.cancelBotButton.setScaleY(0.1f);
                         this.cancelBotButton.setAlpha(0.0f);
-                        this.sendButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        this.sendButton.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                        this.sendButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        this.sendButton.setScaleX(1.0f);
+                        this.sendButton.setScaleY(1.0f);
+                        this.sendButton.setAlpha(1.0f);
                         this.sendButton.setVisibility(0);
                         this.cancelBotButton.setVisibility(8);
                     }
@@ -1623,15 +1622,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         if (this.messageEditText.caption != null) {
                             this.runningAnimationType = 3;
-                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleX", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleY", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "alpha", new float[]{1.0f}));
                             this.cancelBotButton.setVisibility(0);
                         } else {
                             this.runningAnimationType = 1;
-                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "scaleX", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "scaleY", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(this.sendButton, "alpha", new float[]{1.0f}));
                             this.sendButton.setVisibility(0);
                         }
                         this.runningAnimation.playTogether(animators);
@@ -1670,9 +1669,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.cancelBotButton.setScaleX(0.1f);
                     this.cancelBotButton.setScaleY(0.1f);
                     this.cancelBotButton.setAlpha(0.0f);
-                    this.audioSendButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    this.audioSendButton.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    this.audioSendButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    this.audioSendButton.setScaleX(1.0f);
+                    this.audioSendButton.setScaleY(1.0f);
+                    this.audioSendButton.setAlpha(1.0f);
                     this.cancelBotButton.setVisibility(8);
                     this.sendButton.setVisibility(8);
                     this.audioSendButton.setVisibility(0);
@@ -1697,8 +1696,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.runningAnimation2 = new AnimatorSet();
                         animatorSet = this.runningAnimation2;
                         animatorArr = new Animator[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this.attachButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this.attachButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                        animatorArr[0] = ObjectAnimator.ofFloat(this.attachButton, "alpha", new float[]{1.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this.attachButton, "scaleX", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.runningAnimation2.setDuration(100);
                         this.runningAnimation2.start();
@@ -1711,9 +1710,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.runningAnimation = new AnimatorSet();
                     this.runningAnimationType = 2;
                     animators = new ArrayList();
-                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "scaleX", new float[]{1.0f}));
+                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "scaleY", new float[]{1.0f}));
+                    animators.add(ObjectAnimator.ofFloat(this.audioSendButton, "alpha", new float[]{1.0f}));
                     if (this.cancelBotButton.getVisibility() == 0) {
                         animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleX", new float[]{0.1f}));
                         animators.add(ObjectAnimator.ofFloat(this.cancelBotButton, "scaleY", new float[]{0.1f}));
@@ -1793,7 +1792,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animatorArr = new Animator[3];
                 animatorArr[0] = ObjectAnimator.ofFloat(this.recordPanel, "translationX", new float[]{(float) AndroidUtilities.displaySize.x});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.recordCircle, "scale", new float[]{0.0f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.audioSendButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.audioSendButton, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
                 this.runningAnimationAudio.setDuration(300);
                 this.runningAnimationAudio.addListener(new AnimatorListenerAdapter() {
@@ -1802,7 +1801,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             LayoutParams params = (LayoutParams) ChatActivityEnterView.this.slideText.getLayoutParams();
                             params.leftMargin = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
                             ChatActivityEnterView.this.slideText.setLayoutParams(params);
-                            ChatActivityEnterView.this.slideText.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            ChatActivityEnterView.this.slideText.setAlpha(1.0f);
                             ChatActivityEnterView.this.recordPanel.setVisibility(8);
                             ChatActivityEnterView.this.recordCircle.setVisibility(8);
                             ChatActivityEnterView.this.runningAnimationAudio = null;
@@ -1832,7 +1831,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             LayoutParams params = (LayoutParams) this.slideText.getLayoutParams();
             params.leftMargin = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
             this.slideText.setLayoutParams(params);
-            this.slideText.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.slideText.setAlpha(1.0f);
             this.recordPanel.setX((float) AndroidUtilities.displaySize.x);
             this.recordCircle.setTranslationX(0.0f);
             if (this.runningAnimationAudio != null) {
@@ -1842,7 +1841,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             animatorSet = this.runningAnimationAudio;
             animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.recordPanel, "translationX", new float[]{0.0f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.recordCircle, "scale", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.recordCircle, "scale", new float[]{1.0f});
             animatorArr[2] = ObjectAnimator.ofFloat(this.audioSendButton, "alpha", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.runningAnimationAudio.setDuration(300);
@@ -1975,17 +1974,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.audioSendButton.setVisibility(0);
                 this.attachButton.setVisibility(0);
                 this.sendButtonContainer.setVisibility(0);
-                this.attachButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                this.attachButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.attachButton.setScaleX(1.0f);
+                this.attachButton.setAlpha(1.0f);
                 this.sendButton.setScaleX(0.1f);
                 this.sendButton.setScaleY(0.1f);
                 this.sendButton.setAlpha(0.0f);
                 this.cancelBotButton.setScaleX(0.1f);
                 this.cancelBotButton.setScaleY(0.1f);
                 this.cancelBotButton.setAlpha(0.0f);
-                this.audioSendButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                this.audioSendButton.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                this.audioSendButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.audioSendButton.setScaleX(1.0f);
+                this.audioSendButton.setScaleY(1.0f);
+                this.audioSendButton.setAlpha(1.0f);
                 this.sendButton.setVisibility(8);
                 this.cancelBotButton.setVisibility(8);
                 this.messageEditText.setText("");
@@ -2708,7 +2707,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     message.media.document = this.audioToSend;
                     message.flags |= 768;
                     this.audioToSendMessageObject = new MessageObject(message, null, false);
-                    this.recordedAudioPanel.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    this.recordedAudioPanel.setAlpha(1.0f);
                     this.recordedAudioPanel.setVisibility(0);
                     int duration = 0;
                     for (a = 0; a < this.audioToSend.attributes.size(); a++) {

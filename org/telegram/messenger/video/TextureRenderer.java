@@ -8,7 +8,6 @@ import com.google.android.gms.gcm.Task;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(16)
 public class TextureRenderer {
@@ -18,7 +17,7 @@ public class TextureRenderer {
     private static final int TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 20;
     private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
-    private static final float[] mTriangleVerticesData = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, -1.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+    private static final float[] mTriangleVerticesData = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
     private float[] mMVPMatrix = new float[16];
     private int mProgram;
     private float[] mSTMatrix = new float[16];
@@ -46,7 +45,7 @@ public class TextureRenderer {
         st.getTransformMatrix(this.mSTMatrix);
         if (invert) {
             this.mSTMatrix[5] = -this.mSTMatrix[5];
-            this.mSTMatrix[13] = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mSTMatrix[13];
+            this.mSTMatrix[13] = 1.0f - this.mSTMatrix[13];
         }
         GLES20.glUseProgram(this.mProgram);
         checkGlError("glUseProgram");
@@ -106,7 +105,7 @@ public class TextureRenderer {
         checkGlError("glTexParameter");
         Matrix.setIdentityM(this.mMVPMatrix, 0);
         if (this.rotationAngle != 0) {
-            Matrix.rotateM(this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            Matrix.rotateM(this.mMVPMatrix, 0, (float) this.rotationAngle, 0.0f, 0.0f, 1.0f);
         }
     }
 

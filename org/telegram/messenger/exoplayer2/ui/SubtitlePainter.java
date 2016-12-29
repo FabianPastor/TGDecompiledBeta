@@ -16,7 +16,6 @@ import android.util.Log;
 import org.telegram.messenger.exoplayer2.text.CaptionStyleCompat;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.util.Util;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 final class SubtitlePainter {
     private static final float INNER_PADDING_RATIO = 0.125f;
@@ -58,7 +57,7 @@ final class SubtitlePainter {
     public SubtitlePainter(Context context) {
         TypedArray styledAttributes = context.obtainStyledAttributes(null, new int[]{16843287, 16843288}, 0, 0);
         this.spacingAdd = (float) styledAttributes.getDimensionPixelSize(0, 0);
-        this.spacingMult = styledAttributes.getFloat(1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.spacingMult = styledAttributes.getFloat(1, 1.0f);
         styledAttributes.recycle();
         int twoDpInPx = Math.round((2.0f * ((float) context.getResources().getDisplayMetrics().densityDpi)) / 160.0f);
         this.cornerRadius = (float) twoDpInPx;

@@ -14,7 +14,6 @@ import org.telegram.messenger.exoplayer2.text.CaptionStyleCompat;
 import org.telegram.messenger.exoplayer2.text.Cue;
 import org.telegram.messenger.exoplayer2.text.TextRenderer.Output;
 import org.telegram.messenger.exoplayer2.util.Util;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class SubtitleView extends View implements Output {
     private static final int ABSOLUTE = 2;
@@ -71,7 +70,7 @@ public final class SubtitleView extends View implements Output {
     }
 
     public void setUserDefaultTextSize() {
-        float fontScale = (Util.SDK_INT < 19 || isInEditMode()) ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : getUserCaptionFontScaleV19();
+        float fontScale = (Util.SDK_INT < 19 || isInEditMode()) ? 1.0f : getUserCaptionFontScaleV19();
         setFractionalTextSize(DEFAULT_TEXT_SIZE_FRACTION * fontScale);
     }
 

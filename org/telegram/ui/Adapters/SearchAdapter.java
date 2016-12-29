@@ -15,7 +15,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_contact;
@@ -281,7 +280,7 @@ public class SearchAdapter extends BaseFragmentAdapter {
                 ((ProfileSearchCell) view).drawAlpha = 0.5f;
                 return view;
             }
-            ((ProfileSearchCell) view).drawAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            ((ProfileSearchCell) view).drawAlpha = 1.0f;
             return view;
         } else if (view != null) {
             return view;

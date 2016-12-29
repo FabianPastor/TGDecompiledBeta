@@ -75,7 +75,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -1705,9 +1704,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             this.writeButtonAnimation.setInterpolator(new DecelerateInterpolator());
                             animatorSet = this.writeButtonAnimation;
                             animatorArr = new Animator[3];
-                            animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                            animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                            animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                            animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{1.0f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{1.0f});
+                            animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{1.0f});
                             animatorSet.playTogether(animatorArr);
                         } else {
                             this.writeButtonAnimation.setInterpolator(new AccelerateInterpolator());
@@ -1730,7 +1729,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
             }
-            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) ActionBar.getCurrentActionBarHeight()) / 2.0f) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.dp(47.0f))) * diff);
@@ -1741,8 +1740,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     this.nameTextView[a].setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.dp(1.3f))) + (((float) AndroidUtilities.dp(7.0f)) * diff));
                     this.onlineTextView[a].setTranslationX((-21.0f * AndroidUtilities.density) * diff);
                     this.onlineTextView[a].setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.dp(24.0f))) + (((float) Math.floor((double) (11.0f * AndroidUtilities.density))) * diff));
-                    this.nameTextView[a].setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (0.12f * diff));
-                    this.nameTextView[a].setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (0.12f * diff));
+                    this.nameTextView[a].setScaleX(1.0f + (0.12f * diff));
+                    this.nameTextView[a].setScaleY(1.0f + (0.12f * diff));
                     if (a == 1 && !this.openAnimationInProgress) {
                         int width;
                         if (AndroidUtilities.isTablet()) {
@@ -1750,7 +1749,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             width = AndroidUtilities.displaySize.x;
                         }
-                        width = (int) (((float) (width - AndroidUtilities.dp(126.0f + (40.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - diff))))) - this.nameTextView[a].getTranslationX());
+                        width = (int) (((float) (width - AndroidUtilities.dp(126.0f + (40.0f * (1.0f - diff))))) - this.nameTextView[a].getTranslationX());
                         layoutParams = (FrameLayout.LayoutParams) this.nameTextView[a].getLayoutParams();
                         if (((float) width) < (this.nameTextView[a].getPaint().measureText(this.nameTextView[a].getText().toString()) * this.nameTextView[a].getScaleX()) + ((float) this.nameTextView[a].getSideDrawablesSize())) {
                             layoutParams.width = (int) Math.ceil((double) (((float) width) / this.nameTextView[a].getScaleX()));
@@ -1759,7 +1758,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         this.nameTextView[a].setLayoutParams(layoutParams);
                         layoutParams = (FrameLayout.LayoutParams) this.onlineTextView[a].getLayoutParams();
-                        layoutParams.rightMargin = (int) Math.ceil((double) ((this.onlineTextView[a].getTranslationX() + ((float) AndroidUtilities.dp(8.0f))) + (((float) AndroidUtilities.dp(40.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - diff))));
+                        layoutParams.rightMargin = (int) Math.ceil((double) ((this.onlineTextView[a].getTranslationX() + ((float) AndroidUtilities.dp(8.0f))) + (((float) AndroidUtilities.dp(40.0f)) * (1.0f - diff))));
                         this.onlineTextView[a].setLayoutParams(layoutParams);
                     }
                 }
@@ -2059,40 +2058,40 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             this.fragmentView.setBackgroundColor(0);
             setAnimationProgress(0.0f);
             animators = new ArrayList();
-            animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{0.0f, 1.0f}));
             if (this.writeButton != null) {
                 this.writeButton.setScaleX(0.2f);
                 this.writeButton.setScaleY(0.2f);
                 this.writeButton.setAlpha(0.0f);
-                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                animators.add(ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{1.0f}));
+                animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{1.0f}));
+                animators.add(ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{1.0f}));
             }
             a = 0;
             while (a < 2) {
-                this.onlineTextView[a].setAlpha(a == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
-                this.nameTextView[a].setAlpha(a == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+                this.onlineTextView[a].setAlpha(a == 0 ? 1.0f : 0.0f);
+                this.nameTextView[a].setAlpha(a == 0 ? 1.0f : 0.0f);
                 obj = this.onlineTextView[a];
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = a == 0 ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                fArr[0] = a == 0 ? 0.0f : 1.0f;
                 animators.add(ObjectAnimator.ofFloat(obj, str, fArr));
                 obj = this.nameTextView[a];
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = a == 0 ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                fArr[0] = a == 0 ? 0.0f : 1.0f;
                 animators.add(ObjectAnimator.ofFloat(obj, str, fArr));
                 a++;
             }
             if (this.animatingItem != null) {
-                this.animatingItem.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.animatingItem.setAlpha(1.0f);
                 animators.add(ObjectAnimator.ofFloat(this.animatingItem, "alpha", new float[]{0.0f}));
             }
             animatorSet.playTogether(animators);
         } else {
             this.initialAnimationExtraHeight = this.extraHeight;
             animators = new ArrayList();
-            animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}));
+            animators.add(ObjectAnimator.ofFloat(this, "animationProgress", new float[]{1.0f, 0.0f}));
             if (this.writeButton != null) {
                 animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{0.2f}));
                 animators.add(ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{0.2f}));
@@ -2103,18 +2102,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 obj = this.onlineTextView[a];
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = a == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+                fArr[0] = a == 0 ? 1.0f : 0.0f;
                 animators.add(ObjectAnimator.ofFloat(obj, str, fArr));
                 obj = this.nameTextView[a];
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = a == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+                fArr[0] = a == 0 ? 1.0f : 0.0f;
                 animators.add(ObjectAnimator.ofFloat(obj, str, fArr));
                 a++;
             }
             if (this.animatingItem != null) {
                 this.animatingItem.setAlpha(0.0f);
-                animators.add(ObjectAnimator.ofFloat(this.animatingItem, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(this.animatingItem, "alpha", new float[]{1.0f}));
             }
             animatorSet.playTogether(animators);
         }

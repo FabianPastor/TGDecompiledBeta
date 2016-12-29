@@ -24,7 +24,6 @@ import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.video.AvcConfig;
 import org.telegram.messenger.exoplayer2.video.HevcConfig;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 final class AtomParsers {
     private static final String TAG = "AtomParsers";
@@ -603,7 +602,7 @@ final class AtomParsers {
         int width = parent.readUnsignedShort();
         int height = parent.readUnsignedShort();
         boolean pixelWidthHeightRatioFromPasp = false;
-        float pixelWidthHeightRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float pixelWidthHeightRatio = 1.0f;
         parent.skipBytes(50);
         int childPosition = parent.getPosition();
         if (atomType == Atom.TYPE_encv) {

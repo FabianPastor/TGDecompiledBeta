@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class VideoSeekBarView extends View {
     private SeekBarDelegate delegate;
@@ -77,8 +76,8 @@ public class VideoSeekBarView extends View {
     public void setProgress(float progress) {
         if (progress < 0.0f) {
             progress = 0.0f;
-        } else if (progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            progress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        } else if (progress > 1.0f) {
+            progress = 1.0f;
         }
         this.progress = progress;
         invalidate();
@@ -91,7 +90,7 @@ public class VideoSeekBarView extends View {
     protected void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress);
-        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)), this.paint);
+        canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.paint);
         canvas.drawCircle((float) ((this.thumbWidth / 2) + thumbX), (float) ((this.thumbHeight / 2) + y), (float) (this.thumbWidth / 2), this.paint2);
     }
 }

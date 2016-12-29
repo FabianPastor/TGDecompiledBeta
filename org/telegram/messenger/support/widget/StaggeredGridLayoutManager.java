@@ -29,7 +29,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.Properti
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class StaggeredGridLayoutManager extends LayoutManager implements ScrollVectorProvider {
@@ -1221,7 +1220,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 float size = (float) this.mSecondaryOrientation.getDecoratedMeasurement(child);
                 if (size >= maxSize) {
                     if (((LayoutParams) child.getLayoutParams()).isFullSpan()) {
-                        size = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * size) / ((float) this.mSpanCount);
+                        size = (1.0f * size) / ((float) this.mSpanCount);
                     }
                     maxSize = Math.max(maxSize, size);
                 }

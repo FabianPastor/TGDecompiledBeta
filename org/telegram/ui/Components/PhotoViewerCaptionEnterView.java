@@ -35,7 +35,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.StickerSet;
@@ -86,11 +85,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textFieldContainer.setOrientation(0);
         addView(textFieldContainer, LayoutHelper.createFrame(-1, -2.0f, 51, 2.0f, 0.0f, 0.0f, 0.0f));
         FrameLayout frameLayout = new FrameLayout(context);
-        textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        textFieldContainer.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
         this.emojiButton = new ImageView(context);
         this.emojiButton.setImageResource(R.drawable.ic_smile_w);
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
-        this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), 0, 0);
+        this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
         this.emojiButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {

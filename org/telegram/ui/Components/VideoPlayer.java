@@ -32,7 +32,6 @@ import org.telegram.messenger.exoplayer2.upstream.DataSource.Factory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultBandwidthMeter;
 import org.telegram.messenger.exoplayer2.upstream.DefaultDataSourceFactory;
 import org.telegram.messenger.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @SuppressLint({"NewApi"})
 public class VideoPlayer implements EventListener, VideoListener {
@@ -232,7 +231,7 @@ public class VideoPlayer implements EventListener, VideoListener {
             if (value) {
                 this.player.setVolume(0.0f);
             } else {
-                this.player.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.player.setVolume(1.0f);
             }
         }
     }

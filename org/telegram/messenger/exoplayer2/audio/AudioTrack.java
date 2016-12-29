@@ -13,7 +13,6 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.util.Assertions;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.Util;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class AudioTrack {
     private static final int BUFFER_MULTIPLICATION_FACTOR = 4;
@@ -165,7 +164,7 @@ public final class AudioTrack {
         }
 
         public float getPlaybackSpeed() {
-            return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            return 1.0f;
         }
     }
 
@@ -240,7 +239,7 @@ public final class AudioTrack {
     @TargetApi(23)
     private static class AudioTrackUtilV23 extends AudioTrackUtilV19 {
         private PlaybackParams playbackParams;
-        private float playbackSpeed = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        private float playbackSpeed = 1.0f;
 
         public void reconfigure(android.media.AudioTrack audioTrack, boolean needsPassthroughWorkaround) {
             super.reconfigure(audioTrack, needsPassthroughWorkaround);
@@ -285,7 +284,7 @@ public final class AudioTrack {
             this.audioTrackUtil = new AudioTrackUtil();
         }
         this.playheadOffsets = new long[10];
-        this.volume = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.volume = 1.0f;
         this.startMediaTimeState = 0;
         this.streamType = 3;
     }

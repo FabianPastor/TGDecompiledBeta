@@ -16,7 +16,6 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Adapters.BaseSectionsAdapter;
 
 public class LetterSectionsListView extends ListView implements OnScrollListener {
@@ -176,7 +175,7 @@ public class LetterSectionsListView extends ListView implements OnScrollListener
                 canvas.translate(LocaleController.isRTL ? (float) (getWidth() - header.getWidth()) : 0.0f, (float) top);
                 canvas.clipRect(0, 0, getWidth(), header.getMeasuredHeight());
                 if (top < 0) {
-                    canvas.saveLayerAlpha(0.0f, (float) top, (float) header.getWidth(), (float) (canvas.getHeight() + top), (int) (255.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (((float) top) / ((float) header.getMeasuredHeight())))), 4);
+                    canvas.saveLayerAlpha(0.0f, (float) top, (float) header.getWidth(), (float) (canvas.getHeight() + top), (int) (255.0f * (1.0f + (((float) top) / ((float) header.getMeasuredHeight())))), 4);
                 }
                 header.draw(canvas);
                 canvas.restoreToCount(saveCount);

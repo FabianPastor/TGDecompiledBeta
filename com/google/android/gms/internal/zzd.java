@@ -1,6 +1,6 @@
 package com.google.android.gms.internal;
 
-import org.telegram.messenger.volley.DefaultRetryPolicy;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 
 public class zzd implements zzo {
     private int zzn;
@@ -9,7 +9,7 @@ public class zzd implements zzo {
     private final float zzq;
 
     public zzd() {
-        this(2500, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS, 1, 1.0f);
     }
 
     public zzd(int i, int i2, float f) {

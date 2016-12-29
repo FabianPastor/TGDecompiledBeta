@@ -475,6 +475,20 @@ public class MessagesQuery {
         return false;
     }
 
+    private static boolean checkIntersection(int start, int end, ArrayList<MessageEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return false;
+        }
+        int count = entities.size();
+        for (int a = 0; a < count; a++) {
+            MessageEntity entity = (MessageEntity) entities.get(a);
+            if (entity.offset > start && entity.offset + entity.length <= end) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static ArrayList<MessageEntity> getEntities(CharSequence[] message) {
         if (message == null || message[0] == null) {
             return null;
@@ -555,10 +569,10 @@ public class MessagesQuery {
             entity2.length = 1;
             entities.add(entity2);
         }
-        lastIndex = 0;
-        start = -1;
         int c = 0;
         while (c < 2) {
+            lastIndex = 0;
+            start = -1;
             String checkString = c == 0 ? "*" : "_";
             char checkChar = c == 0 ? '*' : '_';
             while (true) {
@@ -580,7 +594,7 @@ public class MessagesQuery {
                         a++;
                     }
                     lastIndex = index + 1;
-                    if (checkInclusion(index, entities)) {
+                    if (checkInclusion(index, entities) || checkIntersection(start, index, entities)) {
                         start = -1;
                     } else {
                         if (start + 1 != index) {

@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class EditTextBoldCursor extends EditText {
@@ -32,7 +31,7 @@ public class EditTextBoldCursor extends EditText {
     private int cursorSize;
     private Object editor;
     private GradientDrawable gradientDrawable;
-    private float hintAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float hintAlpha = 1.0f;
     private int hintColor;
     private StaticLayout hintLayout;
     private boolean hintVisible = true;
@@ -100,7 +99,7 @@ public class EditTextBoldCursor extends EditText {
     }
 
     public void setHintText(String value) {
-        this.hintLayout = new StaticLayout(value, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+        this.hintLayout = new StaticLayout(value, getPaint(), AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
     }
 
     public void setLineSpacing(float add, float mult) {
@@ -148,7 +147,7 @@ public class EditTextBoldCursor extends EditText {
         }
         canvas.restore();
         if (length() == 0 && this.hintLayout != null && (this.hintVisible || this.hintAlpha != 0.0f)) {
-            if ((this.hintVisible && this.hintAlpha != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) || !(this.hintVisible || this.hintAlpha == 0.0f)) {
+            if ((this.hintVisible && this.hintAlpha != 1.0f) || !(this.hintVisible || this.hintAlpha == 0.0f)) {
                 long newTime = System.currentTimeMillis();
                 long dt = newTime - this.lastUpdateTime;
                 if (dt < 0 || dt > 17) {
@@ -157,8 +156,8 @@ public class EditTextBoldCursor extends EditText {
                 this.lastUpdateTime = newTime;
                 if (this.hintVisible) {
                     this.hintAlpha += ((float) dt) / 150.0f;
-                    if (this.hintAlpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        this.hintAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (this.hintAlpha > 1.0f) {
+                        this.hintAlpha = 1.0f;
                     }
                 } else {
                     this.hintAlpha -= ((float) dt) / 150.0f;

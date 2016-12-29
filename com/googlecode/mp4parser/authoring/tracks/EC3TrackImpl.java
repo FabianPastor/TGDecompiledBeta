@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class EC3TrackImpl extends AbstractTrack {
     private static final long MAX_FRAMES_PER_MMAP = 20;
@@ -109,7 +108,7 @@ public class EC3TrackImpl extends AbstractTrack {
         this.trackMetaData.setCreationTime(new Date());
         this.trackMetaData.setModificationTime(new Date());
         this.trackMetaData.setTimescale((long) samplerate);
-        this.trackMetaData.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.trackMetaData.setVolume(1.0f);
         dataSource.position(0);
         this.samples = readSamples();
         this.decodingTimes = new long[this.samples.size()];

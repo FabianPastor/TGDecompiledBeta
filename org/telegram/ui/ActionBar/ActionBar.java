@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBar extends FrameLayout {
@@ -64,7 +63,7 @@ public class ActionBar extends FrameLayout {
             this.backButtonImageView = new ImageView(getContext());
             this.backButtonImageView.setScaleType(ScaleType.CENTER);
             this.backButtonImageView.setBackgroundDrawable(Theme.createBarSelectorDrawable(this.itemsBackgroundColor));
-            this.backButtonImageView.setPadding(AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), 0, 0, 0);
+            this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
             this.backButtonImageView.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -92,7 +91,7 @@ public class ActionBar extends FrameLayout {
         imageView.setVisibility(i);
         this.backButtonImageView.setImageDrawable(drawable);
         if (drawable instanceof BackDrawable) {
-            ((BackDrawable) drawable).setRotation(isActionModeShowed() ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f, false);
+            ((BackDrawable) drawable).setRotation(isActionModeShowed() ? 1.0f : 0.0f, false);
         }
     }
 
@@ -237,9 +236,9 @@ public class ActionBar extends FrameLayout {
         if (this.actionMode != null && !this.actionModeVisible) {
             this.actionModeVisible = true;
             ArrayList<Animator> animators = new ArrayList();
-            animators.add(ObjectAnimator.ofFloat(this.actionMode, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            animators.add(ObjectAnimator.ofFloat(this.actionMode, "alpha", new float[]{0.0f, 1.0f}));
             if (this.occupyStatusBar && this.actionModeTop != null) {
-                animators.add(ObjectAnimator.ofFloat(this.actionModeTop, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(this.actionModeTop, "alpha", new float[]{0.0f, 1.0f}));
             }
             if (this.actionModeAnimation != null) {
                 this.actionModeAnimation.cancel();
@@ -280,7 +279,7 @@ public class ActionBar extends FrameLayout {
             if (this.backButtonImageView != null) {
                 Drawable drawable = this.backButtonImageView.getDrawable();
                 if (drawable instanceof BackDrawable) {
-                    ((BackDrawable) drawable).setRotation(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+                    ((BackDrawable) drawable).setRotation(1.0f, true);
                 }
                 this.backButtonImageView.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_MODE_SELECTOR_COLOR));
             }
@@ -370,7 +369,7 @@ public class ActionBar extends FrameLayout {
         }
         Drawable drawable = this.backButtonImageView.getDrawable();
         if (drawable != null && (drawable instanceof MenuDrawable)) {
-            ((MenuDrawable) drawable).setRotation(visible ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f, true);
+            ((MenuDrawable) drawable).setRotation(visible ? 1.0f : 0.0f, true);
         }
     }
 
@@ -473,7 +472,7 @@ public class ActionBar extends FrameLayout {
         }
         if (!(this.subtitleTextView == null || this.subtitleTextView.getVisibility() == 8)) {
             currentActionBarHeight = (((getCurrentActionBarHeight() / 2) - this.subtitleTextView.getTextHeight()) / 2) + (getCurrentActionBarHeight() / 2);
-            f = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            f = (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) ? 1.0f : 1.0f;
             textTop = currentActionBarHeight - AndroidUtilities.dp(f);
             this.subtitleTextView.layout(textLeft, additionalTop + textTop, this.subtitleTextView.getMeasuredWidth() + textLeft, (additionalTop + textTop) + this.subtitleTextView.getTextHeight());
         }

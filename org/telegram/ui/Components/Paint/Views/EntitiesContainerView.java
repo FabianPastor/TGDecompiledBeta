@@ -5,7 +5,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.widget.FrameLayout;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.Paint.Views.RotationGestureDetector.OnRotationGestureListener;
 
 public class EntitiesContainerView extends FrameLayout implements OnScaleGestureListener, OnRotationGestureListener {
@@ -13,7 +12,7 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
     private ScaleGestureDetector gestureDetector;
     private boolean hasTransformed;
     private float previousAngle;
-    private float previousScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float previousScale = 1.0f;
     private RotationGestureDetector rotationGestureDetector;
 
     public interface EntitiesContainerViewDelegate {
@@ -81,7 +80,7 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
     }
 
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        this.previousScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.previousScale = 1.0f;
         this.hasTransformed = true;
         return true;
     }

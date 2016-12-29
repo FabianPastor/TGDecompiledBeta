@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class PagerTabStrip extends PagerTitleStrip {
     private static final int FULL_UNDERLINE_HEIGHT = 1;
@@ -60,7 +59,7 @@ public class PagerTabStrip extends PagerTitleStrip {
         this.mMinPaddingBottom = (int) ((6.0f * density) + 0.5f);
         this.mMinTextSpacing = (int) (64.0f * density);
         this.mTabPadding = (int) ((16.0f * density) + 0.5f);
-        this.mFullUnderlineHeight = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * density) + 0.5f);
+        this.mFullUnderlineHeight = (int) ((1.0f * density) + 0.5f);
         this.mMinStripHeight = (int) ((32.0f * density) + 0.5f);
         this.mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom());

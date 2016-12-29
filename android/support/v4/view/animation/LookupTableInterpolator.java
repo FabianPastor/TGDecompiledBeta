@@ -1,10 +1,9 @@
 package android.support.v4.view.animation;
 
 import android.view.animation.Interpolator;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 abstract class LookupTableInterpolator implements Interpolator {
-    private final float mStepSize = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) (this.mValues.length - 1)));
+    private final float mStepSize = (1.0f / ((float) (this.mValues.length - 1)));
     private final float[] mValues;
 
     public LookupTableInterpolator(float[] values) {
@@ -12,8 +11,8 @@ abstract class LookupTableInterpolator implements Interpolator {
     }
 
     public float getInterpolation(float input) {
-        if (input >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (input >= 1.0f) {
+            return 1.0f;
         }
         if (input <= 0.0f) {
             return 0.0f;

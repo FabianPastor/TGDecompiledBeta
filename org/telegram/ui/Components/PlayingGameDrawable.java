@@ -9,7 +9,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class PlayingGameDrawable extends Drawable {
@@ -32,12 +31,12 @@ public class PlayingGameDrawable extends Drawable {
         if (dt > 16) {
             dt = 16;
         }
-        if (this.progress >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
         this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA;
-        if (this.progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.progress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (this.progress > 1.0f) {
+            this.progress = 1.0f;
         }
         invalidateSelf();
     }
@@ -58,12 +57,12 @@ public class PlayingGameDrawable extends Drawable {
         int size = AndroidUtilities.dp(10.0f);
         int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
         if (!this.isChat) {
-            y += AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            y += AndroidUtilities.dp(1.0f);
         }
         this.paint.setColor(Theme.ACTION_BAR_SUBTITLE_COLOR);
         this.rect.set(0.0f, (float) y, (float) size, (float) (y + size));
         if (this.progress < 0.5f) {
-            rad = (int) (35.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (this.progress / 0.5f)));
+            rad = (int) (35.0f * (1.0f - (this.progress / 0.5f)));
         } else {
             rad = (int) ((35.0f * (this.progress - 0.5f)) / 0.5f);
         }
@@ -74,7 +73,7 @@ public class PlayingGameDrawable extends Drawable {
             } else if (a != 0) {
                 this.paint.setAlpha(255);
             } else if (this.progress > 0.5f) {
-                this.paint.setAlpha((int) (255.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((this.progress - 0.5f) / 0.5f))));
+                this.paint.setAlpha((int) (255.0f * (1.0f - ((this.progress - 0.5f) / 0.5f))));
             } else {
                 this.paint.setAlpha(255);
             }
@@ -83,7 +82,7 @@ public class PlayingGameDrawable extends Drawable {
         this.paint.setAlpha(255);
         canvas.drawArc(this.rect, (float) rad, (float) (360 - (rad * 2)), true, this.paint);
         this.paint.setColor(Theme.ACTION_BAR_COLOR);
-        canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), this.paint);
+        canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(1.0f), this.paint);
         checkUpdate();
     }
 

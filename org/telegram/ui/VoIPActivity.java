@@ -48,7 +48,6 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.VoIPController;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.messenger.voip.VoIPService.StateListener;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
@@ -205,8 +204,8 @@ public class VoIPActivity extends Activity implements StateListener {
                 }
                 AnimatorSet set = new AnimatorSet();
                 r1 = new Animator[2];
-                r1[0] = ObjectAnimator.ofFloat(VoIPActivity.this.declineSwipe, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                r1[1] = ObjectAnimator.ofFloat(VoIPActivity.this.declineBtn, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                r1[0] = ObjectAnimator.ofFloat(VoIPActivity.this.declineSwipe, "alpha", new float[]{1.0f});
+                r1[1] = ObjectAnimator.ofFloat(VoIPActivity.this.declineBtn, "alpha", new float[]{1.0f});
                 set.playTogether(r1);
                 set.setDuration(200);
                 set.setInterpolator(new DecelerateInterpolator());
@@ -252,8 +251,8 @@ public class VoIPActivity extends Activity implements StateListener {
                 }
                 AnimatorSet set = new AnimatorSet();
                 r1 = new Animator[2];
-                r1[0] = ObjectAnimator.ofFloat(VoIPActivity.this.acceptSwipe, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                r1[1] = ObjectAnimator.ofFloat(VoIPActivity.this.acceptBtn, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                r1[0] = ObjectAnimator.ofFloat(VoIPActivity.this.acceptSwipe, "alpha", new float[]{1.0f});
+                r1[1] = ObjectAnimator.ofFloat(VoIPActivity.this.acceptBtn, "alpha", new float[]{1.0f});
                 set.playTogether(r1);
                 set.setDuration(200);
                 set.setInterpolator(new DecelerateInterpolator());
@@ -355,11 +354,11 @@ public class VoIPActivity extends Activity implements StateListener {
         CallSwipeView acceptSwipe = new CallSwipeView(this);
         acceptSwipe.setColor(-12207027);
         this.acceptSwipe = acceptSwipe;
-        swipesWrap.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 4, 4, -35, 4));
+        swipesWrap.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, 4, 4, -35, 4));
         anonymousClass10 = new CallSwipeView(this);
         anonymousClass10.setColor(-1696188);
         this.declineSwipe = anonymousClass10;
-        swipesWrap.addView(anonymousClass10, LayoutHelper.createLinear(-1, 70, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, -35, 4, 4, 4));
+        swipesWrap.addView(anonymousClass10, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
         this.swipeViewsWrap = swipesWrap;
         frameLayout.addView(swipesWrap, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
         ImageView acceptBtn = new ImageView(this);
@@ -425,13 +424,13 @@ public class VoIPActivity extends Activity implements StateListener {
         anonymousClass10 = new ImageView(this);
         anonymousClass10.setScaleType(ScaleType.FIT_XY);
         this.keyImage = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 20, 20, 20, 20));
+        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, 1.0f, 20, 20, 20, 20));
         anonymousClass10 = new TextView(this);
         anonymousClass10.setTextSize(1, 16.0f);
         anonymousClass10.setTextColor(-1);
         anonymousClass10.setGravity(17);
         this.keyText = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 10, 10, 10, 10));
+        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, 1.0f, 10, 10, 10, 10));
         anonymousClass10.setVisibility(8);
         anonymousClass10.setAlpha(0.0f);
         this.keyOverlay = anonymousClass10;
@@ -484,7 +483,7 @@ public class VoIPActivity extends Activity implements StateListener {
         if (visible) {
             this.keyOverlay.animate().cancel();
             this.keyOverlay.setVisibility(0);
-            this.keyOverlay.animate().alpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT).setDuration(200).setListener(null).setInterpolator(new DecelerateInterpolator()).start();
+            this.keyOverlay.animate().alpha(1.0f).setDuration(200).setListener(null).setInterpolator(new DecelerateInterpolator()).start();
             return;
         }
         this.keyOverlay.animate().cancel();
@@ -631,12 +630,12 @@ public class VoIPActivity extends Activity implements StateListener {
             }
             AnimatorSet set = new AnimatorSet();
             AnimatorSet decSet = new AnimatorSet();
-            decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
+            decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.endBtnIcon, "rotation", new float[]{-135.0f, 0.0f}), colorAnim});
             decSet.setInterpolator(new DecelerateInterpolator());
             decSet.setDuration(500);
             AnimatorSet accSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.swipeViewsWrap, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.swipeViewsWrap, "alpha", new float[]{1.0f, 0.0f});
             animatorArr[1] = ObjectAnimator.ofFloat(this.declineBtn, "alpha", new float[]{0.0f});
             accSet.playTogether(animatorArr);
             accSet.setInterpolator(new AccelerateInterpolator());
@@ -653,7 +652,7 @@ public class VoIPActivity extends Activity implements StateListener {
         }
         set = new AnimatorSet();
         decSet = new AnimatorSet();
-        decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+        decSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.micToggle, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.spkToggle, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.chatBtn, "alpha", new float[]{0.0f, 1.0f})});
         decSet.setInterpolator(new DecelerateInterpolator());
         decSet.setDuration(500);
         accSet = new AnimatorSet();
@@ -740,7 +739,7 @@ public class VoIPActivity extends Activity implements StateListener {
                     if (VoIPActivity.this.keyButton.getVisibility() != 0) {
                         VoIPActivity.this.keyButton.setVisibility(0);
                         VoIPActivity.this.keyButton.setAlpha(0.0f);
-                        VoIPActivity.this.keyButton.animate().alpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
+                        VoIPActivity.this.keyButton.animate().alpha(1.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
                     }
                 } else if (state == 4) {
                     VoIPActivity.this.stateText.setText(LocaleController.getString("VoipFailed", R.string.VoipFailed));

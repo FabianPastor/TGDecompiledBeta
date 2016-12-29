@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.view.View;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateCheckBox extends View {
@@ -75,7 +74,7 @@ public class GroupCreateCheckBox extends View {
         this.isCheckAnimation = newCheckedState;
         String str = "progress";
         float[] fArr = new float[1];
-        fArr[0] = newCheckedState ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.setDuration(300);
         this.checkAnimator.start();
@@ -99,7 +98,7 @@ public class GroupCreateCheckBox extends View {
                 return;
             }
             cancelCheckAnimator();
-            setProgress(checked ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -114,9 +113,9 @@ public class GroupCreateCheckBox extends View {
             int cy = getMeasuredHeight() / 2;
             eraser2.setStrokeWidth((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
             this.drawBitmap.eraseColor(0);
-            float roundProgress = this.progress >= 0.5f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : this.progress / 0.5f;
+            float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
             float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
-            float roundProgressCheckState = this.isCheckAnimation ? this.progress : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress;
+            float roundProgressCheckState = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
             if (roundProgressCheckState < progressBounceDiff) {
                 radDiff = (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
             } else if (roundProgressCheckState < 0.4f) {
@@ -129,11 +128,11 @@ public class GroupCreateCheckBox extends View {
             }
             float innerRad = ((float) (cx - AndroidUtilities.dp(2.0f))) - radDiff;
             this.bitmapCanvas.drawCircle((float) cx, (float) cy, innerRad, backgroundInnerPaint);
-            this.bitmapCanvas.drawCircle((float) cx, (float) cy, (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - roundProgress) * innerRad, eraser);
+            this.bitmapCanvas.drawCircle((float) cx, (float) cy, (1.0f - roundProgress) * innerRad, eraser);
             canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
             float checkSide = ((float) AndroidUtilities.dp(10.0f)) * checkProgress;
             float smallCheckSide = ((float) AndroidUtilities.dp(5.0f)) * checkProgress;
-            int x = cx - AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            int x = cx - AndroidUtilities.dp(1.0f);
             int y = cy + AndroidUtilities.dp(4.0f);
             float side = (float) Math.sqrt((double) ((smallCheckSide * smallCheckSide) / 2.0f));
             canvas.drawLine((float) x, (float) y, ((float) x) - side, ((float) y) - side, checkPaint);

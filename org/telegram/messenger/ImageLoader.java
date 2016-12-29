@@ -41,7 +41,6 @@ import org.telegram.messenger.FileLoader.FileLoaderDelegate;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -289,7 +288,7 @@ public class ImageLoader {
 
         private void reportProgress(final float progress) {
             long currentTime = System.currentTimeMillis();
-            if (progress == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
+            if (progress == 1.0f || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
                 this.lastProgressTime = currentTime;
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -390,7 +389,7 @@ public class ImageLoader {
                             } else if (read == -1) {
                                 done = true;
                                 if (this.fileSize != 0) {
-                                    reportProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                    reportProgress(1.0f);
                                 }
                             }
                         }
@@ -443,7 +442,7 @@ public class ImageLoader {
 
         private void reportProgress(final float progress) {
             long currentTime = System.currentTimeMillis();
-            if (progress == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
+            if (progress == 1.0f || this.lastProgressTime == 0 || this.lastProgressTime < currentTime - 500) {
                 this.lastProgressTime = currentTime;
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
@@ -535,7 +534,7 @@ public class ImageLoader {
                             } else if (read == -1) {
                                 done = true;
                                 if (this.imageSize != 0) {
-                                    reportProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                    reportProgress(1.0f);
                                 }
                             }
                         }
@@ -1736,8 +1735,8 @@ public class ImageLoader {
         float photoW = (float) bmOptions.outWidth;
         float photoH = (float) bmOptions.outHeight;
         float scaleFactor = useMaxScale ? Math.max(photoW / maxWidth, photoH / maxHeight) : Math.min(photoW / maxWidth, photoH / maxHeight);
-        if (scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            scaleFactor = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (scaleFactor < 1.0f) {
+            scaleFactor = 1.0f;
         }
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = (int) scaleFactor;
@@ -1904,7 +1903,7 @@ public class ImageLoader {
 
     private static PhotoSize scaleAndSaveImageInternal(Bitmap bitmap, int w, int h, float photoW, float photoH, float scaleFactor, int quality, boolean cache, boolean scaleAnyway) throws Exception {
         Bitmap scaledBitmap;
-        if (scaleFactor > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || scaleAnyway) {
+        if (scaleFactor > 1.0f || scaleAnyway) {
             scaledBitmap = Bitmaps.createScaledBitmap(bitmap, w, h, true);
         } else {
             scaledBitmap = bitmap;

@@ -11,7 +11,6 @@ import org.telegram.messenger.exoplayer2.extractor.ts.TsPayloadReader.TrackIdGen
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 final class H262Reader implements ElementaryStreamReader {
     private static final double[] FRAME_RATE_VALUES = new double[]{23.976023976023978d, 24.0d, 25.0d, 29.97002997002997d, 30.0d, 50.0d, 59.94005994005994d, 60.0d};
@@ -151,7 +150,7 @@ final class H262Reader implements ElementaryStreamReader {
         int secondByte = csdData[5] & 255;
         int width = ((csdData[4] & 255) << 4) | (secondByte >> 4);
         int height = ((secondByte & 15) << 8) | (csdData[6] & 255);
-        float pixelWidthHeightRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float pixelWidthHeightRatio = 1.0f;
         switch ((csdData[7] & PsExtractor.VIDEO_STREAM_MASK) >> 4) {
             case 2:
                 pixelWidthHeightRatio = ((float) (height * 4)) / ((float) (width * 3));

@@ -59,7 +59,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -155,7 +154,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             if (this.currentType == 3) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 ImageView imageView = new ImageView(context);
@@ -212,7 +211,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.timeText = new TextView(context);
             this.timeText.setTextSize(1, 14.0f);
             this.timeText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
             addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
             if (this.currentType == 3) {
@@ -224,7 +223,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
             this.problemText.setTextColor(-11697229);
-            this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 20, 0, 0));
             this.problemText.setOnClickListener(new OnClickListener(ChangePhoneActivity.this) {
@@ -257,7 +256,7 @@ public class ChangePhoneActivity extends BaseFragment {
             wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
             wrongNumber.setTextColor(-11697229);
             wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
             linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
             wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
@@ -464,13 +463,13 @@ public class ChangePhoneActivity extends BaseFragment {
                                             LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                                         }
                                         if (LoginActivitySmsView.this.progressView != null) {
-                                            LoginActivitySmsView.this.progressView.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
+                                            LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
                                             return;
                                         }
                                         return;
                                     }
                                     if (LoginActivitySmsView.this.progressView != null) {
-                                        LoginActivitySmsView.this.progressView.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                        LoginActivitySmsView.this.progressView.setProgress(1.0f);
                                     }
                                     LoginActivitySmsView.this.destroyTimer();
                                     if (LoginActivitySmsView.this.currentType == 3) {
@@ -904,7 +903,7 @@ public class ChangePhoneActivity extends BaseFragment {
             view.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
             view.setTextSize(1, 14.0f);
             view.setGravity(LocaleController.isRTL ? 5 : 3);
-            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             addView(view, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
             HashMap<String, String> languageMap = new HashMap();
             try {

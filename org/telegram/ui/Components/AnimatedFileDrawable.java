@@ -20,7 +20,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new DiscardPolicy());
@@ -91,8 +90,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private BitmapShader renderingShader;
     private int roundRadius;
     private RectF roundRect = new RectF();
-    private float scaleX = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-    private float scaleY = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float scaleX = 1.0f;
+    private float scaleY = 1.0f;
     private View secondParentView = null;
     private Matrix shaderMatrix = new Matrix();
     private Runnable uiRunnable = new Runnable() {

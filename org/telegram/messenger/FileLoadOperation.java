@@ -5,7 +5,6 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -472,7 +471,7 @@ public class FileLoadOperation {
                         this.fiv.write(this.iv);
                     }
                     if (this.totalBytesCount > 0 && this.state == 1) {
-                        this.delegate.didChangedLoadProgress(this, Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, ((float) this.downloadedBytes) / ((float) this.totalBytesCount)));
+                        this.delegate.didChangedLoadProgress(this, Math.min(1.0f, ((float) this.downloadedBytes) / ((float) this.totalBytesCount)));
                     }
                     for (int a = 0; a < this.delayedRequestInfos.size(); a++) {
                         RequestInfo delayedRequestInfo = (RequestInfo) this.delayedRequestInfos.get(a);

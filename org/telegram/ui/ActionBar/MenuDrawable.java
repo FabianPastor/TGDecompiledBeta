@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class MenuDrawable extends Drawable {
     private boolean animationInProgress;
@@ -26,7 +25,7 @@ public class MenuDrawable extends Drawable {
 
     public void setRotation(float rotation, boolean animated) {
         this.lastFrameTime = 0;
-        if (this.currentRotation == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.currentRotation == 1.0f) {
             this.reverseAngle = true;
         } else if (this.currentRotation == 0.0f) {
             this.reverseAngle = false;
@@ -36,7 +35,7 @@ public class MenuDrawable extends Drawable {
             if (this.currentRotation < rotation) {
                 this.currentAnimationTime = (int) (this.currentRotation * BitmapDescriptorFactory.HUE_MAGENTA);
             } else {
-                this.currentAnimationTime = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentRotation) * BitmapDescriptorFactory.HUE_MAGENTA);
+                this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * BitmapDescriptorFactory.HUE_MAGENTA);
             }
             this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = rotation;
@@ -56,7 +55,7 @@ public class MenuDrawable extends Drawable {
                 } else if (this.currentRotation < this.finalRotation) {
                     this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA) * this.finalRotation;
                 } else {
-                    this.currentRotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / BitmapDescriptorFactory.HUE_MAGENTA);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();
@@ -66,7 +65,7 @@ public class MenuDrawable extends Drawable {
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         canvas.rotate(((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation);
         canvas.drawLine((float) (-AndroidUtilities.dp(9.0f)), 0.0f, ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(3.0f)) * this.currentRotation), 0.0f, this.paint);
-        float endYDiff = (((float) AndroidUtilities.dp(5.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
+        float endYDiff = (((float) AndroidUtilities.dp(5.0f)) * (1.0f - Math.abs(this.currentRotation))) - (((float) AndroidUtilities.dp(0.5f)) * Math.abs(this.currentRotation));
         float endXDiff = ((float) AndroidUtilities.dp(9.0f)) - (((float) AndroidUtilities.dp(2.5f)) * Math.abs(this.currentRotation));
         float startYDiff = ((float) AndroidUtilities.dp(5.0f)) + (((float) AndroidUtilities.dp(2.0f)) * Math.abs(this.currentRotation));
         float startXDiff = ((float) (-AndroidUtilities.dp(9.0f))) + (((float) AndroidUtilities.dp(7.5f)) * Math.abs(this.currentRotation));

@@ -429,6 +429,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     }
 
     public boolean onFragmentCreate() {
+        this.rowCount = 0;
         int i = this.rowCount;
         this.rowCount = i + 1;
         this.customRow = i;
@@ -455,15 +456,12 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             i = this.rowCount;
             this.rowCount = i + 1;
             this.priorityRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.priorityInfoRow = i;
         } else {
             this.priorityRow = -1;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.priorityInfoRow = i;
         }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.priorityInfoRow = i;
         int lower_id = (int) this.dialog_id;
         boolean isChannel;
         if (lower_id < 0) {
@@ -497,8 +495,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
         if (lower_id <= 0 || !MessagesController.getInstance().callsEnabled) {
             this.callsRow = -1;
-            this.ringtoneRow = -1;
             this.callsVibrateRow = -1;
+            this.ringtoneRow = -1;
             this.ringtoneInfoRow = -1;
         } else {
             i = this.rowCount;
@@ -584,7 +582,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 SharedPreferences preferences;
-                if (position == ProfileNotificationsActivity.this.customRow) {
+                if (position == ProfileNotificationsActivity.this.customRow && (view instanceof TextCheckBoxCell)) {
                     preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                     ProfileNotificationsActivity.this.customEnabled = !ProfileNotificationsActivity.this.customEnabled;
                     ProfileNotificationsActivity.this.notificationsEnabled = ProfileNotificationsActivity.this.customEnabled;

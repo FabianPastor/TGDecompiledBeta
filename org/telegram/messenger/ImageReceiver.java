@@ -16,7 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
@@ -107,7 +106,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.roundRect = new RectF();
         this.bitmapRect = new RectF();
         this.shaderMatrix = new Matrix();
-        this.overrideAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.overrideAlpha = 1.0f;
         this.crossfadeAlpha = (byte) 1;
         this.parentView = view;
         if (roundPaint == null) {
@@ -210,7 +209,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.staticThumb = thumb;
             this.bitmapShader = null;
             this.bitmapShaderThumb = null;
-            this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            this.currentAlpha = 1.0f;
             if (this.delegate != null) {
                 imageReceiverDelegate = this.delegate;
                 z = (this.currentImage == null && this.currentThumb == null && this.staticThumb == null) ? false : true;
@@ -239,7 +238,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentFilter = null;
         this.currentCacheOnly = false;
         this.staticThumb = thumb;
-        this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.currentAlpha = 1.0f;
         this.currentThumbLocation = null;
         this.currentSize = 0;
         this.currentImage = null;
@@ -349,7 +348,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.setImageBackup.thumbLocation = null;
             this.setImageBackup.thumb = null;
         }
-        this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.currentAlpha = 1.0f;
         if (this.delegate != null) {
             ImageReceiverDelegate imageReceiverDelegate = this.delegate;
             if (!(this.currentThumb == null && this.staticThumb == null)) {
@@ -601,15 +600,15 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     private void checkAlphaAnimation(boolean skip) {
-        if (this.currentAlpha != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.currentAlpha != 1.0f) {
             if (!skip) {
                 long dt = System.currentTimeMillis() - this.lastUpdateAlphaTime;
                 if (dt > 18) {
                     dt = 18;
                 }
                 this.currentAlpha += ((float) dt) / 150.0f;
-                if (this.currentAlpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.currentAlpha > 1.0f) {
+                    this.currentAlpha = 1.0f;
                 }
             }
             this.lastUpdateAlphaTime = System.currentTimeMillis();
@@ -646,7 +645,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     drawDrawable(canvas, drawable, (int) (this.overrideAlpha * 255.0f), this.bitmapShaderThumb);
                 } else {
                     BitmapShader bitmapShader;
-                    if (this.crossfadeWithThumb && this.currentAlpha != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    if (this.crossfadeWithThumb && this.currentAlpha != 1.0f) {
                         Drawable thumbDrawable = null;
                         if (drawable == this.currentImage) {
                             if (this.staticThumb != null) {
@@ -966,7 +965,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     this.bitmapShaderThumb = new BitmapShader(bitmap.getBitmap(), TileMode.CLAMP, TileMode.CLAMP);
                 }
                 if (memCache || this.crossfadeAlpha == (byte) 2) {
-                    this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    this.currentAlpha = 1.0f;
                 } else {
                     this.currentAlpha = 0.0f;
                     this.lastUpdateAlphaTime = System.currentTimeMillis();
@@ -1000,8 +999,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 this.bitmapShader = new BitmapShader(bitmap.getBitmap(), TileMode.CLAMP, TileMode.CLAMP);
             }
             if (memCache || this.forcePreview) {
-                this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-            } else if ((this.currentThumb == null && this.staticThumb == null) || this.currentAlpha == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                this.currentAlpha = 1.0f;
+            } else if ((this.currentThumb == null && this.staticThumb == null) || this.currentAlpha == 1.0f) {
                 this.currentAlpha = 0.0f;
                 this.lastUpdateAlphaTime = System.currentTimeMillis();
                 if (this.currentThumb == null && this.staticThumb == null) {

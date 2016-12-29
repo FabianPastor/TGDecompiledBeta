@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class zzf {
     public static <K, V> Map<K, V> zza(K k, V v, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
@@ -57,7 +56,7 @@ public final class zzf {
             case 1:
                 return zze(kArr[0], vArr[0]);
             default:
-                Map arrayMap = length <= 32 ? new ArrayMap(length) : new HashMap(length, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                Map arrayMap = length <= 32 ? new ArrayMap(length) : new HashMap(length, 1.0f);
                 while (i < length) {
                     arrayMap.put(kArr[i], vArr[i]);
                     i++;

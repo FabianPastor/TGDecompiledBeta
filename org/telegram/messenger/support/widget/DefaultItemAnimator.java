@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class DefaultItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
@@ -177,7 +176,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
 
             public void onAnimationEnd(View view) {
                 animation.setListener(null);
-                ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                ViewCompat.setAlpha(view, 1.0f);
                 DefaultItemAnimator.this.dispatchRemoveFinished(holder);
                 DefaultItemAnimator.this.mRemoveAnimations.remove(holder);
                 DefaultItemAnimator.this.dispatchFinishedWhenDone();
@@ -195,13 +194,13 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
     void animateAddImpl(final ViewHolder holder) {
         final ViewPropertyAnimatorCompat animation = ViewCompat.animate(holder.itemView);
         this.mAddAnimations.add(holder);
-        animation.alpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT).setDuration(getAddDuration()).setListener(new VpaListenerAdapter() {
+        animation.alpha(1.0f).setDuration(getAddDuration()).setListener(new VpaListenerAdapter() {
             public void onAnimationStart(View view) {
                 DefaultItemAnimator.this.dispatchAddStarting(holder);
             }
 
             public void onAnimationCancel(View view) {
-                ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                ViewCompat.setAlpha(view, 1.0f);
             }
 
             public void onAnimationEnd(View view) {
@@ -315,7 +314,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
 
                 public void onAnimationEnd(View view) {
                     oldViewAnim.setListener(null);
-                    ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    ViewCompat.setAlpha(view, 1.0f);
                     ViewCompat.setTranslationX(view, 0.0f);
                     ViewCompat.setTranslationY(view, 0.0f);
                     DefaultItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
@@ -327,14 +326,14 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         if (newView != null) {
             final ViewPropertyAnimatorCompat newViewAnimation = ViewCompat.animate(newView);
             this.mChangeAnimations.add(changeInfo.newHolder);
-            newViewAnimation.translationX(0.0f).translationY(0.0f).setDuration(getChangeDuration()).alpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT).setListener(new VpaListenerAdapter() {
+            newViewAnimation.translationX(0.0f).translationY(0.0f).setDuration(getChangeDuration()).alpha(1.0f).setListener(new VpaListenerAdapter() {
                 public void onAnimationStart(View view) {
                     DefaultItemAnimator.this.dispatchChangeStarting(changeInfo.newHolder, false);
                 }
 
                 public void onAnimationEnd(View view) {
                     newViewAnimation.setListener(null);
-                    ViewCompat.setAlpha(newView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    ViewCompat.setAlpha(newView, 1.0f);
                     ViewCompat.setTranslationX(newView, 0.0f);
                     ViewCompat.setTranslationY(newView, 0.0f);
                     DefaultItemAnimator.this.dispatchChangeFinished(changeInfo.newHolder, false);
@@ -373,7 +372,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
             changeInfo.oldHolder = null;
             oldItem = true;
         }
-        ViewCompat.setAlpha(item.itemView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        ViewCompat.setAlpha(item.itemView, 1.0f);
         ViewCompat.setTranslationX(item.itemView, 0.0f);
         ViewCompat.setTranslationY(item.itemView, 0.0f);
         dispatchChangeFinished(item, oldItem);
@@ -394,11 +393,11 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         }
         endChangeAnimation(this.mPendingChanges, item);
         if (this.mPendingRemovals.remove(item)) {
-            ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            ViewCompat.setAlpha(view, 1.0f);
             dispatchRemoveFinished(item);
         }
         if (this.mPendingAdditions.remove(item)) {
-            ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            ViewCompat.setAlpha(view, 1.0f);
             dispatchAddFinished(item);
         }
         for (i = this.mChangesList.size() - 1; i >= 0; i--) {
@@ -428,7 +427,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         for (i = this.mAdditionsList.size() - 1; i >= 0; i--) {
             ArrayList<ViewHolder> additions = (ArrayList) this.mAdditionsList.get(i);
             if (additions.remove(item)) {
-                ViewCompat.setAlpha(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                ViewCompat.setAlpha(view, 1.0f);
                 dispatchAddFinished(item);
                 if (additions.isEmpty()) {
                     this.mAdditionsList.remove(i);
@@ -482,7 +481,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         }
         for (i = this.mPendingAdditions.size() - 1; i >= 0; i--) {
             ViewHolder item2 = (ViewHolder) this.mPendingAdditions.get(i);
-            ViewCompat.setAlpha(item2.itemView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            ViewCompat.setAlpha(item2.itemView, 1.0f);
             dispatchAddFinished(item2);
             this.mPendingAdditions.remove(i);
         }
@@ -510,7 +509,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                 ArrayList<ViewHolder> additions = (ArrayList) this.mAdditionsList.get(i);
                 for (j = additions.size() - 1; j >= 0; j--) {
                     item2 = (ViewHolder) additions.get(j);
-                    ViewCompat.setAlpha(item2.itemView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    ViewCompat.setAlpha(item2.itemView, 1.0f);
                     dispatchAddFinished(item2);
                     additions.remove(j);
                     if (additions.isEmpty()) {

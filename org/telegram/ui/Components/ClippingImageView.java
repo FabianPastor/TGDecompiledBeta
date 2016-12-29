@@ -12,7 +12,6 @@ import android.graphics.Shader.TileMode;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ClippingImageView extends View {
     private float animationProgress;
@@ -106,8 +105,8 @@ public class ClippingImageView extends View {
                     bitmapW = this.bmp.getWidth();
                     bitmapH = this.bmp.getHeight();
                 }
-                float scaleW = getWidth() != 0 ? ((float) bitmapW) / ((float) getWidth()) : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-                float scaleH = getHeight() != 0 ? ((float) bitmapH) / ((float) getHeight()) : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                float scaleW = getWidth() != 0 ? ((float) bitmapW) / ((float) getWidth()) : 1.0f;
+                float scaleH = getHeight() != 0 ? ((float) bitmapH) / ((float) getHeight()) : 1.0f;
                 float scale = Math.min(scaleW, scaleH);
                 if (Math.abs(scaleW - scaleH) > 1.0E-5f) {
                     int w = (int) Math.floor((double) (((float) getWidth()) * scale));

@@ -169,13 +169,13 @@ public class DataUsageActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("FilesDataUsage", R.string.FilesDataUsage));
                         return;
                     } else if (position == DataUsageActivity.this.audiosSectionRow) {
-                        headerCell.setText(LocaleController.getString("AudiosDataUsage", R.string.AudiosDataUsage));
+                        headerCell.setText(LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache));
                         return;
                     } else if (position == DataUsageActivity.this.videosSectionRow) {
-                        headerCell.setText(LocaleController.getString("VideosDataUsage", R.string.VideosDataUsage));
+                        headerCell.setText(LocaleController.getString("LocalVideoCache", R.string.LocalVideoCache));
                         return;
                     } else if (position == DataUsageActivity.this.photosSectionRow) {
-                        headerCell.setText(LocaleController.getString("PhotosDataUsage", R.string.PhotosDataUsage));
+                        headerCell.setText(LocaleController.getString("LocalPhotoCache", R.string.LocalPhotoCache));
                         return;
                     } else if (position == DataUsageActivity.this.messagesSectionRow) {
                         headerCell.setText(LocaleController.getString("MessagesDataUsage", R.string.MessagesDataUsage));

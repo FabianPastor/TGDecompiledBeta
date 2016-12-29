@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -35,7 +34,7 @@ public class LocationCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         this.imageView = new BackupImageView(context);
         this.imageView.setBackgroundResource(R.drawable.round_grey);

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -47,13 +46,13 @@ public class StickerView extends EntityView {
         public StickerViewSelectionView(Context context) {
             super(context);
             this.arcPaint.setColor(-1);
-            this.arcPaint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            this.arcPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
             this.arcPaint.setStyle(Style.STROKE);
         }
 
         protected int pointInsideHandle(float x, float y) {
             float radius = (float) AndroidUtilities.dp(19.5f);
-            float inset = radius + ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            float inset = radius + ((float) AndroidUtilities.dp(1.0f));
             float middle = inset + ((((float) getHeight()) - (inset * 2.0f)) / 2.0f);
             if (x > inset - radius && y > middle - radius && x < inset + radius && y < middle + radius) {
                 return 1;
@@ -71,7 +70,7 @@ public class StickerView extends EntityView {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             float radius = (float) AndroidUtilities.dp(4.5f);
-            float inset = (radius + ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) + ((float) AndroidUtilities.dp(15.0f));
+            float inset = (radius + ((float) AndroidUtilities.dp(1.0f))) + ((float) AndroidUtilities.dp(15.0f));
             float mainRadius = ((float) (getWidth() / 2)) - inset;
             this.arcRect.set(inset, inset, (mainRadius * 2.0f) + inset, (mainRadius * 2.0f) + inset);
             for (int i = 0; i < 48; i++) {
@@ -86,7 +85,7 @@ public class StickerView extends EntityView {
     }
 
     public StickerView(Context context, Point position, Size baseSize, Document sticker) {
-        this(context, position, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, baseSize, sticker);
+        this(context, position, 0.0f, 1.0f, baseSize, sticker);
     }
 
     public StickerView(Context context, Point position, float angle, float scale, Size baseSize, Document sticker) {
@@ -150,7 +149,7 @@ public class StickerView extends EntityView {
             canvas.save();
             if (this.centerImage.getBitmap() != null) {
                 if (this.mirrored) {
-                    canvas.scale(-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    canvas.scale(-1.0f, 1.0f);
                     canvas.translate(-this.baseSize.width, 0.0f);
                 }
                 this.centerImage.setImageCoords(0, 0, (int) this.baseSize.width, (int) this.baseSize.height);

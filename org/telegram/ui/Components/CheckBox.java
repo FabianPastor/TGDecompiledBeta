@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class CheckBox extends View {
@@ -104,7 +103,7 @@ public class CheckBox extends View {
         this.isCheckAnimation = newCheckedState;
         String str = "progress";
         float[] fArr = new float[1];
-        fArr[0] = newCheckedState ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.setDuration(300);
         this.checkAnimator.start();
@@ -132,7 +131,7 @@ public class CheckBox extends View {
                 return;
             }
             cancelCheckAnimator();
-            setProgress(checked ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -146,9 +145,9 @@ public class CheckBox extends View {
                 eraser2.setStrokeWidth((float) AndroidUtilities.dp((float) (this.size + 6)));
                 this.drawBitmap.eraseColor(0);
                 float rad = (float) (getMeasuredWidth() / 2);
-                float roundProgress = this.progress >= 0.5f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : this.progress / 0.5f;
+                float roundProgress = this.progress >= 0.5f ? 1.0f : this.progress / 0.5f;
                 float checkProgress = this.progress < 0.5f ? 0.0f : (this.progress - 0.5f) / 0.5f;
-                float roundProgressCheckState = this.isCheckAnimation ? this.progress : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress;
+                float roundProgressCheckState = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
                 if (roundProgressCheckState < progressBounceDiff) {
                     rad -= (((float) AndroidUtilities.dp(2.0f)) * roundProgressCheckState) / progressBounceDiff;
                 } else if (roundProgressCheckState < 0.4f) {
@@ -156,12 +155,12 @@ public class CheckBox extends View {
                 }
                 if (this.drawBackground) {
                     paint.setColor(NUM);
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)), paint);
-                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)), backgroundPaint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), paint);
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), backgroundPaint);
                 }
                 paint.setColor(this.color);
                 this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - roundProgress) * rad, eraser);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (1.0f - roundProgress) * rad, eraser);
                 canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
                 this.checkBitmap.eraseColor(0);
                 int w = this.checkDrawable.getIntrinsicWidth();
@@ -170,7 +169,7 @@ public class CheckBox extends View {
                 int y = (getMeasuredHeight() - h) / 2;
                 this.checkDrawable.setBounds(x, this.checkOffset + y, x + w, (y + h) + this.checkOffset);
                 this.checkDrawable.draw(this.checkCanvas);
-                this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.dp(6.0f)) / 2)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - checkProgress), eraser2);
+                this.checkCanvas.drawCircle((float) ((getMeasuredWidth() / 2) - AndroidUtilities.dp(2.5f)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(4.0f)), ((float) ((getMeasuredWidth() + AndroidUtilities.dp(6.0f)) / 2)) * (1.0f - checkProgress), eraser2);
                 canvas.drawBitmap(this.checkBitmap, 0.0f, 0.0f, null);
             }
         }

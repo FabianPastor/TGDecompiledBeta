@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class ColorUtils {
     private static final int MIN_ALPHA_SEARCH_MAX_ITERATIONS = 10;
@@ -101,15 +100,15 @@ public final class ColorUtils {
             } else {
                 h = ((rf - gf) / deltaMaxMin) + 4.0f;
             }
-            s = deltaMaxMin / (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - Math.abs((2.0f * l) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            s = deltaMaxMin / (1.0f - Math.abs((2.0f * l) - 1.0f));
         }
         h = (BitmapDescriptorFactory.HUE_YELLOW * h) % 360.0f;
         if (h < 0.0f) {
             h += 360.0f;
         }
         outHsl[0] = constrain(h, 0.0f, 360.0f);
-        outHsl[1] = constrain(s, 0.0f, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        outHsl[2] = constrain(l, 0.0f, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        outHsl[1] = constrain(s, 0.0f, 1.0f);
+        outHsl[2] = constrain(l, 0.0f, 1.0f);
     }
 
     public static void colorToHSL(@ColorInt int color, @NonNull float[] outHsl) {
@@ -121,9 +120,9 @@ public final class ColorUtils {
         float h = hsl[0];
         float s = hsl[1];
         float l = hsl[2];
-        float c = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - Math.abs((2.0f * l) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * s;
+        float c = (1.0f - Math.abs((2.0f * l) - 1.0f)) * s;
         float m = l - (0.5f * c);
-        float x = c * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - Math.abs(((h / BitmapDescriptorFactory.HUE_YELLOW) % 2.0f) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        float x = c * (1.0f - Math.abs(((h / BitmapDescriptorFactory.HUE_YELLOW) % 2.0f) - 1.0f));
         int r = 0;
         int g = 0;
         int b = 0;
@@ -264,7 +263,7 @@ public final class ColorUtils {
 
     @ColorInt
     public static int blendARGB(@ColorInt int color1, @ColorInt int color2, @FloatRange(from = 0.0d, to = 1.0d) float ratio) {
-        float inverseRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ratio;
+        float inverseRatio = 1.0f - ratio;
         return Color.argb((int) ((((float) Color.alpha(color1)) * inverseRatio) + (((float) Color.alpha(color2)) * ratio)), (int) ((((float) Color.red(color1)) * inverseRatio) + (((float) Color.red(color2)) * ratio)), (int) ((((float) Color.green(color1)) * inverseRatio) + (((float) Color.green(color2)) * ratio)), (int) ((((float) Color.blue(color1)) * inverseRatio) + (((float) Color.blue(color2)) * ratio)));
     }
 
@@ -272,7 +271,7 @@ public final class ColorUtils {
         if (outResult.length != 3) {
             throw new IllegalArgumentException("result must have a length of 3.");
         }
-        float inverseRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ratio;
+        float inverseRatio = 1.0f - ratio;
         outResult[0] = circularInterpolate(hsl1[0], hsl2[0], ratio);
         outResult[1] = (hsl1[1] * inverseRatio) + (hsl2[1] * ratio);
         outResult[2] = (hsl1[2] * inverseRatio) + (hsl2[2] * ratio);

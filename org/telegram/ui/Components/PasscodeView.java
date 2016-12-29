@@ -55,7 +55,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class PasscodeView extends FrameLayout {
@@ -143,15 +142,15 @@ public class PasscodeView extends FrameLayout {
                 TextView textView = (TextView) this.characterTextViews.get(newPos);
                 textView.setText(c);
                 textView.setTranslationX((float) getXForTextView(newPos));
-                animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{0.0f, 1.0f}));
+                animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{0.0f, 1.0f}));
+                animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{0.0f, 1.0f}));
                 animators.add(ObjectAnimator.ofFloat(textView, "translationY", new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
                 textView = (TextView) this.dotTextViews.get(newPos);
                 textView.setTranslationX((float) getXForTextView(newPos));
                 textView.setAlpha(0.0f);
-                animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{0.0f, 1.0f}));
+                animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{0.0f, 1.0f}));
                 animators.add(ObjectAnimator.ofFloat(textView, "translationY", new float[]{(float) AndroidUtilities.dp(20.0f), 0.0f}));
                 for (a = newPos + 1; a < 4; a++) {
                     textView = (TextView) this.characterTextViews.get(a);
@@ -179,9 +178,9 @@ public class PasscodeView extends FrameLayout {
                             animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{0.0f}));
                             animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{0.0f}));
                             textView = (TextView) AnimatingTextView.this.dotTextViews.get(newPos);
-                            animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                            animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                            animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{1.0f}));
+                            animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{1.0f}));
                             AnimatingTextView.this.currentAnimation = new AnimatorSet();
                             AnimatingTextView.this.currentAnimation.setDuration(150);
                             AnimatingTextView.this.currentAnimation.playTogether(animators);
@@ -206,9 +205,9 @@ public class PasscodeView extends FrameLayout {
                     animators.add(ObjectAnimator.ofFloat(textView, "translationY", new float[]{0.0f}));
                     textView = (TextView) this.dotTextViews.get(a);
                     animators.add(ObjectAnimator.ofFloat(textView, "translationX", new float[]{(float) getXForTextView(a)}));
-                    animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                    animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-                    animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                    animators.add(ObjectAnimator.ofFloat(textView, "scaleX", new float[]{1.0f}));
+                    animators.add(ObjectAnimator.ofFloat(textView, "scaleY", new float[]{1.0f}));
+                    animators.add(ObjectAnimator.ofFloat(textView, "alpha", new float[]{1.0f}));
                     animators.add(ObjectAnimator.ofFloat(textView, "translationY", new float[]{0.0f}));
                 }
                 if (this.currentAnimation != null) {
@@ -356,14 +355,14 @@ public class PasscodeView extends FrameLayout {
                 if (a < this.stringBuilder.length()) {
                     TextView textView = (TextView) this.characterTextViews.get(a);
                     textView.setAlpha(0.0f);
-                    textView.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    textView.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    textView.setScaleX(1.0f);
+                    textView.setScaleY(1.0f);
                     textView.setTranslationY(0.0f);
                     textView.setTranslationX((float) getXForTextView(a));
                     textView = (TextView) this.dotTextViews.get(a);
-                    textView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    textView.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    textView.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    textView.setAlpha(1.0f);
+                    textView.setScaleX(1.0f);
+                    textView.setScaleY(1.0f);
                     textView.setTranslationY(0.0f);
                     textView.setTranslationX((float) getXForTextView(a));
                 } else {
@@ -402,7 +401,7 @@ public class PasscodeView extends FrameLayout {
         imageView.setImageResource(R.drawable.passcode_logo);
         this.passwordFrameLayout.addView(imageView);
         layoutParams = (LayoutParams) imageView.getLayoutParams();
-        if (AndroidUtilities.density < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (AndroidUtilities.density < 1.0f) {
             layoutParams.width = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
             layoutParams.height = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
         } else {
@@ -513,7 +512,7 @@ public class PasscodeView extends FrameLayout {
         this.passwordFrameLayout.addView(lineFrameLayout);
         layoutParams = (LayoutParams) lineFrameLayout.getLayoutParams();
         layoutParams.width = -1;
-        layoutParams.height = AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        layoutParams.height = AndroidUtilities.dp(1.0f);
         layoutParams.gravity = 83;
         layoutParams.leftMargin = AndroidUtilities.dp(20.0f);
         layoutParams.rightMargin = AndroidUtilities.dp(20.0f);
@@ -882,7 +881,7 @@ public class PasscodeView extends FrameLayout {
         }
         checkFingerprint();
         if (getVisibility() != 0) {
-            setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            setAlpha(1.0f);
             setTranslationY(0.0f);
             if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("selectedBackground", 1000001) == 1000001) {
                 this.backgroundFrameLayout.setBackgroundColor(-11436898);

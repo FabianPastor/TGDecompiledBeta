@@ -30,7 +30,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -422,7 +421,7 @@ public class StickerPreviewViewer {
             for (a = 0; a < sticker.attributes.size(); a++) {
                 attribute = (DocumentAttribute) sticker.attributes.get(a);
                 if ((attribute instanceof TL_documentAttributeSticker) && !TextUtils.isEmpty(attribute.alt)) {
-                    this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     break;
                 }
             }
@@ -452,7 +451,7 @@ public class StickerPreviewViewer {
     public void close() {
         if (this.parentActivity != null && this.visibleDialog == null) {
             AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-            this.showProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            this.showProgress = 1.0f;
             this.lastUpdateTime = System.currentTimeMillis();
             this.containerView.invalidate();
             try {
@@ -519,14 +518,14 @@ public class StickerPreviewViewer {
             long newTime;
             long dt;
             if (this.isVisible) {
-                if (this.showProgress != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.showProgress != 1.0f) {
                     newTime = System.currentTimeMillis();
                     dt = newTime - this.lastUpdateTime;
                     this.lastUpdateTime = newTime;
                     this.showProgress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
                     this.containerView.invalidate();
-                    if (this.showProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        this.showProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (this.showProgress > 1.0f) {
+                        this.showProgress = 1.0f;
                     }
                 }
             } else if (this.showProgress != 0.0f) {

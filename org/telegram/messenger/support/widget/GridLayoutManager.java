@@ -14,7 +14,6 @@ import java.util.Arrays;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class GridLayoutManager extends LinearLayoutManager {
     private static final boolean DEBUG = false;
@@ -581,7 +580,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             if (size > maxSize) {
                 maxSize = size;
             }
-            float otherSize = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) this.mOrientationHelper.getDecoratedMeasurementInOther(view))) / ((float) ((LayoutParams) view.getLayoutParams()).mSpanSize);
+            float otherSize = (1.0f * ((float) this.mOrientationHelper.getDecoratedMeasurementInOther(view))) / ((float) ((LayoutParams) view.getLayoutParams()).mSpanSize);
             if (otherSize > maxSizeInOther) {
                 maxSizeInOther = otherSize;
             }

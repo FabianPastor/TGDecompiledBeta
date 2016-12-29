@@ -5,7 +5,6 @@ import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public abstract class PagerAdapter {
     public static final int POSITION_NONE = -2;
@@ -98,6 +97,6 @@ public abstract class PagerAdapter {
     }
 
     public float getPageWidth(int position) {
-        return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        return 1.0f;
     }
 }

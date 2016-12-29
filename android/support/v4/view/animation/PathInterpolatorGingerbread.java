@@ -5,7 +5,6 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.RequiresApi;
 import android.view.animation.Interpolator;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(9)
 @RequiresApi(9)
@@ -40,8 +39,8 @@ class PathInterpolatorGingerbread implements Interpolator {
         if (t <= 0.0f) {
             return 0.0f;
         }
-        if (t >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (t >= 1.0f) {
+            return 1.0f;
         }
         int startIndex = 0;
         int endIndex = this.mX.length - 1;
@@ -65,14 +64,14 @@ class PathInterpolatorGingerbread implements Interpolator {
     private static Path createQuad(float controlX, float controlY) {
         Path path = new Path();
         path.moveTo(0.0f, 0.0f);
-        path.quadTo(controlX, controlY, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        path.quadTo(controlX, controlY, 1.0f, 1.0f);
         return path;
     }
 
     private static Path createCubic(float controlX1, float controlY1, float controlX2, float controlY2) {
         Path path = new Path();
         path.moveTo(0.0f, 0.0f);
-        path.cubicTo(controlX1, controlY1, controlX2, controlY2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        path.cubicTo(controlX1, controlY1, controlX2, controlY2, 1.0f, 1.0f);
         return path;
     }
 }

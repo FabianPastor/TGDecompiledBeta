@@ -63,7 +63,6 @@ import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.voip.VoIPController.ConnectionStateListener;
 import org.telegram.messenger.voip.VoIPController.Stats;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -94,7 +93,7 @@ import org.telegram.ui.VoIPPermissionActivity;
 
 public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener {
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
-    private static final int CALL_MAX_LAYER = 62;
+    private static final int CALL_MAX_LAYER = 60;
     private static final int CALL_MIN_LAYER = 60;
     public static final int DISCARD_REASON_DISCONNECT = 2;
     public static final int DISCARD_REASON_HANGUP = 1;
@@ -389,8 +388,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     TL_phoneCallProtocol tL_phoneCallProtocol = reqCall.protocol;
                     reqCall.protocol.udp_reflector = true;
                     tL_phoneCallProtocol.udp_p2p = true;
-                    reqCall.protocol.min_layer = VoIPService.CALL_MIN_LAYER;
-                    reqCall.protocol.max_layer = 62;
+                    reqCall.protocol.min_layer = 60;
+                    reqCall.protocol.max_layer = 60;
                     reqCall.g_a = g_a;
                     reqCall.random_id = Utilities.random.nextInt();
                     ConnectionsManager.getInstance().sendRequest(reqCall, new RequestDelegate() {
@@ -569,8 +568,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
                         req.protocol.udp_reflector = true;
                         tL_phoneCallProtocol.udp_p2p = true;
-                        req.protocol.min_layer = VoIPService.CALL_MIN_LAYER;
-                        req.protocol.max_layer = 62;
+                        req.protocol.min_layer = 60;
+                        req.protocol.max_layer = 60;
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {
@@ -662,7 +661,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
                 dispatchStateChanged(12);
                 this.playingSound = true;
-                this.soundPool.play(this.spBusyId, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.soundPool.play(this.spBusyId, 1.0f, 1.0f, 0, -1, 1.0f);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         VoIPService.this.soundPool.release();
@@ -678,7 +677,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             dispatchStateChanged(11);
             FileLog.d(TAG, "!!!!!! CALL RECEIVED");
             if (this.spPlayID == 0) {
-                this.spPlayID = this.soundPool.play(this.spRingbackID, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
             }
             if (this.timeoutRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
@@ -809,7 +808,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     try {
                         float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
                         Options options = new Options();
-                        if (scaleFactor >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                        if (scaleFactor >= 1.0f) {
                             i = (int) scaleFactor;
                         }
                         options.inSampleSize = i;
@@ -862,7 +861,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     try {
                         float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
                         Options options = new Options();
-                        options.inSampleSize = scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT ? 1 : (int) scaleFactor;
+                        options.inSampleSize = scaleFactor < 1.0f ? 1 : (int) scaleFactor;
                         Bitmap bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(photoPath, true).toString(), options);
                         if (bitmap != null) {
                             builder.setLargeIcon(bitmap);
@@ -900,7 +899,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         });
         dispatchStateChanged(4);
         this.playingSound = true;
-        this.soundPool.play(this.spFailedID, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 VoIPService.this.soundPool.release();
@@ -913,7 +912,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         dispatchStateChanged(6);
         if (this.needPlayEndSound) {
             this.playingSound = true;
-            this.soundPool.play(this.spEndId, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     VoIPService.this.soundPool.release();

@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public interface Brush {
 
@@ -79,7 +78,7 @@ public interface Brush {
         }
 
         public float getScale() {
-            return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            return 1.0f;
         }
 
         public boolean isLightSaber() {

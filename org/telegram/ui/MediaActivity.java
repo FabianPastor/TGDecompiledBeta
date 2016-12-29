@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -17,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnPreDrawListener;
@@ -53,11 +53,12 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.query.SharedMediaQuery;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -75,6 +76,7 @@ import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterMusic;
 import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterUrl;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
 import org.telegram.tgnet.TLRPC.TL_webPageEmpty;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -87,6 +89,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.BaseFragmentAdapter;
 import org.telegram.ui.Adapters.BaseSectionsAdapter;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.GreySectionCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
@@ -902,9 +905,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.actionBar.setAllowOverlayTitle(false);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
+                int a;
                 if (id == -1) {
                     if (MediaActivity.this.actionBar.isActionModeShowed()) {
-                        for (int a = 1; a >= 0; a--) {
+                        for (a = 1; a >= 0; a--) {
                             MediaActivity.this.selectedFiles[a].clear();
                         }
                         MediaActivity.this.cantDeleteMessagesCount = 0;
@@ -935,10 +939,87 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     }
                 } else if (id == 4) {
                     if (MediaActivity.this.getParentActivity() != null) {
+                        final boolean[] zArr;
                         Builder builder = new Builder(MediaActivity.this.getParentActivity());
                         builder.setMessage(LocaleController.formatString("AreYouSureDeleteMessages", R.string.AreYouSureDeleteMessages, LocaleController.formatPluralString("items", MediaActivity.this.selectedFiles[0].size() + MediaActivity.this.selectedFiles[1].size())));
                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                        boolean[] deleteForAll = new boolean[1];
+                        int lower_id = (int) MediaActivity.this.dialog_id;
+                        if (lower_id != 0) {
+                            User currentUser;
+                            Chat currentChat;
+                            if (lower_id > 0) {
+                                currentUser = MessagesController.getInstance().getUser(Integer.valueOf(lower_id));
+                                currentChat = null;
+                            } else {
+                                currentUser = null;
+                                currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-lower_id));
+                            }
+                            if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
+                                int currentDate = ConnectionsManager.getInstance().getCurrentTime();
+                                if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null)) {
+                                    boolean hasOutgoing = false;
+                                    for (a = 1; a >= 0; a--) {
+                                        for (Entry<Integer, MessageObject> entry : MediaActivity.this.selectedFiles[a].entrySet()) {
+                                            MessageObject msg = (MessageObject) entry.getValue();
+                                            if (msg.messageOwner.action == null) {
+                                                if (!msg.isOut()) {
+                                                    hasOutgoing = false;
+                                                    break;
+                                                } else if (currentDate - msg.messageOwner.date <= 172800) {
+                                                    hasOutgoing = true;
+                                                }
+                                            }
+                                        }
+                                        if (hasOutgoing) {
+                                            break;
+                                        }
+                                    }
+                                    if (hasOutgoing) {
+                                        int dp;
+                                        int dp2;
+                                        View frameLayout = new FrameLayout(MediaActivity.this.getParentActivity());
+                                        CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity());
+                                        cell.setBackgroundResource(R.drawable.list_selector);
+                                        if (currentChat != null) {
+                                            cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
+                                        } else {
+                                            cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
+                                        }
+                                        if (LocaleController.isRTL) {
+                                            dp = AndroidUtilities.dp(16.0f);
+                                        } else {
+                                            dp = AndroidUtilities.dp(8.0f);
+                                        }
+                                        if (LocaleController.isRTL) {
+                                            dp2 = AndroidUtilities.dp(8.0f);
+                                        } else {
+                                            dp2 = AndroidUtilities.dp(16.0f);
+                                        }
+                                        cell.setPadding(dp, 0, dp2, 0);
+                                        frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                                        zArr = deleteForAll;
+                                        cell.setOnClickListener(new OnClickListener() {
+                                            public void onClick(View v) {
+                                                boolean z;
+                                                CheckBoxCell cell = (CheckBoxCell) v;
+                                                boolean[] zArr = zArr;
+                                                if (zArr[0]) {
+                                                    z = false;
+                                                } else {
+                                                    z = true;
+                                                }
+                                                zArr[0] = z;
+                                                cell.setChecked(zArr[0], true);
+                                            }
+                                        });
+                                        builder.setView(frameLayout);
+                                    }
+                                }
+                            }
+                        }
+                        zArr = deleteForAll;
+                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 for (int a = 1; a >= 0; a--) {
                                     MessageObject msg;
@@ -964,7 +1045,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                             }
                                         }
                                     }
-                                    MessagesController.getInstance().deleteMessages(ids, random_ids, currentEncryptedChat, channelId, false);
+                                    MessagesController.getInstance().deleteMessages(ids, random_ids, currentEncryptedChat, channelId, zArr[0]);
                                     MediaActivity.this.selectedFiles[a].clear();
                                 }
                                 MediaActivity.this.actionBar.hideActionMode();
@@ -979,8 +1060,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 1);
-                    DialogsActivity fragment = new DialogsActivity(args);
-                    fragment.setDelegate(new DialogsActivityDelegate() {
+                    BaseFragment dialogsActivity = new DialogsActivity(args);
+                    dialogsActivity.setDelegate(new DialogsActivityDelegate() {
                         public void didSelectDialog(DialogsActivity fragment, long did, boolean param) {
                             int lower_part = (int) did;
                             if (lower_part != 0) {
@@ -1022,7 +1103,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             fragment.finishFragment();
                         }
                     });
-                    MediaActivity.this.presentFragment(fragment);
+                    MediaActivity.this.presentFragment(dialogsActivity);
                 }
             }
         });
@@ -1087,7 +1168,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         }
         this.actionBar.addView(this.dropDownContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, AndroidUtilities.isTablet() ? 64.0f : 56.0f, 0.0f, 40.0f, 0.0f));
-        this.dropDownContainer.setOnClickListener(new View.OnClickListener() {
+        this.dropDownContainer.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 MediaActivity.this.dropDownContainer.toggleSubMenu();
             }
@@ -1114,7 +1195,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 return true;
             }
         });
-        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 65, 0, 0, 0));
+        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
         if (((int) this.dialog_id) != 0) {
             this.actionModeViews.add(actionMode.addItem(3, R.drawable.ic_ab_fwd_forward, Theme.ACTION_BAR_MODE_SELECTOR_COLOR, null, AndroidUtilities.dp(54.0f)));
         }
@@ -1650,7 +1731,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         for (int i2 = 0; i2 < this.actionModeViews.size(); i2++) {
             View view2 = (View) this.actionModeViews.get(i2);
             AndroidUtilities.clearDrawableAnimation(view2);
-            animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
         }
         animatorSet.playTogether(animators);
         animatorSet.setDuration(250);

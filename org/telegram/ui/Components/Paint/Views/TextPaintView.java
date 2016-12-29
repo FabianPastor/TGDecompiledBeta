@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 import org.telegram.ui.Components.Paint.Views.EntityView.SelectionView;
@@ -28,7 +27,7 @@ public class TextPaintView extends EntityView {
 
         protected int pointInsideHandle(float x, float y) {
             float radius = (float) AndroidUtilities.dp(19.5f);
-            float inset = radius + ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            float inset = radius + ((float) AndroidUtilities.dp(1.0f));
             float width = ((float) getWidth()) - (inset * 2.0f);
             float height = ((float) getHeight()) - (inset * 2.0f);
             float middle = inset + (height / 2.0f);
@@ -49,7 +48,7 @@ public class TextPaintView extends EntityView {
             super.onDraw(canvas);
             float space = (float) AndroidUtilities.dp(3.0f);
             float length = (float) AndroidUtilities.dp(3.0f);
-            float thickness = (float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            float thickness = (float) AndroidUtilities.dp(1.0f);
             float radius = (float) AndroidUtilities.dp(4.5f);
             float inset = (radius + thickness) + ((float) AndroidUtilities.dp(15.0f));
             float width = ((float) getWidth()) - (2.0f * inset);

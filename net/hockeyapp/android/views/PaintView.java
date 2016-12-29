@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Stack;
 import net.hockeyapp.android.utils.HockeyLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @SuppressLint({"ViewConstructor"})
 public class PaintView extends ImageView {
@@ -37,7 +36,7 @@ public class PaintView extends ImageView {
         options.inJustDecodeBounds = true;
         try {
             BitmapFactory.decodeStream(resolver.openInputStream(imageUri), null, options);
-            if (((float) options.outWidth) / ((float) options.outHeight) > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (((float) options.outWidth) / ((float) options.outHeight) > 1.0f) {
                 return 0;
             }
             return 1;

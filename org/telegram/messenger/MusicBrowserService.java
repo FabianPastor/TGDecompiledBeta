@@ -39,7 +39,6 @@ import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -459,7 +458,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             stateBuilder.setErrorMessage(error);
             state = 7;
         }
-        stateBuilder.setState(state, position, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, SystemClock.elapsedRealtime());
+        stateBuilder.setState(state, position, 1.0f, SystemClock.elapsedRealtime());
         if (playingMessageObject != null) {
             stateBuilder.setActiveQueueItemId((long) MediaController.getInstance().getPlayingMessageObjectNum());
         } else {

@@ -339,34 +339,36 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int option) {
-                            final ProgressDialog progressDialog = new ProgressDialog(SessionsActivity.this.getParentActivity());
-                            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
-                            progressDialog.setCanceledOnTouchOutside(false);
-                            progressDialog.setCancelable(false);
-                            progressDialog.show();
-                            final TL_authorization authorization = (TL_authorization) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
-                            TL_account_resetAuthorization req = new TL_account_resetAuthorization();
-                            req.hash = authorization.hash;
-                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                                public void run(TLObject response, final TL_error error) {
-                                    AndroidUtilities.runOnUIThread(new Runnable() {
-                                        public void run() {
-                                            try {
-                                                progressDialog.dismiss();
-                                            } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
-                                            }
-                                            if (error == null) {
-                                                SessionsActivity.this.sessions.remove(authorization);
-                                                SessionsActivity.this.updateRows();
-                                                if (SessionsActivity.this.listAdapter != null) {
-                                                    SessionsActivity.this.listAdapter.notifyDataSetChanged();
+                            if (SessionsActivity.this.getParentActivity() != null) {
+                                final ProgressDialog progressDialog = new ProgressDialog(SessionsActivity.this.getParentActivity());
+                                progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+                                progressDialog.setCanceledOnTouchOutside(false);
+                                progressDialog.setCancelable(false);
+                                progressDialog.show();
+                                final TL_authorization authorization = (TL_authorization) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
+                                TL_account_resetAuthorization req = new TL_account_resetAuthorization();
+                                req.hash = authorization.hash;
+                                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                    public void run(TLObject response, final TL_error error) {
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    progressDialog.dismiss();
+                                                } catch (Throwable e) {
+                                                    FileLog.e("tmessages", e);
+                                                }
+                                                if (error == null) {
+                                                    SessionsActivity.this.sessions.remove(authorization);
+                                                    SessionsActivity.this.updateRows();
+                                                    if (SessionsActivity.this.listAdapter != null) {
+                                                        SessionsActivity.this.listAdapter.notifyDataSetChanged();
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
-                                }
-                            });
+                                        });
+                                    }
+                                });
+                            }
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

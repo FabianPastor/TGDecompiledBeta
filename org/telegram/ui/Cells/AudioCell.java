@@ -18,7 +18,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -47,7 +46,7 @@ public class AudioCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         this.playButton = new ImageView(context);
         this.playButton.setScaleType(ScaleType.CENTER);

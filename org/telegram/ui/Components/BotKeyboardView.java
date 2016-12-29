@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_replyKeyboardMarkup;
@@ -100,7 +99,7 @@ public class BotKeyboardView extends LinearLayout {
                     f = 0.0f;
                 }
                 linearLayout.addView(layout, LayoutHelper.createLinear(-1, i, 15.0f, f2, 15.0f, f));
-                float weight = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ((float) row.buttons.size());
+                float weight = 1.0f / ((float) row.buttons.size());
                 int b = 0;
                 while (b < row.buttons.size()) {
                     KeyboardButton button = (KeyboardButton) row.buttons.get(b);

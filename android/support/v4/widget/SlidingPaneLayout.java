@@ -37,7 +37,6 @@ import android.view.accessibility.AccessibilityEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SlidingPaneLayout extends ViewGroup {
     private static final int DEFAULT_FADE_COLOR = -858993460;
@@ -552,6 +551,7 @@ public class SlidingPaneLayout extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
+        int childWidthSpec;
         int childHeightSpec;
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -594,7 +594,6 @@ public class SlidingPaneLayout extends ViewGroup {
         }
         this.mSlideableView = null;
         for (i = 0; i < childCount; i++) {
-            int childWidthSpec;
             View child = getChildAt(i);
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
             if (child.getVisibility() == 8) {
@@ -704,7 +703,7 @@ public class SlidingPaneLayout extends ViewGroup {
         int xStart = paddingStart;
         int nextXStart = xStart;
         if (this.mFirstLayout) {
-            float f = (this.mCanSlide && this.mPreservedOpenState) ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+            float f = (this.mCanSlide && this.mPreservedOpenState) ? 1.0f : 0.0f;
             this.mSlideOffset = f;
         }
         for (i = 0; i < childCount; i++) {
@@ -726,7 +725,7 @@ public class SlidingPaneLayout extends ViewGroup {
                 } else if (!this.mCanSlide || this.mParallaxBy == 0) {
                     xStart = nextXStart;
                 } else {
-                    offset = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mSlideOffset) * ((float) this.mParallaxBy));
+                    offset = (int) ((1.0f - this.mSlideOffset) * ((float) this.mParallaxBy));
                     xStart = nextXStart;
                 }
                 if (isLayoutRtl) {
@@ -861,7 +860,7 @@ public class SlidingPaneLayout extends ViewGroup {
     }
 
     private boolean openPane(View pane, int initialVelocity) {
-        if (!this.mFirstLayout && !smoothSlideTo(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, initialVelocity)) {
+        if (!this.mFirstLayout && !smoothSlideTo(1.0f, initialVelocity)) {
             return false;
         }
         this.mPreservedOpenState = true;
@@ -887,7 +886,7 @@ public class SlidingPaneLayout extends ViewGroup {
     }
 
     public boolean isOpen() {
-        return !this.mCanSlide || this.mSlideOffset == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        return !this.mCanSlide || this.mSlideOffset == 1.0f;
     }
 
     @Deprecated
@@ -1084,15 +1083,15 @@ public class SlidingPaneLayout extends ViewGroup {
                 for (i = 0; i < childCount; i++) {
                     v = getChildAt(i);
                     if (v == this.mSlideableView) {
-                        int oldOffset = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mParallaxOffset) * ((float) this.mParallaxBy));
+                        int oldOffset = (int) ((1.0f - this.mParallaxOffset) * ((float) this.mParallaxBy));
                         this.mParallaxOffset = slideOffset;
-                        dx = oldOffset - ((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - slideOffset) * ((float) this.mParallaxBy)));
+                        dx = oldOffset - ((int) ((1.0f - slideOffset) * ((float) this.mParallaxBy)));
                         if (isLayoutRtl) {
                             dx = -dx;
                         }
                         v.offsetLeftAndRight(dx);
                         if (!dimViews) {
-                            dimChildView(v, isLayoutRtl ? this.mParallaxOffset - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mParallaxOffset, this.mCoveredFadeColor);
+                            dimChildView(v, isLayoutRtl ? this.mParallaxOffset - 1.0f : 1.0f - this.mParallaxOffset, this.mCoveredFadeColor);
                         }
                     }
                 }
@@ -1103,9 +1102,9 @@ public class SlidingPaneLayout extends ViewGroup {
         for (i = 0; i < childCount; i++) {
             v = getChildAt(i);
             if (v == this.mSlideableView) {
-                int oldOffset2 = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mParallaxOffset) * ((float) this.mParallaxBy));
+                int oldOffset2 = (int) ((1.0f - this.mParallaxOffset) * ((float) this.mParallaxBy));
                 this.mParallaxOffset = slideOffset;
-                dx = oldOffset2 - ((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - slideOffset) * ((float) this.mParallaxBy)));
+                dx = oldOffset2 - ((int) ((1.0f - slideOffset) * ((float) this.mParallaxBy)));
                 if (isLayoutRtl) {
                     dx = -dx;
                 }
@@ -1113,7 +1112,7 @@ public class SlidingPaneLayout extends ViewGroup {
                 if (!dimViews) {
                     if (isLayoutRtl) {
                     }
-                    dimChildView(v, isLayoutRtl ? this.mParallaxOffset - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.mParallaxOffset, this.mCoveredFadeColor);
+                    dimChildView(v, isLayoutRtl ? this.mParallaxOffset - 1.0f : 1.0f - this.mParallaxOffset, this.mCoveredFadeColor);
                 }
             }
         }

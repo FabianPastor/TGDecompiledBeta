@@ -29,7 +29,6 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.C;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ActionBarLayout extends FrameLayout {
     private static Drawable headerShadowDrawable;
@@ -268,7 +267,7 @@ public class ActionBarLayout extends FrameLayout {
         canvas.restoreToCount(restoreCount);
         if (translationX != 0) {
             if (child == this.containerView) {
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
                 layerShadowDrawable.setBounds(translationX - layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 layerShadowDrawable.setAlpha((int) (255.0f * alpha));
                 layerShadowDrawable.draw(canvas);
@@ -510,13 +509,13 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.cancelRunOnUIThread(this.animationRunnable);
             this.animationRunnable = null;
         }
-        setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerView.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerView.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerViewBack.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerViewBack.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.containerViewBack.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setAlpha(1.0f);
+        this.containerView.setAlpha(1.0f);
+        this.containerView.setScaleX(1.0f);
+        this.containerView.setScaleY(1.0f);
+        this.containerViewBack.setAlpha(1.0f);
+        this.containerViewBack.setScaleX(1.0f);
+        this.containerViewBack.setScaleY(1.0f);
     }
 
     public boolean checkTransitionAnimation() {
@@ -583,18 +582,18 @@ public class ActionBarLayout extends FrameLayout {
                     }
                     ActionBarLayout.this.lastFrameTime = newTime;
                     ActionBarLayout.this.animationProgress = ActionBarLayout.this.animationProgress + (((float) dt) / 150.0f);
-                    if (ActionBarLayout.this.animationProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        ActionBarLayout.this.animationProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (ActionBarLayout.this.animationProgress > 1.0f) {
+                        ActionBarLayout.this.animationProgress = 1.0f;
                     }
                     float interpolated = ActionBarLayout.this.decelerateInterpolator.getInterpolation(ActionBarLayout.this.animationProgress);
                     if (open) {
                         ActionBarLayout.this.containerView.setAlpha(interpolated);
-                        ActionBarLayout.this.containerView.setTranslationX(((float) AndroidUtilities.dp(48.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolated));
+                        ActionBarLayout.this.containerView.setTranslationX(((float) AndroidUtilities.dp(48.0f)) * (1.0f - interpolated));
                     } else {
-                        ActionBarLayout.this.containerViewBack.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolated);
+                        ActionBarLayout.this.containerViewBack.setAlpha(1.0f - interpolated);
                         ActionBarLayout.this.containerViewBack.setTranslationX(((float) AndroidUtilities.dp(48.0f)) * interpolated);
                     }
-                    if (ActionBarLayout.this.animationProgress < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    if (ActionBarLayout.this.animationProgress < 1.0f) {
                         ActionBarLayout.this.startLayoutAnimation(open, false);
                     } else {
                         ActionBarLayout.this.onAnimationEndCheck(false);
@@ -670,7 +669,7 @@ public class ActionBarLayout extends FrameLayout {
         }
         if (!needAnimation) {
             if (this.backgroundView != null) {
-                this.backgroundView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.backgroundView.setAlpha(1.0f);
                 this.backgroundView.setVisibility(0);
             }
             fragment.onTransitionAnimationStart(true, false);
@@ -687,10 +686,10 @@ public class ActionBarLayout extends FrameLayout {
                 }
             };
             ArrayList<Animator> animators = new ArrayList();
-            animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f, 1.0f}));
             if (this.backgroundView != null) {
                 this.backgroundView.setVisibility(0);
-                animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{0.0f, 1.0f}));
             }
             fragment.onTransitionAnimationStart(true, false);
             this.currentAnimation = new AnimatorSet();
@@ -751,11 +750,11 @@ public class ActionBarLayout extends FrameLayout {
                     startLayoutAnimation(true, true);
                 }
             } else if (VERSION.SDK_INT > 15) {
-                this.containerView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.containerView.setAlpha(1.0f);
                 this.containerView.setTranslationX(0.0f);
                 this.currentAnimation = animation;
             } else {
-                this.containerView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                this.containerView.setAlpha(1.0f);
                 this.containerView.setTranslationX(0.0f);
                 this.currentAnimation = animation;
             }
@@ -924,9 +923,9 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 };
                 ArrayList<Animator> animators = new ArrayList();
-                animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}));
+                animators.add(ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f, 0.0f}));
                 if (this.backgroundView != null) {
-                    animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}));
+                    animators.add(ObjectAnimator.ofFloat(this.backgroundView, "alpha", new float[]{1.0f, 0.0f}));
                 }
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.playTogether(animators);

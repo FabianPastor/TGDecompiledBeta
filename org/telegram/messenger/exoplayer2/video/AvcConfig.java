@@ -7,7 +7,6 @@ import org.telegram.messenger.exoplayer2.util.CodecSpecificDataUtil;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil.SpsData;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class AvcConfig {
     public final int height;
@@ -35,7 +34,7 @@ public final class AvcConfig {
             }
             int width = -1;
             int height = -1;
-            float pixelWidthAspectRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float pixelWidthAspectRatio = 1.0f;
             if (numSequenceParameterSets > 0) {
                 SpsData spsData = NalUnitUtil.parseSpsNalUnit((byte[]) initializationData.get(0), nalUnitLengthFieldLength, ((byte[]) initializationData.get(0)).length);
                 width = spsData.width;

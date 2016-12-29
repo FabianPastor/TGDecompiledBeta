@@ -16,7 +16,6 @@ import android.view.View;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CallSwipeView extends View {
     private boolean animatingArrows = true;
@@ -193,9 +192,9 @@ public class CallSwipeView extends View {
         float offsetX = Math.abs(this.viewToDrag.getTranslationX());
         for (int i = 0; i < 3; i++) {
             float f;
-            float masterAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float masterAlpha = 1.0f;
             if (offsetX > ((float) AndroidUtilities.dp((float) (i * 16)))) {
-                masterAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, Math.max(0.0f, (offsetX - ((float) (AndroidUtilities.dp(16.0f) * i))) / ((float) AndroidUtilities.dp(16.0f))));
+                masterAlpha = 1.0f - Math.min(1.0f, Math.max(0.0f, (offsetX - ((float) (AndroidUtilities.dp(16.0f) * i))) / ((float) AndroidUtilities.dp(16.0f))));
             }
             this.arrowsPaint.setAlpha(Math.round(((float) this.arrowAlphas[i]) * masterAlpha));
             canvas.drawPath(this.arrow, this.arrowsPaint);

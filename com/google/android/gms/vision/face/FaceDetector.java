@@ -12,7 +12,6 @@ import com.google.android.gms.vision.zza;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class FaceDetector extends Detector<Face> {
     public static final int ACCURATE_MODE = 1;
@@ -67,7 +66,7 @@ public final class FaceDetector extends Detector<Face> {
         }
 
         public Builder setMinFaceSize(float f) {
-            if (f < 0.0f || f > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (f < 0.0f || f > 1.0f) {
                 throw new IllegalArgumentException("Invalid proportional face size: " + f);
             }
             this.zzbNa = f;

@@ -42,7 +42,11 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                     z = false;
                 }
                 builder.setProgress(100, i, z);
-                NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
+                try {
+                    NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                }
             }
         } else if (id == NotificationCenter.stopEncodingService) {
             String filepath = args[0];

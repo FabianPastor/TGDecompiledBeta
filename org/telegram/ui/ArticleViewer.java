@@ -106,7 +106,6 @@ import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -325,7 +324,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private float pinchCenterX;
     private float pinchCenterY;
     private float pinchStartDistance;
-    private float pinchStartScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float pinchStartScale = 1.0f;
     private float pinchStartX;
     private float pinchStartY;
     private int pressCount = 0;
@@ -337,7 +336,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private AnimatorSet progressViewAnimation;
     private RadialProgressView[] radialProgressViews = new RadialProgressView[3];
     private ImageReceiver rightImage = new ImageReceiver();
-    private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float scale = 1.0f;
     private Paint scrimPaint;
     private Scroller scroller;
     private ImageView shareButton;
@@ -700,7 +699,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         protected void onDraw(Canvas canvas) {
             int width = getMeasuredWidth() / 3;
             this.rect.set((float) width, (float) AndroidUtilities.dp(8.0f), (float) (width * 2), (float) AndroidUtilities.dp(10.0f));
-            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), (float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), ArticleViewer.dividerPaint);
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), ArticleViewer.dividerPaint);
         }
     }
 
@@ -952,7 +951,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     textWidth = width - AndroidUtilities.dp(36.0f);
                 }
                 if (this.currentBlock.w == 0) {
-                    scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    scale = 1.0f;
                 } else {
                     scale = ((float) width) / ((float) this.currentBlock.w);
                 }
@@ -2052,7 +2051,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         public int index;
         public View parentView;
         public int radius;
-        public float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        public float scale = 1.0f;
         public int size;
         public Bitmap thumb;
         public int viewX;
@@ -2060,8 +2059,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     private class RadialProgressView {
-        private float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        private float animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        private float alpha = 1.0f;
+        private float animatedAlphaValue = 1.0f;
         private float animatedProgressValue = 0.0f;
         private float animationProgressStart = 0.0f;
         private int backgroundState = -1;
@@ -2072,7 +2071,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         private int previousBackgroundState = -2;
         private RectF progressRect = new RectF();
         private float radOffset = 0.0f;
-        private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        private float scale = 1.0f;
         private int size = AndroidUtilities.dp(64.0f);
 
         public RadialProgressView(Context context, View parentView) {
@@ -2091,7 +2090,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
-            if (this.animatedProgressValue != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (this.animatedProgressValue != 1.0f) {
                 this.radOffset += ((float) (360 * dt)) / 3000.0f;
                 float progressDiff = this.currentProgress - this.animationProgressStart;
                 if (progressDiff > 0.0f) {
@@ -2106,7 +2105,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 this.parent.invalidate();
             }
-            if (this.animatedProgressValue >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.previousBackgroundState != -2) {
+            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
                 this.animatedAlphaValue -= ((float) dt) / 200.0f;
                 if (this.animatedAlphaValue <= 0.0f) {
                     this.animatedAlphaValue = 0.0f;
@@ -2133,7 +2132,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 this.previousBackgroundState = -2;
             } else {
                 this.previousBackgroundState = this.backgroundState;
-                this.animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.animatedAlphaValue = 1.0f;
             }
             this.backgroundState = state;
             this.parent.invalidate();
@@ -2164,7 +2163,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 drawable = ArticleViewer.progressDrawables[this.backgroundState];
                 if (drawable != null) {
                     if (this.previousBackgroundState != -2) {
-                        drawable.setAlpha((int) (((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.animatedAlphaValue) * 255.0f) * this.alpha));
+                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
                     } else {
                         drawable.setAlpha((int) (this.alpha * 255.0f));
                     }
@@ -2286,7 +2285,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.innerTranslationX = value;
             if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
                 DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.innerTranslationX == 0.0f) ? false : true;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
                 drawerLayoutContainer.setAllowDrawContent(z);
             }
             invalidate();
@@ -2306,7 +2305,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 ArticleViewer.this.scrimPaint.setColor(((int) (153.0f * opacity)) << 24);
                 canvas.drawRect(0.0f, 0.0f, (float) translationX, (float) getHeight(), ArticleViewer.this.scrimPaint);
-                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                float alpha = Math.max(0.0f, Math.min(((float) (width - translationX)) / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
                 ArticleViewer.this.layerShadowDrawable.setBounds(translationX - ArticleViewer.this.layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
                 ArticleViewer.this.layerShadowDrawable.setAlpha((int) (255.0f * alpha));
                 ArticleViewer.this.layerShadowDrawable.draw(canvas);
@@ -2423,7 +2422,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.alpha = value;
             if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
                 DrawerLayoutContainer drawerLayoutContainer = ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer;
-                boolean z = (ArticleViewer.this.isVisible && this.alpha == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.innerTranslationX == 0.0f) ? false : true;
+                boolean z = (ArticleViewer.this.isVisible && this.alpha == 1.0f && this.innerTranslationX == 0.0f) ? false : true;
                 drawerLayoutContainer.setAllowDrawContent(z);
             }
             invalidate();
@@ -2682,7 +2681,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
 
         public void onSuccessDownload(String fileName) {
-            this.radialProgress.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+            this.radialProgress.setProgress(1.0f, true);
             if (this.isGif) {
                 this.buttonState = 2;
                 didPressedButton(true);
@@ -3380,9 +3379,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             paint = embedPostDatePaint;
         }
         if (parentBlock instanceof TL_pageBlockPullquote) {
-            return new StaticLayout(text, paint, width, Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            return new StaticLayout(text, paint, width, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         }
-        return new StaticLayout(text, paint, width, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (float) AndroidUtilities.dp(4.0f), false);
+        return new StaticLayout(text, paint, width, Alignment.ALIGN_NORMAL, 1.0f, (float) AndroidUtilities.dp(4.0f), false);
     }
 
     private void drawLayoutLink(Canvas canvas, StaticLayout layout) {
@@ -3552,7 +3551,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (this.currentFileNames[a] == null || !this.currentFileNames[a].equals(location)) {
                     a++;
                 } else {
-                    this.radialProgressViews[a].setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+                    this.radialProgressViews[a].setProgress(1.0f, true);
                     checkProgress(a, true);
                     return;
                 }
@@ -3564,7 +3563,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (this.currentFileNames[a] == null || !this.currentFileNames[a].equals(location)) {
                     a++;
                 } else {
-                    this.radialProgressViews[a].setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+                    this.radialProgressViews[a].setProgress(1.0f, true);
                     checkProgress(a, true);
                     if (a == 0 && isMediaVideo(this.currentIndex)) {
                         onActionClick(false);
@@ -4031,7 +4030,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
-        WindowManager wm;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4076,7 +4074,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.containerView.setTranslationX(0.0f);
         this.containerView.setTranslationY(0.0f);
         this.listView.setTranslationY(0.0f);
-        this.listView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.listView.setAlpha(1.0f);
         this.windowView.setInnerTranslationX(0.0f);
         this.actionBar.setVisibility(8);
         this.bottomLayout.setVisibility(8);
@@ -4090,6 +4088,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+            WindowManager wm;
             LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
@@ -4134,9 +4133,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         animatorSet = new AnimatorSet();
                         animatorArr = new Animator[3];
                         fArr = new float[2];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
                         fArr = new float[2];
-                        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.dp(56.0f), 0.0f});
                         animatorSet.playTogether(animatorArr);
                         this.animationEndRunnable = new Runnable() {
@@ -4210,9 +4209,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         animatorSet = new AnimatorSet();
         animatorArr = new Animator[3];
         fArr = new float[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[0] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f, 1.0f});
         animatorArr[2] = ObjectAnimator.ofFloat(this.windowView, "translationX", new float[]{(float) AndroidUtilities.dp(56.0f), 0.0f});
         animatorSet.playTogether(animatorArr);
         this.animationEndRunnable = /* anonymous class already generated */;
@@ -4242,8 +4241,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     private void showActionBar(int delay) {
         AnimatorSet animatorSet = new AnimatorSet();
         r1 = new Animator[2];
-        r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-        r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        r1[0] = ObjectAnimator.ofFloat(this.backButton, "alpha", new float[]{1.0f});
+        r1[1] = ObjectAnimator.ofFloat(this.shareContainer, "alpha", new float[]{1.0f});
         animatorSet.playTogether(r1);
         animatorSet.setDuration(150);
         animatorSet.setStartDelay((long) delay);
@@ -4265,9 +4264,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             animatorArr[0] = ObjectAnimator.ofFloat(this.shareButton, "scaleX", new float[]{0.1f});
             animatorArr[1] = ObjectAnimator.ofFloat(this.shareButton, "scaleY", new float[]{0.1f});
             animatorArr[2] = ObjectAnimator.ofFloat(this.shareButton, "alpha", new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
         } else {
             this.shareButton.setVisibility(0);
@@ -4277,9 +4276,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, "scaleX", new float[]{0.1f});
             animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, "scaleY", new float[]{0.1f});
             animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, "alpha", new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.shareButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.shareButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.shareButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.shareButton, "scaleX", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.shareButton, "scaleY", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.shareButton, "alpha", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
         }
         this.progressViewAnimation.addListener(new AnimatorListenerAdapter() {
@@ -4345,12 +4344,12 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             animatorArr[3] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{0.0f});
             animatorArr[4] = ObjectAnimator.ofFloat(this.listView, "translationY", new float[]{(float) (-AndroidUtilities.dp(56.0f))});
             animatorArr[5] = ObjectAnimator.ofFloat(this.headerView, "translationY", new float[]{0.0f});
-            animatorArr[6] = ObjectAnimator.ofFloat(this.backButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[7] = ObjectAnimator.ofFloat(this.backButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[6] = ObjectAnimator.ofFloat(this.backButton, "scaleX", new float[]{1.0f});
+            animatorArr[7] = ObjectAnimator.ofFloat(this.backButton, "scaleY", new float[]{1.0f});
             animatorArr[8] = ObjectAnimator.ofFloat(this.backButton, "translationY", new float[]{0.0f});
-            animatorArr[9] = ObjectAnimator.ofFloat(this.shareContainer, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[9] = ObjectAnimator.ofFloat(this.shareContainer, "scaleX", new float[]{1.0f});
             animatorArr[10] = ObjectAnimator.ofFloat(this.shareContainer, "translationY", new float[]{0.0f});
-            animatorArr[11] = ObjectAnimator.ofFloat(this.shareContainer, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[11] = ObjectAnimator.ofFloat(this.shareContainer, "scaleY", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
             this.collapsed = true;
             this.animationInProgress = 2;
@@ -4379,7 +4378,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(2, null);
             }
-            this.backDrawable.setRotation(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+            this.backDrawable.setRotation(1.0f, true);
             animatorSet.start();
         }
     }
@@ -4390,16 +4389,16 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             r1 = new Animator[12];
             r1[0] = ObjectAnimator.ofFloat(this.containerView, "translationX", new float[]{0.0f});
             r1[1] = ObjectAnimator.ofFloat(this.containerView, "translationY", new float[]{0.0f});
-            r1[2] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            r1[3] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            r1[2] = ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f});
+            r1[3] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{1.0f});
             r1[4] = ObjectAnimator.ofFloat(this.listView, "translationY", new float[]{0.0f});
             r1[5] = ObjectAnimator.ofFloat(this.headerView, "translationY", new float[]{0.0f});
-            r1[6] = ObjectAnimator.ofFloat(this.backButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            r1[7] = ObjectAnimator.ofFloat(this.backButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            r1[6] = ObjectAnimator.ofFloat(this.backButton, "scaleX", new float[]{1.0f});
+            r1[7] = ObjectAnimator.ofFloat(this.backButton, "scaleY", new float[]{1.0f});
             r1[8] = ObjectAnimator.ofFloat(this.backButton, "translationY", new float[]{0.0f});
-            r1[9] = ObjectAnimator.ofFloat(this.shareContainer, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            r1[9] = ObjectAnimator.ofFloat(this.shareContainer, "scaleX", new float[]{1.0f});
             r1[10] = ObjectAnimator.ofFloat(this.shareContainer, "translationY", new float[]{0.0f});
-            r1[11] = ObjectAnimator.ofFloat(this.shareContainer, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            r1[11] = ObjectAnimator.ofFloat(this.shareContainer, "scaleY", new float[]{1.0f});
             animatorSet.playTogether(r1);
             this.collapsed = false;
             this.animationInProgress = 2;
@@ -4761,7 +4760,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 width = height;
                                 height = temp;
                             }
-                            ArticleViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
+                            ArticleViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
                         }
                     }
 
@@ -4822,7 +4821,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     private void toggleActionBar(boolean show, boolean animated) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
         if (show) {
             this.actionBar.setVisibility(0);
             if (this.videoPlayer != null) {
@@ -4835,17 +4834,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.isActionBarVisible = show;
         this.actionBar.setEnabled(show);
         this.bottomLayout.setEnabled(show);
+        float f2;
         if (animated) {
             ArrayList<Animator> arrayList = new ArrayList();
             ActionBar actionBar = this.actionBar;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = show ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+            if (show) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.0f;
+            }
+            fArr[0] = f2;
             arrayList.add(ObjectAnimator.ofFloat(actionBar, str, fArr));
             FrameLayout frameLayout = this.bottomLayout;
             str = "alpha";
             fArr = new float[1];
-            fArr[0] = show ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+            if (show) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.0f;
+            }
+            fArr[0] = f2;
             arrayList.add(ObjectAnimator.ofFloat(frameLayout, str, fArr));
             if (this.captionTextView.getTag() != null) {
                 TextView textView = this.captionTextView;
@@ -4879,8 +4889,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.currentActionBarAnimation.start();
             return;
         }
-        this.actionBar.setAlpha(show ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
-        this.bottomLayout.setAlpha(show ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+        this.actionBar.setAlpha(show ? 1.0f : 0.0f);
+        frameLayout = this.bottomLayout;
+        if (show) {
+            f2 = 1.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        frameLayout.setAlpha(f2);
         if (this.captionTextView.getTag() != null) {
             textView = this.captionTextView;
             if (!show) {
@@ -5101,10 +5117,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 this.draggingDown = false;
                 this.translationX = 0.0f;
                 this.translationY = 0.0f;
-                this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.scale = 1.0f;
                 this.animateToX = 0.0f;
                 this.animateToY = 0.0f;
-                this.animateToScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.animateToScale = 1.0f;
                 this.animationStartTime = 0;
                 this.imageMoveAnimation = null;
                 if (this.aspectRatioFrameLayout != null) {
@@ -5112,7 +5128,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 releasePlayer();
                 this.pinchStartDistance = 0.0f;
-                this.pinchStartScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.pinchStartScale = 1.0f;
                 this.pinchCenterX = 0.0f;
                 this.pinchCenterY = 0.0f;
                 this.pinchStartX = 0.0f;
@@ -5180,7 +5196,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.captionTextView.setTag(str);
         this.captionTextView.setText(str);
         this.captionTextView.setTextColor(-1);
-        this.captionTextView.setAlpha(this.actionBar.getVisibility() == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+        this.captionTextView.setAlpha(this.actionBar.getVisibility() == 0 ? 1.0f : 0.0f);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 int i = 4;
@@ -5352,7 +5368,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.animatingImageView.setOrientation(orientation);
         this.animatingImageView.setNeedRadius(object.radius != 0);
         this.animatingImageView.setImageBitmap(object.thumb);
-        this.animatingImageView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.animatingImageView.setAlpha(1.0f);
         this.animatingImageView.setPivotX(0.0f);
         this.animatingImageView.setPivotY(0.0f);
         this.animatingImageView.setScaleX(object.scale);
@@ -5412,15 +5428,15 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         final AnimatorSet animatorSet = new AnimatorSet();
         Animator[] animatorArr = new Animator[5];
         float[] fArr = new float[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
         int[] iArr = new int[2];
         animatorArr[1] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0, 255});
         fArr = new float[2];
-        animatorArr[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f, 1.0f});
         fArr = new float[2];
-        animatorArr[4] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        animatorArr[4] = ObjectAnimator.ofFloat(this.captionTextView, "alpha", new float[]{0.0f, 1.0f});
         animatorSet.playTogether(animatorArr);
         this.photoAnimationEndRunnable = new Runnable() {
             public void run() {
@@ -5572,7 +5588,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     this.animationValues[1][7] = (float) object.radius;
                     animatorArr = new Animator[5];
                     float[] fArr = new float[2];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
                     animatorArr[1] = ObjectAnimator.ofInt(this.photoBackgroundDrawable, "alpha", new int[]{0});
                     animatorArr[2] = ObjectAnimator.ofFloat(this.actionBar, "alpha", new float[]{0.0f});
                     animatorArr[3] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{0.0f});
@@ -5649,8 +5665,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             ArticleViewer.this.photoContainerBackground.setVisibility(4);
                             ArticleViewer.this.photoAnimationInProgress = 0;
                             ArticleViewer.this.onPhotoClosed(object);
-                            ArticleViewer.this.photoContainerView.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                            ArticleViewer.this.photoContainerView.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            ArticleViewer.this.photoContainerView.setScaleX(1.0f);
+                            ArticleViewer.this.photoContainerView.setScaleY(1.0f);
                         }
                     }
                 };
@@ -5796,7 +5812,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (dx > ((float) AndroidUtilities.dp(3.0f)) || dy > ((float) AndroidUtilities.dp(3.0f))) {
                     this.discardTap = true;
                 }
-                if (this.canDragDown && !this.draggingDown && this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && dy >= ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) && dy / 2.0f > dx) {
+                if (this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) && dy / 2.0f > dx) {
                     this.draggingDown = true;
                     this.moving = false;
                     this.dragY = ev.getY();
@@ -5814,7 +5830,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 } else {
                     float moveDx = this.moveStartX - ev.getX();
                     float moveDy = this.moveStartY - ev.getY();
-                    if (this.moving || ((this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && Math.abs(moveDy) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(moveDx)) || this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
+                    if (this.moving || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
                         if (!this.moving) {
                             moveDx = 0.0f;
                             moveDy = 0.0f;
@@ -5839,7 +5855,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             moveDy /= 3.0f;
                         }
                         this.translationX -= moveDx;
-                        if (this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                        if (this.scale != 1.0f) {
                             this.translationY -= moveDy;
                         }
                         this.photoContainerView.invalidate();
@@ -5849,9 +5865,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         } else if (ev.getActionMasked() == 3 || ev.getActionMasked() == 1 || ev.getActionMasked() == 6) {
             if (this.zooming) {
                 this.invalidCoords = true;
-                if (this.scale < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    updateMinMax(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    animateTo(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f, true);
+                if (this.scale < 1.0f) {
+                    updateMinMax(1.0f);
+                    animateTo(1.0f, 0.0f, 0.0f, true);
                 } else if (this.scale > 3.0f) {
                     float atx = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (3.0f / this.pinchStartScale));
                     float aty = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (3.0f / this.pinchStartScale));
@@ -5875,7 +5891,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (Math.abs(this.dragY - ev.getY()) > ((float) getContainerViewHeight()) / 6.0f) {
                     closePhoto(true);
                 } else {
-                    animateTo(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f, false);
+                    animateTo(1.0f, 0.0f, 0.0f, false);
                 }
                 this.draggingDown = false;
             } else if (this.moving) {
@@ -5885,7 +5901,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 this.moving = false;
                 this.canDragDown = true;
                 float velocity = 0.0f;
-                if (this.velocityTracker != null && this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.velocityTracker != null && this.scale == 1.0f) {
                     this.velocityTracker.computeCurrentVelocity(1000);
                     velocity = this.velocityTracker.getXVelocity();
                 }
@@ -5932,7 +5948,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private void goToNext() {
         float extra = 0.0f;
-        if (this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.scale != 1.0f) {
             extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
         }
         this.switchImageAfterAnimation = 1;
@@ -5941,7 +5957,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private void goToPrev() {
         float extra = 0.0f;
-        if (this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.scale != 1.0f) {
             extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
         }
         this.switchImageAfterAnimation = 2;
@@ -5960,7 +5976,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.animateToY = newTy;
             this.animationStartTime = System.currentTimeMillis();
             this.imageMoveAnimation = new AnimatorSet();
-            this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+            this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
             this.imageMoveAnimation.setDuration((long) duration);
             this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
@@ -6007,7 +6023,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 float ts = this.scale + ((this.animateToScale - this.scale) * this.animationValue);
                 float tx = this.translationX + ((this.animateToX - this.translationX) * this.animationValue);
                 float ty = this.translationY + ((this.animateToY - this.translationY) * this.animationValue);
-                if (this.animateToScale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.translationX == 0.0f) {
+                if (this.animateToScale == 1.0f && this.scale == 1.0f && this.translationX == 0.0f) {
                     aty = ty;
                 }
                 currentScale = ts;
@@ -6047,14 +6063,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     aty = this.translationY;
                 }
             }
-            if (this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || aty == -1.0f || this.zoomAnimation) {
+            if (this.scale != 1.0f || aty == -1.0f || this.zoomAnimation) {
                 this.photoBackgroundDrawable.setAlpha(255);
             } else {
                 float maxValue = ((float) getContainerViewHeight()) / 4.0f;
-                this.photoBackgroundDrawable.setAlpha((int) Math.max(127.0f, 255.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (Math.min(Math.abs(aty), maxValue) / maxValue))));
+                this.photoBackgroundDrawable.setAlpha((int) Math.max(127.0f, 255.0f * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
             }
             ImageReceiver sideImage = null;
-            if (!(this.scale < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || this.zoomAnimation || this.zooming)) {
+            if (!(this.scale < 1.0f || this.zoomAnimation || this.zooming)) {
                 if (currentTranslationX > this.maxX + ((float) AndroidUtilities.dp(5.0f))) {
                     sideImage = this.leftImage;
                 } else if (currentTranslationX < this.minX - ((float) AndroidUtilities.dp(5.0f))) {
@@ -6065,17 +6081,17 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (sideImage == this.rightImage) {
                 float tranlateX = currentTranslationX;
                 scaleDiff = 0.0f;
-                alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                alpha = 1.0f;
                 if (!this.zoomAnimation && tranlateX < this.minX) {
-                    alpha = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (this.minX - tranlateX) / ((float) canvas.getWidth()));
-                    scaleDiff = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - alpha) * 0.3f;
+                    alpha = Math.min(1.0f, (this.minX - tranlateX) / ((float) canvas.getWidth()));
+                    scaleDiff = (1.0f - alpha) * 0.3f;
                     tranlateX = (float) ((-canvas.getWidth()) - (AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE) / 2));
                 }
                 if (sideImage.hasBitmapImage()) {
                     canvas.save();
                     canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
                     canvas.translate(((float) (canvas.getWidth() + (AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE) / 2))) + tranlateX, 0.0f);
-                    canvas.scale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - scaleDiff, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - scaleDiff);
+                    canvas.scale(1.0f - scaleDiff, 1.0f - scaleDiff);
                     bitmapWidth = sideImage.getBitmapWidth();
                     bitmapHeight = sideImage.getBitmapHeight();
                     scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
@@ -6094,19 +6110,19 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 canvas.save();
                 canvas.translate(tranlateX, currentTranslationY / currentScale);
-                canvas.translate(((((float) canvas.getWidth()) * (this.scale + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE))) / 2.0f, (-currentTranslationY) / currentScale);
-                this.radialProgressViews[1].setScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - scaleDiff);
+                canvas.translate(((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE))) / 2.0f, (-currentTranslationY) / currentScale);
+                this.radialProgressViews[1].setScale(1.0f - scaleDiff);
                 this.radialProgressViews[1].setAlpha(alpha);
                 this.radialProgressViews[1].onDraw(canvas);
                 canvas.restore();
             }
             float translateX = currentTranslationX;
             scaleDiff = 0.0f;
-            alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            alpha = 1.0f;
             if (!this.zoomAnimation && translateX > this.maxX) {
-                alpha = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (translateX - this.maxX) / ((float) canvas.getWidth()));
+                alpha = Math.min(1.0f, (translateX - this.maxX) / ((float) canvas.getWidth()));
                 scaleDiff = alpha * 0.3f;
-                alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - alpha;
+                alpha = 1.0f - alpha;
                 translateX = this.maxX;
             }
             boolean drawTextureView = this.aspectRatioFrameLayout != null && this.aspectRatioFrameLayout.getVisibility() == 0;
@@ -6130,7 +6146,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 width = (int) (((float) bitmapWidth) * scale);
                 height = (int) (((float) bitmapHeight) * scale);
-                if (!(drawTextureView && this.textureUploaded && this.videoCrossfadeStarted && this.videoCrossfadeAlpha == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
+                if (!(drawTextureView && this.textureUploaded && this.videoCrossfadeStarted && this.videoCrossfadeAlpha == 1.0f)) {
                     this.centerImage.setAlpha(alpha);
                     this.centerImage.setImageCoords((-width) / 2, (-height) / 2, width, height);
                     this.centerImage.draw(canvas);
@@ -6144,14 +6160,14 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     canvas.translate((float) ((-width) / 2), (float) ((-height) / 2));
                     this.videoTextureView.setAlpha(this.videoCrossfadeAlpha * alpha);
                     this.aspectRatioFrameLayout.draw(canvas);
-                    if (this.videoCrossfadeStarted && this.videoCrossfadeAlpha < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    if (this.videoCrossfadeStarted && this.videoCrossfadeAlpha < 1.0f) {
                         long newUpdateTime = System.currentTimeMillis();
                         long dt = newUpdateTime - this.videoCrossfadeAlphaLastTime;
                         this.videoCrossfadeAlphaLastTime = newUpdateTime;
                         this.videoCrossfadeAlpha += ((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA;
                         this.photoContainerView.invalidate();
-                        if (this.videoCrossfadeAlpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                            this.videoCrossfadeAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                        if (this.videoCrossfadeAlpha > 1.0f) {
+                            this.videoCrossfadeAlpha = 1.0f;
                         }
                     }
                 }
@@ -6160,7 +6176,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (!(drawTextureView || this.bottomLayout.getVisibility() == 0)) {
                 canvas.save();
                 canvas.translate(translateX, currentTranslationY / currentScale);
-                this.radialProgressViews[0].setScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - scaleDiff);
+                this.radialProgressViews[0].setScale(1.0f - scaleDiff);
                 this.radialProgressViews[0].setAlpha(alpha);
                 this.radialProgressViews[0].onDraw(canvas);
                 canvas.restore();
@@ -6169,7 +6185,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 if (sideImage.hasBitmapImage()) {
                     canvas.save();
                     canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
-                    canvas.translate(((-((((float) canvas.getWidth()) * (this.scale + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)))) / 2.0f) + currentTranslationX, 0.0f);
+                    canvas.translate(((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)))) / 2.0f) + currentTranslationX, 0.0f);
                     bitmapWidth = sideImage.getBitmapWidth();
                     bitmapHeight = sideImage.getBitmapHeight();
                     scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
@@ -6177,16 +6193,16 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     scale = scaleX > scaleY ? scaleY : scaleX;
                     width = (int) (((float) bitmapWidth) * scale);
                     height = (int) (((float) bitmapHeight) * scale);
-                    sideImage.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    sideImage.setAlpha(1.0f);
                     sideImage.setImageCoords((-width) / 2, (-height) / 2, width, height);
                     sideImage.draw(canvas);
                     canvas.restore();
                 }
                 canvas.save();
                 canvas.translate(currentTranslationX, currentTranslationY / currentScale);
-                canvas.translate((-((((float) canvas.getWidth()) * (this.scale + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)))) / 2.0f, (-currentTranslationY) / currentScale);
-                this.radialProgressViews[2].setScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                this.radialProgressViews[2].setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                canvas.translate((-((((float) canvas.getWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)))) / 2.0f, (-currentTranslationY) / currentScale);
+                this.radialProgressViews[2].setScale(1.0f);
+                this.radialProgressViews[2].setAlpha(1.0f);
                 this.radialProgressViews[2].onDraw(canvas);
                 canvas.restore();
             }
@@ -6236,7 +6252,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (this.scale != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.scale != 1.0f) {
             this.scroller.abortAnimation();
             this.scroller.fling(Math.round(this.translationX), Math.round(this.translationY), Math.round(velocityX), Math.round(velocityY), (int) this.minX, (int) this.maxX, (int) this.minY, (int) this.maxY);
             this.photoContainerView.postInvalidate();
@@ -6275,13 +6291,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     public boolean onDoubleTap(MotionEvent e) {
-        if (!this.canZoom || (this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && (this.translationY != 0.0f || this.translationX != 0.0f))) {
+        if (!this.canZoom || (this.scale == 1.0f && (this.translationY != 0.0f || this.translationX != 0.0f))) {
             return false;
         }
         if (this.animationStartTime != 0 || this.photoAnimationInProgress != 0) {
             return false;
         }
-        if (this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.scale == 1.0f) {
             float atx = (e.getX() - ((float) (getContainerViewWidth() / 2))) - (((e.getX() - ((float) (getContainerViewWidth() / 2))) - this.translationX) * (3.0f / this.scale));
             float aty = (e.getY() - ((float) (getContainerViewHeight() / 2))) - (((e.getY() - ((float) (getContainerViewHeight() / 2))) - this.translationY) * (3.0f / this.scale));
             updateMinMax(3.0f);
@@ -6297,7 +6313,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             }
             animateTo(3.0f, atx, aty, true);
         } else {
-            animateTo(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f, true);
+            animateTo(1.0f, 0.0f, 0.0f, true);
         }
         this.doubleTap = true;
         return true;

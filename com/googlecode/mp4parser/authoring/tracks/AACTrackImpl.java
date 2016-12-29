@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class AACTrackImpl extends AbstractTrack {
     static Map<Integer, String> audioObjectTypes = new HashMap();
@@ -215,7 +214,7 @@ public class AACTrackImpl extends AbstractTrack {
         this.trackMetaData.setCreationTime(new Date());
         this.trackMetaData.setModificationTime(new Date());
         this.trackMetaData.setLanguage(lang);
-        this.trackMetaData.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.trackMetaData.setVolume(1.0f);
         this.trackMetaData.setTimescale((long) this.firstHeader.sampleRate);
         this.decTimes = new long[this.samples.size()];
         Arrays.fill(this.decTimes, 1024);

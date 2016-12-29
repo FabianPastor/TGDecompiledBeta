@@ -8,7 +8,6 @@ import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.TargetApi;
 import android.support.annotation.RequiresApi;
 import android.view.View;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(12)
 @RequiresApi(12)
@@ -87,7 +86,7 @@ class HoneycombMr1AnimatorCompatProvider implements AnimatorProvider {
     }
 
     public ValueAnimatorCompat emptyValueAnimator() {
-        return new HoneycombValueAnimatorCompat(ValueAnimator.ofFloat(new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+        return new HoneycombValueAnimatorCompat(ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}));
     }
 
     public void clearInterpolator(View view) {

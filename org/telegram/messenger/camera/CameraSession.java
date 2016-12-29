@@ -270,9 +270,14 @@ public class CameraSession {
     }
 
     public int getDisplayOrientation() {
-        CameraInfo info = new CameraInfo();
-        Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
-        return getDisplayOrientation(info, true);
+        try {
+            CameraInfo info = new CameraInfo();
+            Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
+            return getDisplayOrientation(info, true);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+            return 0;
+        }
     }
 
     public void destroy() {

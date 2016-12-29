@@ -30,7 +30,6 @@ import org.telegram.messenger.support.widget.RecyclerView.AdapterDataObserver;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnItemTouchListener;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecyclerListView extends RecyclerView {
@@ -140,8 +139,8 @@ public class RecyclerListView extends RecyclerView {
                     this.progress += dy / ((float) (getMeasuredHeight() - AndroidUtilities.dp(54.0f)));
                     if (this.progress < 0.0f) {
                         this.progress = 0.0f;
-                    } else if (this.progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        this.progress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    } else if (this.progress > 1.0f) {
+                        this.progress = 1.0f;
                     }
                     getCurrentLetter();
                     invalidate();
@@ -165,7 +164,7 @@ public class RecyclerListView extends RecyclerView {
                         if (newLetter == null) {
                             this.letterLayout = null;
                         } else if (!newLetter.equals(this.currentLetter)) {
-                            this.letterLayout = new StaticLayout(newLetter, this.letterPaint, 1000, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                            this.letterLayout = new StaticLayout(newLetter, this.letterPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             if (this.letterLayout.getLineCount() > 0) {
                                 if (LocaleController.isRTL) {
                                     float lWidth = this.letterLayout.getLineWidth(0);
@@ -208,7 +207,7 @@ public class RecyclerListView extends RecyclerView {
                     raduisBottom = ((float) AndroidUtilities.dp(4.0f)) + ((diff / ((float) AndroidUtilities.dp(29.0f))) * ((float) AndroidUtilities.dp(40.0f)));
                 } else {
                     raduisBottom = (float) AndroidUtilities.dp(44.0f);
-                    raduisTop = ((float) AndroidUtilities.dp(4.0f)) + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((diff - ((float) AndroidUtilities.dp(29.0f))) / ((float) AndroidUtilities.dp(29.0f)))) * ((float) AndroidUtilities.dp(40.0f)));
+                    raduisTop = ((float) AndroidUtilities.dp(4.0f)) + ((1.0f - ((diff - ((float) AndroidUtilities.dp(29.0f))) / ((float) AndroidUtilities.dp(29.0f)))) * ((float) AndroidUtilities.dp(40.0f)));
                 }
                 if ((LocaleController.isRTL && !(this.radii[0] == raduisTop && this.radii[6] == raduisBottom)) || !(LocaleController.isRTL || (this.radii[2] == raduisTop && this.radii[4] == raduisBottom))) {
                     float f;
@@ -247,7 +246,7 @@ public class RecyclerListView extends RecyclerView {
                 this.letterLayout.draw(canvas);
                 canvas.restore();
             }
-            if ((this.pressed && this.bubbleProgress < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) || (!this.pressed && this.bubbleProgress > 0.0f)) {
+            if ((this.pressed && this.bubbleProgress < 1.0f) || (!this.pressed && this.bubbleProgress > 0.0f)) {
                 long newTime = System.currentTimeMillis();
                 long dt = newTime - this.lastUpdateTime;
                 if (dt < 0 || dt > 17) {
@@ -257,8 +256,8 @@ public class RecyclerListView extends RecyclerView {
                 invalidate();
                 if (this.pressed) {
                     this.bubbleProgress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
-                    if (this.bubbleProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        this.bubbleProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (this.bubbleProgress > 1.0f) {
+                        this.bubbleProgress = 1.0f;
                         return;
                     }
                     return;

@@ -63,7 +63,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
@@ -101,6 +100,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int emojiSize;
     private LinearLayout emojiTab;
     private HashMap<String, Integer> emojiUseHistory = new HashMap();
+    private int featuresStickersHash;
     private ExtendedGridLayoutManager flowLayoutManager;
     private int gifTabNum = -2;
     private GifsAdapter gifsAdapter;
@@ -1051,6 +1051,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
                 if (this.totalItems != 0) {
                     EmojiView.this.trendingLoaded = true;
+                    EmojiView.this.featuresStickersHash = StickersQuery.getFeaturesStickersHashWithoutUnread();
                 }
                 super.notifyDataSetChanged();
             }
@@ -1380,7 +1381,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     return false;
                 }
             };
-            this.stickersTab.setUnderlineHeight(AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            this.stickersTab.setUnderlineHeight(AndroidUtilities.dp(1.0f));
             this.stickersTab.setIndicatorColor(-1907225);
             this.stickersTab.setUnderlineColor(-1907225);
             this.stickersTab.setBackgroundColor(-657673);
@@ -1476,10 +1477,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.pagerSlidingTabStrip.setViewPager(this.pager);
         this.pagerSlidingTabStrip.setShouldExpand(true);
         this.pagerSlidingTabStrip.setIndicatorHeight(AndroidUtilities.dp(2.0f));
-        this.pagerSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.pagerSlidingTabStrip.setUnderlineHeight(AndroidUtilities.dp(1.0f));
         this.pagerSlidingTabStrip.setIndicatorColor(-13920542);
         this.pagerSlidingTabStrip.setUnderlineColor(-1907225);
-        this.emojiTab.addView(this.pagerSlidingTabStrip, LayoutHelper.createLinear(0, 48, (float) DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.emojiTab.addView(this.pagerSlidingTabStrip, LayoutHelper.createLinear(0, 48, 1.0f));
         this.pagerSlidingTabStrip.setOnPageChangeListener(new OnPageChangeListener() {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 EmojiView.this.onPageScrolled(position, (EmojiView.this.getMeasuredWidth() - EmojiView.this.getPaddingLeft()) - EmojiView.this.getPaddingRight(), positionOffsetPixels);
@@ -2214,6 +2215,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         } else if (id == NotificationCenter.featuredStickersDidLoaded) {
             if (this.trendingGridAdapter != null) {
+                if (this.featuresStickersHash != StickersQuery.getFeaturesStickersHashWithoutUnread()) {
+                    this.trendingLoaded = false;
+                }
                 if (this.trendingLoaded) {
                     updateVisibleTrendingSets();
                 } else {

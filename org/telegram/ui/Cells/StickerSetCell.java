@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
@@ -113,9 +112,9 @@ public class StickerSetCell extends FrameLayout {
             this.valueTextView.setAlpha(0.5f);
             this.imageView.setAlpha(0.5f);
         } else {
-            this.textView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.valueTextView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.imageView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.textView.setAlpha(1.0f);
+            this.valueTextView.setAlpha(1.0f);
+            this.imageView.setAlpha(1.0f);
         }
         ArrayList<Document> documents = set.documents;
         if (documents == null || documents.isEmpty()) {

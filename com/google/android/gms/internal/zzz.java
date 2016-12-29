@@ -18,7 +18,6 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
-import org.telegram.messenger.volley.toolbox.HttpClientStack.HttpPatch;
 
 public class zzz implements zzy {
     private final zza zzaD;
@@ -107,7 +106,7 @@ public class zzz implements zzy {
                 httpURLConnection.setRequestMethod("TRACE");
                 return;
             case 7:
-                httpURLConnection.setRequestMethod(HttpPatch.METHOD_NAME);
+                httpURLConnection.setRequestMethod("PATCH");
                 zzb(httpURLConnection, com_google_android_gms_internal_zzk_);
                 return;
             default:

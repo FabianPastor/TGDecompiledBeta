@@ -20,7 +20,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -91,7 +90,7 @@ public class BotHelpCell extends View {
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
             Emoji.replaceEmoji(stringBuilder, this.textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             try {
-                this.textLayout = new StaticLayout(stringBuilder, this.textPaint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.textLayout = new StaticLayout(stringBuilder, this.textPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.width = 0;
                 this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
                 int count = this.textLayout.getLineCount();

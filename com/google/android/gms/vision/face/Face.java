@@ -3,7 +3,6 @@ package com.google.android.gms.vision.face;
 import android.graphics.PointF;
 import java.util.Arrays;
 import java.util.List;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Face {
     public static final float UNCOMPUTED_PROBABILITY = -1.0f;
@@ -26,17 +25,17 @@ public class Face {
         this.zzbMN = f3;
         this.zzbMO = f4;
         this.zzbMP = Arrays.asList(landmarkArr);
-        if (f5 < 0.0f || f5 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (f5 < 0.0f || f5 > 1.0f) {
             this.zzbMQ = -1.0f;
         } else {
             this.zzbMQ = f5;
         }
-        if (f6 < 0.0f || f6 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (f6 < 0.0f || f6 > 1.0f) {
             this.zzbMR = -1.0f;
         } else {
             this.zzbMR = f6;
         }
-        if (f7 < 0.0f || f7 > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (f7 < 0.0f || f7 > 1.0f) {
             this.zzbMS = -1.0f;
         } else {
             this.zzbMS = f7;

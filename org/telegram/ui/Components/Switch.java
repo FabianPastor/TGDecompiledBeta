@@ -18,7 +18,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Switch extends CompoundButton {
     private static final int THUMB_ANIMATION_DURATION = 250;
@@ -82,7 +81,7 @@ public class Switch extends CompoundButton {
         if (this.mTrackDrawable != null) {
             this.mTrackDrawable.setCallback(this);
         }
-        if (AndroidUtilities.density < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (AndroidUtilities.density < 1.0f) {
             this.mSwitchMinWidth = AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
         } else {
             this.mSwitchMinWidth = 0;
@@ -253,12 +252,12 @@ public class Switch extends CompoundButton {
                         if (thumbScrollRange != 0) {
                             dPos = thumbScrollOffset / ((float) thumbScrollRange);
                         } else {
-                            dPos = thumbScrollOffset > 0.0f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : -1.0f;
+                            dPos = thumbScrollOffset > 0.0f ? 1.0f : -1.0f;
                         }
                         if (LocaleController.isRTL) {
                             dPos = -dPos;
                         }
-                        float newPos = constrain(this.thumbPosition + dPos, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        float newPos = constrain(this.thumbPosition + dPos, 0.0f, 1.0f);
                         if (newPos != this.thumbPosition) {
                             this.mTouchX = x;
                             setThumbPosition(newPos);
@@ -308,7 +307,7 @@ public class Switch extends CompoundButton {
     }
 
     private void animateThumbToCheckedState(boolean newCheckedState) {
-        float targetPosition = newCheckedState ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+        float targetPosition = newCheckedState ? 1.0f : 0.0f;
         this.mPositionAnimator = ObjectAnimator.ofFloat(this, "thumbPosition", new float[]{targetPosition});
         this.mPositionAnimator.setDuration(250);
         this.mPositionAnimator.start();
@@ -360,7 +359,7 @@ public class Switch extends CompoundButton {
             animateThumbToCheckedState(checked);
         } else {
             cancelPositionAnimator();
-            setThumbPosition(checked ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+            setThumbPosition(checked ? 1.0f : 0.0f);
         }
         if (this.mTrackDrawable != null) {
             this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? -6236422 : -3684409, Mode.MULTIPLY));
@@ -457,7 +456,7 @@ public class Switch extends CompoundButton {
             this.mThumbDrawable.getPadding(padding);
             int thumbLeft = thumbInitialLeft - padding.left;
             int thumbRight = (this.mThumbWidth + thumbInitialLeft) + padding.right;
-            int offset = AndroidUtilities.density == 1.5f ? AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) : 0;
+            int offset = AndroidUtilities.density == 1.5f ? AndroidUtilities.dp(1.0f) : 0;
             this.mThumbDrawable.setBounds(thumbLeft, switchTop + offset, thumbRight, switchBottom + offset);
             Drawable background = getBackground();
             if (background != null && VERSION.SDK_INT >= 21) {
@@ -518,7 +517,7 @@ public class Switch extends CompoundButton {
     private int getThumbOffset() {
         float position;
         if (LocaleController.isRTL) {
-            position = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.thumbPosition;
+            position = 1.0f - this.thumbPosition;
         } else {
             position = this.thumbPosition;
         }

@@ -27,7 +27,6 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.TraceUtil;
 import org.telegram.messenger.exoplayer2.util.Util;
 import org.telegram.messenger.exoplayer2.video.VideoRendererEventListener.EventDispatcher;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(16)
 public class MediaCodecVideoRenderer extends MediaCodecRenderer {
@@ -265,7 +264,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             int rotatedHeight = this.currentWidth;
             this.currentWidth = this.currentHeight;
             this.currentHeight = rotatedHeight;
-            this.currentPixelWidthHeightRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / this.currentPixelWidthHeightRatio;
+            this.currentPixelWidthHeightRatio = 1.0f / this.currentPixelWidthHeightRatio;
         }
         setVideoScalingMode(codec, this.scalingMode);
     }
@@ -510,7 +509,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     private static float getPixelWidthHeightRatio(Format format) {
-        return format.pixelWidthHeightRatio == -1.0f ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : format.pixelWidthHeightRatio;
+        return format.pixelWidthHeightRatio == -1.0f ? 1.0f : format.pixelWidthHeightRatio;
     }
 
     private static int getRotationDegrees(Format format) {

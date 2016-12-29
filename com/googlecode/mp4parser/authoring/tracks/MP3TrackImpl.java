@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class MP3TrackImpl extends AbstractTrack {
     private static final int[] BIT_RATE;
@@ -144,7 +143,7 @@ public class MP3TrackImpl extends AbstractTrack {
         this.trackMetaData.setCreationTime(new Date());
         this.trackMetaData.setModificationTime(new Date());
         this.trackMetaData.setLanguage(lang);
-        this.trackMetaData.setVolume(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.trackMetaData.setVolume(1.0f);
         this.trackMetaData.setTimescale((long) this.firstHeader.sampleRate);
         this.durations = new long[this.samples.size()];
         Arrays.fill(this.durations, 1152);

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CropAreaView extends View {
     private Control activeControl;
@@ -89,7 +88,7 @@ public class CropAreaView extends View {
         this.linePaint = new Paint();
         this.linePaint.setStyle(Style.FILL);
         this.linePaint.setColor(-1);
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.handlePaint = new Paint();
         this.handlePaint.setStyle(Style.FILL);
         this.handlePaint.setColor(-1);
@@ -131,8 +130,8 @@ public class CropAreaView extends View {
                 aspectRatio = ((float) bitmap.getWidth()) / ((float) bitmap.getHeight());
             }
             if (!freeform) {
-                aspectRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-                this.lockAspectRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                aspectRatio = 1.0f;
+                this.lockAspectRatio = 1.0f;
             }
             setActualRect(aspectRatio);
         }
@@ -238,7 +237,7 @@ public class CropAreaView extends View {
         if (this.gridType != type) {
             this.previousGridType = this.gridType;
             this.gridType = type;
-            float targetProgress = type == GridType.NONE ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float targetProgress = type == GridType.NONE ? 0.0f : 1.0f;
             if (animated) {
                 this.gridAnimator = ObjectAnimator.ofFloat(this, "gridProgress", new float[]{this.gridProgress, targetProgress});
                 this.gridAnimator.setDuration(200);
@@ -382,7 +381,7 @@ public class CropAreaView extends View {
         float height = measuredHeight - (2.0f * this.sidePadding);
         float centerX = ((float) getMeasuredWidth()) / 2.0f;
         float centerY = statusBarHeight + (measuredHeight / 2.0f);
-        if (((double) Math.abs(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - cropAspectRatio)) < 1.0E-4d) {
+        if (((double) Math.abs(1.0f - cropAspectRatio)) < 1.0E-4d) {
             left = centerX - (minSide / 2.0f);
             top = centerY - (minSide / 2.0f);
             right = centerX + (minSide / 2.0f);
@@ -592,7 +591,7 @@ public class CropAreaView extends View {
                 this.tempRect.bottom = this.tempRect.top + this.minWidth;
             }
             if (this.lockAspectRatio > 0.0f) {
-                if (this.lockAspectRatio < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.lockAspectRatio < 1.0f) {
                     if (this.tempRect.width() <= this.minWidth) {
                         this.tempRect.right = this.tempRect.left + this.minWidth;
                         this.tempRect.bottom = this.tempRect.top + (this.tempRect.width() / this.lockAspectRatio);

@@ -46,7 +46,6 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.InputUser;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.User;
@@ -224,9 +223,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             this.currentAnimation.setDuration(150);
             this.addingSpan = span;
             this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
-            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleX", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "scaleY", new float[]{0.01f, 1.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.addingSpan, "alpha", new float[]{0.0f, 1.0f}));
             addView(span);
         }
 
@@ -256,9 +255,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             this.currentAnimation.setDuration(150);
             this.removingSpan = span;
             this.animators.clear();
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}));
-            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleX", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "scaleY", new float[]{1.0f, 0.01f}));
+            this.animators.add(ObjectAnimator.ofFloat(this.removingSpan, "alpha", new float[]{1.0f, 0.0f}));
             requestLayout();
         }
     }
@@ -960,9 +959,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             this.currentDoneButtonAnimation = new AnimatorSet();
             animatorSet = this.currentDoneButtonAnimation;
             animatorArr = new Animator[3];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneButton, "scaleX", new float[]{1.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneButton, "scaleY", new float[]{1.0f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneButton, "alpha", new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
             this.currentDoneButtonAnimation.setDuration(180);
             this.currentDoneButtonAnimation.start();

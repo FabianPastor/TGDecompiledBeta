@@ -10,7 +10,6 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class GestureDetectorCompat {
     private final GestureDetectorCompatImpl mImpl;
@@ -253,7 +252,7 @@ public final class GestureDetectorCompat {
                         }
                         this.mAlwaysInBiggerTapRegion = false;
                         return handled;
-                    } else if (Math.abs(scrollX) < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && Math.abs(scrollY) < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    } else if (Math.abs(scrollX) < 1.0f && Math.abs(scrollY) < 1.0f) {
                         return false;
                     } else {
                         handled = this.mListener.onScroll(this.mCurrentDownEvent, ev, scrollX, scrollY);

@@ -2,14 +2,13 @@ package org.telegram.ui.Components.Crop;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CropState {
     private float height;
     private Matrix matrix = new Matrix();
     private float minimumScale;
     private float rotation = 0.0f;
-    private float scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float scale = 1.0f;
     private float[] values = new float[9];
     private float width;
     private float x = 0.0f;

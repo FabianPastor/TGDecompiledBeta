@@ -8,7 +8,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TypingDotsDrawable extends Drawable {
@@ -45,7 +44,7 @@ public class TypingDotsDrawable extends Drawable {
             } else if (timeSinceStart <= 320.0f) {
                 this.scales[a] = 1.33f + this.decelerateInterpolator.getInterpolation(timeSinceStart / 320.0f);
             } else if (timeSinceStart <= 640.0f) {
-                this.scales[a] = (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.decelerateInterpolator.getInterpolation((timeSinceStart - 320.0f) / 320.0f)) + 1.33f;
+                this.scales[a] = (1.0f - this.decelerateInterpolator.getInterpolation((timeSinceStart - 320.0f) / 320.0f)) + 1.33f;
             } else if (timeSinceStart >= 800.0f) {
                 this.elapsedTimes[a] = 0.0f;
                 this.startTimes[a] = 0.0f;

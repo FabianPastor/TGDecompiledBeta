@@ -19,7 +19,6 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.Paint.Painting.PaintingDelegate;
 import org.telegram.ui.Components.Size;
 
@@ -57,7 +56,7 @@ public class RenderView extends TextureView {
                     CanvasInternal.this.setCurrentContext();
                     GLES20.glBindFramebuffer(36160, 0);
                     GLES20.glViewport(0, 0, CanvasInternal.this.bufferWidth, CanvasInternal.this.bufferHeight);
-                    GLES20.glClearColor(0.0f, 0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
                     GLES20.glClear(16384);
                     RenderView.this.painting.render();
                     GLES20.glBlendFunc(1, 771);
@@ -391,17 +390,23 @@ public class RenderView extends TextureView {
     }
 
     private void updateTransform() {
+        float scale;
         Matrix matrix = new Matrix();
-        float scale = this.painting != null ? ((float) getWidth()) / this.painting.getSize().width : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        int width = getWidth();
+        if (this.painting != null) {
+            scale = ((float) width) / this.painting.getSize().width;
+        } else {
+            scale = 1.0f;
+        }
         if (scale <= 0.0f) {
-            scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            scale = 1.0f;
         }
         Size paintingSize = getPainting().getSize();
         matrix.preTranslate(((float) getWidth()) / 2.0f, ((float) getHeight()) / 2.0f);
         matrix.preScale(scale, -scale);
         matrix.preTranslate((-paintingSize.width) / 2.0f, (-paintingSize.height) / 2.0f);
         this.input.setMatrix(matrix);
-        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), GLMatrix.LoadGraphicsMatrix(matrix)));
+        this.painting.setRenderProjection(GLMatrix.MultiplyMat4f(GLMatrix.LoadOrtho(0.0f, (float) this.internal.bufferWidth, 0.0f, (float) this.internal.bufferHeight, -1.0f, 1.0f), GLMatrix.LoadGraphicsMatrix(matrix)));
     }
 
     public boolean shouldDraw() {

@@ -33,7 +33,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Document;
@@ -111,7 +110,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             descriptionTextPaint = new TextPaint(1);
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
         descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -148,7 +147,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (!(this.mediaWebpage || this.inlineResult == null)) {
             if (this.inlineResult.title != null) {
                 try {
-                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace('\n', ' '), titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), titleTextPaint, (float) Math.min((int) Math.ceil((double) titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace('\n', ' '), titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), titleTextPaint, (float) Math.min((int) Math.ceil((double) titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
@@ -158,7 +157,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 try {
                     this.descriptionLayout = ChatMessageCell.generateStaticLayout(Emoji.replaceEmoji(this.inlineResult.description, descriptionTextPaint.getFontMetricsInt(), AndroidUtilities.dp(13.0f), false), descriptionTextPaint, maxWidth, maxWidth, 0, 3);
                     if (this.descriptionLayout.getLineCount() > 0) {
-                        this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                     }
                 } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
@@ -166,7 +165,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
             if (this.inlineResult.url != null) {
                 try {
-                    this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace('\n', ' '), descriptionTextPaint, (float) Math.min((int) Math.ceil((double) descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace('\n', ' '), descriptionTextPaint, (float) Math.min((int) Math.ceil((double) descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e22) {
                     FileLog.e("tmessages", e22);
                 }
@@ -623,14 +622,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         if (this.drawLinkImageView) {
             canvas.save();
-            if ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
+            if ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)) {
                 long newTime = System.currentTimeMillis();
                 long dt = newTime - this.lastUpdateTime;
                 this.lastUpdateTime = newTime;
                 if (!this.scaled || this.scale == 0.8f) {
                     this.scale += ((float) dt) / 400.0f;
-                    if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                        this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    if (this.scale > 1.0f) {
+                        this.scale = 1.0f;
                     }
                 } else {
                     this.scale -= ((float) dt) / 400.0f;
@@ -778,7 +777,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     }
 
     public void onSuccessDownload(String fileName) {
-        this.radialProgress.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+        this.radialProgress.setProgress(1.0f, true);
         updateButtonState(true);
     }
 

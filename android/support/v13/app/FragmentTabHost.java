@@ -23,7 +23,6 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import java.util.ArrayList;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(13)
 @RequiresApi(13)
@@ -128,7 +127,7 @@ public class FragmentTabHost extends TabHost implements OnTabChangeListener {
             fl = new FrameLayout(context);
             this.mRealTabContent = fl;
             this.mRealTabContent.setId(this.mContainerId);
-            ll.addView(fl, new LinearLayout.LayoutParams(-1, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            ll.addView(fl, new LinearLayout.LayoutParams(-1, 0, 1.0f));
         }
     }
 

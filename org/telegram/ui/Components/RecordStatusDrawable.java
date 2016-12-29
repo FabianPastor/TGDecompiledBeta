@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecordStatusDrawable extends Drawable {
@@ -39,8 +38,8 @@ public class RecordStatusDrawable extends Drawable {
             dt = 50;
         }
         this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_MAGENTA;
-        while (this.progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.progress -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        while (this.progress > 1.0f) {
+            this.progress -= 1.0f;
         }
         invalidateSelf();
     }
@@ -57,12 +56,12 @@ public class RecordStatusDrawable extends Drawable {
 
     public void draw(Canvas canvas) {
         canvas.save();
-        canvas.translate(0.0f, (float) (AndroidUtilities.dp(this.isChat ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 2.0f) + (getIntrinsicHeight() / 2)));
+        canvas.translate(0.0f, (float) (AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f) + (getIntrinsicHeight() / 2)));
         for (int a = 0; a < 4; a++) {
             if (a == 0) {
                 this.paint.setAlpha((int) (this.progress * 255.0f));
             } else if (a == 3) {
-                this.paint.setAlpha((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress) * 255.0f));
+                this.paint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
             } else {
                 this.paint.setAlpha(255);
             }

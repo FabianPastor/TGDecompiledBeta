@@ -13,7 +13,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CheckBoxSquare extends View {
     private static Paint backgroundPaint = null;
@@ -77,7 +76,7 @@ public class CheckBoxSquare extends View {
     private void animateToCheckedState(boolean newCheckedState) {
         String str = "progress";
         float[] fArr = new float[1];
-        fArr[0] = newCheckedState ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.setDuration(300);
         this.checkAnimator.start();
@@ -105,7 +104,7 @@ public class CheckBoxSquare extends View {
                 return;
             }
             cancelCheckAnimator();
-            setProgress(checked ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -128,24 +127,24 @@ public class CheckBoxSquare extends View {
                 backgroundPaint.setColor(Color.rgb(((int) (((float) (Color.red(this.color) - 115)) * checkProgress)) + 115, ((int) (((float) (Color.green(this.color) - 115)) * checkProgress)) + 115, ((int) (((float) (Color.blue(this.color) - 115)) * checkProgress)) + 115));
             } else {
                 bounceProgress = 2.0f - (this.progress / 0.5f);
-                checkProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                checkProgress = 1.0f;
                 backgroundPaint.setColor(this.color);
             }
             if (this.isDisabled) {
                 backgroundPaint.setColor(-5197648);
             }
-            float bounce = ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * bounceProgress;
+            float bounce = ((float) AndroidUtilities.dp(1.0f)) * bounceProgress;
             rectF.set(bounce, bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce, ((float) AndroidUtilities.dp(18.0f)) - bounce);
             this.drawBitmap.eraseColor(0);
             this.drawCanvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), backgroundPaint);
-            if (checkProgress != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (checkProgress != 1.0f) {
                 float rad = Math.min((float) AndroidUtilities.dp(7.0f), (((float) AndroidUtilities.dp(7.0f)) * checkProgress) + bounce);
                 rectF.set(((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(2.0f)) + rad, ((float) AndroidUtilities.dp(16.0f)) - rad, ((float) AndroidUtilities.dp(16.0f)) - rad);
                 this.drawCanvas.drawRect(rectF, eraser);
             }
             if (this.progress > 0.5f) {
-                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.5f), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (((float) AndroidUtilities.dp(7.5f)) - (((float) AndroidUtilities.dp(5.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(5.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - bounceProgress)))), checkPaint);
-                this.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(6.5f)), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (AndroidUtilities.dpf2(6.5f) + (((float) AndroidUtilities.dp(9.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(9.0f)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - bounceProgress)))), checkPaint);
+                this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.5f), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (((float) AndroidUtilities.dp(7.5f)) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(5.0f)) * (1.0f - bounceProgress)))), checkPaint);
+                this.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(6.5f)), (float) ((int) AndroidUtilities.dpf2(13.5f)), (float) ((int) (AndroidUtilities.dpf2(6.5f) + (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), (float) ((int) (AndroidUtilities.dpf2(13.5f) - (((float) AndroidUtilities.dp(9.0f)) * (1.0f - bounceProgress)))), checkPaint);
             }
             canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, null);
         }

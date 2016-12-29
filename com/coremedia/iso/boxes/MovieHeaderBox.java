@@ -13,7 +13,6 @@ import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.runtime.internal.Conversions;
 import org.aspectj.runtime.reflect.Factory;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class MovieHeaderBox extends AbstractFullBox {
     public static final String TYPE = "mvhd";
@@ -59,7 +58,7 @@ public class MovieHeaderBox extends AbstractFullBox {
     private int selectionDuration;
     private int selectionTime;
     private long timescale;
-    private float volume = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float volume = 1.0f;
 
     static {
         ajc$preClinit();

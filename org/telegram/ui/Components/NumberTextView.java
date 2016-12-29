@@ -13,7 +13,6 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class NumberTextView extends View {
     private ObjectAnimator animator;
@@ -57,7 +56,7 @@ public class NumberTextView extends View {
                 String ch = text.substring(a, a + 1);
                 String oldCh = (this.oldLetters.isEmpty() || a >= oldText.length()) ? null : oldText.substring(a, a + 1);
                 if (oldCh == null || !oldCh.equals(ch)) {
-                    this.letters.add(new StaticLayout(ch, this.textPaint, (int) Math.ceil((double) this.textPaint.measureText(ch)), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false));
+                    this.letters.add(new StaticLayout(ch, this.textPaint, (int) Math.ceil((double) this.textPaint.measureText(ch)), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false));
                 } else {
                     this.letters.add(this.oldLetters.get(a));
                     this.oldLetters.set(a, null);
@@ -67,7 +66,7 @@ public class NumberTextView extends View {
             if (animated && !this.oldLetters.isEmpty()) {
                 String str = "progress";
                 float[] fArr = new float[2];
-                fArr[0] = forwardAnimation ? -1.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                fArr[0] = forwardAnimation ? -1.0f : 1.0f;
                 fArr[1] = 0.0f;
                 this.animator = ObjectAnimator.ofFloat(this, str, fArr);
                 this.animator.setDuration(150);
@@ -118,11 +117,11 @@ public class NumberTextView extends View {
                     if (old != null) {
                         this.textPaint.setAlpha((int) (this.progress * 255.0f));
                         canvas.save();
-                        canvas.translate(0.0f, (this.progress - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * height);
+                        canvas.translate(0.0f, (this.progress - 1.0f) * height);
                         old.draw(canvas);
                         canvas.restore();
                         if (layout != null) {
-                            this.textPaint.setAlpha((int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress) * 255.0f));
+                            this.textPaint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
                             canvas.translate(0.0f, this.progress * height);
                         }
                     } else {
@@ -132,13 +131,13 @@ public class NumberTextView extends View {
                     if (old != null) {
                         this.textPaint.setAlpha((int) ((-this.progress) * 255.0f));
                         canvas.save();
-                        canvas.translate(0.0f, (this.progress + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * height);
+                        canvas.translate(0.0f, (this.progress + 1.0f) * height);
                         old.draw(canvas);
                         canvas.restore();
                     }
                     if (layout != null) {
                         if (a == count - 1 || old != null) {
-                            this.textPaint.setAlpha((int) ((this.progress + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * 255.0f));
+                            this.textPaint.setAlpha((int) ((this.progress + 1.0f) * 255.0f));
                             canvas.translate(0.0f, this.progress * height);
                         } else {
                             this.textPaint.setAlpha(255);
@@ -154,7 +153,7 @@ public class NumberTextView extends View {
                 if (layout != null) {
                     lineWidth = layout.getLineWidth(0);
                 } else {
-                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    lineWidth = old.getLineWidth(0) + ((float) AndroidUtilities.dp(1.0f));
                 }
                 canvas.translate(lineWidth, 0.0f);
                 a++;

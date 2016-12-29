@@ -61,7 +61,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.MessageMedia;
@@ -496,7 +495,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         access$2100 = LocationActivity.this.animatorSet;
                         animatorArr = new Animator[2];
                         animatorArr[0] = ObjectAnimator.ofFloat(LocationActivity.this.markerImageView, "translationY", new float[]{(float) (LocationActivity.this.markerTop + (-AndroidUtilities.dp(10.0f)))});
-                        animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                        animatorArr[1] = ObjectAnimator.ofFloat(LocationActivity.this.markerXImageView, "alpha", new float[]{1.0f});
                         access$2100.playTogether(animatorArr);
                         LocationActivity.this.animatorSet.start();
                     } else if (ev.getAction() == 1) {
@@ -516,7 +515,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         if (!LocationActivity.this.userLocationMoved) {
                             AnimatorSet animatorSet = new AnimatorSet();
                             animatorSet.setDuration(200);
-                            animatorSet.play(ObjectAnimator.ofFloat(LocationActivity.this.locationButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+                            animatorSet.play(ObjectAnimator.ofFloat(LocationActivity.this.locationButton, "alpha", new float[]{1.0f}));
                             animatorSet.start();
                             LocationActivity.this.userLocationMoved = true;
                         }

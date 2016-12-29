@@ -23,7 +23,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -57,7 +56,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         this.TAG = MediaController.getInstance().generateObserverTag();
         this.placeholderImabeView = new ImageView(context);
@@ -349,7 +348,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     }
 
     public void onSuccessDownload(String name) {
-        this.progressView.setProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, true);
+        this.progressView.setProgress(1.0f, true);
         updateFileExistIcon();
     }
 

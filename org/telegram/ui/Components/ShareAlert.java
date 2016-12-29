@@ -56,7 +56,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -475,6 +474,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
 
         public TL_dialog getItem(int i) {
+            if (i < 0 || i >= this.searchResult.size()) {
+                return null;
+            }
             return ((DialogSearchResult) this.searchResult.get(i)).dialog;
         }
 
@@ -621,7 +623,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButtonBadgeTextView.setGravity(17);
         this.doneButtonBadgeTextView.setBackgroundResource(R.drawable.bluecounter);
         this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
-        this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
         this.doneButton.addView(this.doneButtonBadgeTextView, LayoutHelper.createLinear(-2, 23, 16, 0, 0, 10, 0));
         this.doneButtonTextView = new TextView(context);
         this.doneButtonTextView.setTextSize(1, 14.0f);

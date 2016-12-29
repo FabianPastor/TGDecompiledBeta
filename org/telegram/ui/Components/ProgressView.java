@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ProgressView {
     public float currentProgress = 0.0f;
@@ -22,8 +21,8 @@ public class ProgressView {
         this.currentProgress = progress;
         if (this.currentProgress < 0.0f) {
             this.currentProgress = 0.0f;
-        } else if (this.currentProgress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.currentProgress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        } else if (this.currentProgress > 1.0f) {
+            this.currentProgress = 1.0f;
         }
     }
 

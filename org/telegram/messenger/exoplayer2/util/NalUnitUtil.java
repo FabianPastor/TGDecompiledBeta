@@ -3,10 +3,9 @@ package org.telegram.messenger.exoplayer2.util;
 import android.util.Log;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class NalUnitUtil {
-    public static final float[] ASPECT_RATIO_IDC_VALUES = new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 1.0909091f, 0.90909094f, 1.4545455f, 1.2121212f, 2.1818182f, 1.8181819f, 2.909091f, 2.4242425f, 1.6363636f, 1.3636364f, 1.939394f, 1.6161616f, 1.3333334f, 1.5f, 2.0f};
+    public static final float[] ASPECT_RATIO_IDC_VALUES = new float[]{1.0f, 1.0f, 1.0909091f, 0.90909094f, 1.4545455f, 1.2121212f, 2.1818182f, 1.8181819f, 2.909091f, 2.4242425f, 1.6363636f, 1.3636364f, 1.939394f, 1.6161616f, 1.3333334f, 1.5f, 2.0f};
     public static final int EXTENDED_SAR = 255;
     public static final byte[] NAL_START_CODE = new byte[]{(byte) 0, (byte) 0, (byte) 0, (byte) 1};
     private static final int NAL_UNIT_TYPE_SPS = 7;
@@ -202,7 +201,7 @@ public final class NalUnitUtil {
             frameWidth -= (frameCropLeftOffset + frameCropRightOffset) * cropUnitX;
             frameHeight -= (frameCropTopOffset + frameCropBottomOffset) * cropUnitY;
         }
-        float pixelWidthHeightRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float pixelWidthHeightRatio = 1.0f;
         if (parsableNalUnitBitArray.readBit() && parsableNalUnitBitArray.readBit()) {
             int aspectRatioIdc = parsableNalUnitBitArray.readBits(8);
             if (aspectRatioIdc == 255) {

@@ -11,7 +11,6 @@ import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.Cells.DividerCell;
@@ -271,7 +270,7 @@ public class ContactsAdapter extends BaseSectionsAdapter {
                 convertView.setAlpha(0.5f);
                 return convertView;
             }
-            convertView.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            convertView.setAlpha(1.0f);
             return convertView;
         }
     }

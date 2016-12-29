@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import org.telegram.messenger.exoplayer2.C;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @TargetApi(16)
 public class Track {
@@ -79,7 +78,7 @@ public class Track {
         this.trackId = (long) id;
         this.isAudio = audio;
         if (this.isAudio) {
-            this.volume = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            this.volume = 1.0f;
             this.timeScale = format.getInteger("sample-rate");
             this.handler = "soun";
             this.headerBox = new SoundMediaHeaderBox();

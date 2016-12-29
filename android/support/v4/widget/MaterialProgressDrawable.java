@@ -25,7 +25,6 @@ import android.view.animation.Transformation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 class MaterialProgressDrawable extends Drawable implements Animatable {
     private static final int ANIMATION_DURATION = 1332;
@@ -513,7 +512,7 @@ class MaterialProgressDrawable extends Drawable implements Animatable {
                     ring.setShowArrow(false);
                     return;
                 }
-                MaterialProgressDrawable.this.mRotationCount = (MaterialProgressDrawable.this.mRotationCount + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) % 5.0f;
+                MaterialProgressDrawable.this.mRotationCount = (MaterialProgressDrawable.this.mRotationCount + 1.0f) % 5.0f;
             }
         });
         this.mAnimation = animation;

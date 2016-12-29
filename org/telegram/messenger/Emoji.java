@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Locale;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class Emoji {
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
@@ -158,7 +157,7 @@ public class Emoji {
     static {
         int emojiFullSize;
         int add = 2;
-        if (AndroidUtilities.density <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (AndroidUtilities.density <= 1.0f) {
             emojiFullSize = 32;
             add = 1;
         } else if (AndroidUtilities.density <= 1.5f) {
@@ -187,7 +186,7 @@ public class Emoji {
         try {
             int a;
             File imageFile;
-            if (AndroidUtilities.density <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (AndroidUtilities.density <= 1.0f) {
                 scale = 2.0f;
                 imageResize = 2;
             } else if (AndroidUtilities.density <= 1.5f) {

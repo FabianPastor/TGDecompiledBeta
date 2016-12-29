@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextSettingsCell extends FrameLayout {
@@ -33,7 +32,7 @@ public class TextSettingsCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         this.textView = new TextView(context);
         this.textView.setTextColor(-14606047);
@@ -149,18 +148,25 @@ public class TextSettingsCell extends FrameLayout {
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
+        TextView textView;
+        float f2;
         if (animators != null) {
-            TextView textView = this.textView;
+            textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+            fArr[0] = value ? 1.0f : 0.5f;
             animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             if (this.valueTextView.getVisibility() == 0) {
                 textView = this.valueTextView;
                 str = "alpha";
                 fArr = new float[1];
-                fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+                if (value) {
+                    f2 = 1.0f;
+                } else {
+                    f2 = 0.5f;
+                }
+                fArr[0] = f2;
                 animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             }
             if (this.valueImageView.getVisibility() == 0) {
@@ -176,9 +182,15 @@ public class TextSettingsCell extends FrameLayout {
             }
             return;
         }
-        this.textView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        this.textView.setAlpha(value ? 1.0f : 0.5f);
         if (this.valueTextView.getVisibility() == 0) {
-            this.valueTextView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+            textView = this.valueTextView;
+            if (value) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.5f;
+            }
+            textView.setAlpha(f2);
         }
         if (this.valueImageView.getVisibility() == 0) {
             imageView = this.valueImageView;

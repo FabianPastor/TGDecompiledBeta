@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ImageUtils {
     public static final int ORIENTATION_LANDSCAPE = 1;
@@ -63,7 +62,7 @@ public class ImageUtils {
         if (options.outWidth == -1 || options.outHeight == -1) {
             return 0;
         }
-        if (((float) options.outWidth) / ((float) options.outHeight) <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (((float) options.outWidth) / ((float) options.outHeight) <= 1.0f) {
             return 0;
         }
         return 1;

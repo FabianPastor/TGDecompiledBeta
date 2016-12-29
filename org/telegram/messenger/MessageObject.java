@@ -24,7 +24,6 @@ import org.telegram.messenger.Emoji.EmojiSpan;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -716,7 +715,7 @@ public class MessageObject {
                 int maxButtonSize = 0;
                 int size = row.buttons.size();
                 for (int b = 0; b < size; b++) {
-                    StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(((KeyboardButton) row.buttons.get(b)).text, botButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), botButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(((KeyboardButton) row.buttons.get(b)).text, botButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), botButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout.getLineCount() > 0) {
                         maxButtonSize = Math.max(maxButtonSize, ((int) Math.ceil((double) (staticLayout.getLineWidth(0) - staticLayout.getLineLeft(0)))) + AndroidUtilities.dp(4.0f));
                     }
@@ -1288,7 +1287,7 @@ public class MessageObject {
                 paint = textPaint;
             }
             try {
-                StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.textHeight = textLayout.getHeight();
                 int linesCount = textLayout.getLineCount();
                 int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
@@ -1308,7 +1307,7 @@ public class MessageObject {
                         if (endCharacter >= startCharacter) {
                             block.charactersOffset = startCharacter;
                             try {
-                                block.textLayout = new StaticLayout(this.messageText.subSequence(startCharacter, endCharacter), paint, maxWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                                block.textLayout = new StaticLayout(this.messageText.subSequence(startCharacter, endCharacter), paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 block.textYOffset = (float) textLayout.getLineTop(linesOffset);
                                 if (a != 0) {
                                     block.height = (int) (block.textYOffset - prevOffset);

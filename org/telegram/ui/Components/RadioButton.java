@@ -13,7 +13,6 @@ import android.graphics.PorterDuffXfermode;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RadioButton extends View {
@@ -81,7 +80,7 @@ public class RadioButton extends View {
     private void animateToCheckedState(boolean newCheckedState) {
         String str = "progress";
         float[] fArr = new float[1];
-        fArr[0] = newCheckedState ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+        fArr[0] = newCheckedState ? 1.0f : 0.0f;
         this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
         this.checkAnimator.setDuration(200);
         this.checkAnimator.start();
@@ -105,7 +104,7 @@ public class RadioButton extends View {
                 return;
             }
             cancelCheckAnimator();
-            setProgress(checked ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f);
+            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -133,23 +132,23 @@ public class RadioButton extends View {
         } else {
             circleProgress = 2.0f - (this.progress / 0.5f);
             int r1 = Color.red(this.color);
-            int rD = (int) (((float) (Color.red(this.checkedColor) - r1)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - circleProgress));
+            int rD = (int) (((float) (Color.red(this.checkedColor) - r1)) * (1.0f - circleProgress));
             int g1 = Color.green(this.color);
-            int gD = (int) (((float) (Color.green(this.checkedColor) - g1)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - circleProgress));
+            int gD = (int) (((float) (Color.green(this.checkedColor) - g1)) * (1.0f - circleProgress));
             int b1 = Color.blue(this.color);
-            int c = Color.rgb(r1 + rD, g1 + gD, b1 + ((int) (((float) (Color.blue(this.checkedColor) - b1)) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - circleProgress))));
+            int c = Color.rgb(r1 + rD, g1 + gD, b1 + ((int) (((float) (Color.blue(this.checkedColor) - b1)) * (1.0f - circleProgress))));
             paint.setColor(c);
             checkedPaint.setColor(c);
         }
         if (this.bitmap != null) {
             this.bitmap.eraseColor(0);
-            float rad = ((float) (this.size / 2)) - ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + circleProgress) * AndroidUtilities.density);
+            float rad = ((float) (this.size / 2)) - ((1.0f + circleProgress) * AndroidUtilities.density);
             this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
             if (this.progress <= 0.5f) {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)), checkedPaint);
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (rad - ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - circleProgress), eraser);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (rad - ((float) AndroidUtilities.dp(1.0f))) * (1.0f - circleProgress), eraser);
             } else {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((rad - ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) - ((float) (this.size / 4))) * circleProgress), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((rad - ((float) AndroidUtilities.dp(1.0f))) - ((float) (this.size / 4))) * circleProgress), checkedPaint);
             }
             canvas.drawBitmap(this.bitmap, 0.0f, 0.0f, null);
         }

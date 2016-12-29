@@ -83,7 +83,6 @@ import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -105,7 +104,7 @@ public class AndroidUtilities {
     private static int adjustOwnerClassGuid = 0;
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
-    public static float density = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static Point displaySize = new Point();
     public static boolean incorrectDisplaySizeFix;
@@ -1329,7 +1328,7 @@ public class AndroidUtilities {
             } else if (lastIndex == 0 && idx != 0) {
                 builder.append(wholeString.substring(0, idx));
             }
-            String query = wholeString.substring(idx, end);
+            String query = wholeString.substring(idx, Math.min(wholeString.length(), end));
             if (query.startsWith(" ")) {
                 builder.append(" ");
             }

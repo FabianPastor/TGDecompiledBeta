@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SendingFileDrawable extends Drawable {
@@ -54,7 +53,7 @@ public class SendingFileDrawable extends Drawable {
         long newTime = System.currentTimeMillis();
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
-        if (this.animatedProgressValue != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.animatedProgressValue != 1.0f) {
             this.radOffset += ((float) (360 * dt)) / 1000.0f;
             float progressDiff = this.currentProgress - this.animationProgressStart;
             if (progressDiff > 0.0f) {
@@ -82,7 +81,7 @@ public class SendingFileDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        this.cicleRect.set((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f));
+        this.cicleRect.set((float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f));
         canvas.drawArc(this.cicleRect, this.radOffset - 0.049804688f, Math.max(BitmapDescriptorFactory.HUE_YELLOW, 360.0f * this.animatedProgressValue), false, this.paint);
         if (this.started) {
             update();

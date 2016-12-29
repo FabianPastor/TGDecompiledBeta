@@ -12,7 +12,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import java.util.Arrays;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ViewDragHelper {
     private static final int BASE_SETTLE_DURATION = 256;
@@ -33,8 +32,8 @@ public class ViewDragHelper {
     private static final String TAG = "ViewDragHelper";
     private static final Interpolator sInterpolator = new Interpolator() {
         public float getInterpolation(float t) {
-            t -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-            return ((((t * t) * t) * t) * t) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            t -= 1.0f;
+            return ((((t * t) * t) * t) * t) + 1.0f;
         }
     };
     private int mActivePointerId = -1;
@@ -116,7 +115,7 @@ public class ViewDragHelper {
 
     public static ViewDragHelper create(ViewGroup forParent, float sensitivity, Callback cb) {
         ViewDragHelper helper = create(forParent, cb);
-        helper.mTouchSlop = (int) (((float) helper.mTouchSlop) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / sensitivity));
+        helper.mTouchSlop = (int) (((float) helper.mTouchSlop) * (1.0f / sensitivity));
         return helper;
     }
 
@@ -252,12 +251,12 @@ public class ViewDragHelper {
         int duration;
         int width = this.mParentView.getWidth();
         int halfWidth = width / 2;
-        float distance = ((float) halfWidth) + (((float) halfWidth) * distanceInfluenceForSnapDuration(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, ((float) Math.abs(delta)) / ((float) width))));
+        float distance = ((float) halfWidth) + (((float) halfWidth) * distanceInfluenceForSnapDuration(Math.min(1.0f, ((float) Math.abs(delta)) / ((float) width))));
         velocity = Math.abs(velocity);
         if (velocity > 0) {
             duration = Math.round(1000.0f * Math.abs(distance / ((float) velocity))) * 4;
         } else {
-            duration = (int) (((((float) Math.abs(delta)) / ((float) motionRange)) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * 256.0f);
+            duration = (int) (((((float) Math.abs(delta)) / ((float) motionRange)) + 1.0f) * 256.0f);
         }
         return Math.min(duration, MAX_SETTLE_DURATION);
     }

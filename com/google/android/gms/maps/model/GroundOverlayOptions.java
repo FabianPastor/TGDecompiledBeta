@@ -6,7 +6,6 @@ import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.dynamic.zzd;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class GroundOverlayOptions extends zza {
     public static final Creator<GroundOverlayOptions> CREATOR = new zzc();
@@ -167,7 +166,7 @@ public final class GroundOverlayOptions extends zza {
     }
 
     public GroundOverlayOptions transparency(float f) {
-        boolean z = f >= 0.0f && f <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        boolean z = f >= 0.0f && f <= 1.0f;
         zzac.zzb(z, (Object) "Transparency must be in the range [0..1]");
         this.zzboR = f;
         return this;

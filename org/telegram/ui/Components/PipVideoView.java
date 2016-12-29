@@ -20,7 +20,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar;
 
 public class PipVideoView {
@@ -80,11 +79,11 @@ public class PipVideoView {
                     } else if (PipVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff) {
                         PipVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff;
                     }
-                    float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    float alpha = 1.0f;
                     if (PipVideoView.this.windowLayoutParams.x < 0) {
-                        alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + ((((float) PipVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                        alpha = 1.0f + ((((float) PipVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
                     } else if (PipVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) {
-                        alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((((float) ((PipVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                        alpha = 1.0f - ((((float) ((PipVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
                     }
                     if (PipVideoView.this.windowView.getAlpha() != alpha) {
                         PipVideoView.this.windowView.setAlpha(alpha);
@@ -104,12 +103,12 @@ public class PipVideoView {
                 return true;
             }
         };
-        if (aspectRatio > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (aspectRatio > 1.0f) {
             this.videoWidth = AndroidUtilities.dp(192.0f);
             this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
         } else {
             this.videoHeight = AndroidUtilities.dp(192.0f);
-            this.videoWidth = (int) (((float) this.videoHeight) / aspectRatio);
+            this.videoWidth = (int) (((float) this.videoHeight) * aspectRatio);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
         aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
@@ -198,8 +197,8 @@ public class PipVideoView {
                 animators = new ArrayList();
             }
             editor.putInt("sidex", 0);
-            if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
             }
             animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
         } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
@@ -207,11 +206,11 @@ public class PipVideoView {
                 animators = new ArrayList();
             }
             editor.putInt("sidex", 1);
-            if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}));
+            if (this.windowView.getAlpha() != 1.0f) {
+                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
             }
             animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
-        } else if (this.windowView.getAlpha() != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        } else if (this.windowView.getAlpha() != 1.0f) {
             if (null == null) {
                 animators = new ArrayList();
             }
@@ -272,12 +271,12 @@ public class PipVideoView {
         int sidey = preferences.getInt("sidey", 0);
         float px = preferences.getFloat("px", 0.0f);
         float py = preferences.getFloat("py", 0.0f);
-        if (aspectRatio > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (aspectRatio > 1.0f) {
             videoWidth = AndroidUtilities.dp(192.0f);
             videoHeight = (int) (((float) videoWidth) / aspectRatio);
         } else {
             videoHeight = AndroidUtilities.dp(192.0f);
-            videoWidth = (int) (((float) videoHeight) / aspectRatio);
+            videoWidth = (int) (((float) videoHeight) * aspectRatio);
         }
         return new Rect((float) getSideCoord(true, sidex, px, videoWidth), (float) getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);
     }

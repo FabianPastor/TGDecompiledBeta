@@ -5,7 +5,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class MapPlaceholderDrawable extends Drawable {
     private Paint linePaint;
@@ -15,7 +14,7 @@ public class MapPlaceholderDrawable extends Drawable {
         this.paint.setColor(-2172970);
         this.linePaint = new Paint();
         this.linePaint.setColor(-3752002);
-        this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
     }
 
     public void draw(Canvas canvas) {

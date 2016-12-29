@@ -153,7 +153,7 @@ public class LinearSnapHelper extends SnapHelper {
         int maxPos = Integer.MIN_VALUE;
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
-            return 1.0f;
+            return INVALID_DISTANCE;
         }
         for (int i = 0; i < childCount; i++) {
             View child = layoutManager.getChildAt(i);
@@ -170,13 +170,13 @@ public class LinearSnapHelper extends SnapHelper {
             }
         }
         if (minPosView == null || maxPosView == null) {
-            return 1.0f;
+            return INVALID_DISTANCE;
         }
         int distance = Math.max(helper.getDecoratedEnd(minPosView), helper.getDecoratedEnd(maxPosView)) - Math.min(helper.getDecoratedStart(minPosView), helper.getDecoratedStart(maxPosView));
         if (distance == 0) {
-            return 1.0f;
+            return INVALID_DISTANCE;
         }
-        return (1.0f * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
+        return (INVALID_DISTANCE * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
     }
 
     @NonNull

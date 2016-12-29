@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CloseProgressDrawable2 extends Drawable {
     private float angle;
@@ -54,19 +53,19 @@ public class CloseProgressDrawable2 extends Drawable {
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         canvas.rotate(-45.0f);
-        float progress1 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        float progress2 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        float progress3 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float progress1 = 1.0f;
+        float progress2 = 1.0f;
+        float progress3 = 1.0f;
         float progress4 = 0.0f;
         if (this.angle >= 0.0f && this.angle < 90.0f) {
-            progress1 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (this.angle / 90.0f);
+            progress1 = 1.0f - (this.angle / 90.0f);
         } else if (this.angle >= 90.0f && this.angle < BitmapDescriptorFactory.HUE_CYAN) {
             progress1 = 0.0f;
-            progress2 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((this.angle - 90.0f) / 90.0f);
+            progress2 = 1.0f - ((this.angle - 90.0f) / 90.0f);
         } else if (this.angle >= BitmapDescriptorFactory.HUE_CYAN && this.angle < BitmapDescriptorFactory.HUE_VIOLET) {
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress3 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((this.angle - BitmapDescriptorFactory.HUE_CYAN) / 90.0f);
+            progress3 = 1.0f - ((this.angle - BitmapDescriptorFactory.HUE_CYAN) / 90.0f);
         } else if (this.angle >= BitmapDescriptorFactory.HUE_VIOLET && this.angle < 360.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
@@ -76,7 +75,7 @@ public class CloseProgressDrawable2 extends Drawable {
             progress3 = 0.0f;
             progress2 = 0.0f;
             progress1 = 0.0f;
-            progress4 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - ((this.angle - 360.0f) / 90.0f);
+            progress4 = 1.0f - ((this.angle - 360.0f) / 90.0f);
         } else if (this.angle >= 450.0f && this.angle < 540.0f) {
             progress3 = 0.0f;
             progress2 = 0.0f;
@@ -96,7 +95,7 @@ public class CloseProgressDrawable2 extends Drawable {
         if (progress3 != 0.0f) {
             canvas.drawLine(0.0f, ((float) (-AndroidUtilities.dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
         }
-        if (progress4 != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (progress4 != 1.0f) {
             canvas.drawLine(((float) AndroidUtilities.dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         }
         canvas.restore();

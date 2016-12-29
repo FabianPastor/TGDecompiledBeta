@@ -34,20 +34,19 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CameraController implements OnInfoListener {
     private static final int CORE_POOL_SIZE = 1;
     private static volatile CameraController Instance = null;
     private static final int KEEP_ALIVE_SECONDS = 60;
-    private static final int MAX_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+    private static final int MAX_POOL_SIZE = 1;
     protected ArrayList<String> availableFlashModes = new ArrayList();
     protected ArrayList<CameraInfo> cameraInfos = null;
     private boolean cameraInitied;
     private VideoTakeCallback onVideoTakeCallback;
     private String recordedFile;
     private MediaRecorder recorder;
-    private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, MAX_POOL_SIZE, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
+    private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
     static class CompareSizesByArea implements Comparator<Size> {
         CompareSizesByArea() {
@@ -161,20 +160,23 @@ public class CameraController implements OnInfoListener {
 
     public void close(final CameraSession session, final Semaphore semaphore) {
         session.destroy();
-        final Camera camera = session.cameraInfo.camera;
         this.threadPool.execute(new Runnable() {
             public void run() {
-                session.cameraInfo.camera = null;
-                try {
-                    if (camera != null) {
-                        camera.stopPreview();
-                        camera.release();
+                if (session.cameraInfo.camera != null) {
+                    try {
+                        session.cameraInfo.camera.stopPreview();
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
                     }
-                } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
-                }
-                if (semaphore != null) {
-                    semaphore.release();
+                    try {
+                        session.cameraInfo.camera.release();
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
+                    }
+                    session.cameraInfo.camera = null;
+                    if (semaphore != null) {
+                        semaphore.release();
+                    }
                 }
             }
         });
@@ -305,8 +307,8 @@ public class CameraController implements OnInfoListener {
                         options.inJustDecodeBounds = true;
                         BitmapFactory.decodeByteArray(data, 0, data.length, options);
                         float scaleFactor = Math.max(((float) options.outWidth) / ((float) AndroidUtilities.getPhotoSize()), ((float) options.outHeight) / ((float) AndroidUtilities.getPhotoSize()));
-                        if (scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                            scaleFactor = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                        if (scaleFactor < 1.0f) {
+                            scaleFactor = 1.0f;
                         }
                         options.inJustDecodeBounds = false;
                         options.inSampleSize = (int) scaleFactor;
@@ -321,7 +323,7 @@ public class CameraController implements OnInfoListener {
                             try {
                                 Matrix matrix = new Matrix();
                                 matrix.setRotate((float) CameraController.getOrientation(data));
-                                matrix.postScale(-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                matrix.postScale(-1.0f, 1.0f);
                                 Bitmap scaled = Bitmaps.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
                                 bitmap.recycle();
                                 outputStream = new FileOutputStream(path);

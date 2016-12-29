@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextColorCell extends FrameLayout {
@@ -21,7 +20,7 @@ public class TextColorCell extends FrameLayout {
     public static final int[] colors = new int[]{-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
     public static final int[] colorsToSave = new int[]{SupportMenu.CATEGORY_MASK, -29183, -12769, -16711936, -12521994, -16776961, -2984711, -45162, -1};
     private static Paint paint;
-    private float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float alpha = 1.0f;
     private int currentColor;
     private boolean needDivider;
     private TextView textView;
@@ -33,7 +32,7 @@ public class TextColorCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
             colorPaint = new Paint(1);
         }
         this.textView = new TextView(context);
@@ -79,12 +78,12 @@ public class TextColorCell extends FrameLayout {
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
         if (animators != null) {
             TextView textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+            fArr[0] = value ? 1.0f : 0.5f;
             animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             String str2 = "alpha";
             float[] fArr2 = new float[1];
@@ -95,7 +94,14 @@ public class TextColorCell extends FrameLayout {
             animators.add(ObjectAnimator.ofFloat(this, str2, fArr2));
             return;
         }
-        this.textView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        float f2;
+        textView = this.textView;
+        if (value) {
+            f2 = 1.0f;
+        } else {
+            f2 = 0.5f;
+        }
+        textView.setAlpha(f2);
         if (!value) {
             f = 0.5f;
         }

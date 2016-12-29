@@ -8,7 +8,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -80,14 +79,14 @@ public class StickerCell extends FrameLayout {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))) {
+        if (child == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f))) {
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
             if (!this.scaled || this.scale == 0.8f) {
                 this.scale += ((float) dt) / 400.0f;
-                if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.scale > 1.0f) {
+                    this.scale = 1.0f;
                 }
             } else {
                 this.scale -= ((float) dt) / 400.0f;

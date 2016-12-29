@@ -36,7 +36,6 @@ import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.messenger.voip.VoIPService;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
@@ -343,7 +342,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private SparseArray<ArrayList<Integer>> channelViewsToReload = new SparseArray();
     private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray();
     private HashMap<Integer, Integer> channelsPts = new HashMap();
-    private ConcurrentHashMap<Integer, Chat> chats = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    private ConcurrentHashMap<Integer, Chat> chats = new ConcurrentHashMap(100, 1.0f, 2);
     private HashMap<Integer, Boolean> checkingLastMessagesDialogs = new HashMap();
     private ArrayList<Long> createdDialogIds = new ArrayList();
     private Runnable currentDeleteTaskRunnable = null;
@@ -386,12 +385,12 @@ public class MessagesController implements NotificationCenterDelegate {
     public boolean dialogsEndReached = false;
     public ArrayList<TL_dialog> dialogsGroupsOnly = new ArrayList();
     public ArrayList<TL_dialog> dialogsServerOnly = new ArrayList();
-    public ConcurrentHashMap<Long, TL_dialog> dialogs_dict = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
-    public ConcurrentHashMap<Long, Integer> dialogs_read_inbox_max = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
-    public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    public ConcurrentHashMap<Long, TL_dialog> dialogs_dict = new ConcurrentHashMap(100, 1.0f, 2);
+    public ConcurrentHashMap<Long, Integer> dialogs_read_inbox_max = new ConcurrentHashMap(100, 1.0f, 2);
+    public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap(100, 1.0f, 2);
     private ArrayList<TL_disabledFeature> disabledFeatures = new ArrayList();
     public boolean enableJoined = true;
-    private ConcurrentHashMap<Integer, EncryptedChat> encryptedChats = new ConcurrentHashMap(10, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    private ConcurrentHashMap<Integer, EncryptedChat> encryptedChats = new ConcurrentHashMap(10, 1.0f, 2);
     private HashMap<Integer, ExportedChatInvite> exportedChats = new HashMap();
     public boolean firstGettingTask = false;
     public int fontSize = AndroidUtilities.dp(16.0f);
@@ -426,10 +425,10 @@ public class MessagesController implements NotificationCenterDelegate {
     private SparseIntArray needShortPollChannels = new SparseIntArray();
     public int nextDialogsCacheOffset;
     private boolean offlineSent;
-    public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap(20, 1.0f, 2);
     public HashMap<Long, CharSequence> printingStrings = new HashMap();
     public HashMap<Long, Integer> printingStringsTypes = new HashMap();
-    public ConcurrentHashMap<Long, ArrayList<PrintingUser>> printingUsers = new ConcurrentHashMap(20, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    public ConcurrentHashMap<Long, ArrayList<PrintingUser>> printingUsers = new ConcurrentHashMap(20, 1.0f, 2);
     public int ratingDecay;
     public boolean registeringForPush = false;
     private HashMap<Long, ArrayList<Integer>> reloadingMessages = new HashMap();
@@ -475,8 +474,8 @@ public class MessagesController implements NotificationCenterDelegate {
     public boolean updatingState = false;
     private String uploadingAvatar;
     public boolean useSystemEmoji;
-    private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
-    private ConcurrentHashMap<String, User> usersByUsernames = new ConcurrentHashMap(100, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 2);
+    private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, 1.0f, 2);
+    private ConcurrentHashMap<String, User> usersByUsernames = new ConcurrentHashMap(100, 1.0f, 2);
 
     public static class PrintingUser {
         public SendMessageAction action;
@@ -1534,9 +1533,15 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public void loadPeerSettings(final long dialogId, User currentUser, Chat currentChat) {
-        if (!this.loadingPeerSettings.containsKey(Long.valueOf(dialogId))) {
-            if (currentUser != null || currentChat != null) {
+    public void loadPeerSettings(User currentUser, Chat currentChat) {
+        if (currentUser != null || currentChat != null) {
+            long dialogId;
+            if (currentUser != null) {
+                dialogId = (long) currentUser.id;
+            } else {
+                dialogId = (long) (-currentChat.id);
+            }
+            if (!this.loadingPeerSettings.containsKey(Long.valueOf(dialogId))) {
                 this.loadingPeerSettings.put(Long.valueOf(dialogId), Boolean.valueOf(true));
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                 if (preferences.getInt("spam3_" + dialogId, 0) == 1) {
@@ -2710,7 +2715,7 @@ public class MessagesController implements NotificationCenterDelegate {
         TLObject req = new TL_messages_getHistory();
         req.peer = getInputPeer(lower_part);
         if (load_type == 4) {
-            req.add_offset = -count;
+            req.add_offset = (-count) + 5;
         } else if (load_type == 3) {
             req.add_offset = (-count) / 2;
         } else if (load_type == 1) {
@@ -2745,8 +2750,15 @@ public class MessagesController implements NotificationCenterDelegate {
                         res.messages.remove(0);
                     }
                     int mid = i2;
-                    if (!(i3 == 0 || res.messages.isEmpty())) {
+                    if (i3 != 0 && !res.messages.isEmpty()) {
                         mid = ((Message) res.messages.get(res.messages.size() - 1)).id;
+                        for (int a = res.messages.size() - 1; a >= 0; a--) {
+                            Message message = (Message) res.messages.get(a);
+                            if (message.date > i3) {
+                                mid = message.id;
+                                break;
+                            }
+                        }
                     }
                     MessagesController.this.processLoadedMessages(res, j, i, mid, i3, false, i4, i5, i6, i7, i8, i9, z, false, i10, z2);
                 }
@@ -2984,32 +2996,34 @@ public class MessagesController implements NotificationCenterDelegate {
             boolean found = false;
             for (int a = this.dialogs.size() - 1; a >= 0; a--) {
                 TL_dialog dialog = (TL_dialog) this.dialogs.get(a);
-                int high_id = (int) (dialog.id >> 32);
-                if (!(((int) dialog.id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
-                    MessageObject message = (MessageObject) this.dialogMessage.get(Long.valueOf(dialog.id));
-                    if (message != null && message.getId() > 0) {
-                        int id;
-                        req.offset_date = message.messageOwner.date;
-                        req.offset_id = message.messageOwner.id;
-                        if (message.messageOwner.to_id.channel_id != 0) {
-                            id = -message.messageOwner.to_id.channel_id;
-                        } else if (message.messageOwner.to_id.chat_id != 0) {
-                            id = -message.messageOwner.to_id.chat_id;
-                        } else {
-                            id = message.messageOwner.to_id.user_id;
-                        }
-                        req.offset_peer = getInputPeer(id);
-                        found = true;
-                        if (!found) {
-                            req.offset_peer = new TL_inputPeerEmpty();
-                        }
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false);
-                                }
+                if (!dialog.pinned) {
+                    int high_id = (int) (dialog.id >> 32);
+                    if (!(((int) dialog.id) == 0 || high_id == 1 || dialog.top_message <= 0)) {
+                        MessageObject message = (MessageObject) this.dialogMessage.get(Long.valueOf(dialog.id));
+                        if (message != null && message.getId() > 0) {
+                            int id;
+                            req.offset_date = message.messageOwner.date;
+                            req.offset_id = message.messageOwner.id;
+                            if (message.messageOwner.to_id.channel_id != 0) {
+                                id = -message.messageOwner.to_id.channel_id;
+                            } else if (message.messageOwner.to_id.chat_id != 0) {
+                                id = -message.messageOwner.to_id.chat_id;
+                            } else {
+                                id = message.messageOwner.to_id.user_id;
                             }
-                        });
+                            req.offset_peer = getInputPeer(id);
+                            found = true;
+                            if (!found) {
+                                req.offset_peer = new TL_inputPeerEmpty();
+                            }
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    if (error == null) {
+                                        MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false);
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -3210,7 +3224,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Chat chat;
+                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3227,6 +3241,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3254,7 +3269,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
-                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3553,6 +3567,8 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
+        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -3564,8 +3580,6 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
-                long newTaskId;
-                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -3663,7 +3677,6 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
-                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3678,6 +3691,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
+                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -7883,11 +7897,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     private static void showCantOpenAlert(BaseFragment fragment, String reason) {
-        Builder builder = new Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        builder.setMessage(reason);
-        fragment.showDialog(builder.create());
+        if (fragment != null && fragment.getParentActivity() != null) {
+            Builder builder = new Builder(fragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setMessage(reason);
+            fragment.showDialog(builder.create());
+        }
     }
 
     public static boolean checkCanOpenChat(Bundle bundle, BaseFragment fragment) {

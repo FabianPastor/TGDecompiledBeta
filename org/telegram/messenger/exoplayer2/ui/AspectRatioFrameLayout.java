@@ -9,7 +9,6 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class AspectRatioFrameLayout extends FrameLayout {
     private static final float MAX_ASPECT_RATIO_DEFORMATION_FRACTION = 0.01f;
@@ -64,7 +63,7 @@ public class AspectRatioFrameLayout extends FrameLayout {
         if (this.resizeMode != 3 && this.videoAspectRatio > 0.0f) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
-            float aspectDeformation = (this.videoAspectRatio / (((float) width) / ((float) height))) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            float aspectDeformation = (this.videoAspectRatio / (((float) width) / ((float) height))) - 1.0f;
             if (Math.abs(aspectDeformation) > MAX_ASPECT_RATIO_DEFORMATION_FRACTION) {
                 switch (this.resizeMode) {
                     case 1:
@@ -93,7 +92,7 @@ public class AspectRatioFrameLayout extends FrameLayout {
                         this.matrix.postRotate((float) this.rotation, (float) px, (float) py);
                         if (this.rotation == 90 || this.rotation == 270) {
                             float ratio = ((float) getHeight()) / ((float) getWidth());
-                            this.matrix.postScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / ratio, ratio, (float) px, (float) py);
+                            this.matrix.postScale(1.0f / ratio, ratio, (float) px, (float) py);
                         }
                         ((TextureView) child).setTransform(this.matrix);
                         return;

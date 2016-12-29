@@ -45,7 +45,6 @@ import java.util.Map.Entry;
 import org.aspectj.lang.JoinPoint;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -1286,7 +1285,11 @@ public class NotificationsController {
                                         NotificationsController.this.soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
                                             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                                                 if (status == 0) {
-                                                    soundPool.play(sampleId, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 1, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                                    try {
+                                                        soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
+                                                    } catch (Throwable e) {
+                                                        FileLog.e("tmessages", e);
+                                                    }
                                                 }
                                             }
                                         });
@@ -1296,10 +1299,14 @@ public class NotificationsController {
                                         NotificationsController.this.soundIn = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_in, 1);
                                     }
                                     if (NotificationsController.this.soundIn != 0) {
-                                        NotificationsController.this.soundPool.play(NotificationsController.this.soundIn, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 1, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                        try {
+                                            NotificationsController.this.soundPool.play(NotificationsController.this.soundIn, 1.0f, 1.0f, 1, 0, 1.0f);
+                                        } catch (Throwable e) {
+                                            FileLog.e("tmessages", e);
+                                        }
                                     }
-                                } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                } catch (Throwable e2) {
+                                    FileLog.e("tmessages", e2);
                                 }
                             }
                         }
@@ -1584,7 +1591,7 @@ public class NotificationsController {
                         int i2;
                         float scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
                         Options options = new Options();
-                        if (scaleFactor < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                        if (scaleFactor < 1.0f) {
                             i2 = 1;
                         } else {
                             i2 = (int) scaleFactor;
@@ -1810,7 +1817,7 @@ public class NotificationsController {
                             try {
                                 scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
                                 options = new Options();
-                                if (scaleFactor >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                                if (scaleFactor >= 1.0f) {
                                     i = 1;
                                 } else {
                                     i = (int) scaleFactor;
@@ -1910,7 +1917,7 @@ public class NotificationsController {
                         if (img == null) {
                             scaleFactor = 160.0f / ((float) AndroidUtilities.dp(50.0f));
                             options = new Options();
-                            if (scaleFactor >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                            if (scaleFactor >= 1.0f) {
                                 i = (int) scaleFactor;
                             } else {
                                 i = 1;
@@ -1954,7 +1961,11 @@ public class NotificationsController {
                                 NotificationsController.this.soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
                                     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                                         if (status == 0) {
-                                            soundPool.play(sampleId, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 1, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                            try {
+                                                soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
+                                            } catch (Throwable e) {
+                                                FileLog.e("tmessages", e);
+                                            }
                                         }
                                     }
                                 });
@@ -1964,11 +1975,15 @@ public class NotificationsController {
                                 NotificationsController.this.soundOut = NotificationsController.this.soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_out, 1);
                             }
                             if (NotificationsController.this.soundOut != 0) {
-                                NotificationsController.this.soundPool.play(NotificationsController.this.soundOut, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 1, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                try {
+                                    NotificationsController.this.soundPool.play(NotificationsController.this.soundOut, 1.0f, 1.0f, 1, 0, 1.0f);
+                                } catch (Throwable e) {
+                                    FileLog.e("tmessages", e);
+                                }
                             }
                         }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                    } catch (Throwable e2) {
+                        FileLog.e("tmessages", e2);
                     }
                 }
             });

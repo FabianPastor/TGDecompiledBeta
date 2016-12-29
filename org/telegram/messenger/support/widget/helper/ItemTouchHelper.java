@@ -34,7 +34,6 @@ import org.telegram.messenger.support.widget.RecyclerView.OnChildAttachStateChan
 import org.telegram.messenger.support.widget.RecyclerView.OnItemTouchListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStateChangeListener {
     static final int ACTION_MODE_DRAG_MASK = 16711680;
@@ -210,8 +209,8 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         };
         private static final Interpolator sDragViewScrollCapInterpolator = new Interpolator() {
             public float getInterpolation(float t) {
-                t -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-                return ((((t * t) * t) * t) * t) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                t -= 1.0f;
+                return ((((t * t) * t) * t) * t) + 1.0f;
             }
         };
         private static final ItemTouchUIUtil sUICallback;
@@ -476,9 +475,9 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
 
         public int interpolateOutOfBoundsScroll(RecyclerView recyclerView, int viewSize, int viewSizeOutOfBounds, int totalSize, long msSinceStartScroll) {
             float timeRatio;
-            int cappedScroll = (int) (((float) (((int) Math.signum((float) viewSizeOutOfBounds)) * getMaxDragScroll(recyclerView))) * sDragViewScrollCapInterpolator.getInterpolation(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) Math.abs(viewSizeOutOfBounds))) / ((float) viewSize))));
+            int cappedScroll = (int) (((float) (((int) Math.signum((float) viewSizeOutOfBounds)) * getMaxDragScroll(recyclerView))) * sDragViewScrollCapInterpolator.getInterpolation(Math.min(1.0f, (1.0f * ((float) Math.abs(viewSizeOutOfBounds))) / ((float) viewSize))));
             if (msSinceStartScroll > DRAG_SCROLL_ACCELERATION_LIMIT_TIME_MS) {
-                timeRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                timeRatio = 1.0f;
             } else {
                 timeRatio = ((float) msSinceStartScroll) / 500.0f;
             }
@@ -600,7 +599,7 @@ public class ItemTouchHelper extends ItemDecoration implements OnChildAttachStat
         }
 
         public void onAnimationCancel(ValueAnimatorCompat animation) {
-            setFraction(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            setFraction(1.0f);
         }
 
         public void onAnimationRepeat(ValueAnimatorCompat animation) {

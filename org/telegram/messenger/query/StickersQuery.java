@@ -751,6 +751,17 @@ public class StickersQuery {
         }
     }
 
+    public static int getFeaturesStickersHashWithoutUnread() {
+        long acc = 0;
+        for (int a = 0; a < featuredStickerSets.size(); a++) {
+            StickerSet set = ((StickerSetCovered) featuredStickerSets.get(a)).set;
+            if (!set.archived) {
+                acc = (((((((acc * 20261) + 2147483648L) + ((long) ((int) (set.id >> 32)))) % 2147483648L) * 20261) + 2147483648L) + ((long) ((int) set.id))) % 2147483648L;
+            }
+        }
+        return (int) acc;
+    }
+
     public static void markFaturedStickersByIdAsRead(final long id) {
         if (unreadStickerSets.contains(Long.valueOf(id)) && !readingStickerSets.contains(Long.valueOf(id))) {
             readingStickerSets.add(Long.valueOf(id));

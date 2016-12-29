@@ -78,7 +78,6 @@ import org.telegram.messenger.exoplayer2.C;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.ui.AspectRatioFrameLayout;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -331,7 +330,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         public void setDuration(int value) {
             if (this.duration != value && value >= 0) {
                 this.duration = value;
-                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.durationLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.duration / 60), Integer.valueOf(this.duration % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (this.durationLayout.getLineCount() > 0) {
                     this.durationWidth = (int) Math.ceil((double) this.durationLayout.getLineWidth(0));
                 }
@@ -348,7 +347,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         public void setProgress(int value) {
             if (!this.progressPressed && value >= 0) {
                 this.progress = value;
-                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.progressLayout = new StaticLayout(String.format(Locale.US, "%d:%02d", new Object[]{Integer.valueOf(this.progress / 60), Integer.valueOf(this.progress % 60)}), this.textPaint, AndroidUtilities.dp(1000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 invalidate();
             }
         }
@@ -366,7 +365,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         this.currentAnimation = new AnimatorSet();
                         animatorSet = this.currentAnimation;
                         animatorArr = new Animator[1];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                        animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
                         animatorSet.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
                         this.currentAnimation.addListener(new AnimatorListenerAdapter() {
@@ -376,7 +375,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         });
                         this.currentAnimation.start();
                     } else {
-                        setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                        setAlpha(1.0f);
                     }
                 } else if (animated) {
                     this.currentAnimation = new AnimatorSet();
@@ -626,9 +625,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -854,7 +853,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             if (this.risingCircleLength) {
                 this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) + 4.0f;
             } else {
-                this.currentCircleLength = 4.0f - ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) * BitmapDescriptorFactory.HUE_VIOLET);
+                this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) * BitmapDescriptorFactory.HUE_VIOLET);
             }
             if (this.currentProgressTime == this.risingTime) {
                 if (this.risingCircleLength) {
@@ -1010,7 +1009,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     }
                 }
             }
-            if (encrypted && this.result[0] != null) {
+            if (!(!encrypted || this.result[0] == null || embedCode == null)) {
                 int index = this.result[0].indexOf("/s/");
                 int index2 = this.result[0].indexOf(47, index + 10);
                 if (index != -1) {
@@ -1290,11 +1289,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     layoutParams = WebPlayerView.this.textureImageView.getLayoutParams();
                     layoutParams.width = getMeasuredWidth();
                     layoutParams.height = getMeasuredHeight();
-                    if (WebPlayerView.this.controlsView.getParent() == WebPlayerView.this.textureViewContainer) {
-                        layoutParams = WebPlayerView.this.controlsView.getLayoutParams();
-                        layoutParams.width = getMeasuredWidth();
-                        layoutParams.height = (WebPlayerView.this.inFullscreen ? 0 : AndroidUtilities.dp(10.0f)) + getMeasuredHeight();
-                    }
                 }
             }
         };
@@ -1415,10 +1409,17 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             }
                             WebPlayerView.this.controlsView.show(false, false);
                             WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
+                            if (!WebPlayerView.this.videoPlayer.isPlaying()) {
+                                WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
+                                return;
+                            }
                             return;
                         }
                         WebPlayerView.this.inFullscreen = false;
                         WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
+                        if (!WebPlayerView.this.videoPlayer.isPlaying()) {
+                            WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
+                        }
                     }
                 }
             });
@@ -1502,7 +1503,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 width = height;
                 height = temp;
             }
-            float ratio = height == 0 ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : (((float) width) * pixelWidthHeightRatio) / ((float) height);
+            float ratio = height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height);
             this.aspectRatioFrameLayout.setAspectRatio(ratio, unappliedRotationDegrees);
             if (this.inFullscreen) {
                 this.delegate.onVideoSizeChanged(ratio, unappliedRotationDegrees);
@@ -1804,7 +1805,15 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 String id;
                 if (originalUrl != null) {
                     try {
-                        this.seekToTime = Utilities.parseInt(Uri.parse(originalUrl).getQueryParameter("t")).intValue();
+                        String t = Uri.parse(originalUrl).getQueryParameter("t");
+                        if (t != null) {
+                            if (t.contains("m")) {
+                                String[] args = t.split("m");
+                                this.seekToTime = (Utilities.parseInt(args[0]).intValue() * 60) + Utilities.parseInt(args[1]).intValue();
+                            } else {
+                                this.seekToTime = Utilities.parseInt(t).intValue();
+                            }
+                        }
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
                     }
@@ -1858,7 +1867,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         this.playAudioUrl = null;
         destroy();
         this.firstFrameRendered = false;
-        this.currentAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.currentAlpha = 1.0f;
         if (this.currentTask != null) {
             this.currentTask.cancel(true);
             this.currentTask = null;
@@ -1945,7 +1954,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     private void showProgress(boolean show, boolean animated) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
         if (animated) {
             if (this.progressAnimation != null) {
                 this.progressAnimation.cancel();

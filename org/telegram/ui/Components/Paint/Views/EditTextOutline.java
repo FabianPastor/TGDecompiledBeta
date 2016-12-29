@@ -10,7 +10,6 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.widget.EditText;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class EditTextOutline extends EditText {
     private Bitmap mCache;
@@ -66,7 +65,7 @@ public class EditTextOutline extends EditText {
                 this.mPaint.setTextSize(getTextSize());
                 this.mPaint.setTypeface(getTypeface());
                 this.mPaint.setStyle(Style.FILL_AND_STROKE);
-                StaticLayout sl = new StaticLayout(text, this.mPaint, w, Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, true);
+                StaticLayout sl = new StaticLayout(text, this.mPaint, w, Alignment.ALIGN_CENTER, 1.0f, 0.0f, true);
                 this.mCanvas.save();
                 this.mCanvas.translate((float) getPaddingLeft(), ((float) getPaddingTop()) + (((float) (((h - getPaddingTop()) - getPaddingBottom()) - sl.getHeight())) / 2.0f));
                 sl.draw(this.mCanvas);

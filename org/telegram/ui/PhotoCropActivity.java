@@ -20,7 +20,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -342,7 +341,7 @@ public class PhotoCropActivity extends BaseFragment {
             canvas2.drawRect((float) this.bitmapX, this.rectSizeY + this.rectY, (float) (this.bitmapX + this.bitmapWidth), (float) (this.bitmapY + this.bitmapHeight), this.halfPaint);
             canvas2 = canvas;
             canvas2.drawRect(this.rectX, this.rectY, this.rectSizeX + this.rectX, this.rectSizeY + this.rectY, this.rectPaint);
-            int side = AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            int side = AndroidUtilities.dp(1.0f);
             canvas2 = canvas;
             canvas2.drawRect(((float) side) + this.rectX, ((float) side) + this.rectY, ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + ((float) side)), ((float) (side * 3)) + this.rectY, this.circlePaint);
             canvas2 = canvas;

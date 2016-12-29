@@ -23,7 +23,6 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
@@ -43,8 +42,8 @@ public class ActionBarPopupWindow extends PopupWindow {
         protected static Drawable backgroundDrawable;
         private boolean animationEnabled = ActionBarPopupWindow.allowAnimation;
         private int backAlpha = 255;
-        private float backScaleX = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-        private float backScaleY = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        private float backScaleX = 1.0f;
+        private float backScaleY = 1.0f;
         private int lastStartedChild = 0;
         private LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -141,7 +140,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             if (this.animationEnabled) {
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(child, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[0] = ObjectAnimator.ofFloat(child, "alpha", new float[]{0.0f, 1.0f});
                 String str = "translationY";
                 float[] fArr = new float[2];
                 fArr[0] = (float) AndroidUtilities.dp(this.showedFromBotton ? 6.0f : -6.0f);
@@ -186,7 +185,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 backgroundDrawable.setAlpha(this.backAlpha);
                 int height = getMeasuredHeight();
                 if (this.showedFromBotton) {
-                    backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
+                    backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
                 } else {
                     backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
                 }
@@ -309,7 +308,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         if (this.animationEnabled && this.windowAnimatorSet == null) {
             ActionBarPopupWindowLayout content = (ActionBarPopupWindowLayout) getContentView();
             content.setTranslationY(0.0f);
-            content.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            content.setAlpha(1.0f);
             content.setPivotX((float) content.getMeasuredWidth());
             content.setPivotY(0.0f);
             int count = content.getItemsCount();
@@ -329,7 +328,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 content.lastStartedChild = 0;
             }
             this.windowAnimatorSet = new AnimatorSet();
-            this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
+            this.windowAnimatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(content, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(content, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((visibleCount * 16) + 150));
             this.windowAnimatorSet.addListener(new AnimatorListener() {
                 public void onAnimationStart(Animator animation) {

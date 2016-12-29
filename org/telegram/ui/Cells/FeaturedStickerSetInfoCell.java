@@ -18,7 +18,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -100,10 +99,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                         FeaturedStickerSetInfoCell.this.angle = (int) (((float) FeaturedStickerSetInfoCell.this.angle) + (((float) (360 * delta)) / 2000.0f));
                         FeaturedStickerSetInfoCell.this.angle = FeaturedStickerSetInfoCell.this.angle - ((FeaturedStickerSetInfoCell.this.angle / 360) * 360);
                         if (FeaturedStickerSetInfoCell.this.drawProgress) {
-                            if (FeaturedStickerSetInfoCell.this.progressAlpha < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                            if (FeaturedStickerSetInfoCell.this.progressAlpha < 1.0f) {
                                 FeaturedStickerSetInfoCell.this.progressAlpha = FeaturedStickerSetInfoCell.this.progressAlpha + (((float) delta) / 200.0f);
-                                if (FeaturedStickerSetInfoCell.this.progressAlpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                                    FeaturedStickerSetInfoCell.this.progressAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                                if (FeaturedStickerSetInfoCell.this.progressAlpha > 1.0f) {
+                                    FeaturedStickerSetInfoCell.this.progressAlpha = 1.0f;
                                 }
                             }
                         } else if (FeaturedStickerSetInfoCell.this.progressAlpha > 0.0f) {

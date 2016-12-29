@@ -15,7 +15,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -183,7 +182,7 @@ public class CropRotationWheel extends FrameLayout {
         int val = (int) (((double) radius) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta)))));
         int x = (width / 2) + val;
         float f = ((float) Math.abs(val)) / ((float) radius);
-        int alpha = Math.min(255, Math.max(0, (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (f * f)) * 255.0f)));
+        int alpha = Math.min(255, Math.max(0, (int) ((1.0f - (f * f)) * 255.0f)));
         if (center) {
             paint = this.bluePaint;
         }

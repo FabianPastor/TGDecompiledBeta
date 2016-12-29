@@ -92,8 +92,8 @@ public class SearchQuery {
                     ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
                     List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
                     ArrayList<String> shortcutsToUpdate = new ArrayList();
+                    ArrayList<String> currentShortcutsIds = new ArrayList();
                     if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
-                        ArrayList<String> currentShortcutsIds = new ArrayList();
                         currentShortcutsIds.add("compose");
                         for (a = 0; a < hintsFinal.size(); a++) {
                             hint = (TL_topPeer) hintsFinal.get(a);
@@ -126,8 +126,8 @@ public class SearchQuery {
                         shortcutManager.addDynamicShortcuts(arrayList);
                     }
                     arrayList.clear();
-                    if (!shortcutsToUpdate.isEmpty()) {
-                        shortcutManager.removeDynamicShortcuts(shortcutsToUpdate);
+                    if (!currentShortcutsIds.isEmpty()) {
+                        shortcutManager.removeDynamicShortcuts(currentShortcutsIds);
                     }
                     for (a = 0; a < hintsFinal.size(); a++) {
                         intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
@@ -193,6 +193,9 @@ public class SearchQuery {
                                 }
                             }
                             id = "did" + did;
+                            if (TextUtils.isEmpty(name)) {
+                                name = " ";
+                            }
                             Builder builder = new Builder(ApplicationLoader.applicationContext, id).setShortLabel(name).setLongLabel(name).setIntent(intent);
                             if (bitmap != null) {
                                 builder.setIcon(Icon.createWithBitmap(bitmap));

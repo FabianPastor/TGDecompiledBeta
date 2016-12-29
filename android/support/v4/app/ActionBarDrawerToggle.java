@@ -21,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.view.MenuItem;
 import android.view.View;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 @Deprecated
 public class ActionBarDrawerToggle implements DrawerListener {
@@ -107,7 +106,7 @@ public class ActionBarDrawerToggle implements DrawerListener {
             canvas.translate((((-this.mOffset) * ((float) width)) * this.mPosition) * ((float) flipRtl), 0.0f);
             if (isLayoutRTL && !this.mHasMirroring) {
                 canvas.translate((float) width, 0.0f);
-                canvas.scale(-1.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                canvas.scale(-1.0f, 1.0f);
             }
             super.draw(canvas);
             canvas.restore();
@@ -208,7 +207,7 @@ public class ActionBarDrawerToggle implements DrawerListener {
 
     public void syncState() {
         if (this.mDrawerLayout.isDrawerOpen((int) GravityCompat.START)) {
-            this.mSlider.setPosition(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.mSlider.setPosition(1.0f);
         } else {
             this.mSlider.setPosition(0.0f);
         }
@@ -284,7 +283,7 @@ public class ActionBarDrawerToggle implements DrawerListener {
     }
 
     public void onDrawerOpened(View drawerView) {
-        this.mSlider.setPosition(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.mSlider.setPosition(1.0f);
         if (this.mDrawerIndicatorEnabled) {
             setActionBarDescription(this.mCloseDrawerContentDescRes);
         }

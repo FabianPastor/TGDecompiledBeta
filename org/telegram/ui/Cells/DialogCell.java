@@ -29,7 +29,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.DraftQuery;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.DraftMessage;
@@ -472,7 +471,7 @@ public class DialogCell extends BaseCell {
             }
         }
         int timeWidth = (int) Math.ceil((double) timePaint.measureText(timeString));
-        this.timeLayout = new StaticLayout(timeString, timePaint, timeWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+        this.timeLayout = new StaticLayout(timeString, timePaint, timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (LocaleController.isRTL) {
             this.timeLeft = AndroidUtilities.dp(15.0f);
         } else {
@@ -562,7 +561,7 @@ public class DialogCell extends BaseCell {
         }
         nameWidth = Math.max(AndroidUtilities.dp(12.0f), nameWidth);
         try {
-            this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString.replace('\n', ' '), currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString.replace('\n', ' '), currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }
@@ -586,7 +585,7 @@ public class DialogCell extends BaseCell {
             }
         } else if (countString != null) {
             this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) countPaint.measureText(countString)));
-            this.countLayout = new StaticLayout(countString, countPaint, this.countWidth, Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.countLayout = new StaticLayout(countString, countPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             w = this.countWidth + AndroidUtilities.dp(18.0f);
             messageWidth = messageWidth2 - w;
             if (LocaleController.isRTL) {
@@ -623,7 +622,7 @@ public class DialogCell extends BaseCell {
         }
         messageWidth = Math.max(AndroidUtilities.dp(12.0f), messageWidth);
         try {
-            this.messageLayout = new StaticLayout(TextUtils.ellipsize(messageString, currentMessagePaint, (float) (messageWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentMessagePaint, messageWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.messageLayout = new StaticLayout(TextUtils.ellipsize(messageString, currentMessagePaint, (float) (messageWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentMessagePaint, messageWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Throwable e2) {
             FileLog.e("tmessages", e2);
         }

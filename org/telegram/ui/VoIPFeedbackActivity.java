@@ -20,7 +20,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.Components.LayoutHelper;
@@ -44,7 +43,7 @@ public class VoIPFeedbackActivity extends Activity {
         RatingBar bar = new RatingBar(this);
         bar.setNumStars(5);
         bar.setIsIndicator(false);
-        bar.setStepSize(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        bar.setStepSize(1.0f);
         ll.addView(bar, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
         AlertDialog alert = new Builder(this).setTitle(LocaleController.getString("AppName", R.string.AppName)).setView(ll).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

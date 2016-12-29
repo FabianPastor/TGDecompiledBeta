@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.Crop.CropGestureDetector.CropGestureListener;
 
 public class CropView extends FrameLayout implements AreaViewListener, CropGestureListener {
@@ -96,7 +95,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             this.height = (float) bitmap.getHeight();
             this.x = 0.0f;
             this.y = 0.0f;
-            this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            this.scale = 1.0f;
             this.baseRotation = (float) bRotation;
             this.rotation = 0.0f;
             this.matrix = new Matrix();
@@ -270,7 +269,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     public void reset() {
         this.areaView.resetAnimator();
         this.areaView.setBitmap(this.bitmap, this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
-        this.areaView.setLockedAspectRatio(this.freeform ? 0.0f : DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.areaView.setLockedAspectRatio(this.freeform ? 0.0f : 1.0f);
         this.state.reset(this.areaView, 0.0f, this.freeform);
         this.areaView.getCropRect(this.initialAreaRect);
         updateMatrix();
@@ -291,7 +290,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
     }
 
     private void fillAreaView(RectF targetRect, boolean allowZoomOut) {
-        final float[] currentScale = new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+        final float[] currentScale = new float[]{1.0f};
         float scale = Math.max(targetRect.width() / this.areaView.getCropWidth(), targetRect.height() / this.areaView.getCropHeight());
         boolean ensureFit = false;
         if (this.state.getScale() * scale > 30.0f) {
@@ -302,10 +301,10 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         final float y = ((targetRect.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + ((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
         final float targetScale = scale;
         final boolean animEnsureFit = ensureFit;
-        ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+        ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         animator.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                float deltaScale = (((targetScale - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * ((Float) animation.getAnimatedValue()).floatValue()) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) / currentScale[0];
+                float deltaScale = (((targetScale - 1.0f) * ((Float) animation.getAnimatedValue()).floatValue()) + 1.0f) / currentScale[0];
                 float[] fArr = currentScale;
                 fArr[0] = fArr[0] * deltaScale;
                 CropView.this.state.scale(deltaScale, x, y);
@@ -413,7 +412,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         } else if (maximize && this.rotationStartScale > 0.0f) {
             float ratio = boundsRect.width() / scaleWidthToMaxSize(boundsRect, rectF);
             if (this.state.getScale() * ratio < this.rotationStartScale) {
-                ratio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                ratio = 1.0f;
             }
             targetScale = fitScale(rectF, scale, ratio);
             fitTranslation(rectF, boundsRect, pointF, radians);
@@ -424,10 +423,10 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             final float animScale = targetScale / scale;
             final float animDX = dx;
             final float animDY = dy;
-            if (Math.abs(animScale - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) >= EPSILON || Math.abs(animDX) >= EPSILON || Math.abs(animDY) >= EPSILON) {
+            if (Math.abs(animScale - 1.0f) >= EPSILON || Math.abs(animDX) >= EPSILON || Math.abs(animDY) >= EPSILON) {
                 this.animating = true;
-                final float[] currentValues = new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, 0.0f};
-                ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                final float[] currentValues = new float[]{1.0f, 0.0f, 0.0f};
+                ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 animator.addUpdateListener(new AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         float value = ((Float) animation.getAnimatedValue()).floatValue();
@@ -438,7 +437,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                         fArr = currentValues;
                         fArr[2] = fArr[2] + deltaY;
                         CropView.this.state.translate(currentValues[0] * deltaX, currentValues[0] * deltaY);
-                        float deltaScale = (((animScale - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * value) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) / currentValues[0];
+                        float deltaScale = (((animScale - 1.0f) * value) + 1.0f) / currentValues[0];
                         fArr = currentValues;
                         fArr[0] = fArr[0] * deltaScale;
                         CropView.this.state.scale(deltaScale, 0.0f, 0.0f);
@@ -647,7 +646,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             actions[1] = LocaleController.getString("CropSquare", R.string.CropSquare);
             int i = 2;
             for (Integer[] ratioPair : ratios) {
-                if (this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.areaView.getAspectRatio() > 1.0f) {
                     actions[i] = String.format("%d:%d", new Object[]{ratioPair[0], ratioPair[1]});
                 } else {
                     actions[i] = String.format("%d:%d", new Object[]{ratioPair[1], ratioPair[0]});
@@ -662,11 +661,11 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
                             CropView.this.setLockedAspectRatio((CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getHeight() : CropView.this.state.getWidth()) / (CropView.this.state.getBaseRotation() % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? CropView.this.state.getWidth() : CropView.this.state.getHeight()));
                             return;
                         case 1:
-                            CropView.this.setLockedAspectRatio(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            CropView.this.setLockedAspectRatio(1.0f);
                             return;
                         default:
                             Integer[] ratioPair = ratios[which - 2];
-                            if (CropView.this.areaView.getAspectRatio() > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                            if (CropView.this.areaView.getAspectRatio() > 1.0f) {
                                 CropView.this.setLockedAspectRatio(((float) ratioPair[0].intValue()) / ((float) ratioPair[1].intValue()));
                                 return;
                             } else {

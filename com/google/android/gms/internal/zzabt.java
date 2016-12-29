@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.Drawable.ConstantState;
 import android.os.SystemClock;
 import com.google.android.gms.common.util.zzs;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class zzabt extends Drawable implements Callback {
     private int mFrom;
@@ -133,13 +132,13 @@ public final class zzabt extends Drawable implements Callback {
             case 2:
                 if (this.zzaed >= 0) {
                     float uptimeMillis = ((float) (SystemClock.uptimeMillis() - this.zzaed)) / ((float) this.zzaDh);
-                    if (uptimeMillis < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                    if (uptimeMillis < 1.0f) {
                         i = 0;
                     }
                     if (i != 0) {
                         this.zzaDe = 0;
                     }
-                    this.zzaDi = (int) ((Math.min(uptimeMillis, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * ((float) (this.zzaDf + 0))) + 0.0f);
+                    this.zzaDi = (int) ((Math.min(uptimeMillis, 1.0f) * ((float) (this.zzaDf + 0))) + 0.0f);
                     break;
                 }
                 break;

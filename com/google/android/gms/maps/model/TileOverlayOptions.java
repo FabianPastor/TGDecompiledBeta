@@ -7,7 +7,6 @@ import android.os.RemoteException;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.maps.model.internal.zzi;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class TileOverlayOptions extends zza {
     public static final Creator<TileOverlayOptions> CREATOR = new zzp();
@@ -94,7 +93,7 @@ public final class TileOverlayOptions extends zza {
     }
 
     public TileOverlayOptions transparency(float f) {
-        boolean z = f >= 0.0f && f <= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        boolean z = f >= 0.0f && f <= 1.0f;
         zzac.zzb(z, (Object) "Transparency must be in the range [0..1]");
         this.zzboR = f;
         return this;

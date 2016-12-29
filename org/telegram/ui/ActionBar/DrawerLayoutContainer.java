@@ -26,7 +26,6 @@ import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class DrawerLayoutContainer extends FrameLayout {
     private static final int MIN_DRAWER_MARGIN = 64;
@@ -450,7 +449,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (this.shadowLeft == null) {
                 return result;
             }
-            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
             if (alpha == 0.0f) {
                 return result;
             }

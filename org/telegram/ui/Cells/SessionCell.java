@@ -13,7 +13,6 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.TL_authorization;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -30,11 +29,11 @@ public class SessionCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
-        linearLayout.setWeightSum(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        linearLayout.setWeightSum(1.0f);
         addView(linearLayout, LayoutHelper.createFrame(-1, BitmapDescriptorFactory.HUE_ORANGE, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 11.0f, 11.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(-14606047);
@@ -50,9 +49,9 @@ public class SessionCell extends FrameLayout {
         this.onlineTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         if (LocaleController.isRTL) {
             linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 51, 0, 2, 0, 0));
-            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 53, 10, 0, 0, 0));
+            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 53, 10, 0, 0, 0));
         } else {
-            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 51, 0, 0, 10, 0));
+            linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 51, 0, 0, 10, 0));
             linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 53, 0, 2, 0, 0));
         }
         this.detailTextView = new TextView(context);

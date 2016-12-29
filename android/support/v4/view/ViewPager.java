@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ViewPager extends ViewGroup {
     private static final int CLOSE_ENOUGH = 2;
@@ -78,8 +77,8 @@ public class ViewPager extends ViewGroup {
     private static final boolean USE_CACHE = false;
     private static final Interpolator sInterpolator = new Interpolator() {
         public float getInterpolation(float t) {
-            t -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-            return ((((t * t) * t) * t) * t) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            t -= 1.0f;
+            return ((((t * t) * t) * t) * t) + 1.0f;
         }
     };
     private static final ViewPositionComparator sPositionComparator = new ViewPositionComparator();
@@ -743,12 +742,12 @@ public class ViewPager extends ViewGroup {
         setScrollState(2);
         int width = getClientWidth();
         int halfWidth = width / 2;
-        float distance = ((float) halfWidth) + (((float) halfWidth) * distanceInfluenceForSnapDuration(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) Math.abs(dx))) / ((float) width))));
+        float distance = ((float) halfWidth) + (((float) halfWidth) * distanceInfluenceForSnapDuration(Math.min(1.0f, (1.0f * ((float) Math.abs(dx))) / ((float) width))));
         velocity = Math.abs(velocity);
         if (velocity > 0) {
             duration = Math.round(1000.0f * Math.abs(distance / ((float) velocity))) * 4;
         } else {
-            duration = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (((float) Math.abs(dx)) / (((float) this.mPageMargin) + (((float) width) * this.mAdapter.getPageWidth(this.mCurItem))))) * 100.0f);
+            duration = (int) ((1.0f + (((float) Math.abs(dx)) / (((float) this.mPageMargin) + (((float) width) * this.mAdapter.getPageWidth(this.mCurItem))))) * 100.0f);
         }
         duration = Math.min(duration, MAX_SETTLE_DURATION);
         this.mIsScrollStarted = false;
@@ -1138,7 +1137,7 @@ public class ViewPager extends ViewGroup {
         offset = curItem.offset;
         pos = curItem.position - 1;
         this.mFirstOffset = curItem.position == 0 ? curItem.offset : -3.4028235E38f;
-        this.mLastOffset = curItem.position == N + -1 ? (curItem.offset + curItem.widthFactor) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : AutoScrollHelper.NO_MAX;
+        this.mLastOffset = curItem.position == N + -1 ? (curItem.offset + curItem.widthFactor) - 1.0f : AutoScrollHelper.NO_MAX;
         int i = curIndex - 1;
         while (i >= 0) {
             ii = (ItemInfo) this.mItems.get(i);
@@ -1164,7 +1163,7 @@ public class ViewPager extends ViewGroup {
                 pos++;
             }
             if (ii.position == N - 1) {
-                this.mLastOffset = (ii.widthFactor + offset) - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.mLastOffset = (ii.widthFactor + offset) - 1.0f;
             }
             ii.offset = offset;
             offset += ii.widthFactor + marginOffset;
@@ -1268,7 +1267,6 @@ public class ViewPager extends ViewGroup {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
-        LayoutParams lp;
         setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
         int measuredWidth = getMeasuredWidth();
         this.mGutterSize = Math.min(measuredWidth / 10, this.mDefaultGutterSize);
@@ -1276,6 +1274,7 @@ public class ViewPager extends ViewGroup {
         int childHeightSize = (getMeasuredHeight() - getPaddingTop()) - getPaddingBottom();
         int size = getChildCount();
         for (i = 0; i < size; i++) {
+            LayoutParams lp;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
@@ -1355,6 +1354,7 @@ public class ViewPager extends ViewGroup {
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int i;
+        LayoutParams lp;
         int childLeft;
         int childTop;
         int count = getChildCount();
@@ -1367,7 +1367,6 @@ public class ViewPager extends ViewGroup {
         int scrollX = getScrollX();
         int decorCount = 0;
         for (i = 0; i < count; i++) {
-            LayoutParams lp;
             View child = getChildAt(i);
             if (child.getVisibility() != 8) {
                 lp = (LayoutParams) child.getLayoutParams();
@@ -1963,7 +1962,7 @@ public class ViewPager extends ViewGroup {
                 width = getWidth();
                 height = (getHeight() - getPaddingTop()) - getPaddingBottom();
                 canvas.rotate(90.0f);
-                canvas.translate((float) (-getPaddingTop()), (-(this.mLastOffset + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * ((float) width));
+                canvas.translate((float) (-getPaddingTop()), (-(this.mLastOffset + 1.0f)) * ((float) width));
                 this.mRightEdge.setSize(height, width);
                 needsInvalidate |= this.mRightEdge.draw(canvas);
                 canvas.restoreToCount(restoreCount);

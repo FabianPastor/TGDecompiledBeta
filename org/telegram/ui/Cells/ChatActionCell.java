@@ -22,7 +22,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -245,7 +244,7 @@ public class ChatActionCell extends BaseCell {
             }
             this.previousWidth = width;
             int maxWidth = width - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
-            this.textLayout = new StaticLayout(text, textPaint, maxWidth, Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.textLayout = new StaticLayout(text, textPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             this.textHeight = 0;
             this.textWidth = 0;
             try {

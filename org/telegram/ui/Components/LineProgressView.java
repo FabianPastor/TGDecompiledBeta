@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class LineProgressView extends View {
     private static DecelerateInterpolator decelerateInterpolator = null;
     private static Paint progressPaint = null;
-    private float animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float animatedAlphaValue = 1.0f;
     private float animatedProgressValue = 0.0f;
     private float animationProgressStart = 0.0f;
     private int backColor;
@@ -38,7 +37,7 @@ public class LineProgressView extends View {
         long newTime = System.currentTimeMillis();
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
-        if (!(this.animatedProgressValue == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT || this.animatedProgressValue == this.currentProgress)) {
+        if (!(this.animatedProgressValue == 1.0f || this.animatedProgressValue == this.currentProgress)) {
             float progressDiff = this.currentProgress - this.animationProgressStart;
             if (progressDiff > 0.0f) {
                 this.currentProgressTime += dt;
@@ -52,7 +51,7 @@ public class LineProgressView extends View {
             }
             invalidate();
         }
-        if (this.animatedProgressValue >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.animatedProgressValue == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.animatedAlphaValue != 0.0f) {
+        if (this.animatedProgressValue >= 1.0f && this.animatedProgressValue == 1.0f && this.animatedAlphaValue != 0.0f) {
             this.animatedAlphaValue -= ((float) dt) / 200.0f;
             if (this.animatedAlphaValue <= 0.0f) {
                 this.animatedAlphaValue = 0.0f;
@@ -76,8 +75,8 @@ public class LineProgressView extends View {
             this.animatedProgressValue = value;
             this.animationProgressStart = value;
         }
-        if (value != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.animatedAlphaValue = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        if (value != 1.0f) {
+            this.animatedAlphaValue = 1.0f;
         }
         this.currentProgress = value;
         this.currentProgressTime = 0;
@@ -86,7 +85,7 @@ public class LineProgressView extends View {
     }
 
     public void onDraw(Canvas canvas) {
-        if (!(this.backColor == 0 || this.animatedProgressValue == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) {
+        if (!(this.backColor == 0 || this.animatedProgressValue == 1.0f)) {
             progressPaint.setColor(this.backColor);
             progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
             canvas.drawRect((float) ((int) (((float) getWidth()) * this.animatedProgressValue)), 0.0f, (float) getWidth(), (float) getHeight(), progressPaint);

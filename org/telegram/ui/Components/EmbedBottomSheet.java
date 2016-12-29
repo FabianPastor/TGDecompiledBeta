@@ -51,7 +51,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.BottomSheet.BottomSheetDelegate;
 import org.telegram.ui.ActionBar.Theme;
@@ -223,7 +222,7 @@ public class EmbedBottomSheet extends BottomSheet {
             public TextureView onSwitchToFullscreen(View controlsView, boolean fullscreen, float aspectRatio, int rotation, boolean byButton) {
                 if (fullscreen) {
                     EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(0);
-                    EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(1.0f);
                     EmbedBottomSheet.this.fullscreenVideoContainer.addView(EmbedBottomSheet.this.videoView.getAspectRatioView());
                     EmbedBottomSheet.this.wasInLandscape = false;
                     EmbedBottomSheet.this.fullscreenedByButton = byButton;
@@ -311,7 +310,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {
                             if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
-                                EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(1.0f);
                                 EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
                             }
                             runnable.run();
@@ -346,7 +345,6 @@ public class EmbedBottomSheet extends BottomSheet {
 
             public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation) {
                 if (inline) {
-                    controlsView.setTranslationX(0.0f);
                     controlsView.setTranslationY(0.0f);
                     EmbedBottomSheet.this.pipVideoView = new PipVideoView();
                     return EmbedBottomSheet.this.pipVideoView.show(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this, controlsView, aspectRatio, rotation);
@@ -359,12 +357,12 @@ public class EmbedBottomSheet extends BottomSheet {
                 ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[10];
-                animatorArr[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{1.0f});
+                animatorArr[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{1.0f});
                 animatorArr[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
                 animatorArr[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
-                animatorArr[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{1.0f});
                 animatorArr[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
                 animatorArr[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
                 animatorArr[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{0.0f});
@@ -632,12 +630,10 @@ public class EmbedBottomSheet extends BottomSheet {
         }
         View controlsView = this.videoView.getControlsView();
         if (controlsView.getParent() == this.container) {
-            controlsView.setTranslationX((float) this.position[0]);
             controlsView.setTranslationY((float) this.position[1]);
-            return;
+        } else {
+            controlsView.setTranslationY(0.0f);
         }
-        controlsView.setTranslationX(0.0f);
-        controlsView.setTranslationY(0.0f);
     }
 
     protected void onContainerTranslationYChanged(float translationY) {
@@ -645,6 +641,11 @@ public class EmbedBottomSheet extends BottomSheet {
     }
 
     protected boolean onCustomMeasure(View view, int width, int height) {
+        if (view == this.videoView.getControlsView()) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.width = this.videoView.getMeasuredWidth();
+            layoutParams.height = (this.videoView.isInFullscreen() ? 0 : AndroidUtilities.dp(10.0f)) + this.videoView.getAspectRatioView().getMeasuredHeight();
+        }
         return false;
     }
 

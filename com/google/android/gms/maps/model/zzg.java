@@ -6,7 +6,6 @@ import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class zzg implements Creator<MarkerOptions> {
     static void zza(MarkerOptions markerOptions, Parcel parcel, int i) {
@@ -52,7 +51,7 @@ public class zzg implements Creator<MarkerOptions> {
         float f3 = 0.0f;
         float f4 = 0.5f;
         float f5 = 0.0f;
-        float f6 = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f6 = 1.0f;
         float f7 = 0.0f;
         while (parcel.dataPosition() < zzaU) {
             int zzaT = zzb.zzaT(parcel);

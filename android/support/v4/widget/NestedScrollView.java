@@ -44,7 +44,6 @@ import android.widget.ScrollView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC;
 
 public class NestedScrollView extends FrameLayout implements NestedScrollingParent, NestedScrollingChild, ScrollingView {
@@ -298,7 +297,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         if (scrollY < length) {
             return ((float) scrollY) / ((float) length);
         }
-        return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        return 1.0f;
     }
 
     protected float getBottomFadingEdgeStrength() {
@@ -310,7 +309,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         if (span < length) {
             return ((float) span) / ((float) length);
         }
-        return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        return 1.0f;
     }
 
     public int getMaxScrollAmount() {
@@ -644,7 +643,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                                         this.mEdgeGlowBottom.onRelease();
                                     }
                                 } else if (pulledToY > range) {
-                                    this.mEdgeGlowBottom.onPull(((float) deltaY) / ((float) getHeight()), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (ev.getX(activePointerIndex) / ((float) getWidth())));
+                                    this.mEdgeGlowBottom.onPull(((float) deltaY) / ((float) getHeight()), 1.0f - (ev.getX(activePointerIndex) / ((float) getWidth())));
                                     if (!this.mEdgeGlowTop.isFinished()) {
                                         this.mEdgeGlowTop.onRelease();
                                     }

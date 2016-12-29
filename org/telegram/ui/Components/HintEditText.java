@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.widget.EditText;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class HintEditText extends EditText {
@@ -53,7 +52,7 @@ public class HintEditText extends EditText {
                 if (this.hintText.charAt(a) == ' ') {
                     offsetX += this.spaceSize;
                 } else {
-                    this.rect.set(((int) offsetX) + AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT), AndroidUtilities.dp(2.0f) + top);
+                    this.rect.set(((int) offsetX) + AndroidUtilities.dp(1.0f), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + top);
                     canvas.drawRect(this.rect, this.paint);
                     offsetX += this.numberSize;
                 }

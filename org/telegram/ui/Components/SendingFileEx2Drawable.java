@@ -7,7 +7,6 @@ import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SendingFileEx2Drawable extends Drawable {
@@ -36,8 +35,8 @@ public class SendingFileEx2Drawable extends Drawable {
             dt = 50;
         }
         this.progress += ((float) dt) / 1000.0f;
-        while (this.progress > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            this.progress -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        while (this.progress > 1.0f) {
+            this.progress -= 1.0f;
         }
         invalidateSelf();
     }
@@ -56,7 +55,7 @@ public class SendingFileEx2Drawable extends Drawable {
         float f;
         float f2 = 11.0f;
         int end = (int) (this.progress >= 0.5f ? (float) AndroidUtilities.dp(11.0f) : (((float) AndroidUtilities.dp(11.0f)) * this.progress) * 2.0f);
-        float dp = (float) ((int) (this.progress <= 0.5f ? (float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) : (((float) AndroidUtilities.dp(11.0f)) * (this.progress - 0.5f)) * 2.0f));
+        float dp = (float) ((int) (this.progress <= 0.5f ? (float) AndroidUtilities.dp(1.0f) : (((float) AndroidUtilities.dp(11.0f)) * (this.progress - 0.5f)) * 2.0f));
         if (this.isChat) {
             f = 11.0f;
         } else {

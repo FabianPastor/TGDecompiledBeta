@@ -44,7 +44,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -588,9 +587,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 animatorArr[0] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             } else {
                 this.editDoneItem.getImageView().setVisibility(0);
@@ -600,9 +599,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 animatorArr[0] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleX", new float[]{0.1f});
                 animatorArr[1] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "scaleY", new float[]{0.1f});
                 animatorArr[2] = ObjectAnimator.ofFloat(this.editDoneItemProgress, "alpha", new float[]{0.0f});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleX", new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "scaleY", new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.editDoneItem.getImageView(), "alpha", new float[]{1.0f});
                 animatorSet.playTogether(animatorArr);
             }
             this.editDoneItemAnimation.addListener(new AnimatorListenerAdapter() {
@@ -628,9 +627,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             this.editDoneItem.getImageView().setScaleX(0.1f);
             this.editDoneItem.getImageView().setScaleY(0.1f);
             this.editDoneItem.getImageView().setAlpha(0.0f);
-            this.editDoneItemProgress.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.editDoneItemProgress.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.editDoneItemProgress.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.editDoneItemProgress.setScaleX(1.0f);
+            this.editDoneItemProgress.setScaleY(1.0f);
+            this.editDoneItemProgress.setAlpha(1.0f);
             this.editDoneItem.getImageView().setVisibility(4);
             this.editDoneItemProgress.setVisibility(0);
             this.editDoneItem.setEnabled(false);
@@ -638,9 +637,9 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             this.editDoneItemProgress.setScaleX(0.1f);
             this.editDoneItemProgress.setScaleY(0.1f);
             this.editDoneItemProgress.setAlpha(0.0f);
-            this.editDoneItem.getImageView().setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.editDoneItem.getImageView().setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.editDoneItem.getImageView().setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.editDoneItem.getImageView().setScaleX(1.0f);
+            this.editDoneItem.getImageView().setScaleY(1.0f);
+            this.editDoneItem.getImageView().setAlpha(1.0f);
             this.editDoneItem.getImageView().setVisibility(0);
             this.editDoneItemProgress.setVisibility(4);
             this.editDoneItem.setEnabled(true);

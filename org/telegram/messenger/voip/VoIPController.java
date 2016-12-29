@@ -1,5 +1,6 @@
 package org.telegram.messenger.voip;
 
+import android.media.audiofx.AcousticEchoCanceler;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
@@ -64,7 +65,7 @@ public class VoIPController {
 
     private native void nativeRelease(long j);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i, int i2);
+    private native void nativeSetConfig(long j, double d, double d2, int i, int i2, boolean z);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr);
 
@@ -168,7 +169,9 @@ public class VoIPController {
 
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, int frameSize) {
         ensureNativeInstance();
-        nativeSetConfig(this.nativeInst, recvTimeout, initTimeout, dataSavingOption, frameSize);
+        long j = this.nativeInst;
+        boolean z = VERSION.SDK_INT < 16 || !AcousticEchoCanceler.isAvailable();
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, frameSize, z);
     }
 
     public void debugCtl(int request, int param) {

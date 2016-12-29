@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.messenger.exoplayer2.Format;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
@@ -82,7 +83,7 @@ final class OpusReader extends StreamReader {
         int config = toc >> 3;
         int length = config & 3;
         if (config >= 16) {
-            length = 2500 << length;
+            length = DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS << length;
         } else if (config >= 12) {
             length = 10000 << (length & 1);
         } else if (length == 3) {

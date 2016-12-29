@@ -12,7 +12,6 @@ import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
 import org.telegram.ui.Components.Crop.CropRotationWheel.RotationWheelListener;
@@ -23,7 +22,7 @@ public class PhotoCropView extends FrameLayout {
     private RectF animationEndValues;
     private Runnable animationRunnable;
     private RectF animationStartValues;
-    private float bitmapGlobalScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float bitmapGlobalScale = 1.0f;
     private float bitmapGlobalX = 0.0f;
     private float bitmapGlobalY = 0.0f;
     private int bitmapHeight = 1;
@@ -131,7 +130,7 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.setBitmap(bitmap, rotation, freeform);
         this.wheelView.setFreeform(freeform);
         this.wheelView.reset();
-        this.delegate.needMoveImageTo(0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, false);
+        this.delegate.needMoveImageTo(0.0f, 0.0f, 1.0f, false);
     }
 
     public void setOrientation(int rotation) {
@@ -140,7 +139,7 @@ public class PhotoCropView extends FrameLayout {
         this.rectY = -1.0f;
         this.rectSizeX = 600.0f;
         this.rectSizeY = 600.0f;
-        this.delegate.needMoveImageTo(0.0f, 0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, false);
+        this.delegate.needMoveImageTo(0.0f, 0.0f, 1.0f, false);
         requestLayout();
     }
 
@@ -271,7 +270,7 @@ public class PhotoCropView extends FrameLayout {
 
     public void setAnimationProgress(float animationProgress) {
         if (this.animationStartValues != null) {
-            if (animationProgress == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (animationProgress == 1.0f) {
                 this.rectX = this.animationEndValues.left;
                 this.rectY = this.animationEndValues.top;
                 this.rectSizeX = this.animationEndValues.right;
@@ -297,10 +296,10 @@ public class PhotoCropView extends FrameLayout {
         } else {
             scaleTo = scaleToX;
         }
-        if (scaleTo > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.bitmapGlobalScale * scaleTo > 3.0f) {
+        if (scaleTo > 1.0f && this.bitmapGlobalScale * scaleTo > 3.0f) {
             scaleTo = 3.0f / this.bitmapGlobalScale;
-        } else if (scaleTo < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT && this.bitmapGlobalScale * scaleTo < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-            scaleTo = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT / this.bitmapGlobalScale;
+        } else if (scaleTo < 1.0f && this.bitmapGlobalScale * scaleTo < 1.0f) {
+            scaleTo = 1.0f / this.bitmapGlobalScale;
         }
         float newSizeX = this.rectSizeX * scaleTo;
         float newSizeY = this.rectSizeY * scaleTo;
@@ -309,7 +308,7 @@ public class PhotoCropView extends FrameLayout {
         float newY = ((((float) getHeight()) - newSizeY) + additionalY) / 2.0f;
         this.animationStartValues = new RectF(this.rectX, this.rectY, this.rectSizeX, this.rectSizeY);
         this.animationEndValues = new RectF(newX, newY, newSizeX, newSizeY);
-        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
+        this.delegate.needMoveImageTo(((((float) (getWidth() / 2)) * (scaleTo - 1.0f)) + newX) + ((this.bitmapGlobalX - this.rectX) * scaleTo), ((((((float) getHeight()) + additionalY) / 2.0f) * (scaleTo - 1.0f)) + newY) + ((this.bitmapGlobalY - this.rectY) * scaleTo), this.bitmapGlobalScale * scaleTo, animated);
     }
 
     public void setDelegate(PhotoCropViewDelegate delegate) {

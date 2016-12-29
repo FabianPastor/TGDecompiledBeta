@@ -16,7 +16,6 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SimpleTextView extends View implements Callback {
     private int drawablePadding = AndroidUtilities.dp(4.0f);
@@ -106,7 +105,7 @@ public class SimpleTextView extends View implements Callback {
                 }
                 width -= getPaddingLeft() + getPaddingRight();
                 CharSequence string = TextUtils.ellipsize(this.text, this.textPaint, (float) width, TruncateAt.END);
-                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.layout = new StaticLayout(string, 0, string.length(), this.textPaint, AndroidUtilities.dp(8.0f) + width, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 calcOffset(width);
             } catch (Exception e) {
             }

@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 class ItemTouchUIUtilImpl {
 
@@ -68,7 +67,7 @@ class ItemTouchUIUtilImpl {
         public void onDraw(Canvas c, RecyclerView recyclerView, View view, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             if (isCurrentlyActive && view.getTag() == null) {
                 Float originalElevation = Float.valueOf(ViewCompat.getElevation(view));
-                ViewCompat.setElevation(view, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + findMaxElevation(recyclerView, view));
+                ViewCompat.setElevation(view, 1.0f + findMaxElevation(recyclerView, view));
                 view.setTag(originalElevation);
             }
             super.onDraw(c, recyclerView, view, dX, dY, actionState, isCurrentlyActive);

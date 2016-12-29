@@ -45,7 +45,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -519,7 +518,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             StickersAlert.this.stickerPreviewLayout.setLayoutParams(layoutParams);
                             StickersAlert.this.stickerPreviewLayout.setVisibility(0);
                             animatorSet = new AnimatorSet();
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(StickersAlert.this.stickerPreviewLayout, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(StickersAlert.this.stickerPreviewLayout, "alpha", new float[]{0.0f, 1.0f})});
                             animatorSet.setDuration(200);
                             animatorSet.start();
                         }
@@ -533,7 +532,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     StickersAlert.this.stickerPreviewLayout.setLayoutParams(layoutParams);
                     StickersAlert.this.stickerPreviewLayout.setVisibility(0);
                     animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(StickersAlert.this.stickerPreviewLayout, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(StickersAlert.this.stickerPreviewLayout, "alpha", new float[]{0.0f, 1.0f})});
                     animatorSet.setDuration(200);
                     animatorSet.start();
                 }
@@ -798,7 +797,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 Object obj = this.shadow[num];
                 String str = "alpha";
                 float[] fArr = new float[1];
-                fArr[0] = show ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.0f;
+                fArr[0] = show ? 1.0f : 0.0f;
                 animatorArr[0] = ObjectAnimator.ofFloat(obj, str, fArr);
                 animatorSet.playTogether(animatorArr);
                 this.shadowAnimation[num].setDuration(150);

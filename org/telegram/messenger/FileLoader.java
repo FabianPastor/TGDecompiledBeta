@@ -184,7 +184,7 @@ public class FileLoader {
                     } else {
                         FileLoader.this.uploadOperationPaths.put(str, operation);
                     }
-                    operation.delegate = new FileUploadOperationDelegate() {
+                    operation.setDelegate(new FileUploadOperationDelegate() {
                         public void didFinishUploadingFile(FileUploadOperation operation, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv) {
                             final InputFile inputFile2 = inputFile;
                             final InputEncryptedFile inputEncryptedFile2 = inputEncryptedFile;
@@ -267,7 +267,7 @@ public class FileLoader {
                                 FileLoader.this.delegate.fileUploadProgressChanged(str, progress, z);
                             }
                         }
-                    };
+                    });
                     if (z2) {
                         if (FileLoader.this.currentUploadSmallOperationsCount < 1) {
                             FileLoader.this.currentUploadSmallOperationsCount = FileLoader.this.currentUploadSmallOperationsCount + 1;

@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import java.util.UUID;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Rect;
 
@@ -61,7 +60,7 @@ public class EntityView extends FrameLayout {
             this.dotPaint.setColor(-12793105);
             this.dotStrokePaint.setColor(-1);
             this.dotStrokePaint.setStyle(Style.STROKE);
-            this.dotStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            this.dotStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         }
 
         protected void updatePosition() {
@@ -111,7 +110,7 @@ public class EntityView extends FrameLayout {
                             if (this.currentHandle == 1) {
                                 delta *= -1.0f;
                             }
-                            EntityView.this.scale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + ((2.0f * delta) / ((float) getWidth())));
+                            EntityView.this.scale(1.0f + ((2.0f * delta) / ((float) getWidth())));
                             float centerX = (float) (getLeft() + (getWidth() / 2));
                             float centerY = (float) (getTop() + (getHeight() / 2));
                             float parentX = event.getRawX() - ((float) ((View) getParent()).getLeft());

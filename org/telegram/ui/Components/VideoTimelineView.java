@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 
 @TargetApi(10)
@@ -34,7 +33,7 @@ public class VideoTimelineView extends View {
     private boolean pressedLeft;
     private boolean pressedRight;
     private float progressLeft;
-    private float progressRight = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float progressRight = 1.0f;
     private long videoLength;
 
     public interface VideoTimelineViewDelegate {

@@ -907,7 +907,6 @@ public final class R {
         public static final int AudioTitle = NUM;
         public static final int AudioUnknownArtist = NUM;
         public static final int AudioUnknownTitle = NUM;
-        public static final int AudiosDataUsage = NUM;
         public static final int AutoLock = NUM;
         public static final int AutoLockDisabled = NUM;
         public static final int AutoLockInTime = NUM;
@@ -1443,6 +1442,7 @@ public final class R {
         public static final int LocalDatabaseClear = NUM;
         public static final int LocalDatabaseInfo = NUM;
         public static final int LocalDocumentCache = NUM;
+        public static final int LocalGifCache = NUM;
         public static final int LocalMusicCache = NUM;
         public static final int LocalPhotoCache = NUM;
         public static final int LocalVideoCache = NUM;
@@ -1523,7 +1523,6 @@ public final class R {
         public static final int NeverShareWithTitle = NUM;
         public static final int NewBroadcastList = NUM;
         public static final int NewChannel = NUM;
-        public static final int NewConversation = NUM;
         public static final int NewConversationShortcut = NUM;
         public static final int NewGroup = NUM;
         public static final int NewMessageTitle = NUM;
@@ -1734,12 +1733,12 @@ public final class R {
         public static final int PhoneMobile = NUM;
         public static final int PhoneNumberAlert = NUM;
         public static final int PhoneNumberChange = NUM;
+        public static final int PhoneNumberFlood = NUM;
         public static final int PhoneNumberHelp = NUM;
         public static final int PhoneOther = NUM;
         public static final int PhoneWork = NUM;
         public static final int PhotoCaption = NUM;
         public static final int PhotoTip = NUM;
-        public static final int PhotosDataUsage = NUM;
         public static final int Photos_few = NUM;
         public static final int Photos_many = NUM;
         public static final int Photos_one = NUM;
@@ -2029,7 +2028,6 @@ public final class R {
         public static final int VibrationDefault = NUM;
         public static final int VibrationDisabled = NUM;
         public static final int VideoCaption = NUM;
-        public static final int VideosDataUsage = NUM;
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;
         public static final int VoipAnswerCall = NUM;

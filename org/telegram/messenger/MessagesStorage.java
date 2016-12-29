@@ -2916,7 +2916,36 @@ Error: java.util.NoSuchElementException
                         }
                     } else {
                         isEnd = true;
-                        if (i3 == 1) {
+                        if (i3 == 3 && i4 == 0) {
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0", new Object[]{Long.valueOf(j)}), new Object[0]);
+                            if (cursor.next()) {
+                                min_unread_id = cursor.intValue(0);
+                            }
+                            cursor.dispose();
+                            int min_unread_id2 = 0;
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0", new Object[]{Long.valueOf(j)}), new Object[0]);
+                            if (cursor.next()) {
+                                min_unread_id2 = cursor.intValue(0);
+                                max_unread_date = cursor.intValue(1);
+                            }
+                            cursor.dispose();
+                            if (min_unread_id2 != 0) {
+                                min_unread_id = min_unread_id2;
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)", new Object[]{Long.valueOf(j), Integer.valueOf(min_unread_id2)}), new Object[0]);
+                                if (cursor.next()) {
+                                    count_unread = cursor.intValue(0);
+                                }
+                                cursor.dispose();
+                            }
+                        }
+                        if (i3 == 3 || i3 == 4) {
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0", new Object[]{Long.valueOf(j)}), new Object[0]);
+                            if (cursor.next()) {
+                                last_message_id = cursor.intValue(0);
+                            }
+                            cursor.dispose();
+                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(j), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
+                        } else if (i3 == 1) {
                             cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d", new Object[]{Long.valueOf(j), Integer.valueOf(i2), Integer.valueOf(count_query)}), new Object[0]);
                         } else if (i4 == 0) {
                             if (i3 == 2) {
@@ -3064,18 +3093,20 @@ Error: java.util.NoSuchElementException
                             return 0;
                         }
                     });
-                    if ((i3 == 3 || (i3 == 2 && queryFromServer)) && !res.messages.isEmpty()) {
-                        int minId = ((Message) res.messages.get(res.messages.size() - 1)).id;
-                        int maxId = ((Message) res.messages.get(0)).id;
-                        if (minId > max_id_query || maxId < max_id_query) {
-                            replyMessages.clear();
-                            usersToLoad.clear();
-                            chatsToLoad.clear();
+                    if (lower_id != 0) {
+                        if ((i3 == 3 || (i3 == 2 && queryFromServer)) && !res.messages.isEmpty()) {
+                            int minId = ((Message) res.messages.get(res.messages.size() - 1)).id;
+                            int maxId = ((Message) res.messages.get(0)).id;
+                            if (minId > max_id_query || maxId < max_id_query) {
+                                replyMessages.clear();
+                                usersToLoad.clear();
+                                chatsToLoad.clear();
+                                res.messages.clear();
+                            }
+                        }
+                        if (i3 == 3 && res.messages.size() == 1) {
                             res.messages.clear();
                         }
-                    }
-                    if (i3 == 3 && res.messages.size() == 1) {
-                        res.messages.clear();
                     }
                     if (!replyMessages.isEmpty()) {
                         ArrayList<Message> arrayList;

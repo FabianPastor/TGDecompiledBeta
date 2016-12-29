@@ -16,7 +16,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
@@ -98,7 +97,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         textView.setGravity(17);
         textView.setBackgroundResource(R.drawable.sticker_badge);
         textView.setMinWidth(AndroidUtilities.dp(18.0f));
-        textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        textView.setPadding(AndroidUtilities.dp(5.0f), 0, AndroidUtilities.dp(5.0f), AndroidUtilities.dp(1.0f));
         tab.addView(textView, LayoutHelper.createFrame(-2, 18.0f, 51, 26.0f, 6.0f, 0.0f, 0.0f));
         return textView;
     }

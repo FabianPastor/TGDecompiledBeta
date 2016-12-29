@@ -37,7 +37,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 
@@ -92,7 +91,7 @@ public class SecretPhotoViewer implements NotificationCenterDelegate {
                 if (this.currentInfoString == null || !this.currentInfoString.equals(str)) {
                     this.currentInfoString = str;
                     this.infoWidth = (int) Math.ceil((double) this.infoPaint.measureText(this.currentInfoString));
-                    this.infoLayout = new StaticLayout(TextUtils.ellipsize(this.currentInfoString, this.infoPaint, (float) this.infoWidth, TruncateAt.END), this.infoPaint, this.infoWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                    this.infoLayout = new StaticLayout(TextUtils.ellipsize(this.currentInfoString, this.infoPaint, (float) this.infoWidth, TruncateAt.END), this.infoPaint, this.infoWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     invalidate();
                 }
             }

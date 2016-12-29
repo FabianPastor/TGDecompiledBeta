@@ -50,7 +50,6 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_dialog;
@@ -666,7 +665,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         textView.setTextSize(1, 15.0f);
         textView.setGravity(17);
         textView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(8.0f), 0);
-        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         this.emptyView.addView(textView, LayoutHelper.createLinear(-2, -2));
         this.progressView = new ProgressBar(context);
         this.progressView.setVisibility(8);

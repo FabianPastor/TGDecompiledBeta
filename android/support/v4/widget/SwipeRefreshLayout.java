@@ -28,7 +28,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingParent, NestedScrollingChild {
     private static final int ALPHA_ANIMATION_DURATION = 300;
@@ -209,7 +208,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
                     endTarget = SwipeRefreshLayout.this.mSpinnerOffsetEnd - Math.abs(SwipeRefreshLayout.this.mOriginalOffsetTop);
                 }
                 SwipeRefreshLayout.this.setTargetOffsetTopAndBottom((SwipeRefreshLayout.this.mFrom + ((int) (((float) (endTarget - SwipeRefreshLayout.this.mFrom)) * interpolatedTime))) - SwipeRefreshLayout.this.mCircleView.getTop(), false);
-                SwipeRefreshLayout.this.mProgress.setArrowScale(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolatedTime);
+                SwipeRefreshLayout.this.mProgress.setArrowScale(1.0f - interpolatedTime);
             }
         };
         this.mAnimateToStartPosition = new Animation() {
@@ -233,7 +232,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         int i = -this.mCircleDiameter;
         this.mCurrentTargetOffsetTop = i;
         this.mOriginalOffsetTop = i;
-        moveToStart(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        moveToStart(1.0f);
         TypedArray a = context.obtainStyledAttributes(attrs, LAYOUT_ATTRS);
         setEnabled(a.getBoolean(0, true));
         a.recycle();
@@ -330,7 +329,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     void startScaleDownAnimation(AnimationListener listener) {
         this.mScaleDownAnimation = new Animation() {
             public void applyTransformation(float interpolatedTime, Transformation t) {
-                SwipeRefreshLayout.this.setAnimationProgress(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - interpolatedTime);
+                SwipeRefreshLayout.this.setAnimationProgress(1.0f - interpolatedTime);
             }
         };
         this.mScaleDownAnimation.setDuration(150);
@@ -647,7 +646,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     private void moveSpinner(float overscrollTop) {
         float slingshotDist;
         this.mProgress.showArrow(true);
-        float dragPercent = Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, Math.abs(overscrollTop / this.mTotalDragDistance));
+        float dragPercent = Math.min(1.0f, Math.abs(overscrollTop / this.mTotalDragDistance));
         float adjustedPercent = (((float) Math.max(((double) dragPercent) - 0.4d, 0.0d)) * 5.0f) / 3.0f;
         float extraOS = Math.abs(overscrollTop) - this.mTotalDragDistance;
         if (this.mUsingCustomStart) {
@@ -662,11 +661,11 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             this.mCircleView.setVisibility(0);
         }
         if (!this.mScale) {
-            ViewCompat.setScaleX(this.mCircleView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            ViewCompat.setScaleY(this.mCircleView, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            ViewCompat.setScaleX(this.mCircleView, 1.0f);
+            ViewCompat.setScaleY(this.mCircleView, 1.0f);
         }
         if (this.mScale) {
-            setAnimationProgress(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, overscrollTop / this.mTotalDragDistance));
+            setAnimationProgress(Math.min(1.0f, overscrollTop / this.mTotalDragDistance));
         }
         if (overscrollTop < this.mTotalDragDistance) {
             if (this.mProgress.getAlpha() > STARTING_PROGRESS_ALPHA) {
@@ -680,7 +679,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             }
         }
         this.mProgress.setStartEndTrim(0.0f, Math.min(MAX_PROGRESS_ANGLE, adjustedPercent * MAX_PROGRESS_ANGLE));
-        this.mProgress.setArrowScale(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, adjustedPercent));
+        this.mProgress.setArrowScale(Math.min(1.0f, adjustedPercent));
         this.mProgress.setProgressRotation(((-0.25f + (0.4f * adjustedPercent)) + (DECELERATE_INTERPOLATION_FACTOR * tensionPercent)) * DRAG_RATE);
         setTargetOffsetTopAndBottom(targetY - this.mCurrentTargetOffsetTop, true);
     }

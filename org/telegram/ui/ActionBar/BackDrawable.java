@@ -9,7 +9,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class BackDrawable extends Drawable {
     private boolean alwaysClose;
@@ -38,7 +37,7 @@ public class BackDrawable extends Drawable {
 
     public void setRotation(float rotation, boolean animated) {
         this.lastFrameTime = 0;
-        if (this.currentRotation == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+        if (this.currentRotation == 1.0f) {
             this.reverseAngle = true;
         } else if (this.currentRotation == 0.0f) {
             this.reverseAngle = false;
@@ -48,7 +47,7 @@ public class BackDrawable extends Drawable {
             if (this.currentRotation < rotation) {
                 this.currentAnimationTime = (int) (this.currentRotation * this.animationTime);
             } else {
-                this.currentAnimationTime = (int) ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentRotation) * this.animationTime);
+                this.currentAnimationTime = (int) ((1.0f - this.currentRotation) * this.animationTime);
             }
             this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = rotation;
@@ -76,7 +75,7 @@ public class BackDrawable extends Drawable {
                 } else if (this.currentRotation < this.finalRotation) {
                     this.currentRotation = this.interpolator.getInterpolation(((float) this.currentAnimationTime) / this.animationTime) * this.finalRotation;
                 } else {
-                    this.currentRotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / this.animationTime);
+                    this.currentRotation = 1.0f - this.interpolator.getInterpolation(((float) this.currentAnimationTime) / this.animationTime);
                 }
             }
             this.lastFrameTime = System.currentTimeMillis();
@@ -89,13 +88,13 @@ public class BackDrawable extends Drawable {
         float rotation = this.currentRotation;
         if (this.alwaysClose) {
             canvas.rotate((((float) (this.reverseAngle ? -180 : 180)) * this.currentRotation) + 135.0f);
-            rotation = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            rotation = 1.0f;
         } else {
             canvas.rotate(((float) (this.reverseAngle ? -225 : TsExtractor.TS_STREAM_TYPE_E_AC3)) * this.currentRotation);
         }
-        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * rotation), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+        canvas.drawLine(((float) (-AndroidUtilities.dp(7.0f))) - (((float) AndroidUtilities.dp(1.0f)) * rotation), 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
         float startYDiff = (float) (-AndroidUtilities.dp(0.5f));
-        float endYDiff = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)) * rotation);
+        float endYDiff = ((float) AndroidUtilities.dp(7.0f)) + (((float) AndroidUtilities.dp(1.0f)) * rotation);
         float startXDiff = ((float) (-AndroidUtilities.dp(7.0f))) + (((float) AndroidUtilities.dp(7.0f)) * rotation);
         float endXDiff = ((float) AndroidUtilities.dp(0.5f)) - (((float) AndroidUtilities.dp(0.5f)) * rotation);
         canvas.drawLine(startXDiff, -startYDiff, endXDiff, -endYDiff, this.paint);

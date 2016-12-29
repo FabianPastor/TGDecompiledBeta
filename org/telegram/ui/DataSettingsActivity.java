@@ -148,25 +148,25 @@ public class DataSettingsActivity extends BaseFragment {
                         }
                         String text = "";
                         if ((mask & 1) != 0) {
-                            text = text + LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                            text = text + LocaleController.getString("LocalPhotoCache", R.string.LocalPhotoCache);
                         }
                         if ((mask & 2) != 0) {
                             if (text.length() != 0) {
                                 text = text + ", ";
                             }
-                            text = text + LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                            text = text + LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
                         }
                         if ((mask & 4) != 0) {
                             if (text.length() != 0) {
                                 text = text + ", ";
                             }
-                            text = text + LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                            text = text + LocaleController.getString("LocalVideoCache", R.string.LocalVideoCache);
                         }
                         if ((mask & 8) != 0) {
                             if (text.length() != 0) {
                                 text = text + ", ";
                             }
-                            text = text + LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                            text = text + LocaleController.getString("FilesDataUsage", R.string.FilesDataUsage);
                         }
                         if ((mask & 16) != 0) {
                             if (text.length() != 0) {
@@ -178,7 +178,7 @@ public class DataSettingsActivity extends BaseFragment {
                             if (text.length() != 0) {
                                 text = text + ", ";
                             }
-                            text = text + LocaleController.getString("AttachGif", R.string.AttachGif);
+                            text = text + LocaleController.getString("LocalGifCache", R.string.LocalGifCache);
                         }
                         if (text.length() == 0) {
                             text = LocaleController.getString("NoMediaAutoDownload", R.string.NoMediaAutoDownload);
@@ -355,22 +355,22 @@ public class DataSettingsActivity extends BaseFragment {
                             String name = null;
                             if (a == 0) {
                                 maskValues[a] = (mask & 1) != 0;
-                                name = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                                name = LocaleController.getString("LocalPhotoCache", R.string.LocalPhotoCache);
                             } else if (a == 1) {
                                 maskValues[a] = (mask & 2) != 0;
-                                name = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                                name = LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
                             } else if (a == 2) {
                                 maskValues[a] = (mask & 4) != 0;
-                                name = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                                name = LocaleController.getString("LocalVideoCache", R.string.LocalVideoCache);
                             } else if (a == 3) {
                                 maskValues[a] = (mask & 8) != 0;
-                                name = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                                name = LocaleController.getString("FilesDataUsage", R.string.FilesDataUsage);
                             } else if (a == 4) {
                                 maskValues[a] = (mask & 16) != 0;
                                 name = LocaleController.getString("AttachMusic", R.string.AttachMusic);
                             } else if (a == 5) {
                                 maskValues[a] = (mask & 32) != 0;
-                                name = LocaleController.getString("AttachGif", R.string.AttachGif);
+                                name = LocaleController.getString("LocalGifCache", R.string.LocalGifCache);
                             }
                             CheckBoxCell checkBoxCell = new CheckBoxCell(DataSettingsActivity.this.getParentActivity());
                             checkBoxCell.setTag(Integer.valueOf(a));

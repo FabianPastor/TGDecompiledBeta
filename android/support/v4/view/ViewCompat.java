@@ -30,7 +30,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.WeakHashMap;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class ViewCompat {
     public static final int ACCESSIBILITY_LIVE_REGION_ASSERTIVE = 2;
@@ -403,7 +402,7 @@ public class ViewCompat {
         }
 
         public float getAlpha(View view) {
-            return DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            return 1.0f;
         }
 
         public void setLayerType(View view, int layerType, Paint paint) {

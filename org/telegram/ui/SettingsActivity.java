@@ -76,7 +76,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
@@ -1390,9 +1389,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     this.writeButtonAnimation.setInterpolator(new DecelerateInterpolator());
                     animatorSet = this.writeButtonAnimation;
                     animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                    animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
-                    animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT});
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.writeButton, "scaleX", new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.writeButton, "scaleY", new float[]{1.0f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(this.writeButton, "alpha", new float[]{1.0f});
                     animatorSet.playTogether(animatorArr);
                 } else {
                     this.writeButtonAnimation.setInterpolator(new AccelerateInterpolator());
@@ -1416,15 +1415,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             this.avatarImage.setScaleX((42.0f + (18.0f * diff)) / 42.0f);
             this.avatarImage.setScaleY((42.0f + (18.0f * diff)) / 42.0f);
-            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) ActionBar.getCurrentActionBarHeight()) / 2.0f) * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
+            float avatarY = ((((float) (this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)) + ((((float) ActionBar.getCurrentActionBarHeight()) / 2.0f) * (1.0f + diff))) - (21.0f * AndroidUtilities.density)) + ((27.0f * AndroidUtilities.density) * diff);
             this.avatarImage.setTranslationX(((float) (-AndroidUtilities.dp(47.0f))) * diff);
             this.avatarImage.setTranslationY((float) Math.ceil((double) avatarY));
             this.nameTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
             this.nameTextView.setTranslationY((((float) Math.floor((double) avatarY)) - ((float) Math.ceil((double) AndroidUtilities.density))) + ((float) Math.floor((double) ((7.0f * AndroidUtilities.density) * diff))));
             this.onlineTextView.setTranslationX((-21.0f * AndroidUtilities.density) * diff);
             this.onlineTextView.setTranslationY((((float) Math.floor((double) avatarY)) + ((float) AndroidUtilities.dp(22.0f))) + (((float) Math.floor((double) (11.0f * AndroidUtilities.density))) * diff));
-            this.nameTextView.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (0.12f * diff));
-            this.nameTextView.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT + (0.12f * diff));
+            this.nameTextView.setScaleX(1.0f + (0.12f * diff));
+            this.nameTextView.setScaleY(1.0f + (0.12f * diff));
         }
     }
 

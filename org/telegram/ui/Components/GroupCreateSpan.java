@@ -17,7 +17,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 
@@ -57,7 +56,7 @@ public class GroupCreateSpan extends View {
         } else {
             maxNameWidth = (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) - AndroidUtilities.dp(164.0f)) / 2;
         }
-        this.nameLayout = new StaticLayout(TextUtils.ellipsize(UserObject.getFirstName(user).replace('\n', ' '), textPaint, (float) maxNameWidth, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(UserObject.getFirstName(user).replace('\n', ' '), textPaint, (float) maxNameWidth, TruncateAt.END), textPaint, 1000, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (this.nameLayout.getLineCount() > 0) {
             this.textWidth = (int) Math.ceil((double) this.nameLayout.getLineWidth(0));
             this.textX = -this.nameLayout.getLineLeft(0);
@@ -105,15 +104,15 @@ public class GroupCreateSpan extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        if ((this.deleting && this.progress != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) || !(this.deleting || this.progress == 0.0f)) {
+        if ((this.deleting && this.progress != 1.0f) || !(this.deleting || this.progress == 0.0f)) {
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
             if (dt < 0 || dt > 17) {
                 dt = 17;
             }
             if (this.deleting) {
                 this.progress += ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
-                if (this.progress >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.progress = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.progress >= 1.0f) {
+                    this.progress = 1.0f;
                 }
             } else {
                 this.progress -= ((float) dt) / BitmapDescriptorFactory.HUE_GREEN;
@@ -133,7 +132,7 @@ public class GroupCreateSpan extends View {
             backPaint.setAlpha((int) (255.0f * this.progress));
             canvas.drawCircle((float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), backPaint);
             canvas.save();
-            canvas.rotate(45.0f * (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.progress), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f));
+            canvas.rotate(45.0f * (1.0f - this.progress), (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f));
             this.deleteDrawable.setBounds(AndroidUtilities.dp(11.0f), AndroidUtilities.dp(11.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(21.0f));
             this.deleteDrawable.setAlpha((int) (255.0f * this.progress));
             this.deleteDrawable.draw(canvas);

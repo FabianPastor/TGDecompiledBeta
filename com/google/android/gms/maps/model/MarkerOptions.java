@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.dynamic.zzd;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public final class MarkerOptions extends zza {
     public static final Creator<MarkerOptions> CREATOR = new zzg();
@@ -29,25 +28,25 @@ public final class MarkerOptions extends zza {
 
     public MarkerOptions() {
         this.zzboS = 0.5f;
-        this.zzboT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.zzboT = 1.0f;
         this.zzboK = true;
         this.zzbpf = false;
         this.zzbpg = 0.0f;
         this.zzbph = 0.5f;
         this.zzbpi = 0.0f;
-        this.mAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.mAlpha = 1.0f;
         this.mVersionCode = 1;
     }
 
     MarkerOptions(int i, LatLng latLng, String str, String str2, IBinder iBinder, float f, float f2, boolean z, boolean z2, boolean z3, float f3, float f4, float f5, float f6, float f7) {
         this.zzboS = 0.5f;
-        this.zzboT = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.zzboT = 1.0f;
         this.zzboK = true;
         this.zzbpf = false;
         this.zzbpg = 0.0f;
         this.zzbph = 0.5f;
         this.zzbpi = 0.0f;
-        this.mAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.mAlpha = 1.0f;
         this.mVersionCode = i;
         this.zzbon = latLng;
         this.zzalD = str;

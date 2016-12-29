@@ -1,7 +1,6 @@
 package org.telegram.ui.Components.Paint;
 
 import android.graphics.Matrix;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class GLMatrix {
     public static float[] LoadOrtho(float left, float right, float bottom, float top, float near, float far) {
@@ -10,7 +9,7 @@ public class GLMatrix {
         float tx = (-(right + left)) / (right - left);
         float ty = (-(top + bottom)) / (top - bottom);
         float tz = (-(far + near)) / (far - near);
-        return new float[]{2.0f / (right - left), 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / t_b, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f / f_n, 0.0f, tx, ty, tz, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT};
+        return new float[]{2.0f / (right - left), 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / t_b, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f / f_n, 0.0f, tx, ty, tz, 1.0f};
     }
 
     public static float[] LoadGraphicsMatrix(Matrix matrix) {
@@ -27,12 +26,12 @@ public class GLMatrix {
         m[7] = 0.0f;
         m[8] = 0.0f;
         m[9] = 0.0f;
-        m[10] = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        m[10] = 1.0f;
         m[11] = 0.0f;
         m[12] = v[2];
         m[13] = v[5];
         m[14] = 0.0f;
-        m[15] = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        m[15] = 1.0f;
         return m;
     }
 

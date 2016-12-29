@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.Components.PhotoFilterView.CurvesToolValue;
 import org.telegram.ui.Components.PhotoFilterView.CurvesValue;
 
@@ -50,7 +49,7 @@ public class PhotoFilterCurvesControl extends View {
         setWillNotDraw(false);
         this.curveValue = value;
         this.paint.setColor(-NUM);
-        this.paint.setStrokeWidth((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.paint.setStyle(Style.STROKE);
         this.paintDash.setColor(-NUM);
         this.paintDash.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -178,7 +177,7 @@ public class PhotoFilterCurvesControl extends View {
 
     private void selectSegmentWithPoint(float pointx) {
         if (this.activeSegment == 0) {
-            this.activeSegment = (int) Math.floor((double) (((pointx - this.actualArea.x) / (this.actualArea.width / 5.0f)) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            this.activeSegment = (int) Math.floor((double) (((pointx - this.actualArea.x) / (this.actualArea.width / 5.0f)) + 1.0f));
         }
     }
 
@@ -247,9 +246,9 @@ public class PhotoFilterCurvesControl extends View {
         this.path.reset();
         for (a = 0; a < points.length / 2; a++) {
             if (a == 0) {
-                this.path.moveTo(this.actualArea.x + (points[a * 2] * this.actualArea.width), this.actualArea.y + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - points[(a * 2) + 1]) * this.actualArea.height));
+                this.path.moveTo(this.actualArea.x + (points[a * 2] * this.actualArea.width), this.actualArea.y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             } else {
-                this.path.lineTo(this.actualArea.x + (points[a * 2] * this.actualArea.width), this.actualArea.y + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - points[(a * 2) + 1]) * this.actualArea.height));
+                this.path.lineTo(this.actualArea.x + (points[a * 2] * this.actualArea.width), this.actualArea.y + ((1.0f - points[(a * 2) + 1]) * this.actualArea.height));
             }
         }
         canvas.drawPath(this.path, this.paintCurve);

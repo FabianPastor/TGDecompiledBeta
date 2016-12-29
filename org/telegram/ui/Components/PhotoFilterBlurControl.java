@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class PhotoFilterBlurControl extends FrameLayout {
     private static final float BlurInsetProximity = ((float) AndroidUtilities.dp(20.0f));
@@ -35,7 +34,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private boolean isMoving;
     private boolean isZooming;
     private Paint paint = new Paint(1);
-    private float pointerScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float pointerScale = 1.0f;
     private float pointerStartX;
     private float pointerStartY;
     private float size = 0.35f;
@@ -328,7 +327,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
         switch (state) {
             case 1:
                 this.startPointerDistance = getDistance(event);
-                this.pointerScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                this.pointerScale = 1.0f;
                 this.activeControl = BlurViewActiveControl.BlurViewActiveControlWholeArea;
                 setSelected(true, true);
                 break;
@@ -347,7 +346,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
         this.pointerScale += ((newDistance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f;
         this.falloff = Math.max(BlurMinimumFalloff, this.falloff * this.pointerScale);
         this.size = Math.max(this.falloff + BlurMinimumDifference, this.size * this.pointerScale);
-        this.pointerScale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        this.pointerScale = 1.0f;
         this.startPointerDistance = newDistance;
         invalidate();
         if (this.delegate != null) {

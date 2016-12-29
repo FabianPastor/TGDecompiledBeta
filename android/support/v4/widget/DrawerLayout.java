@@ -554,11 +554,11 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
         float minVel = 400.0f * density;
         this.mLeftCallback = new ViewDragCallback(3);
         this.mRightCallback = new ViewDragCallback(5);
-        this.mLeftDragger = ViewDragHelper.create(this, 1.0f, this.mLeftCallback);
+        this.mLeftDragger = ViewDragHelper.create(this, TOUCH_SLOP_SENSITIVITY, this.mLeftCallback);
         this.mLeftDragger.setEdgeTrackingEnabled(1);
         this.mLeftDragger.setMinVelocity(minVel);
         this.mLeftCallback.setDragger(this.mLeftDragger);
-        this.mRightDragger = ViewDragHelper.create(this, 1.0f, this.mRightCallback);
+        this.mRightDragger = ViewDragHelper.create(this, TOUCH_SLOP_SENSITIVITY, this.mRightCallback);
         this.mRightDragger.setEdgeTrackingEnabled(2);
         this.mRightDragger.setMinVelocity(minVel);
         this.mRightCallback.setDragger(this.mRightDragger);
@@ -790,7 +790,7 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
             LayoutParams lp = (LayoutParams) activeDrawer.getLayoutParams();
             if (lp.onScreen == 0.0f) {
                 dispatchOnDrawerClosed(activeDrawer);
-            } else if (lp.onScreen == 1.0f) {
+            } else if (lp.onScreen == TOUCH_SLOP_SENSITIVITY) {
                 dispatchOnDrawerOpened(activeDrawer);
             }
         }
@@ -1193,14 +1193,14 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
         } else if (this.mShadowLeftResolved != null && checkDrawerViewAbsoluteGravity(child, 3)) {
             shadowWidth = this.mShadowLeftResolved.getIntrinsicWidth();
             int childRight = child.getRight();
-            alpha = Math.max(0.0f, Math.min(((float) childRight) / ((float) this.mLeftDragger.getEdgeSize()), 1.0f));
+            alpha = Math.max(0.0f, Math.min(((float) childRight) / ((float) this.mLeftDragger.getEdgeSize()), TOUCH_SLOP_SENSITIVITY));
             this.mShadowLeftResolved.setBounds(childRight, child.getTop(), childRight + shadowWidth, child.getBottom());
             this.mShadowLeftResolved.setAlpha((int) (255.0f * alpha));
             this.mShadowLeftResolved.draw(canvas);
         } else if (this.mShadowRightResolved != null && checkDrawerViewAbsoluteGravity(child, 5)) {
             shadowWidth = this.mShadowRightResolved.getIntrinsicWidth();
             int childLeft = child.getLeft();
-            alpha = Math.max(0.0f, Math.min(((float) (getWidth() - childLeft)) / ((float) this.mRightDragger.getEdgeSize()), 1.0f));
+            alpha = Math.max(0.0f, Math.min(((float) (getWidth() - childLeft)) / ((float) this.mRightDragger.getEdgeSize()), TOUCH_SLOP_SENSITIVITY));
             this.mShadowRightResolved.setBounds(childLeft - shadowWidth, child.getTop(), childLeft, child.getBottom());
             this.mShadowRightResolved.setAlpha((int) (255.0f * alpha));
             this.mShadowRightResolved.draw(canvas);
@@ -1346,7 +1346,7 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
         if (isDrawerView(drawerView)) {
             LayoutParams lp = (LayoutParams) drawerView.getLayoutParams();
             if (this.mFirstLayout) {
-                lp.onScreen = 1.0f;
+                lp.onScreen = TOUCH_SLOP_SENSITIVITY;
                 lp.openState = 1;
                 updateChildrenImportantForAccessibility(drawerView, true);
             } else if (animate) {
@@ -1357,7 +1357,7 @@ public class DrawerLayout extends ViewGroup implements DrawerLayoutImpl {
                     this.mRightDragger.smoothSlideViewTo(drawerView, getWidth() - drawerView.getWidth(), drawerView.getTop());
                 }
             } else {
-                moveDrawerToOffset(drawerView, 1.0f);
+                moveDrawerToOffset(drawerView, TOUCH_SLOP_SENSITIVITY);
                 updateDrawerState(lp.gravity, 0, drawerView);
                 drawerView.setVisibility(0);
             }

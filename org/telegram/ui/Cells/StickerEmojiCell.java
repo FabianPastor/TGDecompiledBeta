@@ -9,7 +9,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
@@ -18,7 +17,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerEmojiCell extends FrameLayout {
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private float alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    private float alpha = 1.0f;
     private boolean changingAlpha;
     private TextView emojiTextView;
     private BackupImageView imageView;
@@ -114,7 +113,7 @@ public class StickerEmojiCell extends FrameLayout {
 
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)))) {
+        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)))) {
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;
             this.lastUpdateTime = newTime;
@@ -124,15 +123,15 @@ public class StickerEmojiCell extends FrameLayout {
                     this.time = 1050;
                 }
                 this.alpha = 0.5f + (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f);
-                if (this.alpha >= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                if (this.alpha >= 1.0f) {
                     this.changingAlpha = false;
-                    this.alpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                    this.alpha = 1.0f;
                 }
                 this.imageView.getImageReceiver().setAlpha(this.alpha);
             } else if (!this.scaled || this.scale == 0.8f) {
                 this.scale += ((float) dt) / 400.0f;
-                if (this.scale > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                    this.scale = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                if (this.scale > 1.0f) {
+                    this.scale = 1.0f;
                 }
             } else {
                 this.scale -= ((float) dt) / 400.0f;

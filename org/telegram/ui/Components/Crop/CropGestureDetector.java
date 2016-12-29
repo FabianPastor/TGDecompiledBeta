@@ -8,7 +8,6 @@ import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class CropGestureDetector {
     private static final int INVALID_POINTER_ID = -1;
@@ -20,7 +19,7 @@ public class CropGestureDetector {
     float mLastTouchY;
     private CropGestureListener mListener;
     final float mMinimumVelocity;
-    final float mTouchSlop = ((float) AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+    final float mTouchSlop = ((float) AndroidUtilities.dp(1.0f));
     private VelocityTracker mVelocityTracker;
     private boolean started;
 

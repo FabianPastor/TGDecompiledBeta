@@ -737,18 +737,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     public void processForwardFromMyName(MessageObject messageObject, long did) {
         if (messageObject != null) {
             ArrayList<MessageObject> arrayList;
-            if (messageObject.messageOwner.media == null || (messageObject.messageOwner.media instanceof TL_messageMediaEmpty) || (messageObject.messageOwner.media instanceof TL_messageMediaWebPage)) {
+            if (messageObject.messageOwner.media == null || (messageObject.messageOwner.media instanceof TL_messageMediaEmpty) || (messageObject.messageOwner.media instanceof TL_messageMediaWebPage) || (messageObject.messageOwner.media instanceof TL_messageMediaGame)) {
                 if (messageObject.messageOwner.message != null) {
                     WebPage webPage = null;
                     if (messageObject.messageOwner.media instanceof TL_messageMediaWebPage) {
                         webPage = messageObject.messageOwner.media.webpage;
                     }
                     sendMessage(messageObject.messageOwner.message, did, messageObject.replyMessageObject, webPage, true, messageObject.messageOwner.entities, null, null);
-                    return;
+                } else if (((int) did) != 0) {
+                    arrayList = new ArrayList();
+                    arrayList.add(messageObject);
+                    sendMessage(arrayList, did);
                 }
-                arrayList = new ArrayList();
-                arrayList.add(messageObject);
-                sendMessage(arrayList, did);
             } else if (messageObject.messageOwner.media.photo instanceof TL_photo) {
                 sendMessage((TL_photo) messageObject.messageOwner.media.photo, null, did, messageObject.replyMessageObject, null, null);
             } else if (messageObject.messageOwner.media.document instanceof TL_document) {
@@ -762,7 +762,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 user.last_name = messageObject.messageOwner.media.last_name;
                 user.id = messageObject.messageOwner.media.user_id;
                 sendMessage(user, did, messageObject.replyMessageObject, null, null);
-            } else {
+            } else if (((int) did) != 0) {
                 arrayList = new ArrayList();
                 arrayList.add(messageObject);
                 sendMessage(arrayList, did);
@@ -3238,8 +3238,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 uris = new ArrayList();
                 uris.add(uri);
             }
-            paths.add(path);
-            originalPaths.add(originalPath);
+            if (path != null) {
+                paths.add(path);
+                originalPaths.add(originalPath);
+            }
             prepareSendingDocuments(paths, originalPaths, uris, mine, dialog_id, reply_to_msg, inputContent);
         }
     }
@@ -3924,7 +3926,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
-                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3973,6 +3974,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
+                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;

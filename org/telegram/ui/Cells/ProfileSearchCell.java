@@ -22,7 +22,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -56,7 +55,7 @@ public class ProfileSearchCell extends BaseCell {
     private int countWidth;
     private CharSequence currentName;
     private long dialog_id;
-    public float drawAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+    public float drawAlpha = 1.0f;
     private boolean drawCheck;
     private boolean drawCount;
     private boolean drawNameBot;
@@ -293,7 +292,7 @@ public class ProfileSearchCell extends BaseCell {
                 this.lastUnreadCount = dialog.unread_count;
                 String countString = String.format("%d", new Object[]{Integer.valueOf(dialog.unread_count)});
                 this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) countPaint.measureText(countString)));
-                this.countLayout = new StaticLayout(countString, countPaint, this.countWidth, Alignment.ALIGN_CENTER, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+                this.countLayout = new StaticLayout(countString, countPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 int w = this.countWidth + AndroidUtilities.dp(18.0f);
                 nameWidth = nameWidth2 - w;
                 if (LocaleController.isRTL) {
@@ -308,7 +307,7 @@ public class ProfileSearchCell extends BaseCell {
             this.countLayout = null;
             nameWidth = nameWidth2;
         }
-        this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString, currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+        this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString, currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (this.chat == null || this.subLabel != null) {
             if (LocaleController.isRTL) {
                 this.onlineLeft = AndroidUtilities.dp(11.0f);
@@ -330,7 +329,7 @@ public class ProfileSearchCell extends BaseCell {
                     }
                 }
             }
-            this.onlineLayout = new StaticLayout(TextUtils.ellipsize(onlineString, currentOnlinePaint, (float) (onlineWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentOnlinePaint, onlineWidth, Alignment.ALIGN_NORMAL, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f, false);
+            this.onlineLayout = new StaticLayout(TextUtils.ellipsize(onlineString, currentOnlinePaint, (float) (onlineWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentOnlinePaint, onlineWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.nameTop = AndroidUtilities.dp(13.0f);
             if (!(this.subLabel == null || this.chat == null)) {
                 this.nameLockTop -= AndroidUtilities.dp(12.0f);
@@ -456,7 +455,7 @@ public class ProfileSearchCell extends BaseCell {
                     canvas.drawLine((float) AndroidUtilities.dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), linePaint);
                 }
             }
-            if (this.drawAlpha != DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+            if (this.drawAlpha != 1.0f) {
                 canvas.saveLayerAlpha(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), (int) (255.0f * this.drawAlpha), 4);
             }
             if (this.drawNameLock) {

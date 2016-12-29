@@ -10,7 +10,6 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.exoplayer2.util.NalUnitUtil;
 import org.telegram.messenger.exoplayer2.util.ParsableByteArray;
 import org.telegram.messenger.exoplayer2.util.ParsableNalUnitBitArray;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 final class H265Reader implements ElementaryStreamReader {
     private static final int BLA_W_LP = 16;
@@ -305,7 +304,7 @@ final class H265Reader implements ElementaryStreamReader {
             }
         }
         bitArray.skipBits(2);
-        float pixelWidthHeightRatio = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float pixelWidthHeightRatio = 1.0f;
         if (bitArray.readBit() && bitArray.readBit()) {
             int aspectRatioIdc = bitArray.readBits(8);
             if (aspectRatioIdc == 255) {

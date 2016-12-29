@@ -525,6 +525,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private void loadPasswordInfo(final boolean silent) {
         if (!silent) {
             this.loading = true;
+            this.listAdapter.notifyDataSetChanged();
         }
         ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {

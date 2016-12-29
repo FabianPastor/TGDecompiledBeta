@@ -69,7 +69,6 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.exoplayer2.text.Cue;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class RecyclerView extends ViewGroup implements ScrollingView, NestedScrollingChild {
@@ -106,8 +105,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     static long sFrameIntervalNanos = MIN_PREFETCH_TIME_NANOS;
     static final Interpolator sQuinticInterpolator = new Interpolator() {
         public float getInterpolation(float t) {
-            t -= DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
-            return ((((t * t) * t) * t) * t) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+            t -= 1.0f;
+            return ((((t * t) * t) * t) * t) + 1.0f;
         }
     };
     private int glowColor;
@@ -2274,11 +2273,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
         ViewHolder getScrapViewForPosition(int position, int type, boolean dryRun) {
             View view;
-            ViewHolder vh;
             int cacheSize;
             int scrapCount = this.mAttachedScrap.size();
             int i = 0;
             while (i < scrapCount) {
+                ViewHolder vh;
                 int layoutIndex;
                 ViewHolder holder = (ViewHolder) this.mAttachedScrap.get(i);
                 if (holder.wasReturnedFromScrap() || holder.getLayoutPosition() != position || holder.isInvalid() || (!RecyclerView.this.mState.mInPreLayout && holder.isRemoved())) {
@@ -3084,14 +3083,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             int delta = (int) Math.sqrt((double) ((dx * dx) + (dy * dy)));
             int containerSize = horizontal ? RecyclerView.this.getWidth() : RecyclerView.this.getHeight();
             int halfContainerSize = containerSize / 2;
-            float distance = ((float) halfContainerSize) + (((float) halfContainerSize) * distanceInfluenceForSnapDuration(Math.min(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, (DefaultRetryPolicy.DEFAULT_BACKOFF_MULT * ((float) delta)) / ((float) containerSize))));
+            float distance = ((float) halfContainerSize) + (((float) halfContainerSize) * distanceInfluenceForSnapDuration(Math.min(1.0f, (1.0f * ((float) delta)) / ((float) containerSize))));
             if (velocity > 0) {
                 duration = Math.round(1000.0f * Math.abs(distance / ((float) velocity))) * 4;
             } else {
                 if (!horizontal) {
                     absDx = absDy;
                 }
-                duration = (int) (((((float) absDx) / ((float) containerSize)) + DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) * BitmapDescriptorFactory.HUE_MAGENTA);
+                duration = (int) (((((float) absDx) / ((float) containerSize)) + 1.0f) * BitmapDescriptorFactory.HUE_MAGENTA);
             }
             return Math.min(duration, 2000);
         }
@@ -4579,7 +4578,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         boolean invalidate = false;
         if (overscrollX < 0.0f) {
             ensureLeftGlow();
-            if (this.mLeftGlow.onPull((-overscrollX) / ((float) getWidth()), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (y / ((float) getHeight())))) {
+            if (this.mLeftGlow.onPull((-overscrollX) / ((float) getWidth()), 1.0f - (y / ((float) getHeight())))) {
                 invalidate = true;
             }
         } else if (overscrollX > 0.0f) {
@@ -4595,7 +4594,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
         } else if (overscrollY > 0.0f) {
             ensureBottomGlow();
-            if (this.mBottomGlow.onPull(overscrollY / ((float) getHeight()), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - (x / ((float) getWidth())))) {
+            if (this.mBottomGlow.onPull(overscrollY / ((float) getHeight()), 1.0f - (x / ((float) getWidth())))) {
                 invalidate = true;
             }
         }

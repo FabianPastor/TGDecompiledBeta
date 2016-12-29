@@ -26,7 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.Components.BackupImageView;
@@ -143,10 +142,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
                         FeaturedStickerSetCell.this.angle = (int) (((float) FeaturedStickerSetCell.this.angle) + (((float) (360 * delta)) / 2000.0f));
                         FeaturedStickerSetCell.this.angle = FeaturedStickerSetCell.this.angle - ((FeaturedStickerSetCell.this.angle / 360) * 360);
                         if (FeaturedStickerSetCell.this.drawProgress) {
-                            if (FeaturedStickerSetCell.this.progressAlpha < DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
+                            if (FeaturedStickerSetCell.this.progressAlpha < 1.0f) {
                                 FeaturedStickerSetCell.this.progressAlpha = FeaturedStickerSetCell.this.progressAlpha + (((float) delta) / 200.0f);
-                                if (FeaturedStickerSetCell.this.progressAlpha > DefaultRetryPolicy.DEFAULT_BACKOFF_MULT) {
-                                    FeaturedStickerSetCell.this.progressAlpha = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+                                if (FeaturedStickerSetCell.this.progressAlpha > 1.0f) {
+                                    FeaturedStickerSetCell.this.progressAlpha = 1.0f;
                                 }
                             }
                         } else if (FeaturedStickerSetCell.this.progressAlpha > 0.0f) {
@@ -274,7 +273,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                     this.addButton.setClickable(false);
                     this.currentAnimation = new AnimatorSet();
                     this.currentAnimation.setDuration(200);
-                    this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+                    this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{0.01f, 1.0f})});
                     this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
@@ -297,7 +296,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 this.addButton.setClickable(true);
                 this.currentAnimation = new AnimatorSet();
                 this.currentAnimation.setDuration(200);
-                this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{DefaultRetryPolicy.DEFAULT_BACKOFF_MULT, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT})});
+                this.currentAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.checkImage, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.checkImage, "scaleX", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.checkImage, "scaleY", new float[]{1.0f, 0.01f}), ObjectAnimator.ofFloat(this.addButton, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleX", new float[]{0.01f, 1.0f}), ObjectAnimator.ofFloat(this.addButton, "scaleY", new float[]{0.01f, 1.0f})});
                 this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (FeaturedStickerSetCell.this.currentAnimation != null && FeaturedStickerSetCell.this.currentAnimation.equals(animator)) {
@@ -323,17 +322,17 @@ public class FeaturedStickerSetCell extends FrameLayout {
             this.addButton.setVisibility(4);
             this.addButton.setClickable(false);
             this.checkImage.setVisibility(0);
-            this.checkImage.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.checkImage.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            this.checkImage.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            this.checkImage.setScaleX(1.0f);
+            this.checkImage.setScaleY(1.0f);
+            this.checkImage.setAlpha(1.0f);
             return;
         }
         this.addButton.setVisibility(0);
         this.addButton.setClickable(true);
         this.checkImage.setVisibility(4);
-        this.addButton.setScaleX(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.addButton.setScaleY(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        this.addButton.setAlpha(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        this.addButton.setScaleX(1.0f);
+        this.addButton.setScaleY(1.0f);
+        this.addButton.setAlpha(1.0f);
     }
 
     public StickerSetCovered getStickerSet() {

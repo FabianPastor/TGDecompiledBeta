@@ -18,7 +18,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int currentPosition = 0;
@@ -161,7 +160,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             v.setLayoutParams(this.defaultTabLayoutParams);
             if (this.shouldExpand) {
                 v.setPadding(0, 0, 0, 0);
-                v.setLayoutParams(new LayoutParams(-1, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                v.setLayoutParams(new LayoutParams(-1, -1, 1.0f));
             } else {
                 v.setPadding(this.tabPadding, 0, this.tabPadding, 0);
             }
@@ -202,8 +201,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 lineLeft = lineLeft2;
             } else {
                 View nextTab = this.tabsContainer.getChildAt(this.currentPosition + 1);
-                lineLeft = (this.currentPositionOffset * ((float) nextTab.getLeft())) + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentPositionOffset) * lineLeft2);
-                lineRight = (this.currentPositionOffset * ((float) nextTab.getRight())) + ((DefaultRetryPolicy.DEFAULT_BACKOFF_MULT - this.currentPositionOffset) * lineRight);
+                lineLeft = (this.currentPositionOffset * ((float) nextTab.getLeft())) + ((1.0f - this.currentPositionOffset) * lineLeft2);
+                lineRight = (this.currentPositionOffset * ((float) nextTab.getRight())) + ((1.0f - this.currentPositionOffset) * lineRight);
             }
             this.rectPaint.setColor(this.indicatorColor);
             canvas.drawRect(lineLeft, (float) (height - this.indicatorHeight), lineRight, (float) height, this.rectPaint);

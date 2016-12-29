@@ -44,7 +44,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -389,7 +388,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 layoutParams.height = -2;
                 layoutParams.leftMargin = AndroidUtilities.dp(16.0f);
                 layoutParams.gravity = 16;
-                layoutParams.bottomMargin = AndroidUtilities.dp(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                layoutParams.bottomMargin = AndroidUtilities.dp(1.0f);
                 this.dropDown.setLayoutParams(layoutParams);
             } else {
                 this.actionBar.setTitle(LocaleController.getString("Passcode", R.string.Passcode));

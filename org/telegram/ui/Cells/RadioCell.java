@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.volley.DefaultRetryPolicy;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
@@ -31,7 +30,7 @@ public class RadioCell extends FrameLayout {
         if (paint == null) {
             paint = new Paint();
             paint.setColor(-2500135);
-            paint.setStrokeWidth(DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            paint.setStrokeWidth(1.0f);
         }
         this.textView = new TextView(context);
         this.textView.setTextColor(-14606047);
@@ -85,12 +84,12 @@ public class RadioCell extends FrameLayout {
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
-        float f = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+        float f = 1.0f;
         if (animators != null) {
             TextView textView = this.textView;
             String str = "alpha";
             float[] fArr = new float[1];
-            fArr[0] = value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f;
+            fArr[0] = value ? 1.0f : 0.5f;
             animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
             RadioButton radioButton = this.radioButton;
             String str2 = "alpha";
@@ -102,7 +101,14 @@ public class RadioCell extends FrameLayout {
             animators.add(ObjectAnimator.ofFloat(radioButton, str2, fArr2));
             return;
         }
-        this.textView.setAlpha(value ? DefaultRetryPolicy.DEFAULT_BACKOFF_MULT : 0.5f);
+        float f2;
+        textView = this.textView;
+        if (value) {
+            f2 = 1.0f;
+        } else {
+            f2 = 0.5f;
+        }
+        textView.setAlpha(f2);
         radioButton = this.radioButton;
         if (!value) {
             f = 0.5f;
