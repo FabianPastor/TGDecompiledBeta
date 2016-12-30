@@ -83,6 +83,6 @@ public class FeedbackAttachment implements Serializable {
     }
 
     public String toString() {
-        return "\n" + FeedbackAttachment.class.getSimpleName() + "\n" + "id         " + this.mId + "\n" + "message id " + this.mMessageId + "\n" + "filename   " + this.mFilename + "\n" + "url        " + this.mUrl + "\n" + "createdAt  " + this.mCreatedAt + "\n" + "updatedAt  " + this.mUpdatedAt;
+        return "\n" + FeedbackAttachment.class.getSimpleName() + "\nid         " + this.mId + "\nmessage id " + this.mMessageId + "\nfilename   " + this.mFilename + "\nurl        " + this.mUrl + "\ncreatedAt  " + this.mCreatedAt + "\nupdatedAt  " + this.mUpdatedAt;
     }
 }

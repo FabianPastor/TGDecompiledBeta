@@ -929,13 +929,12 @@ public class LocaleController {
 
     public static String formatDateChat(long date) {
         try {
-            Calendar rightNow = Calendar.getInstance();
-            int year = rightNow.get(1);
-            rightNow.setTimeInMillis(date * 1000);
-            if (year == rightNow.get(1)) {
-                return getInstance().chatDate.format(1000 * date);
+            date *= 1000;
+            Calendar.getInstance().setTimeInMillis(date);
+            if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                return getInstance().chatDate.format(date);
             }
-            return getInstance().chatFullDate.format(1000 * date);
+            return getInstance().chatFullDate.format(date);
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
             return "LOC_ERR: formatDateChat";
@@ -943,23 +942,24 @@ public class LocaleController {
     }
 
     public static String formatDate(long date) {
+        date *= 1000;
         try {
             Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(6);
             int year = rightNow.get(1);
-            rightNow.setTimeInMillis(date * 1000);
+            rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                return getInstance().formatterDay.format(new Date(1000 * date));
+                return getInstance().formatterDay.format(new Date(date));
             }
             if (dateDay + 1 == day && year == dateYear) {
                 return getString("Yesterday", R.string.Yesterday);
             }
-            if (year == dateYear) {
-                return getInstance().formatterMonth.format(new Date(1000 * date));
+            if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                return getInstance().formatterMonth.format(new Date(date));
             }
-            return getInstance().formatterYear.format(new Date(1000 * date));
+            return getInstance().formatterYear.format(new Date(date));
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
             return "LOC_ERR: formatDate";
@@ -967,21 +967,22 @@ public class LocaleController {
     }
 
     public static String formatDateAudio(long date) {
+        date *= 1000;
         try {
             Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(6);
             int year = rightNow.get(1);
-            rightNow.setTimeInMillis(1000 * date);
+            rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(1000 * date))});
+                return String.format("%s %s", new Object[]{getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
             } else if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(1000 * date))});
-            } else if (year == dateYear) {
-                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+            } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
-                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
@@ -990,22 +991,23 @@ public class LocaleController {
     }
 
     public static String formatDateCallLog(long date) {
+        date *= 1000;
         try {
             Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(6);
             int year = rightNow.get(1);
-            rightNow.setTimeInMillis(1000 * date);
+            rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                return getInstance().formatterDay.format(new Date(1000 * date));
+                return getInstance().formatterDay.format(new Date(date));
             }
             if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(1000 * date))});
-            } else if (year == dateYear) {
-                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatDate.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                return String.format("%s %s", new Object[]{getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+            } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
-                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
@@ -1014,22 +1016,23 @@ public class LocaleController {
     }
 
     public static String formatDateOnline(long date) {
+        date *= 1000;
         try {
             Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(6);
             int year = rightNow.get(1);
-            rightNow.setTimeInMillis(1000 * date);
+            rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
             int dateYear = rightNow.get(1);
             if (dateDay == day && year == dateYear) {
-                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(1000 * date))});
+                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("TodayAt", R.string.TodayAt), getInstance().formatterDay.format(new Date(date))});
             } else if (dateDay + 1 == day && year == dateYear) {
-                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(1000 * date))});
-            } else if (year == dateYear) {
-                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                return String.format("%s %s %s", new Object[]{getString("LastSeen", R.string.LastSeen), getString("YesterdayAt", R.string.YesterdayAt), getInstance().formatterDay.format(new Date(date))});
+            } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
+                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
                 return String.format("%s %s", new Object[]{getString("LastSeenDate", R.string.LastSeenDate), format});
             } else {
-                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(1000 * date)), getInstance().formatterDay.format(new Date(1000 * date)));
+                format = formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
                 return String.format("%s %s", new Object[]{getString("LastSeenDate", R.string.LastSeenDate), format});
             }
         } catch (Throwable e) {
@@ -1073,23 +1076,25 @@ public class LocaleController {
     }
 
     public static String stringForMessageListDate(long date) {
+        date *= 1000;
         try {
             Calendar rightNow = Calendar.getInstance();
             int day = rightNow.get(6);
             int year = rightNow.get(1);
-            rightNow.setTimeInMillis(1000 * date);
+            rightNow.setTimeInMillis(date);
             int dateDay = rightNow.get(6);
-            if (year != rightNow.get(1)) {
-                return getInstance().formatterYear.format(new Date(1000 * date));
+            int dateYear = rightNow.get(1);
+            if (Math.abs(System.currentTimeMillis() - date) >= 31536000000L) {
+                return getInstance().formatterYear.format(new Date(date));
             }
             int dayDiff = dateDay - day;
-            if (dayDiff == 0 || (dayDiff == -1 && ((long) ((int) (System.currentTimeMillis() / 1000))) - date < 28800)) {
-                return getInstance().formatterDay.format(new Date(1000 * date));
+            if (dayDiff == 0 || (dayDiff == -1 && System.currentTimeMillis() - date < 28800000)) {
+                return getInstance().formatterDay.format(new Date(date));
             }
             if (dayDiff <= -7 || dayDiff > -1) {
-                return getInstance().formatterMonth.format(new Date(1000 * date));
+                return getInstance().formatterMonth.format(new Date(date));
             }
-            return getInstance().formatterWeek.format(new Date(1000 * date));
+            return getInstance().formatterWeek.format(new Date(date));
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
             return "LOC_ERR";

@@ -199,7 +199,7 @@ public class CrashManager {
                         parameters.put("contact", contact);
                         parameters.put("description", description);
                         parameters.put("sdk", Constants.SDK_NAME);
-                        parameters.put("sdk_version", BuildConfig.VERSION_NAME);
+                        parameters.put("sdk_version", "4.1.2");
                         urlConnection = new HttpURLConnectionBuilder(getURLString()).setRequestMethod("POST").writeFormFields(parameters).build();
                         int responseCode = urlConnection.getResponseCode();
                         boolean z = responseCode == 202 || responseCode == 201;

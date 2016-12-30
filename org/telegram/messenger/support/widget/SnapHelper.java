@@ -125,7 +125,7 @@ public abstract class SnapHelper extends OnFlingListener {
     }
 
     @Nullable
-    private LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
+    protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
         if (layoutManager instanceof ScrollVectorProvider) {
             return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
                 protected void onTargetFound(View targetView, State state, Action action) {

@@ -37,8 +37,8 @@ public class FeedbackManager {
     private static FeedbackManagerListener lastListener = null;
     private static boolean notificationActive = false;
     private static BroadcastReceiver receiver = null;
-    private static FeedbackUserDataElement requireUserEmail;
-    private static FeedbackUserDataElement requireUserName;
+    private static FeedbackUserDataElement requireUserEmail = FeedbackUserDataElement.REQUIRED;
+    private static FeedbackUserDataElement requireUserName = FeedbackUserDataElement.REQUIRED;
     private static String urlString = null;
     private static String userEmail;
     private static String userName;
@@ -110,6 +110,7 @@ public class FeedbackManager {
             if (activityClass == null) {
                 activityClass = FeedbackActivity.class;
             }
+            boolean forceNewThread = lastListener != null && lastListener.shouldCreateNewFeedbackThread();
             Intent intent = new Intent();
             if (!(extras == null || extras.isEmpty())) {
                 intent.putExtras(extras);
@@ -117,6 +118,7 @@ public class FeedbackManager {
             intent.setFlags(268435456);
             intent.setClass(context, activityClass);
             intent.putExtra("url", getURLString(context));
+            intent.putExtra(FeedbackActivity.EXTRA_FORCE_NEW_THREAD, forceNewThread);
             intent.putExtra(FeedbackActivity.EXTRA_INITIAL_USER_NAME, userName);
             intent.putExtra(FeedbackActivity.EXTRA_INITIAL_USER_EMAIL, userEmail);
             intent.putExtra(FeedbackActivity.EXTRA_INITIAL_ATTACHMENTS, attachments);

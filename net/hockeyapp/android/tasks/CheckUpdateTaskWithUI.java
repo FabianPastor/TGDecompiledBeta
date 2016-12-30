@@ -8,6 +8,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.widget.Toast;
@@ -68,6 +69,14 @@ public class CheckUpdateTaskWithUI extends CheckUpdateTask {
             builder.setMessage(R.string.hockeyapp_update_dialog_message);
             builder.setNegativeButton(R.string.hockeyapp_update_dialog_negative_button, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    CheckUpdateTaskWithUI.this.cleanUp();
+                    if (CheckUpdateTaskWithUI.this.listener != null) {
+                        CheckUpdateTaskWithUI.this.listener.onCancel();
+                    }
+                }
+            });
+            builder.setOnCancelListener(new OnCancelListener() {
+                public void onCancel(DialogInterface dialog) {
                     CheckUpdateTaskWithUI.this.cleanUp();
                     if (CheckUpdateTaskWithUI.this.listener != null) {
                         CheckUpdateTaskWithUI.this.listener.onCancel();

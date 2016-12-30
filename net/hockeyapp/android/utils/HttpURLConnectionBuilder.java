@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.hockeyapp.android.Constants;
 
 public class HttpURLConnectionBuilder {
     public static final String DEFAULT_CHARSET = "UTF-8";
@@ -30,6 +31,7 @@ public class HttpURLConnectionBuilder {
     public HttpURLConnectionBuilder(String urlString) {
         this.mUrlString = urlString;
         this.mHeaders = new HashMap();
+        this.mHeaders.put("User-Agent", Constants.SDK_USER_AGENT);
     }
 
     public HttpURLConnectionBuilder setRequestMethod(String requestMethod) {

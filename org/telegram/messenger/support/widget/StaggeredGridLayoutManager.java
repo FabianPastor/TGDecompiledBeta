@@ -25,7 +25,7 @@ import java.util.BitSet;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.Properties;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
@@ -40,7 +40,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     public static final int HORIZONTAL = 0;
     static final int INVALID_OFFSET = Integer.MIN_VALUE;
     private static final float MAX_SCROLL_FACTOR = 0.33333334f;
-    private static final String TAG = "StaggeredGridLayoutManager";
+    private static final String TAG = "StaggeredGridLayoutMana";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
     private final Runnable mCheckForGapsRunnable = new Runnable() {
@@ -60,6 +60,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private SavedState mPendingSavedState;
     int mPendingScrollPosition = -1;
     int mPendingScrollPositionOffset = Integer.MIN_VALUE;
+    private int[] mPrefetchDistances;
     @NonNull
     OrientationHelper mPrimaryOrientation;
     private BitSet mRemainingSpans;
@@ -374,7 +375,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         }
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
@@ -808,20 +809,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             }
             return this.mSpan.mIndex;
         }
-    }
-
-    public StaggeredGridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        boolean z = true;
-        Properties properties = LayoutManager.getProperties(context, attrs, defStyleAttr, defStyleRes);
-        setOrientation(properties.orientation);
-        setSpanCount(properties.spanCount);
-        setReverseLayout(properties.reverseLayout);
-        if (this.mGapStrategy == 0) {
-            z = false;
-        }
-        setAutoMeasureEnabled(z);
-        this.mLayoutState = new LayoutState();
-        createOrientationHelpers();
     }
 
     public StaggeredGridLayoutManager(int spanCount, int orientation) {
@@ -2320,31 +2307,36 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         requestLayout();
     }
 
-    int getItemPrefetchCount() {
-        return this.mSpanCount;
-    }
-
-    int gatherPrefetchIndices(int dx, int dy, State state, int[] outIndices) {
+    public void collectAdjacentPrefetchPositions(int dx, int dy, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int delta;
         if (this.mOrientation == 0) {
             delta = dx;
         } else {
             delta = dy;
         }
-        if (getChildCount() == 0 || delta == 0) {
-            return 0;
+        if (getChildCount() != 0 && delta != 0) {
+            int i;
+            prepareLayoutStateForDelta(delta, state);
+            if (this.mPrefetchDistances == null || this.mPrefetchDistances.length < this.mSpanCount) {
+                this.mPrefetchDistances = new int[this.mSpanCount];
+            }
+            for (i = 0; i < this.mSpanCount; i++) {
+                int startLine;
+                int[] iArr = this.mPrefetchDistances;
+                if (this.mLayoutState.mItemDirection == -1) {
+                    startLine = this.mLayoutState.mStartLine - this.mSpans[i].getStartLine(this.mLayoutState.mStartLine);
+                } else {
+                    startLine = this.mSpans[i].getEndLine(this.mLayoutState.mEndLine) - this.mLayoutState.mEndLine;
+                }
+                iArr[i] = startLine;
+            }
+            Arrays.sort(this.mPrefetchDistances, 0, this.mSpanCount);
+            for (i = 0; i < this.mSpanCount && this.mLayoutState.hasMore(state); i++) {
+                layoutPrefetchRegistry.addPosition(this.mLayoutState.mCurrentPosition, this.mPrefetchDistances[i]);
+                LayoutState layoutState = this.mLayoutState;
+                layoutState.mCurrentPosition += this.mLayoutState.mItemDirection;
+            }
         }
-        prepareLayoutStateForDelta(delta, state);
-        int remainingSpan = this.mSpanCount;
-        int count = 0;
-        while (count < this.mSpanCount && this.mLayoutState.hasMore(state) && remainingSpan > 0) {
-            outIndices[count] = this.mLayoutState.mCurrentPosition;
-            remainingSpan--;
-            LayoutState layoutState = this.mLayoutState;
-            layoutState.mCurrentPosition += this.mLayoutState.mItemDirection;
-            count++;
-        }
-        return count;
     }
 
     void prepareLayoutStateForDelta(int delta, State state) {
@@ -2385,12 +2377,12 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         return totalScroll;
     }
 
-    private int getLastChildPosition() {
+    int getLastChildPosition() {
         int childCount = getChildCount();
         return childCount == 0 ? 0 : getPosition(getChildAt(childCount - 1));
     }
 
-    private int getFirstChildPosition() {
+    int getFirstChildPosition() {
         if (getChildCount() == 0) {
             return 0;
         }

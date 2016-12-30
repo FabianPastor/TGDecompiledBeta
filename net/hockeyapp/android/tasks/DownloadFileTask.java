@@ -1,6 +1,6 @@
 package net.hockeyapp.android.tasks;
 
-import android.app.AlertDialog.Builder;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.os.StrictMode.VmPolicy;
+import android.os.StrictMode.VmPolicy.Builder;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
+import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.R;
 import net.hockeyapp.android.listeners.DownloadFileListener;
 
@@ -193,7 +197,7 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
     }
 
     protected void setConnectionProperties(HttpURLConnection connection) {
-        connection.addRequestProperty("User-Agent", "HockeySDK/Android");
+        connection.addRequestProperty("User-Agent", Constants.SDK_USER_AGENT);
         connection.setInstanceFollowRedirects(true);
         if (VERSION.SDK_INT <= 9) {
             connection.setRequestProperty("connection", "close");
@@ -241,12 +245,21 @@ public class DownloadFileTask extends AsyncTask<Void, Integer, Long> {
             Intent intent = new Intent("android.intent.action.VIEW");
             intent.setDataAndType(Uri.fromFile(new File(this.mFilePath, this.mFilename)), "application/vnd.android.package-archive");
             intent.setFlags(268435456);
+            VmPolicy oldVmPolicy = null;
+            if (VERSION.SDK_INT >= 24) {
+                oldVmPolicy = StrictMode.getVmPolicy();
+                StrictMode.setVmPolicy(new Builder().penaltyLog().build());
+            }
             this.mContext.startActivity(intent);
+            if (oldVmPolicy != null) {
+                StrictMode.setVmPolicy(oldVmPolicy);
+                return;
+            }
             return;
         }
         try {
             String message;
-            Builder builder = new Builder(this.mContext);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.mContext);
             builder.setTitle(R.string.hockeyapp_download_failed_dialog_title);
             if (this.mDownloadErrorMessage == null) {
                 message = this.mContext.getString(R.string.hockeyapp_download_failed_dialog_message);

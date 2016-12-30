@@ -37,7 +37,7 @@ class Persistence {
     }
 
     protected void persist(String[] data) {
-        if (isFreeSpaceAvailable().booleanValue()) {
+        if (isFreeSpaceAvailable()) {
             StringBuilder buffer = new StringBuilder();
             for (String aData : data) {
                 if (buffer.length() > 0) {
@@ -45,7 +45,7 @@ class Persistence {
                 }
                 buffer.append(aData);
             }
-            if (Boolean.valueOf(writeToDisk(buffer.toString())).booleanValue()) {
+            if (writeToDisk(buffer.toString())) {
                 getSender().triggerSending();
                 return;
             }
@@ -135,6 +135,10 @@ class Persistence {
         return buffer.toString();
     }
 
+    protected boolean hasFilesAvailable() {
+        return nextAvailableFileInDirectory() != null;
+    }
+
     protected File nextAvailableFileInDirectory() {
         File file;
         synchronized (LOCK) {
@@ -153,7 +157,7 @@ class Persistence {
                 }
             }
             if (this.mTelemetryDirectory != null) {
-                HockeyLog.info(TAG, "The directory " + this.mTelemetryDirectory.toString() + " did not contain any " + "unserved files");
+                HockeyLog.info(TAG, "The directory " + this.mTelemetryDirectory.toString() + " did not contain any unserved files");
             }
             file = null;
         }
@@ -183,23 +187,21 @@ class Persistence {
         }
     }
 
-    protected Boolean isFreeSpaceAvailable() {
-        Boolean valueOf;
+    protected boolean isFreeSpaceAvailable() {
         boolean z = false;
         synchronized (LOCK) {
             Context context = getContext();
             if (context.getFilesDir() != null) {
                 String path = context.getFilesDir().getAbsolutePath() + BIT_TELEMETRY_DIRECTORY;
                 if (!TextUtils.isEmpty(path)) {
-                    if (new File(path).listFiles().length < MAX_FILE_COUNT.intValue()) {
+                    File[] files = new File(path).listFiles();
+                    if (files != null && files.length < MAX_FILE_COUNT.intValue()) {
                         z = true;
                     }
-                    valueOf = Boolean.valueOf(z);
                 }
             }
-            valueOf = Boolean.valueOf(false);
         }
-        return valueOf;
+        return z;
     }
 
     protected void createDirectoriesIfNecessary() {

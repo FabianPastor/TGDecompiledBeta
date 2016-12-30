@@ -777,6 +777,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         }
     }
 
+    public void setImageY(int y) {
+        this.imageY = y;
+    }
+
     public void setImageCoords(int x, int y, int width, int height) {
         this.imageX = x;
         this.imageY = y;

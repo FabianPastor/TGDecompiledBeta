@@ -234,12 +234,12 @@ class ChildHelper {
         this.mCallback.removeAllViews();
     }
 
-    View findHiddenNonRemovedView(int position, int type) {
+    View findHiddenNonRemovedView(int position) {
         int count = this.mHiddenViews.size();
         for (int i = 0; i < count; i++) {
             View view = (View) this.mHiddenViews.get(i);
             ViewHolder holder = this.mCallback.getChildViewHolder(view);
-            if (holder.getLayoutPosition() == position && !holder.isInvalid() && !holder.isRemoved() && (type == -1 || holder.getItemViewType() == type)) {
+            if (holder.getLayoutPosition() == position && !holder.isInvalid() && !holder.isRemoved()) {
                 return view;
             }
         }

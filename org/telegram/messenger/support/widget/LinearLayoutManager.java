@@ -9,14 +9,13 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.Properties;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
@@ -33,6 +32,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     private static final String TAG = "LinearLayoutManager";
     public static final int VERTICAL = 1;
     final AnchorInfo mAnchorInfo;
+    private int mInitialItemPrefetchCount;
     private boolean mLastStackFromEnd;
     private final LayoutChunkResult mLayoutChunkResult;
     private LayoutState mLayoutState;
@@ -233,7 +233,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         }
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
@@ -297,25 +297,9 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         this.mPendingSavedState = null;
         this.mAnchorInfo = new AnchorInfo();
         this.mLayoutChunkResult = new LayoutChunkResult();
+        this.mInitialItemPrefetchCount = 2;
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
-        setAutoMeasureEnabled(true);
-    }
-
-    public LinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        this.mReverseLayout = false;
-        this.mShouldReverseLayout = false;
-        this.mStackFromEnd = false;
-        this.mSmoothScrollbarEnabled = true;
-        this.mPendingScrollPosition = -1;
-        this.mPendingScrollPositionOffset = Integer.MIN_VALUE;
-        this.mPendingSavedState = null;
-        this.mAnchorInfo = new AnchorInfo();
-        this.mLayoutChunkResult = new LayoutChunkResult();
-        Properties properties = LayoutManager.getProperties(context, attrs, defStyleAttr, defStyleRes);
-        setOrientation(properties.orientation);
-        setReverseLayout(properties.reverseLayout);
-        setStackFromEnd(properties.stackFromEnd);
         setAutoMeasureEnabled(true);
     }
 
@@ -1008,31 +992,58 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         return this.mOrientationHelper.getMode() == 0 && this.mOrientationHelper.getEnd() == 0;
     }
 
-    int getItemPrefetchCount() {
-        return 1;
-    }
-
-    int gatherPrefetchIndicesForLayoutState(State state, LayoutState layoutState, int[] outIndices) {
+    void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int pos = layoutState.mCurrentPosition;
-        if (pos < 0 || pos >= state.getItemCount()) {
-            return 0;
+        if (pos >= 0 && pos < state.getItemCount()) {
+            layoutPrefetchRegistry.addPosition(pos, layoutState.mScrollingOffset);
         }
-        outIndices[0] = pos;
-        return 1;
     }
 
-    int gatherPrefetchIndices(int dx, int dy, State state, int[] outIndices) {
+    public void collectInitialPrefetchPositions(int adapterItemCount, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+        boolean fromEnd;
+        int anchorPos;
+        int direction = -1;
+        if (this.mPendingSavedState == null || !this.mPendingSavedState.hasValidAnchor()) {
+            resolveShouldLayoutReverse();
+            fromEnd = this.mShouldReverseLayout;
+            if (this.mPendingScrollPosition == -1) {
+                anchorPos = fromEnd ? adapterItemCount - 1 : 0;
+            } else {
+                anchorPos = this.mPendingScrollPosition;
+            }
+        } else {
+            fromEnd = this.mPendingSavedState.mAnchorLayoutFromEnd;
+            anchorPos = this.mPendingSavedState.mAnchorPosition;
+        }
+        if (!fromEnd) {
+            direction = 1;
+        }
+        int targetPos = anchorPos;
+        for (int i = 0; i < this.mInitialItemPrefetchCount && targetPos >= 0 && targetPos < adapterItemCount; i++) {
+            layoutPrefetchRegistry.addPosition(targetPos, 0);
+            targetPos += direction;
+        }
+    }
+
+    public void setInitialPrefetchItemCount(int itemCount) {
+        this.mInitialItemPrefetchCount = itemCount;
+    }
+
+    public int getInitialItemPrefetchCount() {
+        return this.mInitialItemPrefetchCount;
+    }
+
+    public void collectAdjacentPrefetchPositions(int dx, int dy, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int delta;
         if (this.mOrientation == 0) {
             delta = dx;
         } else {
             delta = dy;
         }
-        if (getChildCount() == 0 || delta == 0) {
-            return 0;
+        if (getChildCount() != 0 && delta != 0) {
+            updateLayoutState(delta > 0 ? 1 : -1, Math.abs(delta), true, state);
+            collectPrefetchPositionsForLayoutState(state, this.mLayoutState, layoutPrefetchRegistry);
         }
-        updateLayoutState(delta > 0 ? 1 : -1, Math.abs(delta), true, state);
-        return gatherPrefetchIndicesForLayoutState(state, this.mLayoutState, outIndices);
     }
 
     int scrollBy(int dy, Recycler recycler, State state) {
@@ -1527,7 +1538,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         return this.mPendingSavedState == null && this.mLastStackFromEnd == this.mStackFromEnd;
     }
 
-    @RestrictTo({Scope.GROUP_ID})
+    @RestrictTo({Scope.LIBRARY_GROUP})
     public void prepareForDrop(View view, View target, int x, int y) {
         int dropDirection;
         assertNotInLayoutOrScroll("Cannot drop a view during a scroll or layout calculation");

@@ -32,6 +32,8 @@ public class Constants {
     public static String PHONE_MANUFACTURER = null;
     public static String PHONE_MODEL = null;
     public static final String SDK_NAME = "HockeySDK";
+    public static final String SDK_USER_AGENT = "HockeySDK/Android 4.1.2";
+    public static final String SDK_VERSION = "4.1.2";
     public static final int UPDATE_PERMISSIONS_REQUEST = 1;
 
     public static void loadFromContext(Context context) {

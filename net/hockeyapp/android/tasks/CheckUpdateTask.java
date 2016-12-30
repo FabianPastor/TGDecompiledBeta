@@ -17,7 +17,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Locale;
-import net.hockeyapp.android.BuildConfig;
 import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.Tracking;
 import net.hockeyapp.android.UpdateActivity;
@@ -118,7 +117,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
 
     protected URLConnection createConnection(URL url) throws IOException {
         URLConnection connection = url.openConnection();
-        connection.addRequestProperty("User-Agent", "HockeySDK/Android");
+        connection.addRequestProperty("User-Agent", Constants.SDK_USER_AGENT);
         if (VERSION.SDK_INT <= 9) {
             connection.setRequestProperty("connection", "close");
         }
@@ -218,7 +217,7 @@ public class CheckUpdateTask extends AsyncTask<Void, String, JSONArray> {
         builder.append("&oem=" + encodeParam(Constants.PHONE_MANUFACTURER));
         builder.append("&app_version=" + encodeParam(Constants.APP_VERSION));
         builder.append("&sdk=" + encodeParam(Constants.SDK_NAME));
-        builder.append("&sdk_version=" + encodeParam(BuildConfig.VERSION_NAME));
+        builder.append("&sdk_version=" + encodeParam("4.1.2"));
         builder.append("&lang=" + encodeParam(Locale.getDefault().getLanguage()));
         builder.append("&usage_time=" + this.usageTime);
         return builder.toString();

@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPOutputStream;
 import net.hockeyapp.android.utils.AsyncTaskUtils;
 import net.hockeyapp.android.utils.HockeyLog;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class Sender {
     static final String DEFAULT_ENDPOINT_URL = "https://gate.hockeyapp.net/v2/track";
@@ -36,14 +37,18 @@ public class Sender {
 
     protected void triggerSending() {
         if (requestCount() < 10) {
-            this.mRequestCount.getAndIncrement();
-            AsyncTaskUtils.execute(new AsyncTask<Void, Void, Void>() {
-                protected Void doInBackground(Void... params) {
-                    Sender.this.send();
-                    return null;
-                }
-            });
-            return;
+            try {
+                AsyncTaskUtils.execute(new AsyncTask<Void, Void, Void>() {
+                    protected Void doInBackground(Void... params) {
+                        Sender.this.sendAvailableFiles();
+                        return null;
+                    }
+                });
+                return;
+            } catch (Throwable e) {
+                HockeyLog.error("Could not send events. Executor rejected async task.", e);
+                return;
+            }
         }
         HockeyLog.debug(TAG, "We have already 10 pending requests, not sending anything.");
     }
@@ -60,7 +65,7 @@ public class Sender {
         }
     }
 
-    protected void send() {
+    protected void sendAvailableFiles() {
         if (getPersistence() != null) {
             File fileToSend = getPersistence().nextAvailableFileInDirectory();
             String persistedData = loadData(fileToSend);
@@ -74,11 +79,13 @@ public class Sender {
     protected void send(HttpURLConnection connection, File file, String persistedData) {
         logRequest(connection, persistedData);
         if (connection != null && file != null && persistedData != null) {
+            this.mRequestCount.getAndIncrement();
             try {
                 connection.connect();
                 onResponse(connection, connection.getResponseCode(), persistedData, file);
             } catch (IOException e) {
                 HockeyLog.debug(TAG, "Couldn't send data with IOException: " + e.toString());
+                this.mRequestCount.getAndDecrement();
                 if (getPersistence() != null) {
                     HockeyLog.debug(TAG, "Persisting because of IOException: We're probably offline.");
                     getPersistence().makeAvailable(file);
@@ -151,14 +158,14 @@ public class Sender {
     }
 
     protected boolean isExpected(int responseCode) {
-        return 199 < responseCode && responseCode <= 203;
+        return Callback.DEFAULT_DRAG_ANIMATION_DURATION <= responseCode && responseCode <= 203;
     }
 
     protected void onUnexpected(HttpURLConnection connection, int responseCode, StringBuilder builder) {
         String message = String.format(Locale.ROOT, "Unexpected response code: %d", new Object[]{Integer.valueOf(responseCode)});
         builder.append(message);
         builder.append("\n");
-        HockeyLog.debug(TAG, message);
+        HockeyLog.error(TAG, message);
         readResponse(connection, builder);
     }
 

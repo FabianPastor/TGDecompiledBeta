@@ -89,12 +89,14 @@ public class SearchQuery {
                     int a;
                     TL_topPeer hint;
                     long did;
+                    String id;
                     ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
                     List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
                     ArrayList<String> shortcutsToUpdate = new ArrayList();
-                    ArrayList<String> currentShortcutsIds = new ArrayList();
+                    ArrayList<String> newShortcutsIds = new ArrayList();
+                    ArrayList<String> shortcutsToDelete = new ArrayList();
                     if (!(currentShortcuts == null || currentShortcuts.isEmpty())) {
-                        currentShortcutsIds.add("compose");
+                        newShortcutsIds.add("compose");
                         for (a = 0; a < hintsFinal.size(); a++) {
                             hint = (TL_topPeer) hintsFinal.get(a);
                             if (hint.peer.user_id != 0) {
@@ -105,14 +107,16 @@ public class SearchQuery {
                                     did = (long) (-hint.peer.channel_id);
                                 }
                             }
-                            currentShortcutsIds.add("did" + did);
+                            newShortcutsIds.add("did" + did);
                         }
                         for (a = 0; a < currentShortcuts.size(); a++) {
-                            String id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
-                            currentShortcutsIds.remove(((ShortcutInfo) currentShortcuts.get(a)).getId());
+                            id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
+                            if (!newShortcutsIds.remove(id)) {
+                                shortcutsToDelete.add(id);
+                            }
                             shortcutsToUpdate.add(id);
                         }
-                        if (currentShortcutsIds.isEmpty()) {
+                        if (newShortcutsIds.isEmpty() && shortcutsToDelete.isEmpty()) {
                             return;
                         }
                     }
@@ -126,8 +130,8 @@ public class SearchQuery {
                         shortcutManager.addDynamicShortcuts(arrayList);
                     }
                     arrayList.clear();
-                    if (!currentShortcutsIds.isEmpty()) {
-                        shortcutManager.removeDynamicShortcuts(currentShortcutsIds);
+                    if (!shortcutsToDelete.isEmpty()) {
+                        shortcutManager.removeDynamicShortcuts(shortcutsToDelete);
                     }
                     for (a = 0; a < hintsFinal.size(); a++) {
                         intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);

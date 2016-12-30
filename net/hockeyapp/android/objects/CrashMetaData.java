@@ -30,6 +30,6 @@ public class CrashMetaData {
     }
 
     public String toString() {
-        return "\n" + CrashMetaData.class.getSimpleName() + "\n" + "userDescription " + this.mUserDescription + "\n" + "userEmail       " + this.mUserEmail + "\n" + "userID          " + this.mUserID;
+        return "\n" + CrashMetaData.class.getSimpleName() + "\nuserDescription " + this.mUserDescription + "\nuserEmail       " + this.mUserEmail + "\nuserID          " + this.mUserID;
     }
 }

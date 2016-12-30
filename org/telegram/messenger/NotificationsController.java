@@ -1114,44 +1114,44 @@ public class NotificationsController {
                 } else if (messageObject.messageOwner.post) {
                     if (messageObject.isMediaEmpty()) {
                         if (shortMessage || messageObject.messageOwner.message == null || messageObject.messageOwner.message.length() == 0) {
-                            return LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name, chat.title);
+                            return LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
                         }
-                        return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageOwner.message);
+                        return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageOwner.message);
                     } else if (messageObject.messageOwner.media instanceof TL_messageMediaPhoto) {
                         if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.media.caption)) {
-                            return LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, name, chat.title);
+                            return LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, name);
                         }
-                        return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "🖼 " + messageObject.messageOwner.media.caption);
+                        return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "🖼 " + messageObject.messageOwner.media.caption);
                     } else if (messageObject.isVideo()) {
                         if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.media.caption)) {
-                            return LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, name, chat.title);
+                            return LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, name);
                         }
-                        return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "📹 " + messageObject.messageOwner.media.caption);
+                        return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "📹 " + messageObject.messageOwner.media.caption);
                     } else if (messageObject.isVoice()) {
-                        return LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, name, chat.title);
+                        return LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, name);
                     } else if (messageObject.isMusic()) {
-                        return LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name, chat.title);
+                        return LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name);
                     } else if (messageObject.messageOwner.media instanceof TL_messageMediaContact) {
-                        return LocaleController.formatString("ChannelMessageContact", R.string.ChannelMessageContact, name, chat.title);
+                        return LocaleController.formatString("ChannelMessageContact", R.string.ChannelMessageContact, name);
                     } else if ((messageObject.messageOwner.media instanceof TL_messageMediaGeo) || (messageObject.messageOwner.media instanceof TL_messageMediaVenue)) {
-                        return LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, name, chat.title);
+                        return LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, name);
                     } else if (!(messageObject.messageOwner.media instanceof TL_messageMediaDocument)) {
                         return null;
                     } else {
                         if (messageObject.isSticker()) {
                             if (messageObject.getStickerEmoji() != null) {
-                                return LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, name, chat.title, messageObject.getStickerEmoji());
+                                return LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, name, messageObject.getStickerEmoji());
                             }
-                            return LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, name, chat.title);
+                            return LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, name);
                         } else if (messageObject.isGif()) {
                             if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.media.caption)) {
-                                return LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, name, chat.title);
+                                return LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, name);
                             }
-                            return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "🎬 " + messageObject.messageOwner.media.caption);
+                            return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "🎬 " + messageObject.messageOwner.media.caption);
                         } else if (shortMessage || VERSION.SDK_INT < 19 || TextUtils.isEmpty(messageObject.messageOwner.media.caption)) {
-                            return LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, name, chat.title);
+                            return LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, name);
                         } else {
-                            return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "📎 " + messageObject.messageOwner.media.caption);
+                            return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "📎 " + messageObject.messageOwner.media.caption);
                         }
                     }
                 } else if (messageObject.isMediaEmpty()) {

@@ -1,5 +1,6 @@
 package net.hockeyapp.android.objects;
 
+import android.text.TextUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,9 +28,12 @@ public class CrashDetails {
     private static final String FIELD_CRASH_REPORTER_KEY = "CrashReporter Key";
     private static final String FIELD_DEVICE_MANUFACTURER = "Manufacturer";
     private static final String FIELD_DEVICE_MODEL = "Model";
+    private static final String FIELD_FORMAT = "Format";
+    private static final String FIELD_FORMAT_VALUE = "Xamarin";
     private static final String FIELD_OS_BUILD = "Android Build";
     private static final String FIELD_OS_VERSION = "Android";
     private static final String FIELD_THREAD_NAME = "Thread";
+    private static final String FIELD_XAMARIN_CAUSED_BY = "Xamarin caused by: ";
     private Date appCrashDate;
     private String appPackage;
     private Date appStartDate;
@@ -38,6 +42,8 @@ public class CrashDetails {
     private final String crashIdentifier;
     private String deviceManufacturer;
     private String deviceModel;
+    private String format;
+    private Boolean isXamarinException;
     private String osBuild;
     private String osVersion;
     private String reporterKey;
@@ -50,8 +56,28 @@ public class CrashDetails {
 
     public CrashDetails(String crashIdentifier, Throwable throwable) {
         this(crashIdentifier);
+        this.isXamarinException = Boolean.valueOf(false);
         Writer stackTraceResult = new StringWriter();
         throwable.printStackTrace(new PrintWriter(stackTraceResult));
+        this.throwableStackTrace = stackTraceResult.toString();
+    }
+
+    public CrashDetails(String crashIdentifier, Throwable throwable, String managedExceptionString, Boolean isManagedException) {
+        this(crashIdentifier);
+        Writer stackTraceResult = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stackTraceResult);
+        this.isXamarinException = Boolean.valueOf(true);
+        setFormat(FIELD_FORMAT_VALUE);
+        if (isManagedException.booleanValue()) {
+            printWriter.print(FIELD_XAMARIN_CAUSED_BY);
+            throwable.printStackTrace(printWriter);
+        } else if (TextUtils.isEmpty(managedExceptionString)) {
+            throwable.printStackTrace(printWriter);
+        } else {
+            throwable.printStackTrace(printWriter);
+            printWriter.print(FIELD_XAMARIN_CAUSED_BY);
+            printWriter.print(managedExceptionString);
+        }
         this.throwableStackTrace = stackTraceResult.toString();
     }
 
@@ -110,6 +136,8 @@ public class CrashDetails {
                     result.setAppVersionCode(headerValue);
                 } else if (headerName.equals(FIELD_THREAD_NAME)) {
                     result.setThreadName(headerValue);
+                } else if (headerName.equals(FIELD_FORMAT)) {
+                    result.setFormat(headerValue);
                 }
             }
         }
@@ -135,6 +163,9 @@ public class CrashDetails {
                 writeHeader(writer2, FIELD_CRASH_REPORTER_KEY, this.reporterKey);
                 writeHeader(writer2, FIELD_APP_START_DATE, DATE_FORMAT.format(this.appStartDate));
                 writeHeader(writer2, FIELD_APP_CRASH_DATE, DATE_FORMAT.format(this.appCrashDate));
+                if (this.isXamarinException.booleanValue()) {
+                    writeHeader(writer2, FIELD_FORMAT, FIELD_FORMAT_VALUE);
+                }
                 writer2.write("\n");
                 writer2.write(this.throwableStackTrace);
                 writer2.flush();
@@ -290,5 +321,21 @@ public class CrashDetails {
 
     public void setThrowableStackTrace(String throwableStackTrace) {
         this.throwableStackTrace = throwableStackTrace;
+    }
+
+    public Boolean getIsXamarinException() {
+        return this.isXamarinException;
+    }
+
+    public void setIsXamarinException(Boolean isXamarinException) {
+        this.isXamarinException = isXamarinException;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 }

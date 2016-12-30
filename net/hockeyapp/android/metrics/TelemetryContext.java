@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import net.hockeyapp.android.BuildConfig;
 import net.hockeyapp.android.Constants;
 import net.hockeyapp.android.metrics.model.Application;
 import net.hockeyapp.android.metrics.model.Device;
@@ -99,7 +98,7 @@ class TelemetryContext {
         } finally {
             setAppVersion(version);
         }
-        setSdkVersion("android:" + BuildConfig.VERSION_NAME);
+        setSdkVersion("android:" + "4.1.2");
     }
 
     protected void configUserId() {
@@ -130,16 +129,23 @@ class TelemetryContext {
 
     @SuppressLint({"NewApi", "Deprecation"})
     protected void updateScreenResolution() {
-        Point size;
         if (this.mContext != null) {
             int width;
             int height;
             WindowManager wm = (WindowManager) this.mContext.getSystemService("window");
+            Point size;
+            Display d;
             if (VERSION.SDK_INT >= 17) {
                 size = new Point();
-                wm.getDefaultDisplay().getRealSize(size);
-                width = size.x;
-                height = size.y;
+                d = wm.getDefaultDisplay();
+                if (d != null) {
+                    d.getRealSize(size);
+                    width = size.x;
+                    height = size.y;
+                } else {
+                    width = 0;
+                    height = 0;
+                }
             } else if (VERSION.SDK_INT >= 13) {
                 try {
                     Method mGetRawW = Display.class.getMethod("getRawWidth", new Class[0]);
@@ -149,13 +155,19 @@ class TelemetryContext {
                     height = ((Integer) mGetRawH.invoke(display, new Object[0])).intValue();
                 } catch (Exception ex) {
                     size = new Point();
-                    wm.getDefaultDisplay().getSize(size);
-                    width = size.x;
-                    height = size.y;
+                    d = wm.getDefaultDisplay();
+                    if (d != null) {
+                        d.getRealSize(size);
+                        width = size.x;
+                        height = size.y;
+                    } else {
+                        width = 0;
+                        height = 0;
+                    }
                     HockeyLog.debug(TAG, "Couldn't determine screen resolution: " + ex.toString());
                 }
             } else {
-                Display d = wm.getDefaultDisplay();
+                d = wm.getDefaultDisplay();
                 width = d.getWidth();
                 height = d.getHeight();
             }
@@ -164,7 +176,7 @@ class TelemetryContext {
     }
 
     protected void configInternalContext() {
-        setSdkVersion("android:" + BuildConfig.VERSION_NAME);
+        setSdkVersion("android:" + "4.1.2");
     }
 
     protected String getPackageName() {

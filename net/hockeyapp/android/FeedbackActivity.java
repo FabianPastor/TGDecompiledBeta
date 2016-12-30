@@ -58,6 +58,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
     private static final int ATTACH_FILE = 2;
     private static final int ATTACH_PICTURE = 1;
     private static final int DIALOG_ERROR_ID = 0;
+    public static final String EXTRA_FORCE_NEW_THREAD = "forceNewThread";
     public static final String EXTRA_INITIAL_ATTACHMENTS = "initialAttachments";
     public static final String EXTRA_INITIAL_USER_EMAIL = "initialUserEmail";
     public static final String EXTRA_INITIAL_USER_NAME = "initialUserName";
@@ -75,6 +76,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
     private ArrayList<FeedbackMessage> mFeedbackMessages;
     private ScrollView mFeedbackScrollview;
     private boolean mFeedbackViewInitialized;
+    private boolean mForceNewThread;
     private boolean mInSendFeedback;
     private List<Uri> mInitialAttachments;
     private TextView mLastUpdatedTextView;
@@ -111,9 +113,9 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                     String responseString = bundle.getString(SendFeedbackTask.BUNDLE_FEEDBACK_RESPONSE);
                     String statusCode = bundle.getString(SendFeedbackTask.BUNDLE_FEEDBACK_STATUS);
                     String requestType = bundle.getString(SendFeedbackTask.BUNDLE_REQUEST_TYPE);
-                    if (requestType.equals("send") && (responseString == null || Integer.parseInt(statusCode) != 201)) {
+                    if ("send".equals(requestType) && (responseString == null || Integer.parseInt(statusCode) != 201)) {
                         error.setMessage(feedbackActivity.getString(R.string.hockeyapp_feedback_send_generic_error));
-                    } else if (requestType.equals("fetch") && statusCode != null && (Integer.parseInt(statusCode) == 404 || Integer.parseInt(statusCode) == 422)) {
+                    } else if ("fetch".equals(requestType) && statusCode != null && (Integer.parseInt(statusCode) == 404 || Integer.parseInt(statusCode) == 422)) {
                         feedbackActivity.resetFeedbackView();
                         success = true;
                     } else if (responseString != null) {
@@ -184,6 +186,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             this.mUrl = extras.getString("url");
+            this.mForceNewThread = extras.getBoolean(EXTRA_FORCE_NEW_THREAD);
             this.initialUserName = extras.getString(EXTRA_INITIAL_USER_NAME);
             this.initialUserEmail = extras.getString(EXTRA_INITIAL_USER_EMAIL);
             Parcelable[] initialAttachmentsArray = extras.getParcelableArray(EXTRA_INITIAL_ATTACHMENTS);
@@ -267,8 +270,8 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                 openContextMenu(v);
             }
         } else if (viewId == R.id.button_add_response) {
-            configureFeedbackView(false);
             this.mInSendFeedback = true;
+            configureFeedbackView(false);
         } else if (viewId == R.id.button_refresh) {
             sendFetchFeedback(this.mUrl, null, null, null, null, null, PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext), this.mFeedbackHandler, true);
         }
@@ -370,12 +373,14 @@ public class FeedbackActivity extends Activity implements OnClickListener {
             this.mWrapperLayoutFeedbackAndMessages.setVisibility(0);
             this.mFeedbackScrollview.setVisibility(8);
             this.mLastUpdatedTextView = (TextView) findViewById(R.id.label_last_updated);
+            this.mLastUpdatedTextView.setVisibility(4);
             this.mAddResponseButton = (Button) findViewById(R.id.button_add_response);
             this.mAddResponseButton.setOnClickListener(this);
             this.mRefreshButton = (Button) findViewById(R.id.button_refresh);
             this.mRefreshButton.setOnClickListener(this);
             return;
         }
+        int i;
         this.mWrapperLayoutFeedbackAndMessages.setVisibility(8);
         this.mFeedbackScrollview.setVisibility(0);
         this.mNameInput = (EditText) findViewById(R.id.input_name);
@@ -389,11 +394,11 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                 if (nameEmailSubjectArray != null && nameEmailSubjectArray.length >= 2) {
                     this.mNameInput.setText(nameEmailSubjectArray[0]);
                     this.mEmailInput.setText(nameEmailSubjectArray[1]);
-                    if (nameEmailSubjectArray.length >= 3) {
+                    if (this.mForceNewThread || nameEmailSubjectArray.length < 3) {
+                        this.mSubjectInput.requestFocus();
+                    } else {
                         this.mSubjectInput.setText(nameEmailSubjectArray[2]);
                         this.mTextInput.requestFocus();
-                    } else {
-                        this.mSubjectInput.requestFocus();
                     }
                 }
             } else {
@@ -410,8 +415,22 @@ public class FeedbackActivity extends Activity implements OnClickListener {
             }
             this.mFeedbackViewInitialized = true;
         }
+        EditText editText = this.mNameInput;
+        if (FeedbackManager.getRequireUserName() == FeedbackUserDataElement.DONT_SHOW) {
+            i = 8;
+        } else {
+            i = 0;
+        }
+        editText.setVisibility(i);
+        editText = this.mEmailInput;
+        if (FeedbackManager.getRequireUserEmail() == FeedbackUserDataElement.DONT_SHOW) {
+            i = 8;
+        } else {
+            i = 0;
+        }
+        editText.setVisibility(i);
         this.mTextInput.setText("");
-        if (PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext) != null) {
+        if ((!this.mForceNewThread || this.mInSendFeedback) && PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext) != null) {
             this.mSubjectInput.setVisibility(8);
         } else {
             this.mSubjectInput.setVisibility(0);
@@ -453,7 +472,9 @@ public class FeedbackActivity extends Activity implements OnClickListener {
     }
 
     private void configureAppropriateView() {
-        this.mToken = PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this);
+        if (!this.mForceNewThread || this.mInSendFeedback) {
+            this.mToken = PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this);
+        }
         if (this.mToken == null || this.mInSendFeedback) {
             configureFeedbackView(false);
             return;
@@ -492,7 +513,8 @@ public class FeedbackActivity extends Activity implements OnClickListener {
                     Collections.reverse(FeedbackActivity.this.mFeedbackMessages);
                     try {
                         Date date = format.parse(((FeedbackMessage) FeedbackActivity.this.mFeedbackMessages.get(0)).getCreatedAt());
-                        FeedbackActivity.this.mLastUpdatedTextView.setText(FeedbackActivity.this.getString(R.string.hockeyapp_feedback_last_updated_text, new Object[]{formatNew.format(date)}));
+                        FeedbackActivity.this.mLastUpdatedTextView.setText(String.format(FeedbackActivity.this.getString(R.string.hockeyapp_feedback_last_updated_text), new Object[]{formatNew.format(date)}));
+                        FeedbackActivity.this.mLastUpdatedTextView.setVisibility(0);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
@@ -526,7 +548,7 @@ public class FeedbackActivity extends Activity implements OnClickListener {
         if (Util.isConnectedToNetwork(this)) {
             enableDisableSendFeedbackButton(false);
             hideKeyboard();
-            String token = PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext);
+            String token = (!this.mForceNewThread || this.mInSendFeedback) ? PrefsUtil.getInstance().getFeedbackTokenFromPrefs(this.mContext) : null;
             String name = this.mNameInput.getText().toString().trim();
             String email = this.mEmailInput.getText().toString().trim();
             String subject = this.mSubjectInput.getText().toString().trim();

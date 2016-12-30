@@ -1,5 +1,6 @@
 package org.telegram.messenger.support.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -51,6 +52,7 @@ public class DividerItemDecoration extends ItemDecoration {
         }
     }
 
+    @SuppressLint({"NewApi"})
     private void drawVertical(Canvas canvas, RecyclerView parent) {
         int left;
         int right;
@@ -74,6 +76,7 @@ public class DividerItemDecoration extends ItemDecoration {
         canvas.restore();
     }
 
+    @SuppressLint({"NewApi"})
     private void drawHorizontal(Canvas canvas, RecyclerView parent) {
         int top;
         int bottom;

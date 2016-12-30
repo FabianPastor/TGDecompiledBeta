@@ -69,6 +69,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private boolean hasDescription;
     private int height;
     private int lastOrientation;
+    private OnShowListener onShowListener;
     private String openUrl;
     private OrientationEventListener orientationEventListener;
     private Activity parentActivity;
@@ -95,6 +96,25 @@ public class EmbedBottomSheet extends BottomSheet {
         this.position = new int[2];
         this.lastOrientation = -1;
         this.prevOrientation = -2;
+        this.onShowListener = new OnShowListener() {
+            public void onShow(DialogInterface dialog) {
+                if (EmbedBottomSheet.this.pipVideoView != null && EmbedBottomSheet.this.videoView.isInline()) {
+                    EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            EmbedBottomSheet.this.videoView.getViewTreeObserver().removeOnPreDrawListener(this);
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    EmbedBottomSheet.this.videoView.updateTextureImageView();
+                                    EmbedBottomSheet.this.pipVideoView.close();
+                                    EmbedBottomSheet.this.pipVideoView = null;
+                                }
+                            }, 100);
+                            return true;
+                        }
+                    });
+                }
+            }
+        };
         this.fullWidth = true;
         setApplyTopPadding(false);
         setApplyBottomPadding(false);
@@ -265,7 +285,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
             }
 
-            public void prepareToSwitchInlineMode(boolean inline, Runnable switchInlineModeRunnable, float aspectRatio) {
+            public void prepareToSwitchInlineMode(boolean inline, Runnable switchInlineModeRunnable, float aspectRatio, boolean animated) {
                 if (inline) {
                     if (EmbedBottomSheet.this.parentActivity != null) {
                         try {
@@ -277,105 +297,126 @@ public class EmbedBottomSheet extends BottomSheet {
                             FileLog.e("tmessages", e);
                         }
                     }
-                    Rect rect = PipVideoView.getPipRect(aspectRatio);
-                    TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
-                    ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
-                    View controlsView = EmbedBottomSheet.this.videoView.getControlsView();
-                    float scale = rect.width / ((float) textureView.getWidth());
-                    if (VERSION.SDK_INT >= 21) {
-                        rect.y += (float) AndroidUtilities.statusBarHeight;
-                    }
                     if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
                         EmbedBottomSheet.this.containerView.setTranslationY((float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f)));
                         EmbedBottomSheet.this.backDrawable.setAlpha(0);
                     }
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    r9 = new Animator[12];
-                    r9[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{scale});
-                    r9[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{scale});
-                    r9[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{rect.x});
-                    r9[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{rect.y});
-                    r9[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{scale});
-                    r9[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{scale});
-                    r9[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{rect.x});
-                    r9[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{rect.y});
-                    r9[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{(float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f))});
-                    r9[9] = ObjectAnimator.ofInt(EmbedBottomSheet.this.backDrawable, "alpha", new int[]{0});
-                    r9[10] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.fullscreenVideoContainer, "alpha", new float[]{0.0f});
-                    r9[11] = ObjectAnimator.ofFloat(controlsView, "alpha", new float[]{0.0f});
-                    animatorSet.playTogether(r9);
-                    animatorSet.setInterpolator(new DecelerateInterpolator());
-                    animatorSet.setDuration(250);
-                    final Runnable runnable = switchInlineModeRunnable;
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
-                            if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
-                                EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(1.0f);
-                                EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
-                            }
-                            runnable.run();
+                    EmbedBottomSheet.this.setOnShowListener(null);
+                    if (animated) {
+                        TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
+                        View controlsView = EmbedBottomSheet.this.videoView.getControlsView();
+                        ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
+                        Rect rect = PipVideoView.getPipRect(aspectRatio);
+                        float scale = rect.width / ((float) textureView.getWidth());
+                        if (VERSION.SDK_INT >= 21) {
+                            rect.y += (float) AndroidUtilities.statusBarHeight;
                         }
-                    });
-                    animatorSet.start();
+                        AnimatorSet animatorSet = new AnimatorSet();
+                        r9 = new Animator[12];
+                        r9[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{scale});
+                        r9[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{scale});
+                        r9[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{rect.x});
+                        r9[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{rect.y});
+                        r9[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{scale});
+                        r9[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{scale});
+                        r9[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{rect.x});
+                        r9[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{rect.y});
+                        r9[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{(float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f))});
+                        r9[9] = ObjectAnimator.ofInt(EmbedBottomSheet.this.backDrawable, "alpha", new int[]{0});
+                        r9[10] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.fullscreenVideoContainer, "alpha", new float[]{0.0f});
+                        r9[11] = ObjectAnimator.ofFloat(controlsView, "alpha", new float[]{0.0f});
+                        animatorSet.playTogether(r9);
+                        animatorSet.setInterpolator(new DecelerateInterpolator());
+                        animatorSet.setDuration(250);
+                        final Runnable runnable = switchInlineModeRunnable;
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animation) {
+                                if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
+                                    EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(1.0f);
+                                    EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
+                                }
+                                runnable.run();
+                            }
+                        });
+                        animatorSet.start();
+                        return;
+                    }
+                    if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
+                        EmbedBottomSheet.this.fullscreenVideoContainer.setAlpha(1.0f);
+                        EmbedBottomSheet.this.fullscreenVideoContainer.setVisibility(4);
+                    }
+                    switchInlineModeRunnable.run();
+                    EmbedBottomSheet.this.dismissInternal();
                     return;
                 }
                 if (ApplicationLoader.mainInterfacePaused) {
                     EmbedBottomSheet.this.parentActivity.startService(new Intent(ApplicationLoader.applicationContext, BringAppForegroundService.class));
                 }
-                rect = PipVideoView.getPipRect(aspectRatio);
-                textureView = EmbedBottomSheet.this.videoView.getTextureView();
-                textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
-                scale = rect.width / ((float) textureView.getLayoutParams().width);
-                if (VERSION.SDK_INT >= 21) {
-                    rect.y += (float) AndroidUtilities.statusBarHeight;
+                if (animated) {
+                    EmbedBottomSheet.this.setOnShowListener(EmbedBottomSheet.this.onShowListener);
+                    rect = PipVideoView.getPipRect(aspectRatio);
+                    textureView = EmbedBottomSheet.this.videoView.getTextureView();
+                    textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
+                    scale = rect.width / ((float) textureView.getLayoutParams().width);
+                    if (VERSION.SDK_INT >= 21) {
+                        rect.y += (float) AndroidUtilities.statusBarHeight;
+                    }
+                    textureImageView.setScaleX(scale);
+                    textureImageView.setScaleY(scale);
+                    textureImageView.setTranslationX(rect.x);
+                    textureImageView.setTranslationY(rect.y);
+                    textureView.setScaleX(scale);
+                    textureView.setScaleY(scale);
+                    textureView.setTranslationX(rect.x);
+                    textureView.setTranslationY(rect.y);
+                } else {
+                    EmbedBottomSheet.this.pipVideoView.close();
+                    EmbedBottomSheet.this.pipVideoView = null;
                 }
-                textureImageView.setScaleX(scale);
-                textureImageView.setScaleY(scale);
-                textureImageView.setTranslationX(rect.x);
-                textureImageView.setTranslationY(rect.y);
-                textureView.setScaleX(scale);
-                textureView.setScaleY(scale);
-                textureView.setTranslationX(rect.x);
-                textureView.setTranslationY(rect.y);
                 EmbedBottomSheet.this.setShowWithoutAnimation(true);
                 EmbedBottomSheet.this.show();
                 EmbedBottomSheet.this.backDrawable.setAlpha(0);
                 EmbedBottomSheet.this.containerView.setTranslationY((float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f)));
             }
 
-            public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation) {
+            public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation, boolean animated) {
                 if (inline) {
                     controlsView.setTranslationY(0.0f);
                     EmbedBottomSheet.this.pipVideoView = new PipVideoView();
                     return EmbedBottomSheet.this.pipVideoView.show(EmbedBottomSheet.this.parentActivity, EmbedBottomSheet.this, controlsView, aspectRatio, rotation);
                 }
-                EmbedBottomSheet.this.animationInProgress = true;
-                EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
-                int[] access$2900 = EmbedBottomSheet.this.position;
-                access$2900[1] = (int) (((float) access$2900[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
-                TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
-                ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
-                AnimatorSet animatorSet = new AnimatorSet();
-                Animator[] animatorArr = new Animator[10];
-                animatorArr[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{1.0f});
-                animatorArr[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{1.0f});
-                animatorArr[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
-                animatorArr[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
-                animatorArr[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{1.0f});
-                animatorArr[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{1.0f});
-                animatorArr[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
-                animatorArr[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
-                animatorArr[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{0.0f});
-                animatorArr[9] = ObjectAnimator.ofInt(EmbedBottomSheet.this.backDrawable, "alpha", new int[]{51});
-                animatorSet.playTogether(animatorArr);
-                animatorSet.setInterpolator(new DecelerateInterpolator());
-                animatorSet.setDuration(250);
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        EmbedBottomSheet.this.animationInProgress = false;
-                    }
-                });
-                animatorSet.start();
+                if (animated) {
+                    EmbedBottomSheet.this.animationInProgress = true;
+                    EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
+                    int[] access$3000 = EmbedBottomSheet.this.position;
+                    access$3000[1] = (int) (((float) access$3000[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
+                    TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
+                    ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    Animator[] animatorArr = new Animator[10];
+                    animatorArr[0] = ObjectAnimator.ofFloat(textureImageView, "scaleX", new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(textureImageView, "scaleY", new float[]{1.0f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(textureImageView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
+                    animatorArr[3] = ObjectAnimator.ofFloat(textureImageView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
+                    animatorArr[4] = ObjectAnimator.ofFloat(textureView, "scaleX", new float[]{1.0f});
+                    animatorArr[5] = ObjectAnimator.ofFloat(textureView, "scaleY", new float[]{1.0f});
+                    animatorArr[6] = ObjectAnimator.ofFloat(textureView, "translationX", new float[]{(float) EmbedBottomSheet.this.position[0]});
+                    animatorArr[7] = ObjectAnimator.ofFloat(textureView, "translationY", new float[]{(float) EmbedBottomSheet.this.position[1]});
+                    animatorArr[8] = ObjectAnimator.ofFloat(EmbedBottomSheet.this.containerView, "translationY", new float[]{0.0f});
+                    animatorArr[9] = ObjectAnimator.ofInt(EmbedBottomSheet.this.backDrawable, "alpha", new int[]{51});
+                    animatorSet.playTogether(animatorArr);
+                    animatorSet.setInterpolator(new DecelerateInterpolator());
+                    animatorSet.setDuration(250);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            EmbedBottomSheet.this.animationInProgress = false;
+                        }
+                    });
+                    animatorSet.start();
+                } else {
+                    EmbedBottomSheet.this.containerView.setTranslationY(0.0f);
+                    EmbedBottomSheet.this.backDrawable.setAlpha(51);
+                }
                 return null;
             }
 
@@ -562,25 +603,6 @@ public class EmbedBottomSheet extends BottomSheet {
             this.orientationEventListener = null;
         }
         instance = this;
-        setOnShowListener(new OnShowListener() {
-            public void onShow(DialogInterface dialog) {
-                if (EmbedBottomSheet.this.pipVideoView != null && EmbedBottomSheet.this.videoView.isInline()) {
-                    EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-                        public boolean onPreDraw() {
-                            EmbedBottomSheet.this.videoView.getViewTreeObserver().removeOnPreDrawListener(this);
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    EmbedBottomSheet.this.videoView.updateTextureImageView();
-                                    EmbedBottomSheet.this.pipVideoView.close();
-                                    EmbedBottomSheet.this.pipVideoView = null;
-                                }
-                            }, 100);
-                            return true;
-                        }
-                    });
-                }
-            }
-        });
     }
 
     protected boolean canDismissWithSwipe() {
@@ -625,8 +647,10 @@ public class EmbedBottomSheet extends BottomSheet {
             textureView.setTranslationX((float) this.position[0]);
             textureView.setTranslationY((float) this.position[1]);
             View textureImageView = this.videoView.getTextureImageView();
-            textureImageView.setTranslationX((float) this.position[0]);
-            textureImageView.setTranslationY((float) this.position[1]);
+            if (textureImageView != null) {
+                textureImageView.setTranslationX((float) this.position[0]);
+                textureImageView.setTranslationY((float) this.position[1]);
+            }
         }
         View controlsView = this.videoView.getControlsView();
         if (controlsView.getParent() == this.container) {

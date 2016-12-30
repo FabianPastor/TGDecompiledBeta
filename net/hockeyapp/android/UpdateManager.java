@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask.Status;
+import android.os.Build.VERSION;
 import android.text.TextUtils;
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -15,6 +16,7 @@ import net.hockeyapp.android.utils.Util;
 
 public class UpdateManager {
     public static final String INSTALLER_ADB = "adb";
+    public static final String INSTALLER_PACKAGE_INSTALLER_NOUGAT = "com.google.android.packageinstaller";
     private static UpdateManagerListener lastListener = null;
     private static CheckUpdateTask updateTask = null;
 
@@ -101,14 +103,24 @@ public class UpdateManager {
         return expiryDate != null && new Date().compareTo(expiryDate) > 0;
     }
 
-    private static boolean installedFromMarket(WeakReference<? extends Context> weakContext) {
+    protected static boolean installedFromMarket(WeakReference<? extends Context> weakContext) {
         Context context = (Context) weakContext.get();
         if (context == null) {
             return false;
         }
         try {
             String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
-            return (TextUtils.isEmpty(installer) && (installer == null || TextUtils.equals(installer, INSTALLER_ADB))) ? false : true;
+            if (TextUtils.isEmpty(installer)) {
+                return false;
+            }
+            boolean result = true;
+            if (VERSION.SDK_INT >= 24 && TextUtils.equals(installer, INSTALLER_PACKAGE_INSTALLER_NOUGAT)) {
+                result = false;
+            }
+            if (TextUtils.equals(installer, INSTALLER_ADB)) {
+                return false;
+            }
+            return result;
         } catch (Throwable th) {
             return false;
         }

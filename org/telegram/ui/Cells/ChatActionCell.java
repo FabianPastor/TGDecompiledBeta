@@ -88,17 +88,12 @@ public class ChatActionCell extends BaseCell {
                 this.previousWidth = 0;
                 this.customDate = date;
                 this.customText = newText;
-                requestLayout();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         ChatActionCell.this.requestLayout();
                     }
                 });
-            } else if (this.textLayout == null) {
-                requestLayout();
             }
-        } else if (this.textLayout == null) {
-            requestLayout();
         }
     }
 

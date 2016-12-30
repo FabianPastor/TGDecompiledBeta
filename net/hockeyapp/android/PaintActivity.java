@@ -32,7 +32,12 @@ public class PaintActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Uri imageUri = (Uri) getIntent().getExtras().getParcelable(EXTRA_IMAGE_URI);
+        Bundle extras = getIntent().getExtras();
+        if (extras == null || extras.getParcelable(EXTRA_IMAGE_URI) == null) {
+            HockeyLog.error("Can't set up PaintActivity as image extra was not provided!");
+            return;
+        }
+        Uri imageUri = (Uri) extras.getParcelable(EXTRA_IMAGE_URI);
         this.mImageName = determineFilename(imageUri, imageUri.getLastPathSegment());
         int displayWidth = getResources().getDisplayMetrics().widthPixels;
         int displayHeight = getResources().getDisplayMetrics().heightPixels;
