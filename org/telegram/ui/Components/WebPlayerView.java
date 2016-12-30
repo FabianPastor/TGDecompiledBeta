@@ -101,6 +101,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final Pattern stsPattern = Pattern.compile("\"sts\"\\s*:\\s*(\\d+)");
     private static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
     private static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
+    private boolean allowInlineAnimation = false;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private int audioFocus;
     private Paint backgroundPaint = new Paint();
@@ -169,11 +170,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
                     public boolean onPreDraw() {
                         WebPlayerView.this.changedTextureView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        WebPlayerView.this.textureImageView.setVisibility(4);
-                        WebPlayerView.this.textureImageView.setImageDrawable(null);
-                        if (WebPlayerView.this.currentBitmap != null) {
-                            WebPlayerView.this.currentBitmap.recycle();
-                            WebPlayerView.this.currentBitmap = null;
+                        if (WebPlayerView.this.textureImageView != null) {
+                            WebPlayerView.this.textureImageView.setVisibility(4);
+                            WebPlayerView.this.textureImageView.setImageDrawable(null);
+                            if (WebPlayerView.this.currentBitmap != null) {
+                                WebPlayerView.this.currentBitmap.recycle();
+                                WebPlayerView.this.currentBitmap = null;
+                            }
                         }
                         WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
                         WebPlayerView.this.waitingForFirstTextureUpload = 0;
@@ -191,21 +194,23 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.currentBitmap = null;
             }
             WebPlayerView.this.changingTextureView = true;
-            try {
-                WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
-                WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
-            } catch (Throwable e) {
-                if (WebPlayerView.this.currentBitmap != null) {
-                    WebPlayerView.this.currentBitmap.recycle();
-                    WebPlayerView.this.currentBitmap = null;
+            if (WebPlayerView.this.textureImageView != null) {
+                try {
+                    WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
+                    WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
+                } catch (Throwable e) {
+                    if (WebPlayerView.this.currentBitmap != null) {
+                        WebPlayerView.this.currentBitmap.recycle();
+                        WebPlayerView.this.currentBitmap = null;
+                    }
+                    FileLog.e("tmessages", e);
                 }
-                FileLog.e("tmessages", e);
-            }
-            if (WebPlayerView.this.currentBitmap != null) {
-                WebPlayerView.this.textureImageView.setVisibility(0);
-                WebPlayerView.this.textureImageView.setImageBitmap(WebPlayerView.this.currentBitmap);
-            } else {
-                WebPlayerView.this.textureImageView.setImageDrawable(null);
+                if (WebPlayerView.this.currentBitmap != null) {
+                    WebPlayerView.this.textureImageView.setVisibility(0);
+                    WebPlayerView.this.textureImageView.setImageBitmap(WebPlayerView.this.currentBitmap);
+                } else {
+                    WebPlayerView.this.textureImageView.setImageDrawable(null);
+                }
             }
             WebPlayerView.this.isInline = true;
             WebPlayerView.this.updatePlayButton();
@@ -216,7 +221,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             if (viewGroup != null) {
                 viewGroup.removeView(WebPlayerView.this.controlsView);
             }
-            WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+            WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
             WebPlayerView.this.changedTextureView.setVisibility(4);
             ViewGroup parent = (ViewGroup) WebPlayerView.this.textureView.getParent();
             if (parent != null) {
@@ -625,9 +630,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -943,13 +948,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
 
         void onSharePressed();
 
-        TextureView onSwitchInlineMode(View view, boolean z, float f, int i);
+        TextureView onSwitchInlineMode(View view, boolean z, float f, int i, boolean z2);
 
         TextureView onSwitchToFullscreen(View view, boolean z, float f, int i, boolean z2);
 
         void onVideoSizeChanged(float f, int i);
 
-        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f);
+        void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String> {
@@ -1286,9 +1291,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     LayoutParams layoutParams = WebPlayerView.this.textureView.getLayoutParams();
                     layoutParams.width = getMeasuredWidth();
                     layoutParams.height = getMeasuredHeight();
-                    layoutParams = WebPlayerView.this.textureImageView.getLayoutParams();
-                    layoutParams.width = getMeasuredWidth();
-                    layoutParams.height = getMeasuredHeight();
+                    if (WebPlayerView.this.textureImageView != null) {
+                        layoutParams = WebPlayerView.this.textureImageView.getLayoutParams();
+                        layoutParams.width = getMeasuredWidth();
+                        layoutParams.height = getMeasuredHeight();
+                    }
                 }
             }
         };
@@ -1314,7 +1321,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         } else {
             this.aspectRatioFrameLayout.addView(this.textureView, LayoutHelper.createFrame(-1, -1, 17));
         }
-        if (this.textureViewContainer != null) {
+        if (this.allowInlineAnimation && this.textureViewContainer != null) {
             this.textureImageView = new ImageView(context);
             this.textureImageView.setBackgroundColor(SupportMenu.CATEGORY_MASK);
             this.textureImageView.setPivotX(0.0f);
@@ -1408,7 +1415,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                 }
                             }
                             WebPlayerView.this.controlsView.show(false, false);
-                            WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
+                            WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
                             if (!WebPlayerView.this.videoPlayer.isPlaying()) {
                                 WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
                                 return;
@@ -1416,7 +1423,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             return;
                         }
                         WebPlayerView.this.inFullscreen = false;
-                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio());
+                        WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
                         if (!WebPlayerView.this.videoPlayer.isPlaying()) {
                             WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
                         }
@@ -1540,16 +1547,18 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     WebPlayerView.this.textureView.getViewTreeObserver().removeOnPreDrawListener(this);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            WebPlayerView.this.textureImageView.setVisibility(4);
-                            WebPlayerView.this.textureImageView.setImageDrawable(null);
-                            if (WebPlayerView.this.currentBitmap != null) {
-                                WebPlayerView.this.currentBitmap.recycle();
-                                WebPlayerView.this.currentBitmap = null;
+                            if (WebPlayerView.this.textureImageView != null) {
+                                WebPlayerView.this.textureImageView.setVisibility(4);
+                                WebPlayerView.this.textureImageView.setImageDrawable(null);
+                                if (WebPlayerView.this.currentBitmap != null) {
+                                    WebPlayerView.this.currentBitmap.recycle();
+                                    WebPlayerView.this.currentBitmap = null;
+                                }
                             }
                         }
                     });
                     WebPlayerView.this.switchingInlineMode = false;
-                    WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation());
+                    WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
                     WebPlayerView.this.waitingForFirstTextureUpload = 0;
                     return true;
                 }

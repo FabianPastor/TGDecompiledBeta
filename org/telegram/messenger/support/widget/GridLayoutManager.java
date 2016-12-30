@@ -12,6 +12,7 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import java.util.Arrays;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 
@@ -170,11 +171,6 @@ public class GridLayoutManager extends LinearLayoutManager {
         public int getSpanSize() {
             return this.mSpanSize;
         }
-    }
-
-    public GridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setSpanCount(LayoutManager.getProperties(context, attrs, defStyleAttr, defStyleRes).spanCount);
     }
 
     public GridLayoutManager(Context context, int spanCount) {
@@ -502,21 +498,14 @@ public class GridLayoutManager extends LinearLayoutManager {
         return 1;
     }
 
-    int getItemPrefetchCount() {
-        return this.mSpanCount;
-    }
-
-    int gatherPrefetchIndicesForLayoutState(State state, LayoutState layoutState, int[] outIndices) {
+    void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int remainingSpan = this.mSpanCount;
-        int count = 0;
-        while (count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0) {
+        for (int count = 0; count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0; count++) {
             int pos = layoutState.mCurrentPosition;
-            outIndices[count] = pos;
+            layoutPrefetchRegistry.addPosition(pos, layoutState.mScrollingOffset);
             remainingSpan -= this.mSpanSizeLookup.getSpanSize(pos);
             layoutState.mCurrentPosition += layoutState.mItemDirection;
-            count++;
         }
-        return count;
     }
 
     void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {

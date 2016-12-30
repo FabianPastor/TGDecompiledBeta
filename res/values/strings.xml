@@ -1434,10 +1434,10 @@
     <string name="hockeyapp_feedback_subject_hint">Subject</string>
     <string name="hockeyapp_feedback_title">Feedback</string>
     <string name="hockeyapp_feedback_validate_email_empty">Please enter an email address</string>
-    <string name="hockeyapp_feedback_validate_email_error">Please enter a name</string>
-    <string name="hockeyapp_feedback_validate_name_error">Please enter a feedback text</string>
+    <string name="hockeyapp_feedback_validate_email_error">Please enter a valid email address</string>
+    <string name="hockeyapp_feedback_validate_name_error">Please enter your name</string>
     <string name="hockeyapp_feedback_validate_subject_error">Please enter a subject</string>
-    <string name="hockeyapp_feedback_validate_text_error">Message couldn\'t be posted. Please check the format of your email address.</string>
+    <string name="hockeyapp_feedback_validate_text_error">Message couldn\'t be posted. Please enter a feedback text</string>
     <string name="hockeyapp_login_email_hint">Email</string>
     <string name="hockeyapp_login_headline_text">Please enter your HockeyApp account\'s email address and password to authorize access to this app.</string>
     <string name="hockeyapp_login_headline_text_email_only">Please enter your HockeyApp account\'s email address to authorize access to this app.</string>

@@ -2036,6 +2036,51 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     }
                 }
             }
+
+            /* JADX WARNING: inconsistent code. */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (child instanceof ChatMessageCell) {
+                    ChatMessageCell chatMessageCell = (ChatMessageCell) child;
+                    ImageReceiver imageReceiver = chatMessageCell.getAvatarImage();
+                    if (imageReceiver != null) {
+                        ViewHolder holder;
+                        int top = child.getTop();
+                        if (chatMessageCell.isPinnedBottom()) {
+                            holder = ChatActivity.this.chatListView.getChildViewHolder(child);
+                            if (holder != null) {
+                            }
+                        }
+                        if (chatMessageCell.isPinnedTop()) {
+                            holder = ChatActivity.this.chatListView.getChildViewHolder(child);
+                            if (holder != null) {
+                                do {
+                                    holder = ChatActivity.this.chatListView.findViewHolderForAdapterPosition(holder.getAdapterPosition() - 1);
+                                    if (holder == null) {
+                                        break;
+                                    }
+                                    top = holder.itemView.getTop();
+                                    if (!(holder.itemView instanceof ChatMessageCell)) {
+                                        break;
+                                    }
+                                } while (((ChatMessageCell) holder.itemView).isPinnedTop());
+                            }
+                        }
+                        int y = child.getTop() + chatMessageCell.getLayoutHeight();
+                        int maxY = ChatActivity.this.chatListView.getHeight() - ChatActivity.this.chatListView.getPaddingBottom();
+                        if (y > maxY) {
+                            y = maxY;
+                        }
+                        if (y - AndroidUtilities.dp(48.0f) < top) {
+                            y = top + AndroidUtilities.dp(48.0f);
+                        }
+                        imageReceiver.setImageY(y - AndroidUtilities.dp(44.0f));
+                        imageReceiver.draw(canvas);
+                    }
+                }
+                return result;
+            }
         };
         this.chatListView.setTag(Integer.valueOf(1));
         this.chatListView.setVerticalScrollBarEnabled(true);
@@ -2072,6 +2117,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             }
 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                ChatActivity.this.chatListView.invalidate();
                 if (!(dy == 0 || !ChatActivity.this.scrollingFloatingDate || ChatActivity.this.currentFloatingTopIsNotMessage)) {
                     if (ChatActivity.this.highlightMessageId != ConnectionsManager.DEFAULT_DATACENTER_ID) {
                         ChatActivity.this.highlightMessageId = ConnectionsManager.DEFAULT_DATACENTER_ID;
@@ -5726,7 +5772,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         this.scrollToMessagePosition = -9000;
                                     }
                                 }
-                                if (load_type != 2 && this.unreadMessageObject == null && this.createUnreadMessageAfterId != 0 && (((this.currentEncryptedChat == null && obj.getId() >= this.createUnreadMessageAfterId) || (this.currentEncryptedChat != null && obj.getId() <= this.createUnreadMessageAfterId)) && (load_type == 1 || prevObj != null))) {
+                                if (load_type != 2 && this.unreadMessageObject == null && this.createUnreadMessageAfterId != 0 && (((this.currentEncryptedChat == null && !obj.isOut() && obj.getId() >= this.createUnreadMessageAfterId) || !(this.currentEncryptedChat == null || obj.isOut() || obj.getId() > this.createUnreadMessageAfterId)) && (load_type == 1 || prevObj != null))) {
                                     dateMsg = new Message();
                                     dateMsg.message = "";
                                     dateMsg.id = 0;

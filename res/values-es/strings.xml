@@ -1434,8 +1434,8 @@
     <string name="hockeyapp_feedback_subject_hint">Asunto</string>
     <string name="hockeyapp_feedback_title">Feedback</string>
     <string name="hockeyapp_feedback_validate_email_empty">Por favor, introduce una dirección de email</string>
-    <string name="hockeyapp_feedback_validate_email_error">Por favor, introduce un nombre</string>
-    <string name="hockeyapp_feedback_validate_name_error">Por favor, introduce tus comentarios</string>
+    <string name="hockeyapp_feedback_validate_email_error">Por favor, introduce una dirección de email</string>
+    <string name="hockeyapp_feedback_validate_name_error">Por favor, introduce un nombre</string>
     <string name="hockeyapp_feedback_validate_subject_error">Por favor, introduce un asunto</string>
     <string name="hockeyapp_feedback_validate_text_error">No se pudo enviar el mensaje. Por favor, comprueba el formato de tu dirección de email.</string>
     <string name="hockeyapp_login_email_hint">Email</string>

@@ -175,8 +175,8 @@ class PrintHelperKitkat {
         new AsyncTask<Void, Void, Throwable>() {
             protected Throwable doInBackground(Void... params) {
                 PrintedPdfDocument pdfDocument;
-                Bitmap maybeGrayscale;
                 Throwable th = null;
+                Bitmap maybeGrayscale;
                 try {
                     if (!cancellationSignal2.isCanceled()) {
                         pdfDocument = new PrintedPdfDocument(PrintHelperKitkat.this.mContext, pdfAttributes);

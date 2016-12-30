@@ -207,25 +207,25 @@ public final class DynamiteModule {
         String valueOf2;
         try {
             ClassLoader classLoader = context.getApplicationContext().getClassLoader();
-            valueOf = String.valueOf("com.google.android.gms.dynamite.descriptors.");
-            valueOf2 = String.valueOf("ModuleDescriptor");
-            Class loadClass = classLoader.loadClass(new StringBuilder(((String.valueOf(valueOf).length() + 1) + String.valueOf(str).length()) + String.valueOf(valueOf2).length()).append(valueOf).append(str).append(".").append(valueOf2).toString());
+            valueOf2 = String.valueOf("com.google.android.gms.dynamite.descriptors.");
+            valueOf = String.valueOf("ModuleDescriptor");
+            Class loadClass = classLoader.loadClass(new StringBuilder(((String.valueOf(valueOf2).length() + 1) + String.valueOf(str).length()) + String.valueOf(valueOf).length()).append(valueOf2).append(str).append(".").append(valueOf).toString());
             Field declaredField = loadClass.getDeclaredField("MODULE_ID");
             Field declaredField2 = loadClass.getDeclaredField("MODULE_VERSION");
             if (declaredField.get(null).equals(str)) {
                 return declaredField2.getInt(null);
             }
-            valueOf = String.valueOf(declaredField.get(null));
-            Log.e("DynamiteModule", new StringBuilder((String.valueOf(valueOf).length() + 51) + String.valueOf(str).length()).append("Module descriptor id '").append(valueOf).append("' didn't match expected id '").append(str).append("'").toString());
+            valueOf2 = String.valueOf(declaredField.get(null));
+            Log.e("DynamiteModule", new StringBuilder((String.valueOf(valueOf2).length() + 51) + String.valueOf(str).length()).append("Module descriptor id '").append(valueOf2).append("' didn't match expected id '").append(str).append("'").toString());
             return 0;
         } catch (ClassNotFoundException e) {
             Log.w("DynamiteModule", new StringBuilder(String.valueOf(str).length() + 45).append("Local module descriptor class for ").append(str).append(" not found.").toString());
             return 0;
         } catch (Exception e2) {
-            valueOf = "DynamiteModule";
-            valueOf2 = "Failed to load module descriptor class: ";
+            valueOf2 = "DynamiteModule";
+            valueOf = "Failed to load module descriptor class: ";
             String valueOf3 = String.valueOf(e2.getMessage());
-            Log.e(valueOf, valueOf3.length() != 0 ? valueOf2.concat(valueOf3) : new String(valueOf2));
+            Log.e(valueOf2, valueOf3.length() != 0 ? valueOf.concat(valueOf3) : new String(valueOf));
             return 0;
         }
     }
@@ -401,31 +401,31 @@ public final class DynamiteModule {
     public static int zzc(Context context, String str, boolean z) throws zza {
         String str2;
         Throwable e;
-        Cursor cursor = null;
+        Cursor cursor;
+        Cursor cursor2 = null;
         if (z) {
             try {
                 str2 = "api_force_staging";
             } catch (Exception e2) {
                 e = e2;
-                r1 = null;
+                cursor = null;
                 try {
                     if (e instanceof zza) {
                         throw e;
                     }
                     throw new zza("V2 version check failed", e);
                 } catch (Throwable th) {
-                    Cursor cursor2;
                     e = th;
-                    cursor = cursor2;
-                    if (cursor != null) {
-                        cursor.close();
+                    cursor2 = cursor;
+                    if (cursor2 != null) {
+                        cursor2.close();
                     }
                     throw e;
                 }
             } catch (Throwable th2) {
                 e = th2;
-                if (cursor != null) {
-                    cursor.close();
+                if (cursor2 != null) {
+                    cursor2.close();
                 }
                 throw e;
             }
@@ -436,19 +436,19 @@ public final class DynamiteModule {
         if (context != null) {
             ContentResolver contentResolver = context.getContentResolver();
             if (contentResolver != null) {
-                cursor2 = contentResolver.query(parse, null, null, null, null);
-                if (cursor2 != null) {
+                cursor = contentResolver.query(parse, null, null, null, null);
+                if (cursor != null) {
                     try {
-                        if (cursor2.moveToFirst()) {
-                            int i = cursor2.getInt(0);
+                        if (cursor.moveToFirst()) {
+                            int i = cursor.getInt(0);
                             if (i > 0) {
                                 synchronized (DynamiteModule.class) {
-                                    zzaQs.put(new StringBuilder(String.valueOf(str).length() + 12).append(str).append(":").append(i).toString(), Base64.decode(cursor2.getString(3), 0));
-                                    zzaQt = cursor2.getString(2);
+                                    zzaQs.put(new StringBuilder(String.valueOf(str).length() + 12).append(str).append(":").append(i).toString(), Base64.decode(cursor.getString(3), 0));
+                                    zzaQt = cursor.getString(2);
                                 }
                             }
-                            if (cursor2 != null) {
-                                cursor2.close();
+                            if (cursor != null) {
+                                cursor.close();
                             }
                             return i;
                         }
