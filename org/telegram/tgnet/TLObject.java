@@ -7,6 +7,7 @@ public class TLObject {
         }
     };
     public boolean disableFree = false;
+    public int networkType;
 
     public void readParams(AbstractSerializedData stream, boolean exception) {
     }

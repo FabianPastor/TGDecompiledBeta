@@ -160,19 +160,15 @@ public class StatsController {
                 public void run() {
                     for (int networkType = 0; networkType < 3; networkType++) {
                         for (int a = 0; a < 7; a++) {
-                            StatsController.this.sentBytes[networkType][a] = 0;
-                            StatsController.this.receivedBytes[networkType][a] = 0;
-                            StatsController.this.sentItems[networkType][a] = 0;
-                            StatsController.this.receivedItems[networkType][a] = 0;
                             StatsController.this.editor.putInt("receivedItems" + networkType + "_" + a, StatsController.this.receivedItems[networkType][a]);
                             StatsController.this.editor.putInt("sentItems" + networkType + "_" + a, StatsController.this.sentItems[networkType][a]);
                             StatsController.this.editor.putLong("receivedBytes" + networkType + "_" + a, StatsController.this.receivedBytes[networkType][a]);
                             StatsController.this.editor.putLong("sentBytes" + networkType + "_" + a, StatsController.this.sentBytes[networkType][a]);
                         }
-                        StatsController.this.callsTotalTime[networkType] = 0;
                         StatsController.this.editor.putInt("callsTotalTime" + networkType, StatsController.this.callsTotalTime[networkType]);
-                        StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]).commit();
+                        StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]);
                     }
+                    StatsController.this.editor.commit();
                 }
             });
         }

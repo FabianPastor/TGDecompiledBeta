@@ -88,7 +88,7 @@ public class ConnectionsManager {
 
     public static native int native_getTimeDifference();
 
-    public static native void native_init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, int i4, boolean z);
+    public static native void native_init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, int i4, boolean z, boolean z2, int i5);
 
     public static native void native_pauseNetwork();
 
@@ -98,7 +98,7 @@ public class ConnectionsManager {
 
     public static native void native_setJava(boolean z);
 
-    public static native void native_setNetworkAvailable(boolean z);
+    public static native void native_setNetworkAvailable(boolean z, int i);
 
     public static native void native_setPushConnectionEnabled(boolean z);
 
@@ -191,7 +191,8 @@ public class ConnectionsManager {
                     tLObject.serializeToStream(buffer);
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
-                        public void run(int response, int errorCode, String errorText) {
+                        public void run(int response, int errorCode, String errorText, int networkType) {
+                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -199,8 +200,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e) {
-                                    e = e;
+                                } catch (Exception e2) {
+                                    e = e2;
                                     FileLog.e("tmessages", e);
                                     return;
                                 }
@@ -211,13 +212,15 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e("tmessages", tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e2) {
-                                    Throwable e3;
-                                    e3 = e2;
+                                } catch (Exception e3) {
+                                    e = e3;
                                     error = error2;
-                                    FileLog.e("tmessages", e3);
+                                    FileLog.e("tmessages", e);
                                     return;
                                 }
+                            }
+                            if (resp != null) {
+                                resp.networkType = networkType;
                             }
                             FileLog.d("tmessages", "java received " + resp + " error = " + error);
                             final TLObject finalResponse = resp;
@@ -273,7 +276,7 @@ public class ConnectionsManager {
 
     private void checkConnection() {
         native_setUseIpv6(useIpv6Address());
-        native_setNetworkAvailable(isNetworkOnline());
+        native_setNetworkAvailable(isNetworkOnline(), getCurrentNetworkType());
     }
 
     public void setPushConnectionEnabled(boolean value) {
@@ -281,7 +284,7 @@ public class ConnectionsManager {
     }
 
     public void init(int version, int layer, int apiId, String deviceModel, String systemVersion, String appVersion, String langCode, String configPath, String logPath, int userId, boolean enablePushConnection) {
-        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, configPath, logPath, userId, enablePushConnection);
+        native_init(version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, configPath, logPath, userId, enablePushConnection, isNetworkOnline(), getCurrentNetworkType());
         checkConnection();
         ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -397,14 +400,6 @@ public class ConnectionsManager {
         });
     }
 
-    public static void onBytesSent(int amount) {
-        try {
-            StatsController.getInstance().incrementSentBytesCount(getCurrentNetworkType(), 6, (long) amount);
-        } catch (Throwable e) {
-            FileLog.e("tmessages", e);
-        }
-    }
-
     public static int getCurrentNetworkType() {
         if (isConnectedToWiFi()) {
             return 1;
@@ -415,9 +410,17 @@ public class ConnectionsManager {
         return 0;
     }
 
-    public static void onBytesReceived(int amount) {
+    public static void onBytesSent(int amount, int networkType) {
         try {
-            StatsController.getInstance().incrementReceivedBytesCount(getCurrentNetworkType(), 6, (long) amount);
+            StatsController.getInstance().incrementSentBytesCount(networkType, 6, (long) amount);
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
+    }
+
+    public static void onBytesReceived(int amount, int networkType) {
+        try {
+            StatsController.getInstance().incrementReceivedBytesCount(networkType, 6, (long) amount);
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }

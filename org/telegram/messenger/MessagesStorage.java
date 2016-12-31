@@ -2685,6 +2685,7 @@ Error: java.util.NoSuchElementException
                 int max_unread_date = 0;
                 long messageMaxId = (long) i2;
                 int max_id_query = i2;
+                int max_id_override = i2;
                 int channelId = 0;
                 if (z) {
                     channelId = -((int) j);
@@ -2820,6 +2821,50 @@ Error: java.util.NoSuchElementException
                                 last_message_id = cursor.intValue(0);
                             }
                             cursor.dispose();
+                            if (i3 == 4 && i5 != 0) {
+                                int startMid;
+                                int endMid;
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT max(mid) FROM messages WHERE uid = %d AND date <= %d AND mid > 0", new Object[]{Long.valueOf(j), Integer.valueOf(i5)}), new Object[0]);
+                                if (cursor.next()) {
+                                    startMid = cursor.intValue(0);
+                                } else {
+                                    startMid = -1;
+                                }
+                                cursor.dispose();
+                                cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT min(mid) FROM messages WHERE uid = %d AND date >= %d AND mid > 0", new Object[]{Long.valueOf(j), Integer.valueOf(i5)}), new Object[0]);
+                                if (cursor.next()) {
+                                    endMid = cursor.intValue(0);
+                                } else {
+                                    endMid = -1;
+                                }
+                                cursor.dispose();
+                                if (!(startMid == -1 || endMid == -1)) {
+                                    if (startMid == endMid) {
+                                        max_id_query = startMid;
+                                    } else {
+                                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(startMid), Integer.valueOf(startMid)}), new Object[0]);
+                                        if (cursor.next()) {
+                                            startMid = -1;
+                                        }
+                                        cursor.dispose();
+                                        if (startMid != -1) {
+                                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(endMid), Integer.valueOf(endMid)}), new Object[0]);
+                                            if (cursor.next()) {
+                                                endMid = -1;
+                                            }
+                                            cursor.dispose();
+                                            if (endMid != -1) {
+                                                max_id_override = endMid;
+                                                max_id_query = endMid;
+                                                messageMaxId = (long) endMid;
+                                                if (!(messageMaxId == 0 || channelId == 0)) {
+                                                    messageMaxId |= ((long) channelId) << 32;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             containMessage = max_id_query != 0;
                             if (containMessage) {
                                 cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(max_id_query), Integer.valueOf(max_id_query)}), new Object[0]);
@@ -3094,7 +3139,7 @@ Error: java.util.NoSuchElementException
                         }
                     });
                     if (lower_id != 0) {
-                        if ((i3 == 3 || (i3 == 2 && queryFromServer)) && !res.messages.isEmpty()) {
+                        if ((i3 == 3 || i3 == 4 || (i3 == 2 && queryFromServer)) && !res.messages.isEmpty()) {
                             int minId = ((Message) res.messages.get(res.messages.size() - 1)).id;
                             int maxId = ((Message) res.messages.get(0)).id;
                             if (minId > max_id_query || maxId < max_id_query) {
@@ -3104,7 +3149,7 @@ Error: java.util.NoSuchElementException
                                 res.messages.clear();
                             }
                         }
-                        if (i3 == 3 && res.messages.size() == 1) {
+                        if ((i3 == 4 || i3 == 3) && res.messages.size() == 1) {
                             res.messages.clear();
                         }
                     }
@@ -3160,16 +3205,16 @@ Error: java.util.NoSuchElementException
                     if (!chatsToLoad.isEmpty()) {
                         MessagesStorage.this.getChatsInternal(TextUtils.join(",", chatsToLoad), res.chats);
                     }
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 } catch (Throwable e2) {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
                     FileLog.e("tmessages", e2);
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 } catch (Throwable th) {
                     Throwable th2 = th;
-                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, i2, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
+                    MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 }
             }
         });
@@ -5272,7 +5317,6 @@ Error: java.util.NoSuchElementException
 
     private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         String ids;
-        long did;
         int unread_count = 0;
         if (channelId != 0) {
             try {
@@ -5294,6 +5338,7 @@ Error: java.util.NoSuchElementException
         SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
         ArrayList<File> filesToDelete = new ArrayList();
         while (cursor.next()) {
+            long did;
             try {
                 did = cursor.longValue(0);
                 if (channelId != 0 && cursor.intValue(2) == 0) {

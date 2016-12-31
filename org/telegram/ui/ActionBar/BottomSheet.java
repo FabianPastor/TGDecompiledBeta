@@ -521,6 +521,11 @@ public class BottomSheet extends Dialog {
         public boolean hasOverlappingRendering() {
             return false;
         }
+
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            BottomSheet.this.onContainerDraw(canvas);
+        }
     }
 
     public void onAttachedToWindow() {
@@ -663,7 +668,7 @@ public class BottomSheet extends Dialog {
         }
         this.dismissed = false;
         cancelSheetAnimation();
-        this.containerView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
+        this.containerView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x + (backgroundPaddingLeft * 2), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
         if (this.showWithoutAnimation) {
             this.backDrawable.setAlpha(51);
             this.containerView.setTranslationY(0.0f);
@@ -918,5 +923,8 @@ public class BottomSheet extends Dialog {
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
+    }
+
+    public void onContainerDraw(Canvas canvas) {
     }
 }

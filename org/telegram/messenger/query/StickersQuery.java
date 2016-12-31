@@ -789,32 +789,36 @@ public class StickersQuery {
 
     public static void loadArchivedStickersCount(final int type, boolean cache) {
         boolean z = true;
-        if (!cache) {
-            TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
-            req.limit = 0;
-            if (type != 1) {
-                z = false;
+        if (cache) {
+            int count = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getInt("archivedStickersCount" + type, -1);
+            if (count == -1) {
+                loadArchivedStickersCount(type, false);
+                return;
             }
-            req.masks = z;
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(final TLObject response, final TL_error error) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (error == null) {
-                                TL_messages_archivedStickers res = response;
-                                StickersQuery.archivedStickersCount[type] = res.count;
-                                ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("archivedStickersCount" + type, res.count).commit();
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
-                            }
-                        }
-                    });
-                }
-            });
-        } else if (ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getInt("archivedStickersCount" + type, -1) == -1) {
-            loadArchivedStickersCount(type, false);
-        } else {
+            archivedStickersCount[type] = count;
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
+            return;
         }
+        TL_messages_getArchivedStickers req = new TL_messages_getArchivedStickers();
+        req.limit = 0;
+        if (type != 1) {
+            z = false;
+        }
+        req.masks = z;
+        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            public void run(final TLObject response, final TL_error error) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        if (error == null) {
+                            TL_messages_archivedStickers res = response;
+                            StickersQuery.archivedStickersCount[type] = res.count;
+                            ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("archivedStickersCount" + type, res.count).commit();
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.archivedStickersCountDidLoaded, Integer.valueOf(type));
+                        }
+                    }
+                });
+            }
+        });
     }
 
     public static void loadStickers(final int type, boolean cache, boolean force) {

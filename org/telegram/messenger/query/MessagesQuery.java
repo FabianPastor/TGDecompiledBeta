@@ -493,7 +493,6 @@ public class MessagesQuery {
         if (message == null || message[0] == null) {
             return null;
         }
-        int a;
         ArrayList<MessageEntity> entities = null;
         int start = -1;
         int lastIndex = 0;
@@ -503,6 +502,7 @@ public class MessagesQuery {
         String bold = "*";
         String italic = "_";
         while (true) {
+            int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
             if (index == -1) {
                 break;

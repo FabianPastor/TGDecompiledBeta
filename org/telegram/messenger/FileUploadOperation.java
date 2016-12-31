@@ -379,19 +379,21 @@ public class FileUploadOperation {
                     final long currentRequestBytesOffset = this.readBytesCount;
                     final int currentRequestPartNum = this.currentPartNum;
                     this.currentPartNum = currentRequestPartNum + 1;
-                    if (this.currentType == ConnectionsManager.FileTypeAudio) {
-                        StatsController.getInstance().incrementSentBytesCount(ConnectionsManager.getCurrentNetworkType(), 3, (long) (finalRequest.getObjectSize() + 4));
-                    } else if (this.currentType == ConnectionsManager.FileTypeVideo) {
-                        StatsController.getInstance().incrementSentBytesCount(ConnectionsManager.getCurrentNetworkType(), 2, (long) (finalRequest.getObjectSize() + 4));
-                    } else if (this.currentType == 16777216) {
-                        StatsController.getInstance().incrementSentBytesCount(ConnectionsManager.getCurrentNetworkType(), 4, (long) (finalRequest.getObjectSize() + 4));
-                    } else if (this.currentType == ConnectionsManager.FileTypeFile) {
-                        StatsController.getInstance().incrementSentBytesCount(ConnectionsManager.getCurrentNetworkType(), 5, (long) (finalRequest.getObjectSize() + 4));
-                    }
+                    final int requestSize = finalRequest.getObjectSize() + 4;
                     ConnectionsManager instance = ConnectionsManager.getInstance();
                     final int i2 = currentRequestBytes;
                     RequestDelegate anonymousClass3 = new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
+                            int networkType = response != null ? response.networkType : ConnectionsManager.getCurrentNetworkType();
+                            if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
+                                StatsController.getInstance().incrementSentBytesCount(networkType, 3, (long) requestSize);
+                            } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeVideo) {
+                                StatsController.getInstance().incrementSentBytesCount(networkType, 2, (long) requestSize);
+                            } else if (FileUploadOperation.this.currentType == 16777216) {
+                                StatsController.getInstance().incrementSentBytesCount(networkType, 4, (long) requestSize);
+                            } else if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeFile) {
+                                StatsController.getInstance().incrementSentBytesCount(networkType, 5, (long) requestSize);
+                            }
                             if (currentRequestIv != null) {
                                 FileUploadOperation.this.freeRequestIvs.add(currentRequestIv);
                             }
