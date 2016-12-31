@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,7 +24,6 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.MotionEventCompat;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -106,7 +104,6 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
@@ -128,7 +125,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private BackupImageView avatarImage;
     private AvatarUpdater avatarUpdater = new AvatarUpdater();
     private int backgroundRow;
-    private int callsFrameSizeRow;
     private int clearLogsRow;
     private int contactsReimportRow;
     private int contactsSectionRow;
@@ -234,14 +230,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                                                     if (position != SettingsActivity.this.contactsReimportRow) {
                                                                         if (position != SettingsActivity.this.stickersRow) {
                                                                             if (position != SettingsActivity.this.privacyPolicyRow) {
-                                                                                if (position != SettingsActivity.this.emojiRow) {
-                                                                                    if (position == SettingsActivity.this.callsFrameSizeRow) {
-                                                                                        textCell.setTextAndValue("Audio frame size", ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipTestFrameSize", 60) + "", true);
-                                                                                        break;
-                                                                                    }
+                                                                                if (position == SettingsActivity.this.emojiRow) {
+                                                                                    textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
+                                                                                    break;
                                                                                 }
-                                                                                textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
-                                                                                break;
                                                                             }
                                                                             textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
                                                                             break;
@@ -378,7 +370,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!checkBackground) {
                 return;
             }
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.callsFrameSizeRow || position == SettingsActivity.this.dataRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
                 if (holder.itemView.getBackground() == null) {
                     holder.itemView.setBackgroundResource(R.drawable.list_selector);
                 }
@@ -477,7 +469,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow) {
                 return 3;
             }
-            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.callsFrameSizeRow || position == SettingsActivity.this.dataRow) {
+            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
                 return 2;
             }
             if (position == SettingsActivity.this.versionRow) {
@@ -605,13 +597,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.textSizeRow = i;
-        if (MessagesController.getInstance().callsEnabled) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsFrameSizeRow = i;
-        } else {
-            this.callsFrameSizeRow = -1;
-        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.raiseToSpeakRow = i;
@@ -740,24 +725,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 Builder builder;
-                View numberPicker;
                 final int i;
                 if (position == SettingsActivity.this.textSizeRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
                         builder = new Builder(SettingsActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("TextSize", R.string.TextSize));
-                        numberPicker = new NumberPicker(SettingsActivity.this.getParentActivity());
+                        final NumberPicker numberPicker = new NumberPicker(SettingsActivity.this.getParentActivity());
                         numberPicker.setMinValue(12);
                         numberPicker.setMaxValue(30);
                         numberPicker.setValue(MessagesController.getInstance().fontSize);
                         builder.setView(numberPicker);
-                        final View view2 = numberPicker;
                         i = position;
                         builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                                editor.putInt("fons_size", view2.getValue());
-                                MessagesController.getInstance().fontSize = view2.getValue();
+                                editor.putInt("fons_size", numberPicker.getValue());
+                                MessagesController.getInstance().fontSize = numberPicker.getValue();
                                 editor.commit();
                                 if (SettingsActivity.this.listAdapter != null) {
                                     SettingsActivity.this.listAdapter.notifyItemChanged(i);
@@ -781,7 +764,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     SettingsActivity.this.presentFragment(new WallpapersActivity());
                 } else if (position == SettingsActivity.this.askQuestionRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
-                        numberPicker = new TextView(SettingsActivity.this.getParentActivity());
+                        TextView message = new TextView(SettingsActivity.this.getParentActivity());
                         Spannable spannableString = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", R.string.AskAQuestionInfo)));
                         URLSpan[] spans = (URLSpan[]) spannableString.getSpans(0, spannableString.length(), URLSpan.class);
                         for (URLSpan span : spans) {
@@ -790,15 +773,15 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             spannableString.removeSpan(span);
                             spannableString.setSpan(new URLSpanNoUnderline(span.getURL()), start, end, 0);
                         }
-                        numberPicker.setText(spannableString);
-                        numberPicker.setTextSize(18.0f);
-                        numberPicker.setLinkTextColor(Theme.MSG_LINK_TEXT_COLOR);
-                        numberPicker.setHighlightColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
-                        numberPicker.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
-                        numberPicker.setMovementMethod(new LinkMovementMethodMy());
-                        numberPicker.setTextColor(-14606047);
+                        message.setText(spannableString);
+                        message.setTextSize(18.0f);
+                        message.setLinkTextColor(Theme.MSG_LINK_TEXT_COLOR);
+                        message.setHighlightColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
+                        message.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
+                        message.setMovementMethod(new LinkMovementMethodMy());
+                        message.setTextColor(-14606047);
                         builder = new Builder(SettingsActivity.this.getParentActivity());
-                        builder.setView(numberPicker);
+                        builder.setView(message);
                         builder.setTitle(LocaleController.getString("AskAQuestion", R.string.AskAQuestion));
                         builder.setPositiveButton(LocaleController.getString("AskButton", R.string.AskButton), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -875,14 +858,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         if (SettingsActivity.this.getParentActivity() != null) {
                             builder = new Builder(SettingsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SortBy", R.string.SortBy));
-                            final int i2 = position;
+                            i = position;
                             builder.setItems(new CharSequence[]{LocaleController.getString("Default", R.string.Default), LocaleController.getString("SortFirstName", R.string.SortFirstName), LocaleController.getString("SortLastName", R.string.SortLastName)}, new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                                     editor.putInt("sortContactsBy", which);
                                     editor.commit();
                                     if (SettingsActivity.this.listAdapter != null) {
-                                        SettingsActivity.this.listAdapter.notifyItemChanged(i2);
+                                        SettingsActivity.this.listAdapter.notifyItemChanged(i);
                                     }
                                 }
                             });
@@ -895,117 +878,74 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         SettingsActivity.this.presentFragment(new ChangePhoneHelpActivity());
                     } else if (position == SettingsActivity.this.stickersRow) {
                         SettingsActivity.this.presentFragment(new StickersActivity(0));
-                    } else if (position == SettingsActivity.this.emojiRow) {
-                        if (SettingsActivity.this.getParentActivity() != null) {
-                            boolean[] maskValues = new boolean[2];
-                            BottomSheet.Builder builder2 = new BottomSheet.Builder(SettingsActivity.this.getParentActivity());
-                            builder2.setApplyTopPadding(false);
-                            builder2.setApplyBottomPadding(false);
-                            numberPicker = new LinearLayout(SettingsActivity.this.getParentActivity());
-                            numberPicker.setOrientation(1);
-                            a = 0;
-                            while (true) {
-                                final boolean[] zArr;
-                                if (a < (VERSION.SDK_INT >= 19 ? 2 : 1)) {
-                                    String name = null;
-                                    if (a == 0) {
-                                        maskValues[a] = MessagesController.getInstance().allowBigEmoji;
-                                        name = LocaleController.getString("EmojiBigSize", R.string.EmojiBigSize);
-                                    } else if (a == 1) {
-                                        maskValues[a] = MessagesController.getInstance().useSystemEmoji;
-                                        name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
+                    } else if (position == SettingsActivity.this.emojiRow && SettingsActivity.this.getParentActivity() != null) {
+                        final boolean[] maskValues = new boolean[2];
+                        BottomSheet.Builder builder2 = new BottomSheet.Builder(SettingsActivity.this.getParentActivity());
+                        builder2.setApplyTopPadding(false);
+                        builder2.setApplyBottomPadding(false);
+                        LinearLayout linearLayout = new LinearLayout(SettingsActivity.this.getParentActivity());
+                        linearLayout.setOrientation(1);
+                        a = 0;
+                        while (true) {
+                            if (a < (VERSION.SDK_INT >= 19 ? 2 : 1)) {
+                                String name = null;
+                                if (a == 0) {
+                                    maskValues[a] = MessagesController.getInstance().allowBigEmoji;
+                                    name = LocaleController.getString("EmojiBigSize", R.string.EmojiBigSize);
+                                } else if (a == 1) {
+                                    maskValues[a] = MessagesController.getInstance().useSystemEmoji;
+                                    name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
+                                }
+                                CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
+                                checkBoxCell.setTag(Integer.valueOf(a));
+                                checkBoxCell.setBackgroundResource(R.drawable.list_selector);
+                                linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
+                                checkBoxCell.setText(name, "", maskValues[a], true);
+                                checkBoxCell.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View v) {
+                                        CheckBoxCell cell = (CheckBoxCell) v;
+                                        int num = ((Integer) cell.getTag()).intValue();
+                                        maskValues[num] = !maskValues[num];
+                                        cell.setChecked(maskValues[num], true);
                                     }
-                                    CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
-                                    checkBoxCell.setTag(Integer.valueOf(a));
-                                    checkBoxCell.setBackgroundResource(R.drawable.list_selector);
-                                    numberPicker.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
-                                    checkBoxCell.setText(name, "", maskValues[a], true);
-                                    zArr = maskValues;
-                                    checkBoxCell.setOnClickListener(new View.OnClickListener() {
-                                        public void onClick(View v) {
-                                            CheckBoxCell cell = (CheckBoxCell) v;
-                                            int num = ((Integer) cell.getTag()).intValue();
-                                            zArr[num] = !zArr[num];
-                                            cell.setChecked(zArr[num], true);
-                                        }
-                                    });
-                                    a++;
-                                } else {
-                                    BottomSheetCell cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
-                                    cell.setBackgroundResource(R.drawable.list_selector);
-                                    cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
-                                    cell.setTextColor(-12940081);
-                                    zArr = maskValues;
-                                    i = position;
-                                    cell.setOnClickListener(new View.OnClickListener() {
-                                        public void onClick(View v) {
-                                            try {
-                                                if (SettingsActivity.this.visibleDialog != null) {
-                                                    SettingsActivity.this.visibleDialog.dismiss();
-                                                }
-                                            } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                });
+                                a++;
+                            } else {
+                                BottomSheetCell cell = new BottomSheetCell(SettingsActivity.this.getParentActivity(), 1);
+                                cell.setBackgroundResource(R.drawable.list_selector);
+                                cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
+                                cell.setTextColor(-12940081);
+                                i = position;
+                                cell.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View v) {
+                                        try {
+                                            if (SettingsActivity.this.visibleDialog != null) {
+                                                SettingsActivity.this.visibleDialog.dismiss();
                                             }
-                                            Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                                            MessagesController instance = MessagesController.getInstance();
-                                            boolean z = zArr[0];
-                                            instance.allowBigEmoji = z;
-                                            editor.putBoolean("allowBigEmoji", z);
-                                            instance = MessagesController.getInstance();
-                                            z = zArr[1];
-                                            instance.useSystemEmoji = z;
-                                            editor.putBoolean("useSystemEmoji", z);
-                                            editor.commit();
-                                            if (SettingsActivity.this.listAdapter != null) {
-                                                SettingsActivity.this.listAdapter.notifyItemChanged(i);
-                                            }
+                                        } catch (Throwable e) {
+                                            FileLog.e("tmessages", e);
                                         }
-                                    });
-                                    numberPicker.addView(cell, LayoutHelper.createLinear(-1, 48));
-                                    builder2.setCustomView(numberPicker);
-                                    SettingsActivity.this.showDialog(builder2.create());
-                                    return;
-                                }
+                                        Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                                        MessagesController instance = MessagesController.getInstance();
+                                        boolean z = maskValues[0];
+                                        instance.allowBigEmoji = z;
+                                        editor.putBoolean("allowBigEmoji", z);
+                                        instance = MessagesController.getInstance();
+                                        z = maskValues[1];
+                                        instance.useSystemEmoji = z;
+                                        editor.putBoolean("useSystemEmoji", z);
+                                        editor.commit();
+                                        if (SettingsActivity.this.listAdapter != null) {
+                                            SettingsActivity.this.listAdapter.notifyItemChanged(i);
+                                        }
+                                    }
+                                });
+                                linearLayout.addView(cell, LayoutHelper.createLinear(-1, 48));
+                                builder2.setCustomView(linearLayout);
+                                SettingsActivity.this.showDialog(builder2.create());
+                                return;
                             }
                         }
-                    } else if (position == SettingsActivity.this.callsFrameSizeRow) {
-                        int sel;
-                        preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                        switch (preferences.getInt("VoipTestFrameSize", 60)) {
-                            case 20:
-                                sel = 0;
-                                break;
-                            case MotionEventCompat.AXIS_GENERIC_9 /*40*/:
-                                sel = 1;
-                                break;
-                            default:
-                                sel = 2;
-                                break;
-                        }
-                        final SharedPreferences sharedPreferences = preferences;
-                        i = position;
-                        Dialog dlg = AlertsCreator.createSingleChoiceDialog(SettingsActivity.this.getParentActivity(), SettingsActivity.this, new String[]{"20", "40", "60"}, "Frame size (ms)", sel, new OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                int val = 60;
-                                switch (which) {
-                                    case 0:
-                                        val = 20;
-                                        break;
-                                    case 1:
-                                        val = 40;
-                                        break;
-                                    case 2:
-                                        val = 60;
-                                        break;
-                                }
-                                sharedPreferences.edit().putInt("VoipTestFrameSize", val).commit();
-                                if (SettingsActivity.this.listAdapter != null) {
-                                    SettingsActivity.this.listAdapter.notifyItemChanged(i);
-                                }
-                            }
-                        });
-                        SettingsActivity.this.setVisibleDialog(dlg);
-                        dlg.show();
                     }
                 }
             }

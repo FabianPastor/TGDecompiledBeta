@@ -953,6 +953,7 @@
     <drawable name="ic_msg_panel_smiles">res/drawable-xhdpi-v4/ic_msg_panel_smiles.png</drawable>
     <drawable name="ic_msg_panel_smiles">res/drawable-xxhdpi-v4/ic_msg_panel_smiles.png</drawable>
     <drawable name="ic_msg_panel_stickers">res/drawable-mdpi-v4/ic_msg_panel_stickers.png</drawable>
+    <drawable name="ic_msg_panel_stickers">res/drawable-hdpi-v4/ic_msg_panel_stickers.png</drawable>
     <drawable name="ic_msg_panel_stickers">res/drawable-xhdpi-v4/ic_msg_panel_stickers.png</drawable>
     <drawable name="ic_msg_panel_stickers">res/drawable-xxhdpi-v4/ic_msg_panel_stickers.png</drawable>
     <drawable name="ic_outfullscreen">res/drawable-mdpi-v4/ic_outfullscreen.png</drawable>

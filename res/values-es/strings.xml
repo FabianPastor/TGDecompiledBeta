@@ -1261,7 +1261,7 @@
     <string name="UsbActive">Transferencia USB activa</string>
     <string name="UseLessDataAlways">Siempre</string>
     <string name="UseLessDataNever">Nunca</string>
-    <string name="UseLessDataOnMobile">Sólo con datos móviles</string>
+    <string name="UseLessDataOnMobile">Sólo datos móviles</string>
     <string name="UserAlreadyInGroup">Este usuario ya está en el grupo</string>
     <string name="UserRestricted">Lo sentimos, no estás autorizado para hacer esto.</string>
     <string name="Username">Alias</string>
@@ -1316,7 +1316,7 @@
     <string name="VoipRinging">Marcando</string>
     <string name="VoipRingtoneInfo">Puedes personalizar el tono de llamada desde este contacto en Telegram.</string>
     <string name="VoipSettingsRingtone">Tono de llamada</string>
-    <string name="VoipUseLessData">Usar menos datos para las llamadas</string>
+    <string name="VoipUseLessData">Usar menos datos</string>
     <string name="VoipWaiting">Esperando</string>
     <string name="WaitingForNetwork">Esperando red...</string>
     <string name="Warmth">Temperatura</string>

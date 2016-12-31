@@ -216,6 +216,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private boolean[] endReached = new boolean[]{false, true};
     private GestureDetector gestureDetector;
     private PlaceProviderObject hideAfterAnimation;
+    private boolean ignoreDidSetImage;
     private AnimatorSet imageMoveAnimation;
     private ArrayList<MessageObject> imagesArr = new ArrayList();
     private ArrayList<Object> imagesArrLocals = new ArrayList();
@@ -1694,7 +1695,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.gestureDetector.setOnDoubleTapListener(this);
             ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
                 public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-                    if (imageReceiver != PhotoViewer.this.centerImage || !set || PhotoViewer.this.placeProvider == null || !PhotoViewer.this.placeProvider.scaleToFill()) {
+                    if (imageReceiver != PhotoViewer.this.centerImage || !set || PhotoViewer.this.placeProvider == null || !PhotoViewer.this.placeProvider.scaleToFill() || PhotoViewer.this.ignoreDidSetImage) {
                         return;
                     }
                     if (PhotoViewer.this.wasLayout) {
@@ -1870,10 +1871,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$7100 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$7200 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$7100.playTogether(animatorArr);
+                        access$7200.playTogether(animatorArr);
                         PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
@@ -2251,7 +2252,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
                 this.centerImage.setParentView(null);
                 this.centerImage.setOrientation(0, true);
+                this.ignoreDidSetImage = true;
                 this.centerImage.setImageBitmap(bitmap);
+                this.ignoreDidSetImage = false;
                 this.centerImage.setParentView(this.containerView);
             }
         }
@@ -2486,15 +2489,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
-                    access$8000.playTogether(r13);
-                    PhotoViewer.this.imageMoveAnimation.setDuration(200);
+                    access$8100.playTogether(r13);
+                    PhotoViewer.this.imageMoveAnimation.setDuration(4000);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
                             PhotoViewer.this.editorDoneLayout.setVisibility(0);
@@ -2597,12 +2600,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$8000.playTogether(r12);
+                    access$8100.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -2696,7 +2699,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8000 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[4];
                     float[] fArr = new float[2];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
@@ -2708,7 +2711,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     fArr2[0] = (float) ((-ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
                     fArr2[1] = 0.0f;
                     r13[3] = ObjectAnimator.ofFloat(actionBar, str, fArr2);
-                    access$8000.playTogether(r13);
+                    access$8100.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {

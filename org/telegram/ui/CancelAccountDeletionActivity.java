@@ -578,8 +578,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
-            TL_account_sendConfirmPhoneCode req;
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
+                TL_account_sendConfirmPhoneCode req;
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 boolean simcardAvailable;
                 if (tm.getSimState() == 1 || tm.getPhoneType() == 0) {

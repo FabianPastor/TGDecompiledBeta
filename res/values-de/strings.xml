@@ -718,7 +718,7 @@
     <string name="MegaDeleteInfo">Du verlierst alle Nachrichten der Gruppe.</string>
     <string name="MegaLeaveAlert">Möchtest du wirklich diese Gruppe verlassen?</string>
     <string name="MegaPrivate">Private Gruppe</string>
-    <string name="MegaPrivateInfo">Private Gruppen können nur nur durch direkte Einladungen oder über einen Einladungslink betreten werden.</string>
+    <string name="MegaPrivateInfo">Private Gruppen können nur durch direkte Einladungen oder über einen Einladungslink betreten werden.</string>
     <string name="MegaPrivateLinkHelp">Alle können mit diesem Link deiner Gruppe beitreten, du kannst ihn aber jederzeit widerrufen.</string>
     <string name="MegaPublic">Öffentliche Gruppe</string>
     <string name="MegaPublicInfo">Öffentliche Gruppen kann jeder über die Suche finden, gesamter Chatverlauf ist für alle einsehbar und jeder kann der Gruppe beitreten.</string>

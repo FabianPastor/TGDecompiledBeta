@@ -16,6 +16,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.Settings;
@@ -78,6 +79,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private int prevOrientation;
     private ProgressBar progressBar;
     private WebPlayerView videoView;
+    private int waitingForDraw;
     private boolean wasInLandscape;
     private WebView webView;
     private int width;
@@ -102,13 +104,6 @@ public class EmbedBottomSheet extends BottomSheet {
                     EmbedBottomSheet.this.videoView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
                         public boolean onPreDraw() {
                             EmbedBottomSheet.this.videoView.getViewTreeObserver().removeOnPreDrawListener(this);
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    EmbedBottomSheet.this.videoView.updateTextureImageView();
-                                    EmbedBottomSheet.this.pipVideoView.close();
-                                    EmbedBottomSheet.this.pipVideoView = null;
-                                }
-                            }, 100);
                             return true;
                         }
                     });
@@ -375,8 +370,11 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
                 EmbedBottomSheet.this.setShowWithoutAnimation(true);
                 EmbedBottomSheet.this.show();
-                EmbedBottomSheet.this.backDrawable.setAlpha(0);
-                EmbedBottomSheet.this.containerView.setTranslationY((float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f)));
+                if (animated) {
+                    EmbedBottomSheet.this.waitingForDraw = 4;
+                    EmbedBottomSheet.this.backDrawable.setAlpha(1);
+                    EmbedBottomSheet.this.containerView.setTranslationY((float) (EmbedBottomSheet.this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f)));
+                }
             }
 
             public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation, boolean animated) {
@@ -388,8 +386,10 @@ public class EmbedBottomSheet extends BottomSheet {
                 if (animated) {
                     EmbedBottomSheet.this.animationInProgress = true;
                     EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
-                    int[] access$3000 = EmbedBottomSheet.this.position;
-                    access$3000[1] = (int) (((float) access$3000[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
+                    int[] access$3100 = EmbedBottomSheet.this.position;
+                    access$3100[0] = access$3100[0] - EmbedBottomSheet.this.getLeftInset();
+                    access$3100 = EmbedBottomSheet.this.position;
+                    access$3100[1] = (int) (((float) access$3100[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                     TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
                     ImageView textureImageView = EmbedBottomSheet.this.videoView.getTextureImageView();
                     AnimatorSet animatorSet = new AnimatorSet();
@@ -415,7 +415,6 @@ public class EmbedBottomSheet extends BottomSheet {
                     animatorSet.start();
                 } else {
                     EmbedBottomSheet.this.containerView.setTranslationY(0.0f);
-                    EmbedBottomSheet.this.backDrawable.setAlpha(51);
                 }
                 return null;
             }
@@ -642,6 +641,8 @@ public class EmbedBottomSheet extends BottomSheet {
 
     public void updateTextureViewPosition() {
         this.videoView.getAspectRatioView().getLocationInWindow(this.position);
+        int[] iArr = this.position;
+        iArr[0] = iArr[0] - getLeftInset();
         if (!(this.videoView.isInline() || this.animationInProgress)) {
             TextureView textureView = this.videoView.getTextureView();
             textureView.setTranslationX((float) this.position[0]);
@@ -683,6 +684,19 @@ public class EmbedBottomSheet extends BottomSheet {
     public void pause() {
         if (this.videoView != null && this.videoView.isInitied()) {
             this.videoView.pause();
+        }
+    }
+
+    public void onContainerDraw(Canvas canvas) {
+        if (this.waitingForDraw != 0) {
+            this.waitingForDraw--;
+            if (this.waitingForDraw == 0) {
+                this.videoView.updateTextureImageView();
+                this.pipVideoView.close();
+                this.pipVideoView = null;
+                return;
+            }
+            this.container.invalidate();
         }
     }
 }

@@ -1978,7 +1978,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (!(old == this.deviceHasGoodCamera || this.photoAttachAdapter == null)) {
                 this.photoAttachAdapter.notifyDataSetChanged();
             }
-            if (isShowing() && this.deviceHasGoodCamera && this.baseFragment != null && !this.revealAnimationInProgress && !this.cameraOpened) {
+            if (isShowing() && this.deviceHasGoodCamera && this.baseFragment != null && this.backDrawable.getAlpha() != 0 && !this.revealAnimationInProgress && !this.cameraOpened) {
                 showCamera();
             }
         }

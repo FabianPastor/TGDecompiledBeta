@@ -130,7 +130,6 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.setBitmap(bitmap, rotation, freeform);
         this.wheelView.setFreeform(freeform);
         this.wheelView.reset();
-        this.delegate.needMoveImageTo(0.0f, 0.0f, 1.0f, false);
     }
 
     public void setOrientation(int rotation) {

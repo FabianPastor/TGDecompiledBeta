@@ -101,7 +101,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final Pattern stsPattern = Pattern.compile("\"sts\"\\s*:\\s*(\\d+)");
     private static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
     private static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
-    private boolean allowInlineAnimation = false;
+    private boolean allowInlineAnimation = true;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private int audioFocus;
     private Paint backgroundPaint = new Paint();
@@ -178,11 +178,16 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                 WebPlayerView.this.currentBitmap = null;
                             }
                         }
-                        WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
+                            }
+                        });
                         WebPlayerView.this.waitingForFirstTextureUpload = 0;
                         return true;
                     }
                 });
+                WebPlayerView.this.changedTextureView.invalidate();
             }
         }
     };
@@ -284,7 +289,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
             } else if (!isCancelled()) {
-                WebPlayerView.this.delegate.onInitFailed();
+                WebPlayerView.this.onInitFailed();
             }
         }
     }
@@ -510,13 +515,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 if (!WebPlayerView.this.isInline) {
                     if (this.durationLayout != null) {
                         canvas.save();
-                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp(39.0f)));
+                        canvas.translate((float) ((width - AndroidUtilities.dp(58.0f)) - this.durationWidth), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
                         this.durationLayout.draw(canvas);
                         canvas.restore();
                     }
                     if (this.progressLayout != null) {
                         canvas.save();
-                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp(39.0f)));
+                        canvas.translate((float) AndroidUtilities.dp(18.0f), (float) (height - AndroidUtilities.dp((float) ((WebPlayerView.this.inFullscreen ? 6 : 10) + 29))));
                         this.progressLayout.draw(canvas);
                         canvas.restore();
                     }
@@ -614,7 +619,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
             } else if (!isCancelled()) {
-                WebPlayerView.this.delegate.onInitFailed();
+                WebPlayerView.this.onInitFailed();
             }
         }
     }
@@ -630,9 +635,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -930,7 +935,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
             } else if (!isCancelled()) {
-                WebPlayerView.this.delegate.onInitFailed();
+                WebPlayerView.this.onInitFailed();
             }
         }
     }
@@ -974,7 +979,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 return null;
             }
             Matcher matcher;
-            String params = "video_id=" + this.videoId;
+            String params = "video_id=" + this.videoId + "&ps=default&gl=US&hl=en";
             try {
                 params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, "UTF-8");
             } catch (Throwable e) {
@@ -1130,7 +1135,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 WebPlayerView.this.showProgress(false, true);
                 WebPlayerView.this.controlsView.show(true, true);
             } else if (!isCancelled()) {
-                WebPlayerView.this.delegate.onInitFailed();
+                WebPlayerView.this.onInitFailed();
             }
         }
     }
@@ -1385,7 +1390,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                     parent.removeView(WebPlayerView.this.aspectRatioFrameLayout);
                                 }
                                 WebPlayerView.this.addView(WebPlayerView.this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
-                                WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight(), NUM));
+                                WebPlayerView.this.aspectRatioFrameLayout.measure(MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(WebPlayerView.this.getMeasuredHeight() - AndroidUtilities.dp(10.0f), NUM));
                             }
                             if (WebPlayerView.this.currentBitmap != null) {
                                 WebPlayerView.this.currentBitmap.recycle();
@@ -1416,17 +1421,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             }
                             WebPlayerView.this.controlsView.show(false, false);
                             WebPlayerView.this.delegate.prepareToSwitchInlineMode(false, null, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
-                            if (!WebPlayerView.this.videoPlayer.isPlaying()) {
-                                WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
-                                return;
-                            }
                             return;
                         }
                         WebPlayerView.this.inFullscreen = false;
                         WebPlayerView.this.delegate.prepareToSwitchInlineMode(true, WebPlayerView.this.switchToInlineRunnable, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.allowInlineAnimation);
-                        if (!WebPlayerView.this.videoPlayer.isPlaying()) {
-                            WebPlayerView.this.videoPlayer.seekTo(WebPlayerView.this.videoPlayer.getCurrentPosition());
-                        }
                     }
                 }
             });
@@ -1448,6 +1446,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         updateFullscreenButton();
         updateInlineButton();
         updateShareButton();
+    }
+
+    private void onInitFailed() {
+        if (this.controlsView.getParent() != this) {
+            this.controlsView.setVisibility(8);
+        }
+        this.delegate.onInitFailed();
     }
 
     public void updateTextureImageView() {
@@ -1542,27 +1547,17 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
 
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         if (this.waitingForFirstTextureUpload == 2) {
-            this.textureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    WebPlayerView.this.textureView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            if (WebPlayerView.this.textureImageView != null) {
-                                WebPlayerView.this.textureImageView.setVisibility(4);
-                                WebPlayerView.this.textureImageView.setImageDrawable(null);
-                                if (WebPlayerView.this.currentBitmap != null) {
-                                    WebPlayerView.this.currentBitmap.recycle();
-                                    WebPlayerView.this.currentBitmap = null;
-                                }
-                            }
-                        }
-                    });
-                    WebPlayerView.this.switchingInlineMode = false;
-                    WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, false, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
-                    WebPlayerView.this.waitingForFirstTextureUpload = 0;
-                    return true;
+            if (this.textureImageView != null) {
+                this.textureImageView.setVisibility(4);
+                this.textureImageView.setImageDrawable(null);
+                if (this.currentBitmap != null) {
+                    this.currentBitmap.recycle();
+                    this.currentBitmap = null;
                 }
-            });
+            }
+            this.switchingInlineMode = false;
+            this.delegate.onSwitchInlineMode(this.controlsView, false, this.aspectRatioFrameLayout.getAspectRatio(), this.aspectRatioFrameLayout.getVideoRotation(), this.allowInlineAnimation);
+            this.waitingForFirstTextureUpload = 0;
         }
     }
 
@@ -1648,9 +1643,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         this.fullscreenButton.setVisibility(0);
         if (this.inFullscreen) {
             this.fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
-        } else {
-            this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
+            this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 1.0f));
+            return;
         }
+        this.fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
+        this.fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 0.0f, 5.0f));
     }
 
     private void updateShareButton() {
