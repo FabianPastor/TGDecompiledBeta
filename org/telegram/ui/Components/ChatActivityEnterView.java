@@ -1924,31 +1924,37 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         CharSequence[] message = new CharSequence[]{this.editingMessageObject.messageText};
                         ArrayList<MessageEntity> entities = this.editingMessageObject.messageOwner.entities;
                         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(message[0]);
-                        int addToOffset = 0;
                         if (entities != null) {
-                            for (int a = 0; a < entities.size(); a++) {
-                                MessageEntity entity = (MessageEntity) entities.get(a);
-                                if (entity instanceof TL_inputMessageEntityMentionName) {
-                                    if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
-                                        entity.length++;
+                            int addToOffset = 0;
+                            int a = 0;
+                            while (a < entities.size()) {
+                                try {
+                                    MessageEntity entity = (MessageEntity) entities.get(a);
+                                    if (entity instanceof TL_inputMessageEntityMentionName) {
+                                        if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
+                                            entity.length++;
+                                        }
+                                        stringBuilder.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                                    } else if (entity instanceof TL_messageEntityCode) {
+                                        stringBuilder.insert((entity.offset + entity.length) + addToOffset, "`");
+                                        stringBuilder.insert(entity.offset + addToOffset, "`");
+                                        addToOffset += 2;
+                                    } else if (entity instanceof TL_messageEntityPre) {
+                                        stringBuilder.insert((entity.offset + entity.length) + addToOffset, "```");
+                                        stringBuilder.insert(entity.offset + addToOffset, "```");
+                                        addToOffset += 6;
+                                    } else if (entity instanceof TL_messageEntityBold) {
+                                        stringBuilder.insert((entity.offset + entity.length) + addToOffset, "*");
+                                        stringBuilder.insert(entity.offset + addToOffset, "*");
+                                        addToOffset += 2;
+                                    } else if (entity instanceof TL_messageEntityItalic) {
+                                        stringBuilder.insert((entity.offset + entity.length) + addToOffset, "_");
+                                        stringBuilder.insert(entity.offset + addToOffset, "_");
+                                        addToOffset += 2;
                                     }
-                                    stringBuilder.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
-                                } else if (entity instanceof TL_messageEntityCode) {
-                                    stringBuilder.insert((entity.offset + entity.length) + addToOffset, "`");
-                                    stringBuilder.insert(entity.offset + addToOffset, "`");
-                                    addToOffset += 2;
-                                } else if (entity instanceof TL_messageEntityPre) {
-                                    stringBuilder.insert((entity.offset + entity.length) + addToOffset, "```");
-                                    stringBuilder.insert(entity.offset + addToOffset, "```");
-                                    addToOffset += 6;
-                                } else if (entity instanceof TL_messageEntityBold) {
-                                    stringBuilder.insert((entity.offset + entity.length) + addToOffset, "*");
-                                    stringBuilder.insert(entity.offset + addToOffset, "*");
-                                    addToOffset += 2;
-                                } else if (entity instanceof TL_messageEntityItalic) {
-                                    stringBuilder.insert((entity.offset + entity.length) + addToOffset, "_");
-                                    stringBuilder.insert(entity.offset + addToOffset, "_");
-                                    addToOffset += 2;
+                                    a++;
+                                } catch (Throwable e) {
+                                    FileLog.e("tmessages", e);
                                 }
                             }
                         }

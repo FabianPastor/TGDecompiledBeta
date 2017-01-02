@@ -95,7 +95,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
                 return;
             }
-            int actionBarHeight = ActionBar.getCurrentActionBarHeight() + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
             int viewHeight = getMeasuredHeight() - actionBarHeight;
             float scaleX = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
             float scaleY = ((float) (this.keyboardHeight + viewHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
@@ -118,5 +118,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 canvas.restore();
             }
         }
+    }
+
+    protected boolean isActionBarVisible() {
+        return true;
     }
 }

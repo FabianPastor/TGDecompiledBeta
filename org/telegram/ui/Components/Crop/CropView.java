@@ -175,10 +175,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             float h = (this.orientation + this.baseRotation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f ? this.width : this.height;
             if (freeform) {
                 this.minimumScale = areaView.getCropWidth() / w;
-            } else if (w > h) {
-                this.minimumScale = areaView.getCropWidth() / h;
             } else {
-                this.minimumScale = areaView.getCropWidth() / w;
+                this.minimumScale = Math.max(areaView.getCropWidth() / w, areaView.getCropHeight() / h);
             }
             this.scale = this.minimumScale;
             this.matrix.postScale(this.scale, this.scale);
@@ -248,6 +246,12 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             }
         });
         this.imageView.setImageBitmap(this.bitmap);
+    }
+
+    public void willShow() {
+        this.areaView.setFrameVisibility(true);
+        this.areaView.setDimVisibility(true);
+        this.areaView.invalidate();
     }
 
     public void show() {
@@ -477,6 +481,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         if (!this.freeform || this.areaView.getLockAspectRatio() <= 0.0f) {
             this.areaView.setBitmap(this.bitmap, (this.state.getBaseRotation() + orientation) % BitmapDescriptorFactory.HUE_CYAN != 0.0f, this.freeform);
         } else {
+            this.areaView.setLockedAspectRatio(1.0f / this.areaView.getLockAspectRatio());
             this.areaView.setActualRect(this.areaView.getLockAspectRatio());
             fform = false;
         }
@@ -484,7 +489,7 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         updateMatrix();
         if (this.listener != null) {
             CropViewListener cropViewListener = this.listener;
-            if (orientation != 0.0f) {
+            if (!(orientation == 0.0f && this.areaView.getLockAspectRatio() == 0.0f)) {
                 z = false;
             }
             cropViewListener.onChange(z);

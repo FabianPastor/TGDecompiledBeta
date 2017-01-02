@@ -27,9 +27,9 @@ public class CropAreaView extends View {
     private float bottomPadding;
     private RectF bottomRightCorner = new RectF();
     Paint dimPaint = new Paint();
-    private boolean dimVisibile;
+    private boolean dimVisibile = true;
     Paint framePaint;
-    private boolean frameVisible;
+    private boolean frameVisible = true;
     private Animator gridAnimator;
     private float gridProgress;
     private GridType gridType = GridType.NONE;

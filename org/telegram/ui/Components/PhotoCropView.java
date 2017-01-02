@@ -2,17 +2,10 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.os.Build.VERSION;
-import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
 import org.telegram.ui.Components.Crop.CropRotationWheel.RotationWheelListener;
 import org.telegram.ui.Components.Crop.CropView;
@@ -30,21 +23,18 @@ public class PhotoCropView extends FrameLayout {
     private int bitmapWidth = 1;
     private int bitmapX;
     private int bitmapY;
-    private Paint circlePaint;
     private CropView cropView;
     private PhotoCropViewDelegate delegate;
     private int draggingState = 0;
     private boolean freeformCrop = true;
-    private Paint halfPaint;
     private float oldX = 0.0f;
     private float oldY = 0.0f;
     private int orientation;
-    private Paint rectPaint = new Paint();
     private float rectSizeX = 600.0f;
     private float rectSizeY = 600.0f;
     private float rectX = -1.0f;
     private float rectY = -1.0f;
-    private Paint shadowPaint;
+    private boolean showOnSetBitmap;
     private CropRotationWheel wheelView;
 
     public interface PhotoCropViewDelegate {
@@ -57,16 +47,6 @@ public class PhotoCropView extends FrameLayout {
 
     public PhotoCropView(Context context) {
         super(context);
-        this.rectPaint.setColor(-NUM);
-        this.rectPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.rectPaint.setStyle(Style.STROKE);
-        this.circlePaint = new Paint();
-        this.circlePaint.setColor(-1);
-        this.halfPaint = new Paint();
-        this.halfPaint.setColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
-        this.shadowPaint = new Paint();
-        this.shadowPaint.setColor(436207616);
-        setWillNotDraw(false);
     }
 
     public void setBitmap(Bitmap bitmap, int rotation, boolean freeform) {
@@ -128,6 +108,10 @@ public class PhotoCropView extends FrameLayout {
         }
         this.cropView.setVisibility(0);
         this.cropView.setBitmap(bitmap, rotation, freeform);
+        if (this.showOnSetBitmap) {
+            this.showOnSetBitmap = false;
+            this.cropView.show();
+        }
         this.wheelView.setFreeform(freeform);
         this.wheelView.reset();
     }
@@ -151,19 +135,22 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.reset();
     }
 
+    public void onAppear() {
+        if (this.cropView != null) {
+            this.cropView.willShow();
+        }
+    }
+
     public void onAppeared() {
-        this.cropView.show();
+        if (this.cropView != null) {
+            this.cropView.show();
+        } else {
+            this.showOnSetBitmap = true;
+        }
     }
 
     public void onDisappear() {
         this.cropView.hide();
-    }
-
-    public boolean onTouch(MotionEvent motionEvent) {
-        if (motionEvent == null) {
-            this.draggingState = 0;
-        }
-        return false;
     }
 
     public float getRectX() {
@@ -207,35 +194,11 @@ public class PhotoCropView extends FrameLayout {
         return (((((float) (getHeight() - AndroidUtilities.dp(14.0f))) - additionalY) - this.rectY) - ((float) ((int) Math.max(0.0d, Math.ceil((double) (((((float) (getHeight() - AndroidUtilities.dp(28.0f))) - (((float) this.bitmapHeight) * this.bitmapGlobalScale)) - additionalY) / 2.0f)))))) - this.rectSizeY;
     }
 
-    private Bitmap createBitmap(int x, int y, int w, int h) {
-        Bitmap newBimap = this.delegate.getBitmap();
-        if (newBimap != null) {
-            this.bitmapToEdit = newBimap;
-        }
-        Bitmap bitmap = Bitmap.createBitmap(w, h, Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint(6);
-        Matrix matrix = new Matrix();
-        matrix.setTranslate((float) ((-this.bitmapToEdit.getWidth()) / 2), (float) ((-this.bitmapToEdit.getHeight()) / 2));
-        matrix.postRotate((float) this.orientation);
-        if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
-            matrix.postTranslate((float) ((this.bitmapToEdit.getHeight() / 2) - x), (float) ((this.bitmapToEdit.getWidth() / 2) - y));
-        } else {
-            matrix.postTranslate((float) ((this.bitmapToEdit.getWidth() / 2) - x), (float) ((this.bitmapToEdit.getHeight() / 2) - y));
-        }
-        canvas.drawBitmap(this.bitmapToEdit, matrix, paint);
-        try {
-            canvas.setBitmap(null);
-        } catch (Exception e) {
-        }
-        return bitmap;
-    }
-
     public Bitmap getBitmap() {
-        return this.cropView.getResult();
-    }
-
-    protected void onDraw(Canvas canvas) {
+        if (this.cropView != null) {
+            return this.cropView.getResult();
+        }
+        return null;
     }
 
     public void setBitmapParams(float scale, float x, float y) {

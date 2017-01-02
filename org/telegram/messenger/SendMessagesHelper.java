@@ -137,6 +137,7 @@ import org.telegram.tgnet.TLRPC.TL_inputStickerSetShortName;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC.TL_messageFwdHeader;
 import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
@@ -1273,8 +1274,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -3674,7 +3675,26 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }).run();
             } else if (result.send_message instanceof TL_botInlineMessageText) {
-                getInstance().sendMessage(result.send_message.message, dialog_id, reply_to_msg, null, !result.send_message.no_webpage, result.send_message.entities, result.send_message.reply_markup, params);
+                boolean z;
+                WebPage webPage = null;
+                if (((int) dialog_id) == 0) {
+                    for (int a = 0; a < result.send_message.entities.size(); a++) {
+                        MessageEntity entity = (MessageEntity) result.send_message.entities.get(a);
+                        if (entity instanceof TL_messageEntityUrl) {
+                            webPage = new TL_webPagePending();
+                            webPage.url = result.send_message.message.substring(entity.offset, entity.offset + entity.length);
+                            break;
+                        }
+                    }
+                }
+                SendMessagesHelper instance = getInstance();
+                String str = result.send_message.message;
+                if (result.send_message.no_webpage) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                instance.sendMessage(str, dialog_id, reply_to_msg, webPage, z, result.send_message.entities, result.send_message.reply_markup, params);
             } else if (result.send_message instanceof TL_botInlineMessageMediaVenue) {
                 MessageMedia venue = new TL_messageMediaVenue();
                 venue.geo = result.send_message.geo;
@@ -3926,6 +3946,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3974,7 +3995,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;

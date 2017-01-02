@@ -1695,6 +1695,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.gestureDetector.setOnDoubleTapListener(this);
             ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
                 public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
+                    if (imageReceiver == PhotoViewer.this.centerImage && set && !thumb && PhotoViewer.this.photoCropView != null) {
+                        PhotoViewer.this.photoCropView.setBitmap(imageReceiver.getBitmap(), imageReceiver.getOrientation(), PhotoViewer.this.sendPhotoType != 1);
+                    }
                     if (imageReceiver != PhotoViewer.this.centerImage || !set || PhotoViewer.this.placeProvider == null || !PhotoViewer.this.placeProvider.scaleToFill() || PhotoViewer.this.ignoreDidSetImage) {
                         return;
                     }
@@ -1871,10 +1874,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$7200 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$7300 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$7200.playTogether(animatorArr);
+                        access$7300.playTogether(animatorArr);
                         PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
@@ -2426,6 +2429,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                 });
             }
+            this.photoCropView.onAppear();
             this.editorDoneLayout.doneButton.setText(LocaleController.getString("Crop", R.string.Crop));
             this.editorDoneLayout.doneButton.setTextColor(-11420173);
             this.changeModeAnimation = new AnimatorSet();
@@ -2489,15 +2493,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8200 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
-                    access$8100.playTogether(r13);
-                    PhotoViewer.this.imageMoveAnimation.setDuration(4000);
+                    access$8200.playTogether(r13);
+                    PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
                             PhotoViewer.this.editorDoneLayout.setVisibility(0);
@@ -2600,12 +2604,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8200 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$8100.playTogether(r12);
+                    access$8200.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -2699,7 +2703,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$8100 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$8200 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[4];
                     float[] fArr = new float[2];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
@@ -2711,7 +2715,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     fArr2[0] = (float) ((-ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
                     fArr2[1] = 0.0f;
                     r13[3] = ObjectAnimator.ofFloat(actionBar, str, fArr2);
-                    access$8100.playTogether(r13);
+                    access$8200.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -4411,199 +4415,200 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.photoFilterView.onTouch(ev);
             return true;
         } else if (this.currentEditMode == 1) {
-            this.photoCropView.onTouch(ev);
-            return true;
-        } else if (this.captionEditText.isPopupShowing() || this.captionEditText.isKeyboardVisible()) {
-            if (ev.getAction() == 1) {
-                closeCaptionEnter(true);
-            }
-            return true;
-        } else if (this.currentEditMode == 0 && ev.getPointerCount() == 1 && this.gestureDetector.onTouchEvent(ev) && this.doubleTap) {
-            this.doubleTap = false;
-            this.moving = false;
-            this.zooming = false;
-            checkMinMax(false);
             return true;
         } else {
-            if (ev.getActionMasked() == 0 || ev.getActionMasked() == 5) {
-                if (this.currentEditMode == 1) {
-                    this.photoCropView.cancelAnimationRunnable();
+            if (this.captionEditText.isPopupShowing() || this.captionEditText.isKeyboardVisible()) {
+                if (ev.getAction() == 1) {
+                    closeCaptionEnter(true);
                 }
-                this.discardTap = false;
-                if (!this.scroller.isFinished()) {
-                    this.scroller.abortAnimation();
-                }
-                if (!(this.draggingDown || this.changingPage)) {
-                    if (this.canZoom && ev.getPointerCount() == 2) {
-                        this.pinchStartDistance = (float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)));
-                        this.pinchStartScale = this.scale;
-                        this.pinchCenterX = (ev.getX(0) + ev.getX(1)) / 2.0f;
-                        this.pinchCenterY = (ev.getY(0) + ev.getY(1)) / 2.0f;
-                        this.pinchStartX = this.translationX;
-                        this.pinchStartY = this.translationY;
-                        this.zooming = true;
-                        this.moving = false;
-                        if (this.velocityTracker != null) {
-                            this.velocityTracker.clear();
-                        }
-                    } else if (ev.getPointerCount() == 1) {
-                        this.moveStartX = ev.getX();
-                        float y = ev.getY();
-                        this.moveStartY = y;
-                        this.dragY = y;
-                        this.draggingDown = false;
-                        this.canDragDown = true;
-                        if (this.velocityTracker != null) {
-                            this.velocityTracker.clear();
-                        }
+                return true;
+            } else if (this.currentEditMode == 0 && ev.getPointerCount() == 1 && this.gestureDetector.onTouchEvent(ev) && this.doubleTap) {
+                this.doubleTap = false;
+                this.moving = false;
+                this.zooming = false;
+                checkMinMax(false);
+                return true;
+            } else {
+                if (ev.getActionMasked() == 0 || ev.getActionMasked() == 5) {
+                    if (this.currentEditMode == 1) {
+                        this.photoCropView.cancelAnimationRunnable();
                     }
-                }
-            } else if (ev.getActionMasked() == 2) {
-                if (this.currentEditMode == 1) {
-                    this.photoCropView.cancelAnimationRunnable();
-                }
-                if (this.canZoom && ev.getPointerCount() == 2 && !this.draggingDown && this.zooming && !this.changingPage) {
-                    this.discardTap = true;
-                    this.scale = (((float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)))) / this.pinchStartDistance) * this.pinchStartScale;
-                    this.translationX = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (this.scale / this.pinchStartScale));
-                    this.translationY = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (this.scale / this.pinchStartScale));
-                    updateMinMax(this.scale);
-                    this.containerView.invalidate();
-                } else if (ev.getPointerCount() == 1) {
-                    if (this.velocityTracker != null) {
-                        this.velocityTracker.addMovement(ev);
+                    this.discardTap = false;
+                    if (!this.scroller.isFinished()) {
+                        this.scroller.abortAnimation();
                     }
-                    float dx = Math.abs(ev.getX() - this.moveStartX);
-                    float dy = Math.abs(ev.getY() - this.dragY);
-                    if (dx > ((float) AndroidUtilities.dp(3.0f)) || dy > ((float) AndroidUtilities.dp(3.0f))) {
-                        this.discardTap = true;
-                    }
-                    if (!(this.placeProvider instanceof EmptyPhotoViewerProvider) && this.currentEditMode == 0 && this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) && dy / 2.0f > dx) {
-                        this.draggingDown = true;
-                        this.moving = false;
-                        this.dragY = ev.getY();
-                        if (this.isActionBarVisible && this.canShowBottom) {
-                            toggleActionBar(false, true);
-                        } else if (this.pickerView.getVisibility() == 0) {
-                            toggleActionBar(false, true);
-                            toggleCheckImageView(false);
-                        }
-                        return true;
-                    } else if (this.draggingDown) {
-                        this.translationY = ev.getY() - this.dragY;
-                        this.containerView.invalidate();
-                    } else if (this.invalidCoords || this.animationStartTime != 0) {
-                        this.invalidCoords = false;
-                        this.moveStartX = ev.getX();
-                        this.moveStartY = ev.getY();
-                    } else {
-                        float moveDx = this.moveStartX - ev.getX();
-                        float moveDy = this.moveStartY - ev.getY();
-                        if (this.moving || this.currentEditMode != 0 || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
-                            if (!this.moving) {
-                                moveDx = 0.0f;
-                                moveDy = 0.0f;
-                                this.moving = true;
-                                this.canDragDown = false;
+                    if (!(this.draggingDown || this.changingPage)) {
+                        if (this.canZoom && ev.getPointerCount() == 2) {
+                            this.pinchStartDistance = (float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)));
+                            this.pinchStartScale = this.scale;
+                            this.pinchCenterX = (ev.getX(0) + ev.getX(1)) / 2.0f;
+                            this.pinchCenterY = (ev.getY(0) + ev.getY(1)) / 2.0f;
+                            this.pinchStartX = this.translationX;
+                            this.pinchStartY = this.translationY;
+                            this.zooming = true;
+                            this.moving = false;
+                            if (this.velocityTracker != null) {
+                                this.velocityTracker.clear();
                             }
+                        } else if (ev.getPointerCount() == 1) {
+                            this.moveStartX = ev.getX();
+                            float y = ev.getY();
+                            this.moveStartY = y;
+                            this.dragY = y;
+                            this.draggingDown = false;
+                            this.canDragDown = true;
+                            if (this.velocityTracker != null) {
+                                this.velocityTracker.clear();
+                            }
+                        }
+                    }
+                } else if (ev.getActionMasked() == 2) {
+                    if (this.currentEditMode == 1) {
+                        this.photoCropView.cancelAnimationRunnable();
+                    }
+                    if (this.canZoom && ev.getPointerCount() == 2 && !this.draggingDown && this.zooming && !this.changingPage) {
+                        this.discardTap = true;
+                        this.scale = (((float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)))) / this.pinchStartDistance) * this.pinchStartScale;
+                        this.translationX = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (this.scale / this.pinchStartScale));
+                        this.translationY = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (this.scale / this.pinchStartScale));
+                        updateMinMax(this.scale);
+                        this.containerView.invalidate();
+                    } else if (ev.getPointerCount() == 1) {
+                        if (this.velocityTracker != null) {
+                            this.velocityTracker.addMovement(ev);
+                        }
+                        float dx = Math.abs(ev.getX() - this.moveStartX);
+                        float dy = Math.abs(ev.getY() - this.dragY);
+                        if (dx > ((float) AndroidUtilities.dp(3.0f)) || dy > ((float) AndroidUtilities.dp(3.0f))) {
+                            this.discardTap = true;
+                        }
+                        if (!(this.placeProvider instanceof EmptyPhotoViewerProvider) && this.currentEditMode == 0 && this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE)) && dy / 2.0f > dx) {
+                            this.draggingDown = true;
+                            this.moving = false;
+                            this.dragY = ev.getY();
+                            if (this.isActionBarVisible && this.canShowBottom) {
+                                toggleActionBar(false, true);
+                            } else if (this.pickerView.getVisibility() == 0) {
+                                toggleActionBar(false, true);
+                                toggleCheckImageView(false);
+                            }
+                            return true;
+                        } else if (this.draggingDown) {
+                            this.translationY = ev.getY() - this.dragY;
+                            this.containerView.invalidate();
+                        } else if (this.invalidCoords || this.animationStartTime != 0) {
+                            this.invalidCoords = false;
                             this.moveStartX = ev.getX();
                             this.moveStartY = ev.getY();
-                            updateMinMax(this.scale);
-                            if ((this.translationX < this.minX && !(this.currentEditMode == 0 && this.rightImage.hasImage())) || (this.translationX > this.maxX && !(this.currentEditMode == 0 && this.leftImage.hasImage()))) {
-                                moveDx /= 3.0f;
-                            }
-                            if (this.maxY == 0.0f && this.minY == 0.0f && this.currentEditMode == 0) {
-                                if (this.translationY - moveDy < this.minY) {
-                                    this.translationY = this.minY;
+                        } else {
+                            float moveDx = this.moveStartX - ev.getX();
+                            float moveDy = this.moveStartY - ev.getY();
+                            if (this.moving || this.currentEditMode != 0 || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
+                                if (!this.moving) {
+                                    moveDx = 0.0f;
                                     moveDy = 0.0f;
-                                } else if (this.translationY - moveDy > this.maxY) {
-                                    this.translationY = this.maxY;
-                                    moveDy = 0.0f;
+                                    this.moving = true;
+                                    this.canDragDown = false;
                                 }
-                            } else if (this.translationY < this.minY || this.translationY > this.maxY) {
-                                moveDy /= 3.0f;
+                                this.moveStartX = ev.getX();
+                                this.moveStartY = ev.getY();
+                                updateMinMax(this.scale);
+                                if ((this.translationX < this.minX && !(this.currentEditMode == 0 && this.rightImage.hasImage())) || (this.translationX > this.maxX && !(this.currentEditMode == 0 && this.leftImage.hasImage()))) {
+                                    moveDx /= 3.0f;
+                                }
+                                if (this.maxY == 0.0f && this.minY == 0.0f && this.currentEditMode == 0) {
+                                    if (this.translationY - moveDy < this.minY) {
+                                        this.translationY = this.minY;
+                                        moveDy = 0.0f;
+                                    } else if (this.translationY - moveDy > this.maxY) {
+                                        this.translationY = this.maxY;
+                                        moveDy = 0.0f;
+                                    }
+                                } else if (this.translationY < this.minY || this.translationY > this.maxY) {
+                                    moveDy /= 3.0f;
+                                }
+                                this.translationX -= moveDx;
+                                if (!(this.scale == 1.0f && this.currentEditMode == 0)) {
+                                    this.translationY -= moveDy;
+                                }
+                                this.containerView.invalidate();
                             }
-                            this.translationX -= moveDx;
-                            if (!(this.scale == 1.0f && this.currentEditMode == 0)) {
-                                this.translationY -= moveDy;
+                        }
+                    }
+                } else if (ev.getActionMasked() == 3 || ev.getActionMasked() == 1 || ev.getActionMasked() == 6) {
+                    if (this.currentEditMode == 1) {
+                        this.photoCropView.startAnimationRunnable();
+                    }
+                    if (this.zooming) {
+                        this.invalidCoords = true;
+                        if (this.scale < 1.0f) {
+                            updateMinMax(1.0f);
+                            animateTo(1.0f, 0.0f, 0.0f, true);
+                        } else if (this.scale > 3.0f) {
+                            float atx = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (3.0f / this.pinchStartScale));
+                            float aty = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (3.0f / this.pinchStartScale));
+                            updateMinMax(3.0f);
+                            if (atx < this.minX) {
+                                atx = this.minX;
+                            } else if (atx > this.maxX) {
+                                atx = this.maxX;
                             }
-                            this.containerView.invalidate();
+                            if (aty < this.minY) {
+                                aty = this.minY;
+                            } else if (aty > this.maxY) {
+                                aty = this.maxY;
+                            }
+                            animateTo(3.0f, atx, aty, true);
+                        } else {
+                            checkMinMax(true);
                         }
+                        this.zooming = false;
+                    } else if (this.draggingDown) {
+                        if (Math.abs(this.dragY - ev.getY()) > ((float) getContainerViewHeight()) / 6.0f) {
+                            closePhoto(true, false);
+                        } else {
+                            if (this.pickerView.getVisibility() == 0) {
+                                toggleActionBar(true, true);
+                                toggleCheckImageView(true);
+                            }
+                            animateTo(1.0f, 0.0f, 0.0f, false);
+                        }
+                        this.draggingDown = false;
+                    } else if (this.moving) {
+                        float moveToX = this.translationX;
+                        float moveToY = this.translationY;
+                        updateMinMax(this.scale);
+                        this.moving = false;
+                        this.canDragDown = true;
+                        float velocity = 0.0f;
+                        if (this.velocityTracker != null && this.scale == 1.0f) {
+                            this.velocityTracker.computeCurrentVelocity(1000);
+                            velocity = this.velocityTracker.getXVelocity();
+                        }
+                        if (this.currentEditMode == 0) {
+                            if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImage()) {
+                                goToNext();
+                                return true;
+                            } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImage()) {
+                                goToPrev();
+                                return true;
+                            }
+                        }
+                        if (this.translationX < this.minX) {
+                            moveToX = this.minX;
+                        } else if (this.translationX > this.maxX) {
+                            moveToX = this.maxX;
+                        }
+                        if (this.translationY < this.minY) {
+                            moveToY = this.minY;
+                        } else if (this.translationY > this.maxY) {
+                            moveToY = this.maxY;
+                        }
+                        animateTo(this.scale, moveToX, moveToY, false);
                     }
                 }
-            } else if (ev.getActionMasked() == 3 || ev.getActionMasked() == 1 || ev.getActionMasked() == 6) {
-                if (this.currentEditMode == 1) {
-                    this.photoCropView.startAnimationRunnable();
-                }
-                if (this.zooming) {
-                    this.invalidCoords = true;
-                    if (this.scale < 1.0f) {
-                        updateMinMax(1.0f);
-                        animateTo(1.0f, 0.0f, 0.0f, true);
-                    } else if (this.scale > 3.0f) {
-                        float atx = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (3.0f / this.pinchStartScale));
-                        float aty = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (3.0f / this.pinchStartScale));
-                        updateMinMax(3.0f);
-                        if (atx < this.minX) {
-                            atx = this.minX;
-                        } else if (atx > this.maxX) {
-                            atx = this.maxX;
-                        }
-                        if (aty < this.minY) {
-                            aty = this.minY;
-                        } else if (aty > this.maxY) {
-                            aty = this.maxY;
-                        }
-                        animateTo(3.0f, atx, aty, true);
-                    } else {
-                        checkMinMax(true);
-                    }
-                    this.zooming = false;
-                } else if (this.draggingDown) {
-                    if (Math.abs(this.dragY - ev.getY()) > ((float) getContainerViewHeight()) / 6.0f) {
-                        closePhoto(true, false);
-                    } else {
-                        if (this.pickerView.getVisibility() == 0) {
-                            toggleActionBar(true, true);
-                            toggleCheckImageView(true);
-                        }
-                        animateTo(1.0f, 0.0f, 0.0f, false);
-                    }
-                    this.draggingDown = false;
-                } else if (this.moving) {
-                    float moveToX = this.translationX;
-                    float moveToY = this.translationY;
-                    updateMinMax(this.scale);
-                    this.moving = false;
-                    this.canDragDown = true;
-                    float velocity = 0.0f;
-                    if (this.velocityTracker != null && this.scale == 1.0f) {
-                        this.velocityTracker.computeCurrentVelocity(1000);
-                        velocity = this.velocityTracker.getXVelocity();
-                    }
-                    if (this.currentEditMode == 0) {
-                        if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImage()) {
-                            goToNext();
-                            return true;
-                        } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImage()) {
-                            goToPrev();
-                            return true;
-                        }
-                    }
-                    if (this.translationX < this.minX) {
-                        moveToX = this.minX;
-                    } else if (this.translationX > this.maxX) {
-                        moveToX = this.maxX;
-                    }
-                    if (this.translationY < this.minY) {
-                        moveToY = this.minY;
-                    } else if (this.translationY > this.maxY) {
-                        moveToY = this.maxY;
-                    }
-                    animateTo(this.scale, moveToX, moveToY, false);
-                }
+                return false;
             }
-            return false;
         }
     }
 
