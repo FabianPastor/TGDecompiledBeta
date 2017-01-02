@@ -1695,7 +1695,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.gestureDetector.setOnDoubleTapListener(this);
             ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
                 public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-                    if (imageReceiver == PhotoViewer.this.centerImage && set && !thumb && PhotoViewer.this.photoCropView != null) {
+                    if (imageReceiver == PhotoViewer.this.centerImage && set && !thumb && PhotoViewer.this.currentEditMode == 1 && PhotoViewer.this.photoCropView != null) {
                         PhotoViewer.this.photoCropView.setBitmap(imageReceiver.getBitmap(), imageReceiver.getOrientation(), PhotoViewer.this.sendPhotoType != 1);
                     }
                     if (imageReceiver != PhotoViewer.this.centerImage || !set || PhotoViewer.this.placeProvider == null || !PhotoViewer.this.placeProvider.scaleToFill() || PhotoViewer.this.ignoreDidSetImage) {
@@ -1750,11 +1750,21 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             });
             this.captionEditText = new PhotoViewerCaptionEnterView(this.actvityContext, this.containerView, this.windowView) {
                 public boolean dispatchTouchEvent(MotionEvent ev) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
+                    try {
+                        return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                        return false;
+                    }
                 }
 
                 public boolean onInterceptTouchEvent(MotionEvent ev) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
+                    try {
+                        return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                        return false;
+                    }
                 }
 
                 public boolean onTouchEvent(MotionEvent event) {

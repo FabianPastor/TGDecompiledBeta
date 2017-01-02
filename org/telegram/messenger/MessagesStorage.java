@@ -4974,7 +4974,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5027,6 +5026,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5317,7 +5317,6 @@ Error: java.util.NoSuchElementException
 
     private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         String ids;
-        long did;
         int unread_count = 0;
         if (channelId != 0) {
             try {
@@ -5339,6 +5338,7 @@ Error: java.util.NoSuchElementException
         SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
         ArrayList<File> filesToDelete = new ArrayList();
         while (cursor.next()) {
+            long did;
             try {
                 did = cursor.longValue(0);
                 if (channelId != 0 && cursor.intValue(2) == 0) {

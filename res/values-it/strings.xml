@@ -433,7 +433,7 @@
     <string name="DescriptionPlaceholder">Descrizione</string>
     <string name="DidNotGetTheCode">Non hai ricevuto il codice?</string>
     <string name="DirectShare">Condivisione diretta</string>
-    <string name="DirectShareInfo">Mostra le chat recenti nel menù condividi</string>
+    <string name="DirectShareInfo">Mostra le chat recenti nel menù di condivisione</string>
     <string name="Disabled">Disabilitata</string>
     <string name="DiscardChanges">Annullare le modifiche?</string>
     <string name="DocumentsTitle">File condivisi</string>
@@ -1008,7 +1008,7 @@
     <string name="PinMessage">Fissa</string>
     <string name="PinMessageAlert">Vuoi fissare questo messaggio in questo gruppo?</string>
     <string name="PinNotify">Notifica tutti i membri</string>
-    <string name="PinToTop">Fissa</string>
+    <string name="PinToTop">Fissa in alto</string>
     <string name="PinnedMessage">Messaggio fissato</string>
     <string name="PinnedMessages">Messaggi fissati</string>
     <string name="PleaseDownload">Scarica prima il file</string>
@@ -1251,7 +1251,7 @@
     <string name="UnlockFingerprint">Sblocca con impronta digitale</string>
     <string name="UnmuteNotifications">Suona</string>
     <string name="UnofficialApp">app non ufficiale</string>
-    <string name="UnpinFromTop">Togli</string>
+    <string name="UnpinFromTop">Togli dall\'alto</string>
     <string name="UnpinMessage">Togli</string>
     <string name="UnpinMessageAlert">Vuoi togliere questo messaggio?</string>
     <string name="UnsupportedAttachment">Allegato non supportato</string>

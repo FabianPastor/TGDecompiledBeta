@@ -268,7 +268,9 @@ public class Track {
             if (presentationTime.index != 0) {
                 this.duration += delta;
             }
-            minDelta = Math.min(minDelta, delta);
+            if (delta != 0) {
+                minDelta = Math.min(minDelta, delta);
+            }
             if (presentationTime.index != a) {
                 outOfOrder = true;
             }
