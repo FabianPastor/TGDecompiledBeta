@@ -489,10 +489,21 @@ public class MessagesQuery {
         return false;
     }
 
+    private static void removeOffsetAfter(int start, int countToRemove, ArrayList<MessageEntity> entities) {
+        int count = entities.size();
+        for (int a = 0; a < count; a++) {
+            MessageEntity entity = (MessageEntity) entities.get(a);
+            if (entity.offset > start) {
+                entity.offset -= countToRemove;
+            }
+        }
+    }
+
     public static ArrayList<MessageEntity> getEntities(CharSequence[] message) {
         if (message == null || message[0] == null) {
             return null;
         }
+        int a;
         ArrayList<MessageEntity> entities = null;
         int start = -1;
         int lastIndex = 0;
@@ -502,7 +513,6 @@ public class MessagesQuery {
         String bold = "*";
         String italic = "_";
         while (true) {
-            int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
             if (index == -1) {
                 break;
@@ -608,6 +618,7 @@ public class MessagesQuery {
                             }
                             entity3.offset = start;
                             entity3.length = (index - start) - 1;
+                            removeOffsetAfter(entity3.offset + entity3.length, 2, entities);
                             entities.add(entity3);
                             lastIndex -= 2;
                         }

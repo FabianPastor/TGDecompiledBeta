@@ -57,6 +57,9 @@ public class DrawerLayoutAdapter extends BaseAdapter {
     }
 
     public long getItemId(int i) {
+        if (i >= this.items.size()) {
+            return 0;
+        }
         Item item = (Item) this.items.get(i);
         if (item != null) {
             return (long) item.id;

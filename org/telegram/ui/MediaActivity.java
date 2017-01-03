@@ -1757,11 +1757,13 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     if (!message.canDeleteMessage(null)) {
                         this.cantDeleteMessagesCount--;
                     }
-                } else {
+                } else if (this.selectedFiles[0].size() + this.selectedFiles[1].size() < 100) {
                     this.selectedFiles[loadIndex].put(Integer.valueOf(message.getId()), message);
                     if (!message.canDeleteMessage(null)) {
                         this.cantDeleteMessagesCount++;
                     }
+                } else {
+                    return;
                 }
                 if (this.selectedFiles[0].isEmpty() && this.selectedFiles[1].isEmpty()) {
                     this.actionBar.hideActionMode();

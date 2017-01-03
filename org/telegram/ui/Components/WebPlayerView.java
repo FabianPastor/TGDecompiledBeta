@@ -101,10 +101,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final Pattern stsPattern = Pattern.compile("\"sts\"\\s*:\\s*(\\d+)");
     private static final Pattern vimeoIdRegex = Pattern.compile("https?://(?:(?:www|(player))\\.)?vimeo(pro)?\\.com/(?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)(?:.*?/)?(?:(?:play_redirect_hls|moogaloop\\.swf)\\?clip_id=)?(?:videos?/)?([0-9]+)(?:/[\\da-f]+)?/?(?:[?&].*)?(?:[#].*)?$");
     private static final Pattern youtubeIdRegex = Pattern.compile("(?:youtube(?:-nocookie)?\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})");
-    private boolean allowInlineAnimation = true;
+    private boolean allowInlineAnimation;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private int audioFocus;
-    private Paint backgroundPaint = new Paint();
+    private Paint backgroundPaint;
     private TextureView changedTextureView;
     private boolean changingTextureView;
     private ControlsView controlsView;
@@ -132,109 +132,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private String playVideoType;
     private String playVideoUrl;
     private AnimatorSet progressAnimation;
-    private Runnable progressRunnable = new Runnable() {
-        public void run() {
-            if (WebPlayerView.this.videoPlayer != null && WebPlayerView.this.videoPlayer.isPlaying()) {
-                WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
-                WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000), WebPlayerView.this.videoPlayer.getBufferedPercentage());
-                AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
-            }
-        }
-    };
+    private Runnable progressRunnable;
     private RadialProgressView progressView;
     private boolean resumeAudioOnFocusGain;
     private int seekToTime;
     private ImageView shareButton;
-    private SurfaceTextureListener surfaceTextureListener = new SurfaceTextureListener() {
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        }
-
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        }
-
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            if (!WebPlayerView.this.changingTextureView) {
-                return true;
-            }
-            if (WebPlayerView.this.switchingInlineMode) {
-                WebPlayerView.this.waitingForFirstTextureUpload = 2;
-            }
-            WebPlayerView.this.textureView.setSurfaceTexture(surface);
-            WebPlayerView.this.textureView.setVisibility(0);
-            WebPlayerView.this.changingTextureView = false;
-            return false;
-        }
-
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-            if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
-                WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-                    public boolean onPreDraw() {
-                        WebPlayerView.this.changedTextureView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        if (WebPlayerView.this.textureImageView != null) {
-                            WebPlayerView.this.textureImageView.setVisibility(4);
-                            WebPlayerView.this.textureImageView.setImageDrawable(null);
-                            if (WebPlayerView.this.currentBitmap != null) {
-                                WebPlayerView.this.currentBitmap.recycle();
-                                WebPlayerView.this.currentBitmap = null;
-                            }
-                        }
-                        AndroidUtilities.runOnUIThread(new Runnable() {
-                            public void run() {
-                                WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
-                            }
-                        });
-                        WebPlayerView.this.waitingForFirstTextureUpload = 0;
-                        return true;
-                    }
-                });
-                WebPlayerView.this.changedTextureView.invalidate();
-            }
-        }
-    };
-    private Runnable switchToInlineRunnable = new Runnable() {
-        public void run() {
-            WebPlayerView.this.switchingInlineMode = false;
-            if (WebPlayerView.this.currentBitmap != null) {
-                WebPlayerView.this.currentBitmap.recycle();
-                WebPlayerView.this.currentBitmap = null;
-            }
-            WebPlayerView.this.changingTextureView = true;
-            if (WebPlayerView.this.textureImageView != null) {
-                try {
-                    WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
-                    WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
-                } catch (Throwable e) {
-                    if (WebPlayerView.this.currentBitmap != null) {
-                        WebPlayerView.this.currentBitmap.recycle();
-                        WebPlayerView.this.currentBitmap = null;
-                    }
-                    FileLog.e("tmessages", e);
-                }
-                if (WebPlayerView.this.currentBitmap != null) {
-                    WebPlayerView.this.textureImageView.setVisibility(0);
-                    WebPlayerView.this.textureImageView.setImageBitmap(WebPlayerView.this.currentBitmap);
-                } else {
-                    WebPlayerView.this.textureImageView.setImageDrawable(null);
-                }
-            }
-            WebPlayerView.this.isInline = true;
-            WebPlayerView.this.updatePlayButton();
-            WebPlayerView.this.updateShareButton();
-            WebPlayerView.this.updateFullscreenButton();
-            WebPlayerView.this.updateInlineButton();
-            ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
-            if (viewGroup != null) {
-                viewGroup.removeView(WebPlayerView.this.controlsView);
-            }
-            WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
-            WebPlayerView.this.changedTextureView.setVisibility(4);
-            ViewGroup parent = (ViewGroup) WebPlayerView.this.textureView.getParent();
-            if (parent != null) {
-                parent.removeView(WebPlayerView.this.textureView);
-            }
-            WebPlayerView.this.controlsView.show(false, false);
-        }
-    };
+    private SurfaceTextureListener surfaceTextureListener;
+    private Runnable switchToInlineRunnable;
     private boolean switchingInlineMode;
     private ImageView textureImageView;
     private TextureView textureView;
@@ -1285,7 +1189,114 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public WebPlayerView(Context context, boolean allowInline, boolean allowShare, WebPlayerViewDelegate webPlayerViewDelegate) {
+        boolean z;
         super(context);
+        if (VERSION.SDK_INT >= 21) {
+            z = true;
+        } else {
+            z = false;
+        }
+        this.allowInlineAnimation = z;
+        this.backgroundPaint = new Paint();
+        this.progressRunnable = new Runnable() {
+            public void run() {
+                if (WebPlayerView.this.videoPlayer != null && WebPlayerView.this.videoPlayer.isPlaying()) {
+                    WebPlayerView.this.controlsView.setProgress((int) (WebPlayerView.this.videoPlayer.getCurrentPosition() / 1000));
+                    WebPlayerView.this.controlsView.setBufferedProgress((int) (WebPlayerView.this.videoPlayer.getBufferedPosition() / 1000), WebPlayerView.this.videoPlayer.getBufferedPercentage());
+                    AndroidUtilities.runOnUIThread(WebPlayerView.this.progressRunnable, 1000);
+                }
+            }
+        };
+        this.surfaceTextureListener = new SurfaceTextureListener() {
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            }
+
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+            }
+
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                if (!WebPlayerView.this.changingTextureView) {
+                    return true;
+                }
+                if (WebPlayerView.this.switchingInlineMode) {
+                    WebPlayerView.this.waitingForFirstTextureUpload = 2;
+                }
+                WebPlayerView.this.textureView.setSurfaceTexture(surface);
+                WebPlayerView.this.textureView.setVisibility(0);
+                WebPlayerView.this.changingTextureView = false;
+                return false;
+            }
+
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+                if (WebPlayerView.this.waitingForFirstTextureUpload == 1) {
+                    WebPlayerView.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            WebPlayerView.this.changedTextureView.getViewTreeObserver().removeOnPreDrawListener(this);
+                            if (WebPlayerView.this.textureImageView != null) {
+                                WebPlayerView.this.textureImageView.setVisibility(4);
+                                WebPlayerView.this.textureImageView.setImageDrawable(null);
+                                if (WebPlayerView.this.currentBitmap != null) {
+                                    WebPlayerView.this.currentBitmap.recycle();
+                                    WebPlayerView.this.currentBitmap = null;
+                                }
+                            }
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    WebPlayerView.this.delegate.onInlineSurfaceTextureReady();
+                                }
+                            });
+                            WebPlayerView.this.waitingForFirstTextureUpload = 0;
+                            return true;
+                        }
+                    });
+                    WebPlayerView.this.changedTextureView.invalidate();
+                }
+            }
+        };
+        this.switchToInlineRunnable = new Runnable() {
+            public void run() {
+                WebPlayerView.this.switchingInlineMode = false;
+                if (WebPlayerView.this.currentBitmap != null) {
+                    WebPlayerView.this.currentBitmap.recycle();
+                    WebPlayerView.this.currentBitmap = null;
+                }
+                WebPlayerView.this.changingTextureView = true;
+                if (WebPlayerView.this.textureImageView != null) {
+                    try {
+                        WebPlayerView.this.currentBitmap = Bitmaps.createBitmap(WebPlayerView.this.textureView.getWidth(), WebPlayerView.this.textureView.getHeight(), Config.ARGB_8888);
+                        WebPlayerView.this.textureView.getBitmap(WebPlayerView.this.currentBitmap);
+                    } catch (Throwable e) {
+                        if (WebPlayerView.this.currentBitmap != null) {
+                            WebPlayerView.this.currentBitmap.recycle();
+                            WebPlayerView.this.currentBitmap = null;
+                        }
+                        FileLog.e("tmessages", e);
+                    }
+                    if (WebPlayerView.this.currentBitmap != null) {
+                        WebPlayerView.this.textureImageView.setVisibility(0);
+                        WebPlayerView.this.textureImageView.setImageBitmap(WebPlayerView.this.currentBitmap);
+                    } else {
+                        WebPlayerView.this.textureImageView.setImageDrawable(null);
+                    }
+                }
+                WebPlayerView.this.isInline = true;
+                WebPlayerView.this.updatePlayButton();
+                WebPlayerView.this.updateShareButton();
+                WebPlayerView.this.updateFullscreenButton();
+                WebPlayerView.this.updateInlineButton();
+                ViewGroup viewGroup = (ViewGroup) WebPlayerView.this.controlsView.getParent();
+                if (viewGroup != null) {
+                    viewGroup.removeView(WebPlayerView.this.controlsView);
+                }
+                WebPlayerView.this.changedTextureView = WebPlayerView.this.delegate.onSwitchInlineMode(WebPlayerView.this.controlsView, WebPlayerView.this.isInline, WebPlayerView.this.aspectRatioFrameLayout.getAspectRatio(), WebPlayerView.this.aspectRatioFrameLayout.getVideoRotation(), WebPlayerView.this.allowInlineAnimation);
+                WebPlayerView.this.changedTextureView.setVisibility(4);
+                ViewGroup parent = (ViewGroup) WebPlayerView.this.textureView.getParent();
+                if (parent != null) {
+                    parent.removeView(WebPlayerView.this.textureView);
+                }
+                WebPlayerView.this.controlsView.show(false, false);
+            }
+        };
         setWillNotDraw(false);
         this.delegate = webPlayerViewDelegate;
         this.backgroundPaint.setColor(-16777216);

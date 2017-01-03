@@ -81,6 +81,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private boolean ignoreLayout;
     private InputStickerSet inputStickerSet;
     private StickersAlertInstallDelegate installDelegate;
+    private int itemSize;
     private GridLayoutManager layoutManager;
     private Activity parentActivity;
     private BaseFragment parentFragment;
@@ -154,7 +155,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 case 0:
                     view = new StickerEmojiCell(this.context) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+                            super.onMeasure(MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                         }
                     };
                     break;
@@ -362,6 +363,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 if (VERSION.SDK_INT >= 21) {
                     height -= AndroidUtilities.statusBarHeight;
                 }
+                int measuredWidth = getMeasuredWidth();
+                StickersAlert.this.itemSize = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(36.0f)) / 5;
                 if (StickersAlert.this.stickerSetCovereds != null) {
                     contentSize = (AndroidUtilities.dp(56.0f) + (AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW) * StickersAlert.this.stickerSetCovereds.size())) + (StickersAlert.this.adapter.stickersRowCount * AndroidUtilities.dp(82.0f));
                 } else {

@@ -545,7 +545,12 @@ public class BottomSheet extends Dialog {
         backgroundPaddingTop = padding.top;
         this.container = new ContainerView(getContext()) {
             public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                return BottomSheet.this.allowDrawContent && super.drawChild(canvas, child, drawingTime);
+                try {
+                    return BottomSheet.this.allowDrawContent && super.drawChild(canvas, child, drawingTime);
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
+                    return true;
+                }
             }
         };
         this.container.setBackgroundDrawable(this.backDrawable);

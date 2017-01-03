@@ -5137,7 +5137,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (!messageObject.canDeleteMessage(this.currentChat)) {
                 this.cantDeleteMessagesCount--;
             }
-        } else {
+        } else if (this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() < 100) {
             this.selectedMessagesIds[index].put(Integer.valueOf(messageObject.getId()), messageObject);
             if (messageObject.type == 0 || messageObject.caption != null) {
                 this.selectedMessagesCanCopyIds[index].put(Integer.valueOf(messageObject.getId()), messageObject);
@@ -5145,6 +5145,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (!messageObject.canDeleteMessage(this.currentChat)) {
                 this.cantDeleteMessagesCount++;
             }
+        } else {
+            return;
         }
         if (!this.actionBar.isActionModeShowed()) {
             return;
