@@ -401,7 +401,7 @@ public class ConnectionsManager {
     }
 
     public static int getCurrentNetworkType() {
-        if (isConnectedToWiFi()) {
+        if (isConnectedOrConnectingToWiFi()) {
             return 1;
         }
         if (isRoaming()) {
@@ -469,6 +469,19 @@ public class ConnectionsManager {
             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
             if (netInfo != null) {
                 return netInfo.isRoaming();
+            }
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
+        return false;
+    }
+
+    public static boolean isConnectedOrConnectingToWiFi() {
+        try {
+            NetworkInfo netInfo = connectivityManager.getNetworkInfo(1);
+            State state = netInfo.getState();
+            if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
+                return true;
             }
         } catch (Throwable e) {
             FileLog.e("tmessages", e);

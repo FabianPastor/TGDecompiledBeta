@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -161,7 +162,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
             public void afterTextChanged(Editable editable) {
                 if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
-                    String url = "https://telegram.me/" + ChangeUsernameActivity.this.firstNameField.getText();
+                    String url = "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + ChangeUsernameActivity.this.firstNameField.getText();
                     String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                     int index = text.indexOf(url);
                     new SpannableStringBuilder(text).setSpan(new LinkSpan(url), index, url.length() + index, 33);

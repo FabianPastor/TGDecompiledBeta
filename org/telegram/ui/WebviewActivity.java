@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -106,7 +107,7 @@ public class WebviewActivity extends BaseFragment {
         this.currentGame = gameName;
         this.currentMessageObject = messageObject;
         this.short_param = startParam;
-        this.linkToCopy = "https://telegram.me/" + this.currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
+        this.linkToCopy = "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
     }
 
     public void onFragmentDestroy() {
@@ -239,7 +240,7 @@ public class WebviewActivity extends BaseFragment {
             SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://telegram.me/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
+            editor.putString(hash + "_link", "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
         } catch (Throwable e) {

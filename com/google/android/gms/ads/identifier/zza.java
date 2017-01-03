@@ -10,9 +10,9 @@ import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 public class zza {
     @WorkerThread
     public void zzu(String str) {
-        HttpURLConnection httpURLConnection;
         String valueOf;
         Throwable e;
+        HttpURLConnection httpURLConnection;
         try {
             httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
             int responseCode = httpURLConnection.getResponseCode();

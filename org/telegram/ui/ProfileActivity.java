@@ -50,6 +50,7 @@ import java.util.concurrent.Semaphore;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -914,10 +915,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 TL_userFull userFull = MessagesController.getInstance().getUserFull(ProfileActivity.this.botInfo.user_id);
                                 if (ProfileActivity.this.botInfo == null || userFull == null || TextUtils.isEmpty(userFull.about)) {
                                     intent = intent;
-                                    intent.putExtra("android.intent.extra.TEXT", String.format("https://telegram.me/%s", new Object[]{user.username}));
+                                    intent.putExtra("android.intent.extra.TEXT", String.format("https://" + BuildVars.MAIN_LINKS_DOMAIN + "/%s", new Object[]{user.username}));
                                 } else {
                                     intent = intent;
-                                    intent.putExtra("android.intent.extra.TEXT", String.format("%s https://telegram.me/%s", new Object[]{userFull.about, user.username}));
+                                    intent.putExtra("android.intent.extra.TEXT", String.format("%s https://" + BuildVars.MAIN_LINKS_DOMAIN + "/%s", new Object[]{userFull.about, user.username}));
                                 }
                                 ProfileActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
                             }
@@ -1140,9 +1141,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             Intent intent = new Intent("android.intent.action.SEND");
                             intent.setType("text/plain");
                             if (ProfileActivity.this.info.about == null || ProfileActivity.this.info.about.length() <= 0) {
-                                intent.putExtra("android.intent.extra.TEXT", ProfileActivity.this.currentChat.title + "\nhttps://telegram.me/" + ProfileActivity.this.currentChat.username);
+                                intent.putExtra("android.intent.extra.TEXT", ProfileActivity.this.currentChat.title + "\nhttps://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + ProfileActivity.this.currentChat.username);
                             } else {
-                                intent.putExtra("android.intent.extra.TEXT", ProfileActivity.this.currentChat.title + "\n" + ProfileActivity.this.info.about + "\nhttps://telegram.me/" + ProfileActivity.this.currentChat.username);
+                                intent.putExtra("android.intent.extra.TEXT", ProfileActivity.this.currentChat.title + "\n" + ProfileActivity.this.info.about + "\nhttps://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + ProfileActivity.this.currentChat.username);
                             }
                             ProfileActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
                         } catch (Throwable e) {
