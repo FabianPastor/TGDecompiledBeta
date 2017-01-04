@@ -5609,9 +5609,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
     private int getDeepestFocusedViewWithId(View view) {
         int lastKnownId = view.getId();
-        while (!view.isFocused() && (view instanceof ViewGroup) && view.hasFocus()) {
+        while ((view instanceof ViewGroup) && !view.isFocused() && view.hasFocus()) {
             view = ((ViewGroup) view).getFocusedChild();
-            if (view.getId() != -1) {
+            if (!(view == null || view.getId() == -1)) {
                 lastKnownId = view.getId();
             }
         }
