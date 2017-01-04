@@ -17,9 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Vibrator;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat.AuthenticationCallback;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat.AuthenticationResult;
 import android.support.v4.os.CancellationSignal;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -55,6 +52,9 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
+import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
+import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.AuthenticationCallback;
+import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.AuthenticationResult;
 import org.telegram.tgnet.ConnectionsManager;
 
 public class PasscodeView extends FrameLayout {

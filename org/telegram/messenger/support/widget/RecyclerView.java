@@ -5580,7 +5580,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (getDescendantFocusability() != 131072 || !isFocused()) {
                 if (!isFocused()) {
                     View focusedChild = getFocusedChild();
-                    if (!this.mChildHelper.isHidden(focusedChild) && focusedChild.getParent() == this && focusedChild.hasFocus()) {
+                    if (focusedChild != null && !this.mChildHelper.isHidden(focusedChild) && focusedChild.getParent() == this && focusedChild.hasFocus()) {
                         return;
                     }
                 }

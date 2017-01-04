@@ -793,7 +793,6 @@ class zzasu extends zzats {
     }
 
     Map<Integer, List<com.google.android.gms.internal.zzauf.zzb>> zzS(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zznA();
@@ -801,6 +800,7 @@ class zzasu extends zzats {
         zzac.zzdv(str);
         zzac.zzdv(str2);
         Map<Integer, List<com.google.android.gms.internal.zzauf.zzb>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("event_filters", new String[]{"audience_id", "data"}, "app_id=? AND event_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1851,12 +1851,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zzasp zzfy(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample"}, "app_id=?", new String[]{str}, null, null, null);
             try {

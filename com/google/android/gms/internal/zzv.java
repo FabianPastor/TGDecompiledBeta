@@ -271,21 +271,21 @@ public class zzv implements zzb {
     }
 
     public synchronized void initialize() {
+        BufferedInputStream bufferedInputStream;
         Throwable th;
         if (this.zzax.exists()) {
             File[] listFiles = this.zzax.listFiles();
             if (listFiles != null) {
                 for (File file : listFiles) {
-                    BufferedInputStream bufferedInputStream = null;
-                    BufferedInputStream bufferedInputStream2;
+                    BufferedInputStream bufferedInputStream2 = null;
                     try {
-                        bufferedInputStream2 = new BufferedInputStream(new FileInputStream(file));
+                        bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
                         try {
-                            zza zzf = zza.zzf(bufferedInputStream2);
+                            zza zzf = zza.zzf(bufferedInputStream);
                             zzf.zzaz = file.length();
                             zza(zzf.zzaA, zzf);
                             try {
-                                bufferedInputStream2.close();
+                                bufferedInputStream.close();
                             } catch (IOException e) {
                             }
                         } catch (IOException e2) {
@@ -294,24 +294,24 @@ public class zzv implements zzb {
                                     file.delete();
                                 } catch (Throwable th2) {
                                     Throwable th3 = th2;
-                                    bufferedInputStream = bufferedInputStream2;
+                                    bufferedInputStream2 = bufferedInputStream;
                                     th = th3;
                                 }
                             }
-                            if (bufferedInputStream2 != null) {
+                            if (bufferedInputStream != null) {
                                 try {
-                                    bufferedInputStream2.close();
+                                    bufferedInputStream.close();
                                 } catch (IOException e3) {
                                 }
                             }
                         }
                     } catch (IOException e4) {
-                        bufferedInputStream2 = null;
+                        bufferedInputStream = null;
                         if (file != null) {
                             file.delete();
                         }
-                        if (bufferedInputStream2 != null) {
-                            bufferedInputStream2.close();
+                        if (bufferedInputStream != null) {
+                            bufferedInputStream.close();
                         }
                     } catch (Throwable th4) {
                         th = th4;
@@ -322,9 +322,9 @@ public class zzv implements zzb {
             zzs.zzc("Unable to create cache dir %s", this.zzax.getAbsolutePath());
         }
         return;
-        if (bufferedInputStream != null) {
+        if (bufferedInputStream2 != null) {
             try {
-                bufferedInputStream.close();
+                bufferedInputStream2.close();
             } catch (IOException e5) {
             }
         }
@@ -342,7 +342,6 @@ public class zzv implements zzb {
 
     public synchronized com.google.android.gms.internal.zzb.zza zza(String str) {
         com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza;
-        zzb com_google_android_gms_internal_zzv_zzb;
         IOException e;
         Throwable th;
         zza com_google_android_gms_internal_zzv_zza = (zza) this.zzav.get(str);
@@ -350,6 +349,7 @@ public class zzv implements zzb {
             com_google_android_gms_internal_zzb_zza = null;
         } else {
             File zzf = zzf(str);
+            zzb com_google_android_gms_internal_zzv_zzb;
             try {
                 com_google_android_gms_internal_zzv_zzb = new zzb(new FileInputStream(zzf));
                 try {

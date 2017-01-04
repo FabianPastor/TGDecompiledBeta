@@ -30,7 +30,6 @@ public class CountryAdapter extends BaseSectionsAdapter {
     }
 
     public CountryAdapter(Context context) {
-        ArrayList<Country> arr;
         this.mContext = context;
         try {
             InputStream stream = ApplicationLoader.applicationContext.getResources().getAssets().open("countries.txt");
@@ -40,6 +39,7 @@ public class CountryAdapter extends BaseSectionsAdapter {
                 if (line == null) {
                     break;
                 }
+                ArrayList<Country> arr;
                 String[] args = line.split(";");
                 Country c = new Country();
                 c.name = args[2];
