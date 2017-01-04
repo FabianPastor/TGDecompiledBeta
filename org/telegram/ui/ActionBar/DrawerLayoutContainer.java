@@ -259,7 +259,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
         if (!this.drawerOpened || ev == null || ev.getX() <= this.drawerPosition || this.startedTracking) {
             if (this.allowOpenDrawer && this.parentActionBarLayout.fragmentsStack.size() == 1) {
-                if (ev != null && ((ev.getActionMasked() == 0 || ev.getActionMasked() == 2) && ev.getPointerId(0) == 0 && !this.startedTracking && !this.maybeStartTracking)) {
+                if (ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking)) {
                     this.startedTrackingPointerId = ev.getPointerId(0);
                     this.maybeStartTracking = true;
                     this.startedTrackingX = (int) ev.getX();
@@ -319,6 +319,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                         }
                     }
                     this.startedTracking = false;
+                    this.maybeStartTracking = false;
                     if (this.velocityTracker != null) {
                         this.velocityTracker.recycle();
                         this.velocityTracker = null;

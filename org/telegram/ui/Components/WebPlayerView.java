@@ -539,9 +539,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);

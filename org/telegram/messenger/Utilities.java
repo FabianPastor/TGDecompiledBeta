@@ -188,9 +188,9 @@ public class Utilities {
     }
 
     public static byte[] computeSHA1(ByteBuffer convertme, int offset, int len) {
-        byte[] digest;
         int oldp = convertme.position();
         int oldl = convertme.limit();
+        byte[] digest;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             convertme.position(offset);

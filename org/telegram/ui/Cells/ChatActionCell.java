@@ -88,6 +88,10 @@ public class ChatActionCell extends BaseCell {
                 this.previousWidth = 0;
                 this.customDate = date;
                 this.customText = newText;
+                if (getMeasuredWidth() != 0) {
+                    createLayout(this.customText, getMeasuredWidth());
+                    invalidate();
+                }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         ChatActionCell.this.requestLayout();
@@ -224,11 +228,40 @@ public class ChatActionCell extends BaseCell {
         return super.onTouchEvent(event);
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void createLayout(CharSequence text, int width) {
+        int maxWidth = width - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
+        this.textLayout = new StaticLayout(text, textPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        this.textHeight = 0;
+        this.textWidth = 0;
+        int linesCount = this.textLayout.getLineCount();
+        int a = 0;
+        while (a < linesCount) {
+            try {
+                float lineWidth = this.textLayout.getLineWidth(a);
+                if (lineWidth > ((float) maxWidth)) {
+                    lineWidth = (float) maxWidth;
+                }
+                this.textHeight = (int) Math.max((double) this.textHeight, Math.ceil((double) this.textLayout.getLineBottom(a)));
+                this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
+                a++;
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+                return;
+            }
+        }
+        this.textX = (width - this.textWidth) / 2;
+        this.textY = AndroidUtilities.dp(7.0f);
+        this.textXLeft = (width - this.textLayout.getWidth()) / 2;
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.currentMessageObject == null && this.customText == null) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), this.textHeight + AndroidUtilities.dp(14.0f));
             return;
         }
+        int i;
         int width = Math.max(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), MeasureSpec.getSize(widthMeasureSpec));
         if (width != this.previousWidth) {
             CharSequence text;
@@ -238,40 +271,18 @@ public class ChatActionCell extends BaseCell {
                 text = this.customText;
             }
             this.previousWidth = width;
-            int maxWidth = width - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
-            this.textLayout = new StaticLayout(text, textPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-            this.textHeight = 0;
-            this.textWidth = 0;
-            try {
-                int linesCount = this.textLayout.getLineCount();
-                int a = 0;
-                while (a < linesCount) {
-                    try {
-                        float lineWidth = this.textLayout.getLineWidth(a);
-                        if (lineWidth > ((float) maxWidth)) {
-                            lineWidth = (float) maxWidth;
-                        }
-                        this.textHeight = (int) Math.max((double) this.textHeight, Math.ceil((double) this.textLayout.getLineBottom(a)));
-                        this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
-                        a++;
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
-                        return;
-                    }
-                }
-            } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
-            }
-            this.textX = (width - this.textWidth) / 2;
-            this.textY = AndroidUtilities.dp(7.0f);
-            this.textXLeft = (width - this.textLayout.getWidth()) / 2;
+            createLayout(text, width);
             if (this.currentMessageObject != null && this.currentMessageObject.type == 11) {
                 this.imageReceiver.setImageCoords((width - AndroidUtilities.dp(64.0f)) / 2, this.textHeight + AndroidUtilities.dp(15.0f), AndroidUtilities.dp(64.0f), AndroidUtilities.dp(64.0f));
             }
         }
-        int i = this.textHeight;
-        int i2 = (this.currentMessageObject == null || this.currentMessageObject.type != 11) ? 0 : 70;
-        setMeasuredDimension(width, AndroidUtilities.dp((float) (i2 + 14)) + i);
+        int i2 = this.textHeight;
+        if (this.currentMessageObject == null || this.currentMessageObject.type != 11) {
+            i = 0;
+        } else {
+            i = 70;
+        }
+        setMeasuredDimension(width, AndroidUtilities.dp((float) (i + 14)) + i2);
     }
 
     public int getCustomDate() {

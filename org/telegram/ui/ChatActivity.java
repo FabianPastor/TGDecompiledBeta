@@ -3223,40 +3223,44 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 if (ChatActivity.this.getParentActivity() != null) {
                     AndroidUtilities.hideKeyboard(ChatActivity.this.searchItem.getSearchField());
                     Calendar calendar = Calendar.getInstance();
-                    DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new OnDateSetListener() {
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.clear();
-                            calendar.set(year, month, dayOfMonth);
-                            int date = (int) (calendar.getTime().getTime() / 1000);
-                            ChatActivity.this.clearChatData();
-                            ChatActivity.this.waitingForLoad.add(Integer.valueOf(ChatActivity.this.lastLoadIndex));
-                            MessagesController.getInstance().loadMessages(ChatActivity.this.dialog_id, 30, 0, date, true, 0, ChatActivity.this.classGuid, 4, 0, ChatObject.isChannel(ChatActivity.this.currentChat), ChatActivity.this.lastLoadIndex = ChatActivity.this.lastLoadIndex + 1);
-                        }
-                    }, calendar.get(1), calendar.get(2), calendar.get(5));
-                    final DatePicker datePicker = dialog.getDatePicker();
-                    datePicker.setMinDate(1375315200000L);
-                    datePicker.setMaxDate(System.currentTimeMillis());
-                    dialog.setButton(-1, LocaleController.getString("JumpToDate", R.string.JumpToDate), dialog);
-                    dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    if (VERSION.SDK_INT >= 21) {
-                        dialog.setOnShowListener(new OnShowListener() {
-                            public void onShow(DialogInterface dialog) {
-                                int count = datePicker.getChildCount();
-                                for (int a = 0; a < count; a++) {
-                                    View child = datePicker.getChildAt(a);
-                                    ViewGroup.LayoutParams layoutParams = child.getLayoutParams();
-                                    layoutParams.width = -1;
-                                    child.setLayoutParams(layoutParams);
-                                }
-                                FileLog.e("tmessages", "");
+                    try {
+                        DatePickerDialog dialog = new DatePickerDialog(ChatActivity.this.getParentActivity(), new OnDateSetListener() {
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.clear();
+                                calendar.set(year, month, dayOfMonth);
+                                int date = (int) (calendar.getTime().getTime() / 1000);
+                                ChatActivity.this.clearChatData();
+                                ChatActivity.this.waitingForLoad.add(Integer.valueOf(ChatActivity.this.lastLoadIndex));
+                                MessagesController.getInstance().loadMessages(ChatActivity.this.dialog_id, 30, 0, date, true, 0, ChatActivity.this.classGuid, 4, 0, ChatObject.isChannel(ChatActivity.this.currentChat), ChatActivity.this.lastLoadIndex = ChatActivity.this.lastLoadIndex + 1);
+                            }
+                        }, calendar.get(1), calendar.get(2), calendar.get(5));
+                        final DatePicker datePicker = dialog.getDatePicker();
+                        datePicker.setMinDate(1375315200000L);
+                        datePicker.setMaxDate(System.currentTimeMillis());
+                        dialog.setButton(-1, LocaleController.getString("JumpToDate", R.string.JumpToDate), dialog);
+                        dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
                             }
                         });
+                        if (VERSION.SDK_INT >= 21) {
+                            dialog.setOnShowListener(new OnShowListener() {
+                                public void onShow(DialogInterface dialog) {
+                                    int count = datePicker.getChildCount();
+                                    for (int a = 0; a < count; a++) {
+                                        View child = datePicker.getChildAt(a);
+                                        ViewGroup.LayoutParams layoutParams = child.getLayoutParams();
+                                        layoutParams.width = -1;
+                                        child.setLayoutParams(layoutParams);
+                                    }
+                                    FileLog.e("tmessages", "");
+                                }
+                            });
+                        }
+                        ChatActivity.this.showDialog(dialog);
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
                     }
-                    ChatActivity.this.showDialog(dialog);
                 }
             }
         });
@@ -3444,37 +3448,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     }
 
     private void jumpToDate(int date) {
-        MessageObject lastMessage = (MessageObject) this.messages.get(this.messages.size() - 1);
-        if (((MessageObject) this.messages.get(0)).messageOwner.date >= date && lastMessage.messageOwner.date <= date) {
-            int a = this.messages.size() - 1;
-            while (a >= 0) {
-                MessageObject message = (MessageObject) this.messages.get(a);
-                if (message.messageOwner.date < date || message.getId() == 0) {
-                    a--;
-                } else {
-                    int i;
-                    int id = message.getId();
-                    if (message.getDialogId() == this.mergeDialogId) {
-                        i = 1;
+        if (!this.messages.isEmpty()) {
+            MessageObject lastMessage = (MessageObject) this.messages.get(this.messages.size() - 1);
+            if (((MessageObject) this.messages.get(0)).messageOwner.date >= date && lastMessage.messageOwner.date <= date) {
+                int a = this.messages.size() - 1;
+                while (a >= 0) {
+                    MessageObject message = (MessageObject) this.messages.get(a);
+                    if (message.messageOwner.date < date || message.getId() == 0) {
+                        a--;
                     } else {
-                        i = 0;
+                        scrollToMessageId(message.getId(), 0, false, message.getDialogId() == this.mergeDialogId ? 1 : 0);
+                        return;
                     }
-                    scrollToMessageId(id, 0, false, i);
-                    return;
                 }
+            } else if (((int) this.dialog_id) != 0) {
+                clearChatData();
+                this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
+                MessagesController instance = MessagesController.getInstance();
+                long j = this.dialog_id;
+                int i = this.classGuid;
+                boolean isChannel = ChatObject.isChannel(this.currentChat);
+                int i2 = this.lastLoadIndex;
+                this.lastLoadIndex = i2 + 1;
+                instance.loadMessages(j, 30, 0, date, true, 0, i, 4, 0, isChannel, i2);
+                this.floatingDateView.setAlpha(0.0f);
+                this.floatingDateView.setTag(null);
             }
-        } else if (((int) this.dialog_id) != 0) {
-            clearChatData();
-            this.waitingForLoad.add(Integer.valueOf(this.lastLoadIndex));
-            MessagesController instance = MessagesController.getInstance();
-            long j = this.dialog_id;
-            int i2 = this.classGuid;
-            boolean isChannel = ChatObject.isChannel(this.currentChat);
-            int i3 = this.lastLoadIndex;
-            this.lastLoadIndex = i3 + 1;
-            instance.loadMessages(j, 30, 0, date, true, 0, i2, 4, 0, isChannel, i3);
-            this.floatingDateView.setAlpha(0.0f);
-            this.floatingDateView.setTag(null);
         }
     }
 

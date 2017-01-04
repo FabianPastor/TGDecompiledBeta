@@ -1842,7 +1842,7 @@ public class PhotoFilterView extends FrameLayout {
             layoutParams.topMargin = bitmapY;
             layoutParams.width = (int) bitmapW;
             layoutParams.height = (int) bitmapH;
-            this.curvesControl.setActualArea((float) bitmapX, (float) bitmapY, (float) layoutParams.width, (float) layoutParams.height);
+            this.curvesControl.setActualArea((float) bitmapX, (float) (bitmapY - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), (float) layoutParams.width, (float) layoutParams.height);
             this.blurControl.setActualAreaSize((float) layoutParams.width, (float) layoutParams.height);
             ((LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(28.0f) + viewHeight;
             ((LayoutParams) this.curvesControl.getLayoutParams()).height = AndroidUtilities.dp(28.0f) + viewHeight;

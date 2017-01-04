@@ -337,6 +337,7 @@ public class Emoji {
         int i = 0;
         while (i < length) {
             try {
+                char next;
                 char c = cs.charAt(i);
                 if ((c >= '?' && c <= '?') || (buf != 0 && (-4294967296L & buf) == 0 && (65535 & buf) == 55356 && c >= '?' && c <= '?')) {
                     if (startIndex == -1) {
@@ -383,7 +384,7 @@ public class Emoji {
                     emojiOnly = null;
                 }
                 if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
-                    char next = cs.charAt(i + 2);
+                    next = cs.charAt(i + 2);
                     if (next >= '?' && next <= '?') {
                         emojiCode.append(cs.subSequence(i + 1, i + 3));
                         startLength += 2;
@@ -405,6 +406,14 @@ public class Emoji {
                             i++;
                             startLength++;
                         }
+                    }
+                }
+                if (doneEmoji && i + 2 < length && cs.charAt(i + 1) == '?') {
+                    next = cs.charAt(i + 2);
+                    if (next >= '?' && next <= '?') {
+                        emojiCode.append(cs.subSequence(i + 1, i + 3));
+                        startLength += 2;
+                        i += 2;
                     }
                 }
                 if (doneEmoji) {

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
+import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -68,6 +69,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
 
     public void setType(int blurType) {
         this.type = blurType;
+        invalidate();
     }
 
     public void setDelegate(PhotoFilterLinearBlurControlDelegate delegate) {
@@ -411,7 +413,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     }
 
     private Point getActualCenterPoint() {
-        return new Point(((((float) getWidth()) - this.actualAreaSize.width) / 2.0f) + (this.centerPoint.x * this.actualAreaSize.width), (((((float) getHeight()) - this.actualAreaSize.height) / 2.0f) - ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) + (this.centerPoint.y * this.actualAreaSize.width));
+        return new Point((this.centerPoint.x * this.actualAreaSize.width) + ((((float) getWidth()) - this.actualAreaSize.width) / 2.0f), ((((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) + ((((float) getHeight()) - this.actualAreaSize.height) / 2.0f)) - ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) + (this.centerPoint.y * this.actualAreaSize.width));
     }
 
     private float getActualInnerRadius() {
