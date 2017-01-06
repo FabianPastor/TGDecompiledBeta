@@ -693,6 +693,10 @@ public final class R {
         public static final int listView = NUM;
         public static final int list_attachments = NUM;
         public static final int list_feedback_messages = NUM;
+        public static final int menu_bold = NUM;
+        public static final int menu_groupbolditalic = NUM;
+        public static final int menu_italic = NUM;
+        public static final int menu_regular = NUM;
         public static final int message_image = NUM;
         public static final int message_text = NUM;
         public static final int none = NUM;
@@ -923,6 +927,7 @@ public final class R {
         public static final int BlurLinear = NUM;
         public static final int BlurOff = NUM;
         public static final int BlurRadial = NUM;
+        public static final int Bold = NUM;
         public static final int Bot = NUM;
         public static final int BotCantJoinGroups = NUM;
         public static final int BotHelp = NUM;
@@ -1145,6 +1150,9 @@ public final class R {
         public static final int Days_other = NUM;
         public static final int Days_two = NUM;
         public static final int Days_zero = NUM;
+        public static final int DebugMenu = NUM;
+        public static final int DebugMenuImportContacts = NUM;
+        public static final int DebugMenuReloadContacts = NUM;
         public static final int Default = NUM;
         public static final int Delete = NUM;
         public static final int DeleteAccountHelp = NUM;
@@ -1373,6 +1381,7 @@ public final class R {
         public static final int IsSendingPhoto = NUM;
         public static final int IsSendingVideo = NUM;
         public static final int IsTyping = NUM;
+        public static final int Italic = NUM;
         public static final int JoinGroup = NUM;
         public static final int JoinToGroup = NUM;
         public static final int JoinToGroupErrorFull = NUM;
@@ -1783,6 +1792,7 @@ public final class R {
         public static final int RecordingAudio = NUM;
         public static final int RecoveryEmail = NUM;
         public static final int RegisterText = NUM;
+        public static final int Regular = NUM;
         public static final int RemoveFromListText = NUM;
         public static final int RepeatDisabled = NUM;
         public static final int RepeatNotifications = NUM;
@@ -1963,10 +1973,12 @@ public final class R {
         public static final int TapHereGifs = NUM;
         public static final int TelegramFaq = NUM;
         public static final int TelegramFaqUrl = NUM;
+        public static final int TelegramVersion = NUM;
         public static final int TerminateAllSessions = NUM;
         public static final int TerminateSessionInfo = NUM;
         public static final int TerminateSessionQuestion = NUM;
         public static final int TextSize = NUM;
+        public static final int Theme = NUM;
         public static final int TimeToEdit = NUM;
         public static final int TimeToEditExpired = NUM;
         public static final int Times_few = NUM;

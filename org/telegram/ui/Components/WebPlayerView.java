@@ -1939,10 +1939,11 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             this.controlsView.show(false, false);
             showProgress(true, false);
         }
-        if (youtubeId == null && vimeoId == null && null == null && aparatId == null && mp4File == null) {
-            return false;
+        if (youtubeId != null || vimeoId != null || null != null || aparatId != null || mp4File != null) {
+            return true;
         }
-        return true;
+        this.controlsView.setVisibility(8);
+        return false;
     }
 
     public View getAspectRatioView() {

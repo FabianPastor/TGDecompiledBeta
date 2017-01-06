@@ -60,7 +60,6 @@ public class ConnectionsManager {
     public static final int RequestFlagNeedQuickAck = 128;
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
-    private static ConnectivityManager connectivityManager;
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState = native_getConnectionState();
@@ -140,7 +139,6 @@ public class ConnectionsManager {
         try {
             this.wakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(1, JoinPoint.SYNCHRONIZATION_LOCK);
             this.wakeLock.setReferenceCounted(false);
-            connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }
@@ -466,7 +464,7 @@ public class ConnectionsManager {
 
     public static boolean isRoaming() {
         try {
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
             if (netInfo != null) {
                 return netInfo.isRoaming();
             }
@@ -478,7 +476,7 @@ public class ConnectionsManager {
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
-            NetworkInfo netInfo = connectivityManager.getNetworkInfo(1);
+            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
             State state = netInfo.getState();
             if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
                 return true;
@@ -491,7 +489,7 @@ public class ConnectionsManager {
 
     public static boolean isConnectedToWiFi() {
         try {
-            NetworkInfo netInfo = connectivityManager.getNetworkInfo(1);
+            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
             if (netInfo != null && netInfo.getState() == State.CONNECTED) {
                 return true;
             }
@@ -582,6 +580,7 @@ public class ConnectionsManager {
 
     public static boolean isNetworkOnline() {
         try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
             if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
                 return true;

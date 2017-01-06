@@ -245,7 +245,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void focusToPoint(int x, int y) {
-        this.cameraSession.focusToRect(calculateTapArea((float) x, (float) y, 1.0f), calculateTapArea((float) x, (float) y, 1.5f));
+        Rect focusRect = calculateTapArea((float) x, (float) y, 1.0f);
+        Rect meteringRect = calculateTapArea((float) x, (float) y, 1.5f);
+        if (this.cameraSession != null) {
+            this.cameraSession.focusToRect(focusRect, meteringRect);
+        }
         this.focusProgress = 0.0f;
         this.innerAlpha = 1.0f;
         this.outerAlpha = 1.0f;

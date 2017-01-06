@@ -3,7 +3,6 @@ package org.telegram.messenger;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -737,35 +736,7 @@ public class NotificationsController {
             public void run() {
                 if (NotificationsController.this.lastBadgeCount != count) {
                     NotificationsController.this.lastBadgeCount = count;
-                    try {
-                        ContentValues cv = new ContentValues();
-                        cv.put("tag", ApplicationLoader.applicationContext.getPackageName() + "/org.telegram.ui.LaunchActivity");
-                        cv.put("count", Integer.valueOf(count));
-                        ApplicationLoader.applicationContext.getContentResolver().insert(Uri.parse("content://com.teslacoilsw.notifier/unread_count"), cv);
-                    } catch (Throwable th) {
-                    }
-                    try {
-                        if (NotificationsController.this.launcherClassName == null) {
-                            NotificationsController.this.launcherClassName = NotificationsController.getLauncherClassName(ApplicationLoader.applicationContext);
-                        }
-                        if (NotificationsController.this.launcherClassName != null) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    try {
-                                        Intent intent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
-                                        intent.putExtra("badge_count", count);
-                                        intent.putExtra("badge_count_package_name", ApplicationLoader.applicationContext.getPackageName());
-                                        intent.putExtra("badge_count_class_name", NotificationsController.this.launcherClassName);
-                                        ApplicationLoader.applicationContext.sendBroadcast(intent);
-                                    } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
-                                    }
-                                }
-                            });
-                        }
-                    } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
-                    }
+                    NotificationBadge.applyCount(count);
                 }
             }
         });

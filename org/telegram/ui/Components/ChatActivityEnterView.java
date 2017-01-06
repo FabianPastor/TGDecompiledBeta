@@ -33,7 +33,11 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.view.ActionMode;
+import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -78,7 +82,7 @@ import org.telegram.messenger.exoplayer2.trackselection.AdaptiveVideoTrackSelect
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.MessagesQuery;
 import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -407,6 +411,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private class EditTextCaption extends EditTextBoldCursor {
         private String caption;
         private StaticLayout captionLayout;
+        private boolean copyPasteShowed;
         private int triesCount = 0;
         private int userNameLength;
         private int xOffset;
@@ -426,6 +431,94 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     requestLayout();
                 }
             }
+        }
+
+        private void makeSelectedBold() {
+            applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")));
+        }
+
+        private void makeSelectedItalic() {
+            applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")));
+        }
+
+        private void makeSelectedRegular() {
+            applyTextStyleToSelection(null);
+        }
+
+        private void applyTextStyleToSelection(TypefaceSpan span) {
+            int start = getSelectionStart();
+            int end = getSelectionEnd();
+            Editable editable = getText();
+            URLSpanUserMention[] spansMentions = (URLSpanUserMention[]) editable.getSpans(start, end, URLSpanUserMention.class);
+            if (spansMentions == null || spansMentions.length <= 0) {
+                TypefaceSpan[] spans = (TypefaceSpan[]) editable.getSpans(start, end, TypefaceSpan.class);
+                if (spans != null && spans.length > 0) {
+                    for (TypefaceSpan oldSpan : spans) {
+                        int spanStart = editable.getSpanStart(oldSpan);
+                        int spanEnd = editable.getSpanEnd(oldSpan);
+                        editable.removeSpan(oldSpan);
+                        if (spanStart < start) {
+                            editable.setSpan(new TypefaceSpan(oldSpan.getTypeface()), spanStart, start, 33);
+                        }
+                        if (spanEnd > end) {
+                            editable.setSpan(new TypefaceSpan(oldSpan.getTypeface()), end, spanEnd, 33);
+                        }
+                    }
+                }
+                if (span != null) {
+                    editable.setSpan(span, start, end, 33);
+                }
+            }
+        }
+
+        public void onWindowFocusChanged(boolean hasWindowFocus) {
+            if (VERSION.SDK_INT >= 23 || hasWindowFocus || !this.copyPasteShowed) {
+                super.onWindowFocusChanged(hasWindowFocus);
+            }
+        }
+
+        private Callback overrideCallback(final Callback callback) {
+            return new Callback() {
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    EditTextCaption.this.copyPasteShowed = true;
+                    return callback.onCreateActionMode(mode, menu);
+                }
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return callback.onPrepareActionMode(mode, menu);
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    if (item.getItemId() == R.id.menu_regular) {
+                        EditTextCaption.this.makeSelectedRegular();
+                        mode.finish();
+                        return true;
+                    } else if (item.getItemId() == R.id.menu_bold) {
+                        EditTextCaption.this.makeSelectedBold();
+                        mode.finish();
+                        return true;
+                    } else if (item.getItemId() != R.id.menu_italic) {
+                        return callback.onActionItemClicked(mode, item);
+                    } else {
+                        EditTextCaption.this.makeSelectedItalic();
+                        mode.finish();
+                        return true;
+                    }
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                    EditTextCaption.this.copyPasteShowed = false;
+                    callback.onDestroyActionMode(mode);
+                }
+            };
+        }
+
+        public ActionMode startActionMode(Callback callback, int type) {
+            return super.startActionMode(overrideCallback(callback), type);
+        }
+
+        public ActionMode startActionMode(Callback callback) {
+            return super.startActionMode(overrideCallback(callback));
         }
 
         @SuppressLint({"DrawAllocation"})
@@ -550,11 +643,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
-                EmojiView access$700 = ChatActivityEnterView.this.emojiView;
+                EmojiView access$1100 = ChatActivityEnterView.this.emojiView;
                 if (ChatActivityEnterView.this.messageEditText.length() <= 0) {
                     z = false;
                 }
-                access$700.onOpen(z);
+                access$1100.onOpen(z);
             }
         });
         this.messageEditText = new EditTextCaption(context) {
@@ -663,9 +756,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (count > 2 || charSequence == null || charSequence.length() == 0) {
                             ChatActivityEnterView.this.messageWebPageSearch = true;
                         }
-                        ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
+                        ChatActivityEnterViewDelegate access$1700 = ChatActivityEnterView.this.delegate;
                         boolean z = before > count + 1 || count - before > 2;
-                        access$1300.onTextChanged(charSequence, z);
+                        access$1700.onTextChanged(charSequence, z);
                     }
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;
@@ -1912,7 +2005,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 showEditDoneProgress(true, false);
                 InputFilter[] inputFilters = new InputFilter[1];
                 if (caption) {
-                    inputFilters[0] = new LengthFilter(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
+                    inputFilters[0] = new LengthFilter(ItemTouchHelper.Callback.DEFAULT_DRAG_ANIMATION_DURATION);
                     if (this.editingMessageObject.caption != null) {
                         setFieldText(Emoji.replaceEmoji(new SpannableStringBuilder(this.editingMessageObject.caption.toString()), this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
                     } else {
@@ -1921,15 +2014,21 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 } else {
                     inputFilters[0] = new LengthFilter(4096);
                     if (this.editingMessageObject.messageText != null) {
-                        CharSequence[] message = new CharSequence[]{this.editingMessageObject.messageText};
+                        int a;
                         ArrayList<MessageEntity> entities = this.editingMessageObject.messageOwner.entities;
                         MessagesQuery.sortEntities(entities);
-                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(message[0]);
+                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(this.editingMessageObject.messageText);
+                        Object[] spansToRemove = stringBuilder.getSpans(0, stringBuilder.length(), Object.class);
+                        if (spansToRemove != null && spansToRemove.length > 0) {
+                            for (Object removeSpan : spansToRemove) {
+                                stringBuilder.removeSpan(removeSpan);
+                            }
+                        }
                         if (entities != null) {
                             int addToOffset = 0;
-                            for (int a = 0; a < entities.size(); a++) {
+                            for (a = 0; a < entities.size(); a++) {
                                 MessageEntity entity = (MessageEntity) entities.get(a);
-                                if ((entity.offset + entity.length) + addToOffset < stringBuilder.length()) {
+                                if ((entity.offset + entity.length) + addToOffset <= stringBuilder.length()) {
                                     if (entity instanceof TL_inputMessageEntityMentionName) {
                                         if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
                                             entity.length++;
@@ -1946,13 +2045,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                                 stringBuilder.insert(entity.offset + addToOffset, "```");
                                                 addToOffset += 6;
                                             } else if (entity instanceof TL_messageEntityBold) {
-                                                stringBuilder.insert((entity.offset + entity.length) + addToOffset, "*");
-                                                stringBuilder.insert(entity.offset + addToOffset, "*");
-                                                addToOffset += 2;
+                                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                             } else if (entity instanceof TL_messageEntityItalic) {
-                                                stringBuilder.insert((entity.offset + entity.length) + addToOffset, "_");
-                                                stringBuilder.insert(entity.offset + addToOffset, "_");
-                                                addToOffset += 2;
+                                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                             }
                                         } catch (Throwable e) {
                                             FileLog.e("tmessages", e);
@@ -2029,6 +2124,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             return 0;
         }
         return this.messageEditText.getSelectionStart();
+    }
+
+    public int getSelectionLength() {
+        int i = 0;
+        if (this.messageEditText == null) {
+            return i;
+        }
+        try {
+            return this.messageEditText.getSelectionEnd() - this.messageEditText.getSelectionStart();
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+            return i;
+        }
     }
 
     public void replaceWithText(int start, int len, CharSequence text) {

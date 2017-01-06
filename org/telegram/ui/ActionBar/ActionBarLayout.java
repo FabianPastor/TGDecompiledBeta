@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -1152,6 +1153,10 @@ public class ActionBarLayout extends FrameLayout {
                 fragment.actionBar.setTitleOverlayText(this.titleOverlayText);
             }
         }
+    }
+
+    public boolean extendActionMode(Menu menu) {
+        return !this.fragmentsStack.isEmpty() && ((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).extendActionMode(menu);
     }
 
     public boolean hasOverlappingRendering() {

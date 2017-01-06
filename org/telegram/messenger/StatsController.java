@@ -168,7 +168,11 @@ public class StatsController {
                         StatsController.this.editor.putInt("callsTotalTime" + networkType, StatsController.this.callsTotalTime[networkType]);
                         StatsController.this.editor.putLong("resetStatsDate" + networkType, StatsController.this.resetStatsDate[networkType]);
                     }
-                    StatsController.this.editor.commit();
+                    try {
+                        StatsController.this.editor.commit();
+                    } catch (Throwable e) {
+                        FileLog.e("tmessages", e);
+                    }
                 }
             });
         }

@@ -38,6 +38,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -233,6 +234,7 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.Size;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
@@ -7381,6 +7383,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
+    public boolean extendActionMode(Menu menu) {
+        if (!(this.chatActivityEnterView.getSelectionLength() == 0 || menu.findItem(16908321) == null)) {
+            if (VERSION.SDK_INT >= 23) {
+                menu.removeItem(16908341);
+            }
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), 33);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, 6, stringBuilder);
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), 33);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, 7, stringBuilder);
+            menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, 8, LocaleController.getString("Regular", R.string.Regular));
+        }
+        return true;
+    }
+
     private void updateBottomOverlay() {
         if (this.bottomOverlayChatText != null) {
             if (this.currentChat != null) {
@@ -7668,12 +7686,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.reportSpamView != null) {
             boolean show;
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
-            if (this.currentEncryptedChat == null) {
-                show = preferences.getInt(new StringBuilder().append("spam3_").append(this.dialog_id).toString(), 0) == 2;
-            } else if (this.currentEncryptedChat.admin_id == UserConfig.getClientUserId() || ContactsController.getInstance().isLoadingContacts() || ContactsController.getInstance().contactsDict.get(this.currentUser.id) != null) {
-                show = false;
+            if (this.currentEncryptedChat != null) {
+                if (this.currentEncryptedChat.admin_id == UserConfig.getClientUserId() || ContactsController.getInstance().isLoadingContacts() || ContactsController.getInstance().contactsDict.get(this.currentUser.id) != null) {
+                    show = false;
+                } else {
+                    show = true;
+                }
+                if (show && preferences.getInt("spam3_" + this.dialog_id, 0) == 1) {
+                    show = false;
+                }
             } else {
-                show = true;
+                show = preferences.getInt(new StringBuilder().append("spam3_").append(this.dialog_id).toString(), 0) == 2;
             }
             AnimatorSet animatorSet;
             Animator[] animatorArr;
@@ -8029,13 +8052,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 stringBuilder.insert(entity.offset + addToOffset, "```");
                                 addToOffset += 6;
                             } else if (entity instanceof TL_messageEntityBold) {
-                                stringBuilder.insert((entity.offset + entity.length) + addToOffset, "*");
-                                stringBuilder.insert(entity.offset + addToOffset, "*");
-                                addToOffset += 2;
+                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                             } else if (entity instanceof TL_messageEntityItalic) {
-                                stringBuilder.insert((entity.offset + entity.length) + addToOffset, "_");
-                                stringBuilder.insert(entity.offset + addToOffset, "_");
-                                addToOffset += 2;
+                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                             }
                         }
                         message = stringBuilder;

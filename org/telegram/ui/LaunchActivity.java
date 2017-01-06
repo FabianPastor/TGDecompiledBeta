@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -2424,6 +2425,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     public void onActionModeStarted(ActionMode mode) {
         super.onActionModeStarted(mode);
+        try {
+            Menu menu = mode.getMenu();
+            if (!(menu == null || this.actionBarLayout.extendActionMode(menu) || !AndroidUtilities.isTablet() || this.rightActionBarLayout.extendActionMode(menu))) {
+                this.layersActionBarLayout.extendActionMode(menu);
+            }
+        } catch (Throwable e) {
+            FileLog.e("tmessages", e);
+        }
         if (VERSION.SDK_INT < 23 || mode.getType() != 1) {
             this.actionBarLayout.onActionModeStarted(mode);
             if (AndroidUtilities.isTablet()) {

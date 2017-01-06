@@ -37,6 +37,7 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC.TL_messages_getMessages;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_Messages;
+import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanUserMention;
 
 public class MessagesQuery {
@@ -509,8 +510,6 @@ public class MessagesQuery {
         boolean isPre = false;
         String mono = "`";
         String pre = "```";
-        String bold = "*";
-        String italic = "_";
         while (true) {
             int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
@@ -579,70 +578,44 @@ public class MessagesQuery {
             entity2.length = 1;
             entities.add(entity2);
         }
-        int c = 0;
-        while (c < 2) {
-            lastIndex = 0;
-            start = -1;
-            String checkString = c == 0 ? "*" : "_";
-            char checkChar = c == 0 ? '*' : '_';
-            while (true) {
-                index = TextUtils.indexOf(message[0], checkString, lastIndex);
-                if (index == -1) {
-                    break;
-                } else if (start == -1) {
-                    char prevChar = index == 0 ? ' ' : message[0].charAt(index - 1);
-                    if (!checkInclusion(index, entities) && (prevChar == ' ' || prevChar == '\n')) {
-                        start = index;
-                    }
-                    lastIndex = index + 1;
-                } else {
-                    if (entities == null) {
-                        entities = new ArrayList();
-                    }
-                    a = index + 1;
-                    while (a < message[0].length() && message[0].charAt(a) == checkChar) {
-                        index++;
-                        a++;
-                    }
-                    lastIndex = index + 1;
-                    if (checkInclusion(index, entities) || checkIntersection(start, index, entities)) {
-                        start = -1;
-                    } else {
-                        if (start + 1 != index) {
-                            MessageEntity entity3;
-                            message[0] = TextUtils.concat(new CharSequence[]{TextUtils.substring(message[0], 0, start), TextUtils.substring(message[0], start + 1, index), TextUtils.substring(message[0], index + 1, message[0].length())});
-                            if (c == 0) {
-                                entity3 = new TL_messageEntityBold();
-                            } else {
-                                entity3 = new TL_messageEntityItalic();
-                            }
-                            entity3.offset = start;
-                            entity3.length = (index - start) - 1;
-                            removeOffsetAfter(entity3.offset + entity3.length, 2, entities);
-                            entities.add(entity3);
-                            lastIndex -= 2;
-                        }
-                        start = -1;
-                    }
-                }
-            }
-            c++;
-        }
         if (!(message[0] instanceof Spannable)) {
             return entities;
         }
         Spannable spannable = message[0];
-        URLSpanUserMention[] spans = (URLSpanUserMention[]) spannable.getSpans(0, message[0].length(), URLSpanUserMention.class);
-        if (spans == null || spans.length <= 0) {
+        TypefaceSpan[] spans = (TypefaceSpan[]) spannable.getSpans(0, message[0].length(), TypefaceSpan.class);
+        if (spans != null && spans.length > 0) {
+            for (TypefaceSpan span : spans) {
+                int spanStart = spannable.getSpanStart(span);
+                int spanEnd = spannable.getSpanEnd(span);
+                if (!(checkInclusion(spanStart, entities) || checkInclusion(spanEnd, entities) || checkIntersection(spanStart, spanEnd, entities))) {
+                    MessageEntity entity3;
+                    if (entities == null) {
+                        entities = new ArrayList();
+                    }
+                    if (span.isBold()) {
+                        entity3 = new TL_messageEntityBold();
+                    } else {
+                        entity3 = new TL_messageEntityItalic();
+                    }
+                    entity3.offset = spanStart;
+                    entity3.length = spanEnd - spanStart;
+                    entities.add(entity3);
+                }
+            }
+        }
+        URLSpanUserMention[] spansMentions = (URLSpanUserMention[]) spannable.getSpans(0, message[0].length(), URLSpanUserMention.class);
+        if (spansMentions == null || spansMentions.length <= 0) {
             return entities;
         }
-        entities = new ArrayList();
-        for (int b = 0; b < spans.length; b++) {
+        if (entities == null) {
+            entities = new ArrayList();
+        }
+        for (int b = 0; b < spansMentions.length; b++) {
             TL_inputMessageEntityMentionName entity4 = new TL_inputMessageEntityMentionName();
-            entity4.user_id = MessagesController.getInputUser(Utilities.parseInt(spans[b].getURL()).intValue());
+            entity4.user_id = MessagesController.getInputUser(Utilities.parseInt(spansMentions[b].getURL()).intValue());
             if (entity4.user_id != null) {
-                entity4.offset = spannable.getSpanStart(spans[b]);
-                entity4.length = Math.min(spannable.getSpanEnd(spans[b]), message[0].length()) - entity4.offset;
+                entity4.offset = spannable.getSpanStart(spansMentions[b]);
+                entity4.length = Math.min(spannable.getSpanEnd(spansMentions[b]), message[0].length()) - entity4.offset;
                 if (message[0].charAt((entity4.offset + entity4.length) - 1) == ' ') {
                     entity4.length--;
                 }

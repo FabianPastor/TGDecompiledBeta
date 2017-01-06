@@ -9,6 +9,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import org.telegram.messenger.FileLog;
@@ -321,5 +322,9 @@ public class BaseFragment {
 
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
+    }
+
+    public boolean extendActionMode(Menu menu) {
+        return false;
     }
 }

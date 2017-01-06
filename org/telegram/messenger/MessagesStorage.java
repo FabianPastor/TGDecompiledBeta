@@ -2842,13 +2842,13 @@ Error: java.util.NoSuchElementException
                                     if (startMid == endMid) {
                                         max_id_query = startMid;
                                     } else {
-                                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(startMid), Integer.valueOf(startMid)}), new Object[0]);
+                                        cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(startMid), Integer.valueOf(startMid)}), new Object[0]);
                                         if (cursor.next()) {
                                             startMid = -1;
                                         }
                                         cursor.dispose();
                                         if (startMid != -1) {
-                                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(endMid), Integer.valueOf(endMid)}), new Object[0]);
+                                            cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d", new Object[]{Long.valueOf(j), Integer.valueOf(endMid), Integer.valueOf(endMid)}), new Object[0]);
                                             if (cursor.next()) {
                                                 endMid = -1;
                                             }
@@ -4974,6 +4974,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5026,7 +5027,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5316,10 +5316,11 @@ Error: java.util.NoSuchElementException
     }
 
     private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
-        String ids;
-        int unread_count = 0;
-        if (channelId != 0) {
-            try {
+        try {
+            String ids;
+            long did;
+            HashMap<Long, Integer> dialogsToUpdate = new HashMap();
+            if (channelId != 0) {
                 StringBuilder builder = new StringBuilder(messages.size());
                 for (int a = 0; a < messages.size(); a++) {
                     long messageId = ((long) ((Integer) messages.get(a)).intValue()) | (((long) channelId) << 32);
@@ -5329,20 +5330,20 @@ Error: java.util.NoSuchElementException
                     builder.append(messageId);
                 }
                 ids = builder.toString();
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-                return;
+            } else {
+                ids = TextUtils.join(",", messages);
             }
-        }
-        ids = TextUtils.join(",", messages);
-        SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
-        ArrayList<File> filesToDelete = new ArrayList();
-        while (cursor.next()) {
-            long did;
-            try {
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
+            ArrayList<File> filesToDelete = new ArrayList();
+            while (cursor.next()) {
                 did = cursor.longValue(0);
-                if (channelId != 0 && cursor.intValue(2) == 0) {
-                    unread_count++;
+                int read_state = cursor.intValue(2);
+                if ((read_state == 0 || read_state == 2) && cursor.intValue(3) == 0) {
+                    Integer unread_count = (Integer) dialogsToUpdate.get(Long.valueOf(did));
+                    if (unread_count == null) {
+                        unread_count = Integer.valueOf(0);
+                    }
+                    dialogsToUpdate.put(Long.valueOf(did), Integer.valueOf(unread_count.intValue() + 1));
                 }
                 if (((int) did) == 0) {
                     NativeByteBuffer data = cursor.byteBufferValue(1);
@@ -5359,42 +5360,48 @@ Error: java.util.NoSuchElementException
                                     filesToDelete.add(file);
                                 }
                             }
-                        } else if (message.media instanceof TL_messageMediaDocument) {
-                            file = FileLoader.getPathToAttach(message.media.document);
-                            if (file != null && file.toString().length() > 0) {
-                                filesToDelete.add(file);
-                            }
-                            file = FileLoader.getPathToAttach(message.media.document.thumb);
-                            if (file != null && file.toString().length() > 0) {
-                                filesToDelete.add(file);
+                        } else {
+                            try {
+                                if (message.media instanceof TL_messageMediaDocument) {
+                                    file = FileLoader.getPathToAttach(message.media.document);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                    file = FileLoader.getPathToAttach(message.media.document.thumb);
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
+                                }
+                            } catch (Throwable e) {
+                                FileLog.e("tmessages", e);
                             }
                         }
                     } else {
                         continue;
                     }
                 }
-            } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
             }
+            cursor.dispose();
+            FileLoader.getInstance().deleteFiles(filesToDelete, 0);
+            for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
+                did = ((Long) entry.getKey()).longValue();
+                SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ((SELECT unread_count FROM dialogs WHERE did = ?) - ?) WHERE did = ?");
+                state.requery();
+                state.bindLong(1, did);
+                state.bindInteger(2, ((Integer) entry.getValue()).intValue());
+                state.bindLong(3, did);
+                state.step();
+                state.dispose();
+            }
+            this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
+            this.database.executeFast(String.format(Locale.US, "DELETE FROM bot_keyboard WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
+            this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
+            this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
+            this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
+            BotQuery.clearBotKeyboard(0, messages);
+        } catch (Throwable e2) {
+            FileLog.e("tmessages", e2);
         }
-        cursor.dispose();
-        FileLoader.getInstance().deleteFiles(filesToDelete, 0);
-        if (!(channelId == 0 || unread_count == 0)) {
-            did = (long) (-channelId);
-            SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ((SELECT unread_count FROM dialogs WHERE did = ?) - ?) WHERE did = ?");
-            state.requery();
-            state.bindLong(1, did);
-            state.bindInteger(2, unread_count);
-            state.bindLong(3, did);
-            state.step();
-            state.dispose();
-        }
-        this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
-        this.database.executeFast(String.format(Locale.US, "DELETE FROM bot_keyboard WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
-        this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
-        this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
-        this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
-        BotQuery.clearBotKeyboard(0, messages);
     }
 
     private void updateDialogsWithDeletedMessagesInternal(ArrayList<Integer> messages, int channelId) {
@@ -5411,7 +5418,7 @@ Error: java.util.NoSuchElementException
                 ArrayList<Long> dialogsToUpdate = new ArrayList();
                 if (channelId != 0) {
                     dialogsToUpdate.add(Long.valueOf((long) (-channelId)));
-                    state = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? )) WHERE did = ?");
+                    state = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ?)) WHERE did = ?");
                 } else {
                     ids = TextUtils.join(",", messages);
                     cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE last_mid IN(%s)", new Object[]{ids}), new Object[0]);
@@ -5419,7 +5426,7 @@ Error: java.util.NoSuchElementException
                         dialogsToUpdate.add(Long.valueOf(cursor.longValue(0)));
                     }
                     cursor.dispose();
-                    state = this.database.executeFast("UPDATE dialogs SET unread_count = 0, unread_count_i = 0, last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? AND date != 0)) WHERE did = ?");
+                    state = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? AND date != 0)) WHERE did = ?");
                 }
                 this.database.beginTransaction();
                 for (int a = 0; a < dialogsToUpdate.size(); a++) {
@@ -5942,7 +5949,6 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                Message message;
                 messages_Dialogs dialogs = new messages_Dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -5953,6 +5959,7 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
+                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

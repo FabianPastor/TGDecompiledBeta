@@ -108,6 +108,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarUpdater;
 import org.telegram.ui.Components.AvatarUpdater.AvatarUpdaterDelegate;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.ColorPickerDialog;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.RecyclerListView;
@@ -165,6 +166,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private int switchBackendButtonRow;
     private int telegramFaqRow;
     private int textSizeRow;
+    private int themeRow;
     private int usernameRow;
     private int versionRow;
     private ImageView writeButton;
@@ -217,69 +219,73 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     TextSettingsCell textCell = holder.itemView;
                     if (position != SettingsActivity.this.textSizeRow) {
                         if (position != SettingsActivity.this.languageRow) {
-                            if (position != SettingsActivity.this.contactsSortRow) {
-                                if (position != SettingsActivity.this.notificationRow) {
-                                    if (position != SettingsActivity.this.backgroundRow) {
-                                        if (position != SettingsActivity.this.sendLogsRow) {
-                                            if (position != SettingsActivity.this.clearLogsRow) {
-                                                if (position != SettingsActivity.this.askQuestionRow) {
-                                                    if (position != SettingsActivity.this.privacyRow) {
-                                                        if (position != SettingsActivity.this.dataRow) {
-                                                            if (position != SettingsActivity.this.switchBackendButtonRow) {
-                                                                if (position != SettingsActivity.this.telegramFaqRow) {
-                                                                    if (position != SettingsActivity.this.contactsReimportRow) {
-                                                                        if (position != SettingsActivity.this.stickersRow) {
-                                                                            if (position != SettingsActivity.this.privacyPolicyRow) {
-                                                                                if (position == SettingsActivity.this.emojiRow) {
-                                                                                    textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
-                                                                                    break;
+                            if (position != SettingsActivity.this.themeRow) {
+                                if (position != SettingsActivity.this.contactsSortRow) {
+                                    if (position != SettingsActivity.this.notificationRow) {
+                                        if (position != SettingsActivity.this.backgroundRow) {
+                                            if (position != SettingsActivity.this.sendLogsRow) {
+                                                if (position != SettingsActivity.this.clearLogsRow) {
+                                                    if (position != SettingsActivity.this.askQuestionRow) {
+                                                        if (position != SettingsActivity.this.privacyRow) {
+                                                            if (position != SettingsActivity.this.dataRow) {
+                                                                if (position != SettingsActivity.this.switchBackendButtonRow) {
+                                                                    if (position != SettingsActivity.this.telegramFaqRow) {
+                                                                        if (position != SettingsActivity.this.contactsReimportRow) {
+                                                                            if (position != SettingsActivity.this.stickersRow) {
+                                                                                if (position != SettingsActivity.this.privacyPolicyRow) {
+                                                                                    if (position == SettingsActivity.this.emojiRow) {
+                                                                                        textCell.setText(LocaleController.getString("Emoji", R.string.Emoji), true);
+                                                                                        break;
+                                                                                    }
                                                                                 }
+                                                                                textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
+                                                                                break;
                                                                             }
-                                                                            textCell.setText(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), true);
+                                                                            textCell.setTextAndValue(LocaleController.getString("Stickers", R.string.Stickers), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
                                                                             break;
                                                                         }
-                                                                        textCell.setTextAndValue(LocaleController.getString("Stickers", R.string.Stickers), StickersQuery.getUnreadStickerSets().size() != 0 ? String.format("%d", new Object[]{Integer.valueOf(StickersQuery.getUnreadStickerSets().size())}) : "", true);
+                                                                        textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
                                                                         break;
                                                                     }
-                                                                    textCell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
+                                                                    textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFaq), true);
                                                                     break;
                                                                 }
-                                                                textCell.setText(LocaleController.getString("TelegramFAQ", R.string.TelegramFaq), true);
+                                                                textCell.setText("Switch Backend", true);
                                                                 break;
                                                             }
-                                                            textCell.setText("Switch Backend", true);
+                                                            textCell.setText(LocaleController.getString("DataSettings", R.string.DataSettings), true);
                                                             break;
                                                         }
-                                                        textCell.setText(LocaleController.getString("DataSettings", R.string.DataSettings), true);
+                                                        textCell.setText(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), true);
                                                         break;
                                                     }
-                                                    textCell.setText(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), true);
+                                                    textCell.setText(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), true);
                                                     break;
                                                 }
-                                                textCell.setText(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), true);
+                                                textCell.setText("Clear Logs", true);
                                                 break;
                                             }
-                                            textCell.setText("Clear Logs", true);
+                                            textCell.setText("Send Logs", true);
                                             break;
                                         }
-                                        textCell.setText("Send Logs", true);
+                                        textCell.setText(LocaleController.getString("ChatBackground", R.string.ChatBackground), true);
                                         break;
                                     }
-                                    textCell.setText(LocaleController.getString("ChatBackground", R.string.ChatBackground), true);
+                                    textCell.setText(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), true);
                                     break;
                                 }
-                                textCell.setText(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), true);
+                                int sort = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("sortContactsBy", 0);
+                                if (sort == 0) {
+                                    value = LocaleController.getString("Default", R.string.Default);
+                                } else if (sort == 1) {
+                                    value = LocaleController.getString("FirstName", R.string.SortFirstName);
+                                } else {
+                                    value = LocaleController.getString("LastName", R.string.SortLastName);
+                                }
+                                textCell.setTextAndValue(LocaleController.getString("SortBy", R.string.SortBy), value, true);
                                 break;
                             }
-                            int sort = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("sortContactsBy", 0);
-                            if (sort == 0) {
-                                value = LocaleController.getString("Default", R.string.Default);
-                            } else if (sort == 1) {
-                                value = LocaleController.getString("FirstName", R.string.SortFirstName);
-                            } else {
-                                value = LocaleController.getString("LastName", R.string.SortLastName);
-                            }
-                            textCell.setTextAndValue(LocaleController.getString("SortBy", R.string.SortBy), value, true);
+                            textCell.setText(LocaleController.getString("Theme", R.string.Theme), true);
                             break;
                         }
                         textCell.setTextAndValue(LocaleController.getString("Language", R.string.Language), LocaleController.getCurrentLanguageName(), true);
@@ -370,7 +376,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!checkBackground) {
                 return;
             }
-            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
+            if (position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.numberRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.usernameRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow || position == SettingsActivity.this.versionRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow || position == SettingsActivity.this.themeRow) {
                 if (holder.itemView.getBackground() == null) {
                     holder.itemView.setBackgroundResource(R.drawable.list_selector);
                 }
@@ -438,7 +444,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 abi = "universal";
                                 break;
                         }
-                        ((TextInfoCell) view).setText(String.format(Locale.US, "Telegram for Android v%s (%d) %s", new Object[]{pInfo.versionName, Integer.valueOf(code), abi}));
+                        TextInfoCell textInfoCell = (TextInfoCell) view;
+                        Object[] objArr = new Object[1];
+                        objArr[0] = String.format(Locale.US, "v%s (%d) %s", new Object[]{pInfo.versionName, Integer.valueOf(code), abi});
+                        textInfoCell.setText(LocaleController.formatString("TelegramVersion", R.string.TelegramVersion, objArr));
                         break;
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
@@ -469,7 +478,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (position == SettingsActivity.this.enableAnimationsRow || position == SettingsActivity.this.sendByEnterRow || position == SettingsActivity.this.saveToGalleryRow || position == SettingsActivity.this.autoplayGifsRow || position == SettingsActivity.this.raiseToSpeakRow || position == SettingsActivity.this.customTabsRow || position == SettingsActivity.this.directShareRow) {
                 return 3;
             }
-            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
+            if (position == SettingsActivity.this.notificationRow || position == SettingsActivity.this.themeRow || position == SettingsActivity.this.backgroundRow || position == SettingsActivity.this.askQuestionRow || position == SettingsActivity.this.sendLogsRow || position == SettingsActivity.this.privacyRow || position == SettingsActivity.this.clearLogsRow || position == SettingsActivity.this.switchBackendButtonRow || position == SettingsActivity.this.telegramFaqRow || position == SettingsActivity.this.contactsReimportRow || position == SettingsActivity.this.textSizeRow || position == SettingsActivity.this.languageRow || position == SettingsActivity.this.contactsSortRow || position == SettingsActivity.this.stickersRow || position == SettingsActivity.this.privacyPolicyRow || position == SettingsActivity.this.emojiRow || position == SettingsActivity.this.dataRow) {
                 return 2;
             }
             if (position == SettingsActivity.this.versionRow) {
@@ -571,6 +580,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.backgroundRow = i;
+        if (BuildVars.DEBUG_VERSION && BuildVars.DEBUG_PRIVATE_VERSION) {
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.themeRow = i;
+        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.languageRow = i;
@@ -835,6 +849,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     SettingsActivity.this.presentFragment(new DataSettingsActivity());
                 } else if (position == SettingsActivity.this.languageRow) {
                     SettingsActivity.this.presentFragment(new LanguageSelectActivity());
+                } else if (position == SettingsActivity.this.themeRow) {
+                    SettingsActivity.this.showDialog(new ColorPickerDialog(SettingsActivity.this.getParentActivity()));
                 } else if (position == SettingsActivity.this.switchBackendButtonRow) {
                     if (SettingsActivity.this.getParentActivity() != null) {
                         builder = new Builder(SettingsActivity.this.getParentActivity());
@@ -960,8 +976,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 this.pressCount++;
                 if (this.pressCount >= 2) {
                     Builder builder = new Builder(SettingsActivity.this.getParentActivity());
-                    builder.setTitle("Debug Menu");
-                    builder.setItems(new CharSequence[]{"Import Contacts", "Reload Contacts"}, new OnClickListener() {
+                    builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
+                    builder.setItems(new CharSequence[]{LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts), LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == 0) {
                                 ContactsController.getInstance().forceImportContacts();

@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import javax.security.auth.x500.X500Principal;
+import org.telegram.messenger.NotificationBadge.NewHtcHomeBadger;
 
 public class zzaue extends zzats {
     private final AtomicLong zzbve = new AtomicLong(0);
@@ -335,7 +336,7 @@ public class zzaue extends zzats {
                     zza(stringBuilder, i2, "name", com_google_android_gms_internal_zzauh_zzb.name);
                     zza(stringBuilder, i2, "timestamp_millis", com_google_android_gms_internal_zzauh_zzb.zzbvW);
                     zza(stringBuilder, i2, "previous_timestamp_millis", com_google_android_gms_internal_zzauh_zzb.zzbvX);
-                    zza(stringBuilder, i2, "count", com_google_android_gms_internal_zzauh_zzb.count);
+                    zza(stringBuilder, i2, NewHtcHomeBadger.COUNT, com_google_android_gms_internal_zzauh_zzb.count);
                     zza(stringBuilder, i2, com_google_android_gms_internal_zzauh_zzb.zzbvV);
                     zza(stringBuilder, i2);
                     stringBuilder.append("}\n");
