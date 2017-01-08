@@ -1311,7 +1311,7 @@ public class MessagesStorage {
                         }
                     });
                     MessagesStorage.this.markMessagesAsDeletedInternal(mids, channelId);
-                    MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(mids, channelId);
+                    MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(mids, null, channelId);
                     FileLoader.getInstance().deleteFiles(filesToDelete, 0);
                     if (!mids.isEmpty()) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -4488,7 +4488,7 @@ Error: java.util.NoSuchElementException
                     dialog.pts = difference.pts;
                     dialogs.dialogs.add(dialog);
                     MessagesStorage.this.putDialogsInternal(dialogs, false);
-                    MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), false, channel_id);
+                    MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, false, channel_id);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(true));
@@ -5305,7 +5305,7 @@ Error: java.util.NoSuchElementException
                             });
                             MessagesStorage.getInstance().updateDialogsWithReadMessagesInternal(mids, null, null);
                             MessagesStorage.getInstance().markMessagesAsDeletedInternal(mids, 0);
-                            MessagesStorage.getInstance().updateDialogsWithDeletedMessagesInternal(mids, 0);
+                            MessagesStorage.getInstance().updateDialogsWithDeletedMessagesInternal(mids, null, 0);
                         }
                     } catch (Throwable e) {
                         FileLog.e("tmessages", e);
@@ -5315,10 +5315,10 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    private void markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
+    private ArrayList<Long> markMessagesAsDeletedInternal(ArrayList<Integer> messages, int channelId) {
         try {
             String ids;
-            long did;
+            ArrayList<Long> arrayList = new ArrayList();
             HashMap<Long, Integer> dialogsToUpdate = new HashMap();
             if (channelId != 0) {
                 StringBuilder builder = new StringBuilder(messages.size());
@@ -5335,34 +5335,35 @@ Error: java.util.NoSuchElementException
             }
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, data, read_state, out FROM messages WHERE mid IN(%s)", new Object[]{ids}), new Object[0]);
             ArrayList<File> filesToDelete = new ArrayList();
+            int currentUser = UserConfig.getClientUserId();
             while (cursor.next()) {
-                did = cursor.longValue(0);
-                int read_state = cursor.intValue(2);
-                if ((read_state == 0 || read_state == 2) && cursor.intValue(3) == 0) {
-                    Integer unread_count = (Integer) dialogsToUpdate.get(Long.valueOf(did));
-                    if (unread_count == null) {
-                        unread_count = Integer.valueOf(0);
-                    }
-                    dialogsToUpdate.put(Long.valueOf(did), Integer.valueOf(unread_count.intValue() + 1));
-                }
-                if (((int) did) == 0) {
-                    NativeByteBuffer data = cursor.byteBufferValue(1);
-                    if (data != null) {
-                        Message message = Message.TLdeserialize(data, data.readInt32(false), false);
-                        data.reuse();
-                        if (message == null) {
-                            continue;
-                        } else if (message.media instanceof TL_messageMediaPhoto) {
-                            Iterator it = message.media.photo.sizes.iterator();
-                            while (it.hasNext()) {
-                                file = FileLoader.getPathToAttach((PhotoSize) it.next());
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
-                                }
+                try {
+                    long did = cursor.longValue(0);
+                    if (did != ((long) currentUser)) {
+                        int read_state = cursor.intValue(2);
+                        if ((read_state == 0 || read_state == 2) && cursor.intValue(3) == 0) {
+                            Integer unread_count = (Integer) dialogsToUpdate.get(Long.valueOf(did));
+                            if (unread_count == null) {
+                                unread_count = Integer.valueOf(0);
                             }
-                        } else {
-                            try {
-                                if (message.media instanceof TL_messageMediaDocument) {
+                            dialogsToUpdate.put(Long.valueOf(did), Integer.valueOf(unread_count.intValue() + 1));
+                        }
+                        if (((int) did) == 0) {
+                            NativeByteBuffer data = cursor.byteBufferValue(1);
+                            if (data != null) {
+                                Message message = Message.TLdeserialize(data, data.readInt32(false), false);
+                                data.reuse();
+                                if (message == null) {
+                                    continue;
+                                } else if (message.media instanceof TL_messageMediaPhoto) {
+                                    Iterator it = message.media.photo.sizes.iterator();
+                                    while (it.hasNext()) {
+                                        file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                        if (file != null && file.toString().length() > 0) {
+                                            filesToDelete.add(file);
+                                        }
+                                    }
+                                } else if (message.media instanceof TL_messageMediaDocument) {
                                     file = FileLoader.getPathToAttach(message.media.document);
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
@@ -5372,24 +5373,27 @@ Error: java.util.NoSuchElementException
                                         filesToDelete.add(file);
                                     }
                                 }
-                            } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                            } else {
+                                continue;
                             }
+                        } else {
+                            continue;
                         }
-                    } else {
-                        continue;
                     }
+                } catch (Throwable e) {
+                    FileLog.e("tmessages", e);
                 }
             }
             cursor.dispose();
             FileLoader.getInstance().deleteFiles(filesToDelete, 0);
             for (Entry<Long, Integer> entry : dialogsToUpdate.entrySet()) {
-                did = ((Long) entry.getKey()).longValue();
-                SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = ((SELECT unread_count FROM dialogs WHERE did = ?) - ?) WHERE did = ?");
+                Long did2 = (Long) entry.getKey();
+                arrayList.add(did2);
+                SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET unread_count = max(0, ((SELECT unread_count FROM dialogs WHERE did = ?) - ?)) WHERE did = ?");
                 state.requery();
-                state.bindLong(1, did);
+                state.bindLong(1, did2.longValue());
                 state.bindInteger(2, ((Integer) entry.getValue()).intValue());
-                state.bindLong(3, did);
+                state.bindLong(3, did2.longValue());
                 state.step();
                 state.dispose();
             }
@@ -5399,23 +5403,26 @@ Error: java.util.NoSuchElementException
             this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             this.database.executeFast("DELETE FROM media_counts_v2 WHERE 1").stepThis().dispose();
             BotQuery.clearBotKeyboard(0, messages);
+            return arrayList;
         } catch (Throwable e2) {
             FileLog.e("tmessages", e2);
+            return null;
         }
     }
 
-    private void updateDialogsWithDeletedMessagesInternal(ArrayList<Integer> messages, int channelId) {
+    private void updateDialogsWithDeletedMessagesInternal(ArrayList<Integer> messages, ArrayList<Long> additionalDialogsToUpdate, int channelId) {
         if (Thread.currentThread().getId() != this.storageQueue.getId()) {
             throw new RuntimeException("wrong db thread");
         }
         try {
             String ids;
             SQLiteCursor cursor;
+            int a;
+            ArrayList<Long> dialogsToUpdate = new ArrayList();
             if (messages.isEmpty()) {
-                ids = "" + (-channelId);
+                dialogsToUpdate.add(Long.valueOf((long) (-channelId)));
             } else {
                 SQLitePreparedStatement state;
-                ArrayList<Long> dialogsToUpdate = new ArrayList();
                 if (channelId != 0) {
                     dialogsToUpdate.add(Long.valueOf((long) (-channelId)));
                     state = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ?)) WHERE did = ?");
@@ -5429,7 +5436,7 @@ Error: java.util.NoSuchElementException
                     state = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? AND date != 0)) WHERE did = ?");
                 }
                 this.database.beginTransaction();
-                for (int a = 0; a < dialogsToUpdate.size(); a++) {
+                for (a = 0; a < dialogsToUpdate.size(); a++) {
                     long did = ((Long) dialogsToUpdate.get(a)).longValue();
                     state.requery();
                     state.bindLong(1, did);
@@ -5439,8 +5446,16 @@ Error: java.util.NoSuchElementException
                 }
                 state.dispose();
                 this.database.commitTransaction();
-                ids = TextUtils.join(",", dialogsToUpdate);
             }
+            if (additionalDialogsToUpdate != null) {
+                for (a = 0; a < additionalDialogsToUpdate.size(); a++) {
+                    Long did2 = (Long) additionalDialogsToUpdate.get(a);
+                    if (!dialogsToUpdate.contains(did2)) {
+                        dialogsToUpdate.add(did2);
+                    }
+                }
+            }
+            ids = TextUtils.join(",", dialogsToUpdate);
             messages_Dialogs dialogs = new messages_Dialogs();
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
             ArrayList<Integer> usersToLoad = new ArrayList();
@@ -5511,32 +5526,33 @@ Error: java.util.NoSuchElementException
         }
     }
 
-    public void updateDialogsWithDeletedMessages(final ArrayList<Integer> messages, boolean useQueue, final int channelId) {
+    public void updateDialogsWithDeletedMessages(final ArrayList<Integer> messages, final ArrayList<Long> additionalDialogsToUpdate, boolean useQueue, final int channelId) {
         if (!messages.isEmpty() || channelId != 0) {
             if (useQueue) {
                 this.storageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(messages, channelId);
+                        MessagesStorage.this.updateDialogsWithDeletedMessagesInternal(messages, additionalDialogsToUpdate, channelId);
                     }
                 });
             } else {
-                updateDialogsWithDeletedMessagesInternal(messages, channelId);
+                updateDialogsWithDeletedMessagesInternal(messages, additionalDialogsToUpdate, channelId);
             }
         }
     }
 
-    public void markMessagesAsDeleted(final ArrayList<Integer> messages, boolean useQueue, final int channelId) {
-        if (!messages.isEmpty()) {
-            if (useQueue) {
-                this.storageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        MessagesStorage.this.markMessagesAsDeletedInternal(messages, channelId);
-                    }
-                });
-            } else {
-                markMessagesAsDeletedInternal(messages, channelId);
-            }
+    public ArrayList<Long> markMessagesAsDeleted(final ArrayList<Integer> messages, boolean useQueue, final int channelId) {
+        if (messages.isEmpty()) {
+            return null;
         }
+        if (!useQueue) {
+            return markMessagesAsDeletedInternal(messages, channelId);
+        }
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                MessagesStorage.this.markMessagesAsDeletedInternal(messages, channelId);
+            }
+        });
+        return null;
     }
 
     private void fixUnsupportedMedia(Message message) {
@@ -5874,7 +5890,7 @@ Error: java.util.NoSuchElementException
                         MessagesStorage.this.putChatsInternal(org_telegram_tgnet_TLRPC_messages_Messages.chats);
                         MessagesStorage.this.database.commitTransaction();
                         if (z) {
-                            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), false, channelId);
+                            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, false, channelId);
                         }
                     } else if (i == 0) {
                         MessagesStorage.this.doneHolesInTable("messages_holes", j, i2);

@@ -182,6 +182,7 @@
     <string name="BlurLinear">Linear</string>
     <string name="BlurOff">Aus</string>
     <string name="BlurRadial">Radial</string>
+    <string name="Bold">Fett</string>
     <string name="Bot">Bot</string>
     <string name="BotCantJoinGroups">Keine Gruppen mit diesem Bot möglich</string>
     <string name="BotHelp">Hilfe</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d Tage</string>
     <string name="Days_two">%1$d Tage</string>
     <string name="Days_zero">%1$d Tage</string>
+    <string name="DebugMenu">Debug-Menü</string>
+    <string name="DebugMenuImportContacts">Kontakte importieren</string>
+    <string name="DebugMenuReloadContacts">Kontakte neu laden</string>
     <string name="Default">Standard</string>
     <string name="Delete">Löschen</string>
     <string name="DeleteAccountHelp">Wenn du dich innerhalb dieser Zeit nicht anmeldest, wird dein Konto mit allen Nachrichten, Gruppen und Kontakten gelöscht.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s schickt Bild...</string>
     <string name="IsSendingVideo">%1$s schickt Video...</string>
     <string name="IsTyping">tippt...</string>
+    <string name="Italic">Kursiv</string>
     <string name="JoinGroup">GRUPPE BEITRETEN</string>
     <string name="JoinToGroup">Möchtest du dem Chat \'%1$s\' beitreten?</string>
     <string name="JoinToGroupErrorFull">Leider ist diese Gruppe schon voll.</string>
@@ -803,7 +808,7 @@
     <string name="NoFiles">Noch keine Dateien…</string>
     <string name="NoGroupsInCommon">Noch keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
-    <string name="NoMailInstalled">Bitte sende eine Email an sms@stel.com mit einer Beschreibung des Problems.</string>
+    <string name="NoMailInstalled">Bitte sende eine E-Mail an sms@stel.com mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
     <string name="NoMedia">Die hier geteilten Bilder und Videos kannst du von jedem deiner Geräte aufrufen.</string>
     <string name="NoMediaAutoDownload">kein automatischer Download</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">nimmt etwas auf...</string>
     <string name="RecoveryEmail">Wiederherstellung</string>
     <string name="RegisterText">Gib deinen Vor- und Nachnamen ein</string>
+    <string name="Regular">Normal</string>
     <string name="RemoveFromListText">Auf Nutzer tippen und halten um zu löschen.</string>
     <string name="RepeatDisabled">Aus</string>
     <string name="RepeatNotifications">Erneut benachrichtigen</string>
@@ -1076,10 +1082,10 @@
     <string name="ResetStatistics">Statistik zurücksetzen</string>
     <string name="ResetStatisticsAlert">Möchtest du die Nutzungsstatistiken zurücksetzen?</string>
     <string name="RestoreEmailSent">Wir haben den Wiederherstellungscode an diese Adresse geschickt:\n\n%1$s</string>
-    <string name="RestoreEmailSentInfo">Überprüfe deine Mails und gib den 6-stelligen Code aus userer Email ein.</string>
+    <string name="RestoreEmailSentInfo">Überprüfe deine Mails und gib den 6-stelligen Code aus userer E-Mail ein.</string>
     <string name="RestoreEmailTrouble">Du hast keinen Zugang zu deiner Adresse %1$s?</string>
-    <string name="RestoreEmailTroubleText">Wenn du nicht in deine Emails kommst, kannst du nur hoffen, dass dir dein Kennwort wieder einfällt oder du musst dein Telegram Konto zurückzusetzen.</string>
-    <string name="RestorePasswordNoEmailText">Da du für diesen Fall keine Email Adresse hinterlegt hast, kannst du nur noch hoffen, dass dir dein Kennwort wieder einfällt oder du musst dein Telegram Konto zurückzusetzen.</string>
+    <string name="RestoreEmailTroubleText">Wenn du nicht in deine E-Mails kommst, kannst du nur hoffen, dass dir dein Kennwort wieder einfällt oder du musst dein Telegram Konto zurückzusetzen.</string>
+    <string name="RestorePasswordNoEmailText">Da du für diesen Fall keine E-Mail Adresse hinterlegt hast, kannst du nur noch hoffen, dass dir dein Kennwort wieder einfällt oder du musst dein Telegram Konto zurückzusetzen.</string>
     <string name="RestorePasswordNoEmailTitle">Tut uns leid</string>
     <string name="Retry">Erneut versuchen</string>
     <string name="RevokeAlert">Bist du sicher, dass du diesen Link widerrufen willst? Dadurch kann ihn niemand mehr nutzen.</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Hier tippen um gespeicherte GIFs zu sehen</string>
     <string name="TelegramFaq">Fragen und Antworten</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/de</string>
+    <string name="TelegramVersion">Telegram für Android %1$s</string>
     <string name="TerminateAllSessions">Alle anderen Geräte abmelden</string>
     <string name="TerminateSessionInfo">Tippe auf eine Sitzung um sie zu beenden.</string>
     <string name="TerminateSessionQuestion">Dieses Gerät abmelden?</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
+    <string name="Theme">Thema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Bearbeitungszeit leider abgelaufen.</string>
     <string name="Times_few">%1$d Mal</string>
@@ -1359,7 +1367,7 @@
     <string name="YourEmail">Deine E-Mail</string>
     <string name="YourEmailAlmostThere">Fast geschafft!</string>
     <string name="YourEmailAlmostThereText">Bitte überprüfe deine Mails (auch den Spam-Ordner) um die zweistufige Bestätigung abzuschließen.</string>
-    <string name="YourEmailInfo">Falls du dein Kennwort vergisst, benötigen wir deine richtige Email Adresse.</string>
+    <string name="YourEmailInfo">Falls du dein Kennwort vergisst, benötigen wir deine richtige E-Mail Adresse.</string>
     <string name="YourEmailSkip">Überspringen</string>
     <string name="YourEmailSkipWarning">Warnung</string>
     <string name="YourEmailSkipWarningText">Keine gute Idee.\n\nWenn du dein Passwort vergisst, verlierst du den Zugang zu deinem Telegram Konto. Für immer, ohne Ausnahme.</string>

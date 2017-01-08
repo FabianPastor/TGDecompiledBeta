@@ -116,7 +116,7 @@
     <string name="AndOther_zero">e altri %1$d</string>
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram Beta</string>
-    <string name="ApplyLocalizationFile">Applica traduzione</string>
+    <string name="ApplyLocalizationFile">Applica file lingua</string>
     <string name="ArchivedMasks">Maschere archiviate</string>
     <string name="ArchivedMasksAlertInfo">Alcuni dei tuoi set di maschere più vecchi sono stati stati archiviati. Puoi riattivarli nelle impostazioni delle maschere.</string>
     <string name="ArchivedMasksAlertTitle">Maschere archiviate</string>
@@ -182,6 +182,7 @@
     <string name="BlurLinear">Lineare</string>
     <string name="BlurOff">No</string>
     <string name="BlurRadial">Radiale</string>
+    <string name="Bold">Grassetto</string>
     <string name="Bot">bot</string>
     <string name="BotCantJoinGroups">Questo bot non può unirsi ai gruppi.</string>
     <string name="BotHelp">Aiuto</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d giorni</string>
     <string name="Days_two">%1$d giorni</string>
     <string name="Days_zero">%1$d giorni</string>
+    <string name="DebugMenu">Menù debug</string>
+    <string name="DebugMenuImportContacts">Importa contatti</string>
+    <string name="DebugMenuReloadContacts">Ricarica contatti</string>
     <string name="Default">Predefinito</string>
     <string name="Delete">Elimina</string>
     <string name="DeleteAccountHelp">Se non ti connetti almeno una volta in questo periodo, il tuo account verrà eliminato insieme a tutti i gruppi, i messaggi e i contatti.</string>
@@ -420,7 +424,7 @@
     <string name="DeleteForAll">Elimina per tutti i membri</string>
     <string name="DeleteForUser">Elimina per %1$s</string>
     <string name="DeleteGif">Eliminare GIF?</string>
-    <string name="DeleteLocalization">Eliminare la traduzione?</string>
+    <string name="DeleteLocalization">Eliminare la lingua?</string>
     <string name="DeleteMega">Elimina gruppo</string>
     <string name="DeleteMegaMenu">Elimina gruppo</string>
     <string name="DeletePhoto">Elimina foto</string>
@@ -607,7 +611,7 @@
     <string name="InAppVibrate">Vibrazione in-app</string>
     <string name="InChatSound">Suoni in-chat</string>
     <string name="IncomingCalls">Chiamata in entrata</string>
-    <string name="IncorrectLocalization">File di traduzione non valido</string>
+    <string name="IncorrectLocalization">File di lingua non valido</string>
     <string name="Info">Info</string>
     <string name="InstantView">APERTURA RAPIDA</string>
     <string name="InternalStorage">Archiviazione interna</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s sta inviando una foto...</string>
     <string name="IsSendingVideo">%1$s sta inviando un video...</string>
     <string name="IsTyping">sta scrivendo...</string>
+    <string name="Italic">Corsivo</string>
     <string name="JoinGroup">UNISCITI AL GRUPPO</string>
     <string name="JoinToGroup">Vuoi unirti alla chat \'%1$s\'?</string>
     <string name="JoinToGroupErrorFull">Spiacenti, questo gruppo è già pieno.</string>
@@ -828,7 +833,7 @@
     <string name="NoStickers">Ancora nessuno sticker</string>
     <string name="NoUsernameFound">Non esiste alcun account Telegram con questo username.</string>
     <string name="NoVideo">Ancora nessun video</string>
-    <string name="NobodyLikesSpam1">Oggi hai scritto a troppi non-contatti, per favore riprova domani. Potrai rispondere oggi se questo utente ti contatta per primo.</string>
+    <string name="NobodyLikesSpam1">Oggi hai scritto a troppi non-contatti, per favore riprova domani. Potrai rispondere oggi se questo utente ti scrive per primo.</string>
     <string name="NobodyLikesSpam2">Non puoi aggiungere questo utente perché hai scritto a troppi non-contatti oggi. Per favore riprova domani. Puoi chiedere a un altro membro di aggiungere questo utente al gruppo.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq/it#non-posso-inviare-messaggi-a-chi-non-far-parte-dei-miei-contatti</string>
     <string name="NotMounted">Archiviazione non montata</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">sta registrando un audio...</string>
     <string name="RecoveryEmail">E-mail di recupero</string>
     <string name="RegisterText">Inserisci il tuo nome e cognome</string>
+    <string name="Regular">Normale</string>
     <string name="RemoveFromListText">Tieni premuto sull\'utente per eliminarlo.</string>
     <string name="RepeatDisabled">No</string>
     <string name="RepeatNotifications">Ripeti notifiche</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Tocca qui per vedere le GIF salvate</string>
     <string name="TelegramFaq">Domande frequenti</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/it</string>
+    <string name="TelegramVersion">Telegram per Android %1$s</string>
     <string name="TerminateAllSessions">Termina le altre sessioni</string>
     <string name="TerminateSessionInfo">Premi su una sessione per terminarla.</string>
     <string name="TerminateSessionQuestion">Terminare questa sessione?</string>
     <string name="TextSize">Dimensione testo messaggi</string>
+    <string name="Theme">Tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Spiacenti, tempo di modifica scaduto.</string>
     <string name="Times_few">%1$d volte</string>

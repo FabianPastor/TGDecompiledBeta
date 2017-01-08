@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -404,25 +405,6 @@ public class DocumentSelectActivity extends BaseFragment {
     public void loadRecentFiles() {
         try {
             File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-            Arrays.sort(files, new Comparator<File>() {
-                public int compare(File lhs, File rhs) {
-                    if (lhs.isDirectory() == rhs.isDirectory()) {
-                        long lm = lhs.lastModified();
-                        long rm = lhs.lastModified();
-                        if (lm == rm) {
-                            return 0;
-                        }
-                        if (lm >= rm) {
-                            return 1;
-                        }
-                        return -1;
-                    } else if (lhs.isDirectory()) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                }
-            });
             for (File file : files) {
                 if (!file.isDirectory()) {
                     ListItem item = new ListItem();
@@ -439,6 +421,19 @@ public class DocumentSelectActivity extends BaseFragment {
                     this.recentItems.add(item);
                 }
             }
+            Collections.sort(this.recentItems, new Comparator<ListItem>() {
+                public int compare(ListItem o1, ListItem o2) {
+                    long lm = o1.file.lastModified();
+                    long rm = o2.file.lastModified();
+                    if (lm == rm) {
+                        return 0;
+                    }
+                    if (lm > rm) {
+                        return -1;
+                    }
+                    return 1;
+                }
+            });
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }

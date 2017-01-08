@@ -182,6 +182,7 @@
     <string name="BlurLinear">선형</string>
     <string name="BlurOff">끔</string>
     <string name="BlurRadial">방사형</string>
+    <string name="Bold">굵게</string>
     <string name="Bot">봇</string>
     <string name="BotCantJoinGroups">이 봇은 그룹에 참여 할 수 없습니다.</string>
     <string name="BotHelp">도움말</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d일</string>
     <string name="Days_two">%1$d일</string>
     <string name="Days_zero">%1$d일</string>
+    <string name="DebugMenu">디버그 메뉴</string>
+    <string name="DebugMenuImportContacts">연락처 가져오기</string>
+    <string name="DebugMenuReloadContacts">연락처 재동기화</string>
     <string name="Default">기본값</string>
     <string name="Delete">삭제</string>
     <string name="DeleteAccountHelp">이 기간 동안 최소 한 번 이상 로그인을 하지 않으면 자동으로 모든 메시지, 연락처와 대화상대를 삭제하고 텔레그램을 탈퇴합니다.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s님이 사진 보내는 중...</string>
     <string name="IsSendingVideo">%1$s님이 동영상 보내는 중...</string>
     <string name="IsTyping">님이 입력 중...</string>
+    <string name="Italic">기울림</string>
     <string name="JoinGroup">그룹방 입장</string>
     <string name="JoinToGroup">\'%1$s\' 채널에 참여하시겠습니까?</string>
     <string name="JoinToGroupErrorFull">죄송합니다, 그룹방의 인원이 최대치입니다.</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">음성메시지를 녹음 중입니다..</string>
     <string name="RecoveryEmail">복구 이메일</string>
     <string name="RegisterText">이름을 입력하세요</string>
+    <string name="Regular">일반</string>
     <string name="RemoveFromListText">사용자를 탭하고 눌러서 삭제하세요.</string>
     <string name="RepeatDisabled">끔</string>
     <string name="RepeatNotifications">알림 반복</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">저장된 GIF 파일을 보려면 탭하세요.</string>
     <string name="TelegramFaq">자주 묻는 질문</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ko</string>
+    <string name="TelegramVersion">텔레그램 안드로이드 %1$s</string>
     <string name="TerminateAllSessions">다른 모든 세션 종료</string>
     <string name="TerminateSessionInfo">탭하여 세션 종료</string>
     <string name="TerminateSessionQuestion">해당 세션을 종료하시겠습니까?</string>
     <string name="TextSize">채팅 글자 크기</string>
+    <string name="Theme">테마</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">죄송합니다, 수정가능시간이 만료되었습니다.</string>
     <string name="Times_few">%1$d 번</string>

@@ -2045,7 +2045,7 @@ public class MessageObject {
                 if (message.from_id > 0 && !message.post) {
                     return true;
                 }
-            } else if (isOut(message) && message.from_id > 0) {
+            } else if (chat.megagroup && isOut(message) && message.from_id > 0) {
                 return true;
             }
         }

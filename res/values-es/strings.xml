@@ -182,6 +182,7 @@
     <string name="BlurLinear">Lineal</string>
     <string name="BlurOff">Apagado</string>
     <string name="BlurRadial">Radial</string>
+    <string name="Bold">Negrita</string>
     <string name="Bot">bot</string>
     <string name="BotCantJoinGroups">Este bot no puede unirse a grupos.</string>
     <string name="BotHelp">Ayuda</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d días</string>
     <string name="Days_two">%1$d días</string>
     <string name="Days_zero">%1$d días</string>
+    <string name="DebugMenu">Menú de depuración</string>
+    <string name="DebugMenuImportContacts">Importar contactos</string>
+    <string name="DebugMenuReloadContacts">Recargar contactos</string>
     <string name="Default">Por defecto</string>
     <string name="Delete">Eliminar</string>
     <string name="DeleteAccountHelp">Si no estás en línea durante este tiempo, al menos una vez, tu cuenta se eliminará con todos tus grupos, mensajes y contactos.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s está enviando una foto...</string>
     <string name="IsSendingVideo">%1$s está enviando un vídeo...</string>
     <string name="IsTyping">está escribiendo...</string>
+    <string name="Italic">Cursiva</string>
     <string name="JoinGroup">UNIRME AL GRUPO</string>
     <string name="JoinToGroup">¿Quieres unirte al chat “%1$s”?</string>
     <string name="JoinToGroupErrorFull">Lo sentimos. Este grupo está lleno.</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">grabando mensaje de voz...</string>
     <string name="RecoveryEmail">E-mail de recuperación</string>
     <string name="RegisterText">Ingresa tu nombre y apellidos</string>
+    <string name="Regular">Normal</string>
     <string name="RemoveFromListText">Mantén pulsado sobre un usuario para eliminarlo.</string>
     <string name="RepeatDisabled">Apagado</string>
     <string name="RepeatNotifications">Repetir notificaciones</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Toca y ve los GIF guardados</string>
     <string name="TelegramFaq">Preguntas frecuentes</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/es</string>
+    <string name="TelegramVersion">Telegram para Android %1$s</string>
     <string name="TerminateAllSessions">Cerrar todas las otras sesiones</string>
     <string name="TerminateSessionInfo">Toca una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
     <string name="TextSize">Tamaño del texto</string>
+    <string name="Theme">Tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Terminó el tiempo de edición.</string>
     <string name="Times_few">%1$d veces</string>

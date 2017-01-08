@@ -182,6 +182,7 @@
     <string name="BlurLinear">Lineair</string>
     <string name="BlurOff">Uit</string>
     <string name="BlurRadial">Radiaal</string>
+    <string name="Bold">Vet</string>
     <string name="Bot">bot</string>
     <string name="BotCantJoinGroups">Deze bot kan geen groepslid worden.</string>
     <string name="BotHelp">Help</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d dagen</string>
     <string name="Days_two">%1$d dagen</string>
     <string name="Days_zero">%1$d dagen</string>
+    <string name="DebugMenu">Debug-menu</string>
+    <string name="DebugMenuImportContacts">Contacten importeren</string>
+    <string name="DebugMenuReloadContacts">Contacten verversen</string>
     <string name="Default">Standaard</string>
     <string name="Delete">Verwijder</string>
     <string name="DeleteAccountHelp">Als je binnen deze periode niet minimaal één keer ingelogd bent geweest zal je account worden verwijderd, inclusief alle groepen, berichten en contacten.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s verstuurt een foto</string>
     <string name="IsSendingVideo">%1$s verstuurt een video</string>
     <string name="IsTyping">is aan het typen</string>
+    <string name="Italic">Cursief</string>
     <string name="JoinGroup">LID WORDEN</string>
     <string name="JoinToGroup">Wil je lid worden van de groep \"%1$s\"?</string>
     <string name="JoinToGroupErrorFull">Sorry, deze groep is al vol.</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">neemt een spraakbericht op...</string>
     <string name="RecoveryEmail">Herstel-e-mailadres</string>
     <string name="RegisterText">Voer je voor- en achternaam in</string>
+    <string name="Regular">Normaal</string>
     <string name="RemoveFromListText">Gebruiker vasthouden om te verwijderen.</string>
     <string name="RepeatDisabled">Uit</string>
     <string name="RepeatNotifications">Meldingen herhalen</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Tik hier om opgeslagen GIF\'s te bekijken</string>
     <string name="TelegramFaq">Veelgestelde vragen</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq</string>
+    <string name="TelegramVersion">Telegram voor Android %1$s</string>
     <string name="TerminateAllSessions">Beëindig alle andere sessies</string>
     <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TextSize">Tekstgrootte berichten</string>
+    <string name="Theme">Thema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Wijzigen kan niet meer.</string>
     <string name="Times_few">%1$d keer</string>

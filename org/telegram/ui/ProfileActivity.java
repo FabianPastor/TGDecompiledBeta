@@ -371,7 +371,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 } else {
                                     text = "@" + ProfileActivity.this.currentChat.username;
                                 }
-                                textDetailCell.setTextAndValue(text, "telegram.me/" + ProfileActivity.this.currentChat.username);
+                                textDetailCell.setTextAndValue(text, BuildVars.MAIN_LINKS_DOMAIN + "/" + ProfileActivity.this.currentChat.username);
                                 break;
                             }
                         }

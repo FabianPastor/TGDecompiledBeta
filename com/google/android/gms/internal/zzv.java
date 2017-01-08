@@ -342,6 +342,7 @@ public class zzv implements zzb {
 
     public synchronized com.google.android.gms.internal.zzb.zza zza(String str) {
         com.google.android.gms.internal.zzb.zza com_google_android_gms_internal_zzb_zza;
+        zzb com_google_android_gms_internal_zzv_zzb;
         IOException e;
         Throwable th;
         zza com_google_android_gms_internal_zzv_zza = (zza) this.zzav.get(str);
@@ -349,7 +350,6 @@ public class zzv implements zzb {
             com_google_android_gms_internal_zzb_zza = null;
         } else {
             File zzf = zzf(str);
-            zzb com_google_android_gms_internal_zzv_zzb;
             try {
                 com_google_android_gms_internal_zzv_zzb = new zzb(new FileInputStream(zzf));
                 try {

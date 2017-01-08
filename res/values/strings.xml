@@ -182,6 +182,7 @@
     <string name="BlurLinear">Linear</string>
     <string name="BlurOff">Off</string>
     <string name="BlurRadial">Radial</string>
+    <string name="Bold">Bold</string>
     <string name="Bot">bot</string>
     <string name="BotCantJoinGroups">This bot can\'t join groups.</string>
     <string name="BotHelp">Help</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d days</string>
     <string name="Days_two">%1$d days</string>
     <string name="Days_zero">%1$d days</string>
+    <string name="DebugMenu">Debug Menu</string>
+    <string name="DebugMenuImportContacts">Import Contacts</string>
+    <string name="DebugMenuReloadContacts">Reload Contacts</string>
     <string name="Default">Default</string>
     <string name="Delete">Delete</string>
     <string name="DeleteAccountHelp">If you do not come online at least once within this period, your account will be deleted along with all groups, messages and contacts.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s is sending photo...</string>
     <string name="IsSendingVideo">%1$s is sending video...</string>
     <string name="IsTyping">is typing...</string>
+    <string name="Italic">Italic</string>
     <string name="JoinGroup">JOIN GROUP</string>
     <string name="JoinToGroup">Do you want to join the chat \'%1$s\'?</string>
     <string name="JoinToGroupErrorFull">Sorry, this group is already full.</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">recording voice message...</string>
     <string name="RecoveryEmail">Recovery E-Mail</string>
     <string name="RegisterText">Set up your first and last name</string>
+    <string name="Regular">Regular</string>
     <string name="RemoveFromListText">Tap and hold on user to delete.</string>
     <string name="RepeatDisabled">Off</string>
     <string name="RepeatNotifications">Repeat Notifications</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Tap here to access saved GIFs</string>
     <string name="TelegramFaq">Telegram FAQ</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq</string>
+    <string name="TelegramVersion">Telegram for Android %1$s</string>
     <string name="TerminateAllSessions">Terminate All Other Sessions</string>
     <string name="TerminateSessionInfo">Tap on a session to terminate.</string>
     <string name="TerminateSessionQuestion">Terminate this session?</string>
     <string name="TextSize">Messages Text Size</string>
+    <string name="Theme">Theme</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Sorry, editing time expired.</string>
     <string name="Times_few">%1$d times</string>
@@ -1462,14 +1470,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="Bold">Bold</string>
-    <string name="DebugMenu">Debug Menu</string>
-    <string name="DebugMenuImportContacts">Import Contacts</string>
-    <string name="DebugMenuReloadContacts">Reload Contacts</string>
-    <string name="Italic">Italic</string>
-    <string name="Regular">Regular</string>
-    <string name="TelegramVersion">Telegram for Android %1$s</string>
-    <string name="Theme">Theme</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

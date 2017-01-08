@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
@@ -54,12 +55,12 @@ public class AdminedChannelCell extends FrameLayout {
         if (channel.photo != null) {
             photo = channel.photo.photo_small;
         }
-        String url = "telegram.me/";
+        String url = BuildVars.MAIN_LINKS_DOMAIN + "/";
         this.currentChannel = channel;
         this.avatarDrawable.setInfo(channel);
         this.nameTextView.setText(channel.title);
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder("telegram.me/" + channel.username);
-        stringBuilder.setSpan(new ForegroundColorSpan(-12876608), "telegram.me/".length(), stringBuilder.length(), 33);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(url + channel.username);
+        stringBuilder.setSpan(new ForegroundColorSpan(-12876608), url.length(), stringBuilder.length(), 33);
         this.statusTextView.setText(stringBuilder);
         this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);
         this.isLast = last;

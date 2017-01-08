@@ -182,6 +182,7 @@
     <string name="BlurLinear">Linear</string>
     <string name="BlurOff">Desativado</string>
     <string name="BlurRadial">Radial</string>
+    <string name="Bold">Negrito</string>
     <string name="Bot">bot</string>
     <string name="BotCantJoinGroups">Esse bot não pode entrar em grupos.</string>
     <string name="BotHelp">Ajuda</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d dias</string>
     <string name="Days_two">%1$d dias</string>
     <string name="Days_zero">%1$d dias</string>
+    <string name="DebugMenu">Debug Menu</string>
+    <string name="DebugMenuImportContacts">Importar Contatos</string>
+    <string name="DebugMenuReloadContacts">Recarregar Contatos</string>
     <string name="Default">Padrão</string>
     <string name="Delete">Apagar</string>
     <string name="DeleteAccountHelp">Se você não ficar online ao menos uma vez nesse período, sua conta será apagada junto com seus grupos, mensagens e contatos.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s está enviando uma foto...</string>
     <string name="IsSendingVideo">%1$s está enviando um vídeo...</string>
     <string name="IsTyping">está escrevendo...</string>
+    <string name="Italic">Itálico</string>
     <string name="JoinGroup">ENTRAR NO GRUPO</string>
     <string name="JoinToGroup">Você deseja entrar no chat \'%1$s\'?</string>
     <string name="JoinToGroupErrorFull">Desculpe, este grupo já está lotado.</string>
@@ -991,7 +996,7 @@
     <string name="PhoneMobile">Celular</string>
     <string name="PhoneNumberAlert">Todos os seus contatos do Telegram terão seu novo número adicionado às suas listas de contatos, desde que eles tenham seu antigo número e você não os tenha bloqueado no Telegram.</string>
     <string name="PhoneNumberChange">ALTERAR NÚMERO</string>
-    <string name="PhoneNumberFlood">Desculpe, você apagou e recrioi sua conta muitas vezes recentemente. Aguarde alguns dias antes de tentar novamente.</string>
+    <string name="PhoneNumberFlood">Desculpe, você apagou e recriou sua conta muitas vezes recentemente. Aguarde alguns dias antes de tentar novamente.</string>
     <string name="PhoneNumberHelp">Você pode alterar seu número do Telegram aqui. Sua conta e todos os seus dados — mensagens, mídia, contatos, etc. serão movidos para o novo número.\n\n&lt;b&gt;Importante:&lt;/b&gt; todos os contatos do Telegram terão seu &lt;b&gt;novo número&lt;/b&gt; adicionado às suas lista de contatos, desde que eles tenham seu número antigo e você não os tenha bloqueado no Telegram.</string>
     <string name="PhoneOther">Outro</string>
     <string name="PhoneWork">Trabalho</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">gravando mensagem de voz...</string>
     <string name="RecoveryEmail">E-mail de recuperação</string>
     <string name="RegisterText">Configure seu nome e sobrenome</string>
+    <string name="Regular">Regular</string>
     <string name="RemoveFromListText">Toque e segure no usuário para remover.</string>
     <string name="RepeatDisabled">Desativado</string>
     <string name="RepeatNotifications">Repetir Notificações</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">Toque aqui para acessar os GIFs salvos</string>
     <string name="TelegramFaq">Perguntas Frequentes</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/br</string>
+    <string name="TelegramVersion">Telegram para Android %1$s</string>
     <string name="TerminateAllSessions">Terminar todas as outras sessões</string>
     <string name="TerminateSessionInfo">Toque em uma sessão para terminá-la.</string>
     <string name="TerminateSessionQuestion">Encerrar essa sessão?</string>
     <string name="TextSize">Tamanho do Texto</string>
+    <string name="Theme">Tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Desculpe, o tempo para editar expirou.</string>
     <string name="Times_few">%1$d vezes</string>

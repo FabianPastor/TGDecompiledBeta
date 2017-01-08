@@ -139,27 +139,31 @@ public class Browser {
 
     public static void openUrl(Context context, Uri uri, boolean allowCustom) {
         if (context != null && uri != null) {
+            boolean internalUri = isInternalUri(uri);
             try {
                 String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
-                boolean internalUri = isInternalUri(uri);
-                if (VERSION.SDK_INT < 15 || !allowCustom || !MediaController.getInstance().canCustomTabs() || internalUri || scheme.equals("tel")) {
-                    Intent intent = new Intent("android.intent.action.VIEW", uri);
-                    if (internalUri) {
-                        intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
-                    }
-                    intent.putExtra("com.android.browser.application_id", context.getPackageName());
-                    context.startActivity(intent);
+                if (VERSION.SDK_INT >= 15 && allowCustom && MediaController.getInstance().canCustomTabs() && !internalUri && !scheme.equals("tel")) {
+                    Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
+                    share.setAction("android.intent.action.SEND");
+                    Builder builder = new Builder(getSession());
+                    builder.setToolbarColor(Theme.ACTION_BAR_COLOR);
+                    builder.setShowTitle(true);
+                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
+                    builder.build().launchUrl((Activity) context, uri);
                     return;
                 }
-                Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
-                share.setAction("android.intent.action.SEND");
-                Builder builder = new Builder(getSession());
-                builder.setToolbarColor(Theme.ACTION_BAR_COLOR);
-                builder.setShowTitle(true);
-                builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
-                builder.build().launchUrl((Activity) context, uri);
             } catch (Throwable e) {
                 FileLog.e("tmessages", e);
+            }
+            try {
+                Intent intent = new Intent("android.intent.action.VIEW", uri);
+                if (internalUri) {
+                    intent.setComponent(new ComponentName(context.getPackageName(), LaunchActivity.class.getName()));
+                }
+                intent.putExtra("com.android.browser.application_id", context.getPackageName());
+                context.startActivity(intent);
+            } catch (Throwable e2) {
+                FileLog.e("tmessages", e2);
             }
         }
     }

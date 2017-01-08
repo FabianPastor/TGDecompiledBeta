@@ -114,6 +114,7 @@ public class zzc {
     }
 
     public static String zzbi(Context context) {
+        ApplicationInfo applicationInfo;
         if (zzbhq != null) {
             return zzbhq;
         }
@@ -122,9 +123,9 @@ public class zzc {
         for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
             if (packageManager.checkPermission("com.google.android.c2dm.permission.RECEIVE", resolveInfo.serviceInfo.packageName) == 0) {
                 try {
-                    ApplicationInfo applicationInfo = packageManager.getApplicationInfo(resolveInfo.serviceInfo.packageName, 0);
-                    Log.w("InstanceID/Rpc", "Found " + applicationInfo.uid);
-                    zzbhs = applicationInfo.uid;
+                    ApplicationInfo applicationInfo2 = packageManager.getApplicationInfo(resolveInfo.serviceInfo.packageName, 0);
+                    Log.w("InstanceID/Rpc", "Found " + applicationInfo2.uid);
+                    zzbhs = applicationInfo2.uid;
                     zzbhq = resolveInfo.serviceInfo.packageName;
                     return zzbhq;
                 } catch (NameNotFoundException e) {
@@ -136,17 +137,16 @@ public class zzc {
             }
         }
         Log.w("InstanceID/Rpc", "Failed to resolve REGISTER intent, falling back");
-        ApplicationInfo applicationInfo2;
         try {
-            applicationInfo2 = packageManager.getApplicationInfo("com.google.android.gms", 0);
-            zzbhq = applicationInfo2.packageName;
-            zzbhs = applicationInfo2.uid;
+            applicationInfo = packageManager.getApplicationInfo("com.google.android.gms", 0);
+            zzbhq = applicationInfo.packageName;
+            zzbhs = applicationInfo.uid;
             return zzbhq;
         } catch (NameNotFoundException e2) {
             try {
-                applicationInfo2 = packageManager.getApplicationInfo("com.google.android.gsf", 0);
-                zzbhq = applicationInfo2.packageName;
-                zzbhs = applicationInfo2.uid;
+                applicationInfo = packageManager.getApplicationInfo("com.google.android.gsf", 0);
+                zzbhq = applicationInfo.packageName;
+                zzbhs = applicationInfo.uid;
                 return zzbhq;
             } catch (NameNotFoundException e3) {
                 Log.w("InstanceID/Rpc", "Both Google Play Services and legacy GSF package are missing");

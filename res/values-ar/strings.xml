@@ -182,6 +182,7 @@
     <string name="BlurLinear">طولي</string>
     <string name="BlurOff">إيقاف</string>
     <string name="BlurRadial">قطري</string>
+    <string name="Bold">عريض</string>
     <string name="Bot">بوت</string>
     <string name="BotCantJoinGroups">هذا البوت لا يستطيع الدخول للمجموعات.</string>
     <string name="BotHelp">مساعدة</string>
@@ -404,6 +405,9 @@
     <string name="Days_other">%1$d يوم</string>
     <string name="Days_two">%1$d يومان</string>
     <string name="Days_zero">%1$d يوم</string>
+    <string name="DebugMenu">قائمة المعالجة</string>
+    <string name="DebugMenuImportContacts">استيراد جهات الاتصال</string>
+    <string name="DebugMenuReloadContacts">إعادة تنزيل جهات الاتصال</string>
     <string name="Default">افتراضي</string>
     <string name="Delete">حذف</string>
     <string name="DeleteAccountHelp">إذا لم تقم بتسجيل الدخول خلال هذه الفترة، سيتم حذف حسابك بالإضافة إلى مجموعاتك، رسائلك، وجهات الاتصال الخاصة بك في تيليجرام.</string>
@@ -632,6 +636,7 @@
     <string name="IsSendingPhoto">%1$s يقوم بإرسال صورة...</string>
     <string name="IsSendingVideo">%1$s يقوم بإرسال مقطع مرئي...</string>
     <string name="IsTyping">يكتب…</string>
+    <string name="Italic">مائل</string>
     <string name="JoinGroup">انضم للمجموعة</string>
     <string name="JoinToGroup">هل ترغب في الدخول للمحادثة \'%1$s\'؟</string>
     <string name="JoinToGroupErrorFull">المعذرة، هذه المجموعة ممتلئة.</string>
@@ -1042,6 +1047,7 @@
     <string name="RecordingAudio">جاري تسجيل الرسالة الصوتية...</string>
     <string name="RecoveryEmail">بريد إسترداد الحساب</string>
     <string name="RegisterText">اختر الاسم الأول واسم العائلة</string>
+    <string name="Regular">طبيعي</string>
     <string name="RemoveFromListText">إضغط بإستمرار على المستخدم لحذفه</string>
     <string name="RepeatDisabled">إيقاف</string>
     <string name="RepeatNotifications">إعادة الإشعارات</string>
@@ -1222,10 +1228,12 @@
     <string name="TapHereGifs">اضغط هنا للوصول للصور المتحركة المحفوظة</string>
     <string name="TelegramFaq">الأسئلة الشائعة عن تيليجرام</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ar</string>
+    <string name="TelegramVersion">تيليجرام للأندرويد %1$s</string>
     <string name="TerminateAllSessions">سجل الخروج من كافة الأجهزة الأخرى</string>
     <string name="TerminateSessionInfo">اضغط على الجهاز لتسجيل الخروج منه.</string>
     <string name="TerminateSessionQuestion">هل ترغب في تسجيل الخروج من هذا الجهاز؟</string>
     <string name="TextSize">حجم نص الرسائل</string>
+    <string name="Theme">نمط</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">المعذرة، انتهت مدة التعديل على الرسائل.</string>
     <string name="Times_few">%1$d مرة</string>

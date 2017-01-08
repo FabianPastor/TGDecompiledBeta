@@ -1696,7 +1696,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             ImageReceiverDelegate imageReceiverDelegate = new ImageReceiverDelegate() {
                 public void didSetImage(ImageReceiver imageReceiver, boolean set, boolean thumb) {
                     if (imageReceiver == PhotoViewer.this.centerImage && set && !thumb && PhotoViewer.this.currentEditMode == 1 && PhotoViewer.this.photoCropView != null) {
-                        PhotoViewer.this.photoCropView.setBitmap(imageReceiver.getBitmap(), imageReceiver.getOrientation(), PhotoViewer.this.sendPhotoType != 1);
+                        Bitmap bitmap = imageReceiver.getBitmap();
+                        if (bitmap != null) {
+                            PhotoViewer.this.photoCropView.setBitmap(bitmap, imageReceiver.getOrientation(), PhotoViewer.this.sendPhotoType != 1);
+                        }
                     }
                     if (imageReceiver != PhotoViewer.this.centerImage || !set || PhotoViewer.this.placeProvider == null || !PhotoViewer.this.placeProvider.scaleToFill() || PhotoViewer.this.ignoreDidSetImage) {
                         return;

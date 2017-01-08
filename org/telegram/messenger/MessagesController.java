@@ -2033,7 +2033,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             MessagesStorage.getInstance().markMessagesAsDeleted(messages, true, channelId);
-            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, true, channelId);
+            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             if (channelId != 0) {
                 TL_channels_deleteMessages req = new TL_channels_deleteMessages();
@@ -3227,7 +3227,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3271,6 +3270,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -4470,7 +4470,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             }, 1000);
                         }
                         if (isChannel && (inputUser instanceof TL_inputUserSelf)) {
-                            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), true, i);
+                            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(new ArrayList(), null, true, i);
                         }
                     }
                 });
@@ -5024,13 +5024,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        Integer channelPts;
         Throwable e;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5620,6 +5620,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public boolean pinDialog(long did, boolean pin, InputPeer peer, long taskId) {
         Throwable e;
+        long newTaskId;
         int lower_id = (int) did;
         TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(Long.valueOf(did));
         if (dialog != null && dialog.pinned != pin) {
@@ -5651,7 +5652,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (peer instanceof TL_inputPeerEmpty) {
                     return false;
                 }
-                long newTaskId;
                 req.peer = peer;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
@@ -6543,7 +6543,6 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
-        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6597,7 +6596,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            ArrayList<Integer> arrayList3;
+            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("tmessages", "process update " + update);
             Message message;
@@ -6769,12 +6768,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 read_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update.max_id)));
             } else if (update instanceof TL_updateDeleteMessages) {
-                arrayList3 = (ArrayList) deletedMessages.get(0);
-                if (arrayList3 == null) {
-                    arrayList3 = new ArrayList();
-                    deletedMessages.put(0, arrayList3);
+                arrayList = (ArrayList) deletedMessages.get(0);
+                if (arrayList == null) {
+                    arrayList = new ArrayList();
+                    deletedMessages.put(0, arrayList);
                 }
-                arrayList3.addAll(update.messages);
+                arrayList.addAll(update.messages);
             } else if ((update instanceof TL_updateUserTyping) || (update instanceof TL_updateChatUserTyping)) {
                 if (update.user_id != UserConfig.getClientUserId()) {
                     uid = (long) (-update.chat_id);
@@ -7079,12 +7078,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (BuildVars.DEBUG_VERSION) {
                     FileLog.d("tmessages", update + " channelId = " + update.channel_id);
                 }
-                arrayList3 = (ArrayList) deletedMessages.get(update.channel_id);
-                if (arrayList3 == null) {
-                    arrayList3 = new ArrayList();
-                    deletedMessages.put(update.channel_id, arrayList3);
+                arrayList = (ArrayList) deletedMessages.get(update.channel_id);
+                if (arrayList == null) {
+                    arrayList = new ArrayList();
+                    deletedMessages.put(update.channel_id, arrayList);
                 }
-                arrayList3.addAll(update.messages);
+                arrayList.addAll(update.messages);
             } else if (update instanceof TL_updateChannel) {
                 if (BuildVars.DEBUG_VERSION) {
                     FileLog.d("tmessages", update + " channelId = " + update.channel_id);
@@ -7250,12 +7249,12 @@ public class MessagesController implements NotificationCenterDelegate {
             ContactsController.getInstance().processContactsUpdates(contactsIds, usersDict);
         }
         if (!pushMessages.isEmpty()) {
-            final ArrayList<MessageObject> arrayList4 = pushMessages;
+            final ArrayList<MessageObject> arrayList3 = pushMessages;
             MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
                 public void run() {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            NotificationsController.getInstance().processNewMessages(arrayList4, true);
+                            NotificationsController.getInstance().processNewMessages(arrayList3, true);
                         }
                     });
                 }
@@ -7279,7 +7278,7 @@ public class MessagesController implements NotificationCenterDelegate {
             MessagesStorage.getInstance().putChannelViews(channelViews, true);
         }
         final int i = interfaceUpdateMaskFinal;
-        final ArrayList<Update> arrayList5 = updatesOnMainThread;
+        final ArrayList<Update> arrayList4 = updatesOnMainThread;
         final HashMap<Long, WebPage> hashMap = webPages;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
@@ -7288,12 +7287,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 ArrayList<MessageObject> arrayList;
                 int updateMask = i;
                 boolean hasDraftUpdates = false;
-                if (!arrayList5.isEmpty()) {
+                if (!arrayList4.isEmpty()) {
                     ArrayList<User> dbUsers = new ArrayList();
                     ArrayList<User> dbUsersStatus = new ArrayList();
                     Editor editor = null;
-                    for (a = 0; a < arrayList5.size(); a++) {
-                        Update update = (Update) arrayList5.get(a);
+                    for (a = 0; a < arrayList4.size(); a++) {
+                        Update update = (Update) arrayList4.get(a);
                         User toDbUser = new User();
                         toDbUser.id = update.user_id;
                         final User currentUser = MessagesController.this.getUser(Integer.valueOf(update.user_id));
@@ -7674,9 +7673,13 @@ public class MessagesController implements NotificationCenterDelegate {
         if (deletedMessages.size() != 0) {
             for (a = 0; a < deletedMessages.size(); a++) {
                 int key = deletedMessages.keyAt(a);
-                arrayList3 = (ArrayList) deletedMessages.get(key);
-                MessagesStorage.getInstance().markMessagesAsDeleted(arrayList3, true, key);
-                MessagesStorage.getInstance().updateDialogsWithDeletedMessages(arrayList3, true, key);
+                final ArrayList<Integer> arrayList5 = (ArrayList) deletedMessages.get(key);
+                final int i2 = key;
+                MessagesStorage.getInstance().getStorageQueue().postRunnable(new Runnable() {
+                    public void run() {
+                        MessagesStorage.getInstance().updateDialogsWithDeletedMessages(arrayList5, MessagesStorage.getInstance().markMessagesAsDeleted(arrayList5, false, i2), false, i2);
+                    }
+                });
             }
         }
         if (!tasks.isEmpty()) {

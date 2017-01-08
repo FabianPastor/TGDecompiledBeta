@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -235,7 +236,7 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
         this.publicContainer.setOrientation(0);
         this.linkContainer.addView(this.publicContainer, LayoutHelper.createLinear(-1, 36, 17.0f, 7.0f, 17.0f, 0.0f));
         EditText editText = new EditText(context);
-        editText.setText("telegram.me/");
+        editText.setText(BuildVars.MAIN_LINKS_DOMAIN + "/");
         editText.setTextSize(1, 18.0f);
         editText.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
         editText.setTextColor(-14606047);
@@ -353,9 +354,9 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
                                             Builder builder = new Builder(ChannelEditTypeActivity.this.getParentActivity());
                                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                             if (channel.megagroup) {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, "telegram.me/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, BuildVars.MAIN_LINKS_DOMAIN + "/" + channel.username, channel.title)));
                                             } else {
-                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, "telegram.me/" + channel.username, channel.title)));
+                                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, BuildVars.MAIN_LINKS_DOMAIN + "/" + channel.username, channel.title)));
                                             }
                                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                             builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), new DialogInterface.OnClickListener() {
