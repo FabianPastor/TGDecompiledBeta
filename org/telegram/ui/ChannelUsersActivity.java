@@ -450,7 +450,6 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                             args.putBoolean("destroyAfterSelect", true);
                             args.putBoolean("returnAsResult", true);
                             args.putBoolean("needForwardCount", false);
-                            args.putBoolean("allowUsernameSearch", false);
                             args.putString("selectAlertString", LocaleController.getString("ChannelAddTo", R.string.ChannelAddTo));
                             fragment = new ContactsActivity(args);
                             fragment.setDelegate(new ContactsActivityDelegate() {
@@ -498,7 +497,6 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                         args.putBoolean("destroyAfterSelect", true);
                         args.putBoolean("returnAsResult", true);
                         args.putBoolean("needForwardCount", false);
-                        args.putBoolean("allowUsernameSearch", true);
                         args.putBoolean("addingToChannel", !ChannelUsersActivity.this.isMegagroup);
                         args.putString("selectAlertString", LocaleController.getString("ChannelAddUserAdminAlert", R.string.ChannelAddUserAdminAlert));
                         fragment = new ContactsActivity(args);

@@ -89,7 +89,6 @@ public class SearchQuery {
                     int a;
                     TL_topPeer hint;
                     long did;
-                    String id;
                     ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
                     List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
                     ArrayList<String> shortcutsToUpdate = new ArrayList();
@@ -110,6 +109,7 @@ public class SearchQuery {
                             newShortcutsIds.add("did" + did);
                         }
                         for (a = 0; a < currentShortcuts.size(); a++) {
+                            String id;
                             id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
                             if (!newShortcutsIds.remove(id)) {
                                 shortcutsToDelete.add(id);

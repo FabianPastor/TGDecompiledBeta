@@ -2047,6 +2047,8 @@ public class MessageObject {
                 }
             } else if (chat.megagroup && isOut(message) && message.from_id > 0) {
                 return true;
+            } else {
+                return false;
             }
         }
         if (isOut(message) || !ChatObject.isChannel(chat)) {

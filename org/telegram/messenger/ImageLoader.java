@@ -1702,7 +1702,6 @@ public class ImageLoader {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
-        Throwable e;
         Bitmap b;
         Bitmap newBitmap;
         Options bmOptions = new Options();
@@ -1714,7 +1713,8 @@ public class ImageLoader {
             } else {
                 try {
                     path = AndroidUtilities.getPath(uri);
-                } catch (Throwable e2) {
+                } catch (Throwable e) {
+                    Throwable e2;
                     FileLog.e("tmessages", e2);
                 }
             }
