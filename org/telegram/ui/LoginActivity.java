@@ -100,6 +100,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
@@ -110,7 +111,7 @@ public class LoginActivity extends BaseFragment {
     private static final int done_button = 1;
     private boolean checkPermissions = true;
     private boolean checkShowPermissions = true;
-    private int currentViewNum = 0;
+    private int currentViewNum;
     private View doneButton;
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems = new ArrayList();
@@ -119,7 +120,31 @@ public class LoginActivity extends BaseFragment {
     private ProgressDialog progressDialog;
     private SlideView[] views = new SlideView[9];
 
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
+
     public class LoginActivityPasswordView extends SlideView {
+        private TextView cancelButton;
         private EditText codeField;
         private TextView confirmTextView;
         private Bundle currentParams;
@@ -138,16 +163,16 @@ public class LoginActivity extends BaseFragment {
             super(context);
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.confirmTextView.setText(LocaleController.getString("LoginPasswordText", R.string.LoginPasswordText));
             addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             this.codeField = new EditText(context);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.codeField);
-            this.codeField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);
@@ -167,15 +192,15 @@ public class LoginActivity extends BaseFragment {
                     return true;
                 }
             });
-            TextView cancelButton = new TextView(context);
-            cancelButton.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            cancelButton.setTextColor(-11697229);
-            cancelButton.setText(LocaleController.getString("ForgotPassword", R.string.ForgotPassword));
-            cancelButton.setTextSize(1, 14.0f);
-            cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
-            addView(cancelButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48));
-            cancelButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
+            this.cancelButton = new TextView(context);
+            this.cancelButton.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            this.cancelButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+            this.cancelButton.setText(LocaleController.getString("ForgotPassword", R.string.ForgotPassword));
+            this.cancelButton.setTextSize(1, 14.0f);
+            this.cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            this.cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
+            addView(this.cancelButton, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48));
+            this.cancelButton.setOnClickListener(new OnClickListener(LoginActivity.this) {
                 public void onClick(View view) {
                     if (LoginActivityPasswordView.this.has_recovery) {
                         LoginActivity.this.needShowProgress();
@@ -227,7 +252,7 @@ public class LoginActivity extends BaseFragment {
             });
             this.resetAccountButton = new TextView(context);
             this.resetAccountButton.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            this.resetAccountButton.setTextColor(-39322);
+            this.resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText6));
             this.resetAccountButton.setVisibility(8);
             this.resetAccountButton.setText(LocaleController.getString("ResetMyAccount", R.string.ResetMyAccount));
             this.resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -283,7 +308,7 @@ public class LoginActivity extends BaseFragment {
             this.resetAccountText = new TextView(context);
             this.resetAccountText.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             this.resetAccountText.setVisibility(8);
-            this.resetAccountText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.resetAccountText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.resetAccountText.setText(LocaleController.getString("ResetMyAccountText", R.string.ResetMyAccountText));
             this.resetAccountText.setTextSize(1, 14.0f);
             this.resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -457,7 +482,7 @@ public class LoginActivity extends BaseFragment {
             super(context);
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -470,9 +495,9 @@ public class LoginActivity extends BaseFragment {
             }
             addView(view, LayoutHelper.createLinear(-2, -2, i));
             this.codeField = new EditText(context);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.codeField);
-            this.codeField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setHint(LocaleController.getString("PasswordCode", R.string.PasswordCode));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);
@@ -494,7 +519,7 @@ public class LoginActivity extends BaseFragment {
             });
             this.cancelButton = new TextView(context);
             this.cancelButton.setGravity((LocaleController.isRTL ? 5 : 3) | 80);
-            this.cancelButton.setTextColor(-11697229);
+            this.cancelButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.cancelButton.setTextSize(1, 14.0f);
             this.cancelButton.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.cancelButton.setPadding(0, AndroidUtilities.dp(14.0f), 0, 0);
@@ -654,19 +679,21 @@ public class LoginActivity extends BaseFragment {
         private String phoneCode;
         private String phoneHash;
         private String requestPhone;
+        private TextView textView;
+        private TextView wrongNumber;
 
         public LoginActivityRegisterView(Context context) {
             super(context);
             setOrientation(1);
-            TextView textView = new TextView(context);
-            textView.setText(LocaleController.getString("RegisterText", R.string.RegisterText));
-            textView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            textView.setGravity(LocaleController.isRTL ? 5 : 3);
-            textView.setTextSize(1, 14.0f);
-            addView(textView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
+            this.textView = new TextView(context);
+            this.textView.setText(LocaleController.getString("RegisterText", R.string.RegisterText));
+            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+            this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
+            this.textView.setTextSize(1, 14.0f);
+            addView(this.textView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
             this.firstNameField = new EditText(context);
-            this.firstNameField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
-            this.firstNameField.setTextColor(-14606047);
+            this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+            this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.firstNameField);
             this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
             this.firstNameField.setImeOptions(268435461);
@@ -685,8 +712,8 @@ public class LoginActivity extends BaseFragment {
             });
             this.lastNameField = new EditText(context);
             this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
-            this.lastNameField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
-            this.lastNameField.setTextColor(-14606047);
+            this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+            this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.lastNameField);
             this.lastNameField.setImeOptions(268435461);
             this.lastNameField.setTextSize(1, 18.0f);
@@ -696,15 +723,15 @@ public class LoginActivity extends BaseFragment {
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setGravity(80);
             addView(linearLayout, LayoutHelper.createLinear(-1, -1));
-            TextView wrongNumber = new TextView(context);
-            wrongNumber.setText(LocaleController.getString("CancelRegistration", R.string.CancelRegistration));
-            wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            wrongNumber.setTextColor(-11697229);
-            wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
-            linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
-            wrongNumber.setOnClickListener(new OnClickListener(LoginActivity.this) {
+            this.wrongNumber = new TextView(context);
+            this.wrongNumber.setText(LocaleController.getString("CancelRegistration", R.string.CancelRegistration));
+            this.wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
+            this.wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+            this.wrongNumber.setTextSize(1, 14.0f);
+            this.wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            this.wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
+            linearLayout.addView(this.wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
+            this.wrongNumber.setOnClickListener(new OnClickListener(LoginActivity.this) {
                 public void onClick(View view) {
                     Builder builder = new Builder(LoginActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -837,6 +864,7 @@ public class LoginActivity extends BaseFragment {
         private String phoneHash;
         private String requestPhone;
         private TextView resetAccountButton;
+        private TextView resetAccountText;
         private TextView resetAccountTime;
         private int startTime;
         final /* synthetic */ LoginActivity this$0;
@@ -850,15 +878,9 @@ public class LoginActivity extends BaseFragment {
             super(context);
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
-            TextView textView = this.confirmTextView;
-            if (LocaleController.isRTL) {
-                i = 5;
-            } else {
-                i = 3;
-            }
-            textView.setGravity(i);
+            this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             View view = this.confirmTextView;
             if (LocaleController.isRTL) {
@@ -867,23 +889,25 @@ public class LoginActivity extends BaseFragment {
                 i = 3;
             }
             addView(view, LayoutHelper.createLinear(-2, -2, i));
-            TextView resetAccountText = new TextView(context);
+            this.resetAccountText = new TextView(context);
+            TextView textView = this.resetAccountText;
             if (LocaleController.isRTL) {
                 i = 5;
             } else {
                 i = 3;
             }
-            resetAccountText.setGravity(i | 48);
-            resetAccountText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            resetAccountText.setText(LocaleController.getString("ResetAccountStatus", R.string.ResetAccountStatus));
-            resetAccountText.setTextSize(1, 14.0f);
-            resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            textView.setGravity(i | 48);
+            this.resetAccountText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+            this.resetAccountText.setText(LocaleController.getString("ResetAccountStatus", R.string.ResetAccountStatus));
+            this.resetAccountText.setTextSize(1, 14.0f);
+            this.resetAccountText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            View view2 = this.resetAccountText;
             if (LocaleController.isRTL) {
                 i = 5;
             } else {
                 i = 3;
             }
-            addView(resetAccountText, LayoutHelper.createLinear(-2, -2, i | 48, 0, 24, 0, 0));
+            addView(view2, LayoutHelper.createLinear(-2, -2, i | 48, 0, 24, 0, 0));
             this.resetAccountTime = new TextView(context);
             textView = this.resetAccountTime;
             if (LocaleController.isRTL) {
@@ -892,10 +916,10 @@ public class LoginActivity extends BaseFragment {
                 i = 3;
             }
             textView.setGravity(i | 48);
-            this.resetAccountTime.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.resetAccountTime.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.resetAccountTime.setTextSize(1, 14.0f);
             this.resetAccountTime.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            View view2 = this.resetAccountTime;
+            view2 = this.resetAccountTime;
             if (LocaleController.isRTL) {
                 i = 5;
             } else {
@@ -976,10 +1000,12 @@ public class LoginActivity extends BaseFragment {
                 this.resetAccountTime.setText(AndroidUtilities.replaceTags(LocaleController.formatPluralString("HoursBold", hours) + " " + LocaleController.formatPluralString("MinutesBold", minutes) + " " + LocaleController.formatPluralString("SecondsBold", seconds)));
             }
             if (timeLeft > 0) {
-                this.resetAccountButton.setTextColor(-NUM);
-            } else {
-                this.resetAccountButton.setTextColor(-39322);
+                this.resetAccountButton.setTag(Theme.key_windowBackgroundWhiteGrayText6);
+                this.resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+                return;
             }
+            this.resetAccountButton.setTag(Theme.key_windowBackgroundWhiteRedText6);
+            this.resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText6));
         }
 
         public void setParams(Bundle params) {
@@ -1056,36 +1082,14 @@ public class LoginActivity extends BaseFragment {
         private int timeout;
         private final Object timerSync = new Object();
         private boolean waitingForEvent;
-
-        private class ProgressView extends View {
-            private Paint paint = new Paint();
-            private Paint paint2 = new Paint();
-            private float progress;
-
-            public ProgressView(Context context) {
-                super(context);
-                this.paint.setColor(-1971470);
-                this.paint2.setColor(-10313520);
-            }
-
-            public void setProgress(float value) {
-                this.progress = value;
-                invalidate();
-            }
-
-            protected void onDraw(Canvas canvas) {
-                int start = (int) (((float) getMeasuredWidth()) * this.progress);
-                canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-                canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-            }
-        }
+        private TextView wrongNumber;
 
         public LoginActivitySmsView(Context context, int type) {
             super(context);
             this.currentType = type;
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -1105,10 +1109,10 @@ public class LoginActivity extends BaseFragment {
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             }
             this.codeField = new EditText(context);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
             AndroidUtilities.clearCursorDrawable(this.codeField);
-            this.codeField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setInputType(3);
@@ -1144,7 +1148,7 @@ public class LoginActivity extends BaseFragment {
             }
             this.timeText = new TextView(context);
             this.timeText.setTextSize(1, 14.0f);
-            this.timeText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
             addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
@@ -1156,7 +1160,7 @@ public class LoginActivity extends BaseFragment {
             this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
-            this.problemText.setTextColor(-11697229);
+            this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 20, 0, 0));
@@ -1188,7 +1192,7 @@ public class LoginActivity extends BaseFragment {
             addView(linearLayout, LayoutHelper.createLinear(-1, -1, LocaleController.isRTL ? 5 : 3));
             TextView wrongNumber = new TextView(context);
             wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            wrongNumber.setTextColor(-11697229);
+            wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             wrongNumber.setTextSize(1, 14.0f);
             wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
@@ -1687,6 +1691,9 @@ public class LoginActivity extends BaseFragment {
         private boolean nextPressed = false;
         private HintEditText phoneField;
         private HashMap<String, String> phoneFormatMap = new HashMap();
+        private TextView textView;
+        private TextView textView2;
+        private View view;
 
         public PhoneView(Context context) {
             super(context);
@@ -1694,7 +1701,7 @@ public class LoginActivity extends BaseFragment {
             this.countryButton = new TextView(context);
             this.countryButton.setTextSize(1, 18.0f);
             this.countryButton.setPadding(AndroidUtilities.dp(12.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(12.0f), 0);
-            this.countryButton.setTextColor(-14606047);
+            this.countryButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.countryButton.setMaxLines(1);
             this.countryButton.setSingleLine(true);
             this.countryButton.setEllipsize(TruncateAt.END);
@@ -1720,21 +1727,21 @@ public class LoginActivity extends BaseFragment {
                     LoginActivity.this.presentFragment(fragment);
                 }
             });
-            View view = new View(context);
-            view.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
-            view.setBackgroundColor(-2368549);
-            addView(view, LayoutHelper.createLinear(-1, 1, 4.0f, -17.5f, 4.0f, 0.0f));
-            view = new LinearLayout(context);
-            view.setOrientation(0);
-            addView(view, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
-            view = new TextView(context);
-            view.setText("+");
-            view.setTextColor(-14606047);
-            view.setTextSize(1, 18.0f);
-            view.addView(view, LayoutHelper.createLinear(-2, -2));
+            this.view = new View(context);
+            this.view.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
+            this.view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayLine));
+            addView(this.view, LayoutHelper.createLinear(-1, 1, 4.0f, -17.5f, 4.0f, 0.0f));
+            View linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(0);
+            addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
+            this.textView = new TextView(context);
+            this.textView.setText("+");
+            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.textView.setTextSize(1, 18.0f);
+            linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
             this.codeField = new EditText(context);
             this.codeField.setInputType(3);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.codeField);
             this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
             this.codeField.setTextSize(1, 18.0f);
@@ -1742,7 +1749,7 @@ public class LoginActivity extends BaseFragment {
             this.codeField.setGravity(19);
             this.codeField.setImeOptions(268435461);
             this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
-            view.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
+            linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
             final LoginActivity loginActivity2 = LoginActivity.this;
             this.codeField.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -1826,15 +1833,15 @@ public class LoginActivity extends BaseFragment {
             });
             this.phoneField = new HintEditText(context);
             this.phoneField.setInputType(3);
-            this.phoneField.setTextColor(-14606047);
-            this.phoneField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.phoneField.setPadding(0, 0, 0, 0);
             AndroidUtilities.clearCursorDrawable(this.phoneField);
             this.phoneField.setTextSize(1, 18.0f);
             this.phoneField.setMaxLines(1);
             this.phoneField.setGravity(19);
             this.phoneField.setImeOptions(268435461);
-            view.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
+            linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
             final LoginActivity loginActivity222 = LoginActivity.this;
             this.phoneField.addTextChangedListener(new TextWatcher() {
                 private int actionPosition;
@@ -1918,13 +1925,13 @@ public class LoginActivity extends BaseFragment {
                     return true;
                 }
             });
-            view = new TextView(context);
-            view.setText(LocaleController.getString("StartText", R.string.StartText));
-            view.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            view.setTextSize(1, 14.0f);
-            view.setGravity(LocaleController.isRTL ? 5 : 3);
-            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            addView(view, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
+            this.textView2 = new TextView(context);
+            this.textView2.setText(LocaleController.getString("StartText", R.string.StartText));
+            this.textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+            this.textView2.setTextSize(1, 14.0f);
+            this.textView2.setGravity(LocaleController.isRTL ? 5 : 3);
+            this.textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            addView(this.textView2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
             HashMap<String, String> languageMap = new HashMap();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
@@ -2116,41 +2123,40 @@ public class LoginActivity extends BaseFragment {
         }
 
         public void fillNumber() {
-            boolean allowSms = false;
             try {
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                if (VERSION.SDK_INT >= 23 && tm.getSimState() != 1 && tm.getPhoneType() != 0) {
-                    boolean allowCall;
-                    if (LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0) {
-                        allowCall = true;
-                    } else {
-                        allowCall = false;
-                    }
-                    if (LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.RECEIVE_SMS") == 0) {
-                        allowSms = true;
-                    }
-                    if (LoginActivity.this.checkShowPermissions && !allowCall && !allowSms) {
-                        LoginActivity.this.permissionsShowItems.clear();
-                        if (!allowCall) {
-                            LoginActivity.this.permissionsShowItems.add("android.permission.READ_PHONE_STATE");
-                        }
-                        if (!allowSms) {
-                            LoginActivity.this.permissionsShowItems.add("android.permission.RECEIVE_SMS");
-                        }
-                        if (!LoginActivity.this.permissionsShowItems.isEmpty()) {
-                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                            if (preferences.getBoolean("firstloginshow", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
-                                preferences.edit().putBoolean("firstloginshow", false).commit();
-                                Builder builder = new Builder(LoginActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                builder.setMessage(LocaleController.getString("AllowFillNumber", R.string.AllowFillNumber));
-                                LoginActivity.this.permissionsShowDialog = LoginActivity.this.showDialog(builder.create());
+                if (tm.getSimState() != 1 && tm.getPhoneType() != 0) {
+                    boolean allowCall = true;
+                    boolean allowSms = true;
+                    if (VERSION.SDK_INT >= 23) {
+                        allowCall = LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
+                        allowSms = LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.RECEIVE_SMS") == 0;
+                        if (!(!LoginActivity.this.checkShowPermissions || allowCall || allowSms)) {
+                            LoginActivity.this.permissionsShowItems.clear();
+                            if (!allowCall) {
+                                LoginActivity.this.permissionsShowItems.add("android.permission.READ_PHONE_STATE");
+                            }
+                            if (!allowSms) {
+                                LoginActivity.this.permissionsShowItems.add("android.permission.RECEIVE_SMS");
+                            }
+                            if (!LoginActivity.this.permissionsShowItems.isEmpty()) {
+                                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                                if (preferences.getBoolean("firstloginshow", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
+                                    preferences.edit().putBoolean("firstloginshow", false).commit();
+                                    Builder builder = new Builder(LoginActivity.this.getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                    builder.setMessage(LocaleController.getString("AllowFillNumber", R.string.AllowFillNumber));
+                                    LoginActivity.this.permissionsShowDialog = LoginActivity.this.showDialog(builder.create());
+                                    return;
+                                }
+                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsShowItems.toArray(new String[LoginActivity.this.permissionsShowItems.size()]), 7);
                                 return;
                             }
-                            LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsShowItems.toArray(new String[LoginActivity.this.permissionsShowItems.size()]), 7);
+                            return;
                         }
-                    } else if (allowCall || allowSms) {
+                    }
+                    if (allowCall || allowSms) {
                         String number = PhoneFormat.stripExceptNumbers(tm.getLine1Number());
                         String textToSet = null;
                         boolean ok = false;
@@ -2641,5 +2647,85 @@ public class LoginActivity extends BaseFragment {
             params.putInt("length", res.type.length);
             setPage(2, true, params, false);
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        PhoneView phoneView = this.views[0];
+        LoginActivitySmsView smsView1 = this.views[1];
+        LoginActivitySmsView smsView2 = this.views[2];
+        LoginActivitySmsView smsView3 = this.views[3];
+        LoginActivitySmsView smsView4 = this.views[4];
+        LoginActivityRegisterView registerView = this.views[5];
+        LoginActivityPasswordView passwordView = this.views[6];
+        LoginActivityRecoverView recoverView = this.views[7];
+        LoginActivityResetWaitView waitView = this.views[8];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[66];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[7] = new ThemeDescription(phoneView.view, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhiteGrayLine);
+        themeDescriptionArr[8] = new ThemeDescription(phoneView.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[9] = new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[10] = new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[11] = new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[12] = new ThemeDescription(phoneView.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[13] = new ThemeDescription(passwordView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[14] = new ThemeDescription(passwordView.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[15] = new ThemeDescription(passwordView.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[16] = new ThemeDescription(passwordView.cancelButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[17] = new ThemeDescription(passwordView.resetAccountButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteRedText6);
+        themeDescriptionArr[18] = new ThemeDescription(passwordView.resetAccountText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[19] = new ThemeDescription(registerView.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[20] = new ThemeDescription(registerView.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[21] = new ThemeDescription(registerView.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[22] = new ThemeDescription(registerView.lastNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[23] = new ThemeDescription(registerView.lastNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[24] = new ThemeDescription(registerView.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[25] = new ThemeDescription(recoverView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[26] = new ThemeDescription(recoverView.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[27] = new ThemeDescription(recoverView.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[28] = new ThemeDescription(recoverView.cancelButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[29] = new ThemeDescription(waitView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[30] = new ThemeDescription(waitView.resetAccountText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[31] = new ThemeDescription(waitView.resetAccountTime, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[32] = new ThemeDescription(waitView.resetAccountButton, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[33] = new ThemeDescription(waitView.resetAccountButton, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteRedText6);
+        themeDescriptionArr[34] = new ThemeDescription(smsView1.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[35] = new ThemeDescription(smsView1.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[36] = new ThemeDescription(smsView1.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[37] = new ThemeDescription(smsView1.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[38] = new ThemeDescription(smsView1.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[39] = new ThemeDescription(smsView1.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[40] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[41] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[42] = new ThemeDescription(smsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[43] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[44] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[45] = new ThemeDescription(smsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[46] = new ThemeDescription(smsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[47] = new ThemeDescription(smsView2.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[48] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[49] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[50] = new ThemeDescription(smsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[51] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[52] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[53] = new ThemeDescription(smsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[54] = new ThemeDescription(smsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[55] = new ThemeDescription(smsView3.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[56] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[57] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[58] = new ThemeDescription(smsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[59] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[60] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[61] = new ThemeDescription(smsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[62] = new ThemeDescription(smsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[63] = new ThemeDescription(smsView4.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[64] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[65] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        return themeDescriptionArr;
     }
 }

@@ -17,6 +17,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
@@ -74,7 +75,9 @@ import org.telegram.ui.Cells.PhotoAttachPhotoCell;
 import org.telegram.ui.Cells.PhotoAttachPhotoCell.PhotoAttachPhotoCellDelegate;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.ShutterButton.ShutterButtonDelegate;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.PhotoViewer.EmptyPhotoViewerProvider;
@@ -343,13 +346,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class ListAdapter extends Adapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
@@ -403,6 +400,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             }
         }
 
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
+        }
+
         public int getItemCount() {
             return (!SearchQuery.inlineBots.isEmpty() ? ((int) Math.ceil((double) (((float) SearchQuery.inlineBots.size()) / 4.0f))) + 1 : 0) + 1;
         }
@@ -419,7 +420,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
     }
 
-    private class PhotoAttachAdapter extends Adapter {
+    private class PhotoAttachAdapter extends SelectionAdapter {
         private Context mContext;
         private HashMap<Integer, PhotoEntry> selectedPhotos = new HashMap();
 
@@ -493,6 +494,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     holder.itemView.setVisibility(4);
                 }
             }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -1587,6 +1592,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 this.cameraView = new CameraView(this.baseFragment.getParentActivity());
                 this.container.addView(this.cameraView, 1, LayoutHelper.createFrame(80, 80.0f));
                 this.cameraView.setDelegate(new CameraViewDelegate() {
+                    public void onCameraCreated(Camera camera) {
+                    }
+
                     public void onCameraInit() {
                         int a;
                         int i = 0;
@@ -1650,7 +1658,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
 
     public void hideCamera(boolean async) {
         if (this.deviceHasGoodCamera && this.cameraView != null) {
-            this.cameraView.destroy(async);
+            this.cameraView.destroy(async, null);
             this.container.removeView(this.cameraView);
             this.container.removeView(this.cameraIcon);
             this.cameraView = null;

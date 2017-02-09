@@ -367,7 +367,7 @@ public class ActionBarLayout extends FrameLayout {
         layoutParams.height = -1;
         fragmentView.setLayoutParams(layoutParams);
         if (!lastFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(-1);
+            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         }
         lastFragment.onResume();
     }
@@ -654,7 +654,7 @@ public class ActionBarLayout extends FrameLayout {
         fragment.onResume();
         this.currentActionBar = fragment.actionBar;
         if (!fragment.hasOwnBackground && fragmentView.getBackground() == null) {
-            fragmentView.setBackgroundColor(-1);
+            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         }
         LinearLayoutContainer temp = this.containerView;
         this.containerView = this.containerViewBack;
@@ -855,7 +855,7 @@ public class ActionBarLayout extends FrameLayout {
                 previousFragment.onResume();
                 this.currentActionBar = previousFragment.actionBar;
                 if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-                    fragmentView.setBackgroundColor(-1);
+                    fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                 }
                 if (!needAnimation) {
                     closeLastFragmentInternalRemoveOld(currentFragment);
@@ -1002,7 +1002,7 @@ public class ActionBarLayout extends FrameLayout {
             previousFragment.onResume();
             this.currentActionBar = previousFragment.actionBar;
             if (!previousFragment.hasOwnBackground && fragmentView.getBackground() == null) {
-                fragmentView.setBackgroundColor(-1);
+                fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             }
         }
     }

@@ -60,6 +60,7 @@ import org.telegram.ui.Components.voip.CallSwipeView;
 import org.telegram.ui.Components.voip.CallSwipeView.Listener;
 import org.telegram.ui.Components.voip.CheckableImageView;
 import org.telegram.ui.Components.voip.FabBackgroundDrawable;
+import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPActivity extends Activity implements StateListener {
     private static final String TAG = "tg-voip-ui";
@@ -474,9 +475,16 @@ public class VoIPActivity extends Activity implements StateListener {
         if (grantResults[0] == 0) {
             VoIPService.getSharedInstance().acceptIncomingCall();
             callAccepted();
-            return;
+        } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+            this.acceptSwipe.reset();
+        } else {
+            VoIPService.getSharedInstance().declineIncomingCall();
+            VoIPHelper.permissionDenied(this, new Runnable() {
+                public void run() {
+                    VoIPActivity.this.finish();
+                }
+            });
         }
-        this.acceptSwipe.reset();
     }
 
     private void setKeyOverlayVisible(boolean visible) {

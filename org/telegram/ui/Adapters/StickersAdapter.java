@@ -2,7 +2,6 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +11,13 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.query.StickersQuery;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.Cells.StickerCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class StickersAdapter extends Adapter implements NotificationCenterDelegate {
+public class StickersAdapter extends SelectionAdapter implements NotificationCenterDelegate {
     private StickersAdapterDelegate delegate;
     private String lastSticker;
     private Context mContext;
@@ -27,12 +27,6 @@ public class StickersAdapter extends Adapter implements NotificationCenterDelega
 
     public interface StickersAdapterDelegate {
         void needChangePanelVisibility(boolean z);
-    }
-
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
     }
 
     public StickersAdapter(Context context, StickersAdapterDelegate delegate) {
@@ -168,8 +162,8 @@ public class StickersAdapter extends Adapter implements NotificationCenterDelega
         return (this.stickers == null || i < 0 || i >= this.stickers.size()) ? null : (Document) this.stickers.get(i);
     }
 
-    public long getItemId(int i) {
-        return (long) i;
+    public boolean isEnabled(ViewHolder holder) {
+        return true;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

@@ -42,6 +42,11 @@ public class SimpleTextView extends View implements Callback {
         invalidate();
     }
 
+    public void setLinkTextColor(int color) {
+        this.textPaint.linkColor = color;
+        invalidate();
+    }
+
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.wasLayout = false;
@@ -238,9 +243,6 @@ public class SimpleTextView extends View implements Callback {
         }
         if (this.rightDrawable != null) {
             int x = (this.textWidth + textOffsetX) + this.drawablePadding;
-            if (this.leftDrawable != null) {
-                x += this.drawablePadding + this.leftDrawable.getIntrinsicWidth();
-            }
             y = ((this.textHeight - this.rightDrawable.getIntrinsicHeight()) / 2) + this.rightDrawableTopPadding;
             this.rightDrawable.setBounds(x, y, this.rightDrawable.getIntrinsicWidth() + x, this.rightDrawable.getIntrinsicHeight() + y);
             this.rightDrawable.draw(canvas);

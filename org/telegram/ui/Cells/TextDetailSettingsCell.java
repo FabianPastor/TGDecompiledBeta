@@ -2,17 +2,16 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextDetailSettingsCell extends FrameLayout {
-    private static Paint paint;
     private boolean multiline;
     private boolean needDivider;
     private TextView textView;
@@ -23,13 +22,8 @@ public class TextDetailSettingsCell extends FrameLayout {
         int i2;
         int i3 = 5;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -43,7 +37,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 17.0f, 10.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-7697782);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
         TextView textView = this.valueTextView;
         if (LocaleController.isRTL) {
@@ -66,14 +60,15 @@ public class TextDetailSettingsCell extends FrameLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i = 0;
         if (this.multiline) {
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, 0));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
             return;
         }
+        int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM);
         int dp = AndroidUtilities.dp(64.0f);
         if (this.needDivider) {
             i = 1;
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
+        super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(i + dp, NUM));
     }
 
     public void setMultilineDetail(boolean value) {
@@ -100,7 +95,7 @@ public class TextDetailSettingsCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

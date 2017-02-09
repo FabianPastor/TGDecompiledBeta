@@ -61,6 +61,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
+import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageActionTTLChange;
@@ -86,6 +87,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
+import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
@@ -99,6 +101,7 @@ import org.telegram.tgnet.TLRPC.TL_message_secret;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
+import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
@@ -114,12 +117,6 @@ public class MessageObject {
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
-    private static TextPaint botButtonPaint;
-    private static TextPaint gameTextPaint;
-    private static TextPaint textPaint;
-    private static TextPaint textPaintOneEmoji;
-    private static TextPaint textPaintThreeEmoji;
-    private static TextPaint textPaintTwoEmoji;
     public static Pattern urlPattern;
     public boolean attachPathExists;
     public float audioProgress;
@@ -164,35 +161,12 @@ public class MessageObject {
 
     public MessageObject(Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, boolean generateLayout) {
         this.type = 1000;
-        if (textPaint == null) {
-            textPaint = new TextPaint(1);
-            textPaint.setColor(-16777216);
-            textPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        }
-        if (gameTextPaint == null) {
-            gameTextPaint = new TextPaint(1);
-            gameTextPaint.setColor(-16777216);
-            gameTextPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        }
-        if (textPaintOneEmoji == null) {
-            textPaintOneEmoji = new TextPaint(1);
-            textPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
-        }
-        if (textPaintTwoEmoji == null) {
-            textPaintTwoEmoji = new TextPaint(1);
-            textPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
-        }
-        if (textPaintThreeEmoji == null) {
-            textPaintThreeEmoji = new TextPaint(1);
-            textPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
-        }
-        textPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getInstance().fontSize));
-        gameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+        Theme.createChatResources(null, true);
         this.messageOwner = message;
         if (message.replyMessage != null) {
             this.replyMessageObject = new MessageObject(message.replyMessage, users, chats, false);
         }
-        TLObject fromUser = null;
+        User fromUser = null;
         if (message.from_id > 0) {
             if (users != null) {
                 fromUser = (User) users.get(Integer.valueOf(message.from_id));
@@ -312,9 +286,9 @@ public class MessageObject {
                 } else if (message.action instanceof TL_messageActionTTLChange) {
                     if (message.action.ttl != 0) {
                         if (isOut()) {
-                            this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, AndroidUtilities.formatTTLString(message.action.ttl));
+                            this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(message.action.ttl));
                         } else {
-                            this.messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), AndroidUtilities.formatTTLString(message.action.ttl));
+                            this.messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(message.action.ttl));
                         }
                     } else if (isOut()) {
                         this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", R.string.MessageLifetimeYouRemoved);
@@ -354,9 +328,9 @@ public class MessageObject {
                     } else if (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) {
                         if (message.action.encryptedAction.ttl_seconds != 0) {
                             if (isOut()) {
-                                this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, AndroidUtilities.formatTTLString(action.ttl_seconds));
+                                this.messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
                             } else {
-                                this.messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), AndroidUtilities.formatTTLString(action.ttl_seconds));
+                                this.messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(action.ttl_seconds));
                             }
                         } else if (isOut()) {
                             this.messageText = LocaleController.getString("MessageLifetimeYouRemoved", R.string.MessageLifetimeYouRemoved);
@@ -414,6 +388,15 @@ public class MessageObject {
                             this.messageText = spannableString;
                         }
                     }
+                } else if (message.action instanceof TL_messageActionPaymentSent) {
+                    int uid = (int) getDialogId();
+                    if (users != null) {
+                        fromUser = (User) users.get(Integer.valueOf(uid));
+                    }
+                    if (fromUser == null) {
+                        fromUser = MessagesController.getInstance().getUser(Integer.valueOf(uid));
+                    }
+                    generatePaymentSentMessageText(null);
                 }
             }
         } else if (isMediaEmpty()) {
@@ -430,6 +413,8 @@ public class MessageObject {
             this.messageText = LocaleController.getString("AttachContact", R.string.AttachContact);
         } else if (message.media instanceof TL_messageMediaGame) {
             this.messageText = message.message;
+        } else if (message.media instanceof TL_messageMediaInvoice) {
+            this.messageText = message.media.description;
         } else if (message.media instanceof TL_messageMediaUnsupported) {
             this.messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia);
         } else if (message.media instanceof TL_messageMediaDocument) {
@@ -475,9 +460,9 @@ public class MessageObject {
         if (generateLayout) {
             TextPaint paint;
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
-                paint = gameTextPaint;
+                paint = Theme.chat_msgGameTextPaint;
             } else {
-                paint = textPaint;
+                paint = Theme.chat_msgTextPaint;
             }
             int[] emojiOnly = MessagesController.getInstance().allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
@@ -486,15 +471,15 @@ public class MessageObject {
                 int size;
                 switch (emojiOnly[0]) {
                     case 1:
-                        emojiPaint = textPaintOneEmoji;
+                        emojiPaint = Theme.chat_msgTextPaintOneEmoji;
                         size = AndroidUtilities.dp(32.0f);
                         break;
                     case 2:
-                        emojiPaint = textPaintTwoEmoji;
+                        emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
                         size = AndroidUtilities.dp(28.0f);
                         break;
                     default:
-                        emojiPaint = textPaintThreeEmoji;
+                        emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
                         size = AndroidUtilities.dp(24.0f);
                         break;
                 }
@@ -521,41 +506,13 @@ public class MessageObject {
             }
             this.messageText = this.messageOwner.message;
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
-                paint = gameTextPaint;
+                paint = Theme.chat_msgGameTextPaint;
             } else {
-                paint = textPaint;
+                paint = Theme.chat_msgTextPaint;
             }
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             generateLayout(fromUser);
         }
-    }
-
-    public static TextPaint getTextPaint() {
-        if (textPaint == null) {
-            textPaint = new TextPaint(1);
-            textPaint.setColor(-16777216);
-            textPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        }
-        if (gameTextPaint == null) {
-            gameTextPaint = new TextPaint(1);
-            gameTextPaint.setColor(-16777216);
-            gameTextPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        }
-        if (textPaintOneEmoji == null) {
-            textPaintOneEmoji = new TextPaint(1);
-            textPaintOneEmoji.setTextSize((float) AndroidUtilities.dp(28.0f));
-        }
-        if (textPaintTwoEmoji == null) {
-            textPaintTwoEmoji = new TextPaint(1);
-            textPaintTwoEmoji.setTextSize((float) AndroidUtilities.dp(24.0f));
-        }
-        if (textPaintThreeEmoji == null) {
-            textPaintThreeEmoji = new TextPaint(1);
-            textPaintThreeEmoji.setTextSize((float) AndroidUtilities.dp(20.0f));
-        }
-        textPaint.setTextSize((float) AndroidUtilities.dp((float) MessagesController.getInstance().fontSize));
-        gameTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
-        return textPaint;
     }
 
     public void generateGameMessageText(User fromUser) {
@@ -578,6 +535,23 @@ public class MessageObject {
         } else {
             this.messageText = LocaleController.formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", this.messageOwner.action.score));
         }
+    }
+
+    public void generatePaymentSentMessageText(User fromUser) {
+        String name;
+        if (fromUser == null) {
+            fromUser = MessagesController.getInstance().getUser(Integer.valueOf((int) getDialogId()));
+        }
+        if (fromUser != null) {
+            name = UserObject.getFirstName(fromUser);
+        } else {
+            name = "";
+        }
+        if (this.replyMessageObject == null || !(this.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
+            this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", R.string.PaymentSuccessfullyPaidNoItem, LocaleController.formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
+            return;
+        }
+        this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, LocaleController.formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
     }
 
     private String formatDuration(int duration) {
@@ -679,7 +653,7 @@ public class MessageObject {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
-            this.messageText = Emoji.replaceEmoji(this.messageText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            this.messageText = Emoji.replaceEmoji(this.messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
         } else if (this.replyMessageObject.messageText == null || this.replyMessageObject.messageText.length() <= 0) {
             string = LocaleController.getString("ActionPinnedNoText", R.string.ActionPinnedNoText);
             str = "un1";
@@ -692,7 +666,7 @@ public class MessageObject {
             if (mess.length() > 20) {
                 mess = mess.subSequence(0, 20) + "...";
             }
-            mess = Emoji.replaceEmoji(mess, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             string = LocaleController.formatString("ActionPinnedText", R.string.ActionPinnedText, mess);
             str = "un1";
             if (fromUser == null) {
@@ -705,17 +679,13 @@ public class MessageObject {
     public void measureInlineBotButtons() {
         this.wantedBotKeyboardWidth = 0;
         if (this.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
-            if (botButtonPaint == null) {
-                botButtonPaint = new TextPaint(1);
-                botButtonPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            }
-            botButtonPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
+            Theme.createChatResources(null, true);
             for (int a = 0; a < this.messageOwner.reply_markup.rows.size(); a++) {
                 TL_keyboardButtonRow row = (TL_keyboardButtonRow) this.messageOwner.reply_markup.rows.get(a);
                 int maxButtonSize = 0;
                 int size = row.buttons.size();
                 for (int b = 0; b < size; b++) {
-                    StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(((KeyboardButton) row.buttons.get(b)).text, botButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), botButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(((KeyboardButton) row.buttons.get(b)).text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout.getLineCount() > 0) {
                         maxButtonSize = Math.max(maxButtonSize, ((int) Math.ceil((double) (staticLayout.getLineWidth(0) - staticLayout.getLineLeft(0)))) + AndroidUtilities.dp(4.0f));
                     }
@@ -758,6 +728,8 @@ public class MessageObject {
                     this.type = 9;
                 }
             } else if (this.messageOwner.media instanceof TL_messageMediaGame) {
+                this.type = 0;
+            } else if (this.messageOwner.media instanceof TL_messageMediaInvoice) {
                 this.type = 0;
             }
         } else if (this.messageOwner instanceof TL_messageService) {
@@ -812,9 +784,9 @@ public class MessageObject {
             fromUser = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
         }
         if (this.messageOwner.media instanceof TL_messageMediaGame) {
-            paint = gameTextPaint;
+            paint = Theme.chat_msgGameTextPaint;
         } else {
-            paint = textPaint;
+            paint = Theme.chat_msgTextPaint;
         }
         this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
         generateLayout(fromUser);
@@ -1112,6 +1084,8 @@ public class MessageObject {
                 this.linkDescription = Factory.getInstance().newSpannable(this.messageOwner.media.webpage.description);
             } else if ((this.messageOwner.media instanceof TL_messageMediaGame) && this.messageOwner.media.game.description != null) {
                 this.linkDescription = Factory.getInstance().newSpannable(this.messageOwner.media.game.description);
+            } else if ((this.messageOwner.media instanceof TL_messageMediaInvoice) && this.messageOwner.media.description != null) {
+                this.linkDescription = Factory.getInstance().newSpannable(this.messageOwner.media.description);
             }
             if (this.linkDescription != null) {
                 if (containsUrls(this.linkDescription)) {
@@ -1121,14 +1095,14 @@ public class MessageObject {
                         FileLog.e("tmessages", e);
                     }
                 }
-                this.linkDescription = Emoji.replaceEmoji(this.linkDescription, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                this.linkDescription = Emoji.replaceEmoji(this.linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
         }
     }
 
     public void generateCaption() {
         if (this.caption == null && this.messageOwner.media != null && this.messageOwner.media.caption != null && this.messageOwner.media.caption.length() > 0) {
-            this.caption = Emoji.replaceEmoji(this.messageOwner.media.caption, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            this.caption = Emoji.replaceEmoji(this.messageOwner.media.caption, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             if (containsUrls(this.caption)) {
                 try {
                     Linkify.addLinks((Spannable) this.caption, 5);
@@ -1209,7 +1183,7 @@ public class MessageObject {
             } else {
                 hasEntities = !this.messageOwner.entities.isEmpty();
             }
-            boolean useManualParse = !hasEntities && ((this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
+            boolean useManualParse = !hasEntities && ((this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
             if (useManualParse) {
                 addLinks(this.messageText);
             } else if ((this.messageText instanceof Spannable) && this.messageText.length() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
@@ -1282,9 +1256,9 @@ public class MessageObject {
                 maxWidth -= AndroidUtilities.dp(10.0f);
             }
             if (this.messageOwner.media instanceof TL_messageMediaGame) {
-                paint = gameTextPaint;
+                paint = Theme.chat_msgGameTextPaint;
             } else {
-                paint = textPaint;
+                paint = Theme.chat_msgTextPaint;
             }
             try {
                 StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -1589,6 +1563,18 @@ public class MessageObject {
         return false;
     }
 
+    public static boolean isVoiceWebDocument(TL_webDocument webDocument) {
+        return webDocument != null && webDocument.mime_type.equals("audio/ogg");
+    }
+
+    public static boolean isImageWebDocument(TL_webDocument webDocument) {
+        return webDocument != null && webDocument.mime_type.startsWith("image/");
+    }
+
+    public static boolean isVideoWebDocument(TL_webDocument webDocument) {
+        return webDocument != null && webDocument.mime_type.startsWith("video/");
+    }
+
     public static boolean isMusicDocument(Document document) {
         if (document == null) {
             return false;
@@ -1672,6 +1658,10 @@ public class MessageObject {
 
     public static boolean isGameMessage(Message message) {
         return message.media instanceof TL_messageMediaGame;
+    }
+
+    public static boolean isInvoiceMessage(Message message) {
+        return message.media instanceof TL_messageMediaInvoice;
     }
 
     public static InputStickerSet getInputStickerSet(Message message) {
@@ -1842,6 +1832,10 @@ public class MessageObject {
 
     public boolean isGame() {
         return isGameMessage(this.messageOwner);
+    }
+
+    public boolean isInvoice() {
+        return isInvoiceMessage(this.messageOwner);
     }
 
     public boolean hasPhotoStickers() {

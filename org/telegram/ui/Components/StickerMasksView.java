@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -29,7 +30,9 @@ import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate;
 import org.telegram.ui.StickerPreviewViewer;
 
@@ -54,13 +57,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         void onTypeChanged();
     }
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class StickersGridAdapter extends Adapter {
+    private class StickersGridAdapter extends SelectionAdapter {
         private HashMap<Integer, Document> cache = new HashMap();
         private Context context;
         private HashMap<TL_messages_stickerSet, Integer> packStartRow = new HashMap();
@@ -104,6 +101,10 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 return StickerMasksView.this.recentTabBum;
             }
             return StickerMasksView.this.stickerSets[StickerMasksView.this.currentType].indexOf(pack) + StickerMasksView.this.stickersTabOffset;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -313,17 +314,22 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             this.stickersTabOffset = 0;
             int lastPosition = this.scrollSlidingTabStrip.getCurrentPosition();
             this.scrollSlidingTabStrip.removeTabs();
+            Drawable drawable;
             if (this.currentType == 0) {
-                this.scrollSlidingTabStrip.addIconTab(R.drawable.ic_masks_msk1);
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_masks_msk1);
+                Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
+                this.scrollSlidingTabStrip.addIconTab(drawable);
                 this.stickersEmptyView.setText(LocaleController.getString("NoStickers", R.string.NoStickers));
             } else {
-                this.scrollSlidingTabStrip.addIconTab(R.drawable.ic_masks_sticker1);
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_masks_sticker1);
+                Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
+                this.scrollSlidingTabStrip.addIconTab(drawable);
                 this.stickersEmptyView.setText(LocaleController.getString("NoMasks", R.string.NoMasks));
             }
             if (!this.recentStickers[this.currentType].isEmpty()) {
                 this.recentTabBum = this.stickersTabOffset;
                 this.stickersTabOffset++;
-                this.scrollSlidingTabStrip.addIconTab(R.drawable.ic_masks_recent);
+                this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), R.drawable.ic_masks_recent1, Theme.getColor(Theme.key_chat_emojiPanelMasksIcon), Theme.getColor(Theme.key_chat_emojiPanelMasksIconSelected)));
             }
             this.stickerSets[this.currentType].clear();
             ArrayList<TL_messages_stickerSet> packs = StickersQuery.getStickerSets(this.currentType);

@@ -5,6 +5,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
@@ -69,7 +71,9 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ShareDialogCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.DialogsActivity;
 
 public class ShareAlert extends BottomSheet implements NotificationCenterDelegate {
@@ -97,13 +101,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private Drawable shadowDrawable;
     private int topBeforeSwitch;
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class ShareDialogsAdapter extends Adapter {
+    private class ShareDialogsAdapter extends SelectionAdapter {
         private Context context;
         private int currentCount;
         private ArrayList<TL_dialog> dialogs = new ArrayList();
@@ -144,8 +142,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             return (TL_dialog) this.dialogs.get(i);
         }
 
-        public long getItemId(int i) {
-            return (long) i;
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -165,7 +163,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
     }
 
-    public class ShareSearchAdapter extends Adapter {
+    public class ShareSearchAdapter extends SelectionAdapter {
         private Context context;
         private int lastReqId;
         private int lastSearchId = 0;
@@ -484,6 +482,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             return (long) i;
         }
 
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
+        }
+
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ShareDialogCell(this.context);
             view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(100.0f)));
@@ -587,7 +589,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         });
         this.doneButton = new LinearLayout(context);
         this.doneButton.setOrientation(0);
-        this.doneButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(788529152, false));
+        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.doneButton.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
         this.frameLayout.addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButton.setOnClickListener(new OnClickListener() {
@@ -632,7 +634,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButton.addView(this.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.search_share);
+        imageView.setImageResource(R.drawable.ic_ab_search);
+        imageView.setColorFilter(new PorterDuffColorFilter(-6381922, Mode.MULTIPLY));
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 19));

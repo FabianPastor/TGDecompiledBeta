@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.telegram.ui.ActionBar.Theme;
 
 public final class ColorParser {
     private static final Map<String, Integer> COLOR_MAP = new HashMap();
@@ -67,7 +66,7 @@ public final class ColorParser {
         COLOR_MAP.put("floralwhite", Integer.valueOf(-1296));
         COLOR_MAP.put("forestgreen", Integer.valueOf(-14513374));
         COLOR_MAP.put("fuchsia", Integer.valueOf(-65281));
-        COLOR_MAP.put("gainsboro", Integer.valueOf(Theme.GROUP_CREATE_DIVIDER_COLOR));
+        COLOR_MAP.put("gainsboro", Integer.valueOf(-2302756));
         COLOR_MAP.put("ghostwhite", Integer.valueOf(-460545));
         COLOR_MAP.put("gold", Integer.valueOf(-10496));
         COLOR_MAP.put("goldenrod", Integer.valueOf(-2448096));

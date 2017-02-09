@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build.VERSION;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -28,6 +25,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.BottomSheetCell;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -36,12 +34,15 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DataSettingsActivity extends BaseFragment {
     private int callsSection2Row;
     private int callsSectionRow;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
     private int mediaDownloadSection2Row;
     private int mediaDownloadSectionRow;
     private int mobileDownloadRow;
@@ -56,14 +57,8 @@ public class DataSettingsActivity extends BaseFragment {
     private int wifiDownloadRow;
     private int wifiUsageRow;
 
-    private class ListAdapter extends Adapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -74,34 +69,22 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean checkBackground = true;
             String value;
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataSettingsActivity.this.callsSection2Row || (position == DataSettingsActivity.this.usageSection2Row && DataSettingsActivity.this.usageSection2Row == -1)) {
-                        holder.itemView.setBackgroundResource(R.drawable.greydivider_bottom);
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
                     } else {
-                        holder.itemView.setBackgroundResource(R.drawable.greydivider);
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        return;
                     }
-                    checkBackground = false;
-                    break;
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
-                    if (position != DataSettingsActivity.this.storageUsageRow) {
-                        if (position != DataSettingsActivity.this.useLessDataForCallsRow) {
-                            if (position != DataSettingsActivity.this.mobileUsageRow) {
-                                if (position != DataSettingsActivity.this.roamingUsageRow) {
-                                    if (position == DataSettingsActivity.this.wifiUsageRow) {
-                                        textCell.setText(LocaleController.getString("WiFiUsage", R.string.WiFiUsage), true);
-                                        break;
-                                    }
-                                }
-                                textCell.setText(LocaleController.getString("RoamingUsage", R.string.RoamingUsage), false);
-                                break;
-                            }
-                            textCell.setText(LocaleController.getString("MobileUsage", R.string.MobileUsage), true);
-                            break;
-                        }
+                    if (position == DataSettingsActivity.this.storageUsageRow) {
+                        textCell.setText(LocaleController.getString("StorageUsage", R.string.StorageUsage), true);
+                        return;
+                    } else if (position == DataSettingsActivity.this.useLessDataForCallsRow) {
                         value = null;
                         switch (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0)) {
                             case 0:
@@ -115,22 +98,33 @@ public class DataSettingsActivity extends BaseFragment {
                                 break;
                         }
                         textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, false);
-                        break;
+                        return;
+                    } else if (position == DataSettingsActivity.this.mobileUsageRow) {
+                        textCell.setText(LocaleController.getString("MobileUsage", R.string.MobileUsage), true);
+                        return;
+                    } else if (position == DataSettingsActivity.this.roamingUsageRow) {
+                        textCell.setText(LocaleController.getString("RoamingUsage", R.string.RoamingUsage), false);
+                        return;
+                    } else if (position == DataSettingsActivity.this.wifiUsageRow) {
+                        textCell.setText(LocaleController.getString("WiFiUsage", R.string.WiFiUsage), true);
+                        return;
+                    } else {
+                        return;
                     }
-                    textCell.setText(LocaleController.getString("StorageUsage", R.string.StorageUsage), true);
-                    break;
-                    break;
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == DataSettingsActivity.this.mediaDownloadSectionRow) {
                         headerCell.setText(LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload));
+                        return;
                     } else if (position == DataSettingsActivity.this.usageSectionRow) {
                         headerCell.setText(LocaleController.getString("DataUsage", R.string.DataUsage));
+                        return;
                     } else if (position == DataSettingsActivity.this.callsSectionRow) {
                         headerCell.setText(LocaleController.getString("Calls", R.string.Calls));
+                        return;
+                    } else {
+                        return;
                     }
-                    checkBackground = false;
-                    break;
                 case 3:
                     TextDetailSettingsCell textCell2 = holder.itemView;
                     if (position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow) {
@@ -184,22 +178,17 @@ public class DataSettingsActivity extends BaseFragment {
                             text = LocaleController.getString("NoMediaAutoDownload", R.string.NoMediaAutoDownload);
                         }
                         textCell2.setTextAndValue(value, text, true);
-                        break;
+                        return;
                     }
+                    return;
                 default:
-                    checkBackground = false;
-                    break;
+                    return;
             }
-            if (!checkBackground) {
-                return;
-            }
-            if (position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow || position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow) {
-                if (holder.itemView.getBackground() == null) {
-                    holder.itemView.setBackgroundResource(R.drawable.list_selector_white);
-                }
-            } else if (holder.itemView.getBackground() != null) {
-                holder.itemView.setBackgroundDrawable(null);
-            }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow || position == DataSettingsActivity.this.storageUsageRow || position == DataSettingsActivity.this.useLessDataForCallsRow || position == DataSettingsActivity.this.mobileUsageRow || position == DataSettingsActivity.this.roamingUsageRow || position == DataSettingsActivity.this.wifiUsageRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -209,28 +198,16 @@ public class DataSettingsActivity extends BaseFragment {
                     view = new ShadowSectionCell(this.mContext);
                     break;
                 case 1:
-                    view = new TextSettingsCell(this.mContext) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 2:
                     view = new HeaderCell(this.mContext);
-                    view.setBackgroundColor(-1);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
-                    view = new TextDetailSettingsCell(this.mContext) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextDetailSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -324,14 +301,14 @@ public class DataSettingsActivity extends BaseFragment {
         });
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
-        RecyclerListView listView = new RecyclerListView(context);
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
-        frameLayout.addView(listView, LayoutHelper.createFrame(-1, -1, 51));
-        listView.setAdapter(this.listAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
+        this.listView = new RecyclerListView(context);
+        this.listView.setVerticalScrollBarEnabled(false);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        this.listView.setAdapter(this.listAdapter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 final int i;
                 if (position == DataSettingsActivity.this.wifiDownloadRow || position == DataSettingsActivity.this.mobileDownloadRow || position == DataSettingsActivity.this.roamingDownloadRow) {
@@ -374,7 +351,7 @@ public class DataSettingsActivity extends BaseFragment {
                             }
                             CheckBoxCell checkBoxCell = new CheckBoxCell(DataSettingsActivity.this.getParentActivity());
                             checkBoxCell.setTag(Integer.valueOf(a));
-                            checkBoxCell.setBackgroundResource(R.drawable.list_selector);
+                            checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                             checkBoxCell.setText(name, "", maskValues[a], true);
                             zArr = maskValues;
@@ -388,7 +365,7 @@ public class DataSettingsActivity extends BaseFragment {
                             });
                         }
                         BottomSheetCell cell = new BottomSheetCell(DataSettingsActivity.this.getParentActivity(), 1);
-                        cell.setBackgroundResource(R.drawable.list_selector);
+                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
                         cell.setTextColor(-12940081);
                         zArr = maskValues;
@@ -493,5 +470,26 @@ public class DataSettingsActivity extends BaseFragment {
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[16];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextSettingsCell.class, TextDetailSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        return themeDescriptionArr;
     }
 }

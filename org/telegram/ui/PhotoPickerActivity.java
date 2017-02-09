@@ -17,15 +17,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.FileNotFoundException;
@@ -47,6 +40,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.MediaController.PhotoEntry;
@@ -60,6 +54,12 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.DefaultLoadControl;
+import org.telegram.messenger.support.widget.GridLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -78,11 +78,17 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
 import org.telegram.ui.Cells.PhotoPickerPhotoCell;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PickerBottomLayout;
+import org.telegram.ui.Components.RadialProgressView;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
 import org.telegram.ui.PhotoViewer.PlaceProviderObject;
 import org.telegram.ui.VideoEditorActivity.VideoEditorActivityDelegate;
@@ -99,8 +105,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private int itemWidth = 100;
     private String lastSearchString;
     private int lastSearchToken;
+    private GridLayoutManager layoutManager;
     private ListAdapter listAdapter;
-    private GridView listView;
+    private RecyclerListView listView;
     private boolean loadingRecent;
     private int nextGiphySearchOffset;
     private PickerBottomLayout pickerBottomLayout;
@@ -126,34 +133,31 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         void selectedPhotosChanged();
     }
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return PhotoPickerActivity.this.selectedAlbum != null;
-        }
-
-        public boolean isEnabled(int i) {
+        public boolean isEnabled(ViewHolder holder) {
             if (PhotoPickerActivity.this.selectedAlbum != null) {
                 return true;
             }
+            int position = holder.getAdapterPosition();
             if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
-                if (i < PhotoPickerActivity.this.recentImages.size()) {
+                if (position < PhotoPickerActivity.this.recentImages.size()) {
                     return true;
                 }
                 return false;
-            } else if (i >= PhotoPickerActivity.this.searchResult.size()) {
+            } else if (position >= PhotoPickerActivity.this.searchResult.size()) {
                 return false;
             } else {
                 return true;
             }
         }
 
-        public int getCount() {
+        public int getItemCount() {
             int i = 0;
             if (PhotoPickerActivity.this.selectedAlbum == null) {
                 if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
@@ -177,27 +181,16 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             return PhotoPickerActivity.this.selectedAlbum.photos.size();
         }
 
-        public Object getItem(int i) {
-            return null;
-        }
-
         public long getItemId(int i) {
             return (long) i;
         }
 
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int viewType = getItemViewType(i);
-            if (viewType == 0) {
-                boolean showing;
-                int i2;
-                PhotoPickerPhotoCell cell = (PhotoPickerPhotoCell) view;
-                if (view == null) {
-                    view = new PhotoPickerPhotoCell(this.mContext);
-                    cell = (PhotoPickerPhotoCell) view;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            int i = 0;
+            switch (viewType) {
+                case 0:
+                    View cell = new PhotoPickerPhotoCell(this.mContext);
                     cell.checkFrame.setOnClickListener(new OnClickListener() {
                         public void onClick(View v) {
                             int index = ((Integer) ((View) v.getParent()).getTag()).intValue();
@@ -235,70 +228,96 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             PhotoPickerActivity.this.delegate.selectedPhotosChanged();
                         }
                     });
-                    cell.checkFrame.setVisibility(PhotoPickerActivity.this.singlePhoto ? 8 : 0);
-                }
-                cell.itemWidth = PhotoPickerActivity.this.itemWidth;
-                BackupImageView imageView = ((PhotoPickerPhotoCell) view).photoImage;
-                imageView.setTag(Integer.valueOf(i));
-                view.setTag(Integer.valueOf(i));
-                imageView.setOrientation(0, true);
-                if (PhotoPickerActivity.this.selectedAlbum != null) {
-                    PhotoEntry photoEntry = (PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(i);
-                    if (photoEntry.thumbPath != null) {
-                        imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                    } else if (photoEntry.path != null) {
-                        imageView.setOrientation(photoEntry.orientation, true);
-                        if (photoEntry.isVideo) {
-                            imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                        } else {
-                            imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                        }
-                    } else {
-                        imageView.setImageResource(R.drawable.nophotos);
+                    FrameLayout frameLayout = cell.checkFrame;
+                    if (PhotoPickerActivity.this.singlePhoto) {
+                        i = 8;
                     }
-                    cell.setChecked(PhotoPickerActivity.this.selectedPhotos.containsKey(Integer.valueOf(photoEntry.imageId)), false);
-                    showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
-                } else {
-                    SearchImage photoEntry2;
-                    if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
-                        photoEntry2 = (SearchImage) PhotoPickerActivity.this.recentImages.get(i);
-                    } else {
-                        photoEntry2 = (SearchImage) PhotoPickerActivity.this.searchResult.get(i);
-                    }
-                    if (photoEntry2.thumbPath != null) {
-                        imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                    } else if (photoEntry2.thumbUrl != null && photoEntry2.thumbUrl.length() > 0) {
-                        imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                    } else if (photoEntry2.document == null || photoEntry2.document.thumb == null) {
-                        imageView.setImageResource(R.drawable.nophotos);
-                    } else {
-                        imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
-                    }
-                    cell.setChecked(PhotoPickerActivity.this.selectedWebPhotos.containsKey(photoEntry2.id), false);
-                    if (photoEntry2.document != null) {
-                        showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry2.document, true).getAbsolutePath());
-                    } else {
-                        showing = PhotoViewer.getInstance().isShowingImage(photoEntry2.imageUrl);
-                    }
-                }
-                imageView.getImageReceiver().setVisible(!showing, true);
-                CheckBox checkBox = cell.checkBox;
-                if (PhotoPickerActivity.this.singlePhoto || showing) {
-                    i2 = 8;
-                } else {
-                    i2 = 0;
-                }
-                checkBox.setVisibility(i2);
-            } else if (viewType == 1) {
-                if (view == null) {
-                    view = ((LayoutInflater) this.mContext.getSystemService("layout_inflater")).inflate(R.layout.media_loading_layout, viewGroup, false);
-                }
-                LayoutParams params = view.getLayoutParams();
-                params.width = PhotoPickerActivity.this.itemWidth;
-                params.height = PhotoPickerActivity.this.itemWidth;
-                view.setLayoutParams(params);
+                    frameLayout.setVisibility(i);
+                    view = cell;
+                    break;
+                default:
+                    view = ((LayoutInflater) this.mContext.getSystemService("layout_inflater")).inflate(R.layout.media_loading_layout, parent, false);
+                    break;
             }
-            return view;
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            int i = 0;
+            switch (holder.getItemViewType()) {
+                case 0:
+                    boolean showing;
+                    boolean z;
+                    PhotoPickerPhotoCell cell = holder.itemView;
+                    cell.itemWidth = PhotoPickerActivity.this.itemWidth;
+                    BackupImageView imageView = cell.photoImage;
+                    imageView.setTag(Integer.valueOf(position));
+                    cell.setTag(Integer.valueOf(position));
+                    imageView.setOrientation(0, true);
+                    if (PhotoPickerActivity.this.selectedAlbum != null) {
+                        PhotoEntry photoEntry = (PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(position);
+                        if (photoEntry.thumbPath != null) {
+                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                        } else if (photoEntry.path != null) {
+                            imageView.setOrientation(photoEntry.orientation, true);
+                            if (photoEntry.isVideo) {
+                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                            } else {
+                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                            }
+                        } else {
+                            imageView.setImageResource(R.drawable.nophotos);
+                        }
+                        cell.setChecked(PhotoPickerActivity.this.selectedPhotos.containsKey(Integer.valueOf(photoEntry.imageId)), false);
+                        showing = PhotoViewer.getInstance().isShowingImage(photoEntry.path);
+                    } else {
+                        SearchImage photoEntry2;
+                        if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
+                            photoEntry2 = (SearchImage) PhotoPickerActivity.this.recentImages.get(position);
+                        } else {
+                            photoEntry2 = (SearchImage) PhotoPickerActivity.this.searchResult.get(position);
+                        }
+                        if (photoEntry2.thumbPath != null) {
+                            imageView.setImage(photoEntry2.thumbPath, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                        } else if (photoEntry2.thumbUrl != null && photoEntry2.thumbUrl.length() > 0) {
+                            imageView.setImage(photoEntry2.thumbUrl, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                        } else if (photoEntry2.document == null || photoEntry2.document.thumb == null) {
+                            imageView.setImageResource(R.drawable.nophotos);
+                        } else {
+                            imageView.setImage(photoEntry2.document.thumb.location, null, this.mContext.getResources().getDrawable(R.drawable.nophotos));
+                        }
+                        cell.setChecked(PhotoPickerActivity.this.selectedWebPhotos.containsKey(photoEntry2.id), false);
+                        if (photoEntry2.document != null) {
+                            showing = PhotoViewer.getInstance().isShowingImage(FileLoader.getPathToAttach(photoEntry2.document, true).getAbsolutePath());
+                        } else {
+                            showing = PhotoViewer.getInstance().isShowingImage(photoEntry2.imageUrl);
+                        }
+                    }
+                    ImageReceiver imageReceiver = imageView.getImageReceiver();
+                    if (showing) {
+                        z = false;
+                    } else {
+                        z = true;
+                    }
+                    imageReceiver.setVisible(z, true);
+                    CheckBox checkBox = cell.checkBox;
+                    if (PhotoPickerActivity.this.singlePhoto || showing) {
+                        i = 8;
+                    }
+                    checkBox.setVisibility(i);
+                    return;
+                case 1:
+                    LayoutParams params = holder.itemView.getLayoutParams();
+                    if (params != null) {
+                        params.width = PhotoPickerActivity.this.itemWidth;
+                        params.height = PhotoPickerActivity.this.itemWidth;
+                        holder.itemView.setLayoutParams(params);
+                        return;
+                    }
+                    return;
+                default:
+                    return;
+            }
         }
 
         public int getItemViewType(int i) {
@@ -306,20 +325,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 return 0;
             }
             return 1;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            if (PhotoPickerActivity.this.selectedAlbum != null) {
-                return PhotoPickerActivity.this.selectedAlbum.photos.isEmpty();
-            }
-            if (PhotoPickerActivity.this.searchResult.isEmpty() && PhotoPickerActivity.this.lastSearchString == null) {
-                return PhotoPickerActivity.this.recentImages.isEmpty();
-            }
-            return PhotoPickerActivity.this.searchResult.isEmpty();
         }
     }
 
@@ -362,9 +367,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     }
 
     public View createView(Context context) {
-        int i = 0;
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR);
+        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (this.selectedAlbum != null) {
             this.actionBar.setTitle(this.selectedAlbum.bucketName);
@@ -453,31 +457,24 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(-16777216);
-        this.listView = new GridView(context);
+        this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         this.listView.setClipToPadding(false);
-        this.listView.setDrawSelectorOnTop(true);
-        this.listView.setStretchMode(2);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setNumColumns(-1);
-        this.listView.setVerticalSpacing(AndroidUtilities.dp(4.0f));
-        this.listView.setHorizontalSpacing(AndroidUtilities.dp(4.0f));
-        this.listView.setSelector(R.drawable.list_selector);
-        frameLayout.addView(this.listView);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.bottomMargin = this.singlePhoto ? 0 : AndroidUtilities.dp(48.0f);
-        this.listView.setLayoutParams(layoutParams);
-        GridView gridView = this.listView;
-        android.widget.ListAdapter listAdapter = new ListAdapter(context);
+        RecyclerListView recyclerListView = this.listView;
+        LayoutManager gridLayoutManager = new GridLayoutManager(context, 4);
+        this.layoutManager = gridLayoutManager;
+        recyclerListView.setLayoutManager(gridLayoutManager);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
+        recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
-        gridView.setAdapter(listAdapter);
-        AndroidUtilities.setListViewEdgeEffectColor(this.listView, Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
+        recyclerListView.setAdapter(listAdapter);
+        this.listView.setGlowColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int i2 = 1;
+            public void onItemClick(View view, int position) {
+                int i = 1;
                 if (PhotoPickerActivity.this.selectedAlbum == null || !PhotoPickerActivity.this.selectedAlbum.isVideo) {
                     ArrayList<Object> arrayList;
                     if (PhotoPickerActivity.this.selectedAlbum != null) {
@@ -487,19 +484,19 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     } else {
                         arrayList = PhotoPickerActivity.this.searchResult;
                     }
-                    if (i >= 0 && i < arrayList.size()) {
+                    if (position >= 0 && position < arrayList.size()) {
                         if (PhotoPickerActivity.this.searchItem != null) {
                             AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.searchItem.getSearchField());
                         }
                         PhotoViewer.getInstance().setParentActivity(PhotoPickerActivity.this.getParentActivity());
                         PhotoViewer instance = PhotoViewer.getInstance();
                         if (!PhotoPickerActivity.this.singlePhoto) {
-                            i2 = 0;
+                            i = 0;
                         }
-                        instance.openPhotoForSelect(arrayList, i, i2, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
+                        instance.openPhotoForSelect(arrayList, position, i, PhotoPickerActivity.this, PhotoPickerActivity.this.chatActivity);
                     }
-                } else if (i >= 0 && i < PhotoPickerActivity.this.selectedAlbum.photos.size()) {
-                    String path = ((PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(i)).path;
+                } else if (position >= 0 && position < PhotoPickerActivity.this.selectedAlbum.photos.size()) {
+                    String path = ((PhotoEntry) PhotoPickerActivity.this.selectedAlbum.photos.get(position)).path;
                     if (VERSION.SDK_INT >= 16) {
                         Bundle args = new Bundle();
                         args.putString("videoPath", path);
@@ -538,7 +535,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         });
         if (this.selectedAlbum == null) {
             this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                public boolean onItemClick(View view, int position) {
                     if (!PhotoPickerActivity.this.searchResult.isEmpty() || PhotoPickerActivity.this.lastSearchString != null) {
                         return false;
                     }
@@ -572,12 +569,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         } else if (this.type == 1) {
             this.emptyView.setText(LocaleController.getString("NoRecentGIFs", R.string.NoRecentGIFs));
         }
-        frameLayout.addView(this.emptyView);
-        layoutParams = (FrameLayout.LayoutParams) this.emptyView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.bottomMargin = this.singlePhoto ? 0 : AndroidUtilities.dp(48.0f);
-        this.emptyView.setLayoutParams(layoutParams);
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
         this.emptyView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
@@ -585,49 +577,35 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         });
         if (this.selectedAlbum == null) {
             this.listView.setOnScrollListener(new OnScrollListener() {
-                public void onScrollStateChanged(AbsListView absListView, int i) {
-                    if (i == 1) {
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == 1) {
                         AndroidUtilities.hideKeyboard(PhotoPickerActivity.this.getParentActivity().getCurrentFocus());
                     }
                 }
 
-                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                    if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount > totalItemCount - 2 && !PhotoPickerActivity.this.searching) {
-                        if (PhotoPickerActivity.this.type == 0 && !PhotoPickerActivity.this.bingSearchEndReached) {
-                            PhotoPickerActivity.this.searchBingImages(PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.searchResult.size(), 54);
-                        } else if (PhotoPickerActivity.this.type == 1 && !PhotoPickerActivity.this.giphySearchEndReached) {
-                            PhotoPickerActivity.this.searchGiphyImages(PhotoPickerActivity.this.searchItem.getSearchField().getText().toString(), PhotoPickerActivity.this.nextGiphySearchOffset);
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    int firstVisibleItem = PhotoPickerActivity.this.layoutManager.findFirstVisibleItemPosition();
+                    int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(PhotoPickerActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
+                    if (visibleItemCount > 0) {
+                        int totalItemCount = PhotoPickerActivity.this.layoutManager.getItemCount();
+                        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount > totalItemCount - 2 && !PhotoPickerActivity.this.searching) {
+                            if (PhotoPickerActivity.this.type == 0 && !PhotoPickerActivity.this.bingSearchEndReached) {
+                                PhotoPickerActivity.this.searchBingImages(PhotoPickerActivity.this.lastSearchString, PhotoPickerActivity.this.searchResult.size(), 54);
+                            } else if (PhotoPickerActivity.this.type == 1 && !PhotoPickerActivity.this.giphySearchEndReached) {
+                                PhotoPickerActivity.this.searchGiphyImages(PhotoPickerActivity.this.searchItem.getSearchField().getText().toString(), PhotoPickerActivity.this.nextGiphySearchOffset);
+                            }
                         }
                     }
                 }
             });
             this.progressView = new FrameLayout(context);
             this.progressView.setVisibility(8);
-            frameLayout.addView(this.progressView);
-            layoutParams = (FrameLayout.LayoutParams) this.progressView.getLayoutParams();
-            layoutParams.width = -1;
-            layoutParams.height = -1;
-            if (!this.singlePhoto) {
-                i = AndroidUtilities.dp(48.0f);
-            }
-            layoutParams.bottomMargin = i;
-            this.progressView.setLayoutParams(layoutParams);
-            ProgressBar progressBar = new ProgressBar(context);
-            this.progressView.addView(progressBar);
-            layoutParams = (FrameLayout.LayoutParams) progressBar.getLayoutParams();
-            layoutParams.width = -2;
-            layoutParams.height = -2;
-            layoutParams.gravity = 17;
-            progressBar.setLayoutParams(layoutParams);
+            frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, this.singlePhoto ? 0.0f : 48.0f));
+            this.progressView.addView(new RadialProgressView(context), LayoutHelper.createFrame(-2, -2, 17));
             updateSearchInterface();
         }
         this.pickerBottomLayout = new PickerBottomLayout(context);
-        frameLayout.addView(this.pickerBottomLayout);
-        layoutParams = (FrameLayout.LayoutParams) this.pickerBottomLayout.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = AndroidUtilities.dp(48.0f);
-        layoutParams.gravity = 80;
-        this.pickerBottomLayout.setLayoutParams(layoutParams);
+        frameLayout.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 80));
         this.pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 PhotoPickerActivity.this.delegate.actionButtonPressed(true);
@@ -1285,7 +1263,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private void fixLayoutInternal() {
         if (getParentActivity() != null) {
             int columnsCount;
-            int position = this.listView.getFirstVisiblePosition();
+            int position = this.layoutManager.findFirstVisibleItemPosition();
             int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
             if (AndroidUtilities.isTablet()) {
                 columnsCount = 3;
@@ -1294,15 +1272,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             } else {
                 columnsCount = 3;
             }
-            this.listView.setNumColumns(columnsCount);
+            this.layoutManager.setSpanCount(columnsCount);
             if (AndroidUtilities.isTablet()) {
                 this.itemWidth = (AndroidUtilities.dp(490.0f) - ((columnsCount + 1) * AndroidUtilities.dp(4.0f))) / columnsCount;
             } else {
                 this.itemWidth = (AndroidUtilities.displaySize.x - ((columnsCount + 1) * AndroidUtilities.dp(4.0f))) / columnsCount;
             }
-            this.listView.setColumnWidth(this.itemWidth);
             this.listAdapter.notifyDataSetChanged();
-            this.listView.setSelection(position);
+            this.layoutManager.scrollToPosition(position);
             if (this.selectedAlbum == null) {
                 this.emptyView.setPadding(0, 0, 0, (int) (((float) (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight())) * 0.4f));
             }

@@ -40,7 +40,6 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.HashMap;
@@ -77,7 +76,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private PipVideoView pipVideoView;
     private int[] position;
     private int prevOrientation;
-    private ProgressBar progressBar;
+    private RadialProgressView progressBar;
     private WebPlayerView videoView;
     private int waitingForDraw;
     private boolean wasInLandscape;
@@ -463,7 +462,7 @@ public class EmbedBottomSheet extends BottomSheet {
         });
         this.videoView.setVisibility(4);
         containerLayout.addView(this.videoView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) (((this.hasDescription ? 22 : 0) + 84) - 10)));
-        this.progressBar = new ProgressBar(context);
+        this.progressBar = new RadialProgressView(context);
         this.progressBar.setVisibility(4);
         containerLayout.addView(this.progressBar, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, (float) (((this.hasDescription ? 22 : 0) + 84) / 2)));
         if (this.hasDescription) {
@@ -479,7 +478,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
         textView = new TextView(context);
         textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-7697782);
+        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         textView.setText(title);
         textView.setSingleLine(true);
         textView.setEllipsize(TruncateAt.END);
@@ -496,7 +495,7 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setTextSize(1, 14.0f);
         textView.setTextColor(-15095832);
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createBarSelectorDrawable(788529152, false));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -513,7 +512,7 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setTextSize(1, 14.0f);
         textView.setTextColor(-15095832);
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createBarSelectorDrawable(788529152, false));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -533,7 +532,7 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setTextSize(1, 14.0f);
         textView.setTextColor(-15095832);
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createBarSelectorDrawable(788529152, false));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

@@ -2,72 +2,32 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.view.animation.DecelerateInterpolator;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SendingFileDrawable extends Drawable {
-    private static DecelerateInterpolator decelerateInterpolator = null;
-    private float animatedProgressValue = 0.0f;
-    private float animationProgressStart = 0.0f;
-    private RectF cicleRect = new RectF();
-    private float currentProgress = 0.0f;
-    private long currentProgressTime = 0;
     private boolean isChat = false;
     private long lastUpdateTime = 0;
-    private Paint paint = new Paint(1);
-    private float radOffset = 0.0f;
+    private float progress;
     private boolean started = false;
-
-    public SendingFileDrawable() {
-        this.paint.setColor(Theme.ACTION_BAR_SUBTITLE_COLOR);
-        this.paint.setStyle(Style.STROKE);
-        this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.paint.setStrokeCap(Cap.ROUND);
-        decelerateInterpolator = new DecelerateInterpolator();
-    }
 
     public void setIsChat(boolean value) {
         this.isChat = value;
-    }
-
-    public void setProgress(float value, boolean animated) {
-        if (animated) {
-            this.animationProgressStart = this.animatedProgressValue;
-        } else {
-            this.animatedProgressValue = value;
-            this.animationProgressStart = value;
-        }
-        this.currentProgress = value;
-        this.currentProgressTime = 0;
-        invalidateSelf();
     }
 
     private void update() {
         long newTime = System.currentTimeMillis();
         long dt = newTime - this.lastUpdateTime;
         this.lastUpdateTime = newTime;
-        if (this.animatedProgressValue != 1.0f) {
-            this.radOffset += ((float) (360 * dt)) / 1000.0f;
-            float progressDiff = this.currentProgress - this.animationProgressStart;
-            if (progressDiff > 0.0f) {
-                this.currentProgressTime += dt;
-                if (this.currentProgressTime >= 300) {
-                    this.animatedProgressValue = this.currentProgress;
-                    this.animationProgressStart = this.currentProgress;
-                    this.currentProgressTime = 0;
-                } else {
-                    this.animatedProgressValue = this.animationProgressStart + (decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / BitmapDescriptorFactory.HUE_MAGENTA) * progressDiff);
-                }
-            }
-            invalidateSelf();
+        if (dt > 50) {
+            dt = 50;
         }
+        this.progress += ((float) dt) / 500.0f;
+        while (this.progress > 1.0f) {
+            this.progress -= 1.0f;
+        }
+        invalidateSelf();
     }
 
     public void start() {
@@ -81,8 +41,36 @@ public class SendingFileDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        this.cicleRect.set((float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(this.isChat ? 3.0f : 4.0f), (float) AndroidUtilities.dp(10.0f), (float) AndroidUtilities.dp(this.isChat ? 11.0f : 12.0f));
-        canvas.drawArc(this.cicleRect, this.radOffset - 0.049804688f, Math.max(BitmapDescriptorFactory.HUE_YELLOW, 360.0f * this.animatedProgressValue), false, this.paint);
+        for (int a = 0; a < 3; a++) {
+            float f;
+            if (a == 0) {
+                Theme.chat_statusRecordPaint.setAlpha((int) (this.progress * 255.0f));
+            } else if (a == 2) {
+                Theme.chat_statusRecordPaint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
+            } else {
+                Theme.chat_statusRecordPaint.setAlpha(255);
+            }
+            float side = ((float) (AndroidUtilities.dp(5.0f) * a)) + (((float) AndroidUtilities.dp(5.0f)) * this.progress);
+            if (this.isChat) {
+                f = 3.0f;
+            } else {
+                f = 4.0f;
+            }
+            canvas.drawLine(side, (float) AndroidUtilities.dp(f), side + ((float) AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(this.isChat ? 7.0f : 8.0f), Theme.chat_statusRecordPaint);
+            if (this.isChat) {
+                f = 11.0f;
+            } else {
+                f = 12.0f;
+            }
+            float dp = (float) AndroidUtilities.dp(f);
+            float dp2 = side + ((float) AndroidUtilities.dp(4.0f));
+            if (this.isChat) {
+                f = 7.0f;
+            } else {
+                f = 8.0f;
+            }
+            canvas.drawLine(side, dp, dp2, (float) AndroidUtilities.dp(f), Theme.chat_statusRecordPaint);
+        }
         if (this.started) {
             update();
         }
@@ -99,7 +87,7 @@ public class SendingFileDrawable extends Drawable {
     }
 
     public int getIntrinsicWidth() {
-        return AndroidUtilities.dp(14.0f);
+        return AndroidUtilities.dp(18.0f);
     }
 
     public int getIntrinsicHeight() {

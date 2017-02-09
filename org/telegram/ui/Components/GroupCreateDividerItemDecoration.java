@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
@@ -12,12 +11,7 @@ import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateDividerItemDecoration extends ItemDecoration {
-    private Paint paint = new Paint();
     private boolean searching;
-
-    public GroupCreateDividerItemDecoration() {
-        this.paint.setColor(Theme.GROUP_CREATE_DIVIDER_COLOR);
-    }
 
     public void setSearching(boolean value) {
         this.searching = value;
@@ -30,7 +24,7 @@ public class GroupCreateDividerItemDecoration extends ItemDecoration {
             View child = parent.getChildAt(i);
             if (parent.getChildAdapterPosition(child) != 0) {
                 int top = child.getBottom();
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, this.paint);
+                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
             }
         }
     }

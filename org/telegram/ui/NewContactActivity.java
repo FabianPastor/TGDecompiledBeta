@@ -56,6 +56,7 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ContextProgressView;
@@ -82,8 +83,10 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private boolean ignoreOnTextChange;
     private boolean ignoreSelection;
     private EditText lastNameField;
+    private View lineView;
     private HintEditText phoneField;
     private HashMap<String, String> phoneFormatMap = new HashMap();
+    private TextView textView;
 
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -188,8 +191,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, BitmapDescriptorFactory.HUE_YELLOW, 51, 0.0f, 9.0f, 0.0f, 0.0f));
         this.firstNameField = new EditText(context);
         this.firstNameField.setTextSize(1, 18.0f);
-        this.firstNameField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
-        this.firstNameField.setTextColor(-14606047);
+        this.firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        this.firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.firstNameField.setMaxLines(1);
         this.firstNameField.setLines(1);
         this.firstNameField.setSingleLine(true);
@@ -223,8 +226,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         });
         this.lastNameField = new EditText(context);
         this.lastNameField.setTextSize(1, 18.0f);
-        this.lastNameField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
-        this.lastNameField.setTextColor(-14606047);
+        this.lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        this.lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.lastNameField.setMaxLines(1);
         this.lastNameField.setLines(1);
         this.lastNameField.setSingleLine(true);
@@ -259,7 +262,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.countryButton = new TextView(context);
         this.countryButton.setTextSize(1, 18.0f);
         this.countryButton.setPadding(AndroidUtilities.dp(6.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(6.0f), 0);
-        this.countryButton.setTextColor(-14606047);
+        this.countryButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.countryButton.setMaxLines(1);
         this.countryButton.setSingleLine(true);
         this.countryButton.setEllipsize(TruncateAt.END);
@@ -284,21 +287,21 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 NewContactActivity.this.presentFragment(fragment);
             }
         });
-        linearLayout = new View(context);
-        linearLayout.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        linearLayout.setBackgroundColor(-2368549);
-        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, 1, 0.0f, -17.5f, 0.0f, 0.0f));
+        this.lineView = new View(context);
+        this.lineView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
+        this.lineView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayLine));
+        linearLayout.addView(this.lineView, LayoutHelper.createLinear(-1, 1, 0.0f, -17.5f, 0.0f, 0.0f));
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
-        linearLayout = new TextView(context);
-        linearLayout.setText("+");
-        linearLayout.setTextColor(-14606047);
-        linearLayout.setTextSize(1, 18.0f);
-        linearLayout.addView(linearLayout, LayoutHelper.createLinear(-2, -2));
+        this.textView = new TextView(context);
+        this.textView.setText("+");
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.textView.setTextSize(1, 18.0f);
+        linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
         this.codeField = new EditText(context);
         this.codeField.setInputType(3);
-        this.codeField.setTextColor(-14606047);
+        this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         AndroidUtilities.clearCursorDrawable(this.codeField);
         this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
         this.codeField.setTextSize(1, 18.0f);
@@ -390,8 +393,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         });
         this.phoneField = new HintEditText(context);
         this.phoneField.setInputType(3);
-        this.phoneField.setTextColor(-14606047);
-        this.phoneField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+        this.phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         this.phoneField.setPadding(0, 0, 0, 0);
         AndroidUtilities.clearCursorDrawable(this.phoneField);
         this.phoneField.setTextSize(1, 18.0f);
@@ -654,5 +657,17 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
             showDialog(builder.create());
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[7];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        return themeDescriptionArr;
     }
 }

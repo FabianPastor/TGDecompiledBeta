@@ -1,17 +1,15 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -25,20 +23,19 @@ public class MentionCell extends LinearLayout {
     public MentionCell(Context context) {
         super(context);
         setOrientation(0);
-        setBackgroundResource(R.drawable.list_selector);
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setRoundRadius(AndroidUtilities.dp(14.0f));
         addView(this.imageView, LayoutHelper.createLinear(28, 28, 12.0f, 4.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(-16777216);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 15.0f);
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setGravity(3);
         this.nameTextView.setEllipsize(TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createLinear(-2, -2, 16, 12, 0, 0, 0));
         this.usernameTextView = new TextView(context);
-        this.usernameTextView.setTextColor(-6710887);
+        this.usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.usernameTextView.setTextSize(1, 15.0f);
         this.usernameTextView.setSingleLine(true);
         this.usernameTextView.setGravity(3);
@@ -48,13 +45,6 @@ public class MentionCell extends LinearLayout {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
-        return super.onTouchEvent(event);
     }
 
     public void setUser(User user) {
@@ -109,7 +99,7 @@ public class MentionCell extends LinearLayout {
             this.usernameTextView.setTextColor(-6710887);
             return;
         }
-        this.nameTextView.setTextColor(-16777216);
-        this.usernameTextView.setTextColor(-6710887);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
     }
 }

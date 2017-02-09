@@ -12,6 +12,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ChatLoadingCell extends FrameLayout {
     private FrameLayout frameLayout;
+    private ProgressBar progressBar;
 
     public ChatLoadingCell(Context context) {
         super(context);
@@ -35,5 +36,9 @@ public class ChatLoadingCell extends FrameLayout {
 
     public void setProgressVisible(boolean value) {
         this.frameLayout.setVisibility(value ? 0 : 4);
+    }
+
+    public ProgressBar getProgressBar() {
+        return this.progressBar;
     }
 }

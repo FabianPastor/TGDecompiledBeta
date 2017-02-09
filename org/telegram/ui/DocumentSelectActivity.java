@@ -17,13 +17,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -39,27 +33,40 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
-import org.telegram.ui.Cells.GreySectionCell;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
+import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DocumentSelectActivity extends BaseFragment {
     private static final int done = 3;
     private ArrayList<View> actionModeViews = new ArrayList();
     private File currentDir;
     private DocumentSelectActivityDelegate delegate;
-    private TextView emptyView;
+    private EmptyTextProgressView emptyView;
     private ArrayList<HistoryEntry> history = new ArrayList();
     private ArrayList<ListItem> items = new ArrayList();
+    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
-    private ListView listView;
+    private RecyclerListView listView;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context arg0, Intent intent) {
             Runnable r = new Runnable() {
@@ -120,14 +127,18 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public int getCount() {
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() != 0;
+        }
+
+        public int getItemCount() {
             int count = DocumentSelectActivity.this.items.size();
             if (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) {
                 return count;
@@ -148,26 +159,29 @@ public class DocumentSelectActivity extends BaseFragment {
             return null;
         }
 
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
         public int getItemViewType(int position) {
             return getItem(position) != null ? 1 : 0;
         }
 
-        public View getView(int position, View view, ViewGroup parent) {
-            boolean z = true;
-            ListItem item = getItem(position);
-            if (item != null) {
-                if (view == null) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new GraySectionCell(this.mContext);
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
+                    break;
+                default:
                     view = new SharedDocumentCell(this.mContext);
-                }
-                SharedDocumentCell documentCell = (SharedDocumentCell) view;
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z = true;
+            if (holder.getItemViewType() == 1) {
+                ListItem item = getItem(position);
+                SharedDocumentCell documentCell = holder.itemView;
                 if (item.icon != 0) {
                     documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, item.icon);
                 } else {
@@ -178,7 +192,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         z = false;
                     }
                     documentCell.setChecked(false, z);
-                    return view;
+                    return;
                 }
                 boolean z2;
                 boolean containsKey = DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString());
@@ -188,13 +202,6 @@ public class DocumentSelectActivity extends BaseFragment {
                     z2 = true;
                 }
                 documentCell.setChecked(containsKey, z2);
-                return view;
-            } else if (view != null) {
-                return view;
-            } else {
-                view = new GreySectionCell(this.mContext);
-                ((GreySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent).toUpperCase());
-                return view;
             }
         }
     }
@@ -260,39 +267,42 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView = new NumberTextView(actionMode.getContext());
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.selectedMessagesCountTextView.setTextColor(Theme.ACTION_BAR_ACTION_MODE_TEXT_COLOR);
+        this.selectedMessagesCountTextView.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         this.selectedMessagesCountTextView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItem(3, R.drawable.ic_ab_done_gray, Theme.ACTION_BAR_MODE_SELECTOR_COLOR, null, AndroidUtilities.dp(54.0f)));
-        this.fragmentView = getParentActivity().getLayoutInflater().inflate(R.layout.document_select_layout, null, false);
-        this.listAdapter = new ListAdapter(context);
-        this.emptyView = (TextView) this.fragmentView.findViewById(R.id.searchEmptyView);
-        this.emptyView.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        this.listView = (ListView) this.fragmentView.findViewById(R.id.listView);
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
+        this.fragmentView = new FrameLayout(context);
+        FrameLayout frameLayout = this.fragmentView;
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.showTextView();
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setVerticalScrollBarEnabled(false);
+        RecyclerListView recyclerListView = this.listView;
+        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setEmptyView(this.emptyView);
-        this.listView.setAdapter(this.listAdapter);
+        RecyclerListView recyclerListView2 = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
+        this.listAdapter = listAdapter;
+        recyclerListView2.setAdapter(listAdapter);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                DocumentSelectActivity.this.scrolling = scrollState != 0;
-            }
-
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                DocumentSelectActivity.this.scrolling = newState != 0;
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long id) {
+            public boolean onItemClick(View view, int position) {
                 if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
                     return false;
                 }
-                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(i);
+                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(position);
                 if (item == null) {
                     return false;
                 }
@@ -330,8 +340,8 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         });
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(i);
+            public void onItemClick(View view, int position) {
+                ListItem item = DocumentSelectActivity.this.listAdapter.getItem(position);
                 if (item != null) {
                     File file = item.file;
                     HistoryEntry he;
@@ -350,20 +360,22 @@ public class DocumentSelectActivity extends BaseFragment {
                         } else {
                             DocumentSelectActivity.this.listRoots();
                         }
-                        DocumentSelectActivity.this.listView.setSelectionFromTop(he.scrollItem, he.scrollOffset);
+                        DocumentSelectActivity.this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
                     } else if (file.isDirectory()) {
                         he = new HistoryEntry();
-                        he.scrollItem = DocumentSelectActivity.this.listView.getFirstVisiblePosition();
-                        he.scrollOffset = DocumentSelectActivity.this.listView.getChildAt(0).getTop();
+                        he.scrollItem = DocumentSelectActivity.this.layoutManager.findLastVisibleItemPosition();
+                        View topView = DocumentSelectActivity.this.layoutManager.findViewByPosition(he.scrollItem);
+                        if (topView != null) {
+                            he.scrollOffset = topView.getTop();
+                        }
                         he.dir = DocumentSelectActivity.this.currentDir;
                         he.title = DocumentSelectActivity.this.actionBar.getTitle();
                         DocumentSelectActivity.this.history.add(he);
                         if (DocumentSelectActivity.this.listFiles(file)) {
                             DocumentSelectActivity.this.actionBar.setTitle(item.title);
-                            DocumentSelectActivity.this.listView.setSelection(0);
-                            return;
+                        } else {
+                            DocumentSelectActivity.this.history.remove(he);
                         }
-                        DocumentSelectActivity.this.history.remove(he);
                     } else {
                         if (!file.canRead()) {
                             DocumentSelectActivity.this.showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
@@ -481,7 +493,7 @@ public class DocumentSelectActivity extends BaseFragment {
         } else {
             listRoots();
         }
-        this.listView.setSelectionFromTop(he.scrollItem, he.scrollOffset);
+        this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
         return false;
     }
 
@@ -776,5 +788,32 @@ public class DocumentSelectActivity extends BaseFragment {
             FileLog.e("tmessages", e);
             return path;
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[22];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[8] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[9] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarActionModeDefaultIcon);
+        themeDescriptionArr[10] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_BACKGROUND, null, null, null, null, Theme.key_actionBarActionModeDefault);
+        themeDescriptionArr[11] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_TOPBACKGROUND, null, null, null, null, Theme.key_actionBarActionModeDefaultTop);
+        themeDescriptionArr[12] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarActionModeDefaultSelector);
+        themeDescriptionArr[13] = new ThemeDescription(this.selectedMessagesCountTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_actionBarActionModeDefaultIcon);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_checkbox);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_checkboxCheck);
+        themeDescriptionArr[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, Theme.key_files_folderIcon);
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, Theme.key_files_iconText);
+        return themeDescriptionArr;
     }
 }

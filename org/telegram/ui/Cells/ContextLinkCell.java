@@ -3,12 +3,9 @@ package org.telegram.ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
@@ -31,7 +28,6 @@ import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -66,12 +62,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private static final int DOCUMENT_ATTACH_TYPE_PHOTO = 7;
     private static final int DOCUMENT_ATTACH_TYPE_STICKER = 6;
     private static final int DOCUMENT_ATTACH_TYPE_VIDEO = 4;
-    private static TextPaint descriptionTextPaint;
     private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
-    private static Paint paint;
-    private static Drawable shadowDrawable;
-    private static TextPaint titleTextPaint;
-    private int TAG;
+    private int TAG = MediaController.getInstance().generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
     private MessageObject currentMessageObject;
@@ -83,14 +75,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private boolean drawLinkImageView;
     private BotInlineResult inlineResult;
     private long lastUpdateTime;
-    private LetterDrawable letterDrawable;
-    private ImageReceiver linkImageView;
+    private LetterDrawable letterDrawable = new LetterDrawable();
+    private ImageReceiver linkImageView = new ImageReceiver(this);
     private StaticLayout linkLayout;
     private int linkY;
     private boolean mediaWebpage;
     private boolean needDivider;
     private boolean needShadow;
-    private RadialProgress radialProgress;
+    private RadialProgress radialProgress = new RadialProgress(this);
     private float scale;
     private boolean scaled;
     private long time = 0;
@@ -103,21 +95,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
 
     public ContextLinkCell(Context context) {
         super(context);
-        if (titleTextPaint == null) {
-            titleTextPaint = new TextPaint(1);
-            titleTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            titleTextPaint.setColor(-14606047);
-            descriptionTextPaint = new TextPaint(1);
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
-        titleTextPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
-        descriptionTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-        this.linkImageView = new ImageReceiver(this);
-        this.letterDrawable = new LetterDrawable();
-        this.radialProgress = new RadialProgress(this);
-        this.TAG = MediaController.getInstance().generateObserverTag();
     }
 
     @SuppressLint({"DrawAllocation"})
@@ -147,7 +124,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (!(this.mediaWebpage || this.inlineResult == null)) {
             if (this.inlineResult.title != null) {
                 try {
-                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace('\n', ' '), titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), titleTextPaint, (float) Math.min((int) Math.ceil((double) titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace('\n', ' '), Theme.chat_contextResult_titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
@@ -155,7 +132,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
             if (this.inlineResult.description != null) {
                 try {
-                    this.descriptionLayout = ChatMessageCell.generateStaticLayout(Emoji.replaceEmoji(this.inlineResult.description, descriptionTextPaint.getFontMetricsInt(), AndroidUtilities.dp(13.0f), false), descriptionTextPaint, maxWidth, maxWidth, 0, 3);
+                    this.descriptionLayout = ChatMessageCell.generateStaticLayout(Emoji.replaceEmoji(this.inlineResult.description, Theme.chat_contextResult_descriptionTextPaint.getFontMetricsInt(), AndroidUtilities.dp(13.0f), false), Theme.chat_contextResult_descriptionTextPaint, maxWidth, maxWidth, 0, 3);
                     if (this.descriptionLayout.getLineCount() > 0) {
                         this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                     }
@@ -165,7 +142,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             }
             if (this.inlineResult.url != null) {
                 try {
-                    this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace('\n', ' '), descriptionTextPaint, (float) Math.min((int) Math.ceil((double) descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace('\n', ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), Theme.chat_contextResult_descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e22) {
                     FileLog.e("tmessages", e22);
                 }
@@ -278,7 +255,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         int height;
         if (this.mediaWebpage) {
-            setBackgroundDrawable(null);
             width = viewWidth;
             height = MeasureSpec.getSize(heightMeasureSpec);
             if (height == 0) {
@@ -291,7 +267,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             this.linkImageView.setImageCoords(0, 0, width, height);
             return;
         }
-        setBackgroundResource(R.drawable.list_selector);
         height = 0;
         if (!(this.titleLayout == null || this.titleLayout.getLineCount() == 0)) {
             height = 0 + this.titleLayout.getLineBottom(this.titleLayout.getLineCount() - 1);
@@ -391,9 +366,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     public void setLink(BotInlineResult contextResult, boolean media, boolean divider, boolean shadow) {
         this.needDivider = divider;
         this.needShadow = shadow;
-        if (this.needShadow && shadowDrawable == null) {
-            shadowDrawable = getContext().getResources().getDrawable(R.drawable.header_shadow);
-        }
         this.inlineResult = contextResult;
         if (this.inlineResult == null || this.inlineResult.document == null) {
             this.documentAttach = null;
@@ -459,9 +431,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
         if (this.mediaWebpage || this.delegate == null || this.inlineResult == null) {
             return super.onTouchEvent(event);
         }
@@ -563,14 +532,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             canvas.restore();
         }
         if (this.descriptionLayout != null) {
-            descriptionTextPaint.setColor(-7697782);
+            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
             canvas.save();
             canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.descriptionY);
             this.descriptionLayout.draw(canvas);
             canvas.restore();
         }
         if (this.linkLayout != null) {
-            descriptionTextPaint.setColor(Theme.MSG_LINK_TEXT_COLOR);
+            Theme.chat_contextResult_descriptionTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
             canvas.save();
             canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.linkY);
             this.linkLayout.draw(canvas);
@@ -582,43 +551,43 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         int y;
         if (this.mediaWebpage) {
             if (this.inlineResult != null && ((this.inlineResult.send_message instanceof TL_botInlineMessageMediaGeo) || (this.inlineResult.send_message instanceof TL_botInlineMessageMediaVenue))) {
-                w = Theme.inlineLocationDrawable.getIntrinsicWidth();
-                h = Theme.inlineLocationDrawable.getIntrinsicHeight();
+                w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
+                h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
                 x = this.linkImageView.getImageX() + ((this.linkImageView.getImageWidth() - w) / 2);
                 y = this.linkImageView.getImageY() + ((this.linkImageView.getImageHeight() - h) / 2);
                 canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + this.linkImageView.getImageWidth()), (float) (this.linkImageView.getImageY() + this.linkImageView.getImageHeight()), LetterDrawable.paint);
-                Theme.inlineLocationDrawable.setBounds(x, y, x + w, y + h);
-                Theme.inlineLocationDrawable.draw(canvas);
+                Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
+                Theme.chat_inlineResultLocation.draw(canvas);
             }
         } else if (this.documentAttachType == 3 || this.documentAttachType == 5) {
-            this.radialProgress.setProgressColor(this.buttonPressed ? Theme.MSG_IN_AUDIO_SELECTED_PROGRESS_COLOR : -1);
+            this.radialProgress.setProgressColor(Theme.getColor(this.buttonPressed ? Theme.key_chat_inAudioSelectedProgress : Theme.key_chat_inAudioProgress));
             this.radialProgress.draw(canvas);
         } else if (this.inlineResult != null && this.inlineResult.type.equals("file")) {
-            w = Theme.inlineDocDrawable.getIntrinsicWidth();
-            h = Theme.inlineDocDrawable.getIntrinsicHeight();
+            w = Theme.chat_inlineResultFile.getIntrinsicWidth();
+            h = Theme.chat_inlineResultFile.getIntrinsicHeight();
             x = this.linkImageView.getImageX() + ((AndroidUtilities.dp(52.0f) - w) / 2);
             y = this.linkImageView.getImageY() + ((AndroidUtilities.dp(52.0f) - h) / 2);
             canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.dp(52.0f)), LetterDrawable.paint);
-            Theme.inlineDocDrawable.setBounds(x, y, x + w, y + h);
-            Theme.inlineDocDrawable.draw(canvas);
+            Theme.chat_inlineResultFile.setBounds(x, y, x + w, y + h);
+            Theme.chat_inlineResultFile.draw(canvas);
         } else if (this.inlineResult != null && (this.inlineResult.type.equals(MimeTypes.BASE_TYPE_AUDIO) || this.inlineResult.type.equals("voice"))) {
-            w = Theme.inlineAudioDrawable.getIntrinsicWidth();
-            h = Theme.inlineAudioDrawable.getIntrinsicHeight();
+            w = Theme.chat_inlineResultAudio.getIntrinsicWidth();
+            h = Theme.chat_inlineResultAudio.getIntrinsicHeight();
             x = this.linkImageView.getImageX() + ((AndroidUtilities.dp(52.0f) - w) / 2);
             y = this.linkImageView.getImageY() + ((AndroidUtilities.dp(52.0f) - h) / 2);
             canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.dp(52.0f)), LetterDrawable.paint);
-            Theme.inlineAudioDrawable.setBounds(x, y, x + w, y + h);
-            Theme.inlineAudioDrawable.draw(canvas);
+            Theme.chat_inlineResultAudio.setBounds(x, y, x + w, y + h);
+            Theme.chat_inlineResultAudio.draw(canvas);
         } else if (this.inlineResult == null || !(this.inlineResult.type.equals("venue") || this.inlineResult.type.equals("geo"))) {
             this.letterDrawable.draw(canvas);
         } else {
-            w = Theme.inlineLocationDrawable.getIntrinsicWidth();
-            h = Theme.inlineLocationDrawable.getIntrinsicHeight();
+            w = Theme.chat_inlineResultLocation.getIntrinsicWidth();
+            h = Theme.chat_inlineResultLocation.getIntrinsicHeight();
             x = this.linkImageView.getImageX() + ((AndroidUtilities.dp(52.0f) - w) / 2);
             y = this.linkImageView.getImageY() + ((AndroidUtilities.dp(52.0f) - h) / 2);
             canvas.drawRect((float) this.linkImageView.getImageX(), (float) this.linkImageView.getImageY(), (float) (this.linkImageView.getImageX() + AndroidUtilities.dp(52.0f)), (float) (this.linkImageView.getImageY() + AndroidUtilities.dp(52.0f)), LetterDrawable.paint);
-            Theme.inlineLocationDrawable.setBounds(x, y, x + w, y + h);
-            Theme.inlineLocationDrawable.draw(canvas);
+            Theme.chat_inlineResultLocation.setBounds(x, y, x + w, y + h);
+            Theme.chat_inlineResultLocation.draw(canvas);
         }
         if (this.drawLinkImageView) {
             canvas.save();
@@ -649,14 +618,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
         if (this.needDivider && !this.mediaWebpage) {
             if (LocaleController.isRTL) {
-                canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), paint);
+                canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             } else {
-                canvas.drawLine((float) AndroidUtilities.dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), paint);
+                canvas.drawLine((float) AndroidUtilities.dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             }
         }
-        if (this.needShadow && shadowDrawable != null) {
-            shadowDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.dp(3.0f));
-            shadowDrawable.draw(canvas);
+        if (this.needShadow) {
+            Theme.chat_contextResult_shadowUnderSwitchDrawable.setBounds(0, 0, getMeasuredWidth(), AndroidUtilities.dp(3.0f));
+            Theme.chat_contextResult_shadowUnderSwitchDrawable.draw(canvas);
         }
     }
 

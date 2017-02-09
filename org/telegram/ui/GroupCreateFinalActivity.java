@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -46,6 +47,8 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.GroupCreateSectionCell;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -56,6 +59,8 @@ import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.GroupCreateDividerItemDecoration;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class GroupCreateFinalActivity extends BaseFragment implements NotificationCenterDelegate, AvatarUpdaterDelegate {
     private static final int done_button = 1;
@@ -78,14 +83,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ArrayList<Integer> selectedContacts;
     private InputFile uploadedAvatar;
 
-    public class GroupCreateAdapter extends Adapter {
+    public class GroupCreateAdapter extends SelectionAdapter {
         private Context context;
-
-        public class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public GroupCreateAdapter(Context ctx) {
             this.context = ctx;
@@ -93,6 +92,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         public int getItemCount() {
             return GroupCreateFinalActivity.this.selectedContacts.size() + 1;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -295,13 +298,13 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.editText.setMaxLines(4);
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.editText.setTextSize(1, 18.0f);
-        this.editText.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+        this.editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        this.editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.editText.setImeOptions(268435456);
         this.editText.setInputType(16384);
         this.editText.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.editText.setFilters(new InputFilter[]{new LengthFilter(100)});
         AndroidUtilities.clearCursorDrawable(this.editText);
-        this.editText.setTextColor(-14606047);
         frameLayout = this.editTextContainer;
         view = this.editText;
         f = LocaleController.isRTL ? 16.0f : 96.0f;
@@ -489,5 +492,52 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             this.doneItemAnimation.setDuration(150);
             this.doneItemAnimation.start();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                String obj;
+                int count = GroupCreateFinalActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = GroupCreateFinalActivity.this.listView.getChildAt(a);
+                    if (child instanceof GroupCreateUserCell) {
+                        ((GroupCreateUserCell) child).update(0);
+                    }
+                }
+                AvatarDrawable access$1300 = GroupCreateFinalActivity.this.avatarDrawable;
+                if (GroupCreateFinalActivity.this.editText.length() > 0) {
+                    obj = GroupCreateFinalActivity.this.editText.getText().toString();
+                } else {
+                    obj = null;
+                }
+                access$1300.setInfo(5, obj, null, false);
+                GroupCreateFinalActivity.this.avatarImage.invalidate();
+            }
+        };
+        r10 = new ThemeDescription[33];
+        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r10[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r10[13] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_groupcreate_hintText);
+        r10[14] = new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, Theme.key_groupcreate_cursor);
+        r10[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GroupCreateSectionCell.class}, null, null, null, Theme.key_graySection);
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateSectionCell.class}, new String[]{"drawable"}, null, null, null, Theme.key_groupcreate_sectionShadow);
+        r10[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
+        r10[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, null, null, null, Theme.key_groupcreate_sectionText);
+        r10[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_onlineText);
+        r10[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, Theme.key_groupcreate_offlineText);
+        r10[21] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, сellDelegate, Theme.key_avatar_text);
+        r10[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        r10[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[24] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[25] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[29] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2);
+        r10[30] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2);
+        r10[31] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r10[32] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        return r10;
     }
 }

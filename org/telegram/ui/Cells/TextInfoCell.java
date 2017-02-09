@@ -5,6 +5,7 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextInfoCell extends FrameLayout {
@@ -13,7 +14,7 @@ public class TextInfoCell extends FrameLayout {
     public TextInfoCell(Context context) {
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(-6052957);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText5));
         this.textView.setTextSize(1, 13.0f);
         this.textView.setGravity(17);
         this.textView.setPadding(0, AndroidUtilities.dp(19.0f), 0, AndroidUtilities.dp(19.0f));
@@ -21,7 +22,7 @@ public class TextInfoCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, 0));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
     }
 
     public void setText(String text) {

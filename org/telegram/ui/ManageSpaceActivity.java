@@ -45,7 +45,7 @@ public class ManageSpaceActivity extends Activity implements ActionBarLayoutDele
         setTheme(R.style.Theme.TMessages);
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         super.onCreate(savedInstanceState);
-        Theme.loadRecources(this);
+        Theme.loadResources(this);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);

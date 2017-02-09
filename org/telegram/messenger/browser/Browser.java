@@ -146,7 +146,7 @@ public class Browser {
                     Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                     share.setAction("android.intent.action.SEND");
                     Builder builder = new Builder(getSession());
-                    builder.setToolbarColor(Theme.ACTION_BAR_COLOR);
+                    builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
                     builder.setShowTitle(true);
                     builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), false);
                     builder.build().launchUrl((Activity) context, uri);

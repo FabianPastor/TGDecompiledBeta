@@ -1,6 +1,5 @@
 package com.googlecode.mp4parser;
 
-import android.support.v4.os.EnvironmentCompat;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -16,7 +15,7 @@ public class Version {
             version = new LineNumberReader(new InputStreamReader(Version.class.getResourceAsStream("/version.txt"))).readLine();
         } catch (IOException e) {
             LOG.warning(e.getMessage());
-            version = EnvironmentCompat.MEDIA_UNKNOWN;
+            version = "unknown";
         }
         VERSION = version;
     }

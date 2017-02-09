@@ -4,101 +4,90 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.TextInfoCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.ContactsActivity.ContactsActivityDelegate;
 
 public class BlockedUsersActivity extends BaseFragment implements NotificationCenterDelegate, ContactsActivityDelegate {
     private static final int block_user = 1;
-    private TextView emptyTextView;
-    private ListView listView;
+    private EmptyTextProgressView emptyView;
+    private RecyclerListView listView;
     private ListAdapter listViewAdapter;
-    private FrameLayout progressView;
     private int selectedUserId;
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return false;
-        }
-
-        public boolean isEnabled(int i) {
-            return i != MessagesController.getInstance().blockedUsers.size();
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             if (MessagesController.getInstance().blockedUsers.isEmpty()) {
                 return 0;
             }
             return MessagesController.getInstance().blockedUsers.size() + 1;
         }
 
-        public Object getItem(int i) {
-            return null;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() == 0;
         }
 
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int type = getItemViewType(i);
-            if (type == 0) {
-                if (view == null) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
                     view = new UserCell(this.mContext, 1, 0, false);
+                    break;
+                default:
+                    view = new TextInfoCell(this.mContext);
+                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", R.string.UnblockText));
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (holder.getItemViewType() == 0) {
+                User user = MessagesController.getInstance().getUser((Integer) MessagesController.getInstance().blockedUsers.get(position));
+                if (user != null) {
+                    String number;
+                    if (user.bot) {
+                        number = LocaleController.getString("Bot", R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", R.string.Bot).substring(1);
+                    } else if (user.phone == null || user.phone.length() == 0) {
+                        number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                    } else {
+                        number = PhoneFormat.getInstance().format("+" + user.phone);
+                    }
+                    ((UserCell) holder.itemView).setData(user, null, number, 0);
                 }
-                User user = MessagesController.getInstance().getUser((Integer) MessagesController.getInstance().blockedUsers.get(i));
-                if (user == null) {
-                    return view;
-                }
-                String number;
-                if (user.bot) {
-                    number = LocaleController.getString("Bot", R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", R.string.Bot).substring(1);
-                } else if (user.phone == null || user.phone.length() == 0) {
-                    number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
-                } else {
-                    number = PhoneFormat.getInstance().format("+" + user.phone);
-                }
-                ((UserCell) view).setData(user, null, number, 0);
-                return view;
-            } else if (type != 1 || view != null) {
-                return view;
-            } else {
-                view = new TextInfoCell(this.mContext);
-                ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", R.string.UnblockText));
-                return view;
             }
         }
 
@@ -107,14 +96,6 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 return 1;
             }
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            return MessagesController.getInstance().blockedUsers.isEmpty();
         }
     }
 
@@ -155,49 +136,36 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        this.emptyTextView = new TextView(context);
-        this.emptyTextView.setTextColor(-8355712);
-        this.emptyTextView.setTextSize(20.0f);
-        this.emptyTextView.setGravity(17);
-        this.emptyTextView.setVisibility(4);
-        this.emptyTextView.setText(LocaleController.getString("NoBlocked", R.string.NoBlocked));
-        frameLayout.addView(this.emptyTextView, LayoutHelper.createFrame(-1, -1, 51));
-        this.emptyTextView.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        this.progressView = new FrameLayout(context);
-        frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
-        this.progressView.addView(new ProgressBar(context), LayoutHelper.createFrame(-2, -2, 17));
-        this.listView = new ListView(context);
-        this.listView.setEmptyView(this.emptyTextView);
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.setText(LocaleController.getString("NoBlocked", R.string.NoBlocked));
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setEmptyView(this.emptyView);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setDivider(null);
-        this.listView.setDividerHeight(0);
-        ListView listView = this.listView;
-        android.widget.ListAdapter listAdapter = new ListAdapter(context);
+        RecyclerListView recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
-        listView.setAdapter(listAdapter);
-        listView = this.listView;
+        recyclerListView.setAdapter(listAdapter);
+        recyclerListView = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        listView.setVerticalScrollbarPosition(i);
+        recyclerListView.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i < MessagesController.getInstance().blockedUsers.size()) {
+            public void onItemClick(View view, int position) {
+                if (position < MessagesController.getInstance().blockedUsers.size()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", ((Integer) MessagesController.getInstance().blockedUsers.get(i)).intValue());
+                    args.putInt("user_id", ((Integer) MessagesController.getInstance().blockedUsers.get(position)).intValue());
                     BlockedUsersActivity.this.presentFragment(new ProfileActivity(args));
                 }
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i >= 0 && i < MessagesController.getInstance().blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
-                    BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance().blockedUsers.get(i)).intValue();
+            public boolean onItemClick(View view, int position) {
+                if (position < MessagesController.getInstance().blockedUsers.size() && BlockedUsersActivity.this.getParentActivity() != null) {
+                    BlockedUsersActivity.this.selectedUserId = ((Integer) MessagesController.getInstance().blockedUsers.get(position)).intValue();
                     Builder builder = new Builder(BlockedUsersActivity.this.getParentActivity());
                     builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -212,12 +180,9 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
             }
         });
         if (MessagesController.getInstance().loadingBlockedUsers) {
-            this.progressView.setVisibility(0);
-            this.emptyTextView.setVisibility(8);
-            this.listView.setEmptyView(null);
+            this.emptyView.showProgress();
         } else {
-            this.progressView.setVisibility(8);
-            this.listView.setEmptyView(this.emptyTextView);
+            this.emptyView.showTextView();
         }
         return this.fragmentView;
     }
@@ -229,12 +194,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 updateVisibleRows(mask);
             }
         } else if (id == NotificationCenter.blockedUsersDidLoaded) {
-            if (this.progressView != null) {
-                this.progressView.setVisibility(8);
-            }
-            if (this.listView != null && this.listView.getEmptyView() == null) {
-                this.listView.setEmptyView(this.emptyTextView);
-            }
+            this.emptyView.showTextView();
             if (this.listViewAdapter != null) {
                 this.listViewAdapter.notifyDataSetChanged();
             }
@@ -264,5 +224,32 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         if (user != null) {
             MessagesController.getInstance().blockUser(user.id);
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int count = BlockedUsersActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = BlockedUsersActivity.this.listView.getChildAt(a);
+                    if (child instanceof UserCell) {
+                        ((UserCell) child).update(0);
+                    }
+                }
+            }
+        };
+        r10 = new ThemeDescription[21];
+        r10[10] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
+        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        r10[13] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        r10[14] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        r10[15] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        return r10;
     }
 }

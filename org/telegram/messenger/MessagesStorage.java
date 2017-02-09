@@ -59,6 +59,7 @@ import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
+import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
@@ -907,7 +908,7 @@ public class MessagesStorage {
                                     message.random_id = cursor.longValue(5);
                                 }
                                 try {
-                                    if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionGameScore))) {
+                                    if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionPaymentSent) || (message.action instanceof TL_messageActionGameScore))) {
                                         if (!cursor.isNull(6)) {
                                             data = cursor.byteBufferValue(6);
                                             if (data != null) {
@@ -5560,12 +5561,12 @@ Error: java.util.NoSuchElementException
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 62;
+                    message.media.bytes[0] = (byte) 64;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 62;
+                message.media.bytes[0] = (byte) 64;
                 message.flags |= 512;
             }
         }
@@ -6014,7 +6015,7 @@ Error: java.util.NoSuchElementException
                             dialogs.messages.add(message);
                             MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                             try {
-                                if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionGameScore))) {
+                                if (message.reply_to_msg_id != 0 && ((message.action instanceof TL_messageActionPinMessage) || (message.action instanceof TL_messageActionPaymentSent) || (message.action instanceof TL_messageActionGameScore))) {
                                     if (!cursor.isNull(13)) {
                                         data = cursor.byteBufferValue(13);
                                         if (data != null) {
@@ -6037,36 +6038,36 @@ Error: java.util.NoSuchElementException
                                     }
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                try {
+                                    FileLog.e("tmessages", e);
+                                } catch (Throwable e2) {
+                                    dialogs.dialogs.clear();
+                                    dialogs.users.clear();
+                                    dialogs.chats.clear();
+                                    encryptedChats.clear();
+                                    FileLog.e("tmessages", e2);
+                                    MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false);
+                                    return;
+                                }
                             }
                         }
                     }
-                    try {
-                        int lower_id = (int) dialog.id;
-                        int high_id = (int) (dialog.id >> 32);
-                        if (lower_id == 0) {
-                            if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                                encryptedToLoad.add(Integer.valueOf(high_id));
-                            }
-                        } else if (high_id == 1) {
-                            if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                                chatsToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (lower_id > 0) {
-                            if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                                usersToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                            chatsToLoad.add(Integer.valueOf(-lower_id));
+                    int lower_id = (int) dialog.id;
+                    int high_id = (int) (dialog.id >> 32);
+                    if (lower_id == 0) {
+                        if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                            encryptedToLoad.add(Integer.valueOf(high_id));
                         }
-                    } catch (Throwable e2) {
-                        dialogs.dialogs.clear();
-                        dialogs.users.clear();
-                        dialogs.chats.clear();
-                        encryptedChats.clear();
-                        FileLog.e("tmessages", e2);
-                        MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false);
-                        return;
+                    } else if (high_id == 1) {
+                        if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                            chatsToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (lower_id > 0) {
+                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                            usersToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                        chatsToLoad.add(Integer.valueOf(-lower_id));
                     }
                 }
                 cursor.dispose();

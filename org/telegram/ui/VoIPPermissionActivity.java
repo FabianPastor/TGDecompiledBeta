@@ -3,6 +3,7 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPPermissionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
@@ -11,9 +12,23 @@ public class VoIPPermissionActivity extends Activity {
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 101 && grantResults[0] == 0 && VoIPService.getSharedInstance() != null) {
-            VoIPService.getSharedInstance().acceptIncomingCall();
+        if (requestCode != 101) {
+            return;
         }
-        finish();
+        if (grantResults[0] == 0) {
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().acceptIncomingCall();
+            }
+            finish();
+        } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+            finish();
+        } else {
+            VoIPService.getSharedInstance().declineIncomingCall();
+            VoIPHelper.permissionDenied(this, new Runnable() {
+                public void run() {
+                    VoIPPermissionActivity.this.finish();
+                }
+            });
+        }
     }
 }

@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import java.net.URLEncoder;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -35,6 +34,8 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ShareAlert;
@@ -107,7 +108,7 @@ public class WebviewActivity extends BaseFragment {
         this.currentGame = gameName;
         this.currentMessageObject = messageObject;
         this.short_param = startParam;
-        this.linkToCopy = "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
+        this.linkToCopy = "https://" + MessagesController.getInstance().linkPrefix + "/" + this.currentBot + (TextUtils.isEmpty(startParam) ? "" : "?game=" + startParam);
     }
 
     public void onFragmentDestroy() {
@@ -152,7 +153,7 @@ public class WebviewActivity extends BaseFragment {
         this.progressView = new ContextProgressView(context, 1);
         this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressItem.getImageView().setVisibility(4);
-        menu.addItem(0, (int) R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp), 0);
+        menu.addItem(0, (int) R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
@@ -240,11 +241,23 @@ public class WebviewActivity extends BaseFragment {
             SerializedData serializedData = new SerializedData(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(serializedData);
             editor.putString(hash + "_m", Utilities.bytesToHex(serializedData.toByteArray()));
-            editor.putString(hash + "_link", "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
+            editor.putString(hash + "_link", "https://" + MessagesController.getInstance().linkPrefix + "/" + username + (TextUtils.isEmpty(short_name) ? "" : "?game=" + short_name));
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
         } catch (Throwable e) {
             FileLog.e("tmessages", e);
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[7];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[5] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressInner2);
+        themeDescriptionArr[6] = new ThemeDescription(this.progressView, 0, null, null, null, null, Theme.key_contextProgressOuter2);
+        return themeDescriptionArr;
     }
 }

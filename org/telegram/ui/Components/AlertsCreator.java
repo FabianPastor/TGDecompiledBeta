@@ -12,17 +12,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import java.util.Calendar;
+import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -35,9 +39,15 @@ import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
+import org.telegram.ui.Components.NumberPicker.Formatter;
 import org.telegram.ui.ReportOtherActivity;
 
 public class AlertsCreator {
+
+    public interface PaymentAlertDelegate {
+        void didPressedNewCard();
+    }
+
     public static Dialog createMuteAlert(Context context, final long dialog_id) {
         if (context == null) {
             return null;
@@ -627,6 +637,115 @@ public class AlertsCreator {
         builder.setTitle(title);
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        return builder.create();
+    }
+
+    public static AlertDialog.Builder createTTLAlert(Context context, final EncryptedChat encryptedChat) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString("MessageLifetime", R.string.MessageLifetime));
+        final NumberPicker numberPicker = new NumberPicker(context);
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(20);
+        if (encryptedChat.ttl > 0 && encryptedChat.ttl < 16) {
+            numberPicker.setValue(encryptedChat.ttl);
+        } else if (encryptedChat.ttl == 30) {
+            numberPicker.setValue(16);
+        } else if (encryptedChat.ttl == 60) {
+            numberPicker.setValue(17);
+        } else if (encryptedChat.ttl == 3600) {
+            numberPicker.setValue(18);
+        } else if (encryptedChat.ttl == 86400) {
+            numberPicker.setValue(19);
+        } else if (encryptedChat.ttl == 604800) {
+            numberPicker.setValue(20);
+        } else if (encryptedChat.ttl == 0) {
+            numberPicker.setValue(0);
+        }
+        numberPicker.setFormatter(new Formatter() {
+            public String format(int value) {
+                if (value == 0) {
+                    return LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
+                }
+                if (value >= 1 && value < 16) {
+                    return LocaleController.formatTTLString(value);
+                }
+                if (value == 16) {
+                    return LocaleController.formatTTLString(30);
+                }
+                if (value == 17) {
+                    return LocaleController.formatTTLString(60);
+                }
+                if (value == 18) {
+                    return LocaleController.formatTTLString(3600);
+                }
+                if (value == 19) {
+                    return LocaleController.formatTTLString(86400);
+                }
+                if (value == 20) {
+                    return LocaleController.formatTTLString(604800);
+                }
+                return "";
+            }
+        });
+        builder.setView(numberPicker);
+        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                int oldValue = encryptedChat.ttl;
+                which = numberPicker.getValue();
+                if (which >= 0 && which < 16) {
+                    encryptedChat.ttl = which;
+                } else if (which == 16) {
+                    encryptedChat.ttl = 30;
+                } else if (which == 17) {
+                    encryptedChat.ttl = 60;
+                } else if (which == 18) {
+                    encryptedChat.ttl = 3600;
+                } else if (which == 19) {
+                    encryptedChat.ttl = 86400;
+                } else if (which == 20) {
+                    encryptedChat.ttl = 604800;
+                }
+                if (oldValue != encryptedChat.ttl) {
+                    SecretChatHelper.getInstance().sendTTLMessage(encryptedChat, null);
+                    MessagesStorage.getInstance().updateEncryptedChatTTL(encryptedChat);
+                }
+            }
+        });
+        return builder;
+    }
+
+    public static AlertDialog createExpireDateAlert(Context context, final boolean month, int[] result, Runnable callback) {
+        int currentYear;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(month ? LocaleController.getString("PaymentCardExpireDateMonth", R.string.PaymentCardExpireDateMonth) : LocaleController.getString("PaymentCardExpireDateYear", R.string.PaymentCardExpireDateYear));
+        final NumberPicker numberPicker = new NumberPicker(context);
+        if (month) {
+            numberPicker.setMinValue(1);
+            numberPicker.setMaxValue(12);
+            currentYear = 0;
+        } else {
+            currentYear = Calendar.getInstance().get(1);
+            numberPicker.setMinValue(0);
+            numberPicker.setMaxValue(30);
+        }
+        numberPicker.setFormatter(new Formatter() {
+            public String format(int value) {
+                if (month) {
+                    return String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(value)});
+                }
+                return String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(currentYear + value)});
+            }
+        });
+        builder.setView(numberPicker);
+        final int[] iArr = result;
+        final boolean z = month;
+        final Runnable runnable = callback;
+        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                iArr[0] = z ? numberPicker.getValue() : (numberPicker.getValue() + currentYear) % 100;
+                runnable.run();
+            }
+        });
         return builder.create();
     }
 }

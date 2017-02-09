@@ -63,7 +63,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PlayingGameDrawable;
 import org.telegram.ui.Components.PopupAudioView;
 import org.telegram.ui.Components.RecordStatusDrawable;
-import org.telegram.ui.Components.SendingFileExDrawable;
+import org.telegram.ui.Components.SendingFileDrawable;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.TypingDotsDrawable;
 
@@ -97,7 +97,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     private ArrayList<MessageObject> popupMessages = new ArrayList();
     private RecordStatusDrawable recordStatusDrawable;
     private ViewGroup rightView;
-    private SendingFileExDrawable sendingFileDrawable;
+    private SendingFileDrawable sendingFileDrawable;
     private boolean startedMoving = false;
     private ArrayList<ViewGroup> textViews = new ArrayList();
     private TypingDotsDrawable typingDotsDrawable;
@@ -155,7 +155,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Theme.loadRecources(this);
+        Theme.loadResources(this);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
@@ -170,7 +170,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.typingDotsDrawable = new TypingDotsDrawable();
         this.recordStatusDrawable = new RecordStatusDrawable();
-        this.sendingFileDrawable = new SendingFileExDrawable();
+        this.sendingFileDrawable = new SendingFileDrawable();
         this.playingGameDrawable = new PlayingGameDrawable();
         SizeNotifierFrameLayout contentView = new SizeNotifierFrameLayout(this) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -255,7 +255,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         RelativeLayout relativeLayout = new RelativeLayout(this);
         contentView.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
         this.popupContainer = new RelativeLayout(this);
-        this.popupContainer.setBackgroundColor(-1);
+        this.popupContainer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         relativeLayout.addView(this.popupContainer, LayoutHelper.createRelative(-1, PsExtractor.VIDEO_STREAM_MASK, 12, 0, 12, 0, 13));
         if (this.chatActivityEnterView != null) {
             this.chatActivityEnterView.onDestroy();
@@ -297,14 +297,17 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
             public void onStickersTab(boolean opened) {
             }
+
+            public void didPressedAttachButton() {
+            }
         });
         this.messageContainer = new FrameLayoutTouch(this);
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
         this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
-        this.actionBar.setBackgroundColor(Theme.ACTION_BAR_COLOR);
-        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_SELECTOR_COLOR);
+        this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+        this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         this.popupContainer.addView(this.actionBar);
         ViewGroup.LayoutParams layoutParams = this.actionBar.getLayoutParams();
         layoutParams.width = -1;
@@ -329,7 +332,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.topMargin = AndroidUtilities.dp(3.0f);
         this.avatarImageView.setLayoutParams(layoutParams2);
         this.nameTextView = new TextView(this);
-        this.nameTextView.setTextColor(-1);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
         this.nameTextView.setTextSize(1, 18.0f);
         this.nameTextView.setLines(1);
         this.nameTextView.setMaxLines(1);
@@ -346,7 +349,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         layoutParams2.gravity = 80;
         this.nameTextView.setLayoutParams(layoutParams2);
         this.onlineTextView = new TextView(this);
-        this.onlineTextView.setTextColor(Theme.ACTION_BAR_SUBTITLE_COLOR);
+        this.onlineTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
         this.onlineTextView.setTextSize(1, 14.0f);
         this.onlineTextView.setLines(1);
         this.onlineTextView.setMaxLines(1);

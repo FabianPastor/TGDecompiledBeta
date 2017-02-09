@@ -18,7 +18,7 @@ public class HintEditText extends EditText {
 
     public HintEditText(Context context) {
         super(context);
-        this.paint.setColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+        this.paint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
     }
 
     public String getHintText() {

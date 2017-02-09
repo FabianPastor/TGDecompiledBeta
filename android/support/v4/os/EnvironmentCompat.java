@@ -21,7 +21,7 @@ public final class EnvironmentCompat {
         } catch (IOException e) {
             Log.w(TAG, "Failed to resolve canonical path: " + e);
         }
-        return MEDIA_UNKNOWN;
+        return "unknown";
     }
 
     private EnvironmentCompat() {

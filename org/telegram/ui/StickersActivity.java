@@ -7,9 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.os.Build.VERSION;
 import android.text.SpannableStringBuilder;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -28,7 +25,6 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
@@ -44,13 +40,16 @@ import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.StickerSetCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
@@ -70,14 +69,49 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private int stickersShadowRow;
     private int stickersStartRow;
 
-    private class ListAdapter extends Adapter {
-        private Context mContext;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
+    public class TouchHelperCallback extends Callback {
+        public boolean isLongPressDragEnabled() {
+            return true;
         }
+
+        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
+            if (viewHolder.getItemViewType() != 0) {
+                return Callback.makeMovementFlags(0, 0);
+            }
+            return Callback.makeMovementFlags(3, 0);
+        }
+
+        public boolean onMove(RecyclerView recyclerView, ViewHolder source, ViewHolder target) {
+            if (source.getItemViewType() != target.getItemViewType()) {
+                return false;
+            }
+            StickersActivity.this.listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        public void onChildDraw(Canvas c, RecyclerView recyclerView, ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+        public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
+            if (actionState != 0) {
+                StickersActivity.this.listView.cancelClickRunnables(false);
+                viewHolder.itemView.setPressed(true);
+            }
+            super.onSelectedChanged(viewHolder, actionState);
+        }
+
+        public void onSwiped(ViewHolder viewHolder, int direction) {
+        }
+
+        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            viewHolder.itemView.setPressed(false);
+        }
+    }
+
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -112,14 +146,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 try {
                     Intent intent = new Intent("android.intent.action.SEND");
                     intent.setType("text/plain");
-                    intent.putExtra("android.intent.extra.TEXT", String.format(Locale.US, "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/addstickers/%s", new Object[]{stickerSet.set.short_name}));
+                    intent.putExtra("android.intent.extra.TEXT", String.format(Locale.US, "https://" + MessagesController.getInstance().linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name}));
                     StickersActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", R.string.StickersShare)), 500);
                 } catch (Throwable e) {
                     FileLog.e("tmessages", e);
                 }
             } else if (which == 3) {
                 try {
-                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(Locale.US, "https://" + BuildVars.MAIN_LINKS_DOMAIN + "/addstickers/%s", new Object[]{stickerSet.set.short_name})));
+                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(Locale.US, "https://" + MessagesController.getInstance().linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name})));
                     Toast.makeText(StickersActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                 } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
@@ -194,12 +228,17 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
+        public boolean isEnabled(ViewHolder holder) {
+            int type = holder.getItemViewType();
+            return type == 0 || type == 2;
+        }
+
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
                 case 0:
                     view = new StickerSetCell(this.mContext);
-                    view.setBackgroundResource(R.drawable.list_selector_white);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     ((StickerSetCell) view).setOnOptionsClick(new OnClickListener() {
                         public void onClick(View v) {
                             int[] options;
@@ -234,22 +273,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
-                    view = new TextSettingsCell(this.mContext) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
-                    view.setBackgroundResource(R.drawable.list_selector_white);
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -281,47 +313,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             arrayList.set(fromIndex - StickersActivity.this.stickersStartRow, arrayList.get(toIndex - StickersActivity.this.stickersStartRow));
             arrayList.set(toIndex - StickersActivity.this.stickersStartRow, from);
             notifyItemMoved(fromIndex, toIndex);
-        }
-    }
-
-    public class TouchHelperCallback extends Callback {
-        public boolean isLongPressDragEnabled() {
-            return true;
-        }
-
-        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
-            if (viewHolder.getItemViewType() != 0) {
-                return Callback.makeMovementFlags(0, 0);
-            }
-            return Callback.makeMovementFlags(3, 0);
-        }
-
-        public boolean onMove(RecyclerView recyclerView, ViewHolder source, ViewHolder target) {
-            if (source.getItemViewType() != target.getItemViewType()) {
-                return false;
-            }
-            StickersActivity.this.listAdapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
-            return true;
-        }
-
-        public void onChildDraw(Canvas c, RecyclerView recyclerView, ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        }
-
-        public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
-            if (actionState != 0) {
-                StickersActivity.this.listView.cancelClickRunnables(false);
-                viewHolder.itemView.setPressed(true);
-            }
-            super.onSelectedChanged(viewHolder, actionState);
-        }
-
-        public void onSwiped(ViewHolder viewHolder, int direction) {
-        }
-
-        public void clearView(RecyclerView recyclerView, ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setPressed(false);
         }
     }
 
@@ -368,7 +359,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
         this.listView.setFocusable(true);
         this.listView.setTag(Integer.valueOf(7));
@@ -487,5 +478,30 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[20];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{StickerSetCell.class, TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteLinkText);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{StickerSetCell.class}, new String[]{"optionsButton"}, null, null, null, Theme.key_stickers_menuSelector);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"optionsButton"}, null, null, null, Theme.key_stickers_menu);
+        return themeDescriptionArr;
     }
 }

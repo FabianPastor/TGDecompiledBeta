@@ -35,7 +35,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
             super(context);
             setBackgroundColor(-15066598);
             this.selector = new View(context);
-            this.selector.setBackgroundResource(R.drawable.list_selector);
+            this.selector.setBackgroundResource(R.drawable.list_selector_ex);
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
             this.imageView = new ImageView(context);
             this.imageView.setScaleType(ScaleType.CENTER);
@@ -124,6 +124,6 @@ public class PhotoPickerSearchCell extends LinearLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
     }
 }

@@ -2,7 +2,6 @@ package com.google.android.gms.location.places;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import android.support.v4.os.EnvironmentCompat;
 import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
@@ -23,7 +22,7 @@ public class PlaceReport extends zza implements ReflectedParcelable {
     }
 
     public static PlaceReport create(String str, String str2) {
-        return zzj(str, str2, EnvironmentCompat.MEDIA_UNKNOWN);
+        return zzj(str, str2, "unknown");
     }
 
     private static boolean zzeY(String str) {
@@ -42,7 +41,7 @@ public class PlaceReport extends zza implements ReflectedParcelable {
                 }
                 break;
             case -284840886:
-                if (str.equals(EnvironmentCompat.MEDIA_UNKNOWN)) {
+                if (str.equals("unknown")) {
                     z = false;
                     break;
                 }
@@ -115,7 +114,7 @@ public class PlaceReport extends zza implements ReflectedParcelable {
         zzaa.zza zzv = zzaa.zzv(this);
         zzv.zzg("placeId", this.zzblg);
         zzv.zzg("tag", this.mTag);
-        if (!EnvironmentCompat.MEDIA_UNKNOWN.equals(this.zzabN)) {
+        if (!"unknown".equals(this.zzabN)) {
             zzv.zzg("source", this.zzabN);
         }
         return zzv.toString();

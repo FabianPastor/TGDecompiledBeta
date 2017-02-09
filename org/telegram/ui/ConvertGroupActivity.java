@@ -7,23 +7,26 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class ConvertGroupActivity extends BaseFragment implements NotificationCenterDelegate {
     private int chat_id;
@@ -31,63 +34,63 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
     private int convertInfoRow;
     private int convertRow;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
     private int rowCount;
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return false;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getAdapterPosition() == ConvertGroupActivity.this.convertRow;
         }
 
-        public boolean isEnabled(int i) {
-            return i == ConvertGroupActivity.this.convertRow;
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             return ConvertGroupActivity.this.rowCount;
         }
 
-        public Object getItem(int i) {
-            return null;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int type = getItemViewType(i);
-            if (type == 0) {
-                if (view == null) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
                     view = new TextSettingsCell(this.mContext);
-                    view.setBackgroundColor(-1);
-                }
-                TextSettingsCell textCell = (TextSettingsCell) view;
-                if (i == ConvertGroupActivity.this.convertRow) {
-                    textCell.setText(LocaleController.getString("ConvertGroup", R.string.ConvertGroup), false);
-                }
-            } else if (type == 1) {
-                if (view == null) {
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                }
-                if (i == ConvertGroupActivity.this.convertInfoRow) {
-                    ((TextInfoPrivacyCell) view).setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", R.string.ConvertGroupInfo2)));
-                    view.setBackgroundResource(R.drawable.greydivider);
-                } else if (i == ConvertGroupActivity.this.convertDetailRow) {
-                    ((TextInfoPrivacyCell) view).setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", R.string.ConvertGroupInfo3)));
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
-                }
+                    break;
             }
-            return view;
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    TextSettingsCell textCell = holder.itemView;
+                    if (position == ConvertGroupActivity.this.convertRow) {
+                        textCell.setText(LocaleController.getString("ConvertGroup", R.string.ConvertGroup), false);
+                        return;
+                    }
+                    return;
+                case 1:
+                    TextInfoPrivacyCell privacyCell = holder.itemView;
+                    if (position == ConvertGroupActivity.this.convertInfoRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo2", R.string.ConvertGroupInfo2)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else if (position == ConvertGroupActivity.this.convertDetailRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ConvertGroupInfo3", R.string.ConvertGroupInfo3)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else {
+                        return;
+                    }
+                default:
+                    return;
+            }
         }
 
         public int getItemViewType(int i) {
@@ -98,14 +101,6 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
                 return 1;
             }
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            return false;
         }
     }
 
@@ -148,17 +143,15 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
-        ListView listView = new ListView(context);
-        listView.setDivider(null);
-        listView.setDividerHeight(0);
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setDrawSelectorOnTop(true);
-        frameLayout.addView(listView, LayoutHelper.createFrame(-1, -1.0f));
-        listView.setAdapter(this.listAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == ConvertGroupActivity.this.convertRow) {
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.listView = new RecyclerListView(context);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        this.listView.setVerticalScrollBarEnabled(false);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setAdapter(this.listAdapter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
+                if (position == ConvertGroupActivity.this.convertRow) {
                     Builder builder = new Builder(ConvertGroupActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ConvertGroupAlert", R.string.ConvertGroupAlert));
                     builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
@@ -186,5 +179,22 @@ public class ConvertGroupActivity extends BaseFragment implements NotificationCe
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        r9 = new ThemeDescription[12];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        return r9;
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
@@ -46,6 +47,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private Matrix txform = new Matrix();
 
     public interface CameraViewDelegate {
+        void onCameraCreated(Camera camera);
+
         void onCameraInit();
     }
 
@@ -87,7 +90,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     public void switchCamera() {
         boolean z = false;
         if (this.cameraSession != null) {
-            CameraController.getInstance().close(this.cameraSession, null);
+            CameraController.getInstance().close(this.cameraSession, null, null);
             this.cameraSession = null;
         }
         this.initied = false;
@@ -149,10 +152,20 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                             }
                             CameraView.this.checkPreviewMatrix();
                         }
+                    }, new Runnable() {
+                        public void run() {
+                            if (CameraView.this.delegate != null) {
+                                CameraView.this.delegate.onCameraCreated(CameraView.this.cameraSession.cameraInfo.camera);
+                            }
+                        }
                     });
                 }
             }
         }
+    }
+
+    public Size getPreviewSize() {
+        return this.previewSize;
     }
 
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
@@ -165,7 +178,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
 
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
         if (this.cameraSession != null) {
-            CameraController.getInstance().close(this.cameraSession, null);
+            CameraController.getInstance().close(this.cameraSession, null, null);
         }
         return false;
     }
@@ -271,10 +284,10 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         return this.cameraSession;
     }
 
-    public void destroy(boolean async) {
+    public void destroy(boolean async, Runnable beforeDestroyRunnable) {
         if (this.cameraSession != null) {
             this.cameraSession.destroy();
-            CameraController.getInstance().close(this.cameraSession, !async ? new Semaphore(0) : null);
+            CameraController.getInstance().close(this.cameraSession, !async ? new Semaphore(0) : null, beforeDestroyRunnable);
         }
     }
 

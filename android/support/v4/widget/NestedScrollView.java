@@ -44,7 +44,6 @@ import android.widget.ScrollView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.extractor.ts.TsExtractor;
-import org.telegram.tgnet.TLRPC;
 
 public class NestedScrollView extends FrameLayout implements NestedScrollingParent, NestedScrollingChild, ScrollingView {
     private static final AccessibilityDelegate ACCESSIBILITY_DELEGATE = new AccessibilityDelegate();
@@ -431,7 +430,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                         }
                         handled = fullScroll(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
-                    case TLRPC.LAYER /*62*/:
+                    case 62:
                         pageScroll(event.isShiftPressed() ? 33 : TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         break;
                 }

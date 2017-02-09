@@ -1,10 +1,11 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Cells.LocationCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 
 public class LocationActivitySearchAdapter extends BaseLocationAdapter {
     private Context mContext;
@@ -13,20 +14,16 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
         this.mContext = context;
     }
 
-    public int getCount() {
+    public int getItemCount() {
         return this.places.size();
     }
 
-    public boolean isEmpty() {
-        return this.places.isEmpty();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new Holder(new LocationCell(this.mContext));
     }
 
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = new LocationCell(this.mContext);
-        }
-        ((LocationCell) view).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), i != this.places.size() + -1);
-        return view;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        ((LocationCell) holder.itemView).setLocation((TL_messageMediaVenue) this.places.get(position), (String) this.iconUrls.get(position), position != this.places.size() + -1);
     }
 
     public TL_messageMediaVenue getItem(int i) {
@@ -36,27 +33,7 @@ public class LocationActivitySearchAdapter extends BaseLocationAdapter {
         return (TL_messageMediaVenue) this.places.get(i);
     }
 
-    public long getItemId(int i) {
-        return (long) i;
-    }
-
-    public int getItemViewType(int position) {
-        return 0;
-    }
-
-    public int getViewTypeCount() {
-        return 4;
-    }
-
-    public boolean areAllItemsEnabled() {
-        return false;
-    }
-
-    public boolean isEnabled(int position) {
-        return true;
-    }
-
-    public boolean hasStableIds() {
+    public boolean isEnabled(ViewHolder holder) {
         return true;
     }
 }

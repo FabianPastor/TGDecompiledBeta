@@ -15,7 +15,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
@@ -31,19 +30,15 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.Cells.JoinSheetUserCell;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class JoinGroupAlert extends BottomSheet {
     private ChatInvite chatInvite;
     private BaseFragment fragment;
     private String hash;
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class UsersAdapter extends Adapter {
+    private class UsersAdapter extends SelectionAdapter {
         private Context context;
 
         public UsersAdapter(Context context) {
@@ -66,6 +61,10 @@ public class JoinGroupAlert extends BottomSheet {
 
         public long getItemId(int i) {
             return (long) i;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

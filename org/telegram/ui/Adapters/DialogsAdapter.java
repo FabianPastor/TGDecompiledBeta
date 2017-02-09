@@ -6,24 +6,19 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.LoadingCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class DialogsAdapter extends Adapter {
+public class DialogsAdapter extends SelectionAdapter {
     private int currentCount;
     private int dialogsType;
     private Context mContext;
     private long openedDialogId;
-
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
 
     public DialogsAdapter(Context context, int type) {
         this.mContext = context;
@@ -81,8 +76,8 @@ public class DialogsAdapter extends Adapter {
         }
     }
 
-    public long getItemId(int i) {
-        return (long) i;
+    public boolean isEnabled(ViewHolder holder) {
+        return holder.getItemViewType() != 1;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {

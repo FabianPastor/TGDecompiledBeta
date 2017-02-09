@@ -10,11 +10,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.SQLite.SQLiteCursor;
@@ -31,6 +28,8 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.BotQuery;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -38,11 +37,15 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.BottomSheetCell;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class CacheControlActivity extends BaseFragment {
     private long audioSize = -1;
@@ -59,105 +62,100 @@ public class CacheControlActivity extends BaseFragment {
     private int keepMediaInfoRow;
     private int keepMediaRow;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
     private long musicSize = -1;
     private long photoSize = -1;
     private int rowCount;
     private long totalSize = -1;
     private long videoSize = -1;
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return false;
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return position == CacheControlActivity.this.databaseRow || ((position == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0) || position == CacheControlActivity.this.keepMediaRow);
         }
 
-        public boolean isEnabled(int i) {
-            return i == CacheControlActivity.this.databaseRow || ((i == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0) || i == CacheControlActivity.this.keepMediaRow);
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             return CacheControlActivity.this.rowCount;
         }
 
-        public Object getItem(int i) {
-            return null;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int type = getItemViewType(i);
-            if (type == 0) {
-                if (view == null) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
                     view = new TextSettingsCell(this.mContext);
-                    view.setBackgroundColor(-1);
-                }
-                TextSettingsCell textCell = (TextSettingsCell) view;
-                if (i == CacheControlActivity.this.databaseRow) {
-                    textCell.setTextAndValue(LocaleController.getString("LocalDatabase", R.string.LocalDatabase), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
-                } else if (i == CacheControlActivity.this.cacheRow) {
-                    if (CacheControlActivity.this.calculating) {
-                        textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), LocaleController.getString("CalculatingSize", R.string.CalculatingSize), false);
-                    } else {
-                        textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), CacheControlActivity.this.totalSize == 0 ? LocaleController.getString("CacheEmpty", R.string.CacheEmpty) : AndroidUtilities.formatFileSize(CacheControlActivity.this.totalSize), false);
-                    }
-                } else if (i == CacheControlActivity.this.keepMediaRow) {
-                    String value;
-                    int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
-                    if (keepMedia == 0) {
-                        value = LocaleController.formatPluralString("Weeks", 1);
-                    } else if (keepMedia == 1) {
-                        value = LocaleController.formatPluralString("Months", 1);
-                    } else {
-                        value = LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever);
-                    }
-                    textCell.setTextAndValue(LocaleController.getString("KeepMedia", R.string.KeepMedia), value, false);
-                }
-            } else if (type == 1) {
-                if (view == null) {
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                }
-                if (i == CacheControlActivity.this.databaseInfoRow) {
-                    ((TextInfoPrivacyCell) view).setText(LocaleController.getString("LocalDatabaseInfo", R.string.LocalDatabaseInfo));
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
-                } else if (i == CacheControlActivity.this.cacheInfoRow) {
-                    ((TextInfoPrivacyCell) view).setText("");
-                    view.setBackgroundResource(R.drawable.greydivider);
-                } else if (i == CacheControlActivity.this.keepMediaInfoRow) {
-                    ((TextInfoPrivacyCell) view).setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", R.string.KeepMediaInfo)));
-                    view.setBackgroundResource(R.drawable.greydivider);
-                }
+                    break;
             }
-            return view;
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    TextSettingsCell textCell = holder.itemView;
+                    if (position == CacheControlActivity.this.databaseRow) {
+                        textCell.setTextAndValue(LocaleController.getString("LocalDatabase", R.string.LocalDatabase), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
+                        return;
+                    } else if (position == CacheControlActivity.this.cacheRow) {
+                        if (CacheControlActivity.this.calculating) {
+                            textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), LocaleController.getString("CalculatingSize", R.string.CalculatingSize), false);
+                            return;
+                        } else {
+                            textCell.setTextAndValue(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), CacheControlActivity.this.totalSize == 0 ? LocaleController.getString("CacheEmpty", R.string.CacheEmpty) : AndroidUtilities.formatFileSize(CacheControlActivity.this.totalSize), false);
+                            return;
+                        }
+                    } else if (position == CacheControlActivity.this.keepMediaRow) {
+                        String value;
+                        int keepMedia = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("keep_media", 2);
+                        if (keepMedia == 0) {
+                            value = LocaleController.formatPluralString("Weeks", 1);
+                        } else if (keepMedia == 1) {
+                            value = LocaleController.formatPluralString("Months", 1);
+                        } else {
+                            value = LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever);
+                        }
+                        textCell.setTextAndValue(LocaleController.getString("KeepMedia", R.string.KeepMedia), value, false);
+                        return;
+                    } else {
+                        return;
+                    }
+                case 1:
+                    TextInfoPrivacyCell privacyCell = holder.itemView;
+                    if (position == CacheControlActivity.this.databaseInfoRow) {
+                        privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", R.string.LocalDatabaseInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else if (position == CacheControlActivity.this.cacheInfoRow) {
+                        privacyCell.setText("");
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else if (position == CacheControlActivity.this.keepMediaInfoRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", R.string.KeepMediaInfo)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        return;
+                    } else {
+                        return;
+                    }
+                default:
+                    return;
+            }
         }
 
         public int getItemViewType(int i) {
-            if (i == CacheControlActivity.this.databaseRow || i == CacheControlActivity.this.cacheRow || i == CacheControlActivity.this.keepMediaRow) {
-                return 0;
-            }
             if (i == CacheControlActivity.this.databaseInfoRow || i == CacheControlActivity.this.cacheInfoRow || i == CacheControlActivity.this.keepMediaInfoRow) {
                 return 1;
             }
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            return false;
         }
     }
 
@@ -372,19 +370,17 @@ public class CacheControlActivity extends BaseFragment {
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
-        ListView listView = new ListView(context);
-        listView.setDivider(null);
-        listView.setDividerHeight(0);
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setDrawSelectorOnTop(true);
-        frameLayout.addView(listView, LayoutHelper.createFrame(-1, -1.0f));
-        listView.setAdapter(this.listAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.listView = new RecyclerListView(context);
+        this.listView.setVerticalScrollBarEnabled(false);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setAdapter(this.listAdapter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
                 if (CacheControlActivity.this.getParentActivity() != null) {
                     Builder builder;
-                    if (i == CacheControlActivity.this.keepMediaRow) {
+                    if (position == CacheControlActivity.this.keepMediaRow) {
                         builder = new Builder(CacheControlActivity.this.getParentActivity());
                         builder.setItems(new CharSequence[]{LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever)}, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -402,7 +398,7 @@ public class CacheControlActivity extends BaseFragment {
                             }
                         });
                         CacheControlActivity.this.showDialog(builder.create());
-                    } else if (i == CacheControlActivity.this.databaseRow) {
+                    } else if (position == CacheControlActivity.this.databaseRow) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(CacheControlActivity.this.getParentActivity());
                         builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
                         builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -502,7 +498,7 @@ public class CacheControlActivity extends BaseFragment {
                             }
                         });
                         CacheControlActivity.this.showDialog(builder2.create());
-                    } else if (i == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0 && CacheControlActivity.this.getParentActivity() != null) {
+                    } else if (position == CacheControlActivity.this.cacheRow && CacheControlActivity.this.totalSize > 0 && CacheControlActivity.this.getParentActivity() != null) {
                         builder = new Builder(CacheControlActivity.this.getParentActivity());
                         builder.setApplyTopPadding(false);
                         builder.setApplyBottomPadding(false);
@@ -534,7 +530,7 @@ public class CacheControlActivity extends BaseFragment {
                                 CacheControlActivity.this.clear[a] = true;
                                 CheckBoxCell checkBoxCell = new CheckBoxCell(CacheControlActivity.this.getParentActivity());
                                 checkBoxCell.setTag(Integer.valueOf(a));
-                                checkBoxCell.setBackgroundResource(R.drawable.list_selector);
+                                checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                                 checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size), true, true);
                                 checkBoxCell.setOnClickListener(new View.OnClickListener() {
@@ -550,9 +546,9 @@ public class CacheControlActivity extends BaseFragment {
                             }
                         }
                         BottomSheetCell cell = new BottomSheetCell(CacheControlActivity.this.getParentActivity(), 1);
-                        cell.setBackgroundResource(R.drawable.list_selector);
+                        cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         cell.setTextAndIcon(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache).toUpperCase(), 0);
-                        cell.setTextColor(Theme.STICKERS_SHEET_REMOVE_TEXT_COLOR);
+                        cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
                         cell.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 try {
@@ -580,5 +576,23 @@ public class CacheControlActivity extends BaseFragment {
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        r9 = new ThemeDescription[13];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        r9[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        return r9;
     }
 }

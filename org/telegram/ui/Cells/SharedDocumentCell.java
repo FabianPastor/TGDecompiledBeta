@@ -2,7 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -27,14 +28,14 @@ import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 
 public class SharedDocumentCell extends FrameLayout implements FileDownloadProgressListener {
-    private static Paint paint;
-    private int TAG;
+    private int TAG = MediaController.getInstance().generateObserverTag();
     private CheckBox checkBox;
     private TextView dateTextView;
     private TextView extTextView;
@@ -44,7 +45,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     private MessageObject message;
     private TextView nameTextView;
     private boolean needDivider;
-    private ImageView placeholderImabeView;
+    private ImageView placeholderImageView;
     private LineProgressView progressView;
     private ImageView statusImageView;
     private BackupImageView thumbImageView;
@@ -53,14 +54,8 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         float f;
         float f2;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
-        this.TAG = MediaController.getInstance().generateObserverTag();
-        this.placeholderImabeView = new ImageView(context);
-        View view = this.placeholderImabeView;
+        this.placeholderImageView = new ImageView(context);
+        View view = this.placeholderImageView;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
             f = 0.0f;
@@ -74,7 +69,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         }
         addView(view, LayoutHelper.createFrame(40, 40.0f, i, f, 8.0f, f2, 0.0f));
         this.extTextView = new TextView(context);
-        this.extTextView.setTextColor(-1);
+        this.extTextView.setTextColor(Theme.getColor(Theme.key_files_iconText));
         this.extTextView.setTextSize(1, 14.0f);
         this.extTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.extTextView.setLines(1);
@@ -84,6 +79,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.extTextView.setEllipsize(TruncateAt.END);
         addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
         this.thumbImageView = new BackupImageView(context);
+        this.thumbImageView.setResourceImageColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_files_folderIcon), Mode.MULTIPLY));
         view = this.thumbImageView;
         i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
@@ -108,7 +104,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
                     i = 0;
                 }
                 access$000.setVisibility(i);
-                ImageView access$100 = SharedDocumentCell.this.placeholderImabeView;
+                ImageView access$100 = SharedDocumentCell.this.placeholderImageView;
                 if (!set) {
                     i2 = 0;
                 }
@@ -116,7 +112,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             }
         });
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setLines(1);
@@ -127,9 +123,10 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
         this.statusImageView = new ImageView(context);
         this.statusImageView.setVisibility(4);
+        this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon), Mode.MULTIPLY));
         addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 35.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
         this.dateTextView = new TextView(context);
-        this.dateTextView.setTextColor(-6710887);
+        this.dateTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.dateTextView.setTextSize(1, 14.0f);
         this.dateTextView.setLines(1);
         this.dateTextView.setMaxLines(1);
@@ -138,9 +135,11 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.dateTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, BitmapDescriptorFactory.HUE_ORANGE, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
         this.progressView = new LineProgressView(context);
+        this.progressView.setProgressColor(Theme.getColor(Theme.key_sharedMedia_startStopLoadIcon));
         addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
         this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setVisibility(4);
+        this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         view = this.checkBox;
         i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
@@ -192,12 +191,13 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.extTextView.setVisibility(4);
         }
         if (resId == 0) {
-            this.placeholderImabeView.setImageResource(getThumbForNameOrMime(text, type));
-            this.placeholderImabeView.setVisibility(0);
+            this.placeholderImageView.setImageResource(getThumbForNameOrMime(text, type));
+            this.placeholderImageView.setVisibility(0);
         } else {
-            this.placeholderImabeView.setVisibility(4);
+            this.placeholderImageView.setVisibility(4);
         }
         if (thumb == null && resId == 0) {
+            this.thumbImageView.setImageBitmap(null);
             this.thumbImageView.setVisibility(4);
             return;
         }
@@ -230,7 +230,7 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
             this.nameTextView.setText("");
             this.extTextView.setText("");
             this.dateTextView.setText("");
-            this.placeholderImabeView.setVisibility(0);
+            this.placeholderImageView.setVisibility(0);
             this.extTextView.setVisibility(0);
             this.thumbImageView.setVisibility(4);
             this.thumbImageView.setImageBitmap(null);
@@ -255,9 +255,9 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
                 name = fileName;
             }
             this.nameTextView.setText(name);
-            this.placeholderImabeView.setVisibility(0);
+            this.placeholderImageView.setVisibility(0);
             this.extTextView.setVisibility(0);
-            this.placeholderImabeView.setImageResource(getThumbForNameOrMime(fileName, messageObject.getDocument().mime_type));
+            this.placeholderImageView.setImageResource(getThumbForNameOrMime(fileName, messageObject.getDocument().mime_type));
             TextView textView = this.extTextView;
             int idx = fileName.lastIndexOf(46);
             textView.setText(idx == -1 ? "" : fileName.substring(idx + 1).toLowerCase());
@@ -334,12 +334,12 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f), NUM));
     }
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 

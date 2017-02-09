@@ -2,13 +2,10 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
+import android.graphics.RectF;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -16,19 +13,16 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HintDialogCell extends FrameLayout {
-    private static Drawable countDrawable;
-    private static Drawable countDrawableGrey;
-    private static TextPaint countPaint;
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private StaticLayout countLayout;
     private int countWidth;
@@ -36,40 +30,25 @@ public class HintDialogCell extends FrameLayout {
     private BackupImageView imageView;
     private int lastUnreadCount;
     private TextView nameTextView;
+    private RectF rect = new RectF();
 
     public HintDialogCell(Context context) {
         super(context);
-        setBackgroundResource(R.drawable.list_selector);
         this.imageView = new BackupImageView(context);
         this.imageView.setRoundRadius(AndroidUtilities.dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
         this.nameTextView.setLines(2);
         this.nameTextView.setEllipsize(TruncateAt.END);
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
-        if (countDrawable == null) {
-            countDrawable = getResources().getDrawable(R.drawable.dialogs_badge);
-            countDrawableGrey = getResources().getDrawable(R.drawable.dialogs_badge2);
-            countPaint = new TextPaint(1);
-            countPaint.setColor(-1);
-            countPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        }
-        countPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
-        return super.onTouchEvent(event);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
     }
 
     public void checkUnreadCounter(int mask) {
@@ -86,13 +65,22 @@ public class HintDialogCell extends FrameLayout {
             } else if (this.lastUnreadCount != dialog.unread_count) {
                 this.lastUnreadCount = dialog.unread_count;
                 String countString = String.format("%d", new Object[]{Integer.valueOf(dialog.unread_count)});
-                this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) countPaint.measureText(countString)));
-                this.countLayout = new StaticLayout(countString, countPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(countString)));
+                this.countLayout = new StaticLayout(countString, Theme.dialogs_countTextPaint, this.countWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 if (mask != 0) {
                     invalidate();
                 }
             }
         }
+    }
+
+    public void update() {
+        int uid = (int) this.dialog_id;
+        if (uid > 0) {
+            this.avatarDrawable.setInfo(MessagesController.getInstance().getUser(Integer.valueOf(uid)));
+            return;
+        }
+        this.avatarDrawable.setInfo(MessagesController.getInstance().getChat(Integer.valueOf(-uid)));
     }
 
     public void setDialog(int uid, boolean counter, CharSequence name) {
@@ -139,13 +127,8 @@ public class HintDialogCell extends FrameLayout {
             int top = AndroidUtilities.dp(6.0f);
             int left = AndroidUtilities.dp(54.0f);
             int x = left - AndroidUtilities.dp(5.5f);
-            if (MessagesController.getInstance().isDialogMuted(this.dialog_id)) {
-                countDrawableGrey.setBounds(x, top, (this.countWidth + x) + AndroidUtilities.dp(11.0f), countDrawableGrey.getIntrinsicHeight() + top);
-                countDrawableGrey.draw(canvas);
-            } else {
-                countDrawable.setBounds(x, top, (this.countWidth + x) + AndroidUtilities.dp(11.0f), countDrawable.getIntrinsicHeight() + top);
-                countDrawable.draw(canvas);
-            }
+            this.rect.set((float) x, (float) top, (float) ((this.countWidth + x) + AndroidUtilities.dp(11.0f)), (float) (AndroidUtilities.dp(23.0f) + top));
+            canvas.drawRoundRect(this.rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, MessagesController.getInstance().isDialogMuted(this.dialog_id) ? Theme.dialogs_countGrayPaint : Theme.dialogs_countPaint);
             canvas.save();
             canvas.translate((float) left, (float) (AndroidUtilities.dp(4.0f) + top));
             this.countLayout.draw(canvas);

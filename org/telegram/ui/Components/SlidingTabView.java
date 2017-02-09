@@ -48,7 +48,7 @@ public class SlidingTabView extends LinearLayout {
         tab.setTextColor(-1);
         tab.setTextSize(1, 14.0f);
         tab.setTypeface(Typeface.DEFAULT_BOLD);
-        tab.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false));
+        tab.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         tab.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 SlidingTabView.this.didSelectTab(position);

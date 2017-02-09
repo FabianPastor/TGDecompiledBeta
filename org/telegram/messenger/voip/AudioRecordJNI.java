@@ -81,7 +81,7 @@ public class AudioRecordJNI {
                 if (VERSION.SDK_INT >= 16) {
                     if (AutomaticGainControl.isAvailable()) {
                         AudioRecordJNI.this.agc = AutomaticGainControl.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
-                        AudioRecordJNI.this.agc.setEnabled(true);
+                        AudioRecordJNI.this.agc.setEnabled(false);
                     } else {
                         FileLog.w("tg-voip", "AutomaticGainControl is not available on this device :(");
                     }

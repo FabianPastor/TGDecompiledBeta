@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -102,13 +103,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         return textView;
     }
 
-    public void addIconTab(int resId) {
+    public void addIconTab(Drawable drawable) {
         boolean z = true;
         final int position = this.tabCount;
         this.tabCount = position + 1;
         ImageView tab = new ImageView(getContext());
         tab.setFocusable(true);
-        tab.setImageResource(resId);
+        tab.setImageDrawable(drawable);
         tab.setScaleType(ScaleType.CENTER);
         tab.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

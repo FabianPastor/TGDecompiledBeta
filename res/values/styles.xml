@@ -77,7 +77,7 @@
         <item>@style/ActionBar.Transparent.TMessages.Item</item>
         <item>false</item>
         <item>false</item>
-        <item>@drawable/list_selector</item>
+        <item>@drawable/list_selector_ex</item>
         <item>@drawable/bar_selector_style</item>
     </style>
     <style name="Theme.TMessages">
@@ -90,7 +90,7 @@
         <item>@style/ActionBar.Transparent.TMessages.Item</item>
         <item>false</item>
         <item>false</item>
-        <item>@drawable/list_selector</item>
+        <item>@drawable/list_selector_ex</item>
         <item>@style/Theme.TMessages.Dialog.Alert</item>
         <item>@style/Theme.TMessages.DatePicker</item>
         <item>@style/Theme.TMessages.CalendarView</item>
@@ -126,7 +126,7 @@
     </style>
     <style name="Theme.TMessages.ListView">
         <item>0</item>
-        <item>@drawable/list_selector</item>
+        <item>@drawable/list_selector_ex</item>
         <item>@color/divider</item>
         <item>1dp</item>
     </style>

@@ -29,6 +29,7 @@ import org.telegram.tgnet.TLRPC.TL_channels_getMessages;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
+import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
@@ -446,6 +447,8 @@ public class MessagesQuery {
                                 m.generatePinMessageText(null, null);
                             } else if (m.messageOwner.action instanceof TL_messageActionGameScore) {
                                 m.generateGameMessageText(null);
+                            } else if (m.messageOwner.action instanceof TL_messageActionPaymentSent) {
+                                m.generatePaymentSentMessageText(null);
                             }
                         }
                         changed = true;

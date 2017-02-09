@@ -67,6 +67,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
 import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
+import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -120,7 +121,7 @@ public class NotificationsController {
     public static NotificationsController getInstance() {
         NotificationsController localInstance = Instance;
         if (localInstance == null) {
-            synchronized (MessagesController.class) {
+            synchronized (NotificationsController.class) {
                 try {
                     localInstance = Instance;
                     if (localInstance == null) {
@@ -803,7 +804,7 @@ public class NotificationsController {
                     r24[1] = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
                     String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, r24);
                     return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
-                } else if (messageObject.messageOwner.action instanceof TL_messageActionGameScore) {
+                } else if ((messageObject.messageOwner.action instanceof TL_messageActionGameScore) || (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent)) {
                     return messageObject.messageText.toString();
                 } else {
                     return null;

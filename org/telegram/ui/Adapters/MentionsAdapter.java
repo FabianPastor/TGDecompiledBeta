@@ -26,7 +26,6 @@ import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProvid
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.SearchQuery;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -57,8 +56,10 @@ import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.ContextLinkCell.ContextLinkCellDelegate;
 import org.telegram.ui.Cells.MentionCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class MentionsAdapter extends Adapter {
+public class MentionsAdapter extends SelectionAdapter {
     private boolean allowNewMentions = true;
     private HashMap<Integer, BotInfo> botInfo;
     private int botsCount;
@@ -118,12 +119,6 @@ public class MentionsAdapter extends Adapter {
         void onContextClick(BotInlineResult botInlineResult);
 
         void onContextSearch(boolean z);
-    }
-
-    public class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
     }
 
     public MentionsAdapter(Context context, boolean darkTheme, long did, MentionsAdapterDelegate mentionsAdapterDelegate) {
@@ -871,6 +866,10 @@ public class MentionsAdapter extends Adapter {
 
     public boolean isMediaLayout() {
         return this.contextMedia;
+    }
+
+    public boolean isEnabled(ViewHolder holder) {
+        return true;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

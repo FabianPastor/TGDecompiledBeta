@@ -24,6 +24,7 @@ public class CameraSession {
     };
     protected CameraInfo cameraInfo;
     private String currentFlashMode = "off";
+    private int currentOrientation;
     private boolean initied;
     private boolean isVideo;
     private int lastOrientation = -1;
@@ -101,6 +102,10 @@ public class CameraSession {
         return this.initied;
     }
 
+    public int getCurrentOrientation() {
+        return this.currentOrientation;
+    }
+
     protected void configurePhotoCamera() {
         Camera camera = this.cameraInfo.camera;
         if (camera != null) {
@@ -146,6 +151,7 @@ public class CameraSession {
                 }
                 cameraDisplayOrientation = temp;
             }
+            this.currentOrientation = cameraDisplayOrientation;
             camera.setDisplayOrientation(cameraDisplayOrientation);
             if (params != null) {
                 int outputOrientation;

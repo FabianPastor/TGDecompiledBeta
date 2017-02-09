@@ -130,8 +130,11 @@ public class BaseFragment {
 
     protected ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context);
-        actionBar.setBackgroundColor(Theme.ACTION_BAR_COLOR);
-        actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_SELECTOR_COLOR);
+        actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+        actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
+        actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), true);
+        actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarDefaultIcon), false);
+        actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon), true);
         return actionBar;
     }
 
@@ -326,5 +329,9 @@ public class BaseFragment {
 
     public boolean extendActionMode(Menu menu) {
         return false;
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        return null;
     }
 }

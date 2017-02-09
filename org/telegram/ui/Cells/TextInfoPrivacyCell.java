@@ -22,8 +22,8 @@ public class TextInfoPrivacyCell extends FrameLayout {
         int i2 = 5;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(-8355712);
-        this.textView.setLinkTextColor(Theme.MSG_LINK_TEXT_COLOR);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
+        this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
         this.textView.setTextSize(1, 14.0f);
         TextView textView = this.textView;
         if (LocaleController.isRTL) {
@@ -56,6 +56,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
 
     public void setTextColor(int color) {
         this.textView.setTextColor(color);
+    }
+
+    public TextView getTextView() {
+        return this.textView;
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {

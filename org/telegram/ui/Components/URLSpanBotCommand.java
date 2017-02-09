@@ -12,7 +12,7 @@ public class URLSpanBotCommand extends URLSpanNoUnderline {
 
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
-        ds.setColor(enabled ? Theme.MSG_LINK_TEXT_COLOR : -16777216);
+        ds.setColor(Theme.getColor(enabled ? Theme.key_chat_messageLink : Theme.key_chat_messageText));
         ds.setUnderlineText(false);
     }
 }

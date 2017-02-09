@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HeaderCell extends FrameLayout {
@@ -18,7 +19,7 @@ public class HeaderCell extends FrameLayout {
         super(context);
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setTextColor(-12676913);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
@@ -33,8 +34,12 @@ public class HeaderCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 15.0f, 17.0f, 0.0f));
     }
 
+    public TextView getTextView() {
+        return this.textView;
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(38.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(38.0f), NUM));
     }
 
     public void setText(String text) {

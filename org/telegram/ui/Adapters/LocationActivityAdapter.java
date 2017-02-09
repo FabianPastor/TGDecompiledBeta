@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import java.util.Locale;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Cells.GreySectionCell;
+import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Cells.LocationLoadingCell;
 import org.telegram.ui.Cells.LocationPoweredCell;
 import org.telegram.ui.Cells.SendLocationCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 
 public class LocationActivityAdapter extends BaseLocationAdapter {
     private Location customLocation;
@@ -53,49 +55,59 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         }
     }
 
-    public int getCount() {
+    public int getItemCount() {
         if (this.searching || (!this.searching && this.places.isEmpty())) {
             return 4;
         }
         return (this.places.isEmpty() ? 0 : 1) + (this.places.size() + 3);
     }
 
-    public boolean isEmpty() {
-        return false;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType) {
+            case 0:
+                view = new EmptyCell(this.mContext);
+                break;
+            case 1:
+                view = new SendLocationCell(this.mContext);
+                break;
+            case 2:
+                view = new GraySectionCell(this.mContext);
+                break;
+            case 3:
+                view = new LocationCell(this.mContext);
+                break;
+            case 4:
+                view = new LocationLoadingCell(this.mContext);
+                break;
+            default:
+                view = new LocationPoweredCell(this.mContext);
+                break;
+        }
+        return new Holder(view);
     }
 
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (i == 0) {
-            if (view == null) {
-                view = new EmptyCell(this.mContext);
-            }
-            ((EmptyCell) view).setHeight(this.overScrollHeight);
-        } else if (i == 1) {
-            if (view == null) {
-                view = new SendLocationCell(this.mContext);
-            }
-            this.sendLocationCell = (SendLocationCell) view;
-            updateCell();
-            return view;
-        } else if (i == 2) {
-            if (view == null) {
-                view = new GreySectionCell(this.mContext);
-            }
-            ((GreySectionCell) view).setText(LocaleController.getString("NearbyPlaces", R.string.NearbyPlaces));
-        } else if (this.searching || (!this.searching && this.places.isEmpty())) {
-            if (view == null) {
-                view = new LocationLoadingCell(this.mContext);
-            }
-            ((LocationLoadingCell) view).setLoading(this.searching);
-        } else if (i != this.places.size() + 3) {
-            if (view == null) {
-                view = new LocationCell(this.mContext);
-            }
-            ((LocationCell) view).setLocation((TL_messageMediaVenue) this.places.get(i - 3), (String) this.iconUrls.get(i - 3), true);
-        } else if (view == null) {
-            view = new LocationPoweredCell(this.mContext);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        switch (holder.getItemViewType()) {
+            case 0:
+                ((EmptyCell) holder.itemView).setHeight(this.overScrollHeight);
+                return;
+            case 1:
+                this.sendLocationCell = (SendLocationCell) holder.itemView;
+                updateCell();
+                return;
+            case 2:
+                ((GraySectionCell) holder.itemView).setText(LocaleController.getString("NearbyPlaces", R.string.NearbyPlaces));
+                return;
+            case 3:
+                ((LocationCell) holder.itemView).setLocation((TL_messageMediaVenue) this.places.get(position - 3), (String) this.iconUrls.get(position - 3), true);
+                return;
+            case 4:
+                ((LocationLoadingCell) holder.itemView).setLoading(this.searching);
+                return;
+            default:
+                return;
         }
-        return view;
     }
 
     public TL_messageMediaVenue getItem(int i) {
@@ -103,10 +115,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
             return null;
         }
         return (TL_messageMediaVenue) this.places.get(i - 3);
-    }
-
-    public long getItemId(int i) {
-        return (long) i;
     }
 
     public int getItemViewType(int position) {
@@ -128,19 +136,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         return 3;
     }
 
-    public int getViewTypeCount() {
-        return 6;
-    }
-
-    public boolean areAllItemsEnabled() {
-        return false;
-    }
-
-    public boolean isEnabled(int position) {
+    public boolean isEnabled(ViewHolder holder) {
+        int position = holder.getAdapterPosition();
         return (position == 2 || position == 0 || ((position == 3 && (this.searching || (!this.searching && this.places.isEmpty()))) || position == this.places.size() + 3)) ? false : true;
-    }
-
-    public boolean hasStableIds() {
-        return true;
     }
 }

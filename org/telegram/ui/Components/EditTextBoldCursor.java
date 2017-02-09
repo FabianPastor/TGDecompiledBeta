@@ -80,6 +80,7 @@ public class EditTextBoldCursor extends EditText {
 
     public void setCursorColor(int color) {
         this.gradientDrawable.setColor(color);
+        invalidate();
     }
 
     public void setCursorSize(int value) {
@@ -96,6 +97,7 @@ public class EditTextBoldCursor extends EditText {
 
     public void setHintColor(int value) {
         this.hintColor = value;
+        invalidate();
     }
 
     public void setHintText(String value) {

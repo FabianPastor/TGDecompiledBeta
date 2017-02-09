@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 
 public class Switch extends CompoundButton {
     private static final int THUMB_ANIMATION_DURATION = 250;
@@ -362,10 +363,19 @@ public class Switch extends CompoundButton {
             setThumbPosition(checked ? 1.0f : 0.0f);
         }
         if (this.mTrackDrawable != null) {
-            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? -6236422 : -3684409, Mode.MULTIPLY));
+            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
         }
         if (this.mThumbDrawable != null) {
-            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? -12211217 : -1184275, Mode.MULTIPLY));
+            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(checked ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
+        }
+    }
+
+    public void checkColorFilters() {
+        if (this.mTrackDrawable != null) {
+            this.mTrackDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchTrackChecked) : Theme.getColor(Theme.key_switchTrack), Mode.MULTIPLY));
+        }
+        if (this.mThumbDrawable != null) {
+            this.mThumbDrawable.setColorFilter(new PorterDuffColorFilter(isChecked() ? Theme.getColor(Theme.key_switchThumbChecked) : Theme.getColor(Theme.key_switchThumb), Mode.MULTIPLY));
         }
     }
 

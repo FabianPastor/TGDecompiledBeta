@@ -5,10 +5,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.support.annotation.WorkerThread;
-import android.support.v4.os.EnvironmentCompat;
 import android.text.TextUtils;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.util.zze;
+import com.stripe.android.model.Card;
 
 public class zzatf extends zzats {
     private String zzVQ;
@@ -156,10 +156,10 @@ public class zzatf extends zzats {
     }
 
     protected void zzmr() {
-        String str = EnvironmentCompat.MEDIA_UNKNOWN;
-        String str2 = "Unknown";
+        String str = "unknown";
+        String str2 = Card.UNKNOWN;
         int i = Integer.MIN_VALUE;
-        String str3 = "Unknown";
+        String str3 = Card.UNKNOWN;
         String packageName = getContext().getPackageName();
         PackageManager packageManager = getContext().getPackageManager();
         if (packageManager == null) {

@@ -404,6 +404,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private int lastPrintingStringCount = 0;
     private long lastStatusUpdateTime;
     private long lastViewsCheckTime;
+    public String linkPrefix = "t.me";
     private ArrayList<Integer> loadedFullChats = new ArrayList();
     private ArrayList<Integer> loadedFullParticipants = new ArrayList();
     private ArrayList<Integer> loadedFullUsers = new ArrayList();
@@ -542,6 +543,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
         this.useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
         this.callsEnabled = preferences.getBoolean("callsEnabled", false);
+        this.linkPrefix = preferences.getString("linkPrefix", "t.me");
         this.callReceiveTimeout = preferences.getInt("callReceiveTimeout", 20000);
         this.callRingTimeout = preferences.getInt("callRingTimeout", 90000);
         this.callConnectTimeout = preferences.getInt("callConnectTimeout", DefaultLoadControl.DEFAULT_MAX_BUFFER_MS);
@@ -579,6 +581,15 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.maxRecentGifsCount = config.saved_gifs_limit;
                 MessagesController.this.maxRecentStickersCount = config.stickers_recent_limit;
                 MessagesController.this.callsEnabled = config.phonecalls_enabled;
+                MessagesController.this.linkPrefix = config.me_url_prefix;
+                if (MessagesController.this.linkPrefix.endsWith("/")) {
+                    MessagesController.this.linkPrefix.substring(0, MessagesController.this.linkPrefix.length() - 1);
+                }
+                if (MessagesController.this.linkPrefix.startsWith("https://")) {
+                    MessagesController.this.linkPrefix.substring(8);
+                } else if (MessagesController.this.linkPrefix.startsWith("http://")) {
+                    MessagesController.this.linkPrefix.substring(7);
+                }
                 MessagesController.this.callReceiveTimeout = config.call_receive_timeout_ms;
                 MessagesController.this.callRingTimeout = config.call_ring_timeout_ms;
                 MessagesController.this.callConnectTimeout = config.call_connect_timeout_ms;
@@ -597,6 +608,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 editor.putInt("callConnectTimeout", MessagesController.this.callConnectTimeout);
                 editor.putInt("callPacketTimeout", MessagesController.this.callPacketTimeout);
                 editor.putBoolean("callsEnabled", MessagesController.this.callsEnabled);
+                editor.putString("linkPrefix", MessagesController.this.linkPrefix);
                 editor.putInt("maxPinnedDialogsCount", MessagesController.this.maxPinnedDialogsCount);
                 try {
                     SerializedData data = new SerializedData();
@@ -2923,7 +2935,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         objects.add(messageObject);
                         if (z) {
                             if (message.media instanceof TL_messageMediaUnsupported) {
-                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 62))) {
+                                if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 64))) {
                                     messagesToReload.add(Integer.valueOf(message.id));
                                 }
                             } else if (message.media instanceof TL_messageMediaWebPage) {
@@ -3226,6 +3238,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3242,7 +3255,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -7208,7 +7220,11 @@ public class MessagesController implements NotificationCenterDelegate {
                 PhoneCall call = ((TL_updatePhoneCall) update).phone_call;
                 VoIPService svc = VoIPService.getSharedInstance();
                 if (call instanceof TL_phoneCallRequested) {
-                    if (svc != null) {
+                    if (call.date + (this.callRingTimeout / 1000) < ConnectionsManager.getInstance().getCurrentTime()) {
+                        if (BuildVars.DEBUG_VERSION) {
+                            FileLog.d("tmessages", "ignoring too old call");
+                        }
+                    } else if (svc != null) {
                         TLObject req = new TL_phone_discardCall();
                         req.peer = new TL_inputPhoneCall();
                         req.peer.access_hash = call.access_hash;
@@ -7216,8 +7232,8 @@ public class MessagesController implements NotificationCenterDelegate {
                         req.reason = new TL_phoneCallDiscardReasonBusy();
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
-                                if (error != null) {
-                                    FileLog.e("tmessages", "error on phone.discardCall: " + error);
+                                if (response != null) {
+                                    MessagesController.this.processUpdates((Updates) response, false);
                                 }
                             }
                         });

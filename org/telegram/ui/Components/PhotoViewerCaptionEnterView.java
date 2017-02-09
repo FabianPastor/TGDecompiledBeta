@@ -229,7 +229,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         doneButton.setImageResource(R.drawable.ic_done);
         textFieldContainer.addView(doneButton, LayoutHelper.createLinear(48, 48, 80));
         if (VERSION.SDK_INT >= 21) {
-            doneButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         }
         doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {

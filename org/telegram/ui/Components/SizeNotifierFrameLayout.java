@@ -31,6 +31,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void setBackgroundImage(Drawable bitmap) {
         this.backgroundDrawable = bitmap;
+        invalidate();
     }
 
     public Drawable getBackgroundImage() {

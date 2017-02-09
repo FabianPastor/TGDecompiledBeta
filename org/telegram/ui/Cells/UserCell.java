@@ -1,6 +1,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -18,6 +20,7 @@ import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.SimpleTextView;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
@@ -39,8 +42,8 @@ public class UserCell extends FrameLayout {
     private String lastName;
     private int lastStatus;
     private SimpleTextView nameTextView;
-    private int statusColor = -5723992;
-    private int statusOnlineColor = -12876608;
+    private int statusColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText);
+    private int statusOnlineColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlueText);
     private SimpleTextView statusTextView;
 
     public UserCell(Context context, int padding, int checkbox, boolean admin) {
@@ -51,7 +54,7 @@ public class UserCell extends FrameLayout {
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 7), 8.0f, LocaleController.isRTL ? (float) (padding + 7) : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         View view = this.nameTextView;
@@ -81,10 +84,12 @@ public class UserCell extends FrameLayout {
         } else if (checkbox == 1) {
             this.checkBox = new CheckBox(context, R.drawable.round_check2);
             this.checkBox.setVisibility(4);
+            this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 38.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
         }
         if (admin) {
             this.adminImage = new ImageView(context);
+            this.adminImage.setImageResource(R.drawable.admin_star);
             addView(this.adminImage, LayoutHelper.createFrame(16, 16.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 24.0f : 0.0f, 13.5f, LocaleController.isRTL ? 0.0f : 24.0f, 0.0f));
         }
     }
@@ -102,9 +107,11 @@ public class UserCell extends FrameLayout {
             int dp = (LocaleController.isRTL || value == 0) ? 0 : AndroidUtilities.dp(16.0f);
             simpleTextView.setPadding(i, 0, dp, 0);
             if (value == 1) {
-                this.adminImage.setImageResource(R.drawable.admin_star);
+                setTag(Theme.key_profile_creatorIcon);
+                this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_creatorIcon), Mode.MULTIPLY));
             } else if (value == 2) {
-                this.adminImage.setImageResource(R.drawable.admin_star2);
+                setTag(Theme.key_profile_adminIcon);
+                this.adminImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_adminIcon), Mode.MULTIPLY));
             }
         }
     }
@@ -153,6 +160,13 @@ public class UserCell extends FrameLayout {
     public void setStatusColors(int color, int onlineColor) {
         this.statusColor = color;
         this.statusOnlineColor = onlineColor;
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        if (this.checkBoxBig != null) {
+            this.checkBoxBig.invalidate();
+        }
     }
 
     public void update(int mask) {

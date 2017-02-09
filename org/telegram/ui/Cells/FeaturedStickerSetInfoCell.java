@@ -23,15 +23,17 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class FeaturedStickerSetInfoCell extends FrameLayout {
-    private static Paint botProgressPaint;
     private TextView addButton;
+    private Drawable addDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private int angle;
+    private Paint botProgressPaint = new Paint(1);
+    private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
     private boolean drawProgress;
     Drawable drawable = new Drawable() {
         Paint paint = new Paint(1);
 
         public void draw(Canvas canvas) {
-            this.paint.setColor(-11688214);
+            this.paint.setColor(Theme.getColor(Theme.key_featuredStickers_unread));
             canvas.drawCircle((float) AndroidUtilities.dp(8.0f), 0.0f, (float) AndroidUtilities.dp(4.0f), this.paint);
         }
 
@@ -64,22 +66,19 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
 
     public FeaturedStickerSetInfoCell(Context context, int left) {
         super(context);
-        if (botProgressPaint == null) {
-            botProgressPaint = new Paint(1);
-            botProgressPaint.setColor(-1);
-            botProgressPaint.setStrokeCap(Cap.ROUND);
-            botProgressPaint.setStyle(Style.STROKE);
-        }
-        botProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.botProgressPaint.setColor(Theme.getColor(Theme.key_featuredStickers_buttonProgress));
+        this.botProgressPaint.setStrokeCap(Cap.ROUND);
+        this.botProgressPaint.setStyle(Style.STROKE);
+        this.botProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 17.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setSingleLine(true);
         addView(this.nameTextView, LayoutHelper.createFrame(-2, -1.0f, 51, (float) left, 8.0f, 100.0f, 0.0f));
         this.infoTextView = new TextView(context);
-        this.infoTextView.setTextColor(-7697782);
+        this.infoTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setEllipsize(TruncateAt.END);
         this.infoTextView.setSingleLine(true);
@@ -88,10 +87,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetInfoCell.this.drawProgress || !(FeaturedStickerSetInfoCell.this.drawProgress || FeaturedStickerSetInfoCell.this.progressAlpha == 0.0f)) {
-                    FeaturedStickerSetInfoCell.botProgressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetInfoCell.this.progressAlpha * 255.0f)));
+                    FeaturedStickerSetInfoCell.this.botProgressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetInfoCell.this.progressAlpha * 255.0f)));
                     int x = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
                     FeaturedStickerSetInfoCell.this.rect.set((float) x, (float) AndroidUtilities.dp(3.0f), (float) (AndroidUtilities.dp(8.0f) + x), (float) AndroidUtilities.dp(11.0f));
-                    canvas.drawArc(FeaturedStickerSetInfoCell.this.rect, (float) FeaturedStickerSetInfoCell.this.angle, 220.0f, false, FeaturedStickerSetInfoCell.botProgressPaint);
+                    canvas.drawArc(FeaturedStickerSetInfoCell.this.rect, (float) FeaturedStickerSetInfoCell.this.angle, 220.0f, false, FeaturedStickerSetInfoCell.this.botProgressPaint);
                     invalidate(((int) FeaturedStickerSetInfoCell.this.rect.left) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.top) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.right) + AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.bottom) + AndroidUtilities.dp(2.0f));
                     long newTime = System.currentTimeMillis();
                     if (Math.abs(FeaturedStickerSetInfoCell.this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
@@ -119,14 +118,14 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         };
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
-        this.addButton.setTextColor(-1);
+        this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.addButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_YELLOW), NUM));
     }
 
     public void setAddOnClickListener(OnClickListener onClickListener) {
@@ -148,10 +147,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             boolean isStickerPackInstalled = StickersQuery.isStickerPackInstalled(stickerSet.set.id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
-                this.addButton.setBackgroundResource(R.drawable.del_states);
+                this.addButton.setBackgroundDrawable(this.delDrawable);
                 this.addButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove).toUpperCase());
             } else {
-                this.addButton.setBackgroundResource(R.drawable.add_states);
+                this.addButton.setBackgroundDrawable(this.addDrawable);
                 this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
             }
         } else {

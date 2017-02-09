@@ -59,7 +59,7 @@ public class PlayingGameDrawable extends Drawable {
         if (!this.isChat) {
             y += AndroidUtilities.dp(1.0f);
         }
-        this.paint.setColor(Theme.ACTION_BAR_SUBTITLE_COLOR);
+        this.paint.setColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
         this.rect.set(0.0f, (float) y, (float) size, (float) (y + size));
         if (this.progress < 0.5f) {
             rad = (int) (35.0f * (1.0f - (this.progress / 0.5f)));
@@ -81,7 +81,7 @@ public class PlayingGameDrawable extends Drawable {
         }
         this.paint.setAlpha(255);
         canvas.drawArc(this.rect, (float) rad, (float) (360 - (rad * 2)), true, this.paint);
-        this.paint.setColor(Theme.ACTION_BAR_COLOR);
+        this.paint.setColor(Theme.getColor(Theme.key_actionBarDefault));
         canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(1.0f), this.paint);
         checkUpdate();
     }

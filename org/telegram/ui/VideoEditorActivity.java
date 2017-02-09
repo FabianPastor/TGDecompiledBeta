@@ -250,7 +250,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     public View createView(Context context) {
         this.needCompressVideo = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("compress_video", true);
         this.actionBar.setBackgroundColor(-16777216);
-        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR);
+        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.getString("AttachVideo", R.string.AttachVideo));
         this.actionBar.setSubtitleColor(-1);
@@ -451,7 +451,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.captionItem = new ImageView(context);
         this.captionItem.setScaleType(ScaleType.CENTER);
         this.captionItem.setImageResource(TextUtils.isEmpty(this.currentCaption) ? R.drawable.photo_text : R.drawable.photo_text2);
-        this.captionItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.captionItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         itemsLayout.addView(this.captionItem, LayoutHelper.createLinear(56, 48));
         this.captionItem.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -470,7 +470,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.compressItem = new ImageView(context);
         this.compressItem.setScaleType(ScaleType.CENTER);
         this.compressItem.setImageResource(this.needCompressVideo ? R.drawable.hd_off : R.drawable.hd_on);
-        this.compressItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.compressItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         ImageView imageView = this.compressItem;
         int i = (this.originalHeight == this.resultHeight && this.originalWidth == this.resultWidth) ? 8 : 0;
         imageView.setVisibility(i);
@@ -512,7 +512,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         }
         this.muteItem = new ImageView(context);
         this.muteItem.setScaleType(ScaleType.CENTER);
-        this.muteItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.muteItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         itemsLayout.addView(this.muteItem, LayoutHelper.createLinear(56, 48));
         this.muteItem.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -1077,8 +1077,8 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 } else {
                     scale = 640.0f / ((float) this.resultHeight);
                 }
-                this.resultWidth = (int) (((float) this.resultWidth) * scale);
-                this.resultHeight = (int) (((float) this.resultHeight) * scale);
+                this.resultWidth = Math.round((((float) this.resultWidth) * scale) / 2.0f) * 2;
+                this.resultHeight = Math.round((((float) this.resultHeight) * scale) / 2.0f) * 2;
                 if (this.bitrate != 0) {
                     this.bitrate = (int) (((float) this.bitrate) * Math.max(0.5f, scale));
                     this.videoFramesSize = (long) (((float) (this.bitrate / 8)) * this.videoDuration);

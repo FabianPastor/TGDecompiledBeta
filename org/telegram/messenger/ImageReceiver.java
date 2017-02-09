@@ -23,6 +23,7 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
+import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 
 public class ImageReceiver implements NotificationCenterDelegate {
@@ -149,7 +150,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         ImageReceiverDelegate imageReceiverDelegate;
         boolean z;
         boolean z2;
-        if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof TL_documentEncrypted))) {
+        if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof TL_webDocument) || (fileLocation instanceof TL_documentEncrypted))) {
             if (!(thumbLocation instanceof TL_fileLocation)) {
                 thumbLocation = null;
             }
@@ -158,6 +159,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 if (fileLocation instanceof FileLocation) {
                     FileLocation location = (FileLocation) fileLocation;
                     key = location.volume_id + "_" + location.local_id;
+                } else if (fileLocation instanceof TL_webDocument) {
+                    key = Utilities.MD5(((TL_webDocument) fileLocation).url);
                 } else {
                     Document location2 = (Document) fileLocation;
                     if (location2.dc_id != 0) {
@@ -299,6 +302,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.invalidateAll = value;
     }
 
+    public Drawable getStaticThumb() {
+        return this.staticThumb;
+    }
+
     public int getAnimatedOrientation() {
         if (this.currentImage instanceof AnimatedFileDrawable) {
             return ((AnimatedFileDrawable) this.currentImage).getOrientation();
@@ -425,7 +432,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 }
             } else if (shader != null) {
                 roundPaint.setColorFilter(null);
-            } else {
+            } else if (this.staticThumb != drawable) {
                 bitmapDrawable.setColorFilter(null);
             }
             if (this.colorFilter != null) {

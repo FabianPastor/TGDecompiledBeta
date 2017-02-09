@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -18,7 +17,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
 
 public class RadioCell extends FrameLayout {
-    private static Paint paint;
     private boolean needDivider;
     private RadioButton radioButton;
     private TextView textView;
@@ -27,13 +25,8 @@ public class RadioCell extends FrameLayout {
         int i;
         int i2 = 3;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -49,7 +42,7 @@ public class RadioCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
-        this.radioButton.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+        this.radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
         View view2 = this.radioButton;
         if (!LocaleController.isRTL) {
             i2 = 5;
@@ -77,6 +70,10 @@ public class RadioCell extends FrameLayout {
             z = true;
         }
         setWillNotDraw(z);
+    }
+
+    public boolean isChecked() {
+        return this.radioButton.isChecked();
     }
 
     public void setChecked(boolean checked, boolean animated) {
@@ -118,7 +115,7 @@ public class RadioCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

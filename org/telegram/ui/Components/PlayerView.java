@@ -6,6 +6,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -22,11 +24,14 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.AudioPlayerActivity;
 
 public class PlayerView extends FrameLayout implements NotificationCenterDelegate {
     private AnimatorSet animatorSet;
+    private ImageView closeButton;
     private BaseFragment fragment;
+    private FrameLayout frameLayout;
     private MessageObject lastMessageObject;
     private ImageView playButton;
     private TextView titleTextView;
@@ -39,14 +44,15 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
         this.fragment = parentFragment;
         ((ViewGroup) this.fragment.getFragmentView()).setClipToPadding(false);
         setTag(Integer.valueOf(1));
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-1);
-        addView(frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+        this.frameLayout = new FrameLayout(context);
+        this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_inappPlayerBackground));
+        addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View shadow = new View(context);
         shadow.setBackgroundResource(R.drawable.header_shadow);
         addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         this.playButton = new ImageView(context);
         this.playButton.setScaleType(ScaleType.CENTER);
+        this.playButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerPlayPause), Mode.MULTIPLY));
         addView(this.playButton, LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -58,7 +64,7 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
             }
         });
         this.titleTextView = new TextView(context);
-        this.titleTextView.setTextColor(-13683656);
+        this.titleTextView.setTextColor(Theme.getColor(Theme.key_inappPlayerTitle));
         this.titleTextView.setMaxLines(1);
         this.titleTextView.setLines(1);
         this.titleTextView.setSingleLine(true);
@@ -66,11 +72,12 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
         this.titleTextView.setTextSize(1, 15.0f);
         this.titleTextView.setGravity(19);
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
-        ImageView closeButton = new ImageView(context);
-        closeButton.setImageResource(R.drawable.miniplayer_close);
-        closeButton.setScaleType(ScaleType.CENTER);
-        addView(closeButton, LayoutHelper.createFrame(36, 36, 53));
-        closeButton.setOnClickListener(new OnClickListener() {
+        this.closeButton = new ImageView(context);
+        this.closeButton.setImageResource(R.drawable.miniplayer_close);
+        this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), Mode.MULTIPLY));
+        this.closeButton.setScaleType(ScaleType.CENTER);
+        addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
+        this.closeButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MediaController.getInstance().cleanupPlayer(true, true);
             }
@@ -211,7 +218,7 @@ public class PlayerView extends FrameLayout implements NotificationCenterDelegat
                 stringBuilder = new SpannableStringBuilder(String.format("%s - %s", new Object[]{messageObject.getMusicAuthor(), messageObject.getMusicTitle()}));
                 this.titleTextView.setEllipsize(TruncateAt.END);
             }
-            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, -13683656), 0, messageObject.getMusicAuthor().length(), 18);
+            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, Theme.getColor(Theme.key_inappPlayerPerformer)), 0, messageObject.getMusicAuthor().length(), 18);
             this.titleTextView.setText(stringBuilder);
         }
     }

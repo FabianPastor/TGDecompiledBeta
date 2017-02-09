@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -10,11 +9,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class CheckBoxCell extends FrameLayout {
-    private static Paint paint;
     private CheckBoxSquare checkBox;
     private boolean needDivider;
     private TextView textView;
@@ -26,13 +25,8 @@ public class CheckBoxCell extends FrameLayout {
         int i3 = 17;
         int i4 = 5;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -47,7 +41,7 @@ public class CheckBoxCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-13660983);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -112,9 +106,21 @@ public class CheckBoxCell extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
+    public TextView getTextView() {
+        return this.textView;
+    }
+
+    public TextView getValueTextView() {
+        return this.valueTextView;
+    }
+
+    public CheckBoxSquare getCheckBox() {
+        return this.checkBox;
+    }
+
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

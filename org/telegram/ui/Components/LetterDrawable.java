@@ -23,11 +23,19 @@ public class LetterDrawable extends Drawable {
 
     public LetterDrawable() {
         if (namePaint == null) {
-            paint.setColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+            paint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholder));
             namePaint = new TextPaint(1);
-            namePaint.setColor(-1);
+            namePaint.setColor(Theme.getColor(Theme.key_sharedMedia_linkPlaceholderText));
         }
         namePaint.setTextSize((float) AndroidUtilities.dp(28.0f));
+    }
+
+    public void setBackgroundColor(int value) {
+        paint.setColor(value);
+    }
+
+    public void setColor(int value) {
+        namePaint.setColor(value);
     }
 
     public void setTitle(String title) {

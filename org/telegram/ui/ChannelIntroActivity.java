@@ -16,6 +16,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
 public class ChannelIntroActivity extends BaseFragment {
     private TextView createChannelText;
@@ -24,9 +26,10 @@ public class ChannelIntroActivity extends BaseFragment {
     private TextView whatIsChannelText;
 
     public View createView(Context context) {
-        this.actionBar.setBackgroundColor(-1);
-        this.actionBar.setBackButtonImage(R.drawable.pl_back);
-        this.actionBar.setItemsBackgroundColor(788529152);
+        this.actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
+        this.actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         this.actionBar.setCastShadows(false);
         if (!AndroidUtilities.isTablet()) {
             this.actionBar.showActionModeTop();
@@ -83,7 +86,7 @@ public class ChannelIntroActivity extends BaseFragment {
                 ChannelIntroActivity.this.createChannelText.layout(0, y, ChannelIntroActivity.this.createChannelText.getMeasuredWidth(), ChannelIntroActivity.this.createChannelText.getMeasuredHeight() + y);
             }
         };
-        this.fragmentView.setBackgroundColor(-1);
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         ViewGroup viewGroup = this.fragmentView;
         viewGroup.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -95,19 +98,19 @@ public class ChannelIntroActivity extends BaseFragment {
         this.imageView.setScaleType(ScaleType.FIT_CENTER);
         viewGroup.addView(this.imageView);
         this.whatIsChannelText = new TextView(context);
-        this.whatIsChannelText.setTextColor(-14606047);
+        this.whatIsChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.whatIsChannelText.setGravity(1);
         this.whatIsChannelText.setTextSize(1, 24.0f);
         this.whatIsChannelText.setText(LocaleController.getString("ChannelAlertTitle", R.string.ChannelAlertTitle));
         viewGroup.addView(this.whatIsChannelText);
         this.descriptionText = new TextView(context);
-        this.descriptionText.setTextColor(-8882056);
+        this.descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
         this.descriptionText.setText(LocaleController.getString("ChannelAlertText", R.string.ChannelAlertText));
         viewGroup.addView(this.descriptionText);
         this.createChannelText = new TextView(context);
-        this.createChannelText.setTextColor(-11759926);
+        this.createChannelText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText5));
         this.createChannelText.setGravity(17);
         this.createChannelText.setTextSize(1, 16.0f);
         this.createChannelText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -121,5 +124,17 @@ public class ChannelIntroActivity extends BaseFragment {
             }
         });
         return this.fragmentView;
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[7];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector);
+        themeDescriptionArr[4] = new ThemeDescription(this.whatIsChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[5] = new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[6] = new ThemeDescription(this.createChannelText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText5);
+        return themeDescriptionArr;
     }
 }

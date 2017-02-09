@@ -2,12 +2,10 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
@@ -31,10 +29,8 @@ public class BotHelpCell extends View {
     private String oldText;
     private ClickableSpan pressedLink;
     private StaticLayout textLayout;
-    private TextPaint textPaint = new TextPaint(1);
     private int textX;
     private int textY;
-    private Paint urlPaint;
     private LinkPath urlPath = new LinkPath();
     private int width;
 
@@ -44,11 +40,6 @@ public class BotHelpCell extends View {
 
     public BotHelpCell(Context context) {
         super(context);
-        this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-        this.textPaint.setColor(-16777216);
-        this.textPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        this.urlPaint = new Paint();
-        this.urlPaint.setColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
     }
 
     public void setDelegate(BotHelpCellDelegate botHelpCellDelegate) {
@@ -88,9 +79,9 @@ public class BotHelpCell extends View {
             }
             MessageObject.addLinks(stringBuilder);
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
-            Emoji.replaceEmoji(stringBuilder, this.textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             try {
-                this.textLayout = new StaticLayout(stringBuilder, this.textPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.textLayout = new StaticLayout(stringBuilder, Theme.chat_msgTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.width = 0;
                 this.height = this.textLayout.getHeight() + AndroidUtilities.dp(22.0f);
                 int count = this.textLayout.getLineCount();
@@ -179,8 +170,10 @@ public class BotHelpCell extends View {
     protected void onDraw(Canvas canvas) {
         int x = (canvas.getWidth() - this.width) / 2;
         int y = AndroidUtilities.dp(4.0f);
-        Theme.backgroundMediaDrawableIn.setBounds(x, y, this.width + x, this.height + y);
-        Theme.backgroundMediaDrawableIn.draw(canvas);
+        Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, this.width + x, this.height + y);
+        Theme.chat_msgInMediaShadowDrawable.draw(canvas);
+        Theme.chat_msgInMediaDrawable.setBounds(x, y, this.width + x, this.height + y);
+        Theme.chat_msgInMediaDrawable.draw(canvas);
         canvas.save();
         int dp = AndroidUtilities.dp(11.0f) + x;
         this.textX = dp;
@@ -189,7 +182,7 @@ public class BotHelpCell extends View {
         this.textY = dp2;
         canvas.translate(f, (float) dp2);
         if (this.pressedLink != null) {
-            canvas.drawPath(this.urlPath, this.urlPaint);
+            canvas.drawPath(this.urlPath, Theme.chat_urlPaint);
         }
         if (this.textLayout != null) {
             this.textLayout.draw(canvas);

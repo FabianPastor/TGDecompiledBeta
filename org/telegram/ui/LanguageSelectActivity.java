@@ -4,21 +4,10 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Timer;
@@ -29,129 +18,89 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class LanguageSelectActivity extends BaseFragment {
-    private TextView emptyTextView;
-    private BaseFragmentAdapter listAdapter;
-    private ListView listView;
-    private BaseFragmentAdapter searchListViewAdapter;
+    private EmptyTextProgressView emptyView;
+    private ListAdapter listAdapter;
+    private RecyclerListView listView;
+    private ListAdapter searchListViewAdapter;
     public ArrayList<LocaleInfo> searchResult;
     private Timer searchTimer;
     private boolean searchWas;
     private boolean searching;
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
+        private boolean search;
 
-        public ListAdapter(Context context) {
+        public ListAdapter(Context context, boolean isSearch) {
             this.mContext = context;
+            this.search = isSearch;
         }
 
-        public boolean areAllItemsEnabled() {
+        public boolean isEnabled(ViewHolder holder) {
             return true;
         }
 
-        public boolean isEnabled(int i) {
-            return true;
-        }
-
-        public int getCount() {
-            if (LocaleController.getInstance().sortedLanguages == null) {
+        public int getItemCount() {
+            if (this.search) {
+                if (LanguageSelectActivity.this.searchResult == null) {
+                    return 0;
+                }
+                return LanguageSelectActivity.this.searchResult.size();
+            } else if (LocaleController.getInstance().sortedLanguages != null) {
+                return LocaleController.getInstance().sortedLanguages.size();
+            } else {
                 return 0;
             }
-            return LocaleController.getInstance().sortedLanguages.size();
         }
 
-        public Object getItem(int i) {
-            return null;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Holder(new TextSettingsCell(this.mContext));
         }
 
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = new TextSettingsCell(this.mContext);
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            LocaleInfo localeInfo;
+            boolean last;
+            boolean z = true;
+            TextSettingsCell textSettingsCell = holder.itemView;
+            if (this.search) {
+                localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
+                if (position == LanguageSelectActivity.this.searchResult.size() - 1) {
+                    last = true;
+                } else {
+                    last = false;
+                }
+            } else {
+                localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(position);
+                last = position == LocaleController.getInstance().sortedLanguages.size() + -1;
             }
-            ((TextSettingsCell) view).setText(((LocaleInfo) LocaleController.getInstance().sortedLanguages.get(i)).name, i != LocaleController.getInstance().sortedLanguages.size() + -1);
-            return view;
+            String str = localeInfo.name;
+            if (last) {
+                z = false;
+            }
+            textSettingsCell.setText(str, z);
         }
 
         public int getItemViewType(int i) {
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        public boolean isEmpty() {
-            return LocaleController.getInstance().sortedLanguages == null || LocaleController.getInstance().sortedLanguages.size() == 0;
-        }
-    }
-
-    private class SearchAdapter extends BaseFragmentAdapter {
-        private Context mContext;
-
-        public SearchAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean areAllItemsEnabled() {
-            return true;
-        }
-
-        public boolean isEnabled(int i) {
-            return true;
-        }
-
-        public int getCount() {
-            if (LanguageSelectActivity.this.searchResult == null) {
-                return 0;
-            }
-            return LanguageSelectActivity.this.searchResult.size();
-        }
-
-        public Object getItem(int i) {
-            return null;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = new TextSettingsCell(this.mContext);
-            }
-            ((TextSettingsCell) view).setText(((LocaleInfo) LanguageSelectActivity.this.searchResult.get(i)).name, i != LanguageSelectActivity.this.searchResult.size() + -1);
-            return view;
-        }
-
-        public int getItemViewType(int i) {
-            return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        public boolean isEmpty() {
-            return LanguageSelectActivity.this.searchResult == null || LanguageSelectActivity.this.searchResult.size() == 0;
         }
     }
 
@@ -178,7 +127,7 @@ public class LanguageSelectActivity extends BaseFragment {
                 LanguageSelectActivity.this.searching = false;
                 LanguageSelectActivity.this.searchWas = false;
                 if (LanguageSelectActivity.this.listView != null) {
-                    LanguageSelectActivity.this.emptyTextView.setVisibility(8);
+                    LanguageSelectActivity.this.emptyView.setVisibility(8);
                     LanguageSelectActivity.this.listView.setAdapter(LanguageSelectActivity.this.listAdapter);
                 }
             }
@@ -194,61 +143,30 @@ public class LanguageSelectActivity extends BaseFragment {
                 }
             }
         }).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
-        this.listAdapter = new ListAdapter(context);
-        this.searchListViewAdapter = new SearchAdapter(context);
+        this.listAdapter = new ListAdapter(context, false);
+        this.searchListViewAdapter = new ListAdapter(context, true);
         this.fragmentView = new FrameLayout(context);
-        LinearLayout emptyTextLayout = new LinearLayout(context);
-        emptyTextLayout.setVisibility(4);
-        emptyTextLayout.setOrientation(1);
-        ((FrameLayout) this.fragmentView).addView(emptyTextLayout);
-        LayoutParams layoutParams = (LayoutParams) emptyTextLayout.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.gravity = 48;
-        emptyTextLayout.setLayoutParams(layoutParams);
-        emptyTextLayout.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        this.emptyTextView = new TextView(context);
-        this.emptyTextView.setTextColor(-8355712);
-        this.emptyTextView.setTextSize(20.0f);
-        this.emptyTextView.setGravity(17);
-        this.emptyTextView.setText(LocaleController.getString("NoResult", R.string.NoResult));
-        emptyTextLayout.addView(this.emptyTextView);
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) this.emptyTextView.getLayoutParams();
-        layoutParams1.width = -1;
-        layoutParams1.height = -1;
-        layoutParams1.weight = 0.5f;
-        this.emptyTextView.setLayoutParams(layoutParams1);
-        FrameLayout frameLayout = new FrameLayout(context);
-        emptyTextLayout.addView(frameLayout);
-        layoutParams1 = (LinearLayout.LayoutParams) frameLayout.getLayoutParams();
-        layoutParams1.width = -1;
-        layoutParams1.height = -1;
-        layoutParams1.weight = 0.5f;
-        frameLayout.setLayoutParams(layoutParams1);
-        this.listView = new ListView(context);
-        this.listView.setEmptyView(emptyTextLayout);
+        FrameLayout frameLayout = this.fragmentView;
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.emptyView.showTextView();
+        this.emptyView.setShowAtCenter(true);
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setEmptyView(this.emptyView);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setDivider(null);
-        this.listView.setDividerHeight(0);
         this.listView.setAdapter(this.listAdapter);
-        ((FrameLayout) this.fragmentView).addView(this.listView);
-        layoutParams = (LayoutParams) this.listView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        this.listView.setLayoutParams(layoutParams);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(View view, int position) {
                 LocaleInfo localeInfo = null;
                 if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
-                    if (i >= 0 && i < LanguageSelectActivity.this.searchResult.size()) {
-                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(i);
+                    if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
+                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
                     }
-                } else if (i >= 0 && i < LocaleController.getInstance().sortedLanguages.size()) {
-                    localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(i);
+                } else if (position >= 0 && position < LocaleController.getInstance().sortedLanguages.size()) {
+                    localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(position);
                 }
                 if (localeInfo != null) {
                     LocaleController.getInstance().applyLanguage(localeInfo, true);
@@ -258,14 +176,14 @@ public class LanguageSelectActivity extends BaseFragment {
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public boolean onItemClick(View view, int position) {
                 LocaleInfo localeInfo = null;
                 if (LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
-                    if (i >= 0 && i < LanguageSelectActivity.this.searchResult.size()) {
-                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(i);
+                    if (position >= 0 && position < LanguageSelectActivity.this.searchResult.size()) {
+                        localeInfo = (LocaleInfo) LanguageSelectActivity.this.searchResult.get(position);
                     }
-                } else if (i >= 0 && i < LocaleController.getInstance().sortedLanguages.size()) {
-                    localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(i);
+                } else if (position >= 0 && position < LocaleController.getInstance().sortedLanguages.size()) {
+                    localeInfo = (LocaleInfo) LocaleController.getInstance().sortedLanguages.get(position);
                 }
                 if (localeInfo == null || localeInfo.pathToFile == null || LanguageSelectActivity.this.getParentActivity() == null) {
                     return false;
@@ -295,13 +213,10 @@ public class LanguageSelectActivity extends BaseFragment {
             }
         });
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (i == 1 && LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == 1 && LanguageSelectActivity.this.searching && LanguageSelectActivity.this.searchWas) {
                     AndroidUtilities.hideKeyboard(LanguageSelectActivity.this.getParentActivity().getCurrentFocus());
                 }
-            }
-
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             }
         });
         return this.fragmentView;
@@ -368,5 +283,25 @@ public class LanguageSelectActivity extends BaseFragment {
                 LanguageSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[13];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        int i = 0;
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, i, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        i = 0;
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, i, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        return themeDescriptionArr;
     }
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
@@ -19,6 +21,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateSpan extends View {
     private static Paint backPaint = new Paint(1);
@@ -40,12 +43,9 @@ public class GroupCreateSpan extends View {
         int maxNameWidth;
         super(context);
         textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
-        textPaint.setColor(-14606047);
-        backPaint.setColor(-855310);
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
         this.avatarDrawable.setInfo(user);
-        this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
         this.imageReceiver = new ImageReceiver();
         this.imageReceiver.setRoundRadius(AndroidUtilities.dp(16.0f));
         this.imageReceiver.setParentView(this);
@@ -66,13 +66,23 @@ public class GroupCreateSpan extends View {
             photo = user.photo.photo_small;
         }
         this.imageReceiver.setImage(photo, null, "50_50", this.avatarDrawable, null, null, 0, null, true);
-        int color = AvatarDrawable.getGroupCreateColor(5);
-        this.colors[0] = Color.red(-855310);
-        this.colors[1] = Color.red(color) - 20;
-        this.colors[2] = Color.green(-855310);
-        this.colors[3] = Color.green(color) - 20;
-        this.colors[4] = Color.blue(-855310);
-        this.colors[5] = Color.blue(color) - 20;
+        updateColors();
+    }
+
+    public void updateColors() {
+        int color = Theme.getColor(Theme.key_avatar_backgroundGroupCreateSpanBlue);
+        int back = Theme.getColor(Theme.key_groupcreate_spanBackground);
+        int text = Theme.getColor(Theme.key_groupcreate_spanText);
+        this.colors[0] = Color.red(back);
+        this.colors[1] = Color.red(color);
+        this.colors[2] = Color.green(back);
+        this.colors[3] = Color.green(color);
+        this.colors[4] = Color.blue(back);
+        this.colors[5] = Color.blue(color);
+        textPaint.setColor(text);
+        this.deleteDrawable.setColorFilter(new PorterDuffColorFilter(text, Mode.MULTIPLY));
+        backPaint.setColor(back);
+        this.avatarDrawable.setColor(AvatarDrawable.getColorForId(5));
     }
 
     public boolean isDeleting() {

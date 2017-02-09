@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
@@ -10,24 +9,12 @@ import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AvatarDrawable extends Drawable {
-    private static int[] arrColors = new int[]{-1743531, -881592, -7436818, -8992691, -10502443, -11232035, -7436818, -887654};
-    private static int[] arrColorsButtons = new int[]{Theme.ACTION_BAR_RED_SELECTOR_COLOR, Theme.ACTION_BAR_ORANGE_SELECTOR_COLOR, Theme.ACTION_BAR_VIOLET_SELECTOR_COLOR, Theme.ACTION_BAR_GREEN_SELECTOR_COLOR, Theme.ACTION_BAR_CYAN_SELECTOR_COLOR, Theme.ACTION_BAR_BLUE_SELECTOR_COLOR, Theme.ACTION_BAR_VIOLET_SELECTOR_COLOR, Theme.ACTION_BAR_BLUE_SELECTOR_COLOR};
-    private static int[] arrColorsNames = new int[]{-3516848, -2589911, -11627828, -11488718, -12406360, -11627828, -11627828, -11627828};
-    private static int[] arrColorsProfiles = new int[]{-2592923, -615071, -7570990, -9981091, -11099461, Theme.ACTION_BAR_MAIN_AVATAR_COLOR, -7570990, -819290};
-    private static int[] arrColorsProfilesBack = new int[]{-3514282, -947900, -8557884, -11099828, -12283220, Theme.ACTION_BAR_PROFILE_COLOR, -8557884, -11762506};
-    private static int[] arrColorsProfilesText = new int[]{-406587, -139832, -3291923, -4133446, -4660496, Theme.ACTION_BAR_PROFILE_SUBTITLE_COLOR, -3291923, -4990985};
-    private static int[] arrGroupCreateColors = new int[]{-136730, -267558, -1842948, -2296624, -2230789, -2888962, -1842948, -7189};
-    private static Drawable broadcastDrawable;
-    private static Paint paint = new Paint(1);
-    private static Drawable photoDrawable;
     private int color;
     private boolean drawBrodcast;
     private boolean drawPhoto;
@@ -43,11 +30,7 @@ public class AvatarDrawable extends Drawable {
         this.stringBuilder = new StringBuilder(5);
         this.namePaint = new TextPaint(1);
         this.namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.namePaint.setColor(-1);
         this.namePaint.setTextSize((float) AndroidUtilities.dp(18.0f));
-        if (broadcastDrawable == null) {
-            broadcastDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.broadcast_w);
-        }
     }
 
     public AvatarDrawable(User user) {
@@ -79,35 +62,31 @@ public class AvatarDrawable extends Drawable {
     }
 
     public static int getColorIndex(int id) {
-        return (id < 0 || id >= 8) ? Math.abs(id % arrColors.length) : id;
+        return (id < 0 || id >= 8) ? Math.abs(id % Theme.keys_avatar_background.length) : id;
     }
 
     public static int getColorForId(int id) {
-        return arrColors[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_background[getColorIndex(id)]);
     }
 
     public static int getButtonColorForId(int id) {
-        return arrColorsButtons[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_actionBarSelector[getColorIndex(id)]);
     }
 
     public static int getProfileColorForId(int id) {
-        return arrColorsProfiles[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_backgroundInProfile[getColorIndex(id)]);
     }
 
     public static int getProfileTextColorForId(int id) {
-        return arrColorsProfilesText[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_subtitleInProfile[getColorIndex(id)]);
     }
 
     public static int getProfileBackColorForId(int id) {
-        return arrColorsProfilesBack[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_backgroundActionBar[getColorIndex(id)]);
     }
 
     public static int getNameColorForId(int id) {
-        return arrColorsNames[getColorIndex(id)];
-    }
-
-    public static int getGroupCreateColor(int id) {
-        return arrGroupCreateColors[getColorIndex(id)];
+        return Theme.getColor(Theme.keys_avatar_nameInMessage[getColorIndex(id)]);
     }
 
     public void setInfo(User user) {
@@ -140,9 +119,9 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(int id, String firstName, String lastName, boolean isBroadcast, String custom) {
         if (this.isProfile) {
-            this.color = arrColorsProfiles[getColorIndex(id)];
+            this.color = getProfileColorForId(id);
         } else {
-            this.color = arrColors[getColorIndex(id)];
+            this.color = getColorForId(id);
         }
         this.drawBrodcast = isBroadcast;
         if (firstName == null || firstName.length() == 0) {
@@ -201,9 +180,6 @@ public class AvatarDrawable extends Drawable {
     }
 
     public void setDrawPhoto(boolean value) {
-        if (value && photoDrawable == null) {
-            photoDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_w);
-        }
         this.drawPhoto = value;
     }
 
@@ -211,25 +187,26 @@ public class AvatarDrawable extends Drawable {
         Rect bounds = getBounds();
         if (bounds != null) {
             int size = bounds.width();
-            paint.setColor(this.color);
+            this.namePaint.setColor(Theme.getColor(Theme.key_avatar_text));
+            Theme.avatar_backgroundPaint.setColor(this.color);
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
-            canvas.drawCircle((float) (size / 2), (float) (size / 2), (float) (size / 2), paint);
+            canvas.drawCircle((float) (size / 2), (float) (size / 2), (float) (size / 2), Theme.avatar_backgroundPaint);
             int x;
             int y;
-            if (this.drawBrodcast && broadcastDrawable != null) {
-                x = (size - broadcastDrawable.getIntrinsicWidth()) / 2;
-                y = (size - broadcastDrawable.getIntrinsicHeight()) / 2;
-                broadcastDrawable.setBounds(x, y, broadcastDrawable.getIntrinsicWidth() + x, broadcastDrawable.getIntrinsicHeight() + y);
-                broadcastDrawable.draw(canvas);
+            if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {
+                x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
+                y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
+                Theme.avatar_broadcastDrawable.setBounds(x, y, Theme.avatar_broadcastDrawable.getIntrinsicWidth() + x, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + y);
+                Theme.avatar_broadcastDrawable.draw(canvas);
             } else if (this.textLayout != null) {
                 canvas.translate(((((float) size) - this.textWidth) / 2.0f) - this.textLeft, (((float) size) - this.textHeight) / 2.0f);
                 this.textLayout.draw(canvas);
-            } else if (this.drawPhoto && photoDrawable != null) {
-                x = (size - photoDrawable.getIntrinsicWidth()) / 2;
-                y = (size - photoDrawable.getIntrinsicHeight()) / 2;
-                photoDrawable.setBounds(x, y, photoDrawable.getIntrinsicWidth() + x, photoDrawable.getIntrinsicHeight() + y);
-                photoDrawable.draw(canvas);
+            } else if (this.drawPhoto && Theme.avatar_photoDrawable != null) {
+                x = (size - Theme.avatar_photoDrawable.getIntrinsicWidth()) / 2;
+                y = (size - Theme.avatar_photoDrawable.getIntrinsicHeight()) / 2;
+                Theme.avatar_photoDrawable.setBounds(x, y, Theme.avatar_photoDrawable.getIntrinsicWidth() + x, Theme.avatar_photoDrawable.getIntrinsicHeight() + y);
+                Theme.avatar_photoDrawable.draw(canvas);
             }
             canvas.restore();
         }

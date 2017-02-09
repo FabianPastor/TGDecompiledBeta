@@ -3,13 +3,12 @@ package org.telegram.ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.os.Build.VERSION;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
@@ -36,10 +35,8 @@ public class AboutLinkCell extends FrameLayout {
     private ClickableSpan pressedLink;
     private SpannableStringBuilder stringBuilder;
     private StaticLayout textLayout;
-    private TextPaint textPaint = new TextPaint(1);
     private int textX;
     private int textY;
-    private Paint urlPaint;
     private LinkPath urlPath = new LinkPath();
 
     public interface AboutLinkCellDelegate {
@@ -49,13 +46,9 @@ public class AboutLinkCell extends FrameLayout {
     public AboutLinkCell(Context context) {
         float f = 16.0f;
         super(context);
-        this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-        this.textPaint.setColor(-16777216);
-        this.textPaint.linkColor = Theme.MSG_LINK_TEXT_COLOR;
-        this.urlPaint = new Paint();
-        this.urlPaint.setColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
         View view = this.imageView;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         float f2 = LocaleController.isRTL ? 0.0f : 16.0f;
@@ -64,6 +57,10 @@ public class AboutLinkCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f2, 5.0f, f, 0.0f));
         setWillNotDraw(false);
+    }
+
+    public ImageView getImageView() {
+        return this.imageView;
     }
 
     public void setDelegate(AboutLinkCellDelegate botHelpCellDelegate) {
@@ -84,7 +81,7 @@ public class AboutLinkCell extends FrameLayout {
             this.oldText = text;
             this.stringBuilder = new SpannableStringBuilder(this.oldText);
             MessageObject.addLinks(this.stringBuilder, false);
-            Emoji.replaceEmoji(this.stringBuilder, this.textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             requestLayout();
             if (resId == 0) {
                 this.imageView.setImageDrawable(null);
@@ -97,9 +94,6 @@ public class AboutLinkCell extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(x, y);
-        }
         boolean result = false;
         if (this.textLayout != null) {
             if (event.getAction() == 0 || (this.pressedLink != null && event.getAction() == 1)) {
@@ -164,7 +158,7 @@ public class AboutLinkCell extends FrameLayout {
 
     @SuppressLint({"DrawAllocation"})
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        this.textLayout = new StaticLayout(this.stringBuilder, this.textPaint, MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        this.textLayout = new StaticLayout(this.stringBuilder, Theme.profile_aboutTextPaint, MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(87.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(this.textLayout.getHeight() + AndroidUtilities.dp(16.0f), NUM));
     }
 
@@ -177,7 +171,7 @@ public class AboutLinkCell extends FrameLayout {
         this.textY = dp2;
         canvas.translate(f, (float) dp2);
         if (this.pressedLink != null) {
-            canvas.drawPath(this.urlPath, this.urlPaint);
+            canvas.drawPath(this.urlPath, Theme.linkSelectionPaint);
         }
         try {
             if (this.textLayout != null) {

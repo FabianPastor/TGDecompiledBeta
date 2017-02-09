@@ -23,8 +23,8 @@ public class RadioButton extends View {
     private Bitmap bitmap;
     private Canvas bitmapCanvas;
     private ObjectAnimator checkAnimator;
-    private int checkedColor = Theme.ACTION_BAR_SUBTITLE_COLOR;
-    private int color = Theme.ACTION_BAR_SUBTITLE_COLOR;
+    private int checkedColor = Theme.getColor(Theme.key_actionBarDefaultSubtitle);
+    private int color = Theme.getColor(Theme.key_actionBarDefaultSubtitle);
     private boolean isChecked;
     private float progress;
     private int size = AndroidUtilities.dp(16.0f);
@@ -67,6 +67,16 @@ public class RadioButton extends View {
 
     public void setColor(int color1, int color2) {
         this.color = color1;
+        this.checkedColor = color2;
+        invalidate();
+    }
+
+    public void setBackgroundColor(int color1) {
+        this.color = color1;
+        invalidate();
+    }
+
+    public void setCheckedColor(int color2) {
         this.checkedColor = color2;
         invalidate();
     }

@@ -28,7 +28,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -65,7 +64,9 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
 
 public class CancelAccountDeletionActivity extends BaseFragment {
@@ -80,6 +81,29 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     private String phone;
     private ProgressDialog progressDialog;
     private SlideView[] views = new SlideView[5];
+
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
         private EditText codeField;
@@ -108,35 +132,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private final Object timerSync = new Object();
         private boolean waitingForEvent;
 
-        private class ProgressView extends View {
-            private Paint paint = new Paint();
-            private Paint paint2 = new Paint();
-            private float progress;
-
-            public ProgressView(Context context) {
-                super(context);
-                this.paint.setColor(-1971470);
-                this.paint2.setColor(-10313520);
-            }
-
-            public void setProgress(float value) {
-                this.progress = value;
-                invalidate();
-            }
-
-            protected void onDraw(Canvas canvas) {
-                int start = (int) (((float) getMeasuredWidth()) * this.progress);
-                canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-                canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-            }
-        }
-
         public LoginActivitySmsView(Context context, int type) {
             super(context);
             this.currentType = type;
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -156,10 +157,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             }
             this.codeField = new EditText(context);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
             AndroidUtilities.clearCursorDrawable(this.codeField);
-            this.codeField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setInputType(3);
@@ -195,7 +196,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
             this.timeText = new TextView(context);
             this.timeText.setTextSize(1, 14.0f);
-            this.timeText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
             addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
@@ -207,7 +208,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
-            this.problemText.setTextColor(-11697229);
+            this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 20, 0, 0));
@@ -568,13 +569,15 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
     public class PhoneView extends SlideView {
         private boolean nextPressed = false;
+        private RadialProgressView progressBar;
 
         public PhoneView(Context context) {
             super(context);
             setOrientation(1);
             FrameLayout frameLayout = new FrameLayout(context);
             addView(frameLayout, LayoutHelper.createLinear(-1, Callback.DEFAULT_DRAG_ANIMATION_DURATION));
-            frameLayout.addView(new ProgressBar(context), LayoutHelper.createFrame(-2, -2, 17));
+            this.progressBar = new RadialProgressView(context);
+            frameLayout.addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
         }
 
         public void onNextPressed() {
@@ -848,5 +851,38 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             params.putInt("length", res.type.length);
             setPage(2, true, params, false);
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        PhoneView phoneView = this.views[0];
+        LoginActivitySmsView smsView1 = this.views[1];
+        LoginActivitySmsView smsView2 = this.views[2];
+        LoginActivitySmsView smsView3 = this.views[3];
+        LoginActivitySmsView smsView4 = this.views[4];
+        r15 = new ThemeDescription[35];
+        r15[12] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r15[13] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r15[14] = new ThemeDescription(smsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[15] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r15[16] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r15[17] = new ThemeDescription(smsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[18] = new ThemeDescription(smsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r15[19] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r15[20] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r15[21] = new ThemeDescription(smsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[22] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r15[23] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r15[24] = new ThemeDescription(smsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[25] = new ThemeDescription(smsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r15[26] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r15[27] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        r15[28] = new ThemeDescription(smsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[29] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r15[30] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        r15[31] = new ThemeDescription(smsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        r15[32] = new ThemeDescription(smsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        r15[33] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        r15[34] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        return r15;
     }
 }

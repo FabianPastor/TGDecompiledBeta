@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
@@ -14,8 +13,6 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,18 +30,24 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.InputDocument;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
 import org.telegram.ui.Cells.PhotoPickerAlbumsCell;
 import org.telegram.ui.Cells.PhotoPickerAlbumsCell.PhotoPickerAlbumsCellDelegate;
 import org.telegram.ui.Cells.PhotoPickerSearchCell;
 import org.telegram.ui.Cells.PhotoPickerSearchCell.PhotoPickerSearchCellDelegate;
 import org.telegram.ui.Components.PickerBottomLayout;
+import org.telegram.ui.Components.RadialProgressView;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.PhotoPickerActivity.PhotoPickerActivityDelegate;
 
 public class PhotoAlbumPickerActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -60,7 +63,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     private ActionBarMenuItem dropDownContainer;
     private TextView emptyView;
     private ListAdapter listAdapter;
-    private ListView listView;
+    private RecyclerListView listView;
     private boolean loading = false;
     private PickerBottomLayout pickerBottomLayout;
     private FrameLayout progressView;
@@ -83,22 +86,18 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         void startPhotoSelectActivity();
     }
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
+        public boolean isEnabled(ViewHolder holder) {
             return true;
         }
 
-        public boolean isEnabled(int i) {
-            return true;
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             int i = 0;
             if (PhotoAlbumPickerActivity.this.singlePhoto || PhotoAlbumPickerActivity.this.selectedMode == 0) {
                 if (!PhotoAlbumPickerActivity.this.singlePhoto) {
@@ -118,40 +117,42 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
         }
 
-        public Object getItem(int i) {
-            return null;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int type = getItemViewType(i);
-            if (type == 0) {
-                PhotoPickerAlbumsCell photoPickerAlbumsCell;
-                if (view == null) {
-                    view = new PhotoPickerAlbumsCell(this.mContext);
-                    photoPickerAlbumsCell = (PhotoPickerAlbumsCell) view;
-                    photoPickerAlbumsCell.setDelegate(new PhotoPickerAlbumsCellDelegate() {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            View cell;
+            switch (viewType) {
+                case 0:
+                    cell = new PhotoPickerAlbumsCell(this.mContext);
+                    cell.setDelegate(new PhotoPickerAlbumsCellDelegate() {
                         public void didSelectAlbum(AlbumEntry albumEntry) {
                             PhotoAlbumPickerActivity.this.openPhotoPicker(albumEntry, 0);
                         }
                     });
-                } else {
-                    photoPickerAlbumsCell = (PhotoPickerAlbumsCell) view;
-                }
+                    view = cell;
+                    break;
+                default:
+                    cell = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
+                    cell.setDelegate(new PhotoPickerSearchCellDelegate() {
+                        public void didPressedSearchButton(int index) {
+                            PhotoAlbumPickerActivity.this.openPhotoPicker(null, index);
+                        }
+                    });
+                    view = cell;
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (holder.getItemViewType() == 0) {
+                PhotoPickerAlbumsCell photoPickerAlbumsCell = holder.itemView;
                 photoPickerAlbumsCell.setAlbumsCount(PhotoAlbumPickerActivity.this.columnsCount);
                 for (int a = 0; a < PhotoAlbumPickerActivity.this.columnsCount; a++) {
                     int index;
                     if (PhotoAlbumPickerActivity.this.singlePhoto || PhotoAlbumPickerActivity.this.selectedMode == 1) {
-                        index = (PhotoAlbumPickerActivity.this.columnsCount * i) + a;
+                        index = (PhotoAlbumPickerActivity.this.columnsCount * position) + a;
                     } else {
-                        index = ((i - 1) * PhotoAlbumPickerActivity.this.columnsCount) + a;
+                        index = ((position - 1) * PhotoAlbumPickerActivity.this.columnsCount) + a;
                     }
                     if (PhotoAlbumPickerActivity.this.singlePhoto || PhotoAlbumPickerActivity.this.selectedMode == 0) {
                         if (index < PhotoAlbumPickerActivity.this.albumsSorted.size()) {
@@ -166,17 +167,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     }
                 }
                 photoPickerAlbumsCell.requestLayout();
-                return view;
-            } else if (type != 1 || view != null) {
-                return view;
-            } else {
-                view = new PhotoPickerSearchCell(this.mContext, PhotoAlbumPickerActivity.this.allowGifs);
-                ((PhotoPickerSearchCell) view).setDelegate(new PhotoPickerSearchCellDelegate() {
-                    public void didPressedSearchButton(int index) {
-                        PhotoAlbumPickerActivity.this.openPhotoPicker(null, index);
-                    }
-                });
-                return view;
             }
         }
 
@@ -188,17 +178,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 return 0;
             }
             return 1;
-        }
-
-        public int getViewTypeCount() {
-            if (PhotoAlbumPickerActivity.this.singlePhoto || PhotoAlbumPickerActivity.this.selectedMode == 1) {
-                return 1;
-            }
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            return getCount() == 0;
         }
     }
 
@@ -228,7 +207,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     public View createView(Context context) {
         LayoutParams layoutParams;
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
-        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR);
+        this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -264,10 +243,10 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         } else {
             int dp;
             this.selectedMode = 0;
-            this.dropDownContainer = new ActionBarMenuItem(context, menu, 0);
+            this.dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0);
             this.dropDownContainer.setSubMenuOpenSide(1);
-            this.dropDownContainer.addSubItem(2, LocaleController.getString("PickerPhotos", R.string.PickerPhotos), 0);
-            this.dropDownContainer.addSubItem(3, LocaleController.getString("PickerVideo", R.string.PickerVideo), 0);
+            this.dropDownContainer.addSubItem(2, LocaleController.getString("PickerPhotos", R.string.PickerPhotos));
+            this.dropDownContainer.addSubItem(3, LocaleController.getString("PickerVideo", R.string.PickerVideo));
             this.actionBar.addView(this.dropDownContainer);
             layoutParams = (LayoutParams) this.dropDownContainer.getLayoutParams();
             layoutParams.height = -1;
@@ -306,27 +285,24 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             layoutParams.gravity = 16;
             this.dropDown.setLayoutParams(layoutParams);
         }
-        this.listView = new ListView(context);
+        this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         this.listView.setClipToPadding(false);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setSelector(new ColorDrawable(0));
-        this.listView.setDividerHeight(0);
-        this.listView.setDivider(null);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setDrawingCacheEnabled(false);
-        this.listView.setScrollingCacheEnabled(false);
         frameLayout.addView(this.listView);
         layoutParams = (LayoutParams) this.listView.getLayoutParams();
         layoutParams.width = -1;
         layoutParams.height = -1;
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.listView.setLayoutParams(layoutParams);
-        ListView listView = this.listView;
-        android.widget.ListAdapter listAdapter = new ListAdapter(context);
+        RecyclerListView recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
-        listView.setAdapter(listAdapter);
-        AndroidUtilities.setListViewEdgeEffectColor(this.listView, Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
+        recyclerListView.setAdapter(listAdapter);
+        this.listView.setGlowColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.emptyView = new TextView(context);
         this.emptyView.setTextColor(-8355712);
         this.emptyView.setTextSize(20.0f);
@@ -352,7 +328,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         layoutParams.height = -1;
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.progressView.setLayoutParams(layoutParams);
-        this.progressView.addView(new ProgressBar(context));
+        this.progressView.addView(new RadialProgressView(context));
         layoutParams = (LayoutParams) this.progressView.getLayoutParams();
         layoutParams.width = -2;
         layoutParams.height = -2;

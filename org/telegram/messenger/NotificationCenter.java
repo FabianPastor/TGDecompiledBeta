@@ -46,6 +46,7 @@ public class NotificationCenter {
     public static final int didReceivedNewMessages;
     public static final int didReceivedWebpages;
     public static final int didReceivedWebpagesInUpdates;
+    public static final int didRemovedTwoStepPassword;
     public static final int didReplacedPhotoInMemCache;
     public static final int didSetNewWallpapper;
     public static final int didSetPasscode;
@@ -79,6 +80,7 @@ public class NotificationCenter {
     public static final int newSessionReceived;
     public static final int notificationsSettingsUpdated;
     public static final int openedChatChanged;
+    public static final int paymentFinished;
     public static final int peerSettingsDidLoaded;
     public static final int privacyRulesUpdated;
     public static final int pushMessagesUpdated;
@@ -233,6 +235,9 @@ public class NotificationCenter {
         didSetTwoStepPassword = i;
         i = totalEvents;
         totalEvents = i + 1;
+        didRemovedTwoStepPassword = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         screenStateChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -318,6 +323,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         archivedStickersCountDidLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        paymentFinished = i;
         i = totalEvents;
         totalEvents = i + 1;
         httpFileDidLoaded = i;

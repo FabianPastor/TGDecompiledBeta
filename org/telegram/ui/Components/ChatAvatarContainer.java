@@ -40,7 +40,7 @@ public class ChatAvatarContainer extends FrameLayout {
     private ChatActivity parentFragment;
     private PlayingGameDrawable playingGameDrawable;
     private RecordStatusDrawable recordStatusDrawable;
-    private SendingFileExDrawable sendingFileDrawable;
+    private SendingFileDrawable sendingFileDrawable;
     private SimpleTextView subtitleTextView;
     private ImageView timeItem;
     private TimerDrawable timerDrawable;
@@ -56,15 +56,14 @@ public class ChatAvatarContainer extends FrameLayout {
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
         this.titleTextView = new SimpleTextView(context);
-        this.titleTextView.setTextColor(-1);
+        this.titleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
         this.titleTextView.setTextSize(18);
         this.titleTextView.setGravity(3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setLeftDrawableTopPadding(-AndroidUtilities.dp(1.3f));
-        this.titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(1.3f));
         addView(this.titleTextView);
         this.subtitleTextView = new SimpleTextView(context);
-        this.subtitleTextView.setTextColor(Theme.ACTION_BAR_SUBTITLE_COLOR);
+        this.subtitleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
         this.subtitleTextView.setTextSize(14);
         this.subtitleTextView.setGravity(3);
         addView(this.subtitleTextView);
@@ -79,7 +78,7 @@ public class ChatAvatarContainer extends FrameLayout {
             addView(this.timeItem);
             this.timeItem.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    ChatAvatarContainer.this.parentFragment.showDialog(AndroidUtilities.buildTTLAlert(ChatAvatarContainer.this.getContext(), ChatAvatarContainer.this.parentFragment.getCurrentEncryptedChat()).create());
+                    ChatAvatarContainer.this.parentFragment.showDialog(AlertsCreator.createTTLAlert(ChatAvatarContainer.this.getContext(), ChatAvatarContainer.this.parentFragment.getCurrentEncryptedChat()).create());
                 }
             });
         }
@@ -119,14 +118,14 @@ public class ChatAvatarContainer extends FrameLayout {
             z = false;
         }
         recordStatusDrawable.setIsChat(z);
-        this.sendingFileDrawable = new SendingFileExDrawable();
-        SendingFileExDrawable sendingFileExDrawable = this.sendingFileDrawable;
+        this.sendingFileDrawable = new SendingFileDrawable();
+        SendingFileDrawable sendingFileDrawable = this.sendingFileDrawable;
         if (chat != null) {
             z = true;
         } else {
             z = false;
         }
-        sendingFileExDrawable.setIsChat(z);
+        sendingFileDrawable.setIsChat(z);
         this.playingGameDrawable = new PlayingGameDrawable();
         PlayingGameDrawable playingGameDrawable = this.playingGameDrawable;
         if (chat == null) {
@@ -180,8 +179,21 @@ public class ChatAvatarContainer extends FrameLayout {
         this.titleTextView.setRightDrawable(rightIcon);
     }
 
+    public void setTitleIcons(Drawable leftIcon, Drawable rightIcon) {
+        this.titleTextView.setLeftDrawable(leftIcon);
+        this.titleTextView.setRightDrawable(rightIcon);
+    }
+
     public void setTitle(CharSequence value) {
         this.titleTextView.setText(value);
+    }
+
+    public SimpleTextView getTitleTextView() {
+        return this.titleTextView;
+    }
+
+    public SimpleTextView getSubtitleTextView() {
+        return this.subtitleTextView;
     }
 
     private void setTypingAnimation(boolean start) {

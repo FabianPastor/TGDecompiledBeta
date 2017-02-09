@@ -2,7 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
@@ -25,7 +26,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerSetCell extends FrameLayout {
-    private static Paint paint;
     private BackupImageView imageView;
     private boolean needDivider;
     private ImageView optionsButton;
@@ -39,12 +39,8 @@ public class StickerSetCell extends FrameLayout {
         int i2;
         int i3 = 3;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-        }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -59,7 +55,7 @@ public class StickerSetCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 40.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 40.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-7697782);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -89,8 +85,9 @@ public class StickerSetCell extends FrameLayout {
         addView(view2, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
-        this.optionsButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(788529152));
-        this.optionsButton.setImageResource(R.drawable.doc_actions_b);
+        this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+        this.optionsButton.setImageResource(R.drawable.msg_actions);
+        this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
         this.optionsButton.setScaleType(ScaleType.CENTER);
         View view3 = this.optionsButton;
         if (!LocaleController.isRTL) {
@@ -142,16 +139,13 @@ public class StickerSetCell extends FrameLayout {
             if (this.rect.contains((int) event.getX(), (int) event.getY())) {
                 return true;
             }
-            if (event.getAction() == 0 || event.getAction() == 2) {
-                getBackground().setHotspot(event.getX(), event.getY());
-            }
         }
         return super.onTouchEvent(event);
     }
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

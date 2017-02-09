@@ -1,0 +1,428 @@
+package org.telegram.ui;
+
+import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import java.util.ArrayList;
+import java.util.List;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputMessagesFilterPhoneCalls;
+import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
+import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_messages_search;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
+import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.messages_Messages;
+import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
+import org.telegram.ui.Cells.LoadingCell;
+import org.telegram.ui.Cells.LocationCell;
+import org.telegram.ui.Cells.ProfileSearchCell;
+import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.voip.VoIPHelper;
+
+public class CallLogActivity extends BaseFragment {
+    private static final int TYPE_IN = 1;
+    private static final int TYPE_MISSED = 2;
+    private static final int TYPE_OUT = 0;
+    private OnClickListener callBtnClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            VoIPHelper.startCall(CallLogActivity.this.lastCallUser = ((CallLogRow) v.getTag()).user, CallLogActivity.this.getParentActivity());
+        }
+    };
+    private ArrayList<CallLogRow> calls = new ArrayList();
+    private EmptyTextProgressView emptyView;
+    private boolean endReached;
+    private boolean firstLoaded;
+    private Drawable greenDrawable;
+    private Drawable greenDrawable2;
+    private ImageSpan iconIn;
+    private ImageSpan iconMissed;
+    private ImageSpan iconOut;
+    private User lastCallUser;
+    private LinearLayoutManager layoutManager;
+    private RecyclerListView listView;
+    private ListAdapter listViewAdapter;
+    private boolean loading;
+    private Drawable redDrawable;
+
+    private class CallLogRow {
+        public List<Message> calls;
+        public int type;
+        public User user;
+
+        private CallLogRow() {
+        }
+    }
+
+    private class CustomCell extends FrameLayout {
+        public CustomCell(Context context) {
+            super(context);
+        }
+    }
+
+    private class ViewItem {
+        public ImageView button;
+        public ProfileSearchCell cell;
+
+        public ViewItem(ImageView button, ProfileSearchCell cell) {
+            this.button = button;
+            this.cell = cell;
+        }
+    }
+
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getAdapterPosition() != CallLogActivity.this.calls.size();
+        }
+
+        public int getItemCount() {
+            int count = CallLogActivity.this.calls.size();
+            if (CallLogActivity.this.calls.isEmpty() || CallLogActivity.this.endReached) {
+                return count;
+            }
+            return count + 1;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    View frameLayout = new CustomCell(this.mContext);
+                    frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ProfileSearchCell cell = new ProfileSearchCell(this.mContext);
+                    cell.setPaddingRight(AndroidUtilities.dp(32.0f));
+                    frameLayout.addView(cell);
+                    ImageView imageView = new ImageView(this.mContext);
+                    imageView.setImageResource(R.drawable.profile_phone);
+                    imageView.setAlpha(214);
+                    imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
+                    imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+                    imageView.setScaleType(ScaleType.CENTER);
+                    imageView.setOnClickListener(CallLogActivity.this.callBtnClickListener);
+                    frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : 5) | 16, 8.0f, 0.0f, 8.0f, 0.0f));
+                    view = frameLayout;
+                    view.setTag(new ViewItem(imageView, cell));
+                    break;
+                case 1:
+                    view = new LoadingCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                default:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            boolean z = false;
+            if (holder.getItemViewType() == 0) {
+                SpannableString subtitle;
+                ViewItem viewItem = (ViewItem) holder.itemView.getTag();
+                ProfileSearchCell cell = viewItem.cell;
+                CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
+                Message last = (Message) row.calls.get(0);
+                if (row.calls.size() == 1) {
+                    subtitle = new SpannableString("  " + LocaleController.formatDateCallLog((long) last.date));
+                } else {
+                    subtitle = new SpannableString(String.format("  (%d) %s", new Object[]{Integer.valueOf(row.calls.size()), LocaleController.formatDateCallLog((long) last.date)}));
+                }
+                switch (row.type) {
+                    case 0:
+                        subtitle.setSpan(CallLogActivity.this.iconOut, 0, 1, 0);
+                        break;
+                    case 1:
+                        subtitle.setSpan(CallLogActivity.this.iconIn, 0, 1, 0);
+                        break;
+                    case 2:
+                        subtitle.setSpan(CallLogActivity.this.iconMissed, 0, 1, 0);
+                        break;
+                }
+                cell.setData(row.user, null, null, subtitle, false);
+                if (!(position == CallLogActivity.this.calls.size() - 1 && CallLogActivity.this.endReached)) {
+                    z = true;
+                }
+                cell.useSeparator = z;
+                viewItem.button.setTag(row);
+            }
+        }
+
+        public int getItemViewType(int i) {
+            if (i < CallLogActivity.this.calls.size()) {
+                return 0;
+            }
+            if (CallLogActivity.this.endReached || i != CallLogActivity.this.calls.size()) {
+                return 2;
+            }
+            return 1;
+        }
+    }
+
+    public boolean onFragmentCreate() {
+        super.onFragmentCreate();
+        getCalls(0, 50);
+        return true;
+    }
+
+    public View createView(Context context) {
+        int i = 1;
+        this.greenDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+        this.greenDrawable.setBounds(0, 0, this.greenDrawable.getIntrinsicWidth(), this.greenDrawable.getIntrinsicHeight());
+        this.greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), Mode.MULTIPLY));
+        this.iconOut = new ImageSpan(this.greenDrawable, 0);
+        this.greenDrawable2 = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+        this.greenDrawable2.setBounds(0, 0, this.greenDrawable2.getIntrinsicWidth(), this.greenDrawable2.getIntrinsicHeight());
+        this.greenDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), Mode.MULTIPLY));
+        this.iconIn = new ImageSpan(this.greenDrawable2, 0);
+        this.redDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+        this.redDrawable.setBounds(0, 0, this.redDrawable.getIntrinsicWidth(), this.redDrawable.getIntrinsicHeight());
+        this.redDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedRedIcon), Mode.MULTIPLY));
+        this.iconMissed = new ImageSpan(this.redDrawable, 0);
+        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setAllowOverlayTitle(true);
+        this.actionBar.setTitle(LocaleController.getString("Calls", R.string.Calls));
+        this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    CallLogActivity.this.finishFragment();
+                }
+            }
+        });
+        this.fragmentView = new FrameLayout(context);
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        FrameLayout frameLayout = this.fragmentView;
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.setText(LocaleController.getString("NoCallLog", R.string.NoCallLog));
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setEmptyView(this.emptyView);
+        RecyclerListView recyclerListView = this.listView;
+        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
+        this.listViewAdapter = listAdapter;
+        recyclerListView.setAdapter(listAdapter);
+        recyclerListView = this.listView;
+        if (!LocaleController.isRTL) {
+            i = 2;
+        }
+        recyclerListView.setVerticalScrollbarPosition(i);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
+                if (position >= 0 && position < CallLogActivity.this.calls.size()) {
+                    CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
+                    Bundle args = new Bundle();
+                    args.putInt("user_id", row.user.id);
+                    args.putInt("message_id", ((Message) row.calls.get(0)).id);
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                    CallLogActivity.this.presentFragment(new ChatActivity(args), true);
+                }
+            }
+        });
+        this.listView.setOnScrollListener(new OnScrollListener() {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int firstVisibleItem = CallLogActivity.this.layoutManager.findFirstVisibleItemPosition();
+                int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(CallLogActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
+                if (visibleItemCount > 0) {
+                    int totalItemCount = CallLogActivity.this.listViewAdapter.getItemCount();
+                    if (!CallLogActivity.this.endReached && !CallLogActivity.this.loading && !CallLogActivity.this.calls.isEmpty() && firstVisibleItem + visibleItemCount >= totalItemCount - 5) {
+                        CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(CallLogActivity.this.calls.size() - 1);
+                        CallLogActivity.this.getCalls(((Message) row.calls.get(row.calls.size() - 1)).id, 100);
+                    }
+                }
+            }
+        });
+        if (this.loading) {
+            this.emptyView.showProgress();
+        } else {
+            this.emptyView.showTextView();
+        }
+        return this.fragmentView;
+    }
+
+    private void getCalls(int max_id, int count) {
+        if (!this.loading) {
+            this.loading = true;
+            if (!(this.emptyView == null || this.firstLoaded)) {
+                this.emptyView.showProgress();
+            }
+            if (this.listViewAdapter != null) {
+                this.listViewAdapter.notifyDataSetChanged();
+            }
+            TL_messages_search req = new TL_messages_search();
+            req.limit = count;
+            req.peer = new TL_inputPeerEmpty();
+            req.filter = new TL_inputMessagesFilterPhoneCalls();
+            req.q = "";
+            req.max_id = max_id;
+            ConnectionsManager.getInstance().bindRequestToGuid(ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (error == null) {
+                                int a;
+                                CallLogRow currentRow;
+                                SparseArray<User> users = new SparseArray();
+                                messages_Messages msgs = response;
+                                CallLogActivity.this.endReached = msgs.messages.isEmpty();
+                                for (a = 0; a < msgs.users.size(); a++) {
+                                    User user = (User) msgs.users.get(a);
+                                    users.put(user.id, user);
+                                }
+                                if (CallLogActivity.this.calls.size() > 0) {
+                                    currentRow = (CallLogRow) CallLogActivity.this.calls.get(CallLogActivity.this.calls.size() - 1);
+                                } else {
+                                    currentRow = null;
+                                }
+                                for (a = 0; a < msgs.messages.size(); a++) {
+                                    Message msg = (Message) msgs.messages.get(a);
+                                    if (msg.action != null) {
+                                        int callType;
+                                        if (msg.from_id == UserConfig.getClientUserId()) {
+                                            callType = 0;
+                                        } else {
+                                            callType = 1;
+                                        }
+                                        if (callType == 1 && (((TL_messageActionPhoneCall) msg.action).reason instanceof TL_phoneCallDiscardReasonMissed)) {
+                                            callType = 2;
+                                        }
+                                        int userID = msg.from_id == UserConfig.getClientUserId() ? msg.to_id.user_id : msg.from_id;
+                                        if (!(currentRow != null && currentRow.user.id == userID && currentRow.type == callType)) {
+                                            if (!(currentRow == null || CallLogActivity.this.calls.contains(currentRow))) {
+                                                CallLogActivity.this.calls.add(currentRow);
+                                            }
+                                            CallLogRow row = new CallLogRow();
+                                            row.calls = new ArrayList();
+                                            row.user = (User) users.get(userID);
+                                            row.type = callType;
+                                            currentRow = row;
+                                        }
+                                        currentRow.calls.add(msg);
+                                    }
+                                }
+                                if (currentRow != null && currentRow.calls.size() > 0) {
+                                    CallLogActivity.this.calls.add(currentRow);
+                                }
+                            } else {
+                                CallLogActivity.this.endReached = true;
+                            }
+                            CallLogActivity.this.loading = false;
+                            CallLogActivity.this.firstLoaded = true;
+                            if (CallLogActivity.this.emptyView != null) {
+                                CallLogActivity.this.emptyView.showTextView();
+                            }
+                            if (CallLogActivity.this.listViewAdapter != null) {
+                                CallLogActivity.this.listViewAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+            }, 2), this.classGuid);
+        }
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (this.listViewAdapter != null) {
+            this.listViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 101 && grantResults[0] == 0) {
+            VoIPHelper.startCall(this.lastCallUser, getParentActivity());
+        }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int count = CallLogActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = CallLogActivity.this.listView.getChildAt(a);
+                    if (child instanceof ProfileSearchCell) {
+                        ((ProfileSearchCell) child).update(0);
+                    }
+                }
+            }
+        };
+        r10 = new ThemeDescription[30];
+        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LocationCell.class, CustomCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r10[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r10[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r10[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r10[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        r10[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r10[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        r10[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        r10[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, Theme.key_chats_verifiedCheck);
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedDrawable}, null, Theme.key_chats_verifiedBackground);
+        r10[17] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        r10[18] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, Theme.key_windowBackgroundWhiteBlueText3);
+        r10[19] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
+        r10[20] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        r10[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        r10[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[24] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[25] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[27] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        r10[28] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.greenDrawable, this.greenDrawable2}, null, Theme.key_calls_callReceivedGreenIcon);
+        r10[29] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.redDrawable}, null, Theme.key_calls_callReceivedRedIcon);
+        return r10;
+    }
+}

@@ -1,6 +1,8 @@
 package org.telegram.ui.ActionBar;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
 import android.text.Editable;
@@ -80,15 +82,18 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor) {
+    public ActionBarMenuItem(Context context, ActionBarMenu menu, int backgroundColor, int iconColor) {
         super(context);
         if (backgroundColor != 0) {
-            setBackgroundDrawable(Theme.createBarSelectorDrawable(backgroundColor));
+            setBackgroundDrawable(Theme.createSelectorDrawable(backgroundColor));
         }
         this.parentMenu = menu;
         this.iconView = new ImageView(context);
         this.iconView.setScaleType(ScaleType.CENTER);
         addView(this.iconView, LayoutHelper.createFrame(-1, -1.0f));
+        if (iconColor != 0) {
+            this.iconView.setColorFilter(new PorterDuffColorFilter(iconColor, Mode.MULTIPLY));
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -175,6 +180,13 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void setIconColor(int color) {
+        this.iconView.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        if (this.clearButton != null) {
+            this.clearButton.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        }
+    }
+
     public void setSubMenuOpenSide(int side) {
         this.subMenuOpenSide = side;
     }
@@ -183,7 +195,7 @@ public class ActionBarMenuItem extends FrameLayout {
         this.layoutInScreen = value;
     }
 
-    public TextView addSubItem(int id, String text, int icon) {
+    public TextView addSubItem(int id, String text) {
         if (this.popupLayout == null) {
             this.rect = new Rect();
             this.location = new int[2];
@@ -208,8 +220,8 @@ public class ActionBarMenuItem extends FrameLayout {
             });
         }
         TextView textView = new TextView(getContext());
-        textView.setTextColor(-14606047);
-        textView.setBackgroundResource(R.drawable.list_selector);
+        textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+        textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         if (LocaleController.isRTL) {
             textView.setGravity(21);
         } else {
@@ -220,14 +232,6 @@ public class ActionBarMenuItem extends FrameLayout {
         textView.setMinWidth(AndroidUtilities.dp(196.0f));
         textView.setTag(Integer.valueOf(id));
         textView.setText(text);
-        if (icon != 0) {
-            textView.setCompoundDrawablePadding(AndroidUtilities.dp(12.0f));
-            if (LocaleController.isRTL) {
-                textView.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(icon), null);
-            } else {
-                textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(icon), null, null, null);
-            }
-        }
         this.popupLayout.setShowedFromBotton(this.showFromBottom);
         this.popupLayout.addView(textView);
         LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
@@ -381,18 +385,12 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.parentMenu != null) {
             if (value && this.searchContainer == null) {
                 this.searchContainer = new FrameLayout(getContext());
-                this.parentMenu.addView(this.searchContainer, 0);
-                LayoutParams layoutParams = (LayoutParams) this.searchContainer.getLayoutParams();
-                layoutParams.weight = 1.0f;
-                layoutParams.width = 0;
-                layoutParams.height = -1;
-                layoutParams.leftMargin = AndroidUtilities.dp(6.0f);
-                this.searchContainer.setLayoutParams(layoutParams);
+                this.parentMenu.addView(this.searchContainer, 0, LayoutHelper.createLinear(0, -1, 1.0f, 6, 0, 0, 0));
                 this.searchContainer.setVisibility(8);
                 this.searchField = new EditText(getContext());
                 this.searchField.setTextSize(1, 18.0f);
-                this.searchField.setHintTextColor(-NUM);
-                this.searchField.setTextColor(-1);
+                this.searchField.setHintTextColor(Theme.getColor(Theme.key_actionBarDefaultSearchPlaceholder));
+                this.searchField.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSearch));
                 this.searchField.setSingleLine(true);
                 this.searchField.setBackgroundResource(0);
                 this.searchField.setPadding(0, 0, 0, 0);
@@ -450,15 +448,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
                 this.searchField.setImeOptions(33554435);
                 this.searchField.setTextIsSelectable(false);
-                this.searchContainer.addView(this.searchField);
-                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.searchField.getLayoutParams();
-                layoutParams2.width = -1;
-                layoutParams2.gravity = 16;
-                layoutParams2.height = AndroidUtilities.dp(36.0f);
-                layoutParams2.rightMargin = AndroidUtilities.dp(48.0f);
-                this.searchField.setLayoutParams(layoutParams2);
+                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
                 this.clearButton = new ImageView(getContext());
                 this.clearButton.setImageResource(R.drawable.ic_close_white);
+                this.clearButton.setColorFilter(new PorterDuffColorFilter(this.parentMenu.parentActionBar.itemsColor, Mode.MULTIPLY));
                 this.clearButton.setScaleType(ScaleType.CENTER);
                 this.clearButton.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
@@ -467,12 +460,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         AndroidUtilities.showKeyboard(ActionBarMenuItem.this.searchField);
                     }
                 });
-                this.searchContainer.addView(this.clearButton);
-                layoutParams2 = (FrameLayout.LayoutParams) this.clearButton.getLayoutParams();
-                layoutParams2.width = AndroidUtilities.dp(48.0f);
-                layoutParams2.gravity = 21;
-                layoutParams2.height = -1;
-                this.clearButton.setLayoutParams(layoutParams2);
+                this.searchContainer.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
             }
             this.isSearchField = value;
         }

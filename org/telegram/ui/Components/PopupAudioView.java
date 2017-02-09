@@ -47,7 +47,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     public PopupAudioView(Context context) {
         super(context);
         if (backgroundMediaDrawableIn == null) {
-            backgroundMediaDrawableIn = getResources().getDrawable(R.drawable.msg_in_photo);
+            backgroundMediaDrawableIn = getResources().getDrawable(R.drawable.msg_photo);
             statesDrawable[0][0] = getResources().getDrawable(R.drawable.play_g);
             statesDrawable[0][1] = getResources().getDrawable(R.drawable.play_g_s);
             statesDrawable[1][0] = getResources().getDrawable(R.drawable.pause_g);
@@ -75,7 +75,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     public void setMessageObject(MessageObject messageObject) {
         if (this.currentMessageObject != messageObject) {
-            this.seekBar.setColors(Theme.MSG_IN_AUDIO_SEEKBAR_COLOR, -9259544, -4399384);
+            this.seekBar.setColors(Theme.getColor(Theme.key_chat_inAudioSeekbar), Theme.getColor(Theme.key_chat_inAudioSeekbarFill), Theme.getColor(Theme.key_chat_inAudioSeekbarSelected));
             this.progressView.setProgressColors(-2497813, -7944712);
             this.currentMessageObject = messageObject;
             this.wasLayout = false;

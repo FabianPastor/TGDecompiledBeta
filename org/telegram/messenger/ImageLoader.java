@@ -56,6 +56,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
+import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 
 public class ImageLoader {
@@ -146,6 +147,8 @@ public class ImageLoader {
                         FileLoader.getInstance().cancelLoadFile((FileLocation) this.location, this.ext);
                     } else if (this.location instanceof Document) {
                         FileLoader.getInstance().cancelLoadFile((Document) this.location);
+                    } else if (this.location instanceof TL_webDocument) {
+                        FileLoader.getInstance().cancelLoadFile((TL_webDocument) this.location);
                     }
                 }
                 if (this.cacheTask != null) {
@@ -1216,6 +1219,8 @@ public class ImageLoader {
             } else {
                 key = location2.dc_id + "_" + location2.id + "_" + location2.version;
             }
+        } else if (fileLocation instanceof TL_webDocument) {
+            key = Utilities.MD5(((TL_webDocument) fileLocation).url);
         }
         if (filter != null) {
             key = key + "@" + filter;
@@ -1367,13 +1372,13 @@ public class ImageLoader {
                         }
                         if (i != 2) {
                             CacheImage img = new CacheImage();
-                            if (!(str4 == null || str4.startsWith("vthumb") || str4.startsWith("thumb") || (!str4.endsWith("mp4") && !str4.endsWith("gif"))) || ((tLObject instanceof Document) && MessageObject.isGifDocument((Document) tLObject))) {
+                            if (!(str4 == null || str4.startsWith("vthumb") || str4.startsWith("thumb") || (!str4.endsWith("mp4") && !str4.endsWith("gif"))) || (((tLObject instanceof TL_webDocument) && ((TL_webDocument) tLObject).mime_type.equals("image/gif")) || ((tLObject instanceof Document) && MessageObject.isGifDocument((Document) tLObject)))) {
                                 img.animatedFile = true;
                             }
                             if (cacheFile == null) {
                                 if (z || i2 == 0 || str4 != null) {
                                     cacheFile = new File(FileLoader.getInstance().getDirectory(4), str);
-                                } else if (tLObject instanceof Document) {
+                                } else if ((tLObject instanceof Document) || (tLObject instanceof TL_webDocument)) {
                                     cacheFile = new File(FileLoader.getInstance().getDirectory(3), str);
                                 } else {
                                     cacheFile = new File(FileLoader.getInstance().getDirectory(0), str);
@@ -1415,6 +1420,8 @@ public class ImageLoader {
                                 instance.loadFile(location2, str, i, z);
                             } else if (tLObject instanceof Document) {
                                 FileLoader.getInstance().loadFile((Document) tLObject, true, z);
+                            } else if (tLObject instanceof TL_webDocument) {
+                                FileLoader.getInstance().loadFile((TL_webDocument) tLObject, true, z);
                             }
                         }
                     }
@@ -1470,21 +1477,26 @@ public class ImageLoader {
                     if (!(imageReceiver.getExt() == null && location.key == null && (location.volume_id != -2147483648L || location.local_id >= 0))) {
                         saveImageToCache = true;
                     }
+                } else if (imageLocation instanceof TL_webDocument) {
+                    TL_webDocument document = (TL_webDocument) imageLocation;
+                    String defaultExt = FileLoader.getExtensionByMime(document.mime_type);
+                    key = Utilities.MD5(document.url);
+                    url = key + "." + getHttpUrlExtension(document.url, defaultExt);
                 } else if (imageLocation instanceof Document) {
-                    Document document = (Document) imageLocation;
-                    if (document.id != 0 && document.dc_id != 0) {
-                        if (document.version == 0) {
-                            key = document.dc_id + "_" + document.id;
+                    Document document2 = (Document) imageLocation;
+                    if (document2.id != 0 && document2.dc_id != 0) {
+                        if (document2.version == 0) {
+                            key = document2.dc_id + "_" + document2.id;
                         } else {
-                            key = document.dc_id + "_" + document.id + "_" + document.version;
+                            key = document2.dc_id + "_" + document2.id + "_" + document2.version;
                         }
-                        String docExt = FileLoader.getDocumentFileName(document);
+                        String docExt = FileLoader.getDocumentFileName(document2);
                         if (docExt != null) {
                             int idx = docExt.lastIndexOf(46);
                             if (idx != -1) {
                                 docExt = docExt.substring(idx);
                                 if (docExt.length() <= 1) {
-                                    if (document.mime_type == null && document.mime_type.equals(MimeTypes.VIDEO_MP4)) {
+                                    if (document2.mime_type == null && document2.mime_type.equals(MimeTypes.VIDEO_MP4)) {
                                         docExt = ".mp4";
                                     } else {
                                         docExt = "";
@@ -1494,7 +1506,7 @@ public class ImageLoader {
                                 if (null != null) {
                                     thumbUrl = null + "." + ext;
                                 }
-                                if (MessageObject.isGifDocument(document)) {
+                                if (MessageObject.isGifDocument(document2)) {
                                     saveImageToCache = true;
                                 } else {
                                     saveImageToCache = false;
@@ -1503,7 +1515,7 @@ public class ImageLoader {
                         }
                         docExt = "";
                         if (docExt.length() <= 1) {
-                            if (document.mime_type == null) {
+                            if (document2.mime_type == null) {
                             }
                             docExt = "";
                         }
@@ -1511,7 +1523,7 @@ public class ImageLoader {
                         if (null != null) {
                             thumbUrl = null + "." + ext;
                         }
-                        if (MessageObject.isGifDocument(document)) {
+                        if (MessageObject.isGifDocument(document2)) {
                             saveImageToCache = false;
                         } else {
                             saveImageToCache = true;
@@ -1702,6 +1714,7 @@ public class ImageLoader {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
+        Throwable e;
         Bitmap b;
         Bitmap newBitmap;
         Options bmOptions = new Options();
@@ -1713,8 +1726,7 @@ public class ImageLoader {
             } else {
                 try {
                     path = AndroidUtilities.getPath(uri);
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e("tmessages", e2);
                 }
             }

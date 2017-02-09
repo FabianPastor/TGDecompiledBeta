@@ -2,20 +2,14 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.view.View;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.Theme;
 
-public class DividerCell extends BaseCell {
-    private static Paint paint;
-
+public class DividerCell extends View {
     public DividerCell(Context context) {
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -23,6 +17,6 @@ public class DividerCell extends BaseCell {
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawLine((float) getPaddingLeft(), (float) AndroidUtilities.dp(8.0f), (float) (getWidth() - getPaddingRight()), (float) AndroidUtilities.dp(8.0f), paint);
+        canvas.drawLine((float) getPaddingLeft(), (float) AndroidUtilities.dp(8.0f), (float) (getWidth() - getPaddingRight()), (float) AndroidUtilities.dp(8.0f), Theme.dividerPaint);
     }
 }

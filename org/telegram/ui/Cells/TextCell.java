@@ -1,6 +1,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -9,6 +11,7 @@ import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
+import org.telegram.ui.ActionBar.Theme;
 
 public class TextCell extends FrameLayout {
     private ImageView imageView;
@@ -20,12 +23,12 @@ public class TextCell extends FrameLayout {
         int i = 3;
         super(context);
         this.textView = new SimpleTextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(16);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
         this.valueTextView = new SimpleTextView(context);
-        this.valueTextView.setTextColor(-13660983);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(16);
         SimpleTextView simpleTextView = this.valueTextView;
         if (!LocaleController.isRTL) {
@@ -35,10 +38,23 @@ public class TextCell extends FrameLayout {
         addView(this.valueTextView);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
         addView(this.imageView);
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         addView(this.valueImageView);
+    }
+
+    public SimpleTextView getTextView() {
+        return this.textView;
+    }
+
+    public SimpleTextView getValueTextView() {
+        return this.valueTextView;
+    }
+
+    public ImageView getValueImageView() {
+        return this.valueImageView;
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -1,6 +1,5 @@
 package org.telegram.messenger.exoplayer2.ui;
 
-import android.support.v4.os.EnvironmentCompat;
 import android.widget.TextView;
 import org.telegram.messenger.exoplayer2.ExoPlaybackException;
 import org.telegram.messenger.exoplayer2.ExoPlayer.EventListener;
@@ -80,7 +79,7 @@ public final class DebugTextViewHelper implements Runnable, EventListener {
             case 4:
                 return text + "ended";
             default:
-                return text + EnvironmentCompat.MEDIA_UNKNOWN;
+                return text + "unknown";
         }
     }
 

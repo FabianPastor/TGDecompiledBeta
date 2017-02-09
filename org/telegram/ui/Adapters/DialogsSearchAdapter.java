@@ -26,7 +26,6 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.SearchQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
@@ -46,18 +45,21 @@ import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.DialogCell;
-import org.telegram.ui.Cells.GreySectionCell;
+import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HashtagSearchCell;
 import org.telegram.ui.Cells.HintDialogCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class DialogsSearchAdapter extends Adapter {
+public class DialogsSearchAdapter extends SelectionAdapter {
     private DialogsSearchAdapterDelegate delegate;
     private int dialogsType;
+    private RecyclerListView innerListView;
     private String lastMessagesSearchString;
     private int lastReqId;
     private int lastSearchId = 0;
@@ -101,7 +103,7 @@ public class DialogsSearchAdapter extends Adapter {
         }
     }
 
-    private class CategoryAdapterRecycler extends Adapter {
+    private class CategoryAdapterRecycler extends SelectionAdapter {
         private CategoryAdapterRecycler() {
         }
 
@@ -113,6 +115,10 @@ public class DialogsSearchAdapter extends Adapter {
             View view = new HintDialogCell(DialogsSearchAdapter.this.mContext);
             view.setLayoutParams(new LayoutParams(AndroidUtilities.dp(80.0f), AndroidUtilities.dp(100.0f)));
             return new Holder(view);
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return true;
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
@@ -147,12 +153,6 @@ public class DialogsSearchAdapter extends Adapter {
         }
     }
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
     public DialogsSearchAdapter(Context context, int messagesSearch, int type) {
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onDataSetChanged() {
@@ -174,6 +174,10 @@ public class DialogsSearchAdapter extends Adapter {
         this.dialogsType = type;
         loadRecentSearch();
         SearchQuery.loadHints(true);
+    }
+
+    public RecyclerListView getInnerListView() {
+        return this.innerListView;
     }
 
     public void setDelegate(DialogsSearchAdapterDelegate delegate) {
@@ -957,15 +961,22 @@ public class DialogsSearchAdapter extends Adapter {
         return (long) i;
     }
 
+    public boolean isEnabled(ViewHolder holder) {
+        int type = holder.getItemViewType();
+        if (type == 1 || type == 3) {
+            return false;
+        }
+        return true;
+    }
+
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         switch (viewType) {
             case 0:
                 view = new ProfileSearchCell(this.mContext);
-                view.setBackgroundResource(R.drawable.list_selector);
                 break;
             case 1:
-                view = new GreySectionCell(this.mContext);
+                view = new GraySectionCell(this.mContext);
                 break;
             case 2:
                 view = new DialogCell(this.mContext);
@@ -1012,6 +1023,7 @@ public class DialogsSearchAdapter extends Adapter {
                     }
                 });
                 view = horizontalListView;
+                this.innerListView = horizontalListView;
                 break;
         }
         if (viewType == 5) {
@@ -1089,7 +1101,7 @@ public class DialogsSearchAdapter extends Adapter {
                 cell.setData(tLObject, encryptedChat, name, username, isRecent);
                 return;
             case 1:
-                GreySectionCell cell2 = holder.itemView;
+                GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
                     if (position < (!SearchQuery.hints.isEmpty() ? 2 : 0)) {
                         cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints).toUpperCase());

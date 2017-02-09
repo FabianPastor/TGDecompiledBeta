@@ -29,12 +29,15 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.IdenticonDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.URLSpanReplacement;
 
 public class IdenticonActivity extends BaseFragment {
     private int chat_id;
+    private FrameLayout container;
+    private TextView textView;
 
     private static class LinkMovementMethodMy extends LinkMovementMethod {
         private LinkMovementMethodMy() {
@@ -74,7 +77,7 @@ public class IdenticonActivity extends BaseFragment {
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
         linearLayout.setWeightSum(100.0f);
-        linearLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        linearLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
@@ -86,19 +89,19 @@ public class IdenticonActivity extends BaseFragment {
         ImageView identiconView = new ImageView(context);
         identiconView.setScaleType(ScaleType.FIT_XY);
         frameLayout.addView(identiconView, LayoutHelper.createFrame(-1, -1.0f));
-        frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-1);
-        frameLayout.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -1, 50.0f));
-        TextView textView = new TextView(context);
-        textView.setTextColor(Theme.CHAT_BOTTOM_OVERLAY_TEXT_COLOR);
-        textView.setTextSize(1, 16.0f);
-        textView.setLinksClickable(true);
-        textView.setClickable(true);
-        textView.setMovementMethod(new LinkMovementMethodMy());
-        textView.setLinkTextColor(Theme.MSG_LINK_TEXT_COLOR);
-        textView.setGravity(17);
-        frameLayout.addView(textView, LayoutHelper.createFrame(-1, -1.0f));
+        this.container = new FrameLayout(context);
+        this.container.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        this.container.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+        linearLayout.addView(this.container, LayoutHelper.createLinear(-1, -1, 50.0f));
+        this.textView = new TextView(context);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
+        this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+        this.textView.setTextSize(1, 16.0f);
+        this.textView.setLinksClickable(true);
+        this.textView.setClickable(true);
+        this.textView.setMovementMethod(new LinkMovementMethodMy());
+        this.textView.setGravity(17);
+        this.container.addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
         EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf(this.chat_id));
         if (encryptedChat != null) {
             IdenticonDrawable drawable = new IdenticonDrawable();
@@ -127,7 +130,7 @@ public class IdenticonActivity extends BaseFragment {
             if (index != -1) {
                 hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", R.string.EncryptionKeyLink)), index, "telegram.org".length() + index, 33);
             }
-            textView.setText(hash);
+            this.textView.setText(hash);
         }
         return this.fragmentView;
     }
@@ -159,5 +162,18 @@ public class IdenticonActivity extends BaseFragment {
                 return true;
             }
         });
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        r8 = new ThemeDescription[8];
+        r8[0] = new ThemeDescription(this.container, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        r8[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r8[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r8[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r8[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r8[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r8[6] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r8[7] = new ThemeDescription(this.textView, ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteLinkText);
+        return r8;
     }
 }

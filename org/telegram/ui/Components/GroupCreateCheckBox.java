@@ -46,11 +46,16 @@ public class GroupCreateCheckBox extends View {
         }
         checkPaint.setStrokeWidth((float) AndroidUtilities.dp(1.5f));
         eraser2.setStrokeWidth((float) AndroidUtilities.dp(28.0f));
-        backgroundInnerPaint.setColor(Theme.GROUP_CREATE_CHECKBOX_COLOR);
-        backgroundPaint.setColor(-1);
-        checkPaint.setColor(-1);
         this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), Config.ARGB_4444);
         this.bitmapCanvas = new Canvas(this.drawBitmap);
+        updateColors();
+    }
+
+    public void updateColors() {
+        backgroundInnerPaint.setColor(Theme.getColor(Theme.key_groupcreate_checkbox));
+        backgroundPaint.setColor(Theme.getColor(Theme.key_groupcreate_checkboxCheck));
+        checkPaint.setColor(Theme.getColor(Theme.key_groupcreate_checkboxCheck));
+        invalidate();
     }
 
     public void setProgress(float value) {

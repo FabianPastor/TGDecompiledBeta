@@ -1,10 +1,13 @@
 package org.telegram.ui.Components.voip;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.Settings.System;
 import org.telegram.messenger.AndroidUtilities;
@@ -82,6 +85,25 @@ public class VoIPHelper {
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
             activity.startService(intent);
+        }
+    }
+
+    @TargetApi(23)
+    public static void permissionDenied(final Activity activity, final Runnable onFinish) {
+        if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+            new Builder(activity).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("VoipNeedMicPermission", R.string.VoipNeedMicPermission)).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).setNegativeButton(LocaleController.getString("Settings", R.string.Settings), new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    intent.setData(Uri.fromParts("package", activity.getPackageName(), null));
+                    activity.startActivity(intent);
+                }
+            }).show().setOnDismissListener(new OnDismissListener() {
+                public void onDismiss(DialogInterface dialog) {
+                    if (onFinish != null) {
+                        onFinish.run();
+                    }
+                }
+            });
         }
     }
 }

@@ -56,7 +56,7 @@ public class CropRotationWheel extends FrameLayout {
         this.bluePaint.setAntiAlias(true);
         this.aspectRatioButton = new ImageView(context);
         this.aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
-        this.aspectRatioButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
         this.aspectRatioButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -68,7 +68,7 @@ public class CropRotationWheel extends FrameLayout {
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         this.rotation90Button = new ImageView(context);
         this.rotation90Button.setImageResource(R.drawable.tool_rotate);
-        this.rotation90Button.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+        this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.rotation90Button.setScaleType(ScaleType.CENTER);
         this.rotation90Button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

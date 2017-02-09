@@ -40,7 +40,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.checkBox.setSize(30);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
-        this.checkBox.setColor(-12793105);
+        this.checkBox.setColor(-12793105, -1);
         addView(this.checkBox, LayoutHelper.createFrame(30, BitmapDescriptorFactory.HUE_ORANGE, 51, 46.0f, 4.0f, 0.0f, 0.0f));
         this.checkBox.setVisibility(0);
     }

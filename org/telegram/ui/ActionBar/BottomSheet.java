@@ -83,8 +83,9 @@ public class BottomSheet extends Dialog {
         private TextView textView;
 
         public BottomSheetCell(Context context, int type) {
+            int i = 3;
             super(context);
-            setBackgroundResource(R.drawable.list_selector);
+            setBackgroundDrawable(Theme.getSelectorDrawable(false));
             setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
             this.imageView = new ImageView(context);
             this.imageView.setScaleType(ScaleType.CENTER);
@@ -95,12 +96,16 @@ public class BottomSheet extends Dialog {
             this.textView.setGravity(1);
             this.textView.setEllipsize(TruncateAt.END);
             if (type == 0) {
-                this.textView.setTextColor(-14606047);
+                this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 this.textView.setTextSize(1, 16.0f);
-                addView(this.textView, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 5 : 3) | 16));
+                View view = this.textView;
+                if (LocaleController.isRTL) {
+                    i = 5;
+                }
+                addView(view, LayoutHelper.createFrame(-2, -2, i | 16));
             } else if (type == 1) {
                 this.textView.setGravity(17);
-                this.textView.setTextColor(-14606047);
+                this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 this.textView.setTextSize(1, 14.0f);
                 this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));

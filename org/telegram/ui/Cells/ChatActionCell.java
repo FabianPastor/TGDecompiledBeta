@@ -3,24 +3,20 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -30,8 +26,6 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.PhotoViewer;
 
 public class ChatActionCell extends BaseCell {
-    private static Paint backPaint;
-    private static TextPaint textPaint;
     private AvatarDrawable avatarDrawable;
     private MessageObject currentMessageObject;
     private int customDate;
@@ -39,7 +33,7 @@ public class ChatActionCell extends BaseCell {
     private ChatActionCellDelegate delegate;
     private boolean hasReplyMessage;
     private boolean imagePressed = false;
-    private ImageReceiver imageReceiver;
+    private ImageReceiver imageReceiver = new ImageReceiver(this);
     private URLSpan pressedLink;
     private int previousWidth = 0;
     private int textHeight = 0;
@@ -63,18 +57,8 @@ public class ChatActionCell extends BaseCell {
 
     public ChatActionCell(Context context) {
         super(context);
-        if (textPaint == null) {
-            textPaint = new TextPaint(1);
-            textPaint.setColor(-1);
-            textPaint.linkColor = -1;
-            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            backPaint = new Paint(1);
-        }
-        backPaint.setColor(ApplicationLoader.getServiceMessageColor());
-        this.imageReceiver = new ImageReceiver(this);
         this.imageReceiver.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.avatarDrawable = new AvatarDrawable();
-        textPaint.setTextSize((float) AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 2)));
     }
 
     public void setDelegate(ChatActionCellDelegate delegate) {
@@ -232,7 +216,7 @@ public class ChatActionCell extends BaseCell {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void createLayout(CharSequence text, int width) {
         int maxWidth = width - AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE);
-        this.textLayout = new StaticLayout(text, textPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        this.textLayout = new StaticLayout(text, Theme.chat_actionTextPaint, maxWidth, Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         this.textHeight = 0;
         this.textWidth = 0;
         int linesCount = this.textLayout.getLineCount();
@@ -339,15 +323,15 @@ public class ChatActionCell extends BaseCell {
                 if (drawBottomCorners) {
                     height += AndroidUtilities.dp(3.0f);
                 }
-                canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), backPaint);
+                canvas.drawRect((float) x, (float) y, (float) (x + width), (float) (y + height), Theme.chat_actionBackgroundPaint);
                 if (!drawBottomCorners && a + 1 < count) {
                     int nextLineWidth = findMaxWidthAroundLine(a + 1) + AndroidUtilities.dp(6.0f);
                     if ((corner * 2) + nextLineWidth < width) {
                         int nextX = (getMeasuredWidth() - nextLineWidth) / 2;
                         drawBottomCorners = true;
                         additionalHeight = AndroidUtilities.dp(3.0f);
-                        canvas.drawRect((float) x, (float) (y + height), (float) nextX, (float) ((y + height) + AndroidUtilities.dp(3.0f)), backPaint);
-                        canvas.drawRect((float) (nextX + nextLineWidth), (float) (y + height), (float) (x + width), (float) ((y + height) + AndroidUtilities.dp(3.0f)), backPaint);
+                        canvas.drawRect((float) x, (float) (y + height), (float) nextX, (float) ((y + height) + AndroidUtilities.dp(3.0f)), Theme.chat_actionBackgroundPaint);
+                        canvas.drawRect((float) (nextX + nextLineWidth), (float) (y + height), (float) (x + width), (float) ((y + height) + AndroidUtilities.dp(3.0f)), Theme.chat_actionBackgroundPaint);
                     } else if ((corner * 2) + width < nextLineWidth) {
                         additionalHeight = AndroidUtilities.dp(3.0f);
                         dy = (y + height) - AndroidUtilities.dp(9.0f);
@@ -368,8 +352,8 @@ public class ChatActionCell extends BaseCell {
                         drawTopCorners = true;
                         y -= AndroidUtilities.dp(3.0f);
                         height += AndroidUtilities.dp(3.0f);
-                        canvas.drawRect((float) x, (float) y, (float) prevX, (float) (AndroidUtilities.dp(3.0f) + y), backPaint);
-                        canvas.drawRect((float) (prevX + prevLineWidth), (float) y, (float) (x + width), (float) (AndroidUtilities.dp(3.0f) + y), backPaint);
+                        canvas.drawRect((float) x, (float) y, (float) prevX, (float) (AndroidUtilities.dp(3.0f) + y), Theme.chat_actionBackgroundPaint);
+                        canvas.drawRect((float) (prevX + prevLineWidth), (float) y, (float) (x + width), (float) (AndroidUtilities.dp(3.0f) + y), Theme.chat_actionBackgroundPaint);
                     } else if ((corner * 2) + width < prevLineWidth) {
                         y -= AndroidUtilities.dp(3.0f);
                         height += AndroidUtilities.dp(3.0f);
@@ -385,8 +369,8 @@ public class ChatActionCell extends BaseCell {
                         height += AndroidUtilities.dp(6.0f);
                     }
                 }
-                canvas.drawRect((float) (x - corner), (float) (y + corner), (float) x, (float) (((y + height) + additionalHeight) - corner), backPaint);
-                canvas.drawRect((float) (x + width), (float) (y + corner), (float) ((x + width) + corner), (float) (((y + height) + additionalHeight) - corner), backPaint);
+                canvas.drawRect((float) (x - corner), (float) (y + corner), (float) x, (float) (((y + height) + additionalHeight) - corner), Theme.chat_actionBackgroundPaint);
+                canvas.drawRect((float) (x + width), (float) (y + corner), (float) ((x + width) + corner), (float) (((y + height) + additionalHeight) - corner), Theme.chat_actionBackgroundPaint);
                 if (drawTopCorners) {
                     dx = x - corner;
                     Theme.cornerOuter[0].setBounds(dx, y, dx + corner, y + corner);

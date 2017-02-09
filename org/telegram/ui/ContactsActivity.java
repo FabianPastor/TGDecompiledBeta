@@ -10,29 +10,23 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.FileLog;
@@ -46,18 +40,29 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView;
+import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Adapters.BaseSectionsAdapter;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Adapters.ContactsAdapter;
 import org.telegram.ui.Adapters.SearchAdapter;
+import org.telegram.ui.Cells.GraySectionCell;
+import org.telegram.ui.Cells.LetterSectionCell;
+import org.telegram.ui.Cells.ProfileSearchCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
-import org.telegram.ui.Components.LetterSectionsListView;
+import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 
 public class ContactsActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int add_button = 1;
@@ -71,10 +76,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private boolean creatingChat;
     private ContactsActivityDelegate delegate;
     private boolean destroyAfterSelect;
-    private TextView emptyTextView;
+    private EmptyTextProgressView emptyView;
     private HashMap<Integer, User> ignoreUsers;
-    private LetterSectionsListView listView;
-    private BaseSectionsAdapter listViewAdapter;
+    private RecyclerListView listView;
+    private ContactsAdapter listViewAdapter;
     private boolean needForwardCount = true;
     private boolean needPhonebook;
     private boolean onlyUsers;
@@ -127,7 +132,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     public View createView(Context context) {
-        boolean z;
         this.searching = false;
         this.searchWas = false;
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -162,10 +166,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 ContactsActivity.this.searchWas = false;
                 ContactsActivity.this.listView.setAdapter(ContactsActivity.this.listViewAdapter);
                 ContactsActivity.this.listViewAdapter.notifyDataSetChanged();
-                ContactsActivity.this.listView.setFastScrollAlwaysVisible(true);
-                ContactsActivity.this.listView.setFastScrollEnabled(true);
+                ContactsActivity.this.listView.setFastScrollVisible(true);
                 ContactsActivity.this.listView.setVerticalScrollBarEnabled(false);
-                ContactsActivity.this.emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+                ContactsActivity.this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
             }
 
             public void onTextChanged(EditText editText) {
@@ -176,12 +179,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         if (ContactsActivity.this.listView != null) {
                             ContactsActivity.this.listView.setAdapter(ContactsActivity.this.searchListViewAdapter);
                             ContactsActivity.this.searchListViewAdapter.notifyDataSetChanged();
-                            ContactsActivity.this.listView.setFastScrollAlwaysVisible(false);
-                            ContactsActivity.this.listView.setFastScrollEnabled(false);
+                            ContactsActivity.this.listView.setFastScrollVisible(false);
                             ContactsActivity.this.listView.setVerticalScrollBarEnabled(true);
                         }
-                        if (ContactsActivity.this.emptyTextView != null) {
-                            ContactsActivity.this.emptyTextView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                        if (ContactsActivity.this.emptyView != null) {
+                            ContactsActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                         }
                     }
                     ContactsActivity.this.searchListViewAdapter.searchDialogs(text);
@@ -192,71 +194,29 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             menu.addItem(1, (int) R.drawable.add);
         }
         this.searchListViewAdapter = new SearchAdapter(context, this.ignoreUsers, this.allowUsernameSearch, false, false, this.allowBots);
-        int i = this.onlyUsers ? 1 : 0;
-        boolean z2 = this.needPhonebook;
-        HashMap hashMap = this.ignoreUsers;
-        if (this.chat_id != 0) {
-            z = true;
-        } else {
-            z = false;
-        }
-        this.listViewAdapter = new ContactsAdapter(context, i, z2, hashMap, z);
+        this.listViewAdapter = new ContactsAdapter(context, this.onlyUsers ? 1 : 0, this.needPhonebook, this.ignoreUsers, this.chat_id != 0);
         this.fragmentView = new FrameLayout(context);
-        LinearLayout emptyTextLayout = new LinearLayout(context);
-        emptyTextLayout.setVisibility(4);
-        emptyTextLayout.setOrientation(1);
-        ((FrameLayout) this.fragmentView).addView(emptyTextLayout);
-        LayoutParams layoutParams = (LayoutParams) emptyTextLayout.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.gravity = 48;
-        emptyTextLayout.setLayoutParams(layoutParams);
-        emptyTextLayout.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        this.emptyTextView = new TextView(context);
-        this.emptyTextView.setTextColor(-8355712);
-        this.emptyTextView.setTextSize(1, 20.0f);
-        this.emptyTextView.setGravity(17);
-        this.emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
-        emptyTextLayout.addView(this.emptyTextView);
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) this.emptyTextView.getLayoutParams();
-        layoutParams1.width = -1;
-        layoutParams1.height = -1;
-        layoutParams1.weight = 0.5f;
-        this.emptyTextView.setLayoutParams(layoutParams1);
-        FrameLayout frameLayout = new FrameLayout(context);
-        emptyTextLayout.addView(frameLayout);
-        layoutParams1 = (LinearLayout.LayoutParams) frameLayout.getLayoutParams();
-        layoutParams1.width = -1;
-        layoutParams1.height = -1;
-        layoutParams1.weight = 0.5f;
-        frameLayout.setLayoutParams(layoutParams1);
-        this.listView = new LetterSectionsListView(context);
-        this.listView.setEmptyView(emptyTextLayout);
+        FrameLayout frameLayout = this.fragmentView;
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.setShowAtCenter(true);
+        this.emptyView.showTextView();
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setEmptyView(this.emptyView);
+        this.listView.setSectionsType(1);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setDivider(null);
-        this.listView.setDividerHeight(0);
-        this.listView.setFastScrollEnabled(true);
-        this.listView.setScrollBarStyle(ConnectionsManager.FileTypeVideo);
+        this.listView.setFastScrollEnabled();
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
-        this.listView.setFastScrollAlwaysVisible(true);
-        this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        ((FrameLayout) this.fragmentView).addView(this.listView);
-        layoutParams = (LayoutParams) this.listView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        this.listView.setLayoutParams(layoutParams);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(View view, int position) {
                 User user;
                 Bundle args;
                 if (ContactsActivity.this.searching && ContactsActivity.this.searchWas) {
-                    user = (User) ContactsActivity.this.searchListViewAdapter.getItem(i);
+                    user = (User) ContactsActivity.this.searchListViewAdapter.getItem(position);
                     if (user != null) {
-                        if (ContactsActivity.this.searchListViewAdapter.isGlobalSearch(i)) {
+                        if (ContactsActivity.this.searchListViewAdapter.isGlobalSearch(position)) {
                             ArrayList<User> users = new ArrayList();
                             users.add(user);
                             MessagesController.getInstance().putUsers(users, false);
@@ -287,8 +247,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     }
                     return;
                 }
-                int section = ContactsActivity.this.listViewAdapter.getSectionForPosition(i);
-                int row = ContactsActivity.this.listViewAdapter.getPositionInSectionForPosition(i);
+                int section = ContactsActivity.this.listViewAdapter.getSectionForPosition(position);
+                int row = ContactsActivity.this.listViewAdapter.getPositionInSectionForPosition(position);
                 if (row >= 0 && section >= 0) {
                     if ((ContactsActivity.this.onlyUsers && ContactsActivity.this.chat_id == 0) || section != 0) {
                         Contact item = ContactsActivity.this.listViewAdapter.getItem(section, row);
@@ -362,29 +322,27 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         ContactsActivity.this.presentFragment(new ContactsActivity(args), false);
                     } else if (row == 2 && MessagesController.isFeatureEnabled("broadcast_create", ContactsActivity.this)) {
                         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                        if (preferences.getBoolean("channel_intro", false)) {
-                            args = new Bundle();
-                            args.putInt("step", 0);
-                            ContactsActivity.this.presentFragment(new ChannelCreateActivity(args));
+                        if (BuildVars.DEBUG_VERSION || !preferences.getBoolean("channel_intro", false)) {
+                            ContactsActivity.this.presentFragment(new ChannelIntroActivity());
+                            preferences.edit().putBoolean("channel_intro", true).commit();
                             return;
                         }
-                        ContactsActivity.this.presentFragment(new ChannelIntroActivity());
-                        preferences.edit().putBoolean("channel_intro", true).commit();
+                        args = new Bundle();
+                        args.putInt("step", 0);
+                        ContactsActivity.this.presentFragment(new ChannelCreateActivity(args));
                     }
                 }
             }
         });
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                if (i == 1 && ContactsActivity.this.searching && ContactsActivity.this.searchWas) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == 1 && ContactsActivity.this.searching && ContactsActivity.this.searchWas) {
                     AndroidUtilities.hideKeyboard(ContactsActivity.this.getParentActivity().getCurrentFocus());
                 }
             }
 
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (absListView.isFastScrollEnabled()) {
-                    AndroidUtilities.clearDrawableAnimation(absListView);
-                }
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
         return this.fragmentView;
@@ -599,5 +557,60 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     public void setIgnoreUsers(HashMap<Integer, User> users) {
         this.ignoreUsers = users;
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int count = ContactsActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = ContactsActivity.this.listView.getChildAt(a);
+                    if (child instanceof UserCell) {
+                        ((UserCell) child).update(0);
+                    } else if (child instanceof ProfileSearchCell) {
+                        ((ProfileSearchCell) child).update(0);
+                    }
+                }
+            }
+        };
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[37];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, Theme.key_fastScrollActive);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, Theme.key_fastScrollInactive);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, Theme.key_fastScrollText);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteBlueText);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        themeDescriptionArr[26] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        themeDescriptionArr[27] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);
+        themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[30] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
+        themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, null, Theme.key_chats_nameIcon);
+        themeDescriptionArr[32] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, Theme.key_chats_verifiedCheck);
+        themeDescriptionArr[33] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedDrawable}, null, Theme.key_chats_verifiedBackground);
+        themeDescriptionArr[34] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[35] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, Theme.key_windowBackgroundWhiteBlueText3);
+        themeDescriptionArr[36] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
+        return themeDescriptionArr;
     }
 }

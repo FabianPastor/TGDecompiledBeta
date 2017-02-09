@@ -1,14 +1,12 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +22,8 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
 import org.telegram.tgnet.TLRPC.ChatParticipant;
@@ -36,125 +36,131 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class SetAdminsActivity extends BaseFragment implements NotificationCenterDelegate {
     private int allAdminsInfoRow;
     private int allAdminsRow;
     private Chat chat;
     private int chat_id;
+    private EmptyTextProgressView emptyView;
     private ChatFull info;
     private ListAdapter listAdapter;
-    private ListView listView;
+    private RecyclerListView listView;
     private ArrayList<ChatParticipant> participants = new ArrayList();
     private int rowCount;
     private SearchAdapter searchAdapter;
-    private EmptyTextProgressView searchEmptyView;
     private ActionBarMenuItem searchItem;
     private boolean searchWas;
     private boolean searching;
     private int usersEndRow;
     private int usersStartRow;
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return false;
-        }
-
-        public boolean isEnabled(int i) {
-            if (i == SetAdminsActivity.this.allAdminsRow) {
+        public boolean isEnabled(ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            if (position == SetAdminsActivity.this.allAdminsRow) {
                 return true;
             }
-            if (i < SetAdminsActivity.this.usersStartRow || i >= SetAdminsActivity.this.usersEndRow || (((ChatParticipant) SetAdminsActivity.this.participants.get(i - SetAdminsActivity.this.usersStartRow)) instanceof TL_chatParticipantCreator)) {
+            if (position < SetAdminsActivity.this.usersStartRow || position >= SetAdminsActivity.this.usersEndRow || (((ChatParticipant) SetAdminsActivity.this.participants.get(position - SetAdminsActivity.this.usersStartRow)) instanceof TL_chatParticipantCreator)) {
                 return false;
             }
             return true;
         }
 
-        public int getCount() {
+        public int getItemCount() {
             return SetAdminsActivity.this.rowCount;
         }
 
-        public Object getItem(int i) {
-            return null;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new TextCheckCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 1:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    break;
+                default:
+                    view = new UserCell(this.mContext, 1, 2, false);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+            }
+            return new Holder(view);
         }
 
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
             boolean z = true;
             boolean z2 = false;
-            int type = getItemViewType(i);
-            if (type == 0) {
-                if (view == null) {
-                    view = new TextCheckCell(this.mContext);
-                    view.setBackgroundColor(-1);
-                }
-                TextCheckCell checkCell = (TextCheckCell) view;
-                SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
-                String string = LocaleController.getString("SetAdminsAll", R.string.SetAdminsAll);
-                if (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled) {
-                    z = false;
-                }
-                checkCell.setTextAndCheck(string, z, false);
-            } else if (type == 1) {
-                if (view == null) {
-                    view = new TextInfoPrivacyCell(this.mContext);
-                }
-                if (i == SetAdminsActivity.this.allAdminsInfoRow) {
-                    if (SetAdminsActivity.this.chat.admins_enabled) {
-                        ((TextInfoPrivacyCell) view).setText(LocaleController.getString("SetAdminsNotAllInfo", R.string.SetAdminsNotAllInfo));
-                    } else {
-                        ((TextInfoPrivacyCell) view).setText(LocaleController.getString("SetAdminsAllInfo", R.string.SetAdminsAllInfo));
+            switch (holder.getItemViewType()) {
+                case 0:
+                    TextCheckCell checkCell = holder.itemView;
+                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    String string = LocaleController.getString("SetAdminsAll", R.string.SetAdminsAll);
+                    if (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled) {
+                        z = false;
                     }
-                    if (SetAdminsActivity.this.usersStartRow != -1) {
-                        view.setBackgroundResource(R.drawable.greydivider);
+                    checkCell.setTextAndCheck(string, z, false);
+                    return;
+                case 1:
+                    TextInfoPrivacyCell privacyCell = holder.itemView;
+                    if (position == SetAdminsActivity.this.allAdminsInfoRow) {
+                        if (SetAdminsActivity.this.chat.admins_enabled) {
+                            privacyCell.setText(LocaleController.getString("SetAdminsNotAllInfo", R.string.SetAdminsNotAllInfo));
+                        } else {
+                            privacyCell.setText(LocaleController.getString("SetAdminsAllInfo", R.string.SetAdminsAllInfo));
+                        }
+                        if (SetAdminsActivity.this.usersStartRow != -1) {
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                            return;
+                        } else {
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            return;
+                        }
+                    } else if (position == SetAdminsActivity.this.usersEndRow) {
+                        privacyCell.setText("");
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        return;
                     } else {
-                        view.setBackgroundResource(R.drawable.greydivider_bottom);
+                        return;
                     }
-                } else if (i == SetAdminsActivity.this.usersEndRow) {
-                    ((TextInfoPrivacyCell) view).setText("");
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
-                }
-            } else if (type == 2) {
-                boolean z3;
-                if (view == null) {
-                    view = new UserCell(this.mContext, 1, 2, false);
-                    view.setBackgroundColor(-1);
-                }
-                UserCell userCell = (UserCell) view;
-                ChatParticipant part = (ChatParticipant) SetAdminsActivity.this.participants.get(i - SetAdminsActivity.this.usersStartRow);
-                userCell.setData(MessagesController.getInstance().getUser(Integer.valueOf(part.user_id)), null, null, 0);
-                SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
-                if ((part instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) {
-                    z3 = false;
-                } else {
-                    z3 = true;
-                }
-                userCell.setChecked(z3, false);
-                if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || part.user_id == UserConfig.getClientUserId()) {
-                    z2 = true;
-                }
-                userCell.setCheckDisabled(z2);
+                case 2:
+                    boolean z3;
+                    UserCell userCell = holder.itemView;
+                    ChatParticipant part = (ChatParticipant) SetAdminsActivity.this.participants.get(position - SetAdminsActivity.this.usersStartRow);
+                    userCell.setData(MessagesController.getInstance().getUser(Integer.valueOf(part.user_id)), null, null, 0);
+                    SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
+                    if ((part instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) {
+                        z3 = false;
+                    } else {
+                        z3 = true;
+                    }
+                    userCell.setChecked(z3, false);
+                    if (SetAdminsActivity.this.chat == null || !SetAdminsActivity.this.chat.admins_enabled || part.user_id == UserConfig.getClientUserId()) {
+                        z2 = true;
+                    }
+                    userCell.setCheckDisabled(z2);
+                    return;
+                default:
+                    return;
             }
-            return view;
         }
 
         public int getItemViewType(int i) {
@@ -166,17 +172,9 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             }
             return 2;
         }
-
-        public int getViewTypeCount() {
-            return 3;
-        }
-
-        public boolean isEmpty() {
-            return false;
-        }
     }
 
-    public class SearchAdapter extends BaseFragmentAdapter {
+    public class SearchAdapter extends SelectionAdapter {
         private Context mContext;
         private ArrayList<ChatParticipant> searchResult = new ArrayList();
         private ArrayList<CharSequence> searchResultNames = new ArrayList();
@@ -286,15 +284,11 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             });
         }
 
-        public boolean areAllItemsEnabled() {
+        public boolean isEnabled(ViewHolder holder) {
             return true;
         }
 
-        public boolean isEnabled(int i) {
-            return true;
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             return this.searchResult.size();
         }
 
@@ -302,33 +296,26 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
             return (ChatParticipant) this.searchResult.get(i);
         }
 
-        public long getItemId(int i) {
-            return (long) i;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Holder(new UserCell(this.mContext, 1, 2, false));
         }
 
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
             boolean z;
             boolean z2 = false;
-            if (view == null) {
-                view = new UserCell(this.mContext, 1, 2, false);
-            }
-            ChatParticipant participant = getItem(i);
+            ChatParticipant participant = getItem(position);
             User user = MessagesController.getInstance().getUser(Integer.valueOf(participant.user_id));
             String un = user.username;
             CharSequence username = null;
             CharSequence name = null;
-            if (i < this.searchResult.size()) {
-                name = (CharSequence) this.searchResultNames.get(i);
+            if (position < this.searchResult.size()) {
+                name = (CharSequence) this.searchResultNames.get(position);
                 if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
                     username = name;
                     name = null;
                 }
             }
-            UserCell userCell = (UserCell) view;
+            UserCell userCell = holder.itemView;
             userCell.setData(user, name, username, 0);
             SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
             if ((participant instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) {
@@ -341,19 +328,10 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 z2 = true;
             }
             userCell.setCheckDisabled(z2);
-            return view;
         }
 
         public int getItemViewType(int i) {
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 1;
-        }
-
-        public boolean isEmpty() {
-            return this.searchResult.isEmpty();
         }
     }
 
@@ -391,7 +369,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 SetAdminsActivity.this.searching = true;
-                SetAdminsActivity.this.listView.setEmptyView(SetAdminsActivity.this.searchEmptyView);
+                SetAdminsActivity.this.listView.setEmptyView(SetAdminsActivity.this.emptyView);
             }
 
             public void onSearchCollapse() {
@@ -399,10 +377,9 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                 SetAdminsActivity.this.searchWas = false;
                 if (SetAdminsActivity.this.listView != null) {
                     SetAdminsActivity.this.listView.setEmptyView(null);
-                    SetAdminsActivity.this.searchEmptyView.setVisibility(8);
+                    SetAdminsActivity.this.emptyView.setVisibility(8);
                     if (SetAdminsActivity.this.listView.getAdapter() != SetAdminsActivity.this.listAdapter) {
                         SetAdminsActivity.this.listView.setAdapter(SetAdminsActivity.this.listAdapter);
-                        SetAdminsActivity.this.fragmentView.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
                     }
                 }
                 if (SetAdminsActivity.this.searchAdapter != null) {
@@ -416,11 +393,11 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     SetAdminsActivity.this.searchWas = true;
                     if (!(SetAdminsActivity.this.searchAdapter == null || SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter)) {
                         SetAdminsActivity.this.listView.setAdapter(SetAdminsActivity.this.searchAdapter);
-                        SetAdminsActivity.this.fragmentView.setBackgroundColor(-1);
+                        SetAdminsActivity.this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     }
-                    if (!(SetAdminsActivity.this.searchEmptyView == null || SetAdminsActivity.this.listView.getEmptyView() == SetAdminsActivity.this.searchEmptyView)) {
-                        SetAdminsActivity.this.searchEmptyView.showTextView();
-                        SetAdminsActivity.this.listView.setEmptyView(SetAdminsActivity.this.searchEmptyView);
+                    if (!(SetAdminsActivity.this.emptyView == null || SetAdminsActivity.this.listView.getEmptyView() == SetAdminsActivity.this.emptyView)) {
+                        SetAdminsActivity.this.emptyView.showTextView();
+                        SetAdminsActivity.this.listView.setEmptyView(SetAdminsActivity.this.emptyView);
                     }
                 }
                 if (SetAdminsActivity.this.searchAdapter != null) {
@@ -433,23 +410,23 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         this.searchAdapter = new SearchAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        this.fragmentView.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
-        this.listView = new ListView(context);
-        this.listView.setDivider(null);
-        this.listView.setDividerHeight(0);
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.listView = new RecyclerListView(context);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setDrawSelectorOnTop(true);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter || (i >= SetAdminsActivity.this.usersStartRow && i < SetAdminsActivity.this.usersEndRow)) {
+            public void onItemClick(View view, int position) {
+                boolean z = true;
+                boolean z2;
+                if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter || (position >= SetAdminsActivity.this.usersStartRow && position < SetAdminsActivity.this.usersEndRow)) {
                     ChatParticipant participant;
                     UserCell userCell = (UserCell) view;
                     SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     int index = -1;
                     if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter) {
-                        participant = SetAdminsActivity.this.searchAdapter.getItem(i);
+                        participant = SetAdminsActivity.this.searchAdapter.getItem(position);
                         for (int a = 0; a < SetAdminsActivity.this.participants.size(); a++) {
                             if (((ChatParticipant) SetAdminsActivity.this.participants.get(a)).user_id == participant.user_id) {
                                 index = a;
@@ -457,7 +434,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             }
                         }
                     } else {
-                        index = i - SetAdminsActivity.this.usersStartRow;
+                        index = position - SetAdminsActivity.this.usersStartRow;
                         participant = (ChatParticipant) SetAdminsActivity.this.participants.get(index);
                     }
                     if (index != -1 && !(participant instanceof TL_chatParticipantCreator)) {
@@ -479,39 +456,47 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                             SetAdminsActivity.this.info.participants.participants.set(index, newParticipant);
                         }
                         if (SetAdminsActivity.this.listView.getAdapter() == SetAdminsActivity.this.searchAdapter) {
-                            SetAdminsActivity.this.searchAdapter.searchResult.set(i, newParticipant);
+                            SetAdminsActivity.this.searchAdapter.searchResult.set(position, newParticipant);
                         }
                         participant = newParticipant;
-                        boolean z = ((participant instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) ? false : true;
-                        userCell.setChecked(z, true);
+                        z2 = ((participant instanceof TL_chatParticipant) && (SetAdminsActivity.this.chat == null || SetAdminsActivity.this.chat.admins_enabled)) ? false : true;
+                        userCell.setChecked(z2, true);
                         if (SetAdminsActivity.this.chat != null && SetAdminsActivity.this.chat.admins_enabled) {
                             MessagesController instance = MessagesController.getInstance();
-                            int access$1100 = SetAdminsActivity.this.chat_id;
-                            int i2 = participant.user_id;
+                            int access$1000 = SetAdminsActivity.this.chat_id;
+                            int i = participant.user_id;
                             if (participant instanceof TL_chatParticipant) {
                                 z = false;
-                            } else {
-                                z = true;
                             }
-                            instance.toggleUserAdmin(access$1100, i2, z);
+                            instance.toggleUserAdmin(access$1000, i, z);
                         }
                     }
-                } else if (i == SetAdminsActivity.this.allAdminsRow) {
+                } else if (position == SetAdminsActivity.this.allAdminsRow) {
                     SetAdminsActivity.this.chat = MessagesController.getInstance().getChat(Integer.valueOf(SetAdminsActivity.this.chat_id));
                     if (SetAdminsActivity.this.chat != null) {
-                        SetAdminsActivity.this.chat.admins_enabled = !SetAdminsActivity.this.chat.admins_enabled;
-                        ((TextCheckCell) view).setChecked(!SetAdminsActivity.this.chat.admins_enabled);
+                        Chat access$900 = SetAdminsActivity.this.chat;
+                        if (SetAdminsActivity.this.chat.admins_enabled) {
+                            z2 = false;
+                        } else {
+                            z2 = true;
+                        }
+                        access$900.admins_enabled = z2;
+                        TextCheckCell textCheckCell = (TextCheckCell) view;
+                        if (SetAdminsActivity.this.chat.admins_enabled) {
+                            z = false;
+                        }
+                        textCheckCell.setChecked(z);
                         MessagesController.getInstance().toggleAdminMode(SetAdminsActivity.this.chat_id, SetAdminsActivity.this.chat.admins_enabled);
                     }
                 }
             }
         });
-        this.searchEmptyView = new EmptyTextProgressView(context);
-        this.searchEmptyView.setVisibility(8);
-        this.searchEmptyView.setShowAtCenter(true);
-        this.searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
-        frameLayout.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.searchEmptyView.showTextView();
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.setVisibility(8);
+        this.emptyView.setShowAtCenter(true);
+        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.emptyView.showTextView();
         updateRowsIds();
         return this.fragmentView;
     }
@@ -650,5 +635,56 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int count = SetAdminsActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = SetAdminsActivity.this.listView.getChildAt(a);
+                    if (child instanceof UserCell) {
+                        ((UserCell) child).update(0);
+                    }
+                }
+            }
+        };
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[35];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextCheckCell.class, UserCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch);
+        themeDescriptionArr[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumb);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumbChecked);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, null, null, Theme.key_checkboxSquareUnchecked);
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, null, null, Theme.key_checkboxSquareDisabled);
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, null, null, Theme.key_checkboxSquareBackground);
+        themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, Theme.checkboxSquare_checkPaint, null, null, Theme.key_checkboxSquareCheck);
+        themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteBlueText);
+        themeDescriptionArr[27] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[28] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        themeDescriptionArr[29] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        themeDescriptionArr[30] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        themeDescriptionArr[31] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        themeDescriptionArr[32] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        themeDescriptionArr[33] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        themeDescriptionArr[34] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        return themeDescriptionArr;
     }
 }

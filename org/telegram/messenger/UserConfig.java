@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.SerializedData;
+import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
 import org.telegram.tgnet.TLRPC.User;
 
 public class UserConfig {
@@ -42,6 +43,7 @@ public class UserConfig {
     public static boolean registeredForPush;
     public static boolean saveIncomingPhotos;
     private static final Object sync = new Object();
+    public static TL_account_tmpPassword tmpPassword;
     public static boolean useFingerprint = true;
 
     public static int getNewMessageId() {
@@ -60,6 +62,7 @@ public class UserConfig {
     public static void saveConfig(boolean withFile, File oldFile) {
         synchronized (sync) {
             try {
+                SerializedData data;
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0).edit();
                 editor.putBoolean("registeredForPush", registeredForPush);
                 editor.putString("pushString2", pushString);
@@ -91,10 +94,18 @@ public class UserConfig {
                     editor.putInt("migrateOffsetChannelId", migrateOffsetChannelId);
                     editor.putLong("migrateOffsetAccess", migrateOffsetAccess);
                 }
+                if (tmpPassword != null) {
+                    data = new SerializedData();
+                    tmpPassword.serializeToStream(data);
+                    editor.putString("tmpPassword", Base64.encodeToString(data.toByteArray(), 0));
+                    data.cleanup();
+                } else {
+                    editor.remove("tmpPassword");
+                }
                 if (currentUser == null) {
                     editor.remove("user");
                 } else if (withFile) {
-                    SerializedData data = new SerializedData();
+                    data = new SerializedData();
                     currentUser.serializeToStream(data);
                     editor.putString("user", Base64.encodeToString(data.toByteArray(), 0));
                     data.cleanup();
@@ -197,6 +208,7 @@ public class UserConfig {
                     FileLog.e("tmessages", e);
                 }
             } else {
+                byte[] bytes;
                 preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
                 registeredForPush = preferences.getBoolean("registeredForPush", false);
                 pushString = preferences.getString("pushString2", "");
@@ -227,11 +239,20 @@ public class UserConfig {
                     migrateOffsetChannelId = preferences.getInt("migrateOffsetChannelId", 0);
                     migrateOffsetAccess = preferences.getLong("migrateOffsetAccess", 0);
                 }
-                String user = preferences.getString("user", null);
-                if (user != null) {
-                    byte[] userBytes = Base64.decode(user, 0);
-                    if (userBytes != null) {
-                        data = new SerializedData(userBytes);
+                String string = preferences.getString("tmpPassword", null);
+                if (string != null) {
+                    bytes = Base64.decode(string, 0);
+                    if (bytes != null) {
+                        data = new SerializedData(bytes);
+                        tmpPassword = TL_account_tmpPassword.TLdeserialize(data, data.readInt32(false), false);
+                        data.cleanup();
+                    }
+                }
+                string = preferences.getString("user", null);
+                if (string != null) {
+                    bytes = Base64.decode(string, 0);
+                    if (bytes != null) {
+                        data = new SerializedData(bytes);
                         currentUser = User.TLdeserialize(data, data.readInt32(false), false);
                         data.cleanup();
                     }

@@ -97,7 +97,7 @@ public class IntroActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme.TMessages);
         super.onCreate(savedInstanceState);
-        Theme.loadRecources(this);
+        Theme.loadResources(this);
         requestWindowFeature(1);
         if (AndroidUtilities.isTablet()) {
             setContentView(R.layout.intro_layout_tablet);

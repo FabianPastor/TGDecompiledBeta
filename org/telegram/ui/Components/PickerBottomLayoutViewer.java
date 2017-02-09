@@ -26,7 +26,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.cancelButton.setTextSize(1, 14.0f);
         this.cancelButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.cancelButton.setGravity(17);
-        this.cancelButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : 788529152, false));
+        this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.cancelButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -35,7 +35,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.doneButton.setTextSize(1, 14.0f);
         this.doneButton.setTextColor(this.isDarkTheme ? -1 : -15095832);
         this.doneButton.setGravity(17);
-        this.doneButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : 788529152, false));
+        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? Theme.ACTION_BAR_PICKER_SELECTOR_COLOR : Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
         this.doneButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.doneButton.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
         this.doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

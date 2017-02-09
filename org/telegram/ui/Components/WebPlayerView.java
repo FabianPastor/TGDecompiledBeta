@@ -12,9 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
-import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -36,8 +33,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnPreDrawListener;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -45,7 +40,6 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -96,6 +90,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     private static final Pattern jsPattern = Pattern.compile("\"assets\":.+?\"js\":\\s*(\"[^\"]+\")");
     private static final Pattern playerIdPattern = Pattern.compile(".*?-([a-zA-Z0-9_-]+)(?:/watch_as3|/html5player(?:-new)?|/base)?\\.([a-z]+)$");
     private static final Pattern sigPattern = Pattern.compile("\\.sig\\|\\|([a-zA-Z0-9$]+)\\(");
+    private static final Pattern sigPattern2 = Pattern.compile("[\"']signature[\"']\\s*,\\s*([a-zA-Z0-9$]+)\\(");
     private static final Pattern stmtReturnPattern = Pattern.compile("return(?:\\s+|$)");
     private static final Pattern stmtVarPattern = Pattern.compile("var\\s");
     private static final Pattern stsPattern = Pattern.compile("\"sts\"\\s*:\\s*(\\d+)");
@@ -668,11 +663,22 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         private HashMap<String, Object> extractObject(String objname) throws Exception {
             HashMap<String, Object> obj = new HashMap();
             Matcher matcher = Pattern.compile(String.format(Locale.US, "(?:var\\s+)?%s\\s*=\\s*\\{\\s*(([a-zA-Z$0-9]+\\s*:\\s*function\\(.*?\\)\\s*\\{.*?\\}(?:,\\s*)?)*)\\}\\s*;", new Object[]{Pattern.quote(objname)})).matcher(this.jsCode);
-            matcher.find();
-            if (!this.codeLines.contains(matcher.group())) {
-                this.codeLines.add(matcher.group());
+            String fields = null;
+            while (matcher.find()) {
+                String code = matcher.group();
+                fields = matcher.group(2);
+                if (!TextUtils.isEmpty(fields)) {
+                    if (!this.codeLines.contains(code)) {
+                        this.codeLines.add(matcher.group());
+                    }
+                    matcher = Pattern.compile("([a-zA-Z$0-9]+)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}").matcher(fields);
+                    while (matcher.find()) {
+                        buildFunction(matcher.group(2).split(","), matcher.group(3));
+                    }
+                    return obj;
+                }
             }
-            matcher = Pattern.compile("([a-zA-Z$0-9]+)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}").matcher(matcher.group(2));
+            matcher = Pattern.compile("([a-zA-Z$0-9]+)\\s*:\\s*function\\(([a-z,]+)\\)\\{([^}]+)\\}").matcher(fields);
             while (matcher.find()) {
                 buildFunction(matcher.group(2).split(","), matcher.group(3));
             }
@@ -726,70 +732,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         @JavascriptInterface
         public void returnResultToJava(String value) {
             this.callJavaResultInterface.jsCallFinished(value);
-        }
-    }
-
-    private class RadialProgressView extends View {
-        private AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
-        private RectF cicleRect = new RectF();
-        private float currentCircleLength;
-        private float currentProgressTime;
-        private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
-        private long lastUpdateTime;
-        private int progressColor = -1;
-        private Paint progressPaint = new Paint(1);
-        private float radOffset;
-        private boolean risingCircleLength;
-        private float risingTime = 500.0f;
-        private float rotationTime = 2000.0f;
-
-        public RadialProgressView(Context context) {
-            super(context);
-            this.progressPaint.setStyle(Style.STROKE);
-            this.progressPaint.setStrokeCap(Cap.ROUND);
-            this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-            this.progressPaint.setColor(this.progressColor);
-        }
-
-        private void updateAnimation() {
-            long newTime = System.currentTimeMillis();
-            long dt = newTime - this.lastUpdateTime;
-            if (dt > 17) {
-                dt = 17;
-            }
-            this.lastUpdateTime = newTime;
-            this.radOffset += ((float) (360 * dt)) / this.rotationTime;
-            this.radOffset -= (float) (((int) (this.radOffset / 360.0f)) * 360);
-            this.currentProgressTime += (float) dt;
-            if (this.currentProgressTime >= this.risingTime) {
-                this.currentProgressTime = this.risingTime;
-            }
-            if (this.risingCircleLength) {
-                this.currentCircleLength = (266.0f * this.accelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) + 4.0f;
-            } else {
-                this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / this.risingTime)) * BitmapDescriptorFactory.HUE_VIOLET);
-            }
-            if (this.currentProgressTime == this.risingTime) {
-                if (this.risingCircleLength) {
-                    this.radOffset += BitmapDescriptorFactory.HUE_VIOLET;
-                    this.currentCircleLength = -266.0f;
-                }
-                this.risingCircleLength = !this.risingCircleLength;
-                this.currentProgressTime = 0.0f;
-            }
-            invalidate();
-        }
-
-        public void setProgressColor(int color) {
-            this.progressColor = color;
-            this.progressPaint.setColor(this.progressColor);
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int diff = AndroidUtilities.dp(4.0f);
-            this.cicleRect.set((float) diff, (float) diff, (float) (getMeasuredWidth() - diff), (float) (getMeasuredHeight() - diff));
-            canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
-            updateAnimation();
         }
     }
 
@@ -923,7 +865,8 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     }
                 }
             }
-            if (!(!encrypted || this.result[0] == null || embedCode == null)) {
+            if (this.result[0] != null && ((encrypted || this.result[0].contains("/s/")) && embedCode != null)) {
+                encrypted = true;
                 int index = this.result[0].indexOf("/s/");
                 int index2 = this.result[0].indexOf(47, index + 10);
                 if (index != -1) {
@@ -959,19 +902,27 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             functionName = preferences.getString(playerId + "n", null);
                         }
                         if (functionCode == null) {
-                            WebPlayerView webPlayerView = WebPlayerView.this;
                             if (jsUrl.startsWith("//")) {
                                 jsUrl = "https:" + jsUrl;
+                            } else if (jsUrl.startsWith("/")) {
+                                jsUrl = "https://www.youtube.com" + jsUrl;
                             }
-                            String jsCode = webPlayerView.downloadUrlContent(this, jsUrl);
+                            String jsCode = WebPlayerView.this.downloadUrlContent(this, jsUrl);
                             if (isCancelled()) {
                                 return null;
                             }
                             if (jsCode != null) {
                                 matcher = WebPlayerView.sigPattern.matcher(jsCode);
                                 if (matcher.find()) {
-                                    try {
+                                    functionName = matcher.group(1);
+                                } else {
+                                    matcher = WebPlayerView.sigPattern2.matcher(jsCode);
+                                    if (matcher.find()) {
                                         functionName = matcher.group(1);
+                                    }
+                                }
+                                if (functionName != null) {
+                                    try {
                                         functionCode = new JSExtractor(jsCode).extractFunction(functionName);
                                         if (!(TextUtils.isEmpty(functionCode) || playerId == null)) {
                                             preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
@@ -1355,6 +1306,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
         }
         this.progressView = new RadialProgressView(context);
+        this.progressView.setProgressColor(-1);
         addView(this.progressView, LayoutHelper.createFrame(48, 48, 17));
         this.fullscreenButton = new ImageView(context);
         this.fullscreenButton.setScaleType(ScaleType.CENTER);

@@ -1002,7 +1002,14 @@ public class StickersQuery {
 
     public static String getStickerSetName(long setId) {
         TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) stickerSetsById.get(Long.valueOf(setId));
-        return stickerSet != null ? stickerSet.set.short_name : null;
+        if (stickerSet != null) {
+            return stickerSet.set.short_name;
+        }
+        StickerSetCovered stickerSetCovered = (StickerSetCovered) featuredStickerSetsById.get(Long.valueOf(setId));
+        if (stickerSetCovered != null) {
+            return stickerSetCovered.set.short_name;
+        }
+        return null;
     }
 
     public static long getStickerSetId(Document document) {

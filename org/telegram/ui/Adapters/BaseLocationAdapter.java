@@ -24,8 +24,9 @@ import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
-public class BaseLocationAdapter extends BaseFragmentAdapter {
+public abstract class BaseLocationAdapter extends SelectionAdapter {
     private AsyncTask<Void, Void, JSONObject> currentTask;
     private BaseLocationAdapterDelegate delegate;
     protected ArrayList<String> iconUrls = new ArrayList();

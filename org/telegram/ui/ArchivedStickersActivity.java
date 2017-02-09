@@ -15,7 +15,6 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
@@ -33,13 +32,16 @@ import org.telegram.tgnet.TLRPC.TL_messages_getArchivedStickers;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.ArchivedStickerSetCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.StickersAlert.StickersAlertInstallDelegate;
 
@@ -50,6 +52,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     private boolean firstLoaded;
     private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
     private boolean loadingStickers;
     private int rowCount;
     private ArrayList<StickerSetCovered> sets = new ArrayList();
@@ -58,14 +61,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     private int stickersShadowRow;
     private int stickersStartRow;
 
-    private class ListAdapter extends Adapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -77,18 +74,16 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             if (getItemViewType(position) == 0) {
-                boolean z;
                 ArchivedStickerSetCell cell = holder.itemView;
                 cell.setTag(Integer.valueOf(position));
                 StickerSetCovered stickerSet = (StickerSetCovered) ArchivedStickersActivity.this.sets.get(position);
-                if (position != ArchivedStickersActivity.this.sets.size() - 1) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                cell.setStickersSet(stickerSet, z, false);
+                cell.setStickersSet(stickerSet, position != ArchivedStickersActivity.this.sets.size() + -1);
                 cell.setChecked(StickersQuery.isStickerPackInstalled(stickerSet.set.id));
             }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getItemViewType() == 0;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,7 +91,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             switch (viewType) {
                 case 0:
                     view = new ArchivedStickerSetCell(this.mContext, true);
-                    view.setBackgroundResource(R.drawable.list_selector_white);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     ((ArchivedStickerSetCell) view).setOnCheckClick(new OnCheckedChangeListener() {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             StickersQuery.removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue())).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
@@ -105,11 +100,11 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundResource(R.drawable.greydivider_bottom);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -165,7 +160,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.emptyView = new EmptyTextProgressView(context);
         if (this.currentType == 0) {
             this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", R.string.ArchivedStickersEmpty));
@@ -178,15 +173,16 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         } else {
             this.emptyView.showTextView();
         }
-        RecyclerListView listView = new RecyclerListView(context);
-        listView.setFocusable(true);
-        listView.setEmptyView(this.emptyView);
+        this.listView = new RecyclerListView(context);
+        this.listView.setFocusable(true);
+        this.listView.setEmptyView(this.emptyView);
+        RecyclerListView recyclerListView = this.listView;
         LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
-        listView.setLayoutManager(linearLayoutManager);
-        frameLayout.addView(listView, LayoutHelper.createFrame(-1, -1.0f));
-        listView.setAdapter(this.listAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setAdapter(this.listAdapter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(final View view, int position) {
                 if (position >= ArchivedStickersActivity.this.stickersStartRow && position < ArchivedStickersActivity.this.stickersEndRow && ArchivedStickersActivity.this.getParentActivity() != null) {
                     InputStickerSet inputStickerSet;
@@ -213,7 +209,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                 }
             }
         });
-        listView.setOnScrollListener(new OnScrollListener() {
+        this.listView.setOnScrollListener(new OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (!ArchivedStickersActivity.this.loadingStickers && !ArchivedStickersActivity.this.endReached && ArchivedStickersActivity.this.layoutManager.findLastVisibleItemPosition() > ArchivedStickersActivity.this.stickersLoadingRow - 2) {
                     ArchivedStickersActivity.this.getStickers();
@@ -312,5 +308,30 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
             getStickers();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[20];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ArchivedStickerSetCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{LoadingCell.class, TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[12] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumb);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchThumbChecked);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{ArchivedStickerSetCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked);
+        return themeDescriptionArr;
     }
 }

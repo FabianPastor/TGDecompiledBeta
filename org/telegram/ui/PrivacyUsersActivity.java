@@ -4,18 +4,11 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
-import android.widget.ListView;
-import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -24,20 +17,33 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
+import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
+import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.TextInfoCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.GroupCreateActivity.GroupCreateActivityDelegate;
 
 public class PrivacyUsersActivity extends BaseFragment implements NotificationCenterDelegate {
     private static final int block_user = 1;
     private PrivacyActivityDelegate delegate;
+    private EmptyTextProgressView emptyView;
     private boolean isAlwaysShare;
     private boolean isGroup;
-    private ListView listView;
+    private RecyclerListView listView;
     private ListAdapter listViewAdapter;
     private int selectedUserId;
     private ArrayList<Integer> uidArray;
@@ -46,57 +52,44 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         void didUpdatedUserList(ArrayList<Integer> arrayList, boolean z);
     }
 
-    private class ListAdapter extends BaseFragmentAdapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
 
         public ListAdapter(Context context) {
             this.mContext = context;
         }
 
-        public boolean areAllItemsEnabled() {
-            return false;
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getAdapterPosition() != PrivacyUsersActivity.this.uidArray.size();
         }
 
-        public boolean isEnabled(int i) {
-            return i != PrivacyUsersActivity.this.uidArray.size();
-        }
-
-        public int getCount() {
+        public int getItemCount() {
             if (PrivacyUsersActivity.this.uidArray.isEmpty()) {
                 return 0;
             }
             return PrivacyUsersActivity.this.uidArray.size() + 1;
         }
 
-        public Object getItem(int i) {
-            return null;
-        }
-
-        public long getItemId(int i) {
-            return (long) i;
-        }
-
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            int type = getItemViewType(i);
-            if (type == 0) {
-                if (view == null) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            switch (viewType) {
+                case 0:
                     view = new UserCell(this.mContext, 1, 0, false);
-                }
-                User user = MessagesController.getInstance().getUser((Integer) PrivacyUsersActivity.this.uidArray.get(i));
-                UserCell userCell = (UserCell) view;
+                    break;
+                default:
+                    view = new TextInfoCell(this.mContext);
+                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
+                    break;
+            }
+            return new Holder(view);
+        }
+
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (holder.getItemViewType() == 0) {
+                User user = MessagesController.getInstance().getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
+                UserCell userCell = (UserCell) holder.itemView;
                 CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
-                return view;
-            } else if (type != 1 || view != null) {
-                return view;
-            } else {
-                view = new TextInfoCell(this.mContext);
-                ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
-                return view;
             }
         }
 
@@ -105,14 +98,6 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 return 1;
             }
             return 0;
-        }
-
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        public boolean isEmpty() {
-            return PrivacyUsersActivity.this.uidArray.isEmpty();
         }
     }
 
@@ -179,69 +164,52 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        TextView emptyTextView = new TextView(context);
-        emptyTextView.setTextColor(-8355712);
-        emptyTextView.setTextSize(20.0f);
-        emptyTextView.setGravity(17);
-        emptyTextView.setVisibility(4);
-        emptyTextView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
-        frameLayout.addView(emptyTextView);
-        LayoutParams layoutParams = (LayoutParams) emptyTextView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        layoutParams.gravity = 48;
-        emptyTextView.setLayoutParams(layoutParams);
-        emptyTextView.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        this.listView = new ListView(context);
-        this.listView.setEmptyView(emptyTextView);
+        this.emptyView = new EmptyTextProgressView(context);
+        this.emptyView.showTextView();
+        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView = new RecyclerListView(context);
+        this.listView.setEmptyView(this.emptyView);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setDivider(null);
-        this.listView.setDividerHeight(0);
-        ListView listView = this.listView;
-        android.widget.ListAdapter listAdapter = new ListAdapter(context);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        RecyclerListView recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
-        listView.setAdapter(listAdapter);
-        listView = this.listView;
+        recyclerListView.setAdapter(listAdapter);
+        recyclerListView = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        listView.setVerticalScrollbarPosition(i);
-        frameLayout.addView(this.listView);
-        layoutParams = (LayoutParams) this.listView.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = -1;
-        this.listView.setLayoutParams(layoutParams);
+        recyclerListView.setVerticalScrollbarPosition(i);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i < PrivacyUsersActivity.this.uidArray.size()) {
+            public void onItemClick(View view, int position) {
+                if (position < PrivacyUsersActivity.this.uidArray.size()) {
                     Bundle args = new Bundle();
-                    args.putInt("user_id", ((Integer) PrivacyUsersActivity.this.uidArray.get(i)).intValue());
+                    args.putInt("user_id", ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue());
                     PrivacyUsersActivity.this.presentFragment(new ProfileActivity(args));
                 }
             }
         });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i >= 0 && i < PrivacyUsersActivity.this.uidArray.size() && PrivacyUsersActivity.this.getParentActivity() != null) {
-                    PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(i)).intValue();
-                    Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new OnClickListener() {
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (i == 0) {
-                                PrivacyUsersActivity.this.uidArray.remove(Integer.valueOf(PrivacyUsersActivity.this.selectedUserId));
-                                PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
-                                if (PrivacyUsersActivity.this.delegate != null) {
-                                    PrivacyUsersActivity.this.delegate.didUpdatedUserList(PrivacyUsersActivity.this.uidArray, false);
-                                }
+            public boolean onItemClick(View view, int position) {
+                if (position < 0 || position >= PrivacyUsersActivity.this.uidArray.size() || PrivacyUsersActivity.this.getParentActivity() == null) {
+                    return false;
+                }
+                PrivacyUsersActivity.this.selectedUserId = ((Integer) PrivacyUsersActivity.this.uidArray.get(position)).intValue();
+                Builder builder = new Builder(PrivacyUsersActivity.this.getParentActivity());
+                builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            PrivacyUsersActivity.this.uidArray.remove(Integer.valueOf(PrivacyUsersActivity.this.selectedUserId));
+                            PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
+                            if (PrivacyUsersActivity.this.delegate != null) {
+                                PrivacyUsersActivity.this.delegate.didUpdatedUserList(PrivacyUsersActivity.this.uidArray, false);
                             }
                         }
-                    });
-                    PrivacyUsersActivity.this.showDialog(builder.create());
-                }
+                    }
+                });
+                PrivacyUsersActivity.this.showDialog(builder.create());
                 return true;
             }
         });
@@ -278,5 +246,32 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         if (this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int count = PrivacyUsersActivity.this.listView.getChildCount();
+                for (int a = 0; a < count; a++) {
+                    View child = PrivacyUsersActivity.this.listView.getChildAt(a);
+                    if (child instanceof UserCell) {
+                        ((UserCell) child).update(0);
+                    }
+                }
+            }
+        };
+        r10 = new ThemeDescription[20];
+        r10[9] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText5);
+        r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, сellDelegate, Theme.key_windowBackgroundWhiteGrayText);
+        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        r10[13] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        r10[14] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        r10[15] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        r10[16] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        r10[17] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        r10[18] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        r10[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        return r10;
     }
 }

@@ -10,12 +10,12 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -28,16 +28,13 @@ import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.StickersQuery;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.Switch;
 
 public class FeaturedStickerSetCell extends FrameLayout {
-    private static Paint botProgressPaint;
-    private static Paint paint;
     private TextView addButton;
     private int angle;
-    private Switch checkBox;
     private ImageView checkImage;
     private AnimatorSet currentAnimation;
     private boolean drawProgress;
@@ -46,6 +43,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
     private long lastUpdateTime;
     private boolean needDivider;
     private float progressAlpha;
+    private Paint progressPaint = new Paint(1);
     private RectF progressRect = new RectF();
     private Rect rect = new Rect();
     private StickerSetCovered stickersSet;
@@ -60,19 +58,12 @@ public class FeaturedStickerSetCell extends FrameLayout {
         float f2;
         int i3 = 3;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-        }
-        if (botProgressPaint == null) {
-            botProgressPaint = new Paint(1);
-            botProgressPaint.setColor(-1);
-            botProgressPaint.setStrokeCap(Cap.ROUND);
-            botProgressPaint.setStyle(Style.STROKE);
-        }
-        botProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.progressPaint.setColor(Theme.getColor(Theme.key_featuredStickers_buttonProgress));
+        this.progressPaint.setStrokeCap(Cap.ROUND);
+        this.progressPaint.setStyle(Style.STROKE);
+        this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -87,7 +78,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 100.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-7697782);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -131,10 +122,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetCell.this.drawProgress || !(FeaturedStickerSetCell.this.drawProgress || FeaturedStickerSetCell.this.progressAlpha == 0.0f)) {
-                    FeaturedStickerSetCell.botProgressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetCell.this.progressAlpha * 255.0f)));
+                    FeaturedStickerSetCell.this.progressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetCell.this.progressAlpha * 255.0f)));
                     int x = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
                     FeaturedStickerSetCell.this.progressRect.set((float) x, (float) AndroidUtilities.dp(3.0f), (float) (AndroidUtilities.dp(8.0f) + x), (float) AndroidUtilities.dp(11.0f));
-                    canvas.drawArc(FeaturedStickerSetCell.this.progressRect, (float) FeaturedStickerSetCell.this.angle, 220.0f, false, FeaturedStickerSetCell.botProgressPaint);
+                    canvas.drawArc(FeaturedStickerSetCell.this.progressRect, (float) FeaturedStickerSetCell.this.angle, 220.0f, false, FeaturedStickerSetCell.this.progressPaint);
                     invalidate(((int) FeaturedStickerSetCell.this.progressRect.left) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.top) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.right) + AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetCell.this.progressRect.bottom) + AndroidUtilities.dp(2.0f));
                     long newTime = System.currentTimeMillis();
                     if (Math.abs(FeaturedStickerSetCell.this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
@@ -162,10 +153,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
         };
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
-        this.addButton.setTextColor(-1);
+        this.addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.addButton.setBackgroundResource(R.drawable.add_states);
+        this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
         view = this.addButton;
         if (!LocaleController.isRTL) {
@@ -173,6 +164,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, 28.0f, i3 | 48, LocaleController.isRTL ? 14.0f : 0.0f, 18.0f, LocaleController.isRTL ? 0.0f : 14.0f, 0.0f));
         this.checkImage = new ImageView(context);
+        this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
@@ -353,16 +345,9 @@ public class FeaturedStickerSetCell extends FrameLayout {
         return this.isInstalled;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
-        return super.onTouchEvent(event);
-    }
-
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

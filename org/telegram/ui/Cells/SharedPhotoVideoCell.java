@@ -24,6 +24,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
@@ -69,10 +70,11 @@ public class SharedPhotoVideoCell extends FrameLayout {
             this.videoTextView.setGravity(16);
             this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createLinear(-2, -2, 16, 4, 0, 0, 1));
             this.selector = new View(context);
-            this.selector.setBackgroundResource(R.drawable.list_selector);
+            this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
             this.checkBox = new CheckBox(context, R.drawable.round_check2);
             this.checkBox.setVisibility(4);
+            this.checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, 53, 0.0f, 2.0f, 2.0f, 0.0f));
         }
 
@@ -193,6 +195,12 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     return SharedPhotoVideoCell.this.delegate.didLongClickItem(SharedPhotoVideoCell.this, SharedPhotoVideoCell.this.indeces[a], SharedPhotoVideoCell.this.messageObjects[a], a);
                 }
             });
+        }
+    }
+
+    public void updateCheckboxColor() {
+        for (int a = 0; a < 6; a++) {
+            this.photoVideoViews[a].checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
         }
     }
 

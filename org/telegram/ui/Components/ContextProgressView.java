@@ -12,6 +12,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class ContextProgressView extends View {
     private RectF cicleRect = new RectF();
+    private int currentColorType;
     private Paint innerPaint = new Paint(1);
     private long lastUpdateTime;
     private Paint outerPaint = new Paint(1);
@@ -24,16 +25,22 @@ public class ContextProgressView extends View {
         this.outerPaint.setStyle(Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.outerPaint.setStrokeCap(Cap.ROUND);
-        if (colorType == 0) {
-            this.innerPaint.setColor(-4202506);
-            this.outerPaint.setColor(-13920542);
-        } else if (colorType == 1) {
-            this.innerPaint.setColor(-4202506);
-            this.outerPaint.setColor(-1);
-        } else if (colorType == 2) {
-            this.innerPaint.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR);
-            this.outerPaint.setColor(-1);
+        this.currentColorType = colorType;
+        updateColors();
+    }
+
+    public void updateColors() {
+        if (this.currentColorType == 0) {
+            this.innerPaint.setColor(Theme.getColor(Theme.key_contextProgressInner1));
+            this.outerPaint.setColor(Theme.getColor(Theme.key_contextProgressOuter1));
+        } else if (this.currentColorType == 1) {
+            this.innerPaint.setColor(Theme.getColor(Theme.key_contextProgressInner2));
+            this.outerPaint.setColor(Theme.getColor(Theme.key_contextProgressOuter2));
+        } else if (this.currentColorType == 2) {
+            this.innerPaint.setColor(Theme.getColor(Theme.key_contextProgressInner3));
+            this.outerPaint.setColor(Theme.getColor(Theme.key_contextProgressOuter3));
         }
+        invalidate();
     }
 
     public void setVisibility(int visibility) {

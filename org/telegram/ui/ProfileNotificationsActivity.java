@@ -17,13 +17,10 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.Settings.System;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -43,7 +40,7 @@ import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Adapters.BaseFragmentAdapter;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.RadioCell;
 import org.telegram.ui.Cells.TextCheckBoxCell;
@@ -53,7 +50,9 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class ProfileNotificationsActivity extends BaseFragment implements NotificationCenterDelegate {
     private ListAdapter adapter;
@@ -86,12 +85,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private class ListAdapter extends Adapter {
         private Context context;
 
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
-
         public ListAdapter(Context ctx) {
             this.context = ctx;
         }
@@ -105,50 +98,26 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             switch (viewType) {
                 case 0:
                     view = new HeaderCell(this.context);
-                    view.setBackgroundColor(-1);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 1:
-                    view = new TextSettingsCell(this.context) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextSettingsCell(this.context);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.context);
                     break;
                 case 3:
-                    view = new TextColorCell(this.context) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextColorCell(this.context);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 4:
-                    view = new RadioCell(this.context) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new RadioCell(this.context);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 default:
-                    view = new TextCheckBoxCell(this.context) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextCheckBoxCell(this.context);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -276,11 +245,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     TextInfoPrivacyCell textCell2 = holder.itemView;
                     if (position == ProfileNotificationsActivity.this.popupInfoRow) {
                         textCell2.setText(LocaleController.getString("ProfilePopupNotificationInfo", R.string.ProfilePopupNotificationInfo));
-                        textCell2.setBackgroundResource(R.drawable.greydivider);
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.ledInfoRow) {
                         textCell2.setText(LocaleController.getString("NotificationsLedInfo", R.string.NotificationsLedInfo));
-                        textCell2.setBackgroundResource(R.drawable.greydivider_bottom);
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.priorityInfoRow) {
                         if (ProfileNotificationsActivity.this.priorityRow == -1) {
@@ -288,15 +257,15 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         } else {
                             textCell2.setText(LocaleController.getString("PriorityInfo", R.string.PriorityInfo));
                         }
-                        textCell2.setBackgroundResource(R.drawable.greydivider);
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.customInfoRow) {
                         textCell2.setText(null);
-                        textCell2.setBackgroundResource(R.drawable.greydivider);
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else if (position == ProfileNotificationsActivity.this.ringtoneInfoRow) {
                         textCell2.setText(LocaleController.getString("VoipRingtoneInfo", R.string.VoipRingtoneInfo));
-                        textCell2.setBackgroundResource(R.drawable.greydivider);
+                        textCell2.setBackgroundDrawable(Theme.getThemedDrawable(this.context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
                         return;
@@ -358,13 +327,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         public void onViewAttachedToWindow(ViewHolder holder) {
             boolean z = true;
             if (holder.getItemViewType() != 0) {
-                if (holder.getItemViewType() != 2) {
-                    if (ProfileNotificationsActivity.this.customEnabled || holder.getAdapterPosition() == ProfileNotificationsActivity.this.customRow) {
-                        holder.itemView.setBackgroundResource(R.drawable.list_selector_white);
-                    } else {
-                        holder.itemView.setBackgroundColor(-1);
-                    }
-                }
                 switch (holder.getItemViewType()) {
                     case 1:
                         TextSettingsCell textCell = holder.itemView;
@@ -549,7 +511,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.notificationsSettingsUpdated);
     }
 
-    public View createView(Context context) {
+    public View createView(final Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CustomNotifications", R.string.CustomNotifications));
@@ -565,7 +527,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         });
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
-        frameLayout.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         RecyclerListView recyclerListView = this.listView;
@@ -594,13 +556,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         Holder holder = (Holder) ProfileNotificationsActivity.this.listView.getChildViewHolder(ProfileNotificationsActivity.this.listView.getChildAt(a));
                         int type = holder.getItemViewType();
                         if (!(holder.getAdapterPosition() == ProfileNotificationsActivity.this.customRow || type == 0)) {
-                            if (type != 2) {
-                                if (ProfileNotificationsActivity.this.customEnabled || holder.getAdapterPosition() == ProfileNotificationsActivity.this.customRow) {
-                                    holder.itemView.setBackgroundResource(R.drawable.list_selector_white);
-                                } else {
-                                    holder.itemView.setBackgroundColor(-1);
-                                }
-                            }
                             switch (type) {
                                 case 1:
                                     ((TextSettingsCell) holder.itemView).setEnabled(ProfileNotificationsActivity.this.customEnabled, animators);
@@ -724,42 +679,46 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 notifyMaxCount = 2;
                             }
                             int selected = ((((notifyDelay / 60) - 1) * 10) + notifyMaxCount) - 1;
-                            View listView = new ListView(ProfileNotificationsActivity.this.getParentActivity());
-                            listView.setDividerHeight(0);
-                            listView.setClipToPadding(true);
-                            listView.setDivider(null);
+                            View recyclerListView = new RecyclerListView(ProfileNotificationsActivity.this.getParentActivity());
+                            recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+                            recyclerListView.setClipToPadding(true);
                             final int i = selected;
-                            listView.setAdapter(new BaseFragmentAdapter() {
-                                public int getCount() {
+                            recyclerListView.setAdapter(new SelectionAdapter() {
+                                public int getItemCount() {
                                     return 100;
                                 }
 
-                                public View getView(int i, View view, ViewGroup viewGroup) {
-                                    TextView textView;
-                                    if (view == null) {
-                                        view = new TextView(context1) {
-                                            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                                                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-                                            }
-                                        };
-                                        textView = (TextView) view;
-                                        textView.setGravity(17);
-                                        textView.setTextSize(1, 18.0f);
-                                        textView.setSingleLine(true);
-                                        textView.setEllipsize(TruncateAt.END);
-                                    }
-                                    textView = (TextView) view;
-                                    textView.setTextColor(i == i ? -13333567 : -14606047);
-                                    int notifyDelay = i / 10;
-                                    String times = LocaleController.formatPluralString("Times", (i % 10) + 1);
+                                public boolean isEnabled(ViewHolder holder) {
+                                    return true;
+                                }
+
+                                public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                                    View view = new TextView(context1) {
+                                        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                                            super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+                                        }
+                                    };
+                                    TextView textView = (TextView) view;
+                                    textView.setGravity(17);
+                                    textView.setTextSize(1, 18.0f);
+                                    textView.setSingleLine(true);
+                                    textView.setEllipsize(TruncateAt.END);
+                                    textView.setLayoutParams(new LayoutParams(-1, -2));
+                                    return new Holder(view);
+                                }
+
+                                public void onBindViewHolder(ViewHolder holder, int position) {
+                                    TextView textView = holder.itemView;
+                                    textView.setTextColor(Theme.getColor(position == i ? Theme.key_windowBackgroundWhiteBlueText2 : Theme.key_windowBackgroundWhiteBlackText));
+                                    int notifyDelay = position / 10;
+                                    String times = LocaleController.formatPluralString("Times", (position % 10) + 1);
                                     String minutes = LocaleController.formatPluralString("Minutes", notifyDelay + 1);
                                     textView.setText(LocaleController.formatString("SmartNotificationsDetail", R.string.SmartNotificationsDetail, times, minutes));
-                                    return view;
                                 }
                             });
-                            listView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(8.0f));
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            recyclerListView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(8.0f));
+                            recyclerListView.setOnItemClickListener(new OnItemClickListener() {
+                                public void onItemClick(View view, int position) {
                                     if (position >= 0 && position < 100) {
                                         int notifyMaxCount = (position % 10) + 1;
                                         int notifyDelay = (position / 10) + 1;
@@ -775,7 +734,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             });
                             Builder builder = new Builder(ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", R.string.SmartNotificationsAlert));
-                            builder.setView(listView);
+                            builder.setView(recyclerListView);
                             builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), new OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -870,5 +829,34 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         if (id == NotificationCenter.notificationsSettingsUpdated) {
             this.adapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[24];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextSettingsCell.class, TextColorCell.class, RadioCell.class, TextCheckBoxCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{RadioCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked);
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareUnchecked);
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareDisabled);
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareBackground);
+        themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, Theme.checkboxSquare_checkPaint, null, null, Theme.key_checkboxSquareCheck);
+        return themeDescriptionArr;
     }
 }

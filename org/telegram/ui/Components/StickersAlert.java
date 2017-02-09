@@ -8,6 +8,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
@@ -22,7 +24,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -70,7 +71,9 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.FeaturedStickerSetInfoCell;
 import org.telegram.ui.Cells.StickerEmojiCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.StickerPreviewViewer;
 
 public class StickersAlert extends BottomSheet implements NotificationCenterDelegate {
@@ -113,19 +116,13 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         void onStickerSetUninstalled();
     }
 
-    private class GridAdapter extends Adapter {
+    private class GridAdapter extends SelectionAdapter {
         private HashMap<Integer, Object> cache = new HashMap();
         private Context context;
         private HashMap<Integer, StickerSetCovered> positionsToSets = new HashMap();
         private int stickersPerRow;
         private int stickersRowCount;
         private int totalItems;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public GridAdapter(Context context) {
             this.context = context;
@@ -147,6 +144,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 return 0;
             }
             return 2;
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -557,7 +558,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                 return true;
             }
         });
-        this.emptyView.addView(new ProgressBar(context), LayoutHelper.createFrame(-2, -2, 17));
+        this.emptyView.addView(new RadialProgressView(context), LayoutHelper.createFrame(-2, -2, 17));
         this.shadow[1] = new View(context);
         this.shadow[1].setBackgroundResource(R.drawable.header_shadow_reverse);
         this.containerView.addView(this.shadow[1], LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
@@ -584,10 +585,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             }
         });
         ImageView closeButton = new ImageView(context);
-        closeButton.setImageResource(R.drawable.delete_reply);
+        closeButton.setImageResource(R.drawable.msg_panel_clear);
+        closeButton.setColorFilter(new PorterDuffColorFilter(-5723992, Mode.MULTIPLY));
         closeButton.setScaleType(ScaleType.CENTER);
         if (VERSION.SDK_INT >= 21) {
-            closeButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
+            closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
         }
         this.stickerPreviewLayout.addView(closeButton, LayoutHelper.createFrame(48, 48, 53));
         closeButton.setOnClickListener(new OnClickListener() {

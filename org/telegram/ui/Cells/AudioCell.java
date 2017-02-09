@@ -2,14 +2,15 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -18,11 +19,12 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox;
+import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class AudioCell extends FrameLayout {
-    private static Paint paint;
     private AudioEntry audioEntry;
     private TextView authorTextView;
     private CheckBox checkBox;
@@ -43,13 +45,7 @@ public class AudioCell extends FrameLayout {
         int i;
         int i2 = 3;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.playButton = new ImageView(context);
-        this.playButton.setScaleType(ScaleType.CENTER);
         View view = this.playButton;
         int i3 = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
@@ -72,7 +68,7 @@ public class AudioCell extends FrameLayout {
                     ArrayList<MessageObject> arrayList = new ArrayList();
                     arrayList.add(AudioCell.this.audioEntry.messageObject);
                     if (MediaController.getInstance().setPlaylist(arrayList, AudioCell.this.audioEntry.messageObject)) {
-                        AudioCell.this.playButton.setImageResource(R.drawable.audiosend_pause);
+                        AudioCell.this.setPlayDrawable(true);
                         if (AudioCell.this.delegate != null) {
                             AudioCell.this.delegate.startedPlayingAudio(AudioCell.this.audioEntry.messageObject);
                             return;
@@ -82,11 +78,11 @@ public class AudioCell extends FrameLayout {
                     return;
                 }
                 MediaController.getInstance().pauseAudio(AudioCell.this.audioEntry.messageObject);
-                AudioCell.this.playButton.setImageResource(R.drawable.audiosend_play);
+                AudioCell.this.setPlayDrawable(false);
             }
         });
         this.titleTextView = new TextView(context);
-        this.titleTextView.setTextColor(-14606047);
+        this.titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.titleTextView.setTextSize(1, 16.0f);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleTextView.setLines(1);
@@ -102,7 +98,7 @@ public class AudioCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 7.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.genreTextView = new TextView(context);
-        this.genreTextView.setTextColor(-7697782);
+        this.genreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.genreTextView.setTextSize(1, 14.0f);
         this.genreTextView.setLines(1);
         this.genreTextView.setMaxLines(1);
@@ -123,7 +119,7 @@ public class AudioCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 28.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.authorTextView = new TextView(context);
-        this.authorTextView.setTextColor(-7697782);
+        this.authorTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.authorTextView.setTextSize(1, 14.0f);
         this.authorTextView.setLines(1);
         this.authorTextView.setMaxLines(1);
@@ -144,7 +140,7 @@ public class AudioCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 44.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.timeTextView = new TextView(context);
-        this.timeTextView.setTextColor(-6710887);
+        this.timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.timeTextView.setTextSize(1, 13.0f);
         this.timeTextView.setLines(1);
         this.timeTextView.setMaxLines(1);
@@ -166,7 +162,7 @@ public class AudioCell extends FrameLayout {
         addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
         this.checkBox = new CheckBox(context, R.drawable.round_check2);
         this.checkBox.setVisibility(0);
-        this.checkBox.setColor(-14043401);
+        this.checkBox.setColor(Theme.getColor(Theme.key_musicPicker_checkbox), Theme.getColor(Theme.key_musicPicker_checkboxCheck));
         view2 = this.checkBox;
         if (!LocaleController.isRTL) {
             i2 = 5;
@@ -174,25 +170,55 @@ public class AudioCell extends FrameLayout {
         addView(view2, LayoutHelper.createFrame(22, 22.0f, i2 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
     }
 
+    private void setPlayDrawable(boolean play) {
+        Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(46.0f), Theme.getColor(Theme.key_musicPicker_buttonBackground), Theme.getColor(Theme.key_musicPicker_buttonBackground));
+        Drawable drawable = getResources().getDrawable(play ? R.drawable.audiosend_pause : R.drawable.audiosend_play);
+        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_musicPicker_buttonIcon), Mode.MULTIPLY));
+        CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
+        combinedDrawable.setCustomSize(AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));
+        this.playButton.setBackgroundDrawable(combinedDrawable);
+    }
+
+    public ImageView getPlayButton() {
+        return this.playButton;
+    }
+
+    public TextView getTitleTextView() {
+        return this.titleTextView;
+    }
+
+    public TextView getGenreTextView() {
+        return this.genreTextView;
+    }
+
+    public TextView getTimeTextView() {
+        return this.timeTextView;
+    }
+
+    public TextView getAuthorTextView() {
+        return this.authorTextView;
+    }
+
+    public CheckBox getCheckBox() {
+        return this.checkBox;
+    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(72.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(72.0f), NUM));
     }
 
     public void setAudio(AudioEntry entry, boolean divider, boolean checked) {
-        boolean z;
+        boolean z = true;
         this.audioEntry = entry;
         this.titleTextView.setText(this.audioEntry.title);
         this.genreTextView.setText(this.audioEntry.genre);
         this.authorTextView.setText(this.audioEntry.author);
         this.timeTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(this.audioEntry.duration / 60), Integer.valueOf(this.audioEntry.duration % 60)}));
-        ImageView imageView = this.playButton;
-        int i = (!MediaController.getInstance().isPlayingAudio(this.audioEntry.messageObject) || MediaController.getInstance().isAudioPaused()) ? R.drawable.audiosend_play : R.drawable.audiosend_pause;
-        imageView.setImageResource(i);
+        boolean z2 = MediaController.getInstance().isPlayingAudio(this.audioEntry.messageObject) && !MediaController.getInstance().isAudioPaused();
+        setPlayDrawable(z2);
         this.needDivider = divider;
         if (divider) {
             z = false;
-        } else {
-            z = true;
         }
         setWillNotDraw(z);
         this.checkBox.setChecked(checked, false);
@@ -212,7 +238,7 @@ public class AudioCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

@@ -41,11 +41,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.InputDeviceCompat;
 import android.view.KeyEvent;
 import java.math.BigInteger;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -182,6 +178,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private MediaPlayer ringtonePlayer;
     private SoundPool soundPool;
     private int spBusyId;
+    private int spConnectingId;
     private int spEndId;
     private int spFailedID;
     private int spPlayID;
@@ -247,6 +244,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             registerReceiver(this.receiver, filter);
             ConnectionsManager.getInstance().setAppPaused(false, false);
             this.soundPool = new SoundPool(1, 0, 0);
+            this.spConnectingId = this.soundPool.load(this, R.raw.voip_connecting, 1);
             this.spRingbackID = this.soundPool.load(this, R.raw.voip_ringback, 1);
             this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
             this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
@@ -351,6 +349,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private void startOutgoingCall() {
         configureDeviceForCall();
         showNotification();
+        startConnectingSound();
         dispatchStateChanged(9);
         Utilities.random.nextBytes(new byte[256]);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
@@ -503,6 +502,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void acceptIncomingCall() {
         stopRinging();
         showNotification();
+        configureDeviceForCall();
+        startConnectingSound();
         dispatchStateChanged(7);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -575,7 +576,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                 if (error == null) {
                                     FileLog.w(VoIPService.TAG, "accept call ok! " + response);
                                     VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                    VoIPService.this.configureDeviceForCall();
                                     VoIPService.this.initiateActualEncryptedCall();
                                     return;
                                 }
@@ -676,9 +676,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         } else if (this.currentState == 8 && call.receive_date != 0) {
             dispatchStateChanged(11);
             FileLog.d(TAG, "!!!!!! CALL RECEIVED");
-            if (this.spPlayID == 0) {
-                this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
+            if (this.spPlayID != 0) {
+                this.soundPool.stop(this.spPlayID);
             }
+            this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
             if (this.timeoutRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
             }
@@ -743,10 +744,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void initiateActualEncryptedCall() {
-        if (this.spPlayID != 0) {
-            this.soundPool.stop(this.spPlayID);
-            this.spPlayID = 0;
-        }
         if (this.timeoutRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
             this.timeoutRunnable = null;
@@ -875,6 +872,27 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         startForeground(ID_INCOMING_CALL_NOTIFICATION, builder.getNotification());
     }
 
+    private void startConnectingSound() {
+        if (this.spPlayID != 0) {
+            this.soundPool.stop(this.spPlayID);
+        }
+        this.spPlayID = this.soundPool.play(this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
+        if (this.spPlayID == 0) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    if (VoIPService.sharedInstance != null) {
+                        if (VoIPService.this.spPlayID == 0) {
+                            VoIPService.this.spPlayID = VoIPService.this.soundPool.play(VoIPService.this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
+                        }
+                        if (VoIPService.this.spPlayID == 0) {
+                            AndroidUtilities.runOnUIThread(this, 100);
+                        }
+                    }
+                }
+            }, 100);
+        }
+    }
+
     private void callFailed() {
         if (this.controller != null && this.controllerStarted) {
             this.lastError = this.controller.getLastError();
@@ -928,6 +946,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             return;
         }
         if (newState == 3) {
+            if (this.spPlayID != 0) {
+                this.soundPool.stop(this.spPlayID);
+                this.spPlayID = 0;
+            }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     if (VoIPService.this.controller != null) {
@@ -1012,28 +1034,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (this.controller != null) {
             this.controller.setNetworkType(type);
         }
-    }
-
-    private String getLanIP() {
-        try {
-            Enumeration<NetworkInterface> ifs = NetworkInterface.getNetworkInterfaces();
-            while (ifs.hasMoreElements()) {
-                NetworkInterface i = (NetworkInterface) ifs.nextElement();
-                if (!(!i.isUp() || i.isLoopback() || i.isPointToPoint())) {
-                    Enumeration<InetAddress> addrs = i.getInetAddresses();
-                    while (addrs.hasMoreElements()) {
-                        InetAddress addr = (InetAddress) addrs.nextElement();
-                        if (!addr.isLoopbackAddress() && (addr instanceof Inet4Address)) {
-                            return addr.getHostAddress();
-                        }
-                    }
-                    continue;
-                }
-            }
-        } catch (Throwable e) {
-            FileLog.e("tmessages", e);
-        }
-        return "0.0.0.0";
     }
 
     private void configureDeviceForCall() {

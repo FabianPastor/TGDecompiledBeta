@@ -56,7 +56,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.widget.AbsListView;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -91,8 +90,6 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.ForegroundDetector;
-import org.telegram.ui.Components.NumberPicker;
-import org.telegram.ui.Components.NumberPicker.Formatter;
 import org.telegram.ui.Components.TypefaceSpan;
 
 public class AndroidUtilities {
@@ -278,8 +275,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -609,100 +606,6 @@ public class AndroidUtilities {
         return photoSize.intValue();
     }
 
-    public static String formatTTLString(int ttl) {
-        if (ttl < 60) {
-            return LocaleController.formatPluralString("Seconds", ttl);
-        }
-        if (ttl < 3600) {
-            return LocaleController.formatPluralString("Minutes", ttl / 60);
-        }
-        if (ttl < 86400) {
-            return LocaleController.formatPluralString("Hours", (ttl / 60) / 60);
-        }
-        if (ttl < 604800) {
-            return LocaleController.formatPluralString("Days", ((ttl / 60) / 60) / 24);
-        }
-        int days = ((ttl / 60) / 60) / 24;
-        if (ttl % 7 == 0) {
-            return LocaleController.formatPluralString("Weeks", days / 7);
-        }
-        return String.format("%s %s", new Object[]{LocaleController.formatPluralString("Weeks", days / 7), LocaleController.formatPluralString("Days", days % 7)});
-    }
-
-    public static Builder buildTTLAlert(Context context, final EncryptedChat encryptedChat) {
-        Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("MessageLifetime", R.string.MessageLifetime));
-        final NumberPicker numberPicker = new NumberPicker(context);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(20);
-        if (encryptedChat.ttl > 0 && encryptedChat.ttl < 16) {
-            numberPicker.setValue(encryptedChat.ttl);
-        } else if (encryptedChat.ttl == 30) {
-            numberPicker.setValue(16);
-        } else if (encryptedChat.ttl == 60) {
-            numberPicker.setValue(17);
-        } else if (encryptedChat.ttl == 3600) {
-            numberPicker.setValue(18);
-        } else if (encryptedChat.ttl == 86400) {
-            numberPicker.setValue(19);
-        } else if (encryptedChat.ttl == 604800) {
-            numberPicker.setValue(20);
-        } else if (encryptedChat.ttl == 0) {
-            numberPicker.setValue(0);
-        }
-        numberPicker.setFormatter(new Formatter() {
-            public String format(int value) {
-                if (value == 0) {
-                    return LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
-                }
-                if (value >= 1 && value < 16) {
-                    return AndroidUtilities.formatTTLString(value);
-                }
-                if (value == 16) {
-                    return AndroidUtilities.formatTTLString(30);
-                }
-                if (value == 17) {
-                    return AndroidUtilities.formatTTLString(60);
-                }
-                if (value == 18) {
-                    return AndroidUtilities.formatTTLString(3600);
-                }
-                if (value == 19) {
-                    return AndroidUtilities.formatTTLString(86400);
-                }
-                if (value == 20) {
-                    return AndroidUtilities.formatTTLString(604800);
-                }
-                return "";
-            }
-        });
-        builder.setView(numberPicker);
-        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                int oldValue = encryptedChat.ttl;
-                which = numberPicker.getValue();
-                if (which >= 0 && which < 16) {
-                    encryptedChat.ttl = which;
-                } else if (which == 16) {
-                    encryptedChat.ttl = 30;
-                } else if (which == 17) {
-                    encryptedChat.ttl = 60;
-                } else if (which == 18) {
-                    encryptedChat.ttl = 3600;
-                } else if (which == 19) {
-                    encryptedChat.ttl = 86400;
-                } else if (which == 20) {
-                    encryptedChat.ttl = 604800;
-                }
-                if (oldValue != encryptedChat.ttl) {
-                    SecretChatHelper.getInstance().sendTTLMessage(encryptedChat, null);
-                    MessagesStorage.getInstance().updateEncryptedChatTTL(encryptedChat);
-                }
-            }
-        });
-        return builder;
-    }
-
     public static void clearCursorDrawable(EditText editText) {
         if (editText != null) {
             try {
@@ -952,27 +855,6 @@ public class AndroidUtilities {
                 field = ScrollView.class.getDeclaredField("mEdgeGlowBottom");
                 field.setAccessible(true);
                 EdgeEffect mEdgeGlowBottom = (EdgeEffect) field.get(scrollView);
-                if (mEdgeGlowBottom != null) {
-                    mEdgeGlowBottom.setColor(color);
-                }
-            } catch (Throwable e) {
-                FileLog.e("tmessages", e);
-            }
-        }
-    }
-
-    public static void setListViewEdgeEffectColor(AbsListView listView, int color) {
-        if (VERSION.SDK_INT >= 21) {
-            try {
-                Field field = AbsListView.class.getDeclaredField("mEdgeGlowTop");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowTop = (EdgeEffect) field.get(listView);
-                if (mEdgeGlowTop != null) {
-                    mEdgeGlowTop.setColor(color);
-                }
-                field = AbsListView.class.getDeclaredField("mEdgeGlowBottom");
-                field.setAccessible(true);
-                EdgeEffect mEdgeGlowBottom = (EdgeEffect) field.get(listView);
                 if (mEdgeGlowBottom != null) {
                     mEdgeGlowBottom.setColor(color);
                 }

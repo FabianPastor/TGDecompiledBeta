@@ -78,6 +78,7 @@ public class MenuDrawable extends Drawable {
     }
 
     public void setColorFilter(ColorFilter cf) {
+        this.paint.setColorFilter(cf);
     }
 
     public int getOpacity() {

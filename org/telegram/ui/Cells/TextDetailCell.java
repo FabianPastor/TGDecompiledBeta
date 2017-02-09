@@ -1,6 +1,8 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -9,6 +11,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextDetailCell extends FrameLayout {
@@ -22,7 +25,7 @@ public class TextDetailCell extends FrameLayout {
         int i3 = 5;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -36,7 +39,7 @@ public class TextDetailCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-7697782);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -57,6 +60,7 @@ public class TextDetailCell extends FrameLayout {
         addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
         View view2 = this.imageView;
         if (!LocaleController.isRTL) {
             i3 = 3;

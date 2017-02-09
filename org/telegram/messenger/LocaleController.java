@@ -838,10 +838,6 @@ public class LocaleController {
         }
     }
 
-    private void loadCurrentLocale() {
-        this.localeValues.clear();
-    }
-
     public static String getCurrentLanguageName() {
         return getString("LanguageName", R.string.LanguageName);
     }
@@ -887,6 +883,37 @@ public class LocaleController {
             FileLog.e("tmessages", e);
             return "LOC_ERR: " + key;
         }
+    }
+
+    public static String formatTTLString(int ttl) {
+        if (ttl < 60) {
+            return formatPluralString("Seconds", ttl);
+        }
+        if (ttl < 3600) {
+            return formatPluralString("Minutes", ttl / 60);
+        }
+        if (ttl < 86400) {
+            return formatPluralString("Hours", (ttl / 60) / 60);
+        }
+        if (ttl < 604800) {
+            return formatPluralString("Days", ((ttl / 60) / 60) / 24);
+        }
+        int days = ((ttl / 60) / 60) / 24;
+        if (ttl % 7 == 0) {
+            return formatPluralString("Weeks", days / 7);
+        }
+        return String.format("%s %s", new Object[]{formatPluralString("Weeks", days / 7), formatPluralString("Days", days % 7)});
+    }
+
+    public static String formatCurrencyString(int amount, String type) {
+        switch (type.hashCode()) {
+            case 116102:
+                if (type.equals("usd")) {
+                    break;
+                }
+                break;
+        }
+        return String.format("$%.2f", new Object[]{Float.valueOf(((float) amount) / 100.0f)});
     }
 
     public static String formatStringSimple(String string, Object... args) {

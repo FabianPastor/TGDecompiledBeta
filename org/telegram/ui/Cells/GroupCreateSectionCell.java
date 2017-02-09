@@ -2,6 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -15,16 +17,18 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class GroupCreateSectionCell extends FrameLayout {
     private Drawable drawable = getResources().getDrawable(R.drawable.shadowdown);
-    private TextView textView = new TextView(getContext());
+    private TextView textView;
 
     public GroupCreateSectionCell(Context context) {
         int i;
         int i2 = 5;
         super(context);
-        setBackgroundColor(-855310);
+        setBackgroundColor(Theme.getColor(Theme.key_graySection));
+        this.drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_groupcreate_sectionShadow), Mode.MULTIPLY));
+        this.textView = new TextView(getContext());
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setTextColor(Theme.GROUP_CREATE_SECTION_TEXT_COLOR);
+        this.textView.setTextColor(Theme.getColor(Theme.key_groupcreate_sectionText));
         TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;

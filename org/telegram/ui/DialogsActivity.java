@@ -12,6 +12,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.Outline;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -25,8 +28,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -62,16 +65,26 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 import org.telegram.ui.Adapters.DialogsSearchAdapter.DialogsSearchAdapterDelegate;
 import org.telegram.ui.Cells.DialogCell;
+import org.telegram.ui.Cells.DividerCell;
+import org.telegram.ui.Cells.DrawerActionCell;
+import org.telegram.ui.Cells.DrawerProfileCell;
+import org.telegram.ui.Cells.GraySectionCell;
+import org.telegram.ui.Cells.HashtagSearchCell;
 import org.telegram.ui.Cells.HintDialogCell;
+import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PlayerView;
+import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
@@ -85,6 +98,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private DialogsAdapter dialogsAdapter;
     private DialogsSearchAdapter dialogsSearchAdapter;
     private int dialogsType;
+    private TextView emptyTextView1;
+    private TextView emptyTextView2;
     private LinearLayout emptyView;
     private ImageView floatingButton;
     private boolean floatingHidden;
@@ -95,9 +110,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private long openedDialogId;
     private ActionBarMenuItem passcodeItem;
     private AlertDialog permissionDialog;
+    private PlayerView playerView;
     private int prevPosition;
     private int prevTop;
-    private ProgressBar progressView;
+    private RadialProgressView progressView;
     private boolean scrollUpdated;
     private EmptyTextProgressView searchEmptyView;
     private String searchString;
@@ -106,6 +122,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private String selectAlertString;
     private String selectAlertStringGroup;
     private long selectedDialog;
+    private RecyclerView sideMenu;
 
     public interface DialogsActivityDelegate {
         void didSelectDialog(DialogsActivity dialogsActivity, long j, boolean z);
@@ -176,13 +193,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     public View createView(Context context) {
         float f;
+        int i;
         float f2;
+        float f3;
         this.searching = false;
         this.searchWas = false;
         final Context context2 = context;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                Theme.loadRecources(context2);
+                Theme.loadResources(context2);
+                Theme.createChatResources(context2, false);
             }
         });
         ActionBarMenu menu = this.actionBar.createMenu();
@@ -649,31 +669,40 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return true;
             }
         });
-        View textView = new TextView(context);
-        textView.setText(LocaleController.getString("NoChats", R.string.NoChats));
-        textView.setTextColor(-6974059);
-        textView.setGravity(17);
-        textView.setTextSize(1, 20.0f);
-        this.emptyView.addView(textView, LayoutHelper.createLinear(-2, -2));
-        textView = new TextView(context);
+        this.emptyTextView1 = new TextView(context);
+        this.emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
+        this.emptyTextView1.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
+        this.emptyTextView1.setGravity(17);
+        this.emptyTextView1.setTextSize(1, 20.0f);
+        this.emptyView.addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2));
+        this.emptyTextView2 = new TextView(context);
         String help = LocaleController.getString("NoChatsHelp", R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace('\n', ' ');
         }
-        textView.setText(help);
-        textView.setTextColor(-6974059);
-        textView.setTextSize(1, 15.0f);
-        textView.setGravity(17);
-        textView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(8.0f), 0);
-        textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-        this.emptyView.addView(textView, LayoutHelper.createLinear(-2, -2));
-        this.progressView = new ProgressBar(context);
+        this.emptyTextView2.setText(help);
+        this.emptyTextView2.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
+        this.emptyTextView2.setTextSize(1, 15.0f);
+        this.emptyTextView2.setGravity(17);
+        this.emptyTextView2.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(8.0f), 0);
+        this.emptyTextView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+        this.emptyView.addView(this.emptyTextView2, LayoutHelper.createLinear(-2, -2));
+        this.progressView = new RadialProgressView(context);
         this.progressView.setVisibility(8);
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-2, -2, 17));
         this.floatingButton = new ImageView(context);
         this.floatingButton.setVisibility(this.onlySelect ? 8 : 0);
         this.floatingButton.setScaleType(ScaleType.CENTER);
-        this.floatingButton.setBackgroundResource(R.drawable.floating_states);
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
+        if (VERSION.SDK_INT < 21) {
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
+            Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
+            combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+            drawable = combinedDrawable;
+        }
+        this.floatingButton.setBackgroundDrawable(drawable);
+        this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), Mode.MULTIPLY));
         this.floatingButton.setImageResource(R.drawable.floating_pencil);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -688,18 +717,29 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             });
         }
         View view = this.floatingButton;
-        int i = (LocaleController.isRTL ? 3 : 5) | 80;
-        if (LocaleController.isRTL) {
-            f = 14.0f;
+        int i2 = VERSION.SDK_INT >= 21 ? 56 : 60;
+        if (VERSION.SDK_INT >= 21) {
+            f = 56.0f;
         } else {
-            f = 0.0f;
+            f = BitmapDescriptorFactory.HUE_YELLOW;
         }
         if (LocaleController.isRTL) {
-            f2 = 0.0f;
+            i = 3;
         } else {
+            i = 5;
+        }
+        i |= 80;
+        if (LocaleController.isRTL) {
             f2 = 14.0f;
+        } else {
+            f2 = 0.0f;
         }
-        frameLayout.addView(view, LayoutHelper.createFrame(-2, -2.0f, i, f, 0.0f, f2, 14.0f));
+        if (LocaleController.isRTL) {
+            f3 = 0.0f;
+        } else {
+            f3 = 14.0f;
+        }
+        frameLayout.addView(view, LayoutHelper.createFrame(i2, f, i, f2, 0.0f, f3, 14.0f));
         this.floatingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Bundle args = new Bundle();
@@ -831,7 +871,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.actionBar.openSearchField(this.searchString);
         }
         if (!this.onlySelect && this.dialogsType == 0) {
-            frameLayout.addView(new PlayerView(context, this), LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
+            View playerView = new PlayerView(context, this);
+            this.playerView = playerView;
+            frameLayout.addView(playerView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
         }
         return this.fragmentView;
     }
@@ -1044,6 +1086,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         return null;
     }
 
+    public void setSideMenu(RecyclerView recyclerView) {
+        this.sideMenu = recyclerView;
+    }
+
     private void updatePasscodeButton() {
         if (this.passcodeItem != null) {
             if (UserConfig.passcodeHash.length() == 0 || this.searching) {
@@ -1196,5 +1242,108 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             showDialog(builder.create());
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        ThemeDescriptionDelegate сellDelegate = new ThemeDescriptionDelegate() {
+            public void didSetColor(int color) {
+                int a;
+                int count = DialogsActivity.this.listView.getChildCount();
+                for (a = 0; a < count; a++) {
+                    View child = DialogsActivity.this.listView.getChildAt(a);
+                    if (child instanceof ProfileSearchCell) {
+                        ((ProfileSearchCell) child).update(0);
+                    } else if (child instanceof DialogCell) {
+                        ((DialogCell) child).update(0);
+                    }
+                }
+                RecyclerListView recyclerListView = DialogsActivity.this.dialogsSearchAdapter.getInnerListView();
+                if (recyclerListView != null) {
+                    count = recyclerListView.getChildCount();
+                    for (a = 0; a < count; a++) {
+                        child = recyclerListView.getChildAt(a);
+                        if (child instanceof HintDialogCell) {
+                            ((HintDialogCell) child).update();
+                        }
+                    }
+                }
+            }
+        };
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[74];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, Theme.key_actionBarDefaultSearch);
+        themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, Theme.key_actionBarDefaultSearchPlaceholder);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[11] = new ThemeDescription(this.searchEmptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[12] = new ThemeDescription(this.searchEmptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[13] = new ThemeDescription(this.emptyTextView1, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[14] = new ThemeDescription(this.emptyTextView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_emptyListPlaceholder);
+        themeDescriptionArr[15] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_chats_actionIcon);
+        themeDescriptionArr[16] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_chats_actionBackground);
+        themeDescriptionArr[17] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_chats_actionPressedBackground);
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_photoDrawable, Theme.avatar_broadcastDrawable}, null, Theme.key_avatar_text);
+        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundRed);
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundOrange);
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundViolet);
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundGreen);
+        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundCyan);
+        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundBlue);
+        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_avatar_backgroundPink);
+        themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countPaint, null, null, Theme.key_chats_unreadCounter);
+        themeDescriptionArr[27] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countGrayPaint, null, null, Theme.key_chats_unreadCounterMuted);
+        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, null, null, Theme.key_chats_unreadCounterText);
+        themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, Theme.key_chats_name);
+        themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, Theme.dialogs_nameEncryptedPaint, null, null, Theme.key_chats_secretName);
+        themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_lockDrawable}, null, Theme.key_chats_secretIcon);
+        themeDescriptionArr[32] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, null, Theme.key_chats_nameIcon);
+        themeDescriptionArr[33] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_pinnedDrawable}, null, Theme.key_chats_pinnedIcon);
+        themeDescriptionArr[34] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePaint, null, null, Theme.key_chats_message);
+        themeDescriptionArr[35] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_chats_nameMessage);
+        themeDescriptionArr[36] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_chats_draft);
+        themeDescriptionArr[37] = new ThemeDescription(null, 0, null, null, null, сellDelegate, Theme.key_chats_attachMessage);
+        themeDescriptionArr[38] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_messagePrintingPaint, null, null, Theme.key_chats_actionMessage);
+        themeDescriptionArr[39] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_timePaint, null, null, Theme.key_chats_date);
+        themeDescriptionArr[40] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_pinnedPaint, null, null, Theme.key_chats_pinnedOverlay);
+        themeDescriptionArr[41] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_tabletSeletedPaint, null, null, Theme.key_chats_tabletSelectedOverlay);
+        themeDescriptionArr[42] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_checkDrawable, Theme.dialogs_halfCheckDrawable}, null, Theme.key_chats_sentCheck);
+        themeDescriptionArr[43] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_clockDrawable}, null, Theme.key_chats_sentClock);
+        themeDescriptionArr[44] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_errorPaint, null, null, Theme.key_chats_sentError);
+        themeDescriptionArr[45] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_errorDrawable}, null, Theme.key_chats_sentErrorIcon);
+        themeDescriptionArr[46] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, Theme.key_chats_verifiedCheck);
+        themeDescriptionArr[47] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedDrawable}, null, Theme.key_chats_verifiedBackground);
+        themeDescriptionArr[48] = new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_muteDrawable}, null, Theme.key_chats_muteIcon);
+        themeDescriptionArr[49] = new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_chats_menuBackground);
+        themeDescriptionArr[50] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, Theme.key_chats_menuName);
+        themeDescriptionArr[51] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, Theme.key_chats_menuPhone);
+        themeDescriptionArr[52] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, Theme.key_chats_menuPhoneCats);
+        themeDescriptionArr[53] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, Theme.key_chats_menuCloudBackgroundCats);
+        themeDescriptionArr[54] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, new String[]{"cloudDrawable"}, null, null, null, Theme.key_chats_menuCloud);
+        themeDescriptionArr[55] = new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemIcon);
+        themeDescriptionArr[56] = new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerActionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_chats_menuItemText);
+        themeDescriptionArr[57] = new ThemeDescription(this.sideMenu, 0, new Class[]{DividerCell.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[58] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[59] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, Theme.key_windowBackgroundWhiteGrayText3);
+        themeDescriptionArr[60] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, Theme.key_windowBackgroundWhiteBlueText3);
+        themeDescriptionArr[61] = new ThemeDescription(this.listView, 0, new Class[]{GraySectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2);
+        themeDescriptionArr[62] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, Theme.key_graySection);
+        themeDescriptionArr[63] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HashtagSearchCell.class}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[64] = new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_progressCircle);
+        themeDescriptionArr[65] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countPaint, null, null, Theme.key_chats_unreadCounter);
+        themeDescriptionArr[66] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countGrayPaint, null, null, Theme.key_chats_unreadCounterMuted);
+        themeDescriptionArr[67] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, Theme.dialogs_countTextPaint, null, null, Theme.key_chats_unreadCounterText);
+        themeDescriptionArr[68] = new ThemeDescription(this.dialogsSearchAdapter.getInnerListView(), 0, new Class[]{HintDialogCell.class}, new String[]{"nameTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[69] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{PlayerView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
+        themeDescriptionArr[70] = new ThemeDescription(this.playerView, 0, new Class[]{PlayerView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
+        themeDescriptionArr[71] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PlayerView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
+        themeDescriptionArr[72] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PlayerView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
+        themeDescriptionArr[73] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{PlayerView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
+        return themeDescriptionArr;
     }
 }

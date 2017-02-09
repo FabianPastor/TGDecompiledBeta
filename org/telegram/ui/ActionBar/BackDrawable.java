@@ -22,16 +22,21 @@ public class BackDrawable extends Drawable {
     private long lastFrameTime;
     private Paint paint = new Paint(1);
     private boolean reverseAngle = false;
-    private boolean rotatedColor = true;
+    private boolean rotated = true;
+    private int rotatedColor = Theme.ATTACH_SHEET_TEXT_COLOR;
 
     public BackDrawable(boolean close) {
-        this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.alwaysClose = close;
     }
 
     public void setColor(int value) {
         this.color = value;
+        invalidateSelf();
+    }
+
+    public void setRotatedColor(int value) {
+        this.rotatedColor = value;
         invalidateSelf();
     }
 
@@ -62,8 +67,8 @@ public class BackDrawable extends Drawable {
         this.animationTime = value;
     }
 
-    public void setRotatedColor(boolean value) {
-        this.rotatedColor = value;
+    public void setRotated(boolean value) {
+        this.rotated = value;
     }
 
     public void draw(Canvas canvas) {
@@ -81,8 +86,7 @@ public class BackDrawable extends Drawable {
             this.lastFrameTime = System.currentTimeMillis();
             invalidateSelf();
         }
-        int rD = this.rotatedColor ? (int) (-138.0f * this.currentRotation) : 0;
-        this.paint.setColor(Color.rgb(Color.red(this.color) + rD, Color.green(this.color) + rD, Color.blue(this.color) + rD));
+        this.paint.setColor(Color.rgb(Color.red(this.color) + (this.rotated ? (int) (((float) (Color.red(this.rotatedColor) - Color.red(this.color))) * this.currentRotation) : 0), Color.green(this.color) + (this.rotated ? (int) (((float) (Color.green(this.rotatedColor) - Color.green(this.color))) * this.currentRotation) : 0), Color.blue(this.color) + (this.rotated ? (int) (((float) (Color.blue(this.rotatedColor) - Color.blue(this.color))) * this.currentRotation) : 0)));
         canvas.save();
         canvas.translate((float) (getIntrinsicWidth() / 2), (float) (getIntrinsicHeight() / 2));
         float rotation = this.currentRotation;

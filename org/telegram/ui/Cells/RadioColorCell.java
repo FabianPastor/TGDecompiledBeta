@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -13,7 +12,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
 
 public class RadioColorCell extends FrameLayout {
-    private static Paint paint;
     private RadioButton radioButton;
     private TextView textView;
 
@@ -22,14 +20,9 @@ public class RadioColorCell extends FrameLayout {
         int i2 = 0;
         int i3 = 5;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
-        this.radioButton.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+        this.radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
         View view = this.radioButton;
         int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
         float f = (float) (LocaleController.isRTL ? 0 : 18);
@@ -38,7 +31,7 @@ public class RadioColorCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -58,7 +51,7 @@ public class RadioColorCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     public void setCheckColor(int color1, int color2) {

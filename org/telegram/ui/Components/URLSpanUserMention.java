@@ -10,7 +10,7 @@ public class URLSpanUserMention extends URLSpanNoUnderline {
 
     public void updateDrawState(TextPaint ds) {
         super.updateDrawState(ds);
-        ds.setColor(Theme.MSG_LINK_TEXT_COLOR);
+        ds.setColor(Theme.getColor(Theme.key_chat_messageLink));
         ds.setUnderlineText(false);
     }
 }

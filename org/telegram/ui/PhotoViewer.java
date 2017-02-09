@@ -1192,7 +1192,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.actionBar = new ActionBar(activity);
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
-            this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
+            this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
@@ -1277,7 +1277,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                                 int dp;
                                                 View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
                                                 CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity);
-                                                cell.setBackgroundResource(R.drawable.list_selector);
+                                                cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                                 if (currentChat != null) {
                                                     cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
                                                 } else {
@@ -1427,11 +1427,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.masksItem = menu.addItem(13, (int) R.drawable.ic_masks_msk1);
             this.muteItem = menu.addItem(12, (int) R.drawable.volume_on);
             this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
-            this.menuItem.addSubItem(11, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp), 0);
-            this.menuItem.addSubItem(2, LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia), 0);
-            this.menuItem.addSubItem(10, LocaleController.getString("ShareFile", R.string.ShareFile), 0);
-            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
-            this.menuItem.addSubItem(6, LocaleController.getString("Delete", R.string.Delete), 0);
+            this.menuItem.addSubItem(11, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            this.menuItem.addSubItem(2, LocaleController.getString("ShowAllMedia", R.string.ShowAllMedia));
+            this.menuItem.addSubItem(10, LocaleController.getString("ShareFile", R.string.ShareFile));
+            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+            this.menuItem.addSubItem(6, LocaleController.getString("Delete", R.string.Delete));
             this.bottomLayout = new FrameLayout(this.actvityContext);
             this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.containerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
@@ -1488,7 +1488,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.shareButton = new ImageView(this.containerView.getContext());
             this.shareButton.setImageResource(R.drawable.share);
             this.shareButton.setScaleType(ScaleType.CENTER);
-            this.shareButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.bottomLayout.addView(this.shareButton, LayoutHelper.createFrame(50, -1, 53));
             this.shareButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -1628,7 +1628,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.tuneItem = new ImageView(this.parentActivity);
             this.tuneItem.setScaleType(ScaleType.CENTER);
             this.tuneItem.setImageResource(R.drawable.photo_tools);
-            this.tuneItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             itemsLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
             this.tuneItem.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -1638,7 +1638,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.paintItem = new ImageView(this.parentActivity);
             this.paintItem.setScaleType(ScaleType.CENTER);
             this.paintItem.setImageResource(R.drawable.photo_paint);
-            this.paintItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.paintItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             itemsLayout.addView(this.paintItem, LayoutHelper.createLinear(56, 48));
             this.paintItem.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -1648,7 +1648,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.cropItem = new ImageView(this.parentActivity);
             this.cropItem.setScaleType(ScaleType.CENTER);
             this.cropItem.setImageResource(R.drawable.photo_crop);
-            this.cropItem.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.cropItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             itemsLayout.addView(this.cropItem, LayoutHelper.createLinear(56, 48));
             this.cropItem.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -1681,7 +1681,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.resetButton.setTextSize(1, 14.0f);
             this.resetButton.setTextColor(-1);
             this.resetButton.setGravity(17);
-            this.resetButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false));
+            this.resetButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
             this.resetButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
             this.resetButton.setText(LocaleController.getString("Reset", R.string.CropReset).toUpperCase());
             this.resetButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -1732,7 +1732,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.checkImageView.setDrawBackground(true);
             this.checkImageView.setSize(45);
             this.checkImageView.setCheckOffset(AndroidUtilities.dp(1.0f));
-            this.checkImageView.setColor(-12793105);
+            this.checkImageView.setColor(-12793105, -1);
             this.checkImageView.setVisibility(8);
             FrameLayoutDrawer frameLayoutDrawer = this.containerView;
             View view = this.checkImageView;
@@ -3486,7 +3486,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.captionTextView = this.captionTextViewOld;
             this.captionTextViewOld = this.captionTextViewNew;
             this.captionTextViewNew = this.captionTextView;
-            CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), MessageObject.getTextPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            Theme.createChatResources(null, true);
+            CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             this.captionTextView.setTag(str);
             try {
                 this.captionTextView.setText(str);

@@ -13,13 +13,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextColorCell extends FrameLayout {
     private static Paint colorPaint;
     public static final int[] colors = new int[]{-1031100, -29183, -12769, -8792480, -12521994, -12140801, -2984711, -45162, -4473925};
     public static final int[] colorsToSave = new int[]{SupportMenu.CATEGORY_MASK, -29183, -12769, -16711936, -12521994, -16776961, -2984711, -45162, -1};
-    private static Paint paint;
     private float alpha = 1.0f;
     private int currentColor;
     private boolean needDivider;
@@ -27,16 +27,13 @@ public class TextColorCell extends FrameLayout {
 
     public TextColorCell(Context context) {
         int i;
-        int i2 = 3;
+        int i2 = 5;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
+        if (colorPaint == null) {
             colorPaint = new Paint(1);
         }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -49,8 +46,8 @@ public class TextColorCell extends FrameLayout {
         }
         textView.setGravity(i | 16);
         View view = this.textView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
+        if (!LocaleController.isRTL) {
+            i2 = 3;
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
     }
@@ -65,7 +62,7 @@ public class TextColorCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
     }
 
     public void setTextAndColor(String text, int color, boolean divider) {
@@ -110,7 +107,7 @@ public class TextColorCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);

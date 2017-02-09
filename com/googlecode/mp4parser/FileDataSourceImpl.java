@@ -1,6 +1,5 @@
 package com.googlecode.mp4parser;
 
-import android.support.v4.os.EnvironmentCompat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,7 +26,7 @@ public class FileDataSourceImpl implements DataSource {
 
     public FileDataSourceImpl(FileChannel fc) {
         this.fc = fc;
-        this.filename = EnvironmentCompat.MEDIA_UNKNOWN;
+        this.filename = "unknown";
     }
 
     public FileDataSourceImpl(FileChannel fc, String filename) {

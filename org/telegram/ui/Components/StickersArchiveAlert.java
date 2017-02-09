@@ -13,12 +13,14 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ArchivedStickerSetCell;
+import org.telegram.ui.Components.RecyclerListView.Holder;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.StickersActivity;
 
 public class StickersArchiveAlert extends Builder {
@@ -29,14 +31,8 @@ public class StickersArchiveAlert extends Builder {
     private int scrollOffsetY;
     private ArrayList<StickerSetCovered> stickerSets;
 
-    private class ListAdapter extends Adapter {
+    private class ListAdapter extends SelectionAdapter {
         Context context;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public ListAdapter(Context context) {
             this.context = context;
@@ -46,6 +42,10 @@ public class StickersArchiveAlert extends Builder {
             return StickersArchiveAlert.this.stickerSets.size();
         }
 
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
+        }
+
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = new ArchivedStickerSetCell(this.context, false);
             view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(82.0f)));
@@ -53,15 +53,7 @@ public class StickersArchiveAlert extends Builder {
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z;
-            ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) holder.itemView;
-            StickerSetCovered stickerSetCovered = (StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position);
-            if (position != StickersArchiveAlert.this.stickerSets.size() - 1) {
-                z = true;
-            } else {
-                z = false;
-            }
-            archivedStickerSetCell.setStickersSet(stickerSetCovered, z, false);
+            ((ArchivedStickerSetCell) holder.itemView).setStickersSet((StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position), position != StickersArchiveAlert.this.stickerSets.size() + -1);
         }
     }
 
@@ -81,7 +73,7 @@ public class StickersArchiveAlert extends Builder {
         container.setOrientation(1);
         setView(container);
         TextView textView = new TextView(context);
-        textView.setTextColor(-14606047);
+        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(1, 16.0f);
         textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(23.0f), 0);
         if (set.set.masks) {

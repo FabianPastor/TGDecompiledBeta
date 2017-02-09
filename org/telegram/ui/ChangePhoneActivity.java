@@ -79,6 +79,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
@@ -93,6 +94,29 @@ public class ChangePhoneActivity extends BaseFragment {
     private ArrayList<String> permissionsItems = new ArrayList();
     private ProgressDialog progressDialog;
     private SlideView[] views = new SlideView[5];
+
+    private class ProgressView extends View {
+        private Paint paint = new Paint();
+        private Paint paint2 = new Paint();
+        private float progress;
+
+        public ProgressView(Context context) {
+            super(context);
+            this.paint.setColor(Theme.getColor(Theme.key_login_progressInner));
+            this.paint2.setColor(Theme.getColor(Theme.key_login_progressOuter));
+        }
+
+        public void setProgress(float value) {
+            this.progress = value;
+            invalidate();
+        }
+
+        protected void onDraw(Canvas canvas) {
+            int start = (int) (((float) getMeasuredWidth()) * this.progress);
+            canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
+            canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        }
+    }
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
         private EditText codeField;
@@ -122,36 +146,14 @@ public class ChangePhoneActivity extends BaseFragment {
         private int timeout;
         private final Object timerSync = new Object();
         private boolean waitingForEvent;
-
-        private class ProgressView extends View {
-            private Paint paint = new Paint();
-            private Paint paint2 = new Paint();
-            private float progress;
-
-            public ProgressView(Context context) {
-                super(context);
-                this.paint.setColor(-1971470);
-                this.paint2.setColor(-10313520);
-            }
-
-            public void setProgress(float value) {
-                this.progress = value;
-                invalidate();
-            }
-
-            protected void onDraw(Canvas canvas) {
-                int start = (int) (((float) getMeasuredWidth()) * this.progress);
-                canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
-                canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-            }
-        }
+        private TextView wrongNumber;
 
         public LoginActivitySmsView(Context context, int type) {
             super(context);
             this.currentType = type;
             setOrientation(1);
             this.confirmTextView = new TextView(context);
-            this.confirmTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.confirmTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.confirmTextView.setTextSize(1, 14.0f);
             this.confirmTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.confirmTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
@@ -171,10 +173,10 @@ public class ChangePhoneActivity extends BaseFragment {
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
             }
             this.codeField = new EditText(context);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.codeField.setHint(LocaleController.getString("Code", R.string.Code));
             AndroidUtilities.clearCursorDrawable(this.codeField);
-            this.codeField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.codeField.setImeOptions(268435461);
             this.codeField.setTextSize(1, 18.0f);
             this.codeField.setInputType(3);
@@ -210,7 +212,7 @@ public class ChangePhoneActivity extends BaseFragment {
             }
             this.timeText = new TextView(context);
             this.timeText.setTextSize(1, 14.0f);
-            this.timeText.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.timeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             this.timeText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.timeText.setGravity(LocaleController.isRTL ? 5 : 3);
             addView(this.timeText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 30, 0, 0));
@@ -222,7 +224,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             this.problemText.setGravity(LocaleController.isRTL ? 5 : 3);
             this.problemText.setTextSize(1, 14.0f);
-            this.problemText.setTextColor(-11697229);
+            this.problemText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             this.problemText.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
             this.problemText.setPadding(0, AndroidUtilities.dp(2.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 20, 0, 0));
@@ -252,15 +254,15 @@ public class ChangePhoneActivity extends BaseFragment {
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             addView(linearLayout, LayoutHelper.createLinear(-1, -1, LocaleController.isRTL ? 5 : 3));
-            TextView wrongNumber = new TextView(context);
-            wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            wrongNumber.setTextColor(-11697229);
-            wrongNumber.setTextSize(1, 14.0f);
-            wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
-            linearLayout.addView(wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
-            wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
-            wrongNumber.setOnClickListener(new OnClickListener(ChangePhoneActivity.this) {
+            this.wrongNumber = new TextView(context);
+            this.wrongNumber.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
+            this.wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+            this.wrongNumber.setTextSize(1, 14.0f);
+            this.wrongNumber.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            this.wrongNumber.setPadding(0, AndroidUtilities.dp(24.0f), 0, 0);
+            linearLayout.addView(this.wrongNumber, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 80, 0, 0, 0, 10));
+            this.wrongNumber.setText(LocaleController.getString("WrongNumber", R.string.WrongNumber));
+            this.wrongNumber.setOnClickListener(new OnClickListener(ChangePhoneActivity.this) {
                 public void onClick(View view) {
                     TL_auth_cancelCode req = new TL_auth_cancelCode();
                     req.phone_number = LoginActivitySmsView.this.requestPhone;
@@ -665,6 +667,9 @@ public class ChangePhoneActivity extends BaseFragment {
         private boolean nextPressed = false;
         private HintEditText phoneField;
         private HashMap<String, String> phoneFormatMap = new HashMap();
+        private TextView textView;
+        private TextView textView2;
+        private View view;
 
         public PhoneView(Context context) {
             super(context);
@@ -672,7 +677,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.countryButton = new TextView(context);
             this.countryButton.setTextSize(1, 18.0f);
             this.countryButton.setPadding(AndroidUtilities.dp(12.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(12.0f), 0);
-            this.countryButton.setTextColor(-14606047);
+            this.countryButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             this.countryButton.setMaxLines(1);
             this.countryButton.setSingleLine(true);
             this.countryButton.setEllipsize(TruncateAt.END);
@@ -698,21 +703,21 @@ public class ChangePhoneActivity extends BaseFragment {
                     ChangePhoneActivity.this.presentFragment(fragment);
                 }
             });
-            View view = new View(context);
-            view.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
-            view.setBackgroundColor(-2368549);
-            addView(view, LayoutHelper.createLinear(-1, 1, 4.0f, -17.5f, 4.0f, 0.0f));
-            view = new LinearLayout(context);
-            view.setOrientation(0);
-            addView(view, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
-            view = new TextView(context);
-            view.setText("+");
-            view.setTextColor(-14606047);
-            view.setTextSize(1, 18.0f);
-            view.addView(view, LayoutHelper.createLinear(-2, -2));
+            this.view = new View(context);
+            this.view.setPadding(AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f), 0);
+            this.view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayLine));
+            addView(this.view, LayoutHelper.createLinear(-1, 1, 4.0f, -17.5f, 4.0f, 0.0f));
+            View linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(0);
+            addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
+            this.textView = new TextView(context);
+            this.textView.setText("+");
+            this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.textView.setTextSize(1, 18.0f);
+            linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
             this.codeField = new EditText(context);
             this.codeField.setInputType(3);
-            this.codeField.setTextColor(-14606047);
+            this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.codeField);
             this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
             this.codeField.setTextSize(1, 18.0f);
@@ -720,7 +725,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.codeField.setGravity(19);
             this.codeField.setImeOptions(268435461);
             this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
-            view.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
+            linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
             final ChangePhoneActivity changePhoneActivity2 = ChangePhoneActivity.this;
             this.codeField.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -806,15 +811,15 @@ public class ChangePhoneActivity extends BaseFragment {
             });
             this.phoneField = new HintEditText(context);
             this.phoneField.setInputType(3);
-            this.phoneField.setTextColor(-14606047);
-            this.phoneField.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+            this.phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            this.phoneField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             this.phoneField.setPadding(0, 0, 0, 0);
             AndroidUtilities.clearCursorDrawable(this.phoneField);
             this.phoneField.setTextSize(1, 18.0f);
             this.phoneField.setMaxLines(1);
             this.phoneField.setGravity(19);
             this.phoneField.setImeOptions(268435461);
-            view.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
+            linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
             final ChangePhoneActivity changePhoneActivity222 = ChangePhoneActivity.this;
             this.phoneField.addTextChangedListener(new TextWatcher() {
                 private int actionPosition;
@@ -898,13 +903,13 @@ public class ChangePhoneActivity extends BaseFragment {
                     return true;
                 }
             });
-            view = new TextView(context);
-            view.setText(LocaleController.getString("ChangePhoneHelp", R.string.ChangePhoneHelp));
-            view.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
-            view.setTextSize(1, 14.0f);
-            view.setGravity(LocaleController.isRTL ? 5 : 3);
-            view.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-            addView(view, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
+            this.textView2 = new TextView(context);
+            this.textView2.setText(LocaleController.getString("ChangePhoneHelp", R.string.ChangePhoneHelp));
+            this.textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+            this.textView2.setTextSize(1, 14.0f);
+            this.textView2.setGravity(LocaleController.isRTL ? 5 : 3);
+            this.textView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            addView(this.textView2, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 28, 0, 10));
             HashMap<String, String> languageMap = new HashMap();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().getAssets().open("countries.txt")));
@@ -1304,5 +1309,60 @@ public class ChangePhoneActivity extends BaseFragment {
             params.putInt("length", res.type.length);
             setPage(2, true, params, false);
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        PhoneView phoneView = this.views[0];
+        LoginActivitySmsView smsView1 = this.views[1];
+        LoginActivitySmsView smsView2 = this.views[2];
+        LoginActivitySmsView smsView3 = this.views[3];
+        LoginActivitySmsView smsView4 = this.views[4];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[45];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(phoneView.countryButton, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[7] = new ThemeDescription(phoneView.view, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhiteGrayLine);
+        themeDescriptionArr[8] = new ThemeDescription(phoneView.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[9] = new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[10] = new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[11] = new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[12] = new ThemeDescription(phoneView.textView2, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[13] = new ThemeDescription(smsView1.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[14] = new ThemeDescription(smsView1.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[15] = new ThemeDescription(smsView1.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[16] = new ThemeDescription(smsView1.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[17] = new ThemeDescription(smsView1.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[18] = new ThemeDescription(smsView1.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[19] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[20] = new ThemeDescription(smsView1.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[21] = new ThemeDescription(smsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[22] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[23] = new ThemeDescription(smsView2.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[24] = new ThemeDescription(smsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[25] = new ThemeDescription(smsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[26] = new ThemeDescription(smsView2.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[27] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[28] = new ThemeDescription(smsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[29] = new ThemeDescription(smsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[30] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[31] = new ThemeDescription(smsView3.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[32] = new ThemeDescription(smsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[33] = new ThemeDescription(smsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[34] = new ThemeDescription(smsView3.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[35] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[36] = new ThemeDescription(smsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        themeDescriptionArr[37] = new ThemeDescription(smsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[38] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[39] = new ThemeDescription(smsView4.codeField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
+        themeDescriptionArr[40] = new ThemeDescription(smsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6);
+        themeDescriptionArr[41] = new ThemeDescription(smsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[42] = new ThemeDescription(smsView4.wrongNumber, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlueText4);
+        themeDescriptionArr[43] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressInner);
+        themeDescriptionArr[44] = new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, Theme.key_login_progressOuter);
+        return themeDescriptionArr;
     }
 }

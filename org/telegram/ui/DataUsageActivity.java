@@ -4,8 +4,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.os.Build.VERSION;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,19 +14,21 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class DataUsageActivity extends BaseFragment {
     private int audiosBytesReceivedRow;
@@ -52,6 +52,7 @@ public class DataUsageActivity extends BaseFragment {
     private int filesSectionRow;
     private int filesSentRow;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
     private int messagesBytesReceivedRow;
     private int messagesBytesSentRow;
     private int messagesReceivedRow;
@@ -78,14 +79,8 @@ public class DataUsageActivity extends BaseFragment {
     private int videosSectionRow;
     private int videosSentRow;
 
-    private class ListAdapter extends Adapter {
+    private class ListAdapter extends SelectionAdapter {
         private Context mContext;
-
-        private class Holder extends ViewHolder {
-            public Holder(View itemView) {
-                super(itemView);
-            }
-        }
 
         public ListAdapter(Context context) {
             this.mContext = context;
@@ -99,22 +94,23 @@ public class DataUsageActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     if (position == DataUsageActivity.this.resetSection2Row) {
-                        holder.itemView.setBackgroundResource(R.drawable.greydivider_bottom);
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         return;
                     } else {
-                        holder.itemView.setBackgroundResource(R.drawable.greydivider);
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         return;
                     }
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
                     if (position == DataUsageActivity.this.resetRow) {
+                        textCell.setTag(Theme.key_windowBackgroundWhiteRedText2);
                         textCell.setText(LocaleController.getString("ResetStatistics", R.string.ResetStatistics), false);
-                        textCell.setTextColor(-2404015);
-                        textCell.setBackgroundResource(R.drawable.list_selector_white);
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
                         return;
                     }
                     int type;
-                    textCell.setTextColor(-14606047);
+                    textCell.setTag(Theme.key_windowBackgroundWhiteBlackText);
+                    textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == DataUsageActivity.this.callsSentRow || position == DataUsageActivity.this.callsReceivedRow || position == DataUsageActivity.this.callsBytesSentRow || position == DataUsageActivity.this.callsBytesReceivedRow) {
                         type = 0;
                     } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.messagesBytesReceivedRow) {
@@ -132,8 +128,10 @@ public class DataUsageActivity extends BaseFragment {
                     }
                     if (position == DataUsageActivity.this.callsSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("OutgoingCalls", R.string.OutgoingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        return;
                     } else if (position == DataUsageActivity.this.callsReceivedRow) {
                         textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        return;
                     } else if (position == DataUsageActivity.this.callsTotalTimeRow) {
                         String time;
                         int total = StatsController.getInstance().getCallsTotalTime(DataUsageActivity.this.currentType);
@@ -146,17 +144,22 @@ public class DataUsageActivity extends BaseFragment {
                             time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
                         }
                         textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), time, false);
+                        return;
                     } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.filesSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        return;
                     } else if (position == DataUsageActivity.this.messagesReceivedRow || position == DataUsageActivity.this.photosReceivedRow || position == DataUsageActivity.this.videosReceivedRow || position == DataUsageActivity.this.audiosReceivedRow || position == DataUsageActivity.this.filesReceivedRow) {
                         textCell.setTextAndValue(LocaleController.getString("CountReceived", R.string.CountReceived), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getRecivedItemsCount(DataUsageActivity.this.currentType, type))}), true);
+                        return;
                     } else if (position == DataUsageActivity.this.messagesBytesSentRow || position == DataUsageActivity.this.photosBytesSentRow || position == DataUsageActivity.this.videosBytesSentRow || position == DataUsageActivity.this.audiosBytesSentRow || position == DataUsageActivity.this.filesBytesSentRow || position == DataUsageActivity.this.callsBytesSentRow || position == DataUsageActivity.this.totalBytesSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("BytesSent", R.string.BytesSent), AndroidUtilities.formatFileSize(StatsController.getInstance().getSentBytesCount(DataUsageActivity.this.currentType, type)), true);
+                        return;
                     } else if (position == DataUsageActivity.this.messagesBytesReceivedRow || position == DataUsageActivity.this.photosBytesReceivedRow || position == DataUsageActivity.this.videosBytesReceivedRow || position == DataUsageActivity.this.audiosBytesReceivedRow || position == DataUsageActivity.this.filesBytesReceivedRow || position == DataUsageActivity.this.callsBytesReceivedRow || position == DataUsageActivity.this.totalBytesReceivedRow) {
                         textCell.setTextAndValue(LocaleController.getString("BytesReceived", R.string.BytesReceived), AndroidUtilities.formatFileSize(StatsController.getInstance().getReceivedBytesCount(DataUsageActivity.this.currentType, type)), position != DataUsageActivity.this.totalBytesReceivedRow);
+                        return;
+                    } else {
+                        return;
                     }
-                    textCell.setBackgroundColor(-1);
-                    return;
                 case 2:
                     HeaderCell headerCell = holder.itemView;
                     if (position == DataUsageActivity.this.totalSectionRow) {
@@ -185,12 +188,16 @@ public class DataUsageActivity extends BaseFragment {
                     }
                 case 3:
                     TextInfoPrivacyCell cell = holder.itemView;
-                    cell.setBackgroundResource(R.drawable.greydivider_bottom);
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     cell.setText(LocaleController.formatString("NetworkUsageSince", R.string.NetworkUsageSince, LocaleController.getInstance().formatterStats.format(StatsController.getInstance().getResetStatsDate(DataUsageActivity.this.currentType))));
                     return;
                 default:
                     return;
             }
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return holder.getAdapterPosition() == DataUsageActivity.this.resetRow;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -200,18 +207,12 @@ public class DataUsageActivity extends BaseFragment {
                     view = new ShadowSectionCell(this.mContext);
                     break;
                 case 1:
-                    view = new TextSettingsCell(this.mContext) {
-                        public boolean onTouchEvent(MotionEvent event) {
-                            if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-                                getBackground().setHotspot(event.getX(), event.getY());
-                            }
-                            return super.onTouchEvent(event);
-                        }
-                    };
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 2:
                     view = new HeaderCell(this.mContext);
-                    view.setBackgroundColor(-1);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
                     view = new TextInfoPrivacyCell(this.mContext);
@@ -407,14 +408,14 @@ public class DataUsageActivity extends BaseFragment {
         });
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        this.fragmentView.setBackgroundColor(Theme.ACTION_BAR_MODE_SELECTOR_COLOR);
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = this.fragmentView;
-        RecyclerListView listView = new RecyclerListView(context);
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
-        frameLayout.addView(listView, LayoutHelper.createFrame(-1, -1, 51));
-        listView.setAdapter(this.listAdapter);
-        listView.setOnItemClickListener(new OnItemClickListener() {
+        this.listView = new RecyclerListView(context);
+        this.listView.setVerticalScrollBarEnabled(false);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        this.listView.setAdapter(this.listAdapter);
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 if (DataUsageActivity.this.getParentActivity() != null && position == DataUsageActivity.this.resetRow) {
                     Builder builder = new Builder(DataUsageActivity.this.getParentActivity());
@@ -440,5 +441,27 @@ public class DataUsageActivity extends BaseFragment {
         if (this.listAdapter != null) {
             this.listAdapter.notifyDataSetChanged();
         }
+    }
+
+    public ThemeDescription[] getThemeDescriptions() {
+        r9 = new ThemeDescription[17];
+        r9[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, HeaderCell.class}, null, null, null, Theme.key_windowBackgroundWhite);
+        r9[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        r9[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        r9[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        r9[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        r9[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        r9[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        r9[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        r9[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[10] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[11] = new ThemeDescription(this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader);
+        r9[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r9[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
+        r9[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText2);
+        return r9;
     }
 }

@@ -56,6 +56,7 @@ import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.AuthenticationCallback;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat.AuthenticationResult;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.ActionBar.Theme;
 
 public class PasscodeView extends FrameLayout {
     private static final int id_fingerprint_imageview = 1001;
@@ -886,7 +887,7 @@ public class PasscodeView extends FrameLayout {
             if (ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("selectedBackground", 1000001) == 1000001) {
                 this.backgroundFrameLayout.setBackgroundColor(-11436898);
             } else {
-                this.backgroundDrawable = ApplicationLoader.getCachedWallpaper();
+                this.backgroundDrawable = Theme.getCachedWallpaper();
                 if (this.backgroundDrawable != null) {
                     this.backgroundFrameLayout.setBackgroundColor(-NUM);
                 } else {

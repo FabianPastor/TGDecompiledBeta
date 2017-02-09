@@ -9,7 +9,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.support.v4.os.EnvironmentCompat;
 import android.telephony.TelephonyManager;
 import android.view.Display;
 import android.view.WindowManager;
@@ -84,7 +83,7 @@ class TelemetryContext {
 
     protected void configApplicationContext() {
         HockeyLog.debug(TAG, "Configuring application context");
-        String version = EnvironmentCompat.MEDIA_UNKNOWN;
+        String version = "unknown";
         this.mPackageName = "";
         try {
             PackageInfo info = this.mContext.getPackageManager().getPackageInfo(this.mContext.getPackageName(), 0);
@@ -129,12 +128,12 @@ class TelemetryContext {
 
     @SuppressLint({"NewApi", "Deprecation"})
     protected void updateScreenResolution() {
+        Point size;
+        Display d;
         if (this.mContext != null) {
             int width;
             int height;
             WindowManager wm = (WindowManager) this.mContext.getSystemService("window");
-            Point size;
-            Display d;
             if (VERSION.SDK_INT >= 17) {
                 size = new Point();
                 d = wm.getDefaultDisplay();

@@ -20,7 +20,7 @@ public class LineProgressView extends View {
     private float currentProgress = 0.0f;
     private long currentProgressTime = 0;
     private long lastUpdateTime = 0;
-    private int progressColor = -13196562;
+    private int progressColor;
 
     public LineProgressView(Context context) {
         super(context);

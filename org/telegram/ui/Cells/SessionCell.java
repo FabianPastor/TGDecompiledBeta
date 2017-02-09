@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -14,10 +13,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.TL_authorization;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class SessionCell extends FrameLayout {
-    private static Paint paint;
     private TextView detailExTextView;
     private TextView detailTextView;
     private TextView nameTextView;
@@ -26,17 +25,12 @@ public class SessionCell extends FrameLayout {
 
     public SessionCell(Context context) {
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
         addView(linearLayout, LayoutHelper.createFrame(-1, BitmapDescriptorFactory.HUE_ORANGE, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 11.0f, 11.0f, 0.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setLines(1);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -55,7 +49,7 @@ public class SessionCell extends FrameLayout {
             linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 53, 0, 2, 0, 0));
         }
         this.detailTextView = new TextView(context);
-        this.detailTextView.setTextColor(-14606047);
+        this.detailTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.detailTextView.setTextSize(1, 14.0f);
         this.detailTextView.setLines(1);
         this.detailTextView.setMaxLines(1);
@@ -64,7 +58,7 @@ public class SessionCell extends FrameLayout {
         this.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 36.0f, 17.0f, 0.0f));
         this.detailExTextView = new TextView(context);
-        this.detailExTextView.setTextColor(-6710887);
+        this.detailExTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         this.detailExTextView.setTextSize(1, 14.0f);
         this.detailExTextView.setLines(1);
         this.detailExTextView.setMaxLines(1);
@@ -75,18 +69,20 @@ public class SessionCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(90.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(90.0f), NUM));
     }
 
     public void setSession(TL_authorization session, boolean divider) {
         this.needDivider = divider;
         this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{session.app_name, session.app_version}));
         if ((session.flags & 1) != 0) {
+            setTag(Theme.key_windowBackgroundWhiteValueText);
             this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
-            this.onlineTextView.setTextColor(-13660983);
+            this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         } else {
+            setTag(Theme.key_windowBackgroundWhiteGrayText3);
             this.onlineTextView.setText(LocaleController.stringForMessageListDate((long) session.date_active));
-            this.onlineTextView.setTextColor(-6710887);
+            this.onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         }
         StringBuilder stringBuilder = new StringBuilder();
         if (session.ip.length() != 0) {
@@ -132,7 +128,7 @@ public class SessionCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

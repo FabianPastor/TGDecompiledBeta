@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.os.EnvironmentCompat;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -130,7 +129,7 @@ public class SendFeedbackTask extends ConnectionTask<Void, Void, HashMap<String,
                 bundle.putString(BUNDLE_FEEDBACK_RESPONSE, (String) result.get("response"));
                 bundle.putString(BUNDLE_FEEDBACK_STATUS, (String) result.get("status"));
             } else {
-                bundle.putString(BUNDLE_REQUEST_TYPE, EnvironmentCompat.MEDIA_UNKNOWN);
+                bundle.putString(BUNDLE_REQUEST_TYPE, "unknown");
             }
             msg.setData(bundle);
             this.mHandler.sendMessage(msg);

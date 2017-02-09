@@ -4,7 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -15,10 +16,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextSettingsCell extends FrameLayout {
-    private static Paint paint;
     private boolean needDivider;
     private TextView textView;
     private ImageView valueImageView;
@@ -29,13 +30,8 @@ public class TextSettingsCell extends FrameLayout {
         int i2;
         int i3 = 3;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.textView = new TextView(context);
-        this.textView.setTextColor(-14606047);
+        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -50,7 +46,7 @@ public class TextSettingsCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(-13660983);
+        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -73,6 +69,7 @@ public class TextSettingsCell extends FrameLayout {
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
+        this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), Mode.MULTIPLY));
         view = this.valueImageView;
         if (!LocaleController.isRTL) {
             i3 = 5;
@@ -94,6 +91,14 @@ public class TextSettingsCell extends FrameLayout {
             width = availableWidth;
         }
         this.textView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    }
+
+    public TextView getTextView() {
+        return this.textView;
+    }
+
+    public TextView getValueTextView() {
+        return this.valueTextView;
     }
 
     public void setTextColor(int color) {
@@ -149,6 +154,7 @@ public class TextSettingsCell extends FrameLayout {
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
         float f = 1.0f;
+        setEnabled(value);
         TextView textView;
         float f2;
         if (animators != null) {
@@ -203,7 +209,7 @@ public class TextSettingsCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }

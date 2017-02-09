@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -42,7 +43,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     public interface IconTabProvider {
         void customOnDraw(Canvas canvas, int i);
 
-        int getPageIconResId(int i);
+        Drawable getPageIconDrawable(int i);
     }
 
     private class PageListener implements OnPageChangeListener {
@@ -112,7 +113,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         this.tabCount = this.pager.getAdapter().getCount();
         for (int i = 0; i < this.tabCount; i++) {
             if (this.pager.getAdapter() instanceof IconTabProvider) {
-                addIconTab(i, ((IconTabProvider) this.pager.getAdapter()).getPageIconResId(i));
+                addIconTab(i, ((IconTabProvider) this.pager.getAdapter()).getPageIconDrawable(i));
             }
         }
         updateTabStyles();
@@ -129,7 +130,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         });
     }
 
-    private void addIconTab(final int position, int resId) {
+    private void addIconTab(final int position, Drawable drawable) {
         boolean z = true;
         ImageView tab = new ImageView(getContext()) {
             protected void onDraw(Canvas canvas) {
@@ -140,7 +141,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
         };
         tab.setFocusable(true);
-        tab.setImageResource(resId);
+        tab.setImageDrawable(drawable);
         tab.setScaleType(ScaleType.CENTER);
         tab.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

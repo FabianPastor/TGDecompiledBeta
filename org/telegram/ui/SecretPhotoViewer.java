@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 
 public class SecretPhotoViewer implements NotificationCenterDelegate {
+    @SuppressLint({"StaticFieldLeak"})
     private static volatile SecretPhotoViewer Instance = null;
     private ImageReceiver centerImage = new ImageReceiver();
     private FrameLayoutDrawer containerView;

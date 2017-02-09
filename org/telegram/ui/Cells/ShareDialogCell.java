@@ -1,9 +1,7 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -28,12 +26,11 @@ public class ShareDialogCell extends FrameLayout {
 
     public ShareDialogCell(Context context) {
         super(context);
-        setBackgroundResource(R.drawable.list_selector);
         this.imageView = new BackupImageView(context);
         this.imageView.setRoundRadius(AndroidUtilities.dp(27.0f));
         addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
@@ -44,19 +41,12 @@ public class ShareDialogCell extends FrameLayout {
         this.checkBox.setSize(24);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setVisibility(0);
-        this.checkBox.setColor(Theme.SHARE_SHEET_SEND_TEXT_COLOR);
+        this.checkBox.setColor(Theme.SHARE_SHEET_SEND_TEXT_COLOR, -1);
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 17.0f, 39.0f, 0.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
-        return super.onTouchEvent(event);
     }
 
     public void setDialog(int uid, boolean checked, CharSequence name) {

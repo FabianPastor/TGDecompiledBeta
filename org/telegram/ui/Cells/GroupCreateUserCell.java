@@ -1,8 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.os.Build.VERSION;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
@@ -41,12 +39,11 @@ public class GroupCreateUserCell extends FrameLayout {
         int i2;
         int i3 = 5;
         super(context);
-        setBackgroundResource(R.drawable.list_selector);
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
         addView(this.avatarImageView, LayoutHelper.createFrame(50, 50.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 11.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(17);
         SimpleTextView simpleTextView = this.nameTextView;
@@ -105,13 +102,6 @@ public class GroupCreateUserCell extends FrameLayout {
         return this.currentUser;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        if (VERSION.SDK_INT >= 21 && getBackground() != null && (event.getAction() == 0 || event.getAction() == 2)) {
-            getBackground().setHotspot(event.getX(), event.getY());
-        }
-        return super.onTouchEvent(event);
-    }
-
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
     }
@@ -165,15 +155,19 @@ public class GroupCreateUserCell extends FrameLayout {
             }
             if (this.currentStatus != null) {
                 this.statusTextView.setText(this.currentStatus, true);
-                this.statusTextView.setTextColor(Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR);
+                this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
+                this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
             } else if (this.currentUser.bot) {
-                this.statusTextView.setTextColor(Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR);
+                this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
+                this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
             } else if (this.currentUser.id == UserConfig.getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance().getCurrentTime()) || MessagesController.getInstance().onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
-                this.statusTextView.setTextColor(Theme.GROUP_CREATE_STATUS_ONLINE_TEXT_COLOR);
+                this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
+                this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_onlineText));
                 this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
             } else {
-                this.statusTextView.setTextColor(Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR);
+                this.statusTextView.setTag(Theme.key_groupcreate_offlineText);
+                this.statusTextView.setTextColor(Theme.getColor(Theme.key_groupcreate_offlineText));
                 this.statusTextView.setText(LocaleController.formatUserStatus(this.currentUser));
             }
             this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable);

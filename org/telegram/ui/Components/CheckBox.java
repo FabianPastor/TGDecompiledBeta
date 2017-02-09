@@ -8,11 +8,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme;
 
 public class CheckBox extends View {
     private static Paint backgroundPaint = null;
@@ -28,7 +28,7 @@ public class CheckBox extends View {
     private Canvas checkCanvas;
     private Drawable checkDrawable;
     private int checkOffset;
-    private int color = Theme.GROUP_CREATE_CHECKBOX_COLOR;
+    private int color;
     private boolean drawBackground;
     private Bitmap drawBitmap;
     private boolean isCheckAnimation = true;
@@ -53,7 +53,7 @@ public class CheckBox extends View {
             backgroundPaint.setStyle(Style.STROKE);
             backgroundPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }
-        this.checkDrawable = context.getResources().getDrawable(resId);
+        this.checkDrawable = context.getResources().getDrawable(resId).mutate();
     }
 
     public void setVisibility(int visibility) {
@@ -89,8 +89,20 @@ public class CheckBox extends View {
         return this.progress;
     }
 
-    public void setColor(int value) {
-        this.color = value;
+    public void setColor(int backgroundColor, int checkColor) {
+        this.color = backgroundColor;
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
+        invalidate();
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.color = backgroundColor;
+        invalidate();
+    }
+
+    public void setCheckColor(int checkColor) {
+        this.checkDrawable.setColorFilter(new PorterDuffColorFilter(checkColor, Mode.MULTIPLY));
+        invalidate();
     }
 
     private void cancelCheckAnimator() {

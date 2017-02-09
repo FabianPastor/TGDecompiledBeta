@@ -174,8 +174,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.RadialProgress;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
+import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.Scroller;
 import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
@@ -2705,13 +2707,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         }
     }
 
-    private class Holder extends ViewHolder {
-        public Holder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class WebpageAdapter extends Adapter {
+    private class WebpageAdapter extends SelectionAdapter {
         private Context context;
 
         public WebpageAdapter(Context ctx) {
@@ -2793,6 +2789,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new Holder(view);
+        }
+
+        public boolean isEnabled(ViewHolder holder) {
+            return false;
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
@@ -3221,7 +3221,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (parentBlock instanceof TL_pageBlockPhoto) {
             currentMap = captionTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+            textColor = -8156010;
         } else if (parentBlock instanceof TL_pageBlockTitle) {
             currentMap = titleTextPaints;
             textSize = AndroidUtilities.dp(24.0f);
@@ -3229,11 +3229,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         } else if (parentBlock instanceof TL_pageBlockAuthorDate) {
             currentMap = authorTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+            textColor = -8156010;
         } else if (parentBlock instanceof TL_pageBlockFooter) {
             currentMap = footerTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+            textColor = -8156010;
         } else if (parentBlock instanceof TL_pageBlockSubtitle) {
             currentMap = subtitleTextPaints;
             textSize = AndroidUtilities.dp(21.0f);
@@ -3254,7 +3254,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             } else if (parentBlock.caption == parentRichText) {
                 currentMap = subquoteTextPaints;
                 textSize = AndroidUtilities.dp(14.0f);
-                textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+                textColor = -8156010;
             }
         } else if (parentBlock instanceof TL_pageBlockPreformatted) {
             currentMap = preformattedTextPaints;
@@ -3264,7 +3264,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (parentBlock.caption == parentRichText) {
                 currentMap = embedPostCaptionTextPaints;
                 textSize = AndroidUtilities.dp(14.0f);
-                textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+                textColor = -8156010;
             } else {
                 currentMap = paragraphTextPaints;
                 textSize = AndroidUtilities.dp(16.0f);
@@ -3277,11 +3277,11 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         } else if (parentBlock instanceof TL_pageBlockEmbed) {
             currentMap = embedTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+            textColor = -8156010;
         } else if (parentBlock instanceof TL_pageBlockSlideshow) {
             currentMap = slideshowTextPaints;
             textSize = AndroidUtilities.dp(14.0f);
-            textColor = Theme.GROUP_CREATE_STATUS_OFFLINE_TEXT_COLOR;
+            textColor = -8156010;
         } else if (parentBlock instanceof TL_pageBlockEmbedPost) {
             if (richText != null) {
                 currentMap = embedPostTextPaints;
@@ -3350,7 +3350,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             preformattedBackgroundPaint = new Paint();
             preformattedBackgroundPaint.setColor(-657156);
             urlPaint = new Paint();
-            urlPaint.setColor(Theme.MSG_LINK_SELECT_BACKGROUND_COLOR);
+            urlPaint.setColor(862104035);
         }
         if (plainText != null) {
             text = plainText;
@@ -3724,9 +3724,9 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.backDrawable = new BackDrawable(false);
             this.backDrawable.setAnimationTime(200.0f);
             this.backDrawable.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR);
-            this.backDrawable.setRotatedColor(false);
+            this.backDrawable.setRotated(false);
             this.backButton.setImageDrawable(this.backDrawable);
-            this.backButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
             this.backButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -3746,7 +3746,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.shareButton = new ImageView(activity);
             this.shareButton.setScaleType(ScaleType.CENTER);
             this.shareButton.setImageResource(R.drawable.ic_share_article);
-            this.shareButton.setBackgroundDrawable(Theme.createBarSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
+            this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             this.shareContainer.addView(this.shareButton, LayoutHelper.createFrame(48, 56.0f));
             this.progressView = new ContextProgressView(activity, 2);
             this.progressView.setVisibility(8);
@@ -3774,7 +3774,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.actionBar = new ActionBar(activity);
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(false);
-            this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR);
+            this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
             this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
@@ -3824,8 +3824,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             menu.addItem(2, (int) R.drawable.share);
             this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
             this.menuItem.setLayoutInScreen(true);
-            this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp), 0);
-            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), 0);
+            this.menuItem.addSubItem(3, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
             this.bottomLayout = new FrameLayout(this.parentActivity);
             this.bottomLayout.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
@@ -5192,7 +5192,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.captionTextView = this.captionTextViewOld;
         this.captionTextViewOld = this.captionTextViewNew;
         this.captionTextViewNew = this.captionTextView;
-        CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), MessageObject.getTextPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+        Theme.createChatResources(null, true);
+        CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
         this.captionTextView.setTag(str);
         this.captionTextView.setText(str);
         this.captionTextView.setTextColor(-1);

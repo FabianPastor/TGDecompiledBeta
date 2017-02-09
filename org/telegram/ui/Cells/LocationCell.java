@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
@@ -15,11 +14,11 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class LocationCell extends FrameLayout {
-    private static Paint paint;
     private TextView addressTextView;
     private BackupImageView imageView;
     private TextView nameTextView;
@@ -31,22 +30,17 @@ public class LocationCell extends FrameLayout {
         int i3 = 16;
         int i4 = 5;
         super(context);
-        if (paint == null) {
-            paint = new Paint();
-            paint.setColor(-2500135);
-            paint.setStrokeWidth(1.0f);
-        }
         this.imageView = new BackupImageView(context);
         this.imageView.setBackgroundResource(R.drawable.round_grey);
         this.imageView.setSize(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE), AndroidUtilities.dp(BitmapDescriptorFactory.HUE_ORANGE));
-        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(-6710887, Mode.MULTIPLY));
+        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Mode.MULTIPLY));
         addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 8.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setMaxLines(1);
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setSingleLine(true);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         TextView textView = this.nameTextView;
         if (LocaleController.isRTL) {
@@ -67,7 +61,7 @@ public class LocationCell extends FrameLayout {
         this.addressTextView.setMaxLines(1);
         this.addressTextView.setEllipsize(TruncateAt.END);
         this.addressTextView.setSingleLine(true);
-        this.addressTextView.setTextColor(-6710887);
+        this.addressTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         textView = this.addressTextView;
         if (LocaleController.isRTL) {
             i = 5;
@@ -88,7 +82,7 @@ public class LocationCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f), NUM));
     }
 
     public void setLocation(TL_messageMediaVenue location, String icon, boolean divider) {
@@ -101,7 +95,7 @@ public class LocationCell extends FrameLayout {
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), paint);
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 }
