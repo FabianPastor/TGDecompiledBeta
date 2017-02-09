@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextColorThemeCell extends FrameLayout {
@@ -27,7 +26,7 @@ public class TextColorThemeCell extends FrameLayout {
             colorPaint = new Paint(1);
         }
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.textView.setTextColor(-14606047);
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);

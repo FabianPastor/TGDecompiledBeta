@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
+import android.support.annotation.ColorInt;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -30,7 +31,11 @@ public class TextSettingsCell extends FrameLayout {
         int i2;
         int i3 = 3;
         super(context);
-        this.textView = new TextView(context);
+        this.textView = new TextView(context) {
+            public void setTextColor(@ColorInt int color) {
+                super.setTextColor(color);
+            }
+        };
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);

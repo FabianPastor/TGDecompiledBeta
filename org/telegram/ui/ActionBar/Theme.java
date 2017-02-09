@@ -509,6 +509,9 @@ public class Theme {
     public static final String key_contextProgressOuter1 = "contextProgressOuter1";
     public static final String key_contextProgressOuter2 = "contextProgressOuter2";
     public static final String key_contextProgressOuter3 = "contextProgressOuter3";
+    public static final String key_dialogBackground = "dialogBackground";
+    public static final String key_dialogIcon = "dialogIcon";
+    public static final String key_dialogTextBlack = "dialogTextBlack";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
     public static final String key_fastScrollActive = "fastScrollActive";
@@ -698,6 +701,9 @@ public class Theme {
         }
         applyTheme(applyingTheme, false);
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
+        defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
+        defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
+        defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
         defaultColors.put(key_progressCircle, Integer.valueOf(-11371101));
         defaultColors.put(key_windowBackgroundWhiteGrayIcon, Integer.valueOf(ACTION_BAR_ACTION_MODE_TEXT_COLOR));
         defaultColors.put(key_windowBackgroundWhiteBlueText, Integer.valueOf(-12876608));
@@ -1361,6 +1367,7 @@ public class Theme {
                 reloadWallpaper();
                 applyCommonTheme();
                 applyDialogsTheme();
+                applyProfileTheme();
                 applyChatTheme(false);
             } catch (Throwable e) {
                 FileLog.e("tmessages", e);
@@ -1912,6 +1919,7 @@ public class Theme {
             Resources resources = context.getResources();
             profile_verifiedDrawable = resources.getDrawable(R.drawable.check_profile).mutate();
             profile_verifiedCheckDrawable = resources.getDrawable(R.drawable.check_profile).mutate();
+            applyProfileTheme();
         }
         profile_aboutTextPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
     }
@@ -2042,19 +2050,19 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
-                    int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
-                        int wallpaperThemeOffset = Theme.getColor(Theme.key_chat_wallpaper);
-                        if (!(wallpaperThemeOffset == 0 || Theme.currentTheme.pathToFile == null)) {
+                        int selectedBackground;
+                        File toFile;
+                        Integer wallpaperThemeOffset = Integer.valueOf(Theme.getColor(Theme.key_chat_wallpaper));
+                        if (!(wallpaperThemeOffset == null || wallpaperThemeOffset.intValue() <= 0 || Theme.currentTheme.pathToFile == null)) {
                             FileInputStream stream = null;
                             try {
                                 FileInputStream stream2 = new FileInputStream(new File(Theme.currentTheme.pathToFile));
                                 try {
-                                    stream2.getChannel().position((long) wallpaperThemeOffset);
+                                    stream2.getChannel().position((long) wallpaperThemeOffset.intValue());
                                     Bitmap bitmap = BitmapFactory.decodeStream(stream2);
                                     if (bitmap != null) {
                                         Theme.wallpaper = new BitmapDrawable(bitmap);

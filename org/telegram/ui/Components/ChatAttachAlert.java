@@ -546,7 +546,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.albumsDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.reloadInlineHints);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.cameraInitied);
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
+        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
         ViewGroup anonymousClass1 = new RecyclerListView(context) {
             private int lastHeight;
             private int lastWidth;

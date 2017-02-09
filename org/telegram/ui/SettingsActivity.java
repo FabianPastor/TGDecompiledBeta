@@ -870,6 +870,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                                 checkBoxCell.setText(name, "", maskValues[a], true);
+                                checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                                 checkBoxCell.setOnClickListener(new View.OnClickListener() {
                                     public void onClick(View v) {
                                         CheckBoxCell cell = (CheckBoxCell) v;

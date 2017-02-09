@@ -11,6 +11,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -89,6 +91,7 @@ public class BottomSheet extends Dialog {
             setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
             this.imageView = new ImageView(context);
             this.imageView.setScaleType(ScaleType.CENTER);
+            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
             addView(this.imageView, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? 5 : 3) | 16));
             this.textView = new TextView(context);
             this.textView.setLines(1);
@@ -96,7 +99,7 @@ public class BottomSheet extends Dialog {
             this.textView.setGravity(1);
             this.textView.setEllipsize(TruncateAt.END);
             if (type == 0) {
-                this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 this.textView.setTextSize(1, 16.0f);
                 View view = this.textView;
                 if (LocaleController.isRTL) {
@@ -105,7 +108,7 @@ public class BottomSheet extends Dialog {
                 addView(view, LayoutHelper.createFrame(-2, -2, i | 16));
             } else if (type == 1) {
                 this.textView.setGravity(17);
-                this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 this.textView.setTextSize(1, 14.0f);
                 this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
@@ -544,7 +547,8 @@ public class BottomSheet extends Dialog {
         }
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         Rect padding = new Rect();
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
+        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
         backgroundPaddingTop = padding.top;

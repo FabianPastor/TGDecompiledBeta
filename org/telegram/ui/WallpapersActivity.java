@@ -74,6 +74,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private int selectedColor;
     private WallpaperUpdater updater;
     private ArrayList<WallPaper> wallPapers = new ArrayList();
+    private File wallpaperFile;
     private HashMap<Integer, WallPaper> wallpappersByIds = new HashMap();
 
     private class ListAdapter extends SelectionAdapter {
@@ -106,14 +107,6 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        this.updater = new WallpaperUpdater(getParentActivity(), new WallpaperUpdaterDelegate() {
-            public void didSelectWallpaper(File file, Bitmap bitmap) {
-                WallpapersActivity.this.selectedBackground = -1;
-                WallpapersActivity.this.selectedColor = 0;
-                Drawable drawable = WallpapersActivity.this.backgroundImage.getDrawable();
-                WallpapersActivity.this.backgroundImage.setImageBitmap(bitmap);
-            }
-        });
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidFailedLoad);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.FileDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.wallpapersDidLoaded);
@@ -133,6 +126,15 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     }
 
     public View createView(Context context) {
+        this.updater = new WallpaperUpdater(getParentActivity(), new WallpaperUpdaterDelegate() {
+            public void didSelectWallpaper(File file, Bitmap bitmap) {
+                WallpapersActivity.this.selectedBackground = -1;
+                WallpapersActivity.this.selectedColor = 0;
+                WallpapersActivity.this.wallpaperFile = file;
+                Drawable drawable = WallpapersActivity.this.backgroundImage.getDrawable();
+                WallpapersActivity.this.backgroundImage.setImageBitmap(bitmap);
+            }
+        });
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
@@ -259,7 +261,12 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 this.backgroundImage.setBackgroundColor(0);
                 this.selectedColor = 0;
             } else if (this.selectedBackground == -1) {
-                File toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                File toFile;
+                if (this.wallpaperFile != null) {
+                    toFile = this.wallpaperFile;
+                } else {
+                    toFile = new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg");
+                }
                 if (toFile.exists()) {
                     this.backgroundImage.setImageURI(Uri.fromFile(toFile));
                 } else {

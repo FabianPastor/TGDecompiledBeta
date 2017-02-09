@@ -354,6 +354,7 @@ public class DataSettingsActivity extends BaseFragment {
                             checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                             checkBoxCell.setText(name, "", maskValues[a], true);
+                            checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                             zArr = maskValues;
                             checkBoxCell.setOnClickListener(new OnClickListener() {
                                 public void onClick(View v) {

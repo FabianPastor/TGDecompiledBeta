@@ -342,7 +342,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     private void init(Context context) {
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
+        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.containerView = new FrameLayout(context) {
             private int lastNotifyWidth;
 

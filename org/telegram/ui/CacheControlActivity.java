@@ -533,6 +533,7 @@ public class CacheControlActivity extends BaseFragment {
                                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));
                                 checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size), true, true);
+                                checkBoxCell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                                 checkBoxCell.setOnClickListener(new View.OnClickListener() {
                                     public void onClick(View v) {
                                         CheckBoxCell cell = (CheckBoxCell) v;

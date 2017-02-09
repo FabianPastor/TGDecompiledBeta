@@ -504,7 +504,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
     public ShareAlert(final Context context, MessageObject messageObject, String text, boolean publicChannel, String copyLink, boolean fullScreen) {
         super(context, true);
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
+        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), Mode.MULTIPLY));
         this.linkToCopy = copyLink;
         this.sendingMessageObject = messageObject;
         this.searchAdapter = new ShareSearchAdapter(context);

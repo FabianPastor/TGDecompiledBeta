@@ -483,7 +483,7 @@ public class ThemeEditorView {
 
         public EditorAlert(Context context, ThemeDescription[] items) {
             super(context, true);
-            this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow);
+            this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
             this.containerView = new FrameLayout(context, ThemeEditorView.this) {
                 private boolean ignoreLayout = false;
 
@@ -505,13 +505,13 @@ public class ThemeEditorView {
                         height -= AndroidUtilities.statusBarHeight;
                     }
                     int contentSize = (((AndroidUtilities.dp(48.0f) * (EditorAlert.this.listAdapter.getItemCount() + 1)) + EditorAlert.this.listAdapter.getItemCount()) - 1) + EditorAlert.backgroundPaddingTop;
-                    int padding = contentSize < height ? 0 : (height - ((height / 5) * 3)) + AndroidUtilities.dp(8.0f);
+                    int padding = (height - ((height / 5) * 3)) + AndroidUtilities.dp(8.0f);
                     if (EditorAlert.this.listView.getPaddingTop() != padding) {
                         this.ignoreLayout = true;
                         EditorAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.dp(48.0f));
                         this.ignoreLayout = false;
                     }
-                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(contentSize, height), NUM));
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, NUM));
                 }
 
                 protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -697,7 +697,7 @@ public class ThemeEditorView {
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
             }
-            ((LaunchActivity) ThemeEditorView.this.parentActivity).rebuildAllFragments();
+            ((LaunchActivity) ThemeEditorView.this.parentActivity).rebuildAllFragments(false);
             Theme.saveCurrentTheme(ThemeEditorView.this.currentThemeName, false);
             AndroidUtilities.hideKeyboard(getCurrentFocus());
             this.animationInProgress = true;

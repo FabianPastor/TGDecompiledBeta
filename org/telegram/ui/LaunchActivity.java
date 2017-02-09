@@ -327,7 +327,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             public void onItemClick(View view, int position) {
                 int id = LaunchActivity.this.drawerLayoutAdapter.getId(position);
                 Bundle args;
-                if (id == 0) {
+                if (position == 0) {
                     args = new Bundle();
                     args.putInt("user_id", UserConfig.getClientUserId());
                     LaunchActivity.this.presentFragment(new ChatActivity(args));
@@ -806,12 +806,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             return;
         }
         int a;
+        BaseFragment chatFragment;
         if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
             this.tabletFullSize = true;
             if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
                 a = 0;
                 while (this.rightActionBarLayout.fragmentsStack.size() > 0) {
-                    BaseFragment chatFragment;
                     chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
                     if (chatFragment instanceof ChatActivity) {
                         ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
@@ -2795,13 +2795,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         return true;
     }
 
-    public void rebuildAllFragments() {
+    public void rebuildAllFragments(boolean last) {
         if (this.layersActionBarLayout != null) {
-            this.layersActionBarLayout.rebuildAllFragmentViews(true);
+            this.layersActionBarLayout.rebuildAllFragmentViews(last);
             this.layersActionBarLayout.showLastFragment();
             return;
         }
-        this.actionBarLayout.rebuildAllFragmentViews(true);
+        this.actionBarLayout.rebuildAllFragmentViews(last);
         this.actionBarLayout.showLastFragment();
     }
 
