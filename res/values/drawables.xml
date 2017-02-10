@@ -735,6 +735,14 @@
     <drawable name="ic_playinline">res/drawable-hdpi-v4/ic_playinline.png</drawable>
     <drawable name="ic_playinline">res/drawable-xhdpi-v4/ic_playinline.png</drawable>
     <drawable name="ic_playinline">res/drawable-xxhdpi-v4/ic_playinline.png</drawable>
+    <drawable name="ic_rating_star">res/drawable-mdpi-v4/ic_rating_star.png</drawable>
+    <drawable name="ic_rating_star">res/drawable-hdpi-v4/ic_rating_star.png</drawable>
+    <drawable name="ic_rating_star">res/drawable-xhdpi-v4/ic_rating_star.png</drawable>
+    <drawable name="ic_rating_star">res/drawable-xxhdpi-v4/ic_rating_star.png</drawable>
+    <drawable name="ic_rating_star_filled">res/drawable-mdpi-v4/ic_rating_star_filled.png</drawable>
+    <drawable name="ic_rating_star_filled">res/drawable-hdpi-v4/ic_rating_star_filled.png</drawable>
+    <drawable name="ic_rating_star_filled">res/drawable-xhdpi-v4/ic_rating_star_filled.png</drawable>
+    <drawable name="ic_rating_star_filled">res/drawable-xxhdpi-v4/ic_rating_star_filled.png</drawable>
     <drawable name="ic_reply_icon">res/drawable-mdpi-v4/ic_reply_icon.png</drawable>
     <drawable name="ic_reply_icon">res/drawable-hdpi-v4/ic_reply_icon.png</drawable>
     <drawable name="ic_reply_icon">res/drawable-xhdpi-v4/ic_reply_icon.png</drawable>
@@ -1399,6 +1407,7 @@
     <drawable name="profile_phone">res/drawable-hdpi-v4/profile_phone.png</drawable>
     <drawable name="profile_phone">res/drawable-xhdpi-v4/profile_phone.png</drawable>
     <drawable name="profile_phone">res/drawable-xxhdpi-v4/profile_phone.png</drawable>
+    <drawable name="rating_bar">res/drawable/rating_bar.xml</drawable>
     <drawable name="rec">res/drawable-mdpi-v4/rec.png</drawable>
     <drawable name="rec">res/drawable-hdpi-v4/rec.png</drawable>
     <drawable name="rec">res/drawable-xhdpi-v4/rec.png</drawable>

@@ -8782,7 +8782,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             this.selectedObject = null;
                             return;
                         }
-                        presentFragment(new ThemePreviewActivity(themeInfo));
+                        presentFragment(new ThemePreviewActivity(locFile, themeInfo));
                         break;
                     }
                     break;

@@ -6,22 +6,23 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
+import org.telegram.ui.Components.BetterRatingView;
+import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class VoIPFeedbackActivity extends Activity {
@@ -40,14 +41,28 @@ public class VoIPFeedbackActivity extends Activity {
         text.setGravity(17);
         text.setText(LocaleController.getString("VoipRateCallAlert", R.string.VoipRateCallAlert));
         ll.addView(text);
-        RatingBar bar = new RatingBar(this);
-        bar.setNumStars(5);
-        bar.setIsIndicator(false);
-        bar.setStepSize(1.0f);
+        final BetterRatingView bar = new BetterRatingView(this);
         ll.addView(bar, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
+        final EditText commentBox = new EditText(this);
+        commentBox.setHint(LocaleController.getString("VoipFeedbackCommentHint", R.string.VoipFeedbackCommentHint));
+        commentBox.setInputType(147457);
+        commentBox.setVisibility(8);
+        ll.addView(commentBox, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
         AlertDialog alert = new Builder(this).setTitle(LocaleController.getString("AppName", R.string.AppName)).setView(ll).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                VoIPFeedbackActivity.this.suggestMoreFeedback();
+                TL_phone_setCallRating req = new TL_phone_setCallRating();
+                req.rating = bar.getRating();
+                if (req.rating < 5) {
+                    req.comment = commentBox.getText().toString();
+                }
+                req.peer = new TL_inputPhoneCall();
+                req.peer.access_hash = VoIPFeedbackActivity.this.getIntent().getLongExtra("call_access_hash", 0);
+                req.peer.id = VoIPFeedbackActivity.this.getIntent().getLongExtra("call_id", 0);
+                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                    }
+                });
+                VoIPFeedbackActivity.this.finish();
             }
         }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -61,9 +76,22 @@ public class VoIPFeedbackActivity extends Activity {
         });
         final Button btn = alert.getButton(-1);
         btn.setEnabled(false);
-        bar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                btn.setEnabled(rating > 0.0f);
+        bar.setOnRatingChangeListener(new OnRatingChangeListener() {
+            public void onRatingChanged(int rating) {
+                boolean z;
+                int i = 0;
+                Button button = btn;
+                if (rating > 0) {
+                    z = true;
+                } else {
+                    z = false;
+                }
+                button.setEnabled(z);
+                EditText editText = commentBox;
+                if (rating >= 5 || rating <= 0) {
+                    i = 8;
+                }
+                editText.setVisibility(i);
             }
         });
     }
@@ -71,26 +99,5 @@ public class VoIPFeedbackActivity extends Activity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
-    }
-
-    private void suggestMoreFeedback() {
-        new Builder(this).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("VoipFeedbackAlert", R.string.VoipFeedbackAlert)).setPositiveButton(LocaleController.getString("Yes", R.string.Yes), new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                User user = new User();
-                user.id = 4244000;
-                user.flags = 2;
-                user.first_name = "VoIP Support";
-                MessagesController.getInstance().putUser(user, true);
-                Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
-                intent.setFlags(32768);
-                intent.putExtra("userId", 4244000);
-                VoIPFeedbackActivity.this.startActivity(intent);
-            }
-        }).setNegativeButton(LocaleController.getString("No", R.string.No), null).show().setOnDismissListener(new OnDismissListener() {
-            public void onDismiss(DialogInterface dialog) {
-                VoIPFeedbackActivity.this.finish();
-            }
-        });
     }
 }

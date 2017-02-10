@@ -111,12 +111,13 @@ public class zzt implements zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
-        int statusCode;
+        HttpResponse zza;
+        Throwable e;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
-            HttpResponse zza;
+            int statusCode;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzk_.zzh());
@@ -132,17 +133,17 @@ public class zzt implements zzf {
                 if (statusCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION && statusCode <= 299) {
                     return new zzi(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
                 }
-            } catch (SocketTimeoutException e) {
+            } catch (SocketTimeoutException e2) {
                 zza("socket", com_google_android_gms_internal_zzk_, new zzq());
-            } catch (ConnectTimeoutException e2) {
+            } catch (ConnectTimeoutException e3) {
                 zza("connection", com_google_android_gms_internal_zzk_, new zzq());
-            } catch (Throwable e3) {
-                Throwable th = e3;
+            } catch (Throwable e4) {
+                Throwable th = e4;
                 String str = "Bad URL ";
                 String valueOf = String.valueOf(com_google_android_gms_internal_zzk_.getUrl());
                 throw new RuntimeException(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), th);
-            } catch (IOException e4) {
-                e3 = e4;
+            } catch (IOException e5) {
+                e4 = e5;
                 r5 = null;
                 httpResponse = zza;
                 if (httpResponse != null) {
@@ -158,8 +159,7 @@ public class zzt implements zzf {
                         throw new zzh(null);
                     }
                 }
-                Throwable e32;
-                throw new zzj(e32);
+                throw new zzj(e4);
             }
         }
         zza zzh = com_google_android_gms_internal_zzk_.zzh();

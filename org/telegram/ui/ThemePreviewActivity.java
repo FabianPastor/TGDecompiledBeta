@@ -49,6 +49,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
     private ThemeInfo applyingTheme;
     private DialogsAdapter dialogsAdapter;
     private RecyclerListView listView;
+    private File themeFile;
     private ViewPager viewPager;
 
     public class DialogsAdapter extends SelectionAdapter {
@@ -199,9 +200,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    public ThemePreviewActivity(ThemeInfo themeInfo) {
+    public ThemePreviewActivity(File file, ThemeInfo themeInfo) {
         this.swipeBackEnabled = false;
         this.applyingTheme = themeInfo;
+        this.themeFile = file;
     }
 
     public View createView(Context context) {
@@ -293,7 +295,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             public void onClick(View v) {
                 ThemePreviewActivity.this.applied = true;
                 ThemePreviewActivity.this.parentLayout.rebuildAllFragmentViews(false);
-                Theme.applyThemeFile(new File(ThemePreviewActivity.this.applyingTheme.pathToFile), ThemePreviewActivity.this.applyingTheme.name, false);
+                Theme.applyThemeFile(ThemePreviewActivity.this.themeFile, ThemePreviewActivity.this.applyingTheme.name, false);
                 ThemePreviewActivity.this.finishFragment();
             }
         });

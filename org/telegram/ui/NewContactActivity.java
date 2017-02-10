@@ -271,7 +271,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         linearLayout.addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 24.0f, 0.0f, 14.0f));
         this.countryButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                CountrySelectActivity fragment = new CountrySelectActivity();
+                CountrySelectActivity fragment = new CountrySelectActivity(true);
                 fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
                     public void didSelectCountry(String name, String shortName) {
                         NewContactActivity.this.selectCountry(name);

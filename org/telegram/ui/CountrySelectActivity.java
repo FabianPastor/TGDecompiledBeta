@@ -46,6 +46,7 @@ public class CountrySelectActivity extends BaseFragment {
     private EmptyTextProgressView emptyView;
     private RecyclerListView listView;
     private CountryAdapter listViewAdapter;
+    private boolean needPhoneCode;
     private CountrySearchAdapter searchListViewAdapter;
     private boolean searchWas;
     private boolean searching;
@@ -153,7 +154,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         public void onBindViewHolder(ViewHolder holder, int position) {
             Country c = (Country) this.searchResult.get(position);
-            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, "+" + c.code, position != this.searchResult.size() + -1);
+            ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, position != this.searchResult.size() + -1);
         }
 
         public int getItemViewType(int i) {
@@ -167,6 +168,7 @@ public class CountrySelectActivity extends BaseFragment {
         private ArrayList<String> sortedCountries = new ArrayList();
 
         public CountryAdapter(Context context) {
+            ArrayList<Country> arr;
             this.mContext = context;
             try {
                 InputStream stream = ApplicationLoader.applicationContext.getResources().getAssets().open("countries.txt");
@@ -176,7 +178,6 @@ public class CountrySelectActivity extends BaseFragment {
                     if (line == null) {
                         break;
                     }
-                    ArrayList<Country> arr;
                     String[] args = line.split(";");
                     Country c = new Country();
                     c.name = args[2];
@@ -285,7 +286,7 @@ public class CountrySelectActivity extends BaseFragment {
         public void onBindViewHolder(int section, int position, ViewHolder holder) {
             if (holder.getItemViewType() == 0) {
                 Country c = (Country) ((ArrayList) this.countries.get(this.sortedCountries.get(section))).get(position);
-                ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, "+" + c.code, false);
+                ((TextSettingsCell) holder.itemView).setTextAndValue(c.name, CountrySelectActivity.this.needPhoneCode ? "+" + c.code : null, false);
             }
         }
 
@@ -304,6 +305,10 @@ public class CountrySelectActivity extends BaseFragment {
         public int getPositionForScrollProgress(float progress) {
             return (int) (((float) getItemCount()) * progress);
         }
+    }
+
+    public CountrySelectActivity(boolean phoneCode) {
+        this.needPhoneCode = phoneCode;
     }
 
     public boolean onFragmentCreate() {

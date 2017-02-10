@@ -401,31 +401,31 @@ public final class DynamiteModule {
     public static int zzc(Context context, String str, boolean z) throws zza {
         String str2;
         Throwable e;
-        Cursor cursor;
-        Cursor cursor2 = null;
+        Cursor cursor = null;
         if (z) {
             try {
                 str2 = "api_force_staging";
             } catch (Exception e2) {
                 e = e2;
-                cursor = null;
+                r1 = null;
                 try {
                     if (e instanceof zza) {
                         throw e;
                     }
                     throw new zza("V2 version check failed", e);
                 } catch (Throwable th) {
+                    Cursor cursor2;
                     e = th;
-                    cursor2 = cursor;
-                    if (cursor2 != null) {
-                        cursor2.close();
+                    cursor = cursor2;
+                    if (cursor != null) {
+                        cursor.close();
                     }
                     throw e;
                 }
             } catch (Throwable th2) {
                 e = th2;
-                if (cursor2 != null) {
-                    cursor2.close();
+                if (cursor != null) {
+                    cursor.close();
                 }
                 throw e;
             }
@@ -436,19 +436,19 @@ public final class DynamiteModule {
         if (context != null) {
             ContentResolver contentResolver = context.getContentResolver();
             if (contentResolver != null) {
-                cursor = contentResolver.query(parse, null, null, null, null);
-                if (cursor != null) {
+                cursor2 = contentResolver.query(parse, null, null, null, null);
+                if (cursor2 != null) {
                     try {
-                        if (cursor.moveToFirst()) {
-                            int i = cursor.getInt(0);
+                        if (cursor2.moveToFirst()) {
+                            int i = cursor2.getInt(0);
                             if (i > 0) {
                                 synchronized (DynamiteModule.class) {
-                                    zzaQs.put(new StringBuilder(String.valueOf(str).length() + 12).append(str).append(":").append(i).toString(), Base64.decode(cursor.getString(3), 0));
-                                    zzaQt = cursor.getString(2);
+                                    zzaQs.put(new StringBuilder(String.valueOf(str).length() + 12).append(str).append(":").append(i).toString(), Base64.decode(cursor2.getString(3), 0));
+                                    zzaQt = cursor2.getString(2);
                                 }
                             }
-                            if (cursor != null) {
-                                cursor.close();
+                            if (cursor2 != null) {
+                                cursor2.close();
                             }
                             return i;
                         }

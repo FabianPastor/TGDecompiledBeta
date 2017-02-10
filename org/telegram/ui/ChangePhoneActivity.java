@@ -687,7 +687,7 @@ public class ChangePhoneActivity extends BaseFragment {
             final ChangePhoneActivity changePhoneActivity = ChangePhoneActivity.this;
             this.countryButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
-                    CountrySelectActivity fragment = new CountrySelectActivity();
+                    CountrySelectActivity fragment = new CountrySelectActivity(true);
                     fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
                         public void didSelectCountry(String name, String shortName) {
                             PhoneView.this.selectCountry(name);

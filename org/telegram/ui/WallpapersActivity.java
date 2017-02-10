@@ -134,6 +134,9 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 Drawable drawable = WallpapersActivity.this.backgroundImage.getDrawable();
                 WallpapersActivity.this.backgroundImage.setImageBitmap(bitmap);
             }
+
+            public void needOpenColorPicker() {
+            }
         });
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);

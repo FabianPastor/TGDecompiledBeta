@@ -79,11 +79,11 @@ import org.telegram.ui.LaunchActivity;
 public class ThemeEditorView {
     @SuppressLint({"StaticFieldLeak"})
     private static volatile ThemeEditorView Instance = null;
-    private BottomSheet currentSheet;
     private ArrayList<ThemeDescription> currentThemeDesription;
     private int currentThemeDesriptionPosition;
     private String currentThemeName;
     private DecelerateInterpolator decelerateInterpolator;
+    private EditorAlert editorAlert;
     private final int editorHeight = AndroidUtilities.dp(54.0f);
     private final int editorWidth = AndroidUtilities.dp(54.0f);
     private boolean hidden;
@@ -821,23 +821,23 @@ public class ThemeEditorView {
                     this.startX = x;
                     this.startY = y;
                 } else if (event.getAction() != 2 || this.dragging) {
-                    if (event.getAction() == 1 && !this.dragging && ThemeEditorView.this.currentSheet == null) {
+                    if (event.getAction() == 1 && !this.dragging && ThemeEditorView.this.editorAlert == null) {
                         ActionBarLayout actionBarLayout = ((LaunchActivity) ThemeEditorView.this.parentActivity).getActionBarLayout();
                         if (!actionBarLayout.fragmentsStack.isEmpty()) {
                             ThemeDescription[] items = ((BaseFragment) actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1)).getThemeDescriptions();
                             if (items != null) {
-                                ThemeEditorView.this.currentSheet = new EditorAlert(ThemeEditorView.this.parentActivity, items);
-                                ThemeEditorView.this.currentSheet.setOnDismissListener(new OnDismissListener() {
+                                ThemeEditorView.this.editorAlert = new EditorAlert(ThemeEditorView.this.parentActivity, items);
+                                ThemeEditorView.this.editorAlert.setOnDismissListener(new OnDismissListener() {
                                     public void onDismiss(DialogInterface dialog) {
                                     }
                                 });
-                                ThemeEditorView.this.currentSheet.setOnDismissListener(new OnDismissListener() {
+                                ThemeEditorView.this.editorAlert.setOnDismissListener(new OnDismissListener() {
                                     public void onDismiss(DialogInterface dialog) {
-                                        ThemeEditorView.this.currentSheet = null;
+                                        ThemeEditorView.this.editorAlert = null;
                                         ThemeEditorView.this.show();
                                     }
                                 });
-                                ThemeEditorView.this.currentSheet.show();
+                                ThemeEditorView.this.editorAlert.show();
                                 ThemeEditorView.this.hide();
                             }
                         }
@@ -907,6 +907,17 @@ public class ThemeEditorView {
             this.wallpaperUpdater = new WallpaperUpdater(activity, new WallpaperUpdaterDelegate() {
                 public void didSelectWallpaper(File file, Bitmap bitmap) {
                     Theme.setThemeWallpaper(themeName, bitmap, file);
+                }
+
+                public void needOpenColorPicker() {
+                    for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
+                        ThemeDescription description = (ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a);
+                        description.startEditing();
+                        if (a == 0) {
+                            ThemeEditorView.this.editorAlert.colorPicker.setColor(description.getCurrentColor());
+                        }
+                    }
+                    ThemeEditorView.this.editorAlert.setColorPickerVisible(true);
                 }
             });
             Instance = this;

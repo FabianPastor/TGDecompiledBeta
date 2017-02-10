@@ -669,6 +669,7 @@ public class Theme {
     private static int serviceSelectedMessageColor;
     private static final Object sync = new Object();
     private static Drawable themedWallpaper;
+    private static int themedWallpaperFileOffset;
     public static ArrayList<ThemeInfo> themes = new ArrayList();
     private static HashMap<String, ThemeInfo> themesDict = new HashMap();
     private static Drawable wallpaper;
@@ -1541,8 +1542,9 @@ public class Theme {
             int currentPosition = 0;
             FileInputStream fileInputStream = new FileInputStream(file);
             boolean finished = false;
-            do {
-                try {
+            try {
+                themedWallpaperFileOffset = -1;
+                do {
                     int read = fileInputStream.read(bytes);
                     if (read == -1) {
                         break;
@@ -1554,7 +1556,7 @@ public class Theme {
                             int len = (a - start) + 1;
                             String line = new String(bytes, start, len - 1, "UTF-8");
                             if (line.startsWith("WPS")) {
-                                stringMap.put(key_chat_wallpaper, Integer.valueOf(currentPosition + len));
+                                themedWallpaperFileOffset = currentPosition + len;
                                 finished = true;
                                 break;
                             }
@@ -1582,20 +1584,20 @@ public class Theme {
                         break;
                     }
                     fileInputStream.getChannel().position((long) currentPosition);
-                } catch (Throwable th2) {
-                    th = th2;
-                    stream = fileInputStream;
+                } while (!finished);
+                if (fileInputStream != null) {
+                    try {
+                        fileInputStream.close();
+                    } catch (Throwable e3) {
+                        FileLog.e(e3);
+                        stream = fileInputStream;
+                    }
                 }
-            } while (!finished);
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (Throwable e3) {
-                    FileLog.e(e3);
-                    stream = fileInputStream;
-                }
+                stream = fileInputStream;
+            } catch (Throwable th2) {
+                th = th2;
+                stream = fileInputStream;
             }
-            stream = fileInputStream;
         } catch (Throwable th3) {
             e3 = th3;
             try {
@@ -2142,6 +2144,8 @@ public class Theme {
         }
         if (key.equals(key_chat_serviceBackground) || key.equals(key_chat_serviceBackgroundSelected)) {
             applyChatServiceMessageColor();
+        } else if (key.equals(key_chat_wallpaper)) {
+            reloadWallpaper();
         }
     }
 
@@ -2238,18 +2242,20 @@ public class Theme {
                 public void run() {
                     Throwable e;
                     int i;
-                    SharedPreferences preferences;
+                    int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int selectedBackground;
-                        File toFile;
-                        Integer wallpaperThemeOffset = Integer.valueOf(Theme.getColor(Theme.key_chat_wallpaper));
-                        if (!(wallpaperThemeOffset == null || wallpaperThemeOffset.intValue() <= 0 || Theme.currentTheme.pathToFile == null)) {
+                        SharedPreferences preferences;
+                        Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
+                        if (backgroundColor != null) {
+                            Theme.wallpaper = new ColorDrawable(backgroundColor.intValue());
+                        } else if (Theme.themedWallpaperFileOffset > 0 && Theme.currentTheme.pathToFile != null) {
                             FileInputStream stream = null;
                             try {
                                 FileInputStream stream2 = new FileInputStream(new File(Theme.currentTheme.pathToFile));
                                 try {
-                                    stream2.getChannel().position((long) wallpaperThemeOffset.intValue());
+                                    stream2.getChannel().position((long) Theme.themedWallpaperFileOffset);
                                     Bitmap bitmap = BitmapFactory.decodeStream(stream2);
                                     if (bitmap != null) {
                                         Theme.themedWallpaper = Theme.wallpaper = new BitmapDrawable(bitmap);

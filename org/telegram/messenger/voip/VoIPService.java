@@ -81,6 +81,9 @@ import org.telegram.tgnet.TLRPC.TL_phone_discardCall;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_receivedCall;
 import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
+import org.telegram.tgnet.TLRPC.TL_updatePhoneCall;
+import org.telegram.tgnet.TLRPC.TL_updates;
+import org.telegram.tgnet.TLRPC.Update;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 import org.telegram.ui.VoIPActivity;
@@ -89,8 +92,8 @@ import org.telegram.ui.VoIPPermissionActivity;
 
 public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener {
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
-    private static final int CALL_MAX_LAYER = 60;
-    private static final int CALL_MIN_LAYER = 60;
+    private static final int CALL_MAX_LAYER = 64;
+    private static final int CALL_MIN_LAYER = 64;
     public static final int DISCARD_REASON_DISCONNECT = 2;
     public static final int DISCARD_REASON_HANGUP = 1;
     public static final int DISCARD_REASON_LINE_BUSY = 4;
@@ -110,6 +113,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public static final int STATE_WAITING_INCOMING = 10;
     public static final int STATE_WAIT_INIT = 1;
     public static final int STATE_WAIT_INIT_ACK = 2;
+    private static final String TAG = "tg-voip-service";
     public static PhoneCall callIShouldHavePutIntoIntent;
     private static VoIPService sharedInstance;
     private byte[] a_or_b;
@@ -286,13 +290,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.soundPool.release();
         }
         ConnectionsManager.getInstance().setAppPaused(true, false);
-        if (this.lastKnownDuration >= 10000) {
-            try {
-                PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).addFlags(805306368), 0).send();
-            } catch (Exception x) {
-                FileLog.e("Error starting incall activity", x);
-            }
-        }
     }
 
     public static VoIPService getSharedInstance() {
@@ -386,8 +383,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     TL_phoneCallProtocol tL_phoneCallProtocol = reqCall.protocol;
                     reqCall.protocol.udp_reflector = true;
                     tL_phoneCallProtocol.udp_p2p = true;
-                    reqCall.protocol.min_layer = 60;
-                    reqCall.protocol.max_layer = 60;
+                    reqCall.protocol.min_layer = 64;
+                    reqCall.protocol.max_layer = 64;
                     reqCall.g_a = g_a;
                     reqCall.random_id = Utilities.random.nextInt();
                     ConnectionsManager.getInstance().sendRequest(reqCall, new RequestDelegate() {
@@ -417,10 +414,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                             }
                                         };
                                         AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
-                                        return;
+                                    } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
+                                        VoIPService.this.callFailed(-1);
+                                    } else {
+                                        FileLog.e("Error on phone.requestCall: " + error);
+                                        VoIPService.this.callFailed();
                                     }
-                                    FileLog.e("Error on phone.requestCall: " + error);
-                                    VoIPService.this.callFailed();
                                 }
                             }, 2);
                         }
@@ -568,8 +567,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
                         req.protocol.udp_reflector = true;
                         tL_phoneCallProtocol.udp_p2p = true;
-                        req.protocol.min_layer = 60;
-                        req.protocol.max_layer = 60;
+                        req.protocol.min_layer = 64;
+                        req.protocol.max_layer = 64;
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {
@@ -642,6 +641,16 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     if (error != null) {
                         FileLog.e("error on phone.discardCall: " + error);
                     } else {
+                        if (response instanceof TL_updates) {
+                            Iterator it = ((TL_updates) response).updates.iterator();
+                            while (it.hasNext()) {
+                                Update upd = (Update) it.next();
+                                if (upd instanceof TL_updatePhoneCall) {
+                                    TL_updatePhoneCall updCall = (TL_updatePhoneCall) upd;
+                                    VoIPService.this.startRatingActivity();
+                                }
+                            }
+                        }
                         FileLog.d("phone.discardCall " + response);
                     }
                     if (onDone != null) {
@@ -667,9 +676,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     }
                 }, 2500);
                 stopSelf();
-                return;
+            } else {
+                callEnded();
             }
-            callEnded();
+            if (((TL_phoneCallDiscarded) call).need_rating) {
+                startRatingActivity();
+            }
         } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
             processAcceptedCall();
         } else if (this.currentState == 8 && call.receive_date != 0) {
@@ -688,6 +700,14 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 }
             };
             AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance().callRingTimeout);
+        }
+    }
+
+    private void startRatingActivity() {
+        try {
+            PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.call.id).putExtra("call_access_hash", this.call.access_hash).addFlags(805306368), 0).send();
+        } catch (Exception x) {
+            FileLog.e("Error starting incall activity", x);
         }
     }
 
@@ -813,7 +833,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             builder.setLargeIcon(bitmap);
                         }
                     } catch (Throwable e) {
-                        FileLog.e(e);
+                        FileLog.e("tmessages", e);
                     }
                 }
             }
@@ -863,7 +883,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             builder.setLargeIcon(bitmap);
                         }
                     } catch (Throwable e) {
-                        FileLog.e(e);
+                        FileLog.e("tmessages", e);
                     }
                 }
             }
@@ -893,27 +913,37 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void callFailed() {
-        if (this.controller != null && this.controllerStarted) {
-            this.lastError = this.controller.getLastError();
-        }
-        TL_phone_discardCall req = new TL_phone_discardCall();
-        req.peer = new TL_inputPhoneCall();
-        req.peer.access_hash = this.call.access_hash;
-        req.peer.id = this.call.id;
-        int callDuration = (this.controller == null || !this.controllerStarted) ? 0 : (int) (this.controller.getCallDuration() / 1000);
-        req.duration = callDuration;
-        long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
-        req.connection_id = preferredRelayID;
-        req.reason = new TL_phoneCallDiscardReasonDisconnect();
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
-                if (error != null) {
-                    FileLog.e("error on phone.discardCall: " + error);
-                } else {
-                    FileLog.d("phone.discardCall " + response);
-                }
+        int lastError = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getLastError();
+        callFailed(lastError);
+    }
+
+    private void callFailed(int errorCode) {
+        this.lastError = errorCode;
+        if (this.call != null) {
+            int i;
+            TL_phone_discardCall req = new TL_phone_discardCall();
+            req.peer = new TL_inputPhoneCall();
+            req.peer.access_hash = this.call.access_hash;
+            req.peer.id = this.call.id;
+            if (this.controller == null || !this.controllerStarted) {
+                i = 0;
+            } else {
+                i = (int) (this.controller.getCallDuration() / 1000);
             }
-        });
+            req.duration = i;
+            long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
+            req.connection_id = preferredRelayID;
+            req.reason = new TL_phoneCallDiscardReasonDisconnect();
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (error != null) {
+                        FileLog.e("error on phone.discardCall: " + error);
+                    } else {
+                        FileLog.d("phone.discardCall " + response);
+                    }
+                }
+            });
+        }
         dispatchStateChanged(4);
         this.playingSound = true;
         this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
@@ -1057,11 +1087,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void onAudioFocusChange(int focusChange) {
-        boolean z = true;
-        if (focusChange != 1) {
-            z = false;
+        if (focusChange == 1) {
+            this.haveAudioFocus = true;
+        } else {
+            this.haveAudioFocus = false;
         }
-        this.haveAudioFocus = z;
     }
 
     public void onUIForegroundStateChanged(boolean isForeground) {

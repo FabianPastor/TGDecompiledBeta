@@ -30,6 +30,8 @@ public class WallpaperUpdater {
 
     public interface WallpaperUpdaterDelegate {
         void didSelectWallpaper(File file, Bitmap bitmap);
+
+        void needOpenColorPicker();
     }
 
     public WallpaperUpdater(Activity activity, WallpaperUpdaterDelegate wallpaperUpdaterDelegate) {
@@ -40,7 +42,7 @@ public class WallpaperUpdater {
 
     public void showAlert(final boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     try {
@@ -68,8 +70,13 @@ public class WallpaperUpdater {
                     Intent photoPickerIntent = new Intent("android.intent.action.PICK");
                     photoPickerIntent.setType("image/*");
                     WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
-                } else if (fromTheme && i == 2) {
-                    WallpaperUpdater.this.delegate.didSelectWallpaper(null, null);
+                } else if (!fromTheme) {
+                } else {
+                    if (i == 2) {
+                        WallpaperUpdater.this.delegate.needOpenColorPicker();
+                    } else if (i == 3) {
+                        WallpaperUpdater.this.delegate.didSelectWallpaper(null, null);
+                    }
                 }
             }
         });

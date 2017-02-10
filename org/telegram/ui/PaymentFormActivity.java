@@ -503,17 +503,16 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             if (PaymentFormActivity.this.getParentActivity() == null) {
                                 return false;
                             }
-                            if (event.getAction() != 1) {
-                                return true;
+                            if (event.getAction() == 1) {
+                                CountrySelectActivity fragment = new CountrySelectActivity(false);
+                                fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
+                                    public void didSelectCountry(String name, String shortName) {
+                                        PaymentFormActivity.this.inputFields[4].setText(name);
+                                        PaymentFormActivity.this.countryName = shortName;
+                                    }
+                                });
+                                PaymentFormActivity.this.presentFragment(fragment);
                             }
-                            CountrySelectActivity fragment = new CountrySelectActivity();
-                            fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
-                                public void didSelectCountry(String name, String shortName) {
-                                    PaymentFormActivity.this.inputFields[4].setText(name);
-                                    PaymentFormActivity.this.countryName = shortName;
-                                }
-                            });
-                            PaymentFormActivity.this.presentFragment(fragment);
                             return true;
                         }
                     });

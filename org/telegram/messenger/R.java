@@ -10,6 +10,10 @@ public final class R {
         public static final int popup_out = NUM;
     }
 
+    public static final class array {
+        public static final int android_wear_capabilities = NUM;
+    }
+
     public static final class attr {
         public static final int ambientEnabled = NUM;
         public static final int buttonSize = NUM;
@@ -281,6 +285,8 @@ public final class R {
         public static final int ic_play = NUM;
         public static final int ic_player = NUM;
         public static final int ic_playinline = NUM;
+        public static final int ic_rating_star = NUM;
+        public static final int ic_rating_star_filled = NUM;
         public static final int ic_reply_icon = NUM;
         public static final int ic_send = NUM;
         public static final int ic_share_article = NUM;
@@ -457,6 +463,7 @@ public final class R {
         public static final int profile_info = NUM;
         public static final int profile_list = NUM;
         public static final int profile_phone = NUM;
+        public static final int rating_bar = NUM;
         public static final int rec = NUM;
         public static final int recorded = NUM;
         public static final int redcircle = NUM;
@@ -1816,6 +1823,7 @@ public final class R {
         public static final int SecretWebPage = NUM;
         public static final int SecurityTitle = NUM;
         public static final int SelectChat = NUM;
+        public static final int SelectColor = NUM;
         public static final int SelectContact = NUM;
         public static final int SelectFile = NUM;
         public static final int Send = NUM;
@@ -1990,6 +1998,7 @@ public final class R {
         public static final int VoipExchangingKeys = NUM;
         public static final int VoipFailed = NUM;
         public static final int VoipFeedbackAlert = NUM;
+        public static final int VoipFeedbackCommentHint = NUM;
         public static final int VoipHangingUp = NUM;
         public static final int VoipInCallBranding = NUM;
         public static final int VoipIncoming = NUM;

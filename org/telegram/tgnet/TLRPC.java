@@ -10197,14 +10197,14 @@ public class TLRPC {
     }
 
     public static class TL_phone_discardCall extends TLObject {
-        public static int constructor = 503940201;
+        public static int constructor = NUM;
         public long connection_id;
         public int duration;
         public TL_inputPhoneCall peer;
         public PhoneCallDiscardReason reason;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return TL_phone_discardedCall.TLdeserialize(stream, constructor, exception);
+            return Updates.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -19468,6 +19468,7 @@ public class TLRPC {
 
     public static class TL_phoneCallDiscarded extends PhoneCall {
         public static int constructor = NUM;
+        public boolean need_rating;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.flags = stream.readInt32(exception);
@@ -19478,9 +19479,13 @@ public class TLRPC {
             if ((this.flags & 2) != 0) {
                 this.duration = stream.readInt32(exception);
             }
+            this.need_rating = (this.flags & 4) != 0;
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
+            if (this.need_rating) {
+                this.flags |= 4;
+            }
             stream.writeInt32(constructor);
             stream.writeInt32(this.flags);
             stream.writeInt64(this.id);

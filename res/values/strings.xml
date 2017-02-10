@@ -1525,7 +1525,9 @@
     <string name="PaymentTransactionReview">Transaction Review</string>
     <string name="PaymentTransactionTotal">Total</string>
     <string name="SaveTheme">SAVE THEME</string>
+    <string name="SelectColor">Select color</string>
     <string name="ThemePreview">Theme Preview</string>
+    <string name="VoipFeedbackCommentHint">Add an optional comment</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>

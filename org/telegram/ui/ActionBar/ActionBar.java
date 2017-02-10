@@ -363,7 +363,9 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setActionModeTopColor(int color) {
-        this.actionModeTop.setBackgroundColor(color);
+        if (this.actionModeTop != null) {
+            this.actionModeTop.setBackgroundColor(color);
+        }
     }
 
     public void setSearchTextColor(int color, boolean placeholder) {
@@ -373,7 +375,9 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setActionModeColor(int color) {
-        this.actionMode.setBackgroundColor(color);
+        if (this.actionMode != null) {
+            this.actionMode.setBackgroundColor(color);
+        }
     }
 
     public boolean isActionModeShowed() {

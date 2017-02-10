@@ -1711,7 +1711,7 @@ public class LoginActivity extends BaseFragment {
             final LoginActivity loginActivity = LoginActivity.this;
             this.countryButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
-                    CountrySelectActivity fragment = new CountrySelectActivity();
+                    CountrySelectActivity fragment = new CountrySelectActivity(true);
                     fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
                         public void didSelectCountry(String name, String shortName) {
                             PhoneView.this.selectCountry(name);

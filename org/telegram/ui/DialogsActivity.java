@@ -1090,6 +1090,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     public void setSideMenu(RecyclerView recyclerView) {
         this.sideMenu = recyclerView;
+        this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
     }
 
     private void updatePasscodeButton() {

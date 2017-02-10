@@ -751,8 +751,15 @@ public class VoIPActivity extends Activity implements StateListener {
                     }
                 } else if (state == 4) {
                     VoIPActivity.this.stateText.setText(LocaleController.getString("VoipFailed", R.string.VoipFailed));
-                    if (VoIPService.getSharedInstance().getLastError() == 1) {
+                    int err = VoIPService.getSharedInstance().getLastError();
+                    if (err == 1) {
                         new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show().setOnDismissListener(new OnDismissListener() {
+                            public void onDismiss(DialogInterface dialog) {
+                                VoIPActivity.this.finish();
+                            }
+                        });
+                    } else if (err == -1) {
+                        new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show().setOnDismissListener(new OnDismissListener() {
                             public void onDismiss(DialogInterface dialog) {
                                 VoIPActivity.this.finish();
                             }

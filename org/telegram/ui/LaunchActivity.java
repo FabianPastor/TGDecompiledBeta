@@ -306,6 +306,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             this.drawerLayoutContainer.addView(this.actionBarLayout, new LayoutParams(-1, -1));
         }
         this.sideMenu = new RecyclerListView(this);
+        this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
         this.sideMenu.setLayoutManager(new LinearLayoutManager(this, 1, false));
         RecyclerListView recyclerListView = this.sideMenu;
         Adapter drawerLayoutAdapter = new DrawerLayoutAdapter(this);
