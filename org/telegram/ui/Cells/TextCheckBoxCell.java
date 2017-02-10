@@ -37,7 +37,7 @@ public class TextCheckBoxCell extends FrameLayout {
             i = 3;
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 64.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 64.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context);
+        this.checkBox = new CheckBoxSquare(context, false);
         this.checkBox.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);

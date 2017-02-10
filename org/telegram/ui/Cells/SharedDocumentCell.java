@@ -79,7 +79,6 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         this.extTextView.setEllipsize(TruncateAt.END);
         addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
         this.thumbImageView = new BackupImageView(context);
-        this.thumbImageView.setResourceImageColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_files_folderIcon), Mode.MULTIPLY));
         view = this.thumbImageView;
         i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
@@ -204,7 +203,10 @@ public class SharedDocumentCell extends FrameLayout implements FileDownloadProgr
         if (thumb != null) {
             this.thumbImageView.setImage(thumb, "40_40", null);
         } else {
-            this.thumbImageView.setImageResource(resId);
+            Drawable drawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), resId);
+            Theme.setCombinedDrawableColor(drawable, Theme.getColor(Theme.key_files_folderIconBackground), false);
+            Theme.setCombinedDrawableColor(drawable, Theme.getColor(Theme.key_files_folderIcon), true);
+            this.thumbImageView.setImageDrawable(drawable);
         }
         this.thumbImageView.setVisibility(0);
     }

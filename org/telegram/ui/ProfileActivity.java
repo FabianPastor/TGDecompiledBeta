@@ -478,8 +478,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                     } else if (i == ProfileActivity.this.startSecretChatRow) {
                         textCell.setText(LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
-                        textCell.setTag("windowBackgroundWhiteGreenText");
-                        textCell.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+                        textCell.setTag(Theme.key_windowBackgroundWhiteGreenText2);
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText2));
                         return;
                     } else if (i == ProfileActivity.this.settingsKeyRow) {
                         Drawable identiconDrawable = new IdenticonDrawable();
@@ -493,8 +493,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         return;
                     } else if (i == ProfileActivity.this.convertRow) {
                         textCell.setText(LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
-                        textCell.setTag("windowBackgroundWhiteGreenText");
-                        textCell.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+                        textCell.setTag(Theme.key_windowBackgroundWhiteGreenText2);
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText2));
                         return;
                     } else if (i == ProfileActivity.this.membersRow) {
                         if (ProfileActivity.this.info != null) {
@@ -2893,7 +2893,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         themeDescriptionArr[52] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_profile_actionBackground);
         themeDescriptionArr[53] = new ThemeDescription(this.writeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_profile_actionPressedBackground);
         themeDescriptionArr[54] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        themeDescriptionArr[55] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGreenText");
+        themeDescriptionArr[55] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGreenText2);
         themeDescriptionArr[56] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText5);
         themeDescriptionArr[57] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText);
         themeDescriptionArr[58] = new ThemeDescription(this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon);

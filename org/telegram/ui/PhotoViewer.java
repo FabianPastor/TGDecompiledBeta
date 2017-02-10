@@ -1276,7 +1276,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                             if (!((currentUser == null || currentUser.id == UserConfig.getClientUserId()) && currentChat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentDate - PhotoViewer.this.currentMessageObject.messageOwner.date <= 172800)) {
                                                 int dp;
                                                 View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
-                                                CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity);
+                                                CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity, true);
                                                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                                 if (currentChat != null) {
                                                     cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);

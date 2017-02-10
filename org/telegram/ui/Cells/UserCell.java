@@ -79,7 +79,7 @@ public class UserCell extends FrameLayout {
         this.imageView.setVisibility(8);
         addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 0.0f : 16.0f, 0.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
         if (checkbox == 2) {
-            this.checkBoxBig = new CheckBoxSquare(context);
+            this.checkBoxBig = new CheckBoxSquare(context, false);
             addView(this.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
         } else if (checkbox == 1) {
             this.checkBox = new CheckBox(context, R.drawable.round_check2);

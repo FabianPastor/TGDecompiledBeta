@@ -22,7 +22,7 @@ public class RadioColorCell extends FrameLayout {
         super(context);
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
-        this.radioButton.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
+        this.radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
         View view = this.radioButton;
         int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
         float f = (float) (LocaleController.isRTL ? 0 : 18);
@@ -31,7 +31,7 @@ public class RadioColorCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(22, 22.0f, i4, f, 13.0f, (float) i2, 0.0f));
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);

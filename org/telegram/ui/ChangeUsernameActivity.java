@@ -330,8 +330,8 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
             if (name.equals(currentName)) {
                 this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
-                this.checkTextView.setTag("windowBackgroundWhiteGreenText");
-                this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+                this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                 return true;
             }
             this.checkTextView.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
@@ -350,8 +350,8 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     if (ChangeUsernameActivity.this.lastCheckName != null && ChangeUsernameActivity.this.lastCheckName.equals(name)) {
                                         if (error == null && (response instanceof TL_boolTrue)) {
                                             ChangeUsernameActivity.this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
-                                            ChangeUsernameActivity.this.checkTextView.setTag("windowBackgroundWhiteGreenText");
-                                            ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+                                            ChangeUsernameActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                                            ChangeUsernameActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                                             ChangeUsernameActivity.this.lastNameAvailable = true;
                                             return;
                                         }
@@ -458,7 +458,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
         themeDescriptionArr[7] = new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8);
         themeDescriptionArr[8] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteRedText4);
-        themeDescriptionArr[9] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhiteGreenText");
+        themeDescriptionArr[9] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGreenText);
         themeDescriptionArr[10] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8);
         return themeDescriptionArr;
     }

@@ -746,6 +746,7 @@ public final class R {
         public static final int AppName = NUM;
         public static final int AppNameBeta = NUM;
         public static final int ApplyLocalizationFile = NUM;
+        public static final int ApplyTheme = NUM;
         public static final int ApplyThemeFile = NUM;
         public static final int ArchivedMasks = NUM;
         public static final int ArchivedMasksAlertInfo = NUM;
@@ -1917,6 +1918,7 @@ public final class R {
         public static final int TerminateSessionQuestion = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;
+        public static final int ThemePreview = NUM;
         public static final int TimeToEdit = NUM;
         public static final int TimeToEditExpired = NUM;
         public static final int Times_few = NUM;

@@ -515,10 +515,10 @@ class zzasu extends zzats {
 
     @WorkerThread
     public String zzKG() {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -862,7 +862,6 @@ class zzasu extends zzats {
     }
 
     Map<Integer, List<zzauf.zze>> zzT(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zznA();
@@ -870,6 +869,7 @@ class zzasu extends zzats {
         zzac.zzdv(str);
         zzac.zzdv(str2);
         Map<Integer, List<zzauf.zze>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1013,7 +1013,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
@@ -1021,6 +1020,7 @@ class zzasu extends zzats {
         zznA();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_internal_zzasu_zza = new zza();
+        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1465,12 +1465,12 @@ class zzasu extends zzats {
     }
 
     public String zzam(long j) {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzmq();
         zznA();
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1684,12 +1684,12 @@ class zzasu extends zzats {
     }
 
     Map<Integer, zzf> zzfC(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zznA();
         zzmq();
         zzac.zzdv(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {
@@ -1851,12 +1851,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zzasp zzfy(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1951,6 +1951,7 @@ class zzasu extends zzats {
 
     @WorkerThread
     public List<Pair<zze, Long>> zzn(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zze, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1964,7 +1965,6 @@ class zzasu extends zzats {
         }
         zzac.zzas(z);
         zzac.zzdv(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

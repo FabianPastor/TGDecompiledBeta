@@ -856,7 +856,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareUnchecked);
         themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareDisabled);
         themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareBackground);
-        themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, Theme.checkboxSquare_checkPaint, null, null, Theme.key_checkboxSquareCheck);
+        themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckBoxCell.class}, null, null, null, Theme.key_checkboxSquareCheck);
         return themeDescriptionArr;
     }
 }

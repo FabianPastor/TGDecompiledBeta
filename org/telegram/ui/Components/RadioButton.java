@@ -10,10 +10,10 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.support.annotation.Keep;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.ui.ActionBar.Theme;
 
 public class RadioButton extends View {
     private static Paint checkedPaint;
@@ -23,8 +23,8 @@ public class RadioButton extends View {
     private Bitmap bitmap;
     private Canvas bitmapCanvas;
     private ObjectAnimator checkAnimator;
-    private int checkedColor = Theme.getColor(Theme.key_actionBarDefaultSubtitle);
-    private int color = Theme.getColor(Theme.key_actionBarDefaultSubtitle);
+    private int checkedColor;
+    private int color;
     private boolean isChecked;
     private float progress;
     private int size = AndroidUtilities.dp(16.0f);
@@ -48,6 +48,7 @@ public class RadioButton extends View {
         }
     }
 
+    @Keep
     public void setProgress(float value) {
         if (this.progress != value) {
             this.progress = value;

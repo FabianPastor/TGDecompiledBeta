@@ -865,7 +865,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                     maskValues[a] = MessagesController.getInstance().useSystemEmoji;
                                     name = LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault);
                                 }
-                                CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity());
+                                CheckBoxCell checkBoxCell = new CheckBoxCell(SettingsActivity.this.getParentActivity(), true);
                                 checkBoxCell.setTag(Integer.valueOf(a));
                                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));

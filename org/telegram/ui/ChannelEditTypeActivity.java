@@ -558,8 +558,8 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
                                     if (ChannelEditTypeActivity.this.lastCheckName != null && ChannelEditTypeActivity.this.lastCheckName.equals(name)) {
                                         if (error == null && (response instanceof TL_boolTrue)) {
                                             ChannelEditTypeActivity.this.checkTextView.setText(LocaleController.formatString("LinkAvailable", R.string.LinkAvailable, name));
-                                            ChannelEditTypeActivity.this.checkTextView.setTag("windowBackgroundWhiteGreenText");
-                                            ChannelEditTypeActivity.this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+                                            ChannelEditTypeActivity.this.checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
+                                            ChannelEditTypeActivity.this.checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                                             ChannelEditTypeActivity.this.lastNameAvailable = true;
                                             return;
                                         }
@@ -635,7 +635,7 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText);
         themeDescriptionArr[13] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteRedText4);
         themeDescriptionArr[14] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText8);
-        themeDescriptionArr[15] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundWhiteGreenText");
+        themeDescriptionArr[15] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, Theme.key_windowBackgroundWhiteGreenText);
         themeDescriptionArr[16] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
         themeDescriptionArr[17] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
         themeDescriptionArr[18] = new ThemeDescription(this.typeInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteRedText4);

@@ -146,6 +146,7 @@ public class ThemeActivity extends BaseFragment {
                                     vibrator.vibrate(200);
                                 }
                                 AndroidUtilities.shakeView(editText, 2.0f, 0);
+                                return;
                             }
                             new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), editText.getText().toString() + ".attheme");
                             alertDialog.dismiss();

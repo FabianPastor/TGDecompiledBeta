@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -15,8 +14,6 @@ import org.telegram.tgnet.TLRPC.FileLocation;
 public class BackupImageView extends View {
     private int height = -1;
     private ImageReceiver imageReceiver;
-    private boolean isFromResource;
-    private ColorFilter resourceColorFilter;
     private int width = -1;
 
     public BackupImageView(Context context) {
@@ -74,38 +71,19 @@ public class BackupImageView extends View {
         if (thumbBitmap != null) {
             thumb = new BitmapDrawable(null, thumbBitmap);
         }
-        this.isFromResource = false;
         this.imageReceiver.setImage(path, httpUrl, filter, thumb, thumbLocation, thumbFilter, size, ext, false);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
-        this.isFromResource = false;
         this.imageReceiver.setImageBitmap(bitmap);
     }
 
-    public void setResourceImageColorFilter(ColorFilter colorFilter) {
-        this.resourceColorFilter = colorFilter;
-        if (this.isFromResource) {
-            Drawable drawable = this.imageReceiver.getStaticThumb();
-            if (drawable != null) {
-                drawable.setColorFilter(colorFilter);
-            }
-            invalidate();
-        }
-    }
-
     public void setImageResource(int resId) {
-        Drawable drawable = getResources().getDrawable(resId);
-        if (!(drawable == null || this.resourceColorFilter == null)) {
-            drawable.setColorFilter(this.resourceColorFilter);
-        }
-        this.imageReceiver.setImageBitmap(drawable);
-        this.isFromResource = true;
+        this.imageReceiver.setImageBitmap(getResources().getDrawable(resId));
         invalidate();
     }
 
     public void setImageDrawable(Drawable drawable) {
-        this.isFromResource = false;
         this.imageReceiver.setImageBitmap(drawable);
     }
 

@@ -19,49 +19,55 @@ public class CheckBoxCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
 
-    public CheckBoxCell(Context context) {
+    public CheckBoxCell(Context context, boolean alert) {
         int i;
         int i2;
         int i3 = 17;
         int i4 = 5;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.textView.setTextColor(Theme.getColor(alert ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
+        textView.setGravity(i | 16);
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+        this.valueTextView.setTextColor(Theme.getColor(alert ? Theme.key_dialogBlueBlack : Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 3;
-        } else {
-            i2 = 5;
-        }
-        textView.setGravity(i2 | 16);
-        view = this.valueTextView;
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 3;
         } else {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, 17.0f, 0.0f, 17.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context);
+        textView.setGravity(i | 16);
+        view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i2 = 3;
+        } else {
+            i2 = 5;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -1.0f, i2 | 48, 17.0f, 0.0f, 17.0f, 0.0f));
+        this.checkBox = new CheckBoxSquare(context, alert);
         View view2 = this.checkBox;
         if (!LocaleController.isRTL) {
             i4 = 3;

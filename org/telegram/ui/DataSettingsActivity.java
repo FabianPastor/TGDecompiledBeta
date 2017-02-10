@@ -349,7 +349,7 @@ public class DataSettingsActivity extends BaseFragment {
                                 maskValues[a] = (mask & 32) != 0;
                                 name = LocaleController.getString("LocalGifCache", R.string.LocalGifCache);
                             }
-                            CheckBoxCell checkBoxCell = new CheckBoxCell(DataSettingsActivity.this.getParentActivity());
+                            CheckBoxCell checkBoxCell = new CheckBoxCell(DataSettingsActivity.this.getParentActivity(), true);
                             checkBoxCell.setTag(Integer.valueOf(a));
                             checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 48));

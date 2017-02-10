@@ -1051,7 +1051,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                         int dp;
                                         int dp2;
                                         View frameLayout = new FrameLayout(MediaActivity.this.getParentActivity());
-                                        CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity());
+                                        CheckBoxCell cell = new CheckBoxCell(MediaActivity.this.getParentActivity(), true);
                                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                                         if (currentChat != null) {
                                             cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
