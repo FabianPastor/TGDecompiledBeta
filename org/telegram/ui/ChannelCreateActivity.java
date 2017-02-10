@@ -210,7 +210,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                         try {
                                             dialog.dismiss();
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 });
@@ -229,7 +229,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                     try {
                                         dialog.dismiss();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             });
@@ -497,7 +497,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", ChannelCreateActivity.this.invite.link));
                             Toast.makeText(ChannelCreateActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -624,7 +624,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             ChannelCreateActivity.this.progressDialog = null;
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     ChannelCreateActivity.this.doneButton.performClick();
                 }
@@ -680,7 +680,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 try {
                     this.progressDialog.dismiss();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             this.donePressed = false;
@@ -689,7 +689,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 try {
                     this.progressDialog.dismiss();
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
             int chat_id = ((Integer) args[0]).intValue();

@@ -201,7 +201,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         final Context context2 = context;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
-                Theme.loadResources(context2);
                 Theme.createChatResources(context2, false);
             }
         });
@@ -1030,7 +1029,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.searchEmptyView.setVisibility(8);
                 this.listView.setEmptyView(this.emptyView);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         } else if (id == NotificationCenter.emojiDidLoaded) {
             updateVisibleRows(0);

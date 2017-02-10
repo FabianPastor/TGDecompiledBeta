@@ -57,7 +57,7 @@ public class CountrySelectActivity extends BaseFragment {
     }
 
     public interface CountrySelectActivityDelegate {
-        void didSelectCountry(String str);
+        void didSelectCountry(String str, String str2);
     }
 
     public class CountrySearchAdapter extends SelectionAdapter {
@@ -81,7 +81,7 @@ public class CountrySelectActivity extends BaseFragment {
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.searchTimer = new Timer();
             this.searchTimer.schedule(new TimerTask() {
@@ -90,7 +90,7 @@ public class CountrySelectActivity extends BaseFragment {
                         CountrySearchAdapter.this.searchTimer.cancel();
                         CountrySearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     CountrySearchAdapter.this.processSearch(query);
                 }
@@ -167,6 +167,7 @@ public class CountrySelectActivity extends BaseFragment {
         private ArrayList<String> sortedCountries = new ArrayList();
 
         public CountryAdapter(Context context) {
+            ArrayList<Country> arr;
             this.mContext = context;
             try {
                 InputStream stream = ApplicationLoader.applicationContext.getResources().getAssets().open("countries.txt");
@@ -176,7 +177,6 @@ public class CountrySelectActivity extends BaseFragment {
                     if (line == null) {
                         break;
                     }
-                    ArrayList<Country> arr;
                     String[] args = line.split(";");
                     Country c = new Country();
                     c.name = args[2];
@@ -194,7 +194,7 @@ public class CountrySelectActivity extends BaseFragment {
                 reader.close();
                 stream.close();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             Collections.sort(this.sortedCountries, new Comparator<String>(CountrySelectActivity.this) {
                 public int compare(String lhs, String rhs) {
@@ -395,7 +395,7 @@ public class CountrySelectActivity extends BaseFragment {
                 if (position >= 0) {
                     CountrySelectActivity.this.finishFragment();
                     if (country != null && CountrySelectActivity.this.delegate != null) {
-                        CountrySelectActivity.this.delegate.didSelectCountry(country.name);
+                        CountrySelectActivity.this.delegate.didSelectCountry(country.name, country.shortname);
                     }
                 }
             }

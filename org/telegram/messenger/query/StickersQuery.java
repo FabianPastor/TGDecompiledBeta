@@ -155,7 +155,7 @@ public class StickersQuery {
                     try {
                         MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "'").stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -185,7 +185,7 @@ public class StickersQuery {
                 try {
                     MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + document.id + "'").stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -211,7 +211,7 @@ public class StickersQuery {
                     try {
                         MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM web_recent_v3 WHERE id = '" + old.id + "'").stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -337,7 +337,7 @@ public class StickersQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -427,7 +427,7 @@ public class StickersQuery {
                             database.commitTransaction();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -576,7 +576,7 @@ public class StickersQuery {
                             }
                         } catch (Throwable th3) {
                             e = th3;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             if (cursor != null) {
                                 cursor.dispose();
                             }
@@ -661,7 +661,7 @@ public class StickersQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 } else if (!z) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -716,7 +716,7 @@ public class StickersQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -865,7 +865,7 @@ public class StickersQuery {
                             }
                         } catch (Throwable th3) {
                             e = th3;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             if (cursor != null) {
                                 cursor.dispose();
                             }
@@ -994,7 +994,7 @@ public class StickersQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1134,7 +1134,7 @@ public class StickersQuery {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 } else if (!z) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1223,7 +1223,7 @@ public class StickersQuery {
                             Toast.makeText(context, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), 0).show();
                             StickersQuery.loadStickers(type, false, true);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });

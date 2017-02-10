@@ -403,7 +403,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -432,7 +432,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -447,7 +447,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 try {
                     MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -767,7 +767,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         }
                         DialogsSearchAdapter.this.updateSearchResults(resultArray, resultArrayNames, encUsers, searchId);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -820,7 +820,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     this.searchTimer = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (query == null || query.length() == 0) {
                 this.searchAdapterHelper.unloadRecentHashtags();
@@ -864,7 +864,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         DialogsSearchAdapter.this.searchTimer.cancel();
                         DialogsSearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1089,7 +1089,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             username = AndroidUtilities.replaceTags(String.format("<c#ff4d83b3>@%s</c>%s", new Object[]{un.substring(0, foundUserName.length()), un.substring(foundUserName.length())}));
                         } catch (Throwable e) {
                             Object username2 = un;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }

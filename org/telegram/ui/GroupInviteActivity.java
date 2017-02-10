@@ -218,7 +218,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", GroupInviteActivity.this.invite.link));
                                 Toast.makeText(GroupInviteActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     } else if (position == GroupInviteActivity.this.shareLinkRow) {
@@ -229,7 +229,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                                 intent.putExtra("android.intent.extra.TEXT", GroupInviteActivity.this.invite.link);
                                 GroupInviteActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                         }
                     } else if (position == GroupInviteActivity.this.revokeLinkRow) {

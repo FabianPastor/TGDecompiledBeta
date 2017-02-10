@@ -619,7 +619,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 12);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
                         try {
@@ -643,7 +643,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                             ProfileNotificationsActivity.this.startActivityForResult(intent, 13);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     } else if (position == ProfileNotificationsActivity.this.vibrateRow) {
                         ProfileNotificationsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(ProfileNotificationsActivity.this.getParentActivity(), ProfileNotificationsActivity.this, ProfileNotificationsActivity.this.dialog_id, false, false, new Runnable() {

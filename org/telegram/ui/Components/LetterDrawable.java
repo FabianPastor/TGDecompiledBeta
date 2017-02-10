@@ -54,7 +54,7 @@ public class LetterDrawable extends Drawable {
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return;
             }
         }

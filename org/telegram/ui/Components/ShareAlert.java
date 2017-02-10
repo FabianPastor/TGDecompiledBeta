@@ -388,7 +388,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         });
                         ShareSearchAdapter.this.updateSearchResults(arrayList, searchId);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -441,7 +441,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         this.searchTimer = null;
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 if (query == null || query.length() == 0) {
                     this.searchResult.clear();
@@ -459,7 +459,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                             ShareSearchAdapter.this.searchTimer.cancel();
                             ShareSearchAdapter.this.searchTimer = null;
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                         ShareSearchAdapter.this.searchDialogsInternal(query, searchId);
                     }
@@ -826,7 +826,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.linkToCopy != null ? this.linkToCopy : this.exportedMessageLink.link));
                 Toast.makeText(context, LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }

@@ -172,7 +172,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             return isCancelled() ? null : this.results[0];
         }
@@ -497,7 +497,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     this.results[3] = "other";
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (isCancelled()) {
                 return null;
@@ -534,9 +534,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -716,7 +716,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 }
             } catch (Throwable e) {
                 this.codeLines.clear();
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             return TextUtils.join("", this.codeLines);
         }
@@ -762,7 +762,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (isCancelled()) {
                 return null;
@@ -829,7 +829,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             try {
                 params = params + "&eurl=" + URLEncoder.encode("https://youtube.googleapis.com/v/" + this.videoId, "UTF-8");
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (embedCode != null) {
                 matcher = WebPlayerView.stsPattern.matcher(embedCode);
@@ -854,7 +854,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             try {
                                 this.result[0] = URLDecoder.decode(args2[1], "UTF-8");
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                         }
                     } else if (args[a].startsWith("use_cipher_signature")) {
@@ -883,7 +883,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                 jsUrl = (String) value;
                             }
                         } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
+                            FileLog.e(e22);
                         }
                     }
                     if (jsUrl != null) {
@@ -928,7 +928,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                             preferences.edit().putString(playerId, functionCode).putString(playerId + "n", functionName).commit();
                                         }
                                     } catch (Throwable e222) {
-                                        FileLog.e("tmessages", e222);
+                                        FileLog.e(e222);
                                     }
                                 }
                             }
@@ -955,14 +955,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                                         try {
                                             WebPlayerView.this.webView.loadUrl("data:text/html;charset=utf-8;base64," + Base64.encodeToString(("<script>" + functionCodeFinal + "</script>").getBytes("UTF-8"), 0));
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 });
                                 this.semaphore.acquire();
                                 encrypted = false;
                             } catch (Throwable e2222) {
-                                FileLog.e("tmessages", e2222);
+                                FileLog.e(e2222);
                             }
                         }
                     }
@@ -1052,7 +1052,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             } else if (e2 instanceof FileNotFoundException) {
                 canRetry = false;
             }
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         if (canRetry) {
             if (httpConnection != null) {
@@ -1065,7 +1065,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         }
                     }
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
             }
             if (httpConnectionStream != null) {
@@ -1106,12 +1106,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     result = result2;
                 } catch (Throwable th2) {
                     e22 = th2;
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                     if (httpConnectionStream != null) {
                         try {
                             httpConnectionStream.close();
                         } catch (Throwable e222) {
-                            FileLog.e("tmessages", e222);
+                            FileLog.e(e222);
                         }
                     }
                     if (done) {
@@ -1128,7 +1128,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             return result.toString();
         }
         return null;
-        FileLog.e("tmessages", e222);
+        FileLog.e(e222);
         if (httpConnectionStream != null) {
             httpConnectionStream.close();
         }
@@ -1221,7 +1221,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             WebPlayerView.this.currentBitmap.recycle();
                             WebPlayerView.this.currentBitmap = null;
                         }
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     if (WebPlayerView.this.currentBitmap != null) {
                         WebPlayerView.this.textureImageView.setVisibility(0);
@@ -1428,7 +1428,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                     this.currentBitmap.recycle();
                     this.currentBitmap = null;
                 }
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.currentBitmap != null) {
                 this.textureImageView.setVisibility(0);
@@ -1468,7 +1468,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
     }
 
     public void onError(Exception e) {
-        FileLog.e("tmessages", (Throwable) e);
+        FileLog.e((Throwable) e);
     }
 
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -1784,7 +1784,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 try {
@@ -1797,7 +1797,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                         youtubeId = id;
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 if (youtubeId == null) {
                     try {
@@ -1810,7 +1810,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             vimeoId = id;
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
                 if (youtubeId == null && vimeoId == null) {
@@ -1824,7 +1824,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                             aparatId = id;
                         }
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                     }
                 }
             }

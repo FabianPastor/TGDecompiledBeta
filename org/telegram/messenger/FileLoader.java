@@ -354,7 +354,7 @@ public class FileLoader {
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return result[0].booleanValue();
     }
@@ -936,7 +936,7 @@ public class FileLoader {
                                     file.deleteOnExit();
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         try {
@@ -945,7 +945,7 @@ public class FileLoader {
                                 qFile.deleteOnExit();
                             }
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                     if (type == 2) {

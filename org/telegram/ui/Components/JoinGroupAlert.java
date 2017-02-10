@@ -28,6 +28,7 @@ import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.JoinSheetUserCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -139,7 +140,7 @@ public class JoinGroupAlert extends BottomSheet {
         if (participants_count > 0) {
             textView = new TextView(context);
             textView.setTextSize(1, 14.0f);
-            textView.setTextColor(-6710887);
+            textView.setTextColor(Theme.JOIN_SHEET_COUNT_TEXT_COLOR);
             textView.setSingleLine(true);
             textView.setEllipsize(TruncateAt.END);
             textView.setText(LocaleController.formatPluralString("Members", participants_count));

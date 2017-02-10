@@ -134,7 +134,7 @@ public class VideoTimelineView extends View {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -183,7 +183,7 @@ public class VideoTimelineView extends View {
                         }
                         return bitmap;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
 
@@ -209,7 +209,7 @@ public class VideoTimelineView extends View {
                     this.mediaMetadataRetriever = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         Iterator it = this.frames.iterator();

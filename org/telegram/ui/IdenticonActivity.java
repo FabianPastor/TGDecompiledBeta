@@ -47,7 +47,7 @@ public class IdenticonActivity extends BaseFragment {
             try {
                 return super.onTouchEvent(widget, buffer, event);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return false;
             }
         }

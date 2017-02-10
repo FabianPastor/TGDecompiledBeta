@@ -56,13 +56,13 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             if (System.currentTimeMillis() - this.enterBackgroundTime < 200) {
                 this.wasInBackground = false;
             }
-            FileLog.e("tmessages", "switch to foreground");
+            FileLog.e("switch to foreground");
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {
                     ((Listener) it.next()).onBecameForeground();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         }
@@ -85,13 +85,13 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         if (i == 0) {
             this.enterBackgroundTime = System.currentTimeMillis();
             this.wasInBackground = true;
-            FileLog.e("tmessages", "switch to background");
+            FileLog.e("switch to background");
             Iterator it = this.listeners.iterator();
             while (it.hasNext()) {
                 try {
                     ((Listener) it.next()).onBecameBackground();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         }

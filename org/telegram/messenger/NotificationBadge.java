@@ -147,7 +147,7 @@ public class NotificationBadge {
                     try {
                         ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse("content://com.huawei.android.launcher.settings/badge/"), "change_badge", null, localBundle);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -238,7 +238,7 @@ public class NotificationBadge {
                             try {
                                 ApplicationLoader.applicationContext.getContentResolver().call(Uri.parse(OPPOHomeBader.PROVIDER_CONTENT_URI), "setAppBadgeCount", null, extras);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     });
@@ -508,7 +508,7 @@ public class NotificationBadge {
                     try {
                         ApplicationLoader.applicationContext.getContentResolver().call(ZukHomeBadger.this.CONTENT_URI, "setAppBadgeCount", null, extra);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });

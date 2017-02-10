@@ -507,7 +507,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                         this.currentThumbKey = null;
                     }
                     setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 canvas.restore();
                 return;
@@ -550,7 +550,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
                 canvas.restore();
@@ -587,7 +587,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             this.currentThumbKey = null;
                         }
                         setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentCacheOnly);
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
                 canvas.restore();
@@ -601,7 +601,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 drawable.setAlpha(alpha);
                 drawable.draw(canvas);
             } catch (Throwable e222) {
-                FileLog.e("tmessages", e222);
+                FileLog.e(e222);
             }
         }
     }
@@ -691,7 +691,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 return false;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

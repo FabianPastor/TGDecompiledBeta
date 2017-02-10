@@ -249,7 +249,7 @@ public class CacheControlActivity extends BaseFragment {
                 }
                 return size;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return 0;
             }
         } else if (dir.isFile()) {
@@ -312,7 +312,7 @@ public class CacheControlActivity extends BaseFragment {
                                         }
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                             if (type == 4) {
@@ -348,7 +348,7 @@ public class CacheControlActivity extends BaseFragment {
                         try {
                             progressDialog.dismiss();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });
@@ -454,7 +454,7 @@ public class CacheControlActivity extends BaseFragment {
                                                                     }
                                                                 }
                                                             } catch (Throwable e) {
-                                                                FileLog.e("tmessages", e);
+                                                                FileLog.e(e);
                                                             }
                                                         }
                                                         cursor2.dispose();
@@ -477,14 +477,14 @@ public class CacheControlActivity extends BaseFragment {
                                             database.commitTransaction();
                                             database.executeFast("VACUUM").stepThis().dispose();
                                         } catch (Throwable e2) {
-                                            FileLog.e("tmessages", e2);
+                                            FileLog.e(e2);
                                         } finally {
                                             AndroidUtilities.runOnUIThread(new Runnable() {
                                                 public void run() {
                                                     try {
                                                         progressDialog.dismiss();
                                                     } catch (Throwable e) {
-                                                        FileLog.e("tmessages", e);
+                                                        FileLog.e(e);
                                                     }
                                                     if (CacheControlActivity.this.listAdapter != null) {
                                                         CacheControlActivity.this.databaseSize = new File(ApplicationLoader.getFilesDirFixed(), "cache4.db").length();
@@ -557,7 +557,7 @@ public class CacheControlActivity extends BaseFragment {
                                         CacheControlActivity.this.visibleDialog.dismiss();
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 CacheControlActivity.this.cleanupFolders();
                             }

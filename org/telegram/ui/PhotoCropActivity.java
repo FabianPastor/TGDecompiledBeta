@@ -318,7 +318,7 @@ public class PhotoCropActivity extends BaseFragment {
             try {
                 return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, x, y, sizeX, sizeY);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
                 return null;
             }
         }
@@ -329,7 +329,7 @@ public class PhotoCropActivity extends BaseFragment {
                     PhotoCropActivity.this.drawable.setBounds(this.bitmapX, this.bitmapY, this.bitmapX + this.bitmapWidth, this.bitmapY + this.bitmapHeight);
                     PhotoCropActivity.this.drawable.draw(canvas);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             canvas.drawRect((float) this.bitmapX, (float) this.bitmapY, (float) (this.bitmapX + this.bitmapWidth), this.rectY, this.halfPaint);

@@ -70,7 +70,7 @@ public class WebviewActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     if (WebviewActivity.this.getParentActivity() != null) {
-                        FileLog.e("tmessages", eventName);
+                        FileLog.e(eventName);
                         String str = eventName;
                         boolean z = true;
                         switch (str.hashCode()) {
@@ -125,7 +125,7 @@ public class WebviewActivity extends BaseFragment {
             this.webView.destroy();
             this.webView = null;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -245,7 +245,7 @@ public class WebviewActivity extends BaseFragment {
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

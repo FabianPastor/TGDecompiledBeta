@@ -51,7 +51,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 if (AnimatedFileDrawable.this.backgroundBitmap != null) {
                     AnimatedFileDrawable.getVideoFrame(AnimatedFileDrawable.this.nativePtr, AnimatedFileDrawable.this.backgroundBitmap, AnimatedFileDrawable.this.metaData);

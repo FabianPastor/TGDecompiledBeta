@@ -515,10 +515,10 @@ class zzasu extends zzats {
 
     @WorkerThread
     public String zzKG() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -862,6 +862,7 @@ class zzasu extends zzats {
     }
 
     Map<Integer, List<zzauf.zze>> zzT(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zznA();
@@ -869,7 +870,6 @@ class zzasu extends zzats {
         zzac.zzdv(str);
         zzac.zzdv(str2);
         Map<Integer, List<zzauf.zze>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -932,7 +932,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     protected long zzU(String str, String str2) {
-        long zza;
         Object e;
         zzac.zzdv(str);
         zzac.zzdv(str2);
@@ -940,6 +939,7 @@ class zzasu extends zzats {
         zznA();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1013,6 +1013,7 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
@@ -1020,7 +1021,6 @@ class zzasu extends zzats {
         zznA();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_internal_zzasu_zza = new zza();
-        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1348,23 +1348,23 @@ class zzasu extends zzats {
                     cursor = writableDatabase.query("raw_events", new String[]{"rowid", "name", "timestamp", "data"}, str4, strArr2, null, null, "rowid", null);
                     if (cursor.moveToFirst()) {
                         do {
+                            long j3 = cursor.getLong(0);
+                            zzbul zzad2 = zzbul.zzad(cursor.getBlob(3));
+                            com.google.android.gms.internal.zzauh.zzb com_google_android_gms_internal_zzauh_zzb = new com.google.android.gms.internal.zzauh.zzb();
                             try {
-                                long j3 = cursor.getLong(0);
-                                zzbul zzad2 = zzbul.zzad(cursor.getBlob(3));
-                                com.google.android.gms.internal.zzauh.zzb com_google_android_gms_internal_zzauh_zzb = new com.google.android.gms.internal.zzauh.zzb();
-                                try {
-                                    com_google_android_gms_internal_zzauh_zzb.zzb(zzad2);
-                                    com_google_android_gms_internal_zzauh_zzb.name = cursor.getString(1);
-                                    com_google_android_gms_internal_zzauh_zzb.zzbvW = Long.valueOf(cursor.getLong(2));
-                                    if (!com_google_android_gms_internal_zzasu_zzb.zza(j3, com_google_android_gms_internal_zzauh_zzb)) {
-                                        if (cursor != null) {
-                                            cursor.close();
-                                            return;
-                                        }
+                                com_google_android_gms_internal_zzauh_zzb.zzb(zzad2);
+                            } catch (IOException e2) {
+                                zzJt().zzLa().zze("Data loss. Failed to merge raw event. appId", zzati.zzfI(str), e2);
+                            }
+                            try {
+                                com_google_android_gms_internal_zzauh_zzb.name = cursor.getString(1);
+                                com_google_android_gms_internal_zzauh_zzb.zzbvW = Long.valueOf(cursor.getLong(2));
+                                if (!com_google_android_gms_internal_zzasu_zzb.zza(j3, com_google_android_gms_internal_zzauh_zzb)) {
+                                    if (cursor != null) {
+                                        cursor.close();
                                         return;
                                     }
-                                } catch (IOException e2) {
-                                    zzJt().zzLa().zze("Data loss. Failed to merge raw event. appId", zzati.zzfI(str), e2);
+                                    return;
                                 }
                             } catch (SQLiteException e3) {
                                 e = e3;
@@ -1615,12 +1615,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public byte[] zzfA(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1700,13 +1700,13 @@ class zzasu extends zzats {
                     zzf com_google_android_gms_internal_zzauh_zzf = new zzf();
                     try {
                         com_google_android_gms_internal_zzauh_zzf.zzb(zzad);
-                        try {
-                            arrayMap.put(Integer.valueOf(i), com_google_android_gms_internal_zzauh_zzf);
-                        } catch (SQLiteException e2) {
-                            e = e2;
-                        }
-                    } catch (IOException e3) {
-                        zzJt().zzLa().zzd("Failed to merge filter results. appId, audienceId, error", zzati.zzfI(str), Integer.valueOf(i), e3);
+                    } catch (IOException e2) {
+                        zzJt().zzLa().zzd("Failed to merge filter results. appId, audienceId, error", zzati.zzfI(str), Integer.valueOf(i), e2);
+                    }
+                    try {
+                        arrayMap.put(Integer.valueOf(i), com_google_android_gms_internal_zzauh_zzf);
+                    } catch (SQLiteException e3) {
+                        e = e3;
                     }
                 } while (query.moveToNext());
                 if (query == null) {
@@ -1851,12 +1851,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zzasp zzfy(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample"}, "app_id=?", new String[]{str}, null, null, null);
             try {

@@ -234,7 +234,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }
@@ -697,7 +697,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }
@@ -734,7 +734,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 try {
                     newPasswordBytes = this.firstPassword.getBytes("UTF-8");
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 byte[] new_salt = this.currentPassword.new_salt;
                 byte[] hash = new byte[((new_salt.length * 2) + newPasswordBytes.length)];
@@ -844,7 +844,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 try {
                     oldPasswordBytes = oldPassword.getBytes("UTF-8");
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 needShowProgress();
                 byte[] hash = new byte[((this.currentPassword.current_salt.length * 2) + oldPasswordBytes.length)];
@@ -900,7 +900,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 try {
                     Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", R.string.PasswordDoNotMatch), 0).show();
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 onPasscodeError(true);
             } else if (this.passwordSetState == 2) {
@@ -909,7 +909,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                     try {
                         Toast.makeText(getParentActivity(), LocaleController.getString("PasswordAsHintError", R.string.PasswordAsHintError), 0).show();
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                     onPasscodeError(false);
                 } else if (this.currentPassword.has_recovery) {

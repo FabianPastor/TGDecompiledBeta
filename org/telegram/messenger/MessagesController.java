@@ -564,7 +564,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -583,12 +583,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesController.this.callsEnabled = config.phonecalls_enabled;
                 MessagesController.this.linkPrefix = config.me_url_prefix;
                 if (MessagesController.this.linkPrefix.endsWith("/")) {
-                    MessagesController.this.linkPrefix.substring(0, MessagesController.this.linkPrefix.length() - 1);
+                    MessagesController.this.linkPrefix = MessagesController.this.linkPrefix.substring(0, MessagesController.this.linkPrefix.length() - 1);
                 }
                 if (MessagesController.this.linkPrefix.startsWith("https://")) {
-                    MessagesController.this.linkPrefix.substring(8);
+                    MessagesController.this.linkPrefix = MessagesController.this.linkPrefix.substring(8);
                 } else if (MessagesController.this.linkPrefix.startsWith("http://")) {
-                    MessagesController.this.linkPrefix.substring(7);
+                    MessagesController.this.linkPrefix = MessagesController.this.linkPrefix.substring(7);
                 }
                 MessagesController.this.callReceiveTimeout = config.call_receive_timeout_ms;
                 MessagesController.this.callRingTimeout = config.call_ring_timeout_ms;
@@ -623,7 +623,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 } catch (Throwable e) {
                     editor.remove("disabledFeatures");
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 editor.commit();
             }
@@ -942,7 +942,7 @@ public class MessagesController implements NotificationCenterDelegate {
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (result.size() != 2) {
             return chat;
@@ -1614,7 +1614,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void processNewChannelDifferenceParams(int pts, int pts_count, int channelId) {
-        FileLog.e("tmessages", "processNewChannelDifferenceParams pts = " + pts + " pts_count = " + pts_count + " channeldId = " + channelId);
+        FileLog.e("processNewChannelDifferenceParams pts = " + pts + " pts_count = " + pts_count + " channeldId = " + channelId);
         if (DialogObject.isChannel((TL_dialog) this.dialogs_dict.get(Long.valueOf((long) (-channelId))))) {
             Integer channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
             if (channelPts == null) {
@@ -1625,7 +1625,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 this.channelsPts.put(Integer.valueOf(channelId), channelPts);
             }
             if (channelPts.intValue() + pts_count == pts) {
-                FileLog.e("tmessages", "APPLY CHANNEL PTS");
+                FileLog.e("APPLY CHANNEL PTS");
                 this.channelsPts.put(Integer.valueOf(channelId), Integer.valueOf(pts));
                 MessagesStorage.getInstance().saveChannelPts(channelId, pts);
             } else if (channelPts.intValue() != pts) {
@@ -1635,7 +1635,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     gettingDifferenceChannel = Boolean.valueOf(false);
                 }
                 if (gettingDifferenceChannel.booleanValue() || updatesStartWaitTime == null || Math.abs(System.currentTimeMillis() - updatesStartWaitTime.longValue()) <= 1500) {
-                    FileLog.e("tmessages", "ADD CHANNEL UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
+                    FileLog.e("ADD CHANNEL UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
                     if (updatesStartWaitTime == null) {
                         this.updatesStartWaitTimeChannels.put(Integer.valueOf(channelId), Long.valueOf(System.currentTimeMillis()));
                     }
@@ -1657,15 +1657,15 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void processNewDifferenceParams(int seq, int pts, int date, int pts_count) {
-        FileLog.e("tmessages", "processNewDifferenceParams seq = " + seq + " pts = " + pts + " date = " + date + " pts_count = " + pts_count);
+        FileLog.e("processNewDifferenceParams seq = " + seq + " pts = " + pts + " date = " + date + " pts_count = " + pts_count);
         if (pts != -1) {
             if (MessagesStorage.lastPtsValue + pts_count == pts) {
-                FileLog.e("tmessages", "APPLY PTS");
+                FileLog.e("APPLY PTS");
                 MessagesStorage.lastPtsValue = pts;
                 MessagesStorage.getInstance().saveDiffParams(MessagesStorage.lastSeqValue, MessagesStorage.lastPtsValue, MessagesStorage.lastDateValue, MessagesStorage.lastQtsValue);
             } else if (MessagesStorage.lastPtsValue != pts) {
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
-                    FileLog.e("tmessages", "ADD UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
+                    FileLog.e("ADD UPDATE TO QUEUE pts = " + pts + " pts_count = " + pts_count);
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
                     }
@@ -1682,7 +1682,7 @@ public class MessagesController implements NotificationCenterDelegate {
             return;
         }
         if (MessagesStorage.lastSeqValue + 1 == seq) {
-            FileLog.e("tmessages", "APPLY SEQ");
+            FileLog.e("APPLY SEQ");
             MessagesStorage.lastSeqValue = seq;
             if (date != -1) {
                 MessagesStorage.lastDateValue = date;
@@ -1691,7 +1691,7 @@ public class MessagesController implements NotificationCenterDelegate {
         } else if (MessagesStorage.lastSeqValue == seq) {
         } else {
             if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
-                FileLog.e("tmessages", "ADD UPDATE TO QUEUE seq = " + seq);
+                FileLog.e("ADD UPDATE TO QUEUE seq = " + seq);
                 if (this.updatesStartWaitTimeSeq == 0) {
                     this.updatesStartWaitTimeSeq = System.currentTimeMillis();
                 }
@@ -2375,7 +2375,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     key = ((Integer) keys.get(a)).intValue();
                     Long updatesStartWaitTime = (Long) this.updatesStartWaitTimeChannels.get(Integer.valueOf(key));
                     if (updatesStartWaitTime != null && updatesStartWaitTime.longValue() + 1500 < currentTime) {
-                        FileLog.e("tmessages", "QUEUE CHANNEL " + key + " UPDATES WAIT TIMEOUT - CHECK QUEUE");
+                        FileLog.e("QUEUE CHANNEL " + key + " UPDATES WAIT TIMEOUT - CHECK QUEUE");
                         processChannelsUpdatesQueue(key, 0);
                     }
                 }
@@ -2383,7 +2383,7 @@ public class MessagesController implements NotificationCenterDelegate {
             a = 0;
             while (a < 3) {
                 if (getUpdatesStartTime(a) != 0 && getUpdatesStartTime(a) + 1500 < currentTime) {
-                    FileLog.e("tmessages", a + " QUEUE UPDATES WAIT TIMEOUT - CHECK QUEUE");
+                    FileLog.e(a + " QUEUE UPDATES WAIT TIMEOUT - CHECK QUEUE");
                     processUpdatesQueue(a, 0);
                 }
                 a++;
@@ -2720,7 +2720,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void loadMessages(long dialog_id, int count, int max_id, int offset_date, boolean fromCache, int midDate, int classGuid, int load_type, int last_message_id, boolean isChannel, int loadIndex, int first_unread, int unread_count, int last_date, boolean queryFromServer) {
-        FileLog.e("tmessages", "load messages in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + fromCache + " mindate = " + midDate + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " index " + loadIndex + " firstUnread " + first_unread + " underad count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
+        FileLog.e("load messages in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + fromCache + " mindate = " + midDate + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " index " + loadIndex + " firstUnread " + first_unread + " underad count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
         int lower_part = (int) dialog_id;
         if (fromCache || lower_part == 0) {
             MessagesStorage.getInstance().getMessages(dialog_id, count, max_id, offset_date, midDate, classGuid, load_type, isChannel, loadIndex);
@@ -2832,7 +2832,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void processLoadedMessages(messages_Messages messagesRes, long dialog_id, int count, int max_id, int offset_date, boolean isCache, int classGuid, int first_unread, int last_message_id, int unread_count, int last_date, int load_type, boolean isChannel, boolean isEnd, int loadIndex, boolean queryFromServer) {
-        FileLog.e("tmessages", "processLoadedMessages size " + messagesRes.messages.size() + " in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + isCache + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " isChannel " + isChannel + " index " + loadIndex + " firstUnread " + first_unread + " underad count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
+        FileLog.e("processLoadedMessages size " + messagesRes.messages.size() + " in chat " + dialog_id + " count " + count + " max_id " + max_id + " cache " + isCache + " guid " + classGuid + " load_type " + load_type + " last_message_id " + last_message_id + " isChannel " + isChannel + " index " + loadIndex + " firstUnread " + first_unread + " underad count " + unread_count + " last_date " + last_date + " queryFromServer " + queryFromServer);
         final messages_Messages org_telegram_tgnet_TLRPC_messages_Messages = messagesRes;
         final long j = dialog_id;
         final boolean z = isCache;
@@ -2999,7 +2999,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!this.loadingDialogs) {
             this.loadingDialogs = true;
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-            FileLog.e("tmessages", "load cacheOffset = " + offset + " count = " + count + " cache = " + fromCache);
+            FileLog.e("load cacheOffset = " + offset + " count = " + count + " cache = " + fromCache);
             if (fromCache) {
                 MessagesStorage.getInstance().getDialogs(offset == 0 ? 0 : this.nextDialogsCacheOffset, count);
                 return;
@@ -3191,7 +3191,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     cursor.dispose();
                                     MessagesController.this.processLoadedDialogs(dialogsRes, null, offsetId, 0, 0, false, true);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             MessagesController.this.migratingDialogs = false;
@@ -3222,7 +3222,7 @@ public class MessagesController implements NotificationCenterDelegate {
         final boolean z2 = migrate;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
-                FileLog.e("tmessages", "loaded loadType " + i + " count " + org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size());
+                FileLog.e("loaded loadType " + i + " count " + org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size());
                 if (i == 1 && org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() == 0) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -3239,7 +3239,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3283,6 +3282,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3581,8 +3581,6 @@ public class MessagesController implements NotificationCenterDelegate {
 
     protected void checkLastDialogMessage(TL_dialog dialog, InputPeer peer, long taskId) {
         Throwable e;
-        long newTaskId;
-        final TL_dialog tL_dialog;
         final int lower_id = (int) dialog.id;
         if (lower_id != 0 && !this.checkingLastMessagesDialogs.containsKey(Integer.valueOf(lower_id))) {
             InputPeer inputPeer;
@@ -3594,6 +3592,8 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             req.peer = inputPeer;
             if (req.peer != null) {
+                long newTaskId;
+                final TL_dialog tL_dialog;
                 req.limit = 1;
                 this.checkingLastMessagesDialogs.put(Integer.valueOf(lower_id), Boolean.valueOf(true));
                 if (taskId == 0) {
@@ -3617,7 +3617,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                             tL_dialog = dialog;
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -3672,7 +3672,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         tL_dialog = dialog;
                         ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
@@ -4196,7 +4196,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -4211,7 +4211,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             try {
                                 progressDialog.dismiss();
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                             Builder builder = new Builder(context);
                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -4229,7 +4229,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 try {
                     dialog.dismiss();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4723,7 +4723,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
                         if (response instanceof TL_boolTrue) {
-                            FileLog.e("tmessages", "registered for push");
+                            FileLog.e("registered for push");
                             UserConfig.registeredForPush = true;
                             UserConfig.pushString = regid;
                             UserConfig.saveConfig(false);
@@ -4860,13 +4860,13 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else if (updateState == 1) {
                     Long updatesStartWaitTime = (Long) this.updatesStartWaitTimeChannels.get(Integer.valueOf(channelId));
                     if (updatesStartWaitTime == null || (!anyProceed && Math.abs(System.currentTimeMillis() - updatesStartWaitTime.longValue()) > 1500)) {
-                        FileLog.e("tmessages", "HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - getChannelDifference ");
+                        FileLog.e("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - getChannelDifference ");
                         this.updatesStartWaitTimeChannels.remove(Integer.valueOf(channelId));
                         this.updatesQueueChannels.remove(Integer.valueOf(channelId));
                         getChannelDifference(channelId);
                         return;
                     }
-                    FileLog.e("tmessages", "HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - will wait more time");
+                    FileLog.e("HOLE IN CHANNEL " + channelId + " UPDATES QUEUE - will wait more time");
                     if (anyProceed) {
                         this.updatesStartWaitTimeChannels.put(Integer.valueOf(channelId), Long.valueOf(System.currentTimeMillis()));
                         return;
@@ -4880,7 +4880,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             this.updatesQueueChannels.remove(Integer.valueOf(channelId));
             this.updatesStartWaitTimeChannels.remove(Integer.valueOf(channelId));
-            FileLog.e("tmessages", "UPDATES CHANNEL " + channelId + " QUEUE PROCEED - OK");
+            FileLog.e("UPDATES CHANNEL " + channelId + " QUEUE PROCEED - OK");
         }
     }
 
@@ -4934,13 +4934,13 @@ public class MessagesController implements NotificationCenterDelegate {
                     updatesQueue.remove(a);
                     a--;
                 } else if (getUpdatesStartTime(type) == 0 || (!anyProceed && Math.abs(System.currentTimeMillis() - getUpdatesStartTime(type)) > 1500)) {
-                    FileLog.e("tmessages", "HOLE IN UPDATES QUEUE - getDifference");
+                    FileLog.e("HOLE IN UPDATES QUEUE - getDifference");
                     setUpdatesStartTime(type, 0);
                     updatesQueue.clear();
                     getDifference();
                     return;
                 } else {
-                    FileLog.e("tmessages", "HOLE IN UPDATES QUEUE - will wait more time");
+                    FileLog.e("HOLE IN UPDATES QUEUE - will wait more time");
                     if (anyProceed) {
                         setUpdatesStartTime(type, System.currentTimeMillis());
                         return;
@@ -4950,16 +4950,16 @@ public class MessagesController implements NotificationCenterDelegate {
                 a++;
             }
             updatesQueue.clear();
-            FileLog.e("tmessages", "UPDATES QUEUE PROCEED - OK");
+            FileLog.e("UPDATES QUEUE PROCEED - OK");
         }
         setUpdatesStartTime(type, 0);
     }
 
     protected void loadUnknownChannel(final Chat channel, long taskId) {
         Throwable e;
-        long newTaskId;
         if ((channel instanceof TL_channel) && !this.gettingUnknownChannels.containsKey(Integer.valueOf(channel.id))) {
             if (channel.access_hash != 0) {
+                long newTaskId;
                 TL_inputPeerChannel inputPeer = new TL_inputPeerChannel();
                 inputPeer.channel_id = channel.id;
                 inputPeer.access_hash = channel.access_hash;
@@ -4977,7 +4977,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                 public void run(TLObject response, TL_error error) {
@@ -5001,7 +5001,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                     }
@@ -5036,6 +5036,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
+        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5046,7 +5047,6 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
-            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5085,7 +5085,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                             this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
                             req = new TL_updates_getChannelDifference();
@@ -5093,8 +5093,8 @@ public class MessagesController implements NotificationCenterDelegate {
                             req.filter = new TL_channelMessagesFilterEmpty();
                             req.pts = channelPts.intValue();
                             req.limit = limit;
-                            req.force = newDialogType != 3;
-                            FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                            req.force = newDialogType == 3;
+                            FileLog.e("start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                             i = channelId;
                             i2 = newDialogType;
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -5298,8 +5298,8 @@ public class MessagesController implements NotificationCenterDelegate {
                                                         if (!res.isFinal) {
                                                             MessagesController.this.getChannelDifference(i);
                                                         }
-                                                        FileLog.e("tmessages", "received channel difference with pts = " + res.pts + " channelId = " + i);
-                                                        FileLog.e("tmessages", "new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+                                                        FileLog.e("received channel difference with pts = " + res.pts + " channelId = " + i);
+                                                        FileLog.e("new_messages = " + res.new_messages.size() + " messages = " + res.messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
                                                         if (newTaskId != 0) {
                                                             MessagesStorage.getInstance().removePendingTask(newTaskId);
                                                         }
@@ -5324,7 +5324,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         this.gettingDifferenceChannels.put(Integer.valueOf(channelId), Boolean.valueOf(true));
                         req = new TL_updates_getChannelDifference();
@@ -5332,10 +5332,10 @@ public class MessagesController implements NotificationCenterDelegate {
                         req.filter = new TL_channelMessagesFilterEmpty();
                         req.pts = channelPts.intValue();
                         req.limit = limit;
-                        if (newDialogType != 3) {
+                        if (newDialogType == 3) {
                         }
-                        req.force = newDialogType != 3;
-                        FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                        req.force = newDialogType == 3;
+                        FileLog.e("start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                         i = channelId;
                         i2 = newDialogType;
                         ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
@@ -5350,10 +5350,10 @@ public class MessagesController implements NotificationCenterDelegate {
                 req.filter = new TL_channelMessagesFilterEmpty();
                 req.pts = channelPts.intValue();
                 req.limit = limit;
-                if (newDialogType != 3) {
+                if (newDialogType == 3) {
                 }
-                req.force = newDialogType != 3;
-                FileLog.e("tmessages", "start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
+                req.force = newDialogType == 3;
+                FileLog.e("start getChannelDifference with pts = " + channelPts + " channelId = " + channelId);
                 i = channelId;
                 i2 = newDialogType;
                 ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
@@ -5421,7 +5421,7 @@ public class MessagesController implements NotificationCenterDelegate {
             if (req.date == 0) {
                 req.date = ConnectionsManager.getInstance().getCurrentTime();
             }
-            FileLog.e("tmessages", "start getDifference with date = " + MessagesStorage.lastDateValue + " pts = " + MessagesStorage.lastPtsValue + " seq = " + MessagesStorage.lastSeqValue);
+            FileLog.e("start getDifference with date = " + MessagesStorage.lastDateValue + " pts = " + MessagesStorage.lastPtsValue + " seq = " + MessagesStorage.lastSeqValue);
             ConnectionsManager.getInstance().setIsUpdating(true);
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
@@ -5604,7 +5604,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             }
                                         }
                                         MessagesStorage.getInstance().saveDiffParams(MessagesStorage.lastSeqValue, MessagesStorage.lastPtsValue, MessagesStorage.lastDateValue, MessagesStorage.lastQtsValue);
-                                        FileLog.e("tmessages", "received difference with date = " + MessagesStorage.lastDateValue + " pts = " + MessagesStorage.lastPtsValue + " seq = " + MessagesStorage.lastSeqValue + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
+                                        FileLog.e("received difference with date = " + MessagesStorage.lastDateValue + " pts = " + MessagesStorage.lastPtsValue + " seq = " + MessagesStorage.lastSeqValue + " messages = " + res.new_messages.size() + " users = " + res.users.size() + " chats = " + res.chats.size() + " other updates = " + res.other_updates.size());
                                     }
                                 });
                             }
@@ -5678,7 +5678,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         } catch (Exception e2) {
                             e = e2;
                             data = data2;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                 public void run(TLObject response, TL_error error) {
@@ -5692,7 +5692,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     } catch (Exception e3) {
                         e = e3;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                         MessagesStorage.getInstance().setDialogPinned(did, dialog.pinnedNum);
@@ -6259,12 +6259,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 MessagesStorage.getInstance().putMessages(arr2, false, true, false, 0);
             } else if (MessagesStorage.lastPtsValue != updates.pts) {
-                FileLog.e("tmessages", "need get diff short message, pts: " + MessagesStorage.lastPtsValue + " " + updates.pts + " count = " + updates.pts_count);
+                FileLog.e("need get diff short message, pts: " + MessagesStorage.lastPtsValue + " " + updates.pts + " count = " + updates.pts_count);
                 if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500) {
                     if (this.updatesStartWaitTimePts == 0) {
                         this.updatesStartWaitTimePts = System.currentTimeMillis();
                     }
-                    FileLog.e("tmessages", "add to queue");
+                    FileLog.e("add to queue");
                     this.updatesQueuePts.add(updates);
                 } else {
                     needGetDiff = true;
@@ -6299,7 +6299,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (update instanceof TL_updateNewChannelMessage) {
                         channelId = ((TL_updateNewChannelMessage) update).message.to_id.channel_id;
                         if (minChannels.containsKey(Integer.valueOf(channelId))) {
-                            FileLog.e("tmessages", "need get diff because of min channel " + channelId);
+                            FileLog.e("need get diff because of min channel " + channelId);
                             needGetDiff = true;
                             break;
                         }
@@ -6353,13 +6353,13 @@ public class MessagesController implements NotificationCenterDelegate {
                                 updates.updates.remove(b);
                             }
                             if (skipUpdate) {
-                                FileLog.e("tmessages", "need load unknown channel = " + channelId);
+                                FileLog.e("need load unknown channel = " + channelId);
                             } else if (channelPts.intValue() + updatesNew.pts_count == updatesNew.pts) {
                                 if (processUpdateArray(updatesNew.updates, updates.users, updates.chats, false)) {
                                     this.channelsPts.put(Integer.valueOf(channelId), Integer.valueOf(updatesNew.pts));
                                     MessagesStorage.getInstance().saveChannelPts(channelId, updatesNew.pts);
                                 } else {
-                                    FileLog.e("tmessages", "need get channel diff inner TL_updates, channel_id = " + channelId);
+                                    FileLog.e("need get channel diff inner TL_updates, channel_id = " + channelId);
                                     if (needGetChannelsDiff == null) {
                                         needGetChannelsDiff = new ArrayList();
                                     } else {
@@ -6369,7 +6369,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     }
                                 }
                             } else if (channelPts.intValue() != updatesNew.pts) {
-                                FileLog.e("tmessages", update + " need get channel diff, pts: " + channelPts + " " + updatesNew.pts + " count = " + updatesNew.pts_count + " channelId = " + channelId);
+                                FileLog.e(update + " need get channel diff, pts: " + channelPts + " " + updatesNew.pts + " count = " + updatesNew.pts_count + " channelId = " + channelId);
                                 Long updatesStartWaitTime = (Long) this.updatesStartWaitTimeChannels.get(Integer.valueOf(channelId));
                                 Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
                                 if (gettingDifferenceChannel == null) {
@@ -6379,7 +6379,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (updatesStartWaitTime == null) {
                                         this.updatesStartWaitTimeChannels.put(Integer.valueOf(channelId), Long.valueOf(System.currentTimeMillis()));
                                     }
-                                    FileLog.e("tmessages", "add to queue");
+                                    FileLog.e("add to queue");
                                     ArrayList<Updates> arrayList3 = (ArrayList) this.updatesQueueChannels.get(Integer.valueOf(channelId));
                                     if (arrayList3 == null) {
                                         arrayList3 = new ArrayList();
@@ -6412,12 +6412,12 @@ public class MessagesController implements NotificationCenterDelegate {
                                 MessagesStorage.lastQtsValue = updatesNew.pts;
                                 needReceivedQueue = true;
                             } else if (MessagesStorage.lastPtsValue != updatesNew.pts) {
-                                FileLog.e("tmessages", update + " need get diff, qts: " + MessagesStorage.lastQtsValue + " " + updatesNew.pts);
+                                FileLog.e(update + " need get diff, qts: " + MessagesStorage.lastQtsValue + " " + updatesNew.pts);
                                 if (this.gettingDifference || this.updatesStartWaitTimeQts == 0 || (this.updatesStartWaitTimeQts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeQts) <= 1500)) {
                                     if (this.updatesStartWaitTimeQts == 0) {
                                         this.updatesStartWaitTimeQts = System.currentTimeMillis();
                                     }
-                                    FileLog.e("tmessages", "add to queue");
+                                    FileLog.e("add to queue");
                                     this.updatesQueueQts.add(updatesNew);
                                 } else {
                                     needGetDiff = true;
@@ -6443,16 +6443,16 @@ public class MessagesController implements NotificationCenterDelegate {
                             if (processUpdateArray(updatesNew.updates, updates.users, updates.chats, false)) {
                                 MessagesStorage.lastPtsValue = updatesNew.pts;
                             } else {
-                                FileLog.e("tmessages", "need get diff inner TL_updates, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq);
+                                FileLog.e("need get diff inner TL_updates, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq);
                                 needGetDiff = true;
                             }
                         } else if (MessagesStorage.lastPtsValue != updatesNew.pts) {
-                            FileLog.e("tmessages", update + " need get diff, pts: " + MessagesStorage.lastPtsValue + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
+                            FileLog.e(update + " need get diff, pts: " + MessagesStorage.lastPtsValue + " " + updatesNew.pts + " count = " + updatesNew.pts_count);
                             if (this.gettingDifference || this.updatesStartWaitTimePts == 0 || (this.updatesStartWaitTimePts != 0 && Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimePts) <= 1500)) {
                                 if (this.updatesStartWaitTimePts == 0) {
                                     this.updatesStartWaitTimePts = System.currentTimeMillis();
                                 }
-                                FileLog.e("tmessages", "add to queue");
+                                FileLog.e("add to queue");
                                 this.updatesQueuePts.add(updatesNew);
                             } else {
                                 needGetDiff = true;
@@ -6473,15 +6473,15 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 } else {
                     if (updates instanceof TL_updatesCombined) {
-                        FileLog.e("tmessages", "need get diff TL_updatesCombined, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq_start);
+                        FileLog.e("need get diff TL_updatesCombined, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq_start);
                     } else {
-                        FileLog.e("tmessages", "need get diff TL_updates, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq);
+                        FileLog.e("need get diff TL_updates, seq: " + MessagesStorage.lastSeqValue + " " + updates.seq);
                     }
                     if (this.gettingDifference || this.updatesStartWaitTimeSeq == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTimeSeq) <= 1500) {
                         if (this.updatesStartWaitTimeSeq == 0) {
                             this.updatesStartWaitTimeSeq = System.currentTimeMillis();
                         }
-                        FileLog.e("tmessages", "add TL_updates/Combined to queue");
+                        FileLog.e("add TL_updates/Combined to queue");
                         this.updatesQueueSeq.add(updates);
                     } else {
                         needGetDiff = true;
@@ -6489,7 +6489,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
         } else if (updates instanceof TL_updatesTooLong) {
-            FileLog.e("tmessages", "need get diff TL_updatesTooLong");
+            FileLog.e("need get diff TL_updatesTooLong");
             needGetDiff = true;
         } else if (updates instanceof UserActionUpdatesSeq) {
             MessagesStorage.lastSeqValue = updates.seq;
@@ -6555,6 +6555,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6608,9 +6609,8 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
-            FileLog.d("tmessages", "process update " + update);
+            FileLog.d("process update " + update);
             Message message;
             int user_id;
             int count;
@@ -6626,7 +6626,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     message = ((TL_updateNewChannelMessage) update).message;
                     if (BuildVars.DEBUG_VERSION) {
-                        FileLog.d("tmessages", update + " channelId = " + message.to_id.channel_id);
+                        FileLog.d(update + " channelId = " + message.to_id.channel_id);
                     }
                     if (!message.out && message.from_id == UserConfig.getClientUserId()) {
                         message.out = true;
@@ -6683,7 +6683,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     putUser(user, true);
                                 }
                                 if (user == null) {
-                                    FileLog.d("tmessages", "not found user " + user_id);
+                                    FileLog.d("not found user " + user_id);
                                     return false;
                                 } else if (a == 1 && user.status != null && user.status.expires <= 0) {
                                     this.onlinePrivacy.put(Integer.valueOf(user_id), Integer.valueOf(ConnectionsManager.getInstance().getCurrentTime()));
@@ -6692,7 +6692,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             }
                         }
                     } else {
-                        FileLog.d("tmessages", "not found chat " + chat_id);
+                        FileLog.d("not found chat " + chat_id);
                         return false;
                     }
                 }
@@ -7043,7 +7043,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 webPages.put(Long.valueOf(update.webpage.id), update.webpage);
             } else if (update instanceof TL_updateChannelTooLong) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("tmessages", update + " channelId = " + update.channel_id);
+                    FileLog.d(update + " channelId = " + update.channel_id);
                 }
                 Integer channelPts = (Integer) this.channelsPts.get(Integer.valueOf(update.channel_id));
                 if (channelPts == null) {
@@ -7088,7 +7088,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 read_max.put(Long.valueOf(dialog_id), Integer.valueOf(Math.max(value.intValue(), update.max_id)));
             } else if (update instanceof TL_updateDeleteChannelMessages) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("tmessages", update + " channelId = " + update.channel_id);
+                    FileLog.d(update + " channelId = " + update.channel_id);
                 }
                 arrayList = (ArrayList) deletedMessages.get(update.channel_id);
                 if (arrayList == null) {
@@ -7098,12 +7098,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 arrayList.addAll(update.messages);
             } else if (update instanceof TL_updateChannel) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("tmessages", update + " channelId = " + update.channel_id);
+                    FileLog.d(update + " channelId = " + update.channel_id);
                 }
                 updatesOnMainThread.add(update);
             } else if (update instanceof TL_updateChannelMessageViews) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("tmessages", update + " channelId = " + update.channel_id);
+                    FileLog.d(update + " channelId = " + update.channel_id);
                 }
                 TL_updateChannelMessageViews updateChannelMessageViews = (TL_updateChannelMessageViews) update;
                 SparseIntArray array = (SparseIntArray) channelViews.get(update.channel_id);
@@ -7211,7 +7211,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 arr.add(messageObject);
             } else if (update instanceof TL_updateChannelPinnedMessage) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("tmessages", update + " channelId = " + update.channel_id);
+                    FileLog.d(update + " channelId = " + update.channel_id);
                 }
                 MessagesStorage.getInstance().updateChannelPinnedMessage(update.channel_id, ((TL_updateChannelPinnedMessage) update).id);
             } else if (update instanceof TL_updateReadFeaturedStickers) {
@@ -7222,7 +7222,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (call instanceof TL_phoneCallRequested) {
                     if (call.date + (this.callRingTimeout / 1000) < ConnectionsManager.getInstance().getCurrentTime()) {
                         if (BuildVars.DEBUG_VERSION) {
-                            FileLog.d("tmessages", "ignoring too old call");
+                            FileLog.d("ignoring too old call");
                         }
                     } else if (svc != null) {
                         TLObject req = new TL_phone_discardCall();
@@ -8005,7 +8005,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 fragment.setVisibleDialog(null);
                                 if (error == null) {
@@ -8022,7 +8022,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                     try {
                                         Toast.makeText(fragment.getParentActivity(), LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound), 0).show();
                                     } catch (Throwable e2) {
-                                        FileLog.e("tmessages", e2);
+                                        FileLog.e(e2);
                                     }
                                 }
                             }
@@ -8035,7 +8035,7 @@ public class MessagesController implements NotificationCenterDelegate {
                         try {
                             dialog.dismiss();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                         if (fragment != null) {
                             fragment.setVisibleDialog(null);

@@ -109,7 +109,7 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
             try {
                 semaphore.acquire();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.currentChat == null) {
                 return false;
@@ -292,7 +292,7 @@ public class ChannelEditTypeActivity extends BaseFragment implements Notificatio
                         ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", ChannelEditTypeActivity.this.invite.link));
                         Toast.makeText(ChannelEditTypeActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }

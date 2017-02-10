@@ -281,7 +281,7 @@ public class SharedMediaQuery {
                     state2.step();
                     state2.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -310,7 +310,7 @@ public class SharedMediaQuery {
                     }
                     SharedMediaQuery.processLoadedMediaCount(count, uid, type, classGuid, true);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -444,7 +444,7 @@ public class SharedMediaQuery {
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     SharedMediaQuery.processLoadedMedia(res, j, i4, i, i2, i3, true, i5, z, false);
                 } catch (Throwable th) {
                     Throwable th2 = th;
@@ -505,7 +505,7 @@ public class SharedMediaQuery {
                     }
                     MessagesStorage.getInstance().getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -531,7 +531,7 @@ public class SharedMediaQuery {
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {

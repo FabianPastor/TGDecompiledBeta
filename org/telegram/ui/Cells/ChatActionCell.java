@@ -231,7 +231,7 @@ public class ChatActionCell extends BaseCell {
                 this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
                 a++;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -336,11 +336,11 @@ public class ChatActionCell extends BaseCell {
                         additionalHeight = AndroidUtilities.dp(3.0f);
                         dy = (y + height) - AndroidUtilities.dp(9.0f);
                         dx = x - (corner * 2);
-                        Theme.cornerInner[2].setBounds(dx, dy, dx + corner, dy + corner);
-                        Theme.cornerInner[2].draw(canvas);
+                        Theme.chat_cornerInner[2].setBounds(dx, dy, dx + corner, dy + corner);
+                        Theme.chat_cornerInner[2].draw(canvas);
                         dx = (x + width) + corner;
-                        Theme.cornerInner[3].setBounds(dx, dy, dx + corner, dy + corner);
-                        Theme.cornerInner[3].draw(canvas);
+                        Theme.chat_cornerInner[3].setBounds(dx, dy, dx + corner, dy + corner);
+                        Theme.chat_cornerInner[3].draw(canvas);
                     } else {
                         additionalHeight = AndroidUtilities.dp(6.0f);
                     }
@@ -359,11 +359,11 @@ public class ChatActionCell extends BaseCell {
                         height += AndroidUtilities.dp(3.0f);
                         dy = y + corner;
                         dx = x - (corner * 2);
-                        Theme.cornerInner[0].setBounds(dx, dy, dx + corner, dy + corner);
-                        Theme.cornerInner[0].draw(canvas);
+                        Theme.chat_cornerInner[0].setBounds(dx, dy, dx + corner, dy + corner);
+                        Theme.chat_cornerInner[0].draw(canvas);
                         dx = (x + width) + corner;
-                        Theme.cornerInner[1].setBounds(dx, dy, dx + corner, dy + corner);
-                        Theme.cornerInner[1].draw(canvas);
+                        Theme.chat_cornerInner[1].setBounds(dx, dy, dx + corner, dy + corner);
+                        Theme.chat_cornerInner[1].draw(canvas);
                     } else {
                         y -= AndroidUtilities.dp(6.0f);
                         height += AndroidUtilities.dp(6.0f);
@@ -373,20 +373,20 @@ public class ChatActionCell extends BaseCell {
                 canvas.drawRect((float) (x + width), (float) (y + corner), (float) ((x + width) + corner), (float) (((y + height) + additionalHeight) - corner), Theme.chat_actionBackgroundPaint);
                 if (drawTopCorners) {
                     dx = x - corner;
-                    Theme.cornerOuter[0].setBounds(dx, y, dx + corner, y + corner);
-                    Theme.cornerOuter[0].draw(canvas);
+                    Theme.chat_cornerOuter[0].setBounds(dx, y, dx + corner, y + corner);
+                    Theme.chat_cornerOuter[0].draw(canvas);
                     dx = x + width;
-                    Theme.cornerOuter[1].setBounds(dx, y, dx + corner, y + corner);
-                    Theme.cornerOuter[1].draw(canvas);
+                    Theme.chat_cornerOuter[1].setBounds(dx, y, dx + corner, y + corner);
+                    Theme.chat_cornerOuter[1].draw(canvas);
                 }
                 if (drawBottomCorners) {
                     dy = ((y + height) + additionalHeight) - corner;
                     dx = x + width;
-                    Theme.cornerOuter[2].setBounds(dx, dy, dx + corner, dy + corner);
-                    Theme.cornerOuter[2].draw(canvas);
+                    Theme.chat_cornerOuter[2].setBounds(dx, dy, dx + corner, dy + corner);
+                    Theme.chat_cornerOuter[2].draw(canvas);
                     dx = x - corner;
-                    Theme.cornerOuter[3].setBounds(dx, dy, dx + corner, dy + corner);
-                    Theme.cornerOuter[3].draw(canvas);
+                    Theme.chat_cornerOuter[3].setBounds(dx, dy, dx + corner, dy + corner);
+                    Theme.chat_cornerOuter[3].draw(canvas);
                 }
                 y += height;
                 a++;

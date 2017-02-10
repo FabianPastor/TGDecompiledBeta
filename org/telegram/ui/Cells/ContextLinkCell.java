@@ -126,7 +126,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                 try {
                     this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace('\n', ' '), Theme.chat_contextResult_titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 this.letterDrawable.setTitle(this.inlineResult.title);
             }
@@ -137,14 +137,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                         this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
             if (this.inlineResult.url != null) {
                 try {
                     this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace('\n', ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), Theme.chat_contextResult_descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
             }
         }
@@ -632,13 +632,13 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private Drawable getDrawableForCurrentState() {
         int i = 1;
         if (this.documentAttachType != 3 && this.documentAttachType != 5) {
-            return this.buttonState == 1 ? Theme.photoStatesDrawables[5][0] : null;
+            return this.buttonState == 1 ? Theme.chat_photoStatesDrawables[5][0] : null;
         } else {
             if (this.buttonState == -1) {
                 return null;
             }
             this.radialProgress.setAlphaForPrevious(false);
-            Drawable[] drawableArr = Theme.fileStatesDrawable[this.buttonState + 5];
+            Drawable[] drawableArr = Theme.chat_fileStatesDrawable[this.buttonState + 5];
             if (!this.buttonPressed) {
                 i = 0;
             }

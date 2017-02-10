@@ -44,7 +44,7 @@ public class NativeLoader {
                 file.delete();
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         ZipFile zipFile = null;
         InputStream stream = null;
@@ -75,20 +75,20 @@ public class NativeLoader {
                     init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                     nativeLoaded = true;
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
                 if (stream != null) {
                     try {
                         stream.close();
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                     }
                 }
                 if (zipFile2 != null) {
                     try {
                         zipFile2.close();
                     } catch (Throwable e2222) {
-                        FileLog.e("tmessages", e2222);
+                        FileLog.e(e2222);
                     }
                 }
                 zipFile = zipFile2;
@@ -97,19 +97,19 @@ public class NativeLoader {
                 e2222 = e3;
                 zipFile = zipFile2;
                 try {
-                    FileLog.e("tmessages", e2222);
+                    FileLog.e(e2222);
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable e22222) {
-                            FileLog.e("tmessages", e22222);
+                            FileLog.e(e22222);
                         }
                     }
                     if (zipFile != null) {
                         try {
                             zipFile.close();
                         } catch (Throwable e222222) {
-                            FileLog.e("tmessages", e222222);
+                            FileLog.e(e222222);
                         }
                     }
                     return false;
@@ -119,14 +119,14 @@ public class NativeLoader {
                         try {
                             stream.close();
                         } catch (Throwable e2222222) {
-                            FileLog.e("tmessages", e2222222);
+                            FileLog.e(e2222222);
                         }
                     }
                     if (zipFile != null) {
                         try {
                             zipFile.close();
                         } catch (Throwable e22222222) {
-                            FileLog.e("tmessages", e22222222);
+                            FileLog.e(e22222222);
                         }
                     }
                     throw th;
@@ -144,7 +144,7 @@ public class NativeLoader {
             }
         } catch (Exception e4) {
             e22222222 = e4;
-            FileLog.e("tmessages", e22222222);
+            FileLog.e(e22222222);
             if (stream != null) {
                 stream.close();
             }
@@ -173,7 +173,7 @@ public class NativeLoader {
                         folder = "mips";
                     } else {
                         folder = "armeabi";
-                        FileLog.e("tmessages", "Unsupported arch: " + Build.CPU_ABI);
+                        FileLog.e("Unsupported arch: " + Build.CPU_ABI);
                     }
                     try {
                         String javaArch = System.getProperty("os.arch");
@@ -184,7 +184,7 @@ public class NativeLoader {
                         if (destFile != null) {
                             File destFile2 = new File(destFile, LIB_SO_NAME);
                             if (destFile2.exists()) {
-                                FileLog.d("tmessages", "load normal lib");
+                                FileLog.d("load normal lib");
                                 System.loadLibrary(LIB_NAME);
                                 init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                                 nativeLoaded = true;
@@ -192,12 +192,12 @@ public class NativeLoader {
                             destFile = destFile2;
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     } catch (Throwable e2) {
                         e2.printStackTrace();
                     }
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                     folder = "armeabi";
                 }
                 File destDir = new File(context.getFilesDir(), "lib");
@@ -205,16 +205,16 @@ public class NativeLoader {
                 File destLocalFile = new File(destDir, LOCALE_LIB_SO_NAME);
                 if (destLocalFile.exists()) {
                     try {
-                        FileLog.d("tmessages", "Load local lib");
+                        FileLog.d("Load local lib");
                         System.load(destLocalFile.getAbsolutePath());
                         init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
                         nativeLoaded = true;
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                         destLocalFile.delete();
                     }
                 }
-                FileLog.e("tmessages", "Library not found, arch = " + folder);
+                FileLog.e("Library not found, arch = " + folder);
             }
         }
         try {
@@ -222,7 +222,7 @@ public class NativeLoader {
             init(Constants.FILES_PATH, BuildVars.DEBUG_VERSION);
             nativeLoaded = true;
         } catch (Throwable e2222) {
-            FileLog.e("tmessages", e2222);
+            FileLog.e(e2222);
         }
     }
 }

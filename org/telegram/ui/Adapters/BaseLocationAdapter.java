@@ -61,7 +61,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.searchTimer = new Timer();
         this.searchTimer.schedule(new TimerTask() {
@@ -70,7 +70,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                     BaseLocationAdapter.this.searchTimer.cancel();
                     BaseLocationAdapter.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
@@ -157,7 +157,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                             } else if (e2 instanceof FileNotFoundException) {
                                 canRetry = false;
                             }
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                         if (canRetry) {
                             if (httpConnection != null) {
@@ -170,7 +170,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                         }
                                     }
                                 } catch (Throwable e22) {
-                                    FileLog.e("tmessages", e22);
+                                    FileLog.e(e22);
                                 }
                             }
                             if (httpConnectionStream != null) {
@@ -211,12 +211,12 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                     result = result2;
                                 } catch (Throwable th2) {
                                     e22 = th2;
-                                    FileLog.e("tmessages", e22);
+                                    FileLog.e(e22);
                                     if (httpConnectionStream != null) {
                                         try {
                                             httpConnectionStream.close();
                                         } catch (Throwable e222) {
-                                            FileLog.e("tmessages", e222);
+                                            FileLog.e(e222);
                                         }
                                     }
                                     if (done) {
@@ -233,7 +233,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                             return result.toString();
                         }
                         return null;
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                         if (httpConnectionStream != null) {
                             httpConnectionStream.close();
                         }
@@ -251,7 +251,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                         try {
                             return new JSONObject(code);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             return null;
                         }
                     }
@@ -300,11 +300,11 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                                         venue.provider = "foursquare";
                                         BaseLocationAdapter.this.places.add(venue);
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                             BaseLocationAdapter.this.searching = false;
                             BaseLocationAdapter.this.notifyDataSetChanged();
@@ -323,7 +323,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 };
                 this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 this.searching = false;
                 if (this.delegate != null) {
                     this.delegate.didLoadedSearchResult(this.places);

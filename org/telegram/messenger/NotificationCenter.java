@@ -521,7 +521,7 @@ public class NotificationCenter {
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.DEBUG_VERSION) {
-                FileLog.e("tmessages", "delay post notification " + id + " with args count = " + args.length);
+                FileLog.e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }

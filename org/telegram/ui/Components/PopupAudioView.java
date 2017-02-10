@@ -9,7 +9,6 @@ import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import java.lang.reflect.Array;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
@@ -17,7 +16,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.FileDownloadProgressListener;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.ui.ActionBar.Theme;
@@ -25,9 +23,6 @@ import org.telegram.ui.Cells.BaseCell;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 
 public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDownloadProgressListener {
-    private static Drawable backgroundMediaDrawableIn;
-    private static Drawable[][] statesDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{8, 2}));
-    private static TextPaint timePaint;
     private int TAG;
     private int buttonPressed = 0;
     private int buttonState = 0;
@@ -40,33 +35,14 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     private int seekBarX;
     private int seekBarY;
     private StaticLayout timeLayout;
+    private TextPaint timePaint = new TextPaint(1);
     int timeWidth = 0;
     private int timeX;
     private boolean wasLayout = false;
 
     public PopupAudioView(Context context) {
         super(context);
-        if (backgroundMediaDrawableIn == null) {
-            backgroundMediaDrawableIn = getResources().getDrawable(R.drawable.msg_photo);
-            statesDrawable[0][0] = getResources().getDrawable(R.drawable.play_g);
-            statesDrawable[0][1] = getResources().getDrawable(R.drawable.play_g_s);
-            statesDrawable[1][0] = getResources().getDrawable(R.drawable.pause_g);
-            statesDrawable[1][1] = getResources().getDrawable(R.drawable.pause_g_s);
-            statesDrawable[2][0] = getResources().getDrawable(R.drawable.file_g_load);
-            statesDrawable[2][1] = getResources().getDrawable(R.drawable.file_g_load_s);
-            statesDrawable[3][0] = getResources().getDrawable(R.drawable.file_g_cancel);
-            statesDrawable[3][1] = getResources().getDrawable(R.drawable.file_g_cancel_s);
-            statesDrawable[4][0] = getResources().getDrawable(R.drawable.play_b);
-            statesDrawable[4][1] = getResources().getDrawable(R.drawable.play_b_s);
-            statesDrawable[5][0] = getResources().getDrawable(R.drawable.pause_b);
-            statesDrawable[5][1] = getResources().getDrawable(R.drawable.pause_b_s);
-            statesDrawable[6][0] = getResources().getDrawable(R.drawable.file_b_load);
-            statesDrawable[6][1] = getResources().getDrawable(R.drawable.file_b_load_s);
-            statesDrawable[7][0] = getResources().getDrawable(R.drawable.file_b_cancel);
-            statesDrawable[7][1] = getResources().getDrawable(R.drawable.file_b_cancel_s);
-            timePaint = new TextPaint(1);
-        }
-        timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+        this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.TAG = MediaController.getInstance().generateObserverTag();
         this.seekBar = new SeekBar(getContext());
         this.seekBar.setDelegate(this);
@@ -114,8 +90,8 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
     protected void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null) {
             if (this.wasLayout) {
-                setDrawableBounds(backgroundMediaDrawableIn, 0, 0, getMeasuredWidth(), getMeasuredHeight());
-                backgroundMediaDrawableIn.draw(canvas);
+                setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
+                Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
                     canvas.save();
                     if (this.buttonState == 0 || this.buttonState == 1) {
@@ -126,9 +102,9 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                         this.progressView.draw(canvas);
                     }
                     canvas.restore();
-                    int state = this.buttonState + 4;
-                    timePaint.setColor(-6182221);
-                    Drawable buttonDrawable = statesDrawable[state][this.buttonPressed];
+                    int state = this.buttonState + 5;
+                    this.timePaint.setColor(-6182221);
+                    Drawable buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
                     int side = AndroidUtilities.dp(36.0f);
                     setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
                     buttonDrawable.draw(canvas);
@@ -205,7 +181,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
             }
         } else if (this.buttonState == 2) {
             FileLoader.getInstance().loadFile(this.currentMessageObject.getDocument(), true, false);
-            this.buttonState = 3;
+            this.buttonState = 4;
             invalidate();
         } else if (this.buttonState == 3) {
             FileLoader.getInstance().cancelLoadFile(this.currentMessageObject.getDocument());
@@ -233,8 +209,8 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
             }
             String timeString = String.format("%02d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
             if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
-                this.timeWidth = (int) Math.ceil((double) timePaint.measureText(timeString));
-                this.timeLayout = new StaticLayout(timeString, timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.timeWidth = (int) Math.ceil((double) this.timePaint.measureText(timeString));
+                this.timeLayout = new StaticLayout(timeString, this.timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
             invalidate();
         }

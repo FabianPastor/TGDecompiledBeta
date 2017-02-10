@@ -47,7 +47,7 @@ public class AudioRecordJNI {
         try {
             this.thread.join();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.thread = null;
         this.audioRecord.release();
@@ -83,13 +83,13 @@ public class AudioRecordJNI {
                         AudioRecordJNI.this.agc = AutomaticGainControl.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
                         AudioRecordJNI.this.agc.setEnabled(false);
                     } else {
-                        FileLog.w("tg-voip", "AutomaticGainControl is not available on this device :(");
+                        FileLog.w("AutomaticGainControl is not available on this device :(");
                     }
                     if (NoiseSuppressor.isAvailable()) {
                         AudioRecordJNI.this.ns = NoiseSuppressor.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
                         AudioRecordJNI.this.ns.setEnabled(true);
                     } else {
-                        FileLog.w("tg-voip", "NoiseSuppressor is not available on this device :(");
+                        FileLog.w("NoiseSuppressor is not available on this device :(");
                     }
                 }
                 while (AudioRecordJNI.this.running) {
@@ -101,7 +101,7 @@ public class AudioRecordJNI {
                         }
                         AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 Log.i("tg-voip", "audiotrack thread exits");

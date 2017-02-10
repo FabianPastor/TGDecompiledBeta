@@ -50,7 +50,7 @@ public class ID3v2Info extends AudioInfo {
     public ID3v2Info(java.io.InputStream r11, java.util.logging.Level r12) throws java.io.IOException, org.telegram.messenger.audioinfo.mp3.ID3v2Exception {
         /* JADX: method processing error */
 /*
-Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:46:0x0085 in {18, 22, 38, 40, 42, 45, 47, 48, 50, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64} preds:[]
+Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:46:0x0088 in {18, 22, 38, 40, 42, 45, 47, 48, 49, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64} preds:[]
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:129)
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:48)
 	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.rerun(BlockProcessor.java:44)
@@ -70,7 +70,7 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         r10.<init>();
         r10.debugLevel = r12;
         r5 = isID3v2StartPosition(r11);
-        if (r5 == 0) goto L_0x0067;
+        if (r5 == 0) goto L_0x0069;
     L_0x000e:
         r4 = new org.telegram.messenger.audioinfo.mp3.ID3v2TagHeader;
         r4.<init>(r11);
@@ -87,49 +87,49 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         r5 = java.lang.String.format(r5, r6);
         r10.version = r5;
         r3 = r4.tagBody(r11);
-    L_0x0039:
-        r6 = r3.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r8 = 10;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 <= 0) goto L_0x004e;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x0043:
-        r2 = new org.telegram.messenger.audioinfo.mp3.ID3v2FrameHeader;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r2.<init>(r3);	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5 = r2.isPadding();	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 == 0) goto L_0x0068;
-    L_0x004e:
+    L_0x003b:
+        r6 = r3.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r8 = 10;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 <= 0) goto L_0x0050;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x0045:
+        r2 = new org.telegram.messenger.audioinfo.mp3.ID3v2FrameHeader;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r2.<init>(r3);	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5 = r2.isPadding();	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 == 0) goto L_0x006a;
+    L_0x0050:
         r5 = r3.getData();
         r6 = r3.getRemainingLength();
         r5.skipFully(r6);
         r5 = r4.getFooterSize();
-        if (r5 <= 0) goto L_0x0067;
-    L_0x005f:
+        if (r5 <= 0) goto L_0x0069;
+    L_0x0061:
         r5 = r4.getFooterSize();
         r6 = (long) r5;
         r11.skip(r6);
-    L_0x0067:
+    L_0x0069:
         return;
-    L_0x0068:
-        r5 = r2.getBodySize();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6 = (long) r5;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r8 = r3.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 <= 0) goto L_0x00ab;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x0075:
-        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5 = r5.isLoggable(r12);	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 == 0) goto L_0x004e;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x007d:
-        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6 = "ID3 frame claims to extend frames area";	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5.log(r12, r6);	 Catch:{ ID3v2Exception -> 0x0085 }
-        goto L_0x004e;
-    L_0x0085:
+    L_0x006a:
+        r5 = r2.getBodySize();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6 = (long) r5;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r8 = r3.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 <= 0) goto L_0x00af;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x0077:
+        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5 = r5.isLoggable(r12);	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 == 0) goto L_0x0050;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x007f:
+        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6 = "ID3 frame claims to extend frames area";	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5.log(r12, r6);	 Catch:{ ID3v2Exception -> 0x0088 }
+        goto L_0x0050;
+    L_0x0088:
         r0 = move-exception;
         r5 = LOGGER;
         r5 = r5.isLoggable(r12);
-        if (r5 == 0) goto L_0x004e;
-    L_0x008e:
+        if (r5 == 0) goto L_0x0050;
+    L_0x0091:
         r5 = LOGGER;
         r6 = new java.lang.StringBuilder;
         r6.<init>();
@@ -139,55 +139,55 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dom
         r6 = r6.append(r7);
         r6 = r6.toString();
         r5.log(r12, r6);
-        goto L_0x004e;
-    L_0x00ab:
-        r5 = r2.isValid();	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 == 0) goto L_0x010a;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x00b1:
-        r5 = r2.isEncryption();	 Catch:{ ID3v2Exception -> 0x0085 }
-        if (r5 != 0) goto L_0x010a;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x00b7:
-        r1 = r3.frameBody(r2);	 Catch:{ ID3v2Exception -> 0x0085 }
-        r10.parseFrame(r1);	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
+        goto L_0x0050;
+    L_0x00af:
+        r5 = r2.isValid();	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 == 0) goto L_0x010f;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x00b5:
+        r5 = r2.isEncryption();	 Catch:{ ID3v2Exception -> 0x0088 }
+        if (r5 != 0) goto L_0x010f;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x00bb:
+        r1 = r3.frameBody(r2);	 Catch:{ ID3v2Exception -> 0x0088 }
+        r10.parseFrame(r1);	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
         r5 = r1.getData();
         r6 = r1.getRemainingLength();
         r5.skipFully(r6);
-        goto L_0x0039;
-    L_0x00cb:
+        goto L_0x003b;
+    L_0x00cf:
         r0 = move-exception;
-        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r5 = r5.isLoggable(r12);	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        if (r5 == 0) goto L_0x00f0;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-    L_0x00d4:
-        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r6 = "ID3 exception occured in frame %s: %s";	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r7 = 2;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r7 = new java.lang.Object[r7];	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r8 = 0;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r9 = r2.getFrameId();	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r7[r8] = r9;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r8 = 1;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r9 = r0.getMessage();	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r7[r8] = r9;	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r6 = java.lang.String.format(r6, r7);	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-        r5.log(r12, r6);	 Catch:{ ID3v2Exception -> 0x00cb, all -> 0x00fd }
-    L_0x00f0:
+        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r5 = r5.isLoggable(r12);	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        if (r5 == 0) goto L_0x00f5;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+    L_0x00d8:
+        r5 = LOGGER;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r6 = "ID3 exception occured in frame %s: %s";	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r7 = 2;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r7 = new java.lang.Object[r7];	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r8 = 0;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r9 = r2.getFrameId();	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r7[r8] = r9;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r8 = 1;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r9 = r0.getMessage();	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r7[r8] = r9;	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r6 = java.lang.String.format(r6, r7);	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+        r5.log(r12, r6);	 Catch:{ ID3v2Exception -> 0x00cf, all -> 0x0102 }
+    L_0x00f5:
         r5 = r1.getData();
         r6 = r1.getRemainingLength();
         r5.skipFully(r6);
-        goto L_0x0039;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x00fd:
-        r5 = move-exception;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6 = r1.getData();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r8 = r1.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6.skipFully(r8);	 Catch:{ ID3v2Exception -> 0x0085 }
-        throw r5;	 Catch:{ ID3v2Exception -> 0x0085 }
-    L_0x010a:
-        r5 = r3.getData();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6 = r2.getBodySize();	 Catch:{ ID3v2Exception -> 0x0085 }
-        r6 = (long) r6;	 Catch:{ ID3v2Exception -> 0x0085 }
-        r5.skipFully(r6);	 Catch:{ ID3v2Exception -> 0x0085 }
-        goto L_0x0039;
+        goto L_0x003b;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x0102:
+        r5 = move-exception;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6 = r1.getData();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r8 = r1.getRemainingLength();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6.skipFully(r8);	 Catch:{ ID3v2Exception -> 0x0088 }
+        throw r5;	 Catch:{ ID3v2Exception -> 0x0088 }
+    L_0x010f:
+        r5 = r3.getData();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6 = r2.getBodySize();	 Catch:{ ID3v2Exception -> 0x0088 }
+        r6 = (long) r6;	 Catch:{ ID3v2Exception -> 0x0088 }
+        r5.skipFully(r6);	 Catch:{ ID3v2Exception -> 0x0088 }
+        goto L_0x003b;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.mp3.ID3v2Info.<init>(java.io.InputStream, java.util.logging.Level):void");
     }

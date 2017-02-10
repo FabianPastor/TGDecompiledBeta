@@ -128,7 +128,7 @@ public class SearchAdapterHelper {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -197,7 +197,7 @@ public class SearchAdapterHelper {
                         MessagesStorage.getInstance().getDatabase().commitTransaction();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -223,7 +223,7 @@ public class SearchAdapterHelper {
                 try {
                     MessagesStorage.getInstance().getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });

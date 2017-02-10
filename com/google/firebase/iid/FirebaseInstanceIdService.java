@@ -81,56 +81,56 @@ public class FirebaseInstanceIdService extends zzb {
                     String str = split[0];
                     String str2 = split[1];
                     int i = -1;
-                    switch (str.hashCode()) {
-                        case 83:
-                            try {
+                    try {
+                        switch (str.hashCode()) {
+                            case 83:
                                 if (str.equals("S")) {
                                     i = 0;
                                 }
-                            } catch (IOException e3) {
-                                zzd(intent, e3.getMessage());
-                                return;
-                            }
-                        case 85:
-                            if (str.equals("U")) {
-                                i = 1;
-                            }
-                            switch (i) {
-                                case 0:
-                                    FirebaseInstanceId.getInstance().zzjv(str2);
-                                    if (!this.zzciX) {
-                                        Log.d("FirebaseInstanceId", "subscribe operation succeeded");
+                            case 85:
+                                if (str.equals("U")) {
+                                    i = 1;
+                                }
+                                switch (i) {
+                                    case 0:
+                                        FirebaseInstanceId.getInstance().zzjv(str2);
+                                        if (!this.zzciX) {
+                                            Log.d("FirebaseInstanceId", "subscribe operation succeeded");
+                                            break;
+                                        }
                                         break;
-                                    }
-                                    break;
-                                case 1:
-                                    FirebaseInstanceId.getInstance().zzjw(str2);
-                                    if (!this.zzciX) {
-                                        Log.d("FirebaseInstanceId", "unsubscribe operation succeeded");
+                                    case 1:
+                                        FirebaseInstanceId.getInstance().zzjw(str2);
+                                        if (!this.zzciX) {
+                                            Log.d("FirebaseInstanceId", "unsubscribe operation succeeded");
+                                            break;
+                                        }
                                         break;
-                                    }
+                                    default:
+                                        continue;
+                                }
+                        }
+                        switch (i) {
+                            case 0:
+                                FirebaseInstanceId.getInstance().zzjv(str2);
+                                if (!this.zzciX) {
                                     break;
-                                default:
-                                    continue;
-                            }
-                    }
-                    switch (i) {
-                        case 0:
-                            FirebaseInstanceId.getInstance().zzjv(str2);
-                            if (!this.zzciX) {
+                                }
+                                Log.d("FirebaseInstanceId", "subscribe operation succeeded");
                                 break;
-                            }
-                            Log.d("FirebaseInstanceId", "subscribe operation succeeded");
-                            break;
-                        case 1:
-                            FirebaseInstanceId.getInstance().zzjw(str2);
-                            if (!this.zzciX) {
+                            case 1:
+                                FirebaseInstanceId.getInstance().zzjw(str2);
+                                if (!this.zzciX) {
+                                    break;
+                                }
+                                Log.d("FirebaseInstanceId", "unsubscribe operation succeeded");
                                 break;
-                            }
-                            Log.d("FirebaseInstanceId", "unsubscribe operation succeeded");
-                            break;
-                        default:
-                            continue;
+                            default:
+                                continue;
+                        }
+                    } catch (IOException e3) {
+                        zzd(intent, e3.getMessage());
+                        return;
                     }
                 }
                 zzaaf.zzjy(zzaai);

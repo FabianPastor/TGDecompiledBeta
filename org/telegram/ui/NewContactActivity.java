@@ -154,7 +154,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                                         intent.putExtra("sms_body", LocaleController.getString("InviteText", R.string.InviteText));
                                                         NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                                     } catch (Throwable e) {
-                                                        FileLog.e("tmessages", e);
+                                                        FileLog.e(e);
                                                     }
                                                 }
                                             });
@@ -273,7 +273,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             public void onClick(View view) {
                 CountrySelectActivity fragment = new CountrySelectActivity();
                 fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
-                    public void didSelectCountry(String name) {
+                    public void didSelectCountry(String name, String shortName) {
                         NewContactActivity.this.selectCountry(name);
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
@@ -502,7 +502,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             }
             bufferedReader.close();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         Collections.sort(this.countriesArray, new Comparator<String>() {
             public int compare(String lhs, String rhs) {
@@ -516,7 +516,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 country = telephonyManager.getSimCountryIso().toUpperCase();
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         if (country != null) {
             String countryName = (String) languageMap.get(country);

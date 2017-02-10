@@ -8,11 +8,11 @@ import org.telegram.tgnet.ConnectionsManager;
 public class ScreenReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.SCREEN_OFF")) {
-            FileLog.e("tmessages", "screen off");
+            FileLog.e("screen off");
             ConnectionsManager.getInstance().setAppPaused(true, true);
             ApplicationLoader.isScreenOn = false;
         } else if (intent.getAction().equals("android.intent.action.SCREEN_ON")) {
-            FileLog.e("tmessages", "screen on");
+            FileLog.e("screen on");
             ConnectionsManager.getInstance().setAppPaused(false, true);
             ApplicationLoader.isScreenOn = true;
         }

@@ -9,7 +9,7 @@ public class GcmPushListenerService extends GcmListenerService {
     public static final int NOTIFICATION_ID = 1;
 
     public void onMessageReceived(String from, final Bundle bundle) {
-        FileLog.d("tmessages", "GCM received bundle: " + bundle + " from: " + from);
+        FileLog.d("GCM received bundle: " + bundle + " from: " + from);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public void run() {
                 ApplicationLoader.postInitApplication();
@@ -25,7 +25,7 @@ public class GcmPushListenerService extends GcmListenerService {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 ConnectionsManager.onInternalPushReceived();
                 ConnectionsManager.getInstance().resumeNetworkMaybe();

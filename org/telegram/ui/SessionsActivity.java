@@ -326,7 +326,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Throwable e) {
-                                                    FileLog.e("tmessages", e);
+                                                    FileLog.e(e);
                                                 }
                                                 if (error == null) {
                                                     SessionsActivity.this.sessions.remove(authorization);

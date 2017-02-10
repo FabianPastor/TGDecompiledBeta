@@ -44,7 +44,7 @@ public class RadioButton extends View {
             this.bitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
             this.bitmapCanvas = new Canvas(this.bitmap);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -132,7 +132,7 @@ public class RadioButton extends View {
                 this.bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Config.ARGB_8888);
                 this.bitmapCanvas = new Canvas(this.bitmap);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         if (this.progress <= 0.5f) {

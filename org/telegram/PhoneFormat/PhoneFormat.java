@@ -112,14 +112,14 @@ public class PhoneFormat {
                     try {
                         bos.close();
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
                 if (stream != null) {
                     try {
                         stream.close();
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
                 if (countryCode == null || countryCode.length() == 0) {
@@ -143,14 +143,14 @@ public class PhoneFormat {
                         try {
                             byteArrayOutputStream.close();
                         } catch (Throwable e222) {
-                            FileLog.e("tmessages", e222);
+                            FileLog.e(e222);
                         }
                     }
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable e2222) {
-                            FileLog.e("tmessages", e2222);
+                            FileLog.e(e2222);
                         }
                     }
                 } catch (Throwable th2) {
@@ -159,14 +159,14 @@ public class PhoneFormat {
                         try {
                             byteArrayOutputStream.close();
                         } catch (Throwable e22222) {
-                            FileLog.e("tmessages", e22222);
+                            FileLog.e(e22222);
                         }
                     }
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable e222222) {
-                            FileLog.e("tmessages", e222222);
+                            FileLog.e(e222222);
                         }
                     }
                     throw th;
@@ -257,7 +257,7 @@ public class PhoneFormat {
             }
             return String.format("%s %s", new Object[]{accessCode, phone});
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return orig;
         }
     }

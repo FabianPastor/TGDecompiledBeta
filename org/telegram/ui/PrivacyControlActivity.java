@@ -93,7 +93,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             try {
                 return super.onTouchEvent(widget, buffer, event);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return false;
             }
         }
@@ -515,7 +515,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                                 progressDialogFinal.dismiss();
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                         if (error == null) {
                             PrivacyControlActivity.this.finishFragment();
@@ -545,7 +545,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         this.currentPlus = new ArrayList();
         this.currentMinus = new ArrayList();
         ArrayList<PrivacyRule> privacyRules = ContactsController.getInstance().getPrivacyRules(this.rulesType);
-        if (privacyRules.size() == 0) {
+        if (privacyRules == null || privacyRules.size() == 0) {
             this.currentType = 1;
             return;
         }

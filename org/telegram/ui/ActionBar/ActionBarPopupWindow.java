@@ -63,7 +63,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 this.scrollView.setVerticalScrollBarEnabled(false);
                 addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.linearLayout = new LinearLayout(context);
             this.linearLayout.setOrientation(1);
@@ -300,7 +300,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super.showAsDropDown(anchor, xoff, yoff);
             registerListener(anchor);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

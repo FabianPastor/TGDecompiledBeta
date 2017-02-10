@@ -629,7 +629,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                         NotificationsSettingsActivity.this.startActivityForResult(intent, position);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 } else if (position == NotificationsSettingsActivity.this.resetNotificationsRow) {
                     if (!NotificationsSettingsActivity.this.reseting) {

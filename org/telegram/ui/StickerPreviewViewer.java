@@ -409,7 +409,7 @@ public class StickerPreviewViewer {
                             this.visibleDialog.dismiss();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                     AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
@@ -434,7 +434,7 @@ public class StickerPreviewViewer {
                         ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 ((WindowManager) this.parentActivity.getSystemService("window")).addView(this.windowView, this.windowLayoutParams);
                 this.isVisible = true;
@@ -460,7 +460,7 @@ public class StickerPreviewViewer {
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.currentSticker = null;
             this.currentSet = null;
@@ -480,7 +480,7 @@ public class StickerPreviewViewer {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.parentActivity != null && this.windowView != null) {
             try {
@@ -489,7 +489,7 @@ public class StickerPreviewViewer {
                 }
                 this.windowView = null;
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             Instance = null;
         }
@@ -549,7 +549,7 @@ public class StickerPreviewViewer {
                             ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }

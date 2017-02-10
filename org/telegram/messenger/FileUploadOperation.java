@@ -127,7 +127,7 @@ public class FileUploadOperation {
                 this.stream = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -190,7 +190,7 @@ public class FileUploadOperation {
                         try {
                             this.mdEnc = MessageDigest.getInstance("MD5");
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     this.uploadChunkSize = (int) Math.max(128, ((this.totalFileSize + 3072000) - 1) / 3072000);
@@ -313,7 +313,7 @@ public class FileUploadOperation {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
                             }
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                     this.uploadedBytesCount = this.readBytesCount;
@@ -500,7 +500,7 @@ public class FileUploadOperation {
                     this.requestTokens.put(Integer.valueOf(requestNumFinal), Integer.valueOf(instance.sendRequest(finalRequest, anonymousClass3, 0, i)));
                 }
             } catch (Throwable e22) {
-                FileLog.e("tmessages", e22);
+                FileLog.e(e22);
                 this.delegate.didFailedUploadingFile(this);
                 cleanup();
             }

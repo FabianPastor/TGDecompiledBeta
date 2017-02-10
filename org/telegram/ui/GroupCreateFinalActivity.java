@@ -170,7 +170,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             try {
                 semaphore.acquire();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (usersToLoad.size() != users.size() || users.isEmpty()) {
                 return false;

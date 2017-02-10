@@ -104,7 +104,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
             try {
                 semaphore.acquire();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.currentChat == null) {
                 return false;
@@ -115,7 +115,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
                 try {
                     semaphore.acquire();
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 if (this.info == null) {
                     return false;
@@ -178,7 +178,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
                                 try {
                                     dialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         });
@@ -480,7 +480,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
                             ChannelEditActivity.this.progressDialog = null;
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     ChannelEditActivity.this.doneButton.performClick();
                 }

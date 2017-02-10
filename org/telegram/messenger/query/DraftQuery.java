@@ -167,7 +167,7 @@ public class DraftQuery {
                 draft.serializeToStream(serializedData);
                 editor.putString("" + did, Utilities.bytesToHex(serializedData.toByteArray()));
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         if (replyToMessage == null) {
@@ -245,7 +245,7 @@ public class DraftQuery {
                                     });
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     });

@@ -540,7 +540,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     this.fingerprintRow = i;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             i = this.rowCount;
             this.rowCount = i + 1;
@@ -634,7 +634,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     System.arraycopy(UserConfig.passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
                     UserConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 UserConfig.passcodeType = this.currentPasswordType;
                 UserConfig.saveConfig(false);
@@ -647,7 +647,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             try {
                 Toast.makeText(getParentActivity(), LocaleController.getString("PasscodeDoNotMatch", R.string.PasscodeDoNotMatch), 0).show();
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             AndroidUtilities.shakeView(this.titleTextView, 2.0f, 0);
             this.passwordEditText.setText("");

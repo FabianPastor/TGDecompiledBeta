@@ -85,14 +85,14 @@ public class FileLog {
         }
     }
 
-    public static void e(final String tag, final String message, final Throwable exception) {
+    public static void e(final String message, final Throwable exception) {
         if (BuildVars.DEBUG_VERSION) {
-            Log.e(tag, message, exception);
+            Log.e("tmessages", message, exception);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
                         try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + "﹕ " + message + "\n");
+                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.write(exception.toString());
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
@@ -104,14 +104,14 @@ public class FileLog {
         }
     }
 
-    public static void e(final String tag, final String message) {
+    public static void e(final String message) {
         if (BuildVars.DEBUG_VERSION) {
-            Log.e(tag, message);
+            Log.e("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
                         try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + "﹕ " + message + "\n");
+                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -122,17 +122,17 @@ public class FileLog {
         }
     }
 
-    public static void e(final String tag, final Throwable e) {
+    public static void e(final Throwable e) {
         if (BuildVars.DEBUG_VERSION) {
             e.printStackTrace();
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
                         try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + "﹕ " + e + "\n");
+                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
                             StackTraceElement[] stack = e.getStackTrace();
                             for (Object obj : stack) {
-                                FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + "﹕ " + obj + "\n");
+                                FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + obj + "\n");
                             }
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
@@ -146,14 +146,14 @@ public class FileLog {
         }
     }
 
-    public static void d(final String tag, final String message) {
+    public static void d(final String message) {
         if (BuildVars.DEBUG_VERSION) {
-            Log.d(tag, message);
+            Log.d("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
                         try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " D/" + tag + "﹕ " + message + "\n");
+                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -164,14 +164,14 @@ public class FileLog {
         }
     }
 
-    public static void w(final String tag, final String message) {
+    public static void w(final String message) {
         if (BuildVars.DEBUG_VERSION) {
-            Log.w(tag, message);
+            Log.w("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable() {
                     public void run() {
                         try {
-                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " W/" + tag + ": " + message + "\n");
+                            FileLog.getInstance().streamWriter.write(FileLog.getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
                             FileLog.getInstance().streamWriter.flush();
                         } catch (Exception e) {
                             e.printStackTrace();

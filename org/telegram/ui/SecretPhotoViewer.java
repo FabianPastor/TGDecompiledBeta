@@ -245,7 +245,7 @@ public class SecretPhotoViewer implements NotificationCenterDelegate {
                 try {
                     bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 if (bitmap != null) {
                     drawable = new BitmapDrawable(bitmap);
@@ -264,7 +264,7 @@ public class SecretPhotoViewer implements NotificationCenterDelegate {
                     ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                 }
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             ((WindowManager) this.parentActivity.getSystemService("window")).addView(this.windowView, this.windowLayoutParams);
             this.secretDeleteTimer.invalidate();
@@ -293,7 +293,7 @@ public class SecretPhotoViewer implements NotificationCenterDelegate {
                     ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -310,7 +310,7 @@ public class SecretPhotoViewer implements NotificationCenterDelegate {
                 }
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             Instance = null;
         }

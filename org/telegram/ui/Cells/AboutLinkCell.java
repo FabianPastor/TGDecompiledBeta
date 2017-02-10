@@ -80,7 +80,7 @@ public class AboutLinkCell extends FrameLayout {
         } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
             this.oldText = text;
             this.stringBuilder = new SpannableStringBuilder(this.oldText);
-            MessageObject.addLinks(this.stringBuilder, false);
+            MessageObject.addLinks(false, this.stringBuilder, false);
             Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             requestLayout();
             if (resId == 0) {
@@ -118,7 +118,7 @@ public class AboutLinkCell extends FrameLayout {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -126,7 +126,7 @@ public class AboutLinkCell extends FrameLayout {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
@@ -141,7 +141,7 @@ public class AboutLinkCell extends FrameLayout {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                     resetPressedLink();
                     result = true;
@@ -178,7 +178,7 @@ public class AboutLinkCell extends FrameLayout {
                 this.textLayout.draw(canvas);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         canvas.restore();
     }

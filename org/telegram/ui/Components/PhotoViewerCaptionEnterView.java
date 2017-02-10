@@ -106,7 +106,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 } catch (Throwable e) {
                     setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         };
@@ -249,7 +249,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         try {
             this.currentActionMode.finish();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.currentActionMode = null;
         return true;
@@ -276,7 +276,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 method.invoke(mode, new Object[0]);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -339,7 +339,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 this.messageEditText.setSelection(this.messageEditText.length());
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -353,7 +353,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                                 try {
                                     PhotoViewerCaptionEnterView.this.messageEditText.requestFocus();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -403,7 +403,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                                 int j = i + localCharSequence.length();
                                 PhotoViewerCaptionEnterView.this.messageEditText.setSelection(j, j);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             } finally {
                                 PhotoViewerCaptionEnterView.this.innerTextChange = false;
                             }
@@ -495,7 +495,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             currentSelection = this.messageEditText.getSelectionStart();
         } catch (Throwable e) {
             currentSelection = this.messageEditText.length();
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         MotionEvent event = MotionEvent.obtain(0, 0, 0, 0.0f, 0.0f, 0);
         this.messageEditText.onTouchEvent(event);
@@ -507,7 +507,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         try {
             this.messageEditText.setSelection(currentSelection);
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
     }
 

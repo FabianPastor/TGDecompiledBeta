@@ -154,7 +154,7 @@ public class EmbedBottomSheet extends BottomSheet {
                         EmbedBottomSheet.this.videoView.destroy();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
 
@@ -229,7 +229,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 try {
                     EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
 
@@ -252,7 +252,7 @@ public class EmbedBottomSheet extends BottomSheet {
                             }
                             EmbedBottomSheet.this.containerView.setSystemUiVisibility(1028);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 } else {
@@ -263,7 +263,7 @@ public class EmbedBottomSheet extends BottomSheet {
                             EmbedBottomSheet.this.containerView.setSystemUiVisibility(0);
                             EmbedBottomSheet.this.parentActivity.setRequestedOrientation(EmbedBottomSheet.this.prevOrientation);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                 }
@@ -288,7 +288,7 @@ public class EmbedBottomSheet extends BottomSheet {
                                 EmbedBottomSheet.this.parentActivity.setRequestedOrientation(EmbedBottomSheet.this.prevOrientation);
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     if (EmbedBottomSheet.this.fullscreenVideoContainer.getVisibility() == 0) {
@@ -427,14 +427,14 @@ public class EmbedBottomSheet extends BottomSheet {
                         EmbedBottomSheet.this.parentActivity.getWindow().addFlags(128);
                         return;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         return;
                     }
                 }
                 try {
                     EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
 
@@ -468,7 +468,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (this.hasDescription) {
             textView = new TextView(context);
             textView.setTextSize(1, 16.0f);
-            textView.setTextColor(Theme.REPLY_PANEL_MESSAGE_TEXT_COLOR);
+            textView.setTextColor(-14540254);
             textView.setText(description);
             textView.setSingleLine(true);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -522,7 +522,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 try {
                     ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", EmbedBottomSheet.this.openUrl));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 Toast.makeText(EmbedBottomSheet.this.getContext(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                 EmbedBottomSheet.this.dismiss();
@@ -560,7 +560,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 try {
                     EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
 
@@ -572,7 +572,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 try {
                     EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 return true;
             }

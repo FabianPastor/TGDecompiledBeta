@@ -89,6 +89,7 @@ public class SearchQuery {
                     int a;
                     TL_topPeer hint;
                     long did;
+                    String id;
                     ShortcutManager shortcutManager = (ShortcutManager) ApplicationLoader.applicationContext.getSystemService(ShortcutManager.class);
                     List<ShortcutInfo> currentShortcuts = shortcutManager.getDynamicShortcuts();
                     ArrayList<String> shortcutsToUpdate = new ArrayList();
@@ -109,7 +110,6 @@ public class SearchQuery {
                             newShortcutsIds.add("did" + did);
                         }
                         for (a = 0; a < currentShortcuts.size(); a++) {
-                            String id;
                             id = ((ShortcutInfo) currentShortcuts.get(a)).getId();
                             if (!newShortcutsIds.remove(id)) {
                                 shortcutsToDelete.add(id);
@@ -193,7 +193,7 @@ public class SearchQuery {
                                         bitmap = result;
                                     }
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                             id = "did" + did;
@@ -302,7 +302,7 @@ public class SearchQuery {
                                                     }
                                                 });
                                             } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                                FileLog.e(e);
                                             }
                                         }
                                     });
@@ -370,7 +370,7 @@ public class SearchQuery {
                                 }
                             });
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });
@@ -481,7 +481,7 @@ public class SearchQuery {
                                 cursor.dispose();
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                         final double dtFinal = dt;
                         AndroidUtilities.runOnUIThread(new Runnable() {
@@ -540,7 +540,7 @@ public class SearchQuery {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -552,7 +552,7 @@ public class SearchQuery {
                 try {
                     MessagesStorage.getInstance().getDatabase().executeFast(String.format(Locale.US, "DELETE FROM chat_hints WHERE did = %d AND type = %d", new Object[]{Integer.valueOf(did), Integer.valueOf(type)})).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });

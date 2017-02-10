@@ -375,7 +375,7 @@ public class LoginActivity extends BaseFragment {
                 try {
                     oldPasswordBytes = oldPassword.getBytes("UTF-8");
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 LoginActivity.this.needShowProgress();
                 byte[] hash = new byte[((this.current_salt.length * 2) + oldPasswordBytes.length)];
@@ -1378,7 +1378,7 @@ public class LoginActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -1460,7 +1460,7 @@ public class LoginActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -1713,7 +1713,7 @@ public class LoginActivity extends BaseFragment {
                 public void onClick(View view) {
                     CountrySelectActivity fragment = new CountrySelectActivity();
                     fragment.setCountrySelectActivityDelegate(new CountrySelectActivityDelegate() {
-                        public void didSelectCountry(String name) {
+                        public void didSelectCountry(String name, String shortName) {
                             PhoneView.this.selectCountry(name);
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
@@ -1951,7 +1951,7 @@ public class LoginActivity extends BaseFragment {
                 }
                 bufferedReader.close();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             final LoginActivity loginActivity22222 = LoginActivity.this;
             Collections.sort(this.countriesArray, new Comparator<String>() {
@@ -1966,7 +1966,7 @@ public class LoginActivity extends BaseFragment {
                     country = telephonyManager.getSimCountryIso().toUpperCase();
                 }
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             if (country != null) {
                 String countryName = (String) languageMap.get(country);
@@ -2075,7 +2075,7 @@ public class LoginActivity extends BaseFragment {
                             req.current_number = z;
                         } catch (Throwable e) {
                             req.allow_flashcall = false;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     final Bundle params = new Bundle();
@@ -2083,7 +2083,7 @@ public class LoginActivity extends BaseFragment {
                     try {
                         params.putString("ephone", "+" + PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                         params.putString("ephone", "+" + phone);
                     }
                     params.putString("phoneFormated", phone);
@@ -2185,7 +2185,7 @@ public class LoginActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -2242,7 +2242,7 @@ public class LoginActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }
@@ -2334,7 +2334,7 @@ public class LoginActivity extends BaseFragment {
                 }
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -2380,7 +2380,7 @@ public class LoginActivity extends BaseFragment {
             }
             return bundle;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -2503,7 +2503,7 @@ public class LoginActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }
@@ -2605,7 +2605,7 @@ public class LoginActivity extends BaseFragment {
             putBundleToEditor(bundle, editor, null);
             editor.commit();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

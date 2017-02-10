@@ -68,7 +68,7 @@ public class TimerDrawable extends Drawable {
             this.timeHeight = this.timeLayout.getHeight();
         } catch (Throwable e) {
             this.timeLayout = null;
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         invalidateSelf();
     }

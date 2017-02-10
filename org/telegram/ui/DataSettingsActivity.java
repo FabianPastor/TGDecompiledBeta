@@ -378,7 +378,7 @@ public class DataSettingsActivity extends BaseFragment {
                                         DataSettingsActivity.this.visibleDialog.dismiss();
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 int newMask = 0;
                                 for (int a = 0; a < 6; a++) {

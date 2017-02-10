@@ -243,7 +243,7 @@ public class FileLoadOperation {
                 }
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             onFail(true, 0);
         }
     }
@@ -339,7 +339,7 @@ public class FileLoadOperation {
                 this.nextDownloadOffset = i;
             }
             if (BuildVars.DEBUG_VERSION) {
-                FileLog.d("tmessages", "start loading file to temp = " + this.cacheFileTemp + " final = " + this.cacheFileFinal);
+                FileLog.d("start loading file to temp = " + this.cacheFileTemp + " final = " + this.cacheFileFinal);
             }
             if (fileNameIv != null) {
                 this.cacheIvTemp = new File(this.tempPath, fileNameIv);
@@ -352,7 +352,7 @@ public class FileLoadOperation {
                         this.fiv.read(this.iv, 0, 32);
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                     this.downloadedBytes = 0;
                 }
             }
@@ -362,7 +362,7 @@ public class FileLoadOperation {
                     this.fileOutputStream.seek((long) this.downloadedBytes);
                 }
             } catch (Throwable e22) {
-                FileLog.e("tmessages", e22);
+                FileLog.e(e22);
             }
             if (this.fileOutputStream == null) {
                 onFail(true, 0);
@@ -410,13 +410,13 @@ public class FileLoadOperation {
                 try {
                     this.fileOutputStream.getChannel().close();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 this.fileOutputStream.close();
                 this.fileOutputStream = null;
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         try {
             if (this.fiv != null) {
@@ -424,7 +424,7 @@ public class FileLoadOperation {
                 this.fiv = null;
             }
         } catch (Throwable e22) {
-            FileLog.e("tmessages", e22);
+            FileLog.e(e22);
         }
         if (this.delayedRequestInfos != null) {
             for (int a = 0; a < this.delayedRequestInfos.size(); a++) {
@@ -451,7 +451,7 @@ public class FileLoadOperation {
             }
             if (!(this.cacheFileTemp == null || this.cacheFileTemp.renameTo(this.cacheFileFinal))) {
                 if (BuildVars.DEBUG_VERSION) {
-                    FileLog.e("tmessages", "unable to rename temp = " + this.cacheFileTemp + " to final = " + this.cacheFileFinal + " retry = " + this.renameRetryCount);
+                    FileLog.e("unable to rename temp = " + this.cacheFileTemp + " to final = " + this.cacheFileFinal + " retry = " + this.renameRetryCount);
                 }
                 this.renameRetryCount++;
                 if (this.renameRetryCount < 3) {
@@ -470,7 +470,7 @@ public class FileLoadOperation {
                 this.cacheFileFinal = this.cacheFileTemp;
             }
             if (BuildVars.DEBUG_VERSION) {
-                FileLog.e("tmessages", "finished downloading file to " + this.cacheFileFinal);
+                FileLog.e("finished downloading file to " + this.cacheFileFinal);
             }
             this.delegate.didFinishLoadingFile(this, this.cacheFileFinal);
             if (!increment) {
@@ -556,7 +556,7 @@ public class FileLoadOperation {
                 }
             } catch (Throwable e) {
                 onFail(false, 0);
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         } else if (error.text.contains("FILE_MIGRATE_")) {
             Integer val;
@@ -580,7 +580,7 @@ public class FileLoadOperation {
                     onFinishLoadingFile(true);
                     return;
                 } catch (Throwable e3) {
-                    FileLog.e("tmessages", e3);
+                    FileLog.e(e3);
                     onFail(false, 0);
                     return;
                 }
@@ -590,9 +590,9 @@ public class FileLoadOperation {
             onFail(false, 2);
         } else {
             if (this.location != null) {
-                FileLog.e("tmessages", "" + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
+                FileLog.e("" + this.location + " id = " + this.location.id + " local_id = " + this.location.local_id + " access_hash = " + this.location.access_hash + " volume_id = " + this.location.volume_id + " secret = " + this.location.secret);
             } else if (this.webLocation != null) {
-                FileLog.e("tmessages", "" + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
+                FileLog.e("" + this.webLocation + " id = " + this.webLocation.url + " access_hash = " + this.webLocation.access_hash);
             }
             onFail(false, 0);
         }

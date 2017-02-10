@@ -290,7 +290,7 @@ public class ActionBarMenuItem extends FrameLayout {
                             }
                             layoutInScreenMethod.invoke(this.popupWindow, new Object[]{Boolean.valueOf(true)});
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     this.popupWindow.setInputMethodMode(2);

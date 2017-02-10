@@ -4678,7 +4678,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                     edgeEffect.setColor(this.glowColor);
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }

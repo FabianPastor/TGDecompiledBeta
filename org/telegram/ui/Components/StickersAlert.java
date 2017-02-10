@@ -695,7 +695,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                                                 }
                                                 StickersQuery.loadStickers(i, false, true);
                                             } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                                FileLog.e(e);
                                             }
                                         }
                                     });

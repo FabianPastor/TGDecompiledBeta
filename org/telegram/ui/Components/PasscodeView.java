@@ -135,7 +135,7 @@ public class PasscodeView extends FrameLayout {
                 try {
                     performHapticFeedback(3);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 ArrayList<Animator> animators = new ArrayList();
                 final int newPos = this.stringBuilder.length();
@@ -242,7 +242,7 @@ public class PasscodeView extends FrameLayout {
                 try {
                     performHapticFeedback(3);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 ArrayList<Animator> animators = new ArrayList();
                 int deletingPos = this.stringBuilder.length() - 1;
@@ -756,7 +756,7 @@ public class PasscodeView extends FrameLayout {
                 }
                 this.fingerprintDialog = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         try {
@@ -765,7 +765,7 @@ public class PasscodeView extends FrameLayout {
                 this.cancellationSignal = null;
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
     }
 
@@ -777,7 +777,7 @@ public class PasscodeView extends FrameLayout {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
@@ -852,7 +852,7 @@ public class PasscodeView extends FrameLayout {
                                     PasscodeView.this.fingerprintDialog.dismiss();
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                             PasscodeView.this.fingerprintDialog = null;
                             PasscodeView.this.processDone(true);
@@ -860,7 +860,7 @@ public class PasscodeView extends FrameLayout {
                     }, null);
                 }
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             } catch (Throwable th) {
             }
         }

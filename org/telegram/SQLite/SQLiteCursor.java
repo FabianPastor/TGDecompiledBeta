@@ -89,7 +89,7 @@ public class SQLiteCursor {
                     break;
                 }
                 try {
-                    FileLog.e("tmessages", "sqlite busy, waiting...");
+                    FileLog.e("sqlite busy, waiting...");
                     Thread.sleep(500);
                     res = this.preparedStatement.step();
                     if (res == 0) {
@@ -97,7 +97,7 @@ public class SQLiteCursor {
                     }
                     repeatCount = repeatCount2;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     repeatCount = repeatCount2;
                 }
             }

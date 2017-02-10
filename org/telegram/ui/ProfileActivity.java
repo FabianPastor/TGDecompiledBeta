@@ -29,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -687,7 +688,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 try {
                     semaphore.acquire();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 if (this.currentChat == null) {
                     return false;
@@ -907,7 +908,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 ProfileActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     } else if (id == 11) {
                         args = new Bundle();
@@ -933,7 +934,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             }
                             AndroidUtilities.installShortcut(did);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                 }
@@ -1032,7 +1033,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             scrollView.setTextSize(1, 16.0f);
                             scrollView.setLines(1);
                             scrollView.setMaxLines(1);
-                            scrollView.setCompoundDrawablesWithIntrinsicBounds(icons[a], 0, 0, 0);
+                            Drawable drawable = ProfileActivity.this.getParentActivity().getResources().getDrawable(icons[a]);
+                            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
+                            scrollView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
                             scrollView.setTag(Integer.valueOf(a));
                             scrollView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             scrollView.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
@@ -1135,7 +1138,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             }
                             ProfileActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     } else if (position == ProfileActivity.this.leaveChannelRow) {
                         ProfileActivity.this.leaveChatPressed();
@@ -1451,7 +1454,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "@" + username));
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -1472,13 +1475,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             intent.addFlags(268435456);
                             ProfileActivity.this.getParentActivity().startActivityForResult(intent, 500);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     } else if (i == 1) {
                         try {
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + user.phone));
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                 }
@@ -1503,7 +1506,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", about));
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1988,6 +1991,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         return this.animationProgress;
     }
 
+    @Keep
     public void setAnimationProgress(float progress) {
         int i;
         this.animationProgress = progress;
@@ -2281,7 +2285,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     }
                 });
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.listAdapter != null) {
                 this.listAdapter.notifyItemRangeChanged(this.emptyRowChat2 + 1, this.sortedUsers.size());

@@ -344,7 +344,7 @@ public class RecyclerListView extends RecyclerView {
                         RecyclerListView.this.currentChildView.setPressed(true);
                         final View view = RecyclerListView.this.currentChildView;
                         final int position = RecyclerListView.this.currentChildPosition;
-                        if (RecyclerListView.this.instantClick) {
+                        if (RecyclerListView.this.instantClick && position != -1) {
                             view.playSoundEffect(0);
                             RecyclerListView.this.onItemClickListener.onItemClick(view, position);
                         }
@@ -357,7 +357,7 @@ public class RecyclerListView extends RecyclerView {
                                     view.setPressed(false);
                                     if (!RecyclerListView.this.instantClick) {
                                         view.playSoundEffect(0);
-                                        if (RecyclerListView.this.onItemClickListener != null) {
+                                        if (RecyclerListView.this.onItemClickListener != null && position != -1) {
                                             RecyclerListView.this.onItemClickListener.onItemClick(view, position);
                                         }
                                     }
@@ -418,7 +418,7 @@ public class RecyclerListView extends RecyclerView {
                 try {
                     RecyclerListView.this.gestureDetector.onTouchEvent(event);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             if (action == 0 || action == 5) {
@@ -675,7 +675,7 @@ public class RecyclerListView extends RecyclerView {
             View.class.getDeclaredMethod("initializeScrollbars", new Class[]{TypedArray.class}).invoke(this, new Object[]{a});
             a.recycle();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         super.setOnScrollListener(new OnScrollListener() {
             boolean scrollingByUser;
@@ -691,7 +691,7 @@ public class RecyclerListView extends RecyclerView {
                     try {
                         RecyclerListView.this.gestureDetector.onTouchEvent(event);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     RecyclerListView.this.currentChildView.onTouchEvent(event);
                     event.recycle();
@@ -1106,13 +1106,13 @@ public class RecyclerListView extends RecyclerView {
                 try {
                     header.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, NUM), MeasureSpec.makeMeasureSpec(layoutParams.height, NUM));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             } else if (this.sectionsType == 2) {
                 try {
                     header.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), NUM), MeasureSpec.makeMeasureSpec(0, 0));
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
             header.layout(0, 0, header.getMeasuredWidth(), header.getMeasuredHeight());

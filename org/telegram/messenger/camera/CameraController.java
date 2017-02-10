@@ -129,7 +129,7 @@ public class CameraController implements OnInfoListener {
                             }
                         });
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -171,12 +171,12 @@ public class CameraController implements OnInfoListener {
                         session.cameraInfo.camera.stopPreview();
                         session.cameraInfo.camera.setPreviewCallbackWithBuffer(null);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     try {
                         session.cameraInfo.camera.release();
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                     session.cameraInfo.camera = null;
                     if (semaphore != null) {
@@ -189,7 +189,7 @@ public class CameraController implements OnInfoListener {
             try {
                 semaphore.acquire();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -320,7 +320,7 @@ public class CameraController implements OnInfoListener {
                         options.inPurgeable = true;
                         bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     try {
                         FileOutputStream outputStream;
@@ -345,7 +345,7 @@ public class CameraController implements OnInfoListener {
                                 }
                                 return;
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                         }
                         outputStream = new FileOutputStream(path);
@@ -357,7 +357,7 @@ public class CameraController implements OnInfoListener {
                             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmap), key);
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                     if (callback != null) {
                         callback.run();
@@ -366,7 +366,7 @@ public class CameraController implements OnInfoListener {
             });
             return true;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return false;
         }
     }
@@ -388,7 +388,7 @@ public class CameraController implements OnInfoListener {
                             if (camera != null) {
                                 camera.release();
                             }
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             return;
                         }
                     }
@@ -419,7 +419,7 @@ public class CameraController implements OnInfoListener {
                             if (camera != null) {
                                 camera.release();
                             }
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             return;
                         }
                     }
@@ -465,7 +465,7 @@ public class CameraController implements OnInfoListener {
                                 params.setFlashMode(cameraSession.getCurrentFlashMode().equals("on") ? "torch" : "off");
                                 camera.setParameters(params);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                             camera.unlock();
                             try {
@@ -492,11 +492,11 @@ public class CameraController implements OnInfoListener {
                             } catch (Throwable e2) {
                                 CameraController.this.recorder.release();
                                 CameraController.this.recorder = null;
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
             });
@@ -536,23 +536,23 @@ public class CameraController implements OnInfoListener {
                         try {
                             tempRecorder.stop();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                         try {
                             tempRecorder.release();
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                         try {
                             camera.reconnect();
                             camera.startPreview();
                         } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
+                            FileLog.e(e22);
                         }
                         try {
                             session.stopVideoRecording();
                         } catch (Throwable e222) {
-                            FileLog.e("tmessages", e222);
+                            FileLog.e(e222);
                         }
                     }
                     try {
@@ -560,7 +560,7 @@ public class CameraController implements OnInfoListener {
                         params.setFlashMode("off");
                         camera.setParameters(params);
                     } catch (Throwable e2222) {
-                        FileLog.e("tmessages", e2222);
+                        FileLog.e(e2222);
                     }
                     CameraController.this.threadPool.execute(new Runnable() {
                         public void run() {
@@ -569,7 +569,7 @@ public class CameraController implements OnInfoListener {
                                 params.setFlashMode(session.getCurrentFlashMode());
                                 camera.setParameters(params);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     });
@@ -587,7 +587,7 @@ public class CameraController implements OnInfoListener {
                         }
                     });
                 } catch (Throwable e22222) {
-                    FileLog.e("tmessages", e22222);
+                    FileLog.e(e22222);
                 }
             }
         });

@@ -708,7 +708,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                                         });
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                             ChannelUsersActivity.this.loadingUsers = false;

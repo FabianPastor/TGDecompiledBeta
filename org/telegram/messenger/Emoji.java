@@ -213,9 +213,9 @@ public class Emoji {
                 }
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         } catch (Throwable x) {
-            FileLog.e("tmessages", "Error loading emoji", x);
+            FileLog.e("Error loading emoji", x);
             return;
         }
         Bitmap bitmap = null;
@@ -227,7 +227,7 @@ public class Emoji {
             bitmap = BitmapFactory.decodeStream(is, null, opts);
             is.close();
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         final Bitmap finalBitmap = bitmap;
         final int i = page;
@@ -284,7 +284,7 @@ public class Emoji {
     public static EmojiDrawable getEmojiDrawable(CharSequence code) {
         DrawableInfo info = (DrawableInfo) rects.get(code);
         if (info == null) {
-            FileLog.e("tmessages", "No drawable for emoji " + code);
+            FileLog.e("No drawable for emoji " + code);
             return null;
         }
         EmojiDrawable ed = new EmojiDrawable(info);
@@ -435,7 +435,7 @@ public class Emoji {
                 }
                 i++;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return cs;
             }
         }

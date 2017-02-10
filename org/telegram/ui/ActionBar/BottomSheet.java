@@ -557,7 +557,7 @@ public class BottomSheet extends Dialog {
                 try {
                     return BottomSheet.this.allowDrawContent && super.drawChild(canvas, child, drawingTime);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return true;
                 }
             }
@@ -849,7 +849,7 @@ public class BottomSheet extends Dialog {
                                 try {
                                     super.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         });
@@ -894,7 +894,7 @@ public class BottomSheet extends Dialog {
                                     try {
                                         BottomSheet.this.dismissInternal();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             });
@@ -917,7 +917,7 @@ public class BottomSheet extends Dialog {
         try {
             super.dismiss();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

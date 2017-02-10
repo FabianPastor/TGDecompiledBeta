@@ -63,7 +63,7 @@ public class SQLiteDatabase {
                 commitTransaction();
                 closedb(this.sqliteHandle);
             } catch (SQLiteException e) {
-                FileLog.e("tmessages", e.getMessage(), e);
+                FileLog.e(e.getMessage(), e);
             }
             this.isOpen = false;
         }

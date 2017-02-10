@@ -69,7 +69,7 @@ public class BaseFragment {
                 try {
                     parent.removeView(this.fragmentView);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             this.fragmentView = null;
@@ -80,7 +80,7 @@ public class BaseFragment {
                 try {
                     parent.removeView(this.actionBar);
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
             this.actionBar = null;
@@ -98,7 +98,7 @@ public class BaseFragment {
                     try {
                         parent.removeView(this.fragmentView);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 if (!(this.parentLayout == null || this.parentLayout.getContext() == this.fragmentView.getContext())) {
@@ -113,7 +113,7 @@ public class BaseFragment {
                         try {
                             parent.removeView(this.actionBar);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                 }
@@ -183,7 +183,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -237,7 +237,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -253,7 +253,7 @@ public class BaseFragment {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.actionBar != null) {
             this.actionBar.onPause();
@@ -293,7 +293,7 @@ public class BaseFragment {
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 this.visibleDialog = dialog;
@@ -310,7 +310,7 @@ public class BaseFragment {
                 this.visibleDialog.show();
                 dialog2 = this.visibleDialog;
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
         return dialog2;

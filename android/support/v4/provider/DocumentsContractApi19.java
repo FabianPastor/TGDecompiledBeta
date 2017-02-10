@@ -37,40 +37,40 @@ Error: java.lang.NullPointerException
         r0 = r10.getContentResolver();
         r6 = 0;
         r1 = 1;
-        r2 = new java.lang.String[r1];	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r1 = 0;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r3 = "document_id";	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2[r1] = r3;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r3 = 0;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r4 = 0;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r5 = 0;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r1 = r11;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r6 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r1 = r6.getCount();	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        if (r1 <= 0) goto L_0x0022;
-    L_0x001d:
-        r1 = r8;
+        r2 = new java.lang.String[r1];	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r1 = 0;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r3 = "document_id";	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2[r1] = r3;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r3 = 0;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r4 = 0;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r5 = 0;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r1 = r11;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r6 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r1 = r6.getCount();	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        if (r1 <= 0) goto L_0x0023;
     L_0x001e:
+        r1 = r8;
+    L_0x001f:
         closeQuietly(r6);
-    L_0x0021:
-        return r1;
     L_0x0022:
+        return r1;
+    L_0x0023:
         r1 = r9;
-        goto L_0x001e;
-    L_0x0024:
+        goto L_0x001f;
+    L_0x0025:
         r7 = move-exception;
-        r1 = "DocumentFile";	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2.<init>();	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r3 = "Failed query: ";	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2 = r2.append(r3);	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2 = r2.append(r7);	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
-        android.util.Log.w(r1, r2);	 Catch:{ Exception -> 0x0024, all -> 0x0042 }
+        r1 = "DocumentFile";	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2.<init>();	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r3 = "Failed query: ";	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2 = r2.append(r3);	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2 = r2.append(r7);	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
+        android.util.Log.w(r1, r2);	 Catch:{ Exception -> 0x0025, all -> 0x0045 }
         closeQuietly(r6);
         r1 = r9;
-        goto L_0x0021;
-    L_0x0042:
+        goto L_0x0022;
+    L_0x0045:
         r1 = move-exception;
         closeQuietly(r6);
         throw r1;

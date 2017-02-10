@@ -110,7 +110,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public static final int STATE_WAITING_INCOMING = 10;
     public static final int STATE_WAIT_INIT = 1;
     public static final int STATE_WAIT_INIT_ACK = 2;
-    private static final String TAG = "tg-voip-service";
     public static PhoneCall callIShouldHavePutIntoIntent;
     private static VoIPService sharedInstance;
     private byte[] a_or_b;
@@ -163,14 +162,14 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
                         return;
                     } catch (Exception x) {
-                        FileLog.e(VoIPService.TAG, "Error starting incall activity", x);
+                        FileLog.e("Error starting incall activity", x);
                         return;
                     }
                 }
                 try {
                     PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPPermissionActivity.class).addFlags(268435456), 0).send();
                 } catch (Exception x2) {
-                    FileLog.e(VoIPService.TAG, "Error starting permission activity", x2);
+                    FileLog.e("Error starting permission activity", x2);
                 }
             }
         }
@@ -251,7 +250,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.spBusyId = this.soundPool.load(this, R.raw.voip_busy, 1);
             ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         } catch (Exception x) {
-            FileLog.e(TAG, "error initializing voip controller", x);
+            FileLog.e("error initializing voip controller", x);
             callFailed();
         }
     }
@@ -291,7 +290,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).addFlags(805306368), 0).send();
             } catch (Exception x) {
-                FileLog.e(TAG, "Error starting incall activity", x);
+                FileLog.e("Error starting incall activity", x);
             }
         }
     }
@@ -408,9 +407,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                                     public void run(TLObject response, TL_error error) {
                                                         if (error != null) {
-                                                            FileLog.e(VoIPService.TAG, "error on phone.discardCall: " + error);
+                                                            FileLog.e("error on phone.discardCall: " + error);
                                                         } else {
-                                                            FileLog.d(VoIPService.TAG, "phone.discardCall " + response);
+                                                            FileLog.d("phone.discardCall " + response);
                                                         }
                                                         VoIPService.this.callFailed();
                                                     }
@@ -420,7 +419,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                         AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
                                         return;
                                     }
-                                    FileLog.e(VoIPService.TAG, "Error on phone.requestCall: " + error);
+                                    FileLog.e("Error on phone.requestCall: " + error);
                                     VoIPService.this.callFailed();
                                 }
                             }, 2);
@@ -428,7 +427,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     });
                     return;
                 }
-                FileLog.e(VoIPService.TAG, "Error on getDhConfig " + error);
+                FileLog.e("Error on getDhConfig " + error);
                 VoIPService.this.callFailed();
             }
         }, 2);
@@ -456,7 +455,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.ringtonePlayer.setDataSource(this, Uri.parse(notificationUri));
             this.ringtonePlayer.prepareAsync();
         } catch (Throwable e) {
-            FileLog.e(TAG, e);
+            FileLog.e(e);
             this.ringtonePlayer.release();
             this.ringtonePlayer = null;
         }
@@ -480,7 +479,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
             } catch (Exception x) {
-                FileLog.e(TAG, "Error starting incall activity", x);
+                FileLog.e("Error starting incall activity", x);
             }
         } else {
             showIncomingNotification();
@@ -491,9 +490,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         req.peer.access_hash = this.call.access_hash;
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
-                FileLog.w(VoIPService.TAG, "receivedCall response = " + response);
+                FileLog.w("receivedCall response = " + response);
                 if (error != null) {
-                    FileLog.e(VoIPService.TAG, "error on receivedCall: " + error);
+                    FileLog.e("error on receivedCall: " + error);
                 }
             }
         }, 2);
@@ -520,7 +519,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             MessagesStorage.lastSecretVersion = res.version;
                             MessagesStorage.getInstance().saveSecretParams(MessagesStorage.lastSecretVersion, MessagesStorage.secretG, MessagesStorage.secretPBytes);
                         } else {
-                            FileLog.e(VoIPService.TAG, "stopping VoIP service, bad prime");
+                            FileLog.e("stopping VoIP service, bad prime");
                             VoIPService.this.callFailed();
                             return;
                         }
@@ -574,18 +573,18 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {
-                                    FileLog.w(VoIPService.TAG, "accept call ok! " + response);
+                                    FileLog.w("accept call ok! " + response);
                                     VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
                                     VoIPService.this.initiateActualEncryptedCall();
                                     return;
                                 }
-                                FileLog.e(VoIPService.TAG, "Error on phone.acceptCall: " + error);
+                                FileLog.e("Error on phone.acceptCall: " + error);
                                 VoIPService.this.callFailed();
                             }
                         }, 2);
                         return;
                     }
-                    FileLog.w(VoIPService.TAG, "stopping VoIP service, bad Ga and Gb (accepting)");
+                    FileLog.w("stopping VoIP service, bad Ga and Gb (accepting)");
                     VoIPService.this.callFailed();
                     return;
                 }
@@ -641,9 +640,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
-                        FileLog.e(VoIPService.TAG, "error on phone.discardCall: " + error);
+                        FileLog.e("error on phone.discardCall: " + error);
                     } else {
-                        FileLog.d(VoIPService.TAG, "phone.discardCall " + response);
+                        FileLog.d("phone.discardCall " + response);
                     }
                     if (onDone != null) {
                         AndroidUtilities.runOnUIThread(onDone);
@@ -657,7 +656,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void onCallUpdated(PhoneCall call) {
         this.call = call;
         if (call instanceof TL_phoneCallDiscarded) {
-            FileLog.d(TAG, "call discarded, stopping service");
+            FileLog.d("call discarded, stopping service");
             if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
                 dispatchStateChanged(12);
                 this.playingSound = true;
@@ -675,7 +674,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             processAcceptedCall();
         } else if (this.currentState == 8 && call.receive_date != 0) {
             dispatchStateChanged(11);
-            FileLog.d(TAG, "!!!!!! CALL RECEIVED");
+            FileLog.d("!!!!!! CALL RECEIVED");
             if (this.spPlayID != 0) {
                 this.soundPool.stop(this.spPlayID);
             }
@@ -739,7 +738,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             declineIncomingCall();
             return;
         }
-        FileLog.w(TAG, "stopping VoIP service, bad Ga and Gb");
+        FileLog.w("stopping VoIP service, bad Ga and Gb");
         callFailed();
     }
 
@@ -749,7 +748,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.timeoutRunnable = null;
         }
         try {
-            FileLog.d(TAG, "InitCall: keyID=" + this.keyFingerprint);
+            FileLog.d("InitCall: keyID=" + this.keyFingerprint);
             this.controller.setEncryptionKey(this.authKey);
             TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
             endpoints[0] = this.call.connection;
@@ -770,7 +769,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 }
             }, ExoPlayerFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS);
         } catch (Exception x) {
-            FileLog.e(TAG, "error starting call", x);
+            FileLog.e("error starting call", x);
             callFailed();
         }
     }
@@ -814,7 +813,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             builder.setLargeIcon(bitmap);
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -864,7 +863,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             builder.setLargeIcon(bitmap);
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -909,9 +908,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 if (error != null) {
-                    FileLog.e(VoIPService.TAG, "error on phone.discardCall: " + error);
+                    FileLog.e("error on phone.discardCall: " + error);
                 } else {
-                    FileLog.d(VoIPService.TAG, "phone.discardCall " + response);
+                    FileLog.d("phone.discardCall " + response);
                 }
             }
         });
@@ -979,7 +978,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 newIsNear = true;
             }
             if (newIsNear != this.isProximityNear) {
-                FileLog.d(TAG, "proximity " + newIsNear);
+                FileLog.d("proximity " + newIsNear);
                 this.isProximityNear = newIsNear;
                 if (this.isProximityNear) {
                     this.proximityWakelock.acquire();
@@ -1058,11 +1057,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void onAudioFocusChange(int focusChange) {
-        if (focusChange == 1) {
-            this.haveAudioFocus = true;
-        } else {
-            this.haveAudioFocus = false;
+        boolean z = true;
+        if (focusChange != 1) {
+            z = false;
         }
+        this.haveAudioFocus = z;
     }
 
     public void onUIForegroundStateChanged(boolean isForeground) {
@@ -1079,7 +1078,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     try {
                         PendingIntent.getActivity(VoIPService.this, 0, intent, 0).send();
                     } catch (CanceledException e) {
-                        FileLog.e(VoIPService.TAG, "error restarting activity", e);
+                        FileLog.e("error restarting activity", e);
                     }
                 }
             }, 500);

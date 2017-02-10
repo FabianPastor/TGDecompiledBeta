@@ -105,7 +105,7 @@ public class DrawerProfileCell extends FrameLayout {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
         } catch (Throwable e) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(148.0f));
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 

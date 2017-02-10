@@ -26,6 +26,7 @@ import android.graphics.SweepGradient;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.support.annotation.Keep;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.InputDeviceCompat;
 import android.support.v4.view.ViewCompat;
@@ -556,7 +557,7 @@ public class ThemeEditorView {
                     for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
                         ThemeDescription description = (ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a);
                         if (description.getCurrentKey().equals(Theme.key_chat_wallpaper)) {
-                            ThemeEditorView.this.wallpaperUpdater.showAlert();
+                            ThemeEditorView.this.wallpaperUpdater.showAlert(true);
                             return;
                         }
                         description.startEditing();
@@ -770,6 +771,7 @@ public class ThemeEditorView {
             return this.scrollOffsetY;
         }
 
+        @Keep
         public void setScrollOffsetY(int value) {
             RecyclerListView recyclerListView = this.listView;
             this.scrollOffsetY = value;
@@ -790,14 +792,14 @@ public class ThemeEditorView {
                 this.windowManager.removeViewImmediate(this.windowView);
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.parentActivity = null;
             Instance = null;
         }
     }
 
-    public void show(Activity activity, String themeName) {
+    public void show(Activity activity, final String themeName) {
         if (Instance != null) {
             Instance.destroy();
         }
@@ -904,13 +906,13 @@ public class ThemeEditorView {
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             this.wallpaperUpdater = new WallpaperUpdater(activity, new WallpaperUpdaterDelegate() {
                 public void didSelectWallpaper(File file, Bitmap bitmap) {
-                    Theme.setThemeWallpaper(bitmap, file);
+                    Theme.setThemeWallpaper(themeName, bitmap, file);
                 }
             });
             Instance = this;
             this.parentActivity = activity;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -975,7 +977,7 @@ public class ThemeEditorView {
                 this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1074,11 +1076,13 @@ public class ThemeEditorView {
         return this.windowLayoutParams.y;
     }
 
+    @Keep
     public void setX(int value) {
         this.windowLayoutParams.x = value;
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
+    @Keep
     public void setY(int value) {
         this.windowLayoutParams.y = value;
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);

@@ -506,7 +506,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 try {
                     z = super.onTouchEvent(event);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 return z;
             }
@@ -690,7 +690,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             this.visibleToast.cancel();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     if (ChatActivityEnterView.this.silent) {
                         this.visibleToast = Toast.makeText(ChatActivityEnterView.this.parentActivity, LocaleController.getString("ChannelNotifyMembersInfoOff", R.string.ChannelNotifyMembersInfoOff), 0);
@@ -1260,7 +1260,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.mWakeLock.release();
                 this.mWakeLock = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         if (this.sizeNotifierLayout != null) {
@@ -1716,7 +1716,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.mWakeLock.release();
                     this.mWakeLock = null;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             AndroidUtilities.unlockOrientation(this.parentActivity);
@@ -1757,7 +1757,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.mWakeLock.acquire();
                 }
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             AndroidUtilities.lockOrientation(this.parentActivity);
             this.recordPanel.setVisibility(0);
@@ -1878,7 +1878,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         if ((entity.offset + entity.length) + addToOffset < stringBuilder.length() && stringBuilder.charAt((entity.offset + entity.length) + addToOffset) == ' ') {
                                             entity.length++;
                                         }
-                                        stringBuilder.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
+                                        stringBuilder.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, true), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                     } else {
                                         try {
                                             if (entity instanceof TL_messageEntityCode) {
@@ -1895,7 +1895,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                                 stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset + addToOffset, (entity.offset + entity.length) + addToOffset, 33);
                                             }
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 }
@@ -1999,7 +1999,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         try {
             return this.messageEditText.getSelectionEnd() - this.messageEditText.getSelectionStart();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return i;
         }
     }
@@ -2011,7 +2011,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.messageEditText.setText(builder);
             this.messageEditText.setSelection(text.length() + start);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -2020,7 +2020,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             try {
                 this.messageEditText.requestFocus();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -2035,7 +2035,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 try {
                                     ChatActivityEnterView.this.messageEditText.requestFocus();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -2291,7 +2291,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         int j = i + localCharSequence.length();
                         ChatActivityEnterView.this.messageEditText.setSelection(j, j);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     } finally {
                         ChatActivityEnterView.this.innerTextChange = 0;
                     }

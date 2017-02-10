@@ -548,10 +548,10 @@ public class MessageObject {
             name = "";
         }
         if (this.replyMessageObject == null || !(this.replyMessageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
-            this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", R.string.PaymentSuccessfullyPaidNoItem, LocaleController.formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
+            this.messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", R.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString((double) this.messageOwner.action.total_amount, this.messageOwner.action.currency), name);
             return;
         }
-        this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, LocaleController.formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
+        this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString((double) this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
     }
 
     private String formatDuration(int duration) {
@@ -1092,7 +1092,7 @@ public class MessageObject {
                     try {
                         Linkify.addLinks((Spannable) this.linkDescription, 1);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 this.linkDescription = Emoji.replaceEmoji(this.linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
@@ -1107,14 +1107,14 @@ public class MessageObject {
                 try {
                     Linkify.addLinks((Spannable) this.caption, 5);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
-                addUsernamesAndHashtags(this.caption, true);
+                addUsernamesAndHashtags(isOutOwner(), this.caption, true);
             }
         }
     }
 
-    private static void addUsernamesAndHashtags(CharSequence charSequence, boolean botCommands) {
+    private static void addUsernamesAndHashtags(boolean isOut, CharSequence charSequence, boolean botCommands) {
         try {
             if (urlPattern == null) {
                 urlPattern = Pattern.compile("(^|\\s)/[a-zA-Z@\\d_]{1,255}|(^|\\s)@[a-zA-Z\\d_]{1,32}|(^|\\s)#[\\w\\.]+");
@@ -1130,37 +1130,37 @@ public class MessageObject {
                 if (charSequence.charAt(start) != '/') {
                     url = new URLSpanNoUnderline(charSequence.subSequence(start, end).toString());
                 } else if (botCommands) {
-                    url = new URLSpanBotCommand(charSequence.subSequence(start, end).toString());
+                    url = new URLSpanBotCommand(charSequence.subSequence(start, end).toString(), isOut);
                 }
                 if (url != null) {
                     ((Spannable) charSequence).setSpan(url, start, end, 0);
                 }
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
-    public static void addLinks(CharSequence messageText) {
-        addLinks(messageText, true);
+    public static void addLinks(boolean isOut, CharSequence messageText) {
+        addLinks(isOut, messageText, true);
     }
 
-    public static void addLinks(CharSequence messageText, boolean botCommands) {
+    public static void addLinks(boolean isOut, CharSequence messageText, boolean botCommands) {
         if ((messageText instanceof Spannable) && containsUrls(messageText)) {
             if (messageText.length() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                 try {
                     Linkify.addLinks((Spannable) messageText, 5);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             } else {
                 try {
                     Linkify.addLinks((Spannable) messageText, 1);
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
-            addUsernamesAndHashtags(messageText, botCommands);
+            addUsernamesAndHashtags(isOut, messageText, botCommands);
         }
     }
 
@@ -1185,12 +1185,12 @@ public class MessageObject {
             }
             boolean useManualParse = !hasEntities && ((this.messageOwner instanceof TL_message_old) || (this.messageOwner instanceof TL_message_old2) || (this.messageOwner instanceof TL_message_old3) || (this.messageOwner instanceof TL_message_old4) || (this.messageOwner instanceof TL_messageForwarded_old) || (this.messageOwner instanceof TL_messageForwarded_old2) || (this.messageOwner instanceof TL_message_secret) || (this.messageOwner.media instanceof TL_messageMediaInvoice) || ((isOut() && this.messageOwner.send_state != 0) || this.messageOwner.id < 0 || (this.messageOwner.media instanceof TL_messageMediaUnsupported)));
             if (useManualParse) {
-                addLinks(this.messageText);
+                addLinks(isOutOwner(), this.messageText);
             } else if ((this.messageText instanceof Spannable) && this.messageText.length() < Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
                 try {
                     Linkify.addLinks((Spannable) this.messageText, 4);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             if (this.messageText instanceof Spannable) {
@@ -1222,13 +1222,13 @@ public class MessageObject {
                         } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
                             spannable.setSpan(new TypefaceSpan(Typeface.MONOSPACE, AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 1))), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_messageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention("" + ((TL_messageEntityMentionName) entity).user_id), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention("" + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_inputMessageEntityMentionName) {
-                            spannable.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanUserMention("" + ((TL_inputMessageEntityMentionName) entity).user_id.user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (!useManualParse) {
                             String url = this.messageOwner.message.substring(entity.offset, entity.offset + entity.length);
                             if (entity instanceof TL_messageEntityBotCommand) {
-                                spannable.setSpan(new URLSpanBotCommand(url), entity.offset, entity.offset + entity.length, 33);
+                                spannable.setSpan(new URLSpanBotCommand(url, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                             } else if ((entity instanceof TL_messageEntityHashtag) || (entity instanceof TL_messageEntityMention)) {
                                 spannable.setSpan(new URLSpanNoUnderline(url), entity.offset, entity.offset + entity.length, 33);
                             } else if (entity instanceof TL_messageEntityEmail) {
@@ -1293,11 +1293,11 @@ public class MessageObject {
                                     try {
                                         this.textHeight = Math.max(this.textHeight, (int) (block.textYOffset + ((float) block.textLayout.getHeight())));
                                     } catch (Throwable e2) {
-                                        FileLog.e("tmessages", e2);
+                                        FileLog.e(e2);
                                     }
                                 }
                             } catch (Throwable e22) {
-                                FileLog.e("tmessages", e22);
+                                FileLog.e(e22);
                             }
                         }
                     }
@@ -1309,13 +1309,13 @@ public class MessageObject {
                         block.textXOffset = lastLeft2;
                         lastLeft = lastLeft2;
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                     }
                     float lastLine = 0.0f;
                     try {
                         lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
                     } catch (Throwable e2222) {
-                        FileLog.e("tmessages", e2222);
+                        FileLog.e(e2222);
                     }
                     int linesMaxWidth = (int) Math.ceil((double) lastLine);
                     boolean hasNonRTL = false;
@@ -1336,7 +1336,7 @@ public class MessageObject {
                             try {
                                 lineWidth = block.textLayout.getLineWidth(n);
                             } catch (Throwable e22222) {
-                                FileLog.e("tmessages", e22222);
+                                FileLog.e(e22222);
                                 lineWidth = 0.0f;
                             }
                             if (lineWidth > ((float) (maxWidth + 20))) {
@@ -1345,7 +1345,7 @@ public class MessageObject {
                             try {
                                 lineLeft = block.textLayout.getLineLeft(n);
                             } catch (Throwable e222222) {
-                                FileLog.e("tmessages", e222222);
+                                FileLog.e(e222222);
                                 lineLeft = 0.0f;
                             }
                             if (lineLeft >= 0.0f) {
@@ -1377,7 +1377,7 @@ public class MessageObject {
                     linesOffset += currentBlockLinesCount;
                 }
             } catch (Throwable e2222222) {
-                FileLog.e("tmessages", e2222222);
+                FileLog.e(e2222222);
             }
         }
     }

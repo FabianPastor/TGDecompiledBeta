@@ -679,7 +679,7 @@ public class SecretChatHelper {
                             layer.in_seq_no = message.seq_in;
                             layer.out_seq_no = message.seq_out;
                         }
-                        FileLog.e("tmessages", decryptedMessage + " send message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
+                        FileLog.e(decryptedMessage + " send message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
                         int len = toEncryptObject.getObjectSize();
                         AbstractSerializedData nativeByteBuffer = new NativeByteBuffer(len + 4);
                         nativeByteBuffer.writeInt32(len);
@@ -755,7 +755,7 @@ public class SecretChatHelper {
                                             currentChat.key_hash = key_hash;
                                             MessagesStorage.getInstance().updateEncryptedChat(currentChat);
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                     SecretChatHelper.this.sendingNotifyLayer.remove(Integer.valueOf(currentChat.id));
@@ -810,7 +810,7 @@ public class SecretChatHelper {
                             }
                         }, 64);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -829,7 +829,7 @@ public class SecretChatHelper {
                     chat.key_hash = key_hash;
                     MessagesStorage.getInstance().updateEncryptedChat(chat);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             chat.layer = AndroidUtilities.setPeerLayerVersion(chat.layer, newPeerLayer);
@@ -1172,7 +1172,7 @@ public class SecretChatHelper {
                 } else if (serviceMessage.action instanceof TL_decryptedMessageActionRequestKey) {
                     if (chat.exchange_id != 0) {
                         if (chat.exchange_id > serviceMessage.action.exchange_id) {
-                            FileLog.e("tmessages", "we already have request key with higher exchange_id");
+                            FileLog.e("we already have request key with higher exchange_id");
                             return null;
                         }
                         sendAbortKeyMessage(chat, null, chat.exchange_id);
@@ -1304,10 +1304,10 @@ public class SecretChatHelper {
                     resendMessages(serviceMessage.action.start_seq_no, serviceMessage.action.end_seq_no, chat);
                 }
             } else {
-                FileLog.e("tmessages", "unknown message " + object);
+                FileLog.e("unknown message " + object);
             }
         } else {
-            FileLog.e("tmessages", "unknown TLObject");
+            FileLog.e("unknown TLObject");
         }
         return null;
     }
@@ -1411,7 +1411,7 @@ public class SecretChatHelper {
                             MessagesStorage.getInstance().getDatabase().executeFast(String.format(Locale.US, "REPLACE INTO requested_holes VALUES(%d, %d, %d)", new Object[]{Integer.valueOf(encryptedChat.id), Integer.valueOf(sSeq), Integer.valueOf(endSeq)})).stepThis().dispose();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1505,11 +1505,11 @@ public class SecretChatHelper {
                         }
                     }
                     if (layer.random_bytes.length < 15) {
-                        FileLog.e("tmessages", "got random bytes less than needed");
+                        FileLog.e("got random bytes less than needed");
                         return null;
                     }
-                    FileLog.e("tmessages", "current chat in_seq = " + chat.seq_in + " out_seq = " + chat.seq_out);
-                    FileLog.e("tmessages", "got message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
+                    FileLog.e("current chat in_seq = " + chat.seq_in + " out_seq = " + chat.seq_out);
+                    FileLog.e("got message with in_seq = " + layer.in_seq_no + " out_seq = " + layer.out_seq_no);
                     if (layer.out_seq_no < chat.seq_in) {
                         return null;
                     }
@@ -1520,7 +1520,7 @@ public class SecretChatHelper {
                         MessagesStorage.getInstance().updateEncryptedChatSeq(chat);
                         object = layer.message;
                     } else {
-                        FileLog.e("tmessages", "got hole");
+                        FileLog.e("got hole");
                         ArrayList<TL_decryptedMessageHolder> arr = (ArrayList) this.secretHolesQueue.get(Integer.valueOf(chat.id));
                         if (arr == null) {
                             arr = new ArrayList();
@@ -1569,10 +1569,10 @@ public class SecretChatHelper {
                 return messages;
             }
             nativeByteBuffer.reuse();
-            FileLog.e("tmessages", String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
+            FileLog.e(String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
             return null;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1789,7 +1789,7 @@ public class SecretChatHelper {
                                                 progressDialog.dismiss();
                                             }
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 });
@@ -1820,7 +1820,7 @@ public class SecretChatHelper {
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Throwable e) {
-                                                    FileLog.e("tmessages", e);
+                                                    FileLog.e(e);
                                                 }
                                             }
                                             EncryptedChat chat = response;
@@ -1860,7 +1860,7 @@ public class SecretChatHelper {
                                             try {
                                                 progressDialog.dismiss();
                                             } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                                FileLog.e(e);
                                             }
                                             Builder builder = new Builder(context);
                                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
@@ -1882,7 +1882,7 @@ public class SecretChatHelper {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -1895,7 +1895,7 @@ public class SecretChatHelper {
                     try {
                         dialog.dismiss();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });

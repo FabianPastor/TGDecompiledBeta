@@ -85,7 +85,7 @@ public class ChangePhoneHelpActivity extends BaseFragment {
         try {
             this.textView1.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             this.textView1.setText(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp));
         }
         linearLayout.addView(this.textView1, LayoutHelper.createLinear(-2, -2, 1, 20, 56, 20, 0));

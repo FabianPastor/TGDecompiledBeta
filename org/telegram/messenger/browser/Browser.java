@@ -87,7 +87,7 @@ public class Browser {
                                 try {
                                     Browser.customTabsClient.warmup(0);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -100,7 +100,7 @@ public class Browser {
                         customTabsServiceConnection = null;
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         }
@@ -114,7 +114,7 @@ public class Browser {
             try {
                 activity.unbindService(customTabsServiceConnection);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             customTabsClient = null;
             customTabsSession = null;
@@ -153,7 +153,7 @@ public class Browser {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 Intent intent = new Intent("android.intent.action.VIEW", uri);
@@ -163,7 +163,7 @@ public class Browser {
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
     }

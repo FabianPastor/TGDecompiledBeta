@@ -318,7 +318,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -332,7 +332,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         MediaSearchAdapter.this.searchTimer.cancel();
                         MediaSearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     MediaSearchAdapter.this.processSearch(query);
                 }
@@ -1952,7 +1952,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         Browser.openUrl(getParentActivity(), link);
                     }
                 } catch (Throwable e3) {
-                    FileLog.e("tmessages", e3);
+                    FileLog.e(e3);
                 }
             }
         }

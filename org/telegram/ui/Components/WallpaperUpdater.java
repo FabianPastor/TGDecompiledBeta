@@ -38,9 +38,9 @@ public class WallpaperUpdater {
         this.currentWallpaperPath = new File(FileLoader.getInstance().getDirectory(4), Utilities.random.nextInt() + ".jpg");
     }
 
-    public void showAlert() {
+    public void showAlert(final boolean fromTheme) {
         Builder builder = new Builder(this.parentActivity);
-        builder.setItems(new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
+        builder.setItems(fromTheme ? new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Default", R.string.Default), LocaleController.getString("Cancel", R.string.Cancel)} : new CharSequence[]{LocaleController.getString("FromCamera", R.string.FromCamera), LocaleController.getString("FromGalley", R.string.FromGalley), LocaleController.getString("Cancel", R.string.Cancel)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     try {
@@ -59,15 +59,17 @@ public class WallpaperUpdater {
                         WallpaperUpdater.this.parentActivity.startActivityForResult(takePictureIntent, 10);
                     } catch (Throwable e) {
                         try {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     }
                 } else if (i == 1) {
                     Intent photoPickerIntent = new Intent("android.intent.action.PICK");
                     photoPickerIntent.setType("image/*");
                     WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
+                } else if (fromTheme && i == 2) {
+                    WallpaperUpdater.this.delegate.didSelectWallpaper(null, null);
                 }
             }
         });
@@ -112,7 +114,7 @@ public class WallpaperUpdater {
                         try {
                             stream2.close();
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                             stream = stream2;
                         }
                     }
@@ -121,12 +123,12 @@ public class WallpaperUpdater {
                     e2 = e3;
                     stream = stream2;
                     try {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                         if (stream != null) {
                             try {
                                 stream.close();
                             } catch (Throwable e22) {
-                                FileLog.e("tmessages", e22);
+                                FileLog.e(e22);
                             }
                         }
                         this.currentPicturePath = null;
@@ -136,7 +138,7 @@ public class WallpaperUpdater {
                             try {
                                 stream.close();
                             } catch (Throwable e222) {
-                                FileLog.e("tmessages", e222);
+                                FileLog.e(e222);
                             }
                         }
                         throw th;
@@ -151,7 +153,7 @@ public class WallpaperUpdater {
                 }
             } catch (Exception e4) {
                 e222 = e4;
-                FileLog.e("tmessages", e222);
+                FileLog.e(e222);
                 if (stream != null) {
                     stream.close();
                 }
@@ -165,7 +167,7 @@ public class WallpaperUpdater {
                 bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
                 this.delegate.didSelectWallpaper(this.currentWallpaperPath, bitmap);
             } catch (Throwable e2222) {
-                FileLog.e("tmessages", e2222);
+                FileLog.e(e2222);
             }
         }
     }

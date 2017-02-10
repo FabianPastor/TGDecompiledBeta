@@ -232,7 +232,7 @@ public class ChatAvatarContainer extends FrameLayout {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return;
             }
         }

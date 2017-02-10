@@ -192,7 +192,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     public StickerMasksView(Context context) {
         super(context);
-        setBackgroundColor(Theme.REPLY_PANEL_MESSAGE_TEXT_COLOR);
+        setBackgroundColor(-14540254);
         setClickable(true);
         StickersQuery.checkStickers(0);
         StickersQuery.checkStickers(1);

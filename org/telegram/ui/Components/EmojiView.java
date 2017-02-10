@@ -395,7 +395,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 super.showAsDropDown(anchor, xoff, yoff);
                 registerListener(anchor);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -1384,7 +1384,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                             } catch (Exception e2) {
                             }
                             this.startedScroll = false;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     this.lastX = ev.getX();
@@ -1946,7 +1946,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             sortEmoji();
             ((EmojiGridAdapter) this.adapters.get(0)).notifyDataSetChanged();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         try {
             str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, "");
@@ -1958,7 +1958,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
     }
 
@@ -2203,7 +2203,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }

@@ -174,7 +174,7 @@ public class SharedLinkCell extends FrameLayout {
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class SharedLinkCell extends FrameLayout {
             try {
                 this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace('\n', ' '), this.titleTextPaint, (float) Math.min((int) Math.ceil((double) this.titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), this.titleTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             this.letterDrawable.setTitle(title);
         }
@@ -197,7 +197,7 @@ public class SharedLinkCell extends FrameLayout {
                     this.description2Y = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                 }
             } catch (Throwable e22) {
-                FileLog.e("tmessages", e22);
+                FileLog.e(e22);
             }
         }
         if (description2 != null) {
@@ -208,7 +208,7 @@ public class SharedLinkCell extends FrameLayout {
                     this.description2Y += AndroidUtilities.dp(10.0f);
                 }
             } catch (Throwable e222) {
-                FileLog.e("tmessages", e222);
+                FileLog.e(e222);
             }
         }
         if (!this.links.isEmpty()) {
@@ -222,7 +222,7 @@ public class SharedLinkCell extends FrameLayout {
                     }
                     this.linkLayout.add(layout);
                 } catch (Throwable e2222) {
-                    FileLog.e("tmessages", e2222);
+                    FileLog.e(e2222);
                 }
             }
         }
@@ -340,7 +340,7 @@ public class SharedLinkCell extends FrameLayout {
                                 this.urlPath.setCurrentLayout(layout, 0, 0.0f);
                                 layout.getSelectionPath(0, layout.getText().length(), this.urlPath);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                             result = true;
                         } else if (this.linkPreviewPressed) {
@@ -356,7 +356,7 @@ public class SharedLinkCell extends FrameLayout {
                                     result = true;
                                 }
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                             }
                         }
                         if (!ok) {

@@ -85,17 +85,17 @@ Error: java.util.NoSuchElementException
         r4 = 0;
         r11 = 1;
         r0 = java.lang.Boolean.valueOf(r11);
-        r11 = "networkaddress.cache.ttl";	 Catch:{ SecurityException -> 0x0033 }
-        r4 = java.security.Security.getProperty(r11);	 Catch:{ SecurityException -> 0x0033 }
-        r11 = "networkaddress.cache.ttl";	 Catch:{ SecurityException -> 0x0033 }
-        r12 = "0";	 Catch:{ SecurityException -> 0x0033 }
-        java.security.Security.setProperty(r11, r12);	 Catch:{ SecurityException -> 0x0033 }
-    L_0x0017:
+        r11 = "networkaddress.cache.ttl";	 Catch:{ SecurityException -> 0x0037 }
+        r4 = java.security.Security.getProperty(r11);	 Catch:{ SecurityException -> 0x0037 }
+        r11 = "networkaddress.cache.ttl";	 Catch:{ SecurityException -> 0x0037 }
+        r12 = "0";	 Catch:{ SecurityException -> 0x0037 }
+        java.security.Security.setProperty(r11, r12);	 Catch:{ SecurityException -> 0x0037 }
+    L_0x001a:
         r1 = r18.getPublishableApiKey();
         r11 = r1.trim();
         r11 = r11.isEmpty();
-        if (r11 == 0) goto L_0x003a;
-    L_0x0025:
+        if (r11 == 0) goto L_0x003e;
+    L_0x0028:
         r11 = new com.stripe.android.exception.AuthenticationException;
         r12 = "No API key provided. (HINT: set your API key using 'Stripe.apiKey = <API-KEY>'. You can generate API keys from the Stripe web interface. See https://stripe.com/api for details or email support@stripe.com if you have questions.";
         r13 = 0;
@@ -103,90 +103,90 @@ Error: java.util.NoSuchElementException
         r14 = java.lang.Integer.valueOf(r14);
         r11.<init>(r12, r13, r14);
         throw r11;
-    L_0x0033:
+    L_0x0037:
         r10 = move-exception;
         r11 = 0;
         r0 = java.lang.Boolean.valueOf(r11);
-        goto L_0x0017;
-    L_0x003a:
-        r9 = getStripeResponse(r15, r16, r17, r18);	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r6 = r9.getResponseCode();	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r5 = r9.getResponseBody();	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r7 = 0;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r2 = r9.getResponseHeaders();	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        if (r2 != 0) goto L_0x007c;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x004d:
-        r8 = 0;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x004e:
-        if (r8 == 0) goto L_0x005d;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x0050:
-        r11 = r8.size();	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        if (r11 <= 0) goto L_0x005d;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x0056:
-        r11 = 0;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r7 = r8.get(r11);	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r7 = (java.lang.String) r7;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x005d:
-        r11 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        if (r6 < r11) goto L_0x0065;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
+        goto L_0x001a;
+    L_0x003e:
+        r9 = getStripeResponse(r15, r16, r17, r18);	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r6 = r9.getResponseCode();	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r5 = r9.getResponseBody();	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r7 = 0;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r2 = r9.getResponseHeaders();	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        if (r2 != 0) goto L_0x0082;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x0051:
+        r8 = 0;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x0052:
+        if (r8 == 0) goto L_0x0061;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x0054:
+        r11 = r8.size();	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        if (r11 <= 0) goto L_0x0061;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x005a:
+        r11 = 0;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r7 = r8.get(r11);	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r7 = (java.lang.String) r7;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
     L_0x0061:
-        r11 = 300; // 0x12c float:4.2E-43 double:1.48E-321;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        if (r6 < r11) goto L_0x0068;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
+        r11 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        if (r6 < r11) goto L_0x0069;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
     L_0x0065:
-        handleAPIError(r5, r6, r7);	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-    L_0x0068:
-        r11 = com.stripe.android.net.TokenParser.parseToken(r5);	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
+        r11 = 300; // 0x12c float:4.2E-43 double:1.48E-321;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        if (r6 < r11) goto L_0x006c;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x0069:
+        handleAPIError(r5, r6, r7);	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+    L_0x006c:
+        r11 = com.stripe.android.net.TokenParser.parseToken(r5);	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
         r12 = r0.booleanValue();
         if (r12 == 0) goto L_0x0003;
-    L_0x0072:
-        if (r4 != 0) goto L_0x0086;
-    L_0x0074:
+    L_0x0076:
+        if (r4 != 0) goto L_0x008d;
+    L_0x0078:
         r12 = "networkaddress.cache.ttl";
         r13 = "-1";
         java.security.Security.setProperty(r12, r13);
         goto L_0x0003;
-    L_0x007c:
-        r11 = "Request-Id";	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r11 = r2.get(r11);	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
-        r11 = (java.util.List) r11;	 Catch:{ JSONException -> 0x008d, all -> 0x00a7 }
+    L_0x0082:
+        r11 = "Request-Id";	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r11 = r2.get(r11);	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
+        r11 = (java.util.List) r11;	 Catch:{ JSONException -> 0x0095, all -> 0x00b2 }
         r8 = r11;
-        goto L_0x004e;
-    L_0x0086:
+        goto L_0x0052;
+    L_0x008d:
         r12 = "networkaddress.cache.ttl";
         java.security.Security.setProperty(r12, r4);
         goto L_0x0003;
-    L_0x008d:
+    L_0x0095:
         r3 = move-exception;
         r11 = 0;
         r12 = r0.booleanValue();
         if (r12 == 0) goto L_0x0003;
-    L_0x0095:
-        if (r4 != 0) goto L_0x00a0;
-    L_0x0097:
+    L_0x009d:
+        if (r4 != 0) goto L_0x00aa;
+    L_0x009f:
         r12 = "networkaddress.cache.ttl";
         r13 = "-1";
         java.security.Security.setProperty(r12, r13);
         goto L_0x0003;
-    L_0x00a0:
+    L_0x00aa:
         r12 = "networkaddress.cache.ttl";
         java.security.Security.setProperty(r12, r4);
         goto L_0x0003;
-    L_0x00a7:
+    L_0x00b2:
         r11 = move-exception;
         r12 = r0.booleanValue();
-        if (r12 == 0) goto L_0x00b7;
-    L_0x00ae:
-        if (r4 != 0) goto L_0x00b8;
-    L_0x00b0:
+        if (r12 == 0) goto L_0x00c4;
+    L_0x00b9:
+        if (r4 != 0) goto L_0x00c5;
+    L_0x00bb:
         r12 = "networkaddress.cache.ttl";
         r13 = "-1";
         java.security.Security.setProperty(r12, r13);
-    L_0x00b7:
+    L_0x00c4:
         throw r11;
-    L_0x00b8:
+    L_0x00c5:
         r12 = "networkaddress.cache.ttl";
         java.security.Security.setProperty(r12, r4);
-        goto L_0x00b7;
+        goto L_0x00c4;
         */
         throw new UnsupportedOperationException("Method not decompiled: com.stripe.android.net.StripeApiHandler.requestToken(java.lang.String, java.lang.String, java.util.Map, com.stripe.android.net.RequestOptions):com.stripe.android.model.Token");
     }

@@ -138,7 +138,7 @@ public class PipVideoView {
             this.parentActivity = activity;
             return textureView;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }

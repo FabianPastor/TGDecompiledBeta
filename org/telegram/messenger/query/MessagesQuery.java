@@ -140,7 +140,7 @@ public class MessagesQuery {
                 broadcastPinnedMessage(result, users, chats, true, false);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return null;
     }
@@ -162,7 +162,7 @@ public class MessagesQuery {
                     state.dispose();
                     MessagesStorage.getInstance().getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -268,7 +268,7 @@ public class MessagesQuery {
                                 }
                             });
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });
@@ -370,7 +370,7 @@ public class MessagesQuery {
                             });
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -406,7 +406,7 @@ public class MessagesQuery {
                     state.dispose();
                     MessagesStorage.getInstance().getDatabase().commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -507,6 +507,7 @@ public class MessagesQuery {
         if (message == null || message[0] == null) {
             return null;
         }
+        int a;
         MessageEntity entity;
         ArrayList<MessageEntity> entities = null;
         int start = -1;
@@ -517,7 +518,6 @@ public class MessagesQuery {
         String bold = "**";
         String italic = "__";
         while (true) {
-            int a;
             int index = TextUtils.indexOf(message[0], !isPre ? "`" : "```", lastIndex);
             if (index == -1) {
                 break;

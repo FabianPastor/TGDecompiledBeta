@@ -186,7 +186,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             try {
                 return super.onTouchEvent(widget, buffer, event);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return false;
             }
         }
@@ -408,7 +408,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         textInfoCell.setText(LocaleController.formatString("TelegramVersion", R.string.TelegramVersion, objArr));
                         break;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         break;
                     }
                 case 6:
@@ -893,7 +893,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                                 SettingsActivity.this.visibleDialog.dismiss();
                                             }
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                         Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                                         MessagesController instance = MessagesController.getInstance();
@@ -948,7 +948,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     Toast.makeText(SettingsActivity.this.getParentActivity(), "¯\\_(ツ)_/¯", 0).show();
                     return true;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return true;
                 }
             }
@@ -1172,7 +1172,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             data.cleanup();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         supportUser = null;
                     }
                 }
@@ -1200,7 +1200,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 ArrayList<User> users = new ArrayList();
                                 users.add(res.user);
@@ -1218,7 +1218,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             try {
                                 progressDialog.dismiss();
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     });

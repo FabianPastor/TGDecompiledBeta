@@ -47,7 +47,7 @@ public class DrawerActionCell extends FrameLayout {
             }
             this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 }

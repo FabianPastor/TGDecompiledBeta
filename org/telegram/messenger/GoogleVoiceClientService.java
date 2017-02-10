@@ -31,7 +31,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });

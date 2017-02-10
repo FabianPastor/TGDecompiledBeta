@@ -982,7 +982,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         } catch (Exception e2) {
                             e = e2;
                             f = f2;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     if (f == null) {
@@ -1009,7 +1009,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 showAlertDialog(builder);
             } catch (Exception e3) {
                 e = e3;
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -1147,7 +1147,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             try {
                                 return ((ViewGroup) view).startActionModeForChild(originalView, callback, type);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     }
@@ -1390,7 +1390,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 AndroidUtilities.openForView(PhotoViewer.this.currentMessageObject, PhotoViewer.this.parentActivity);
                                 PhotoViewer.this.closePhoto(false, false);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         } else if (id == 12) {
                             PhotoViewer.this.muteVideo = !PhotoViewer.this.muteVideo;
@@ -1756,7 +1756,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     try {
                         return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         return false;
                     }
                 }
@@ -1765,7 +1765,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     try {
                         return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         return false;
                     }
                 }
@@ -2018,13 +2018,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 try {
                                     PhotoViewer.this.parentActivity.getWindow().clearFlags(128);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             } else {
                                 try {
                                     PhotoViewer.this.parentActivity.getWindow().addFlags(128);
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                             if (playbackState == 3 && PhotoViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
@@ -2052,7 +2052,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
 
                     public void onError(Exception e) {
-                        FileLog.e("tmessages", (Throwable) e);
+                        FileLog.e((Throwable) e);
                     }
 
                     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -2117,7 +2117,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         try {
             this.parentActivity.getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.aspectRatioFrameLayout != null) {
             this.containerView.removeView(this.aspectRatioFrameLayout);
@@ -2193,7 +2193,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 this.visibleDialog = builder.show();
@@ -2204,7 +2204,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                 });
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
     }
@@ -3487,12 +3487,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.captionTextViewOld = this.captionTextViewNew;
             this.captionTextViewNew = this.captionTextView;
             Theme.createChatResources(null, true);
-            CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             this.captionTextView.setTag(str);
             try {
                 this.captionTextView.setText(str);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.captionTextView.setTextColor(-1);
             TextView textView = this.captionTextView;
@@ -3514,7 +3514,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             try {
                 this.captionTextView.setText(LocaleController.getString("AddCaption", R.string.AddCaption));
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             this.captionTextView.setTag("empty");
             this.captionTextView.setVisibility(0);
@@ -4010,7 +4010,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             }
             return true;
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             return false;
         }
     }
@@ -4023,7 +4023,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.currentEditMode != 0) {
                 if (this.currentEditMode == 2) {
@@ -4257,7 +4257,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.captionEditText != null) {
                 this.captionEditText.onDestroy();
@@ -4295,7 +4295,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         ((WindowManager) PhotoViewer.this.parentActivity.getSystemService("window")).removeView(PhotoViewer.this.windowView);
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });

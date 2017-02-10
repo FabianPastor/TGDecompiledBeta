@@ -42,7 +42,7 @@ public class VideoEditedInfo {
             }
             return true;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return false;
         }
     }

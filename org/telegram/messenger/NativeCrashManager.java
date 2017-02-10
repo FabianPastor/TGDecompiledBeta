@@ -43,7 +43,7 @@ public class NativeCrashManager {
             write.close();
             return filename + ".faketrace";
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -69,7 +69,7 @@ public class NativeCrashManager {
                     outputStream.flush();
                     outputStream.close();
                     urlConnection.connect();
-                    FileLog.e("tmessages", "response code = " + urlConnection.getResponseCode() + " message = " + urlConnection.getResponseMessage());
+                    FileLog.e("response code = " + urlConnection.getResponseCode() + " message = " + urlConnection.getResponseMessage());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

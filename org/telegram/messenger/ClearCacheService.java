@@ -38,9 +38,9 @@ public class ClearCacheService extends IntentService {
                                                     f.delete();
                                                 }
                                             } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                                FileLog.e(e);
                                             } catch (Throwable e2) {
-                                                FileLog.e("tmessages", e2);
+                                                FileLog.e(e2);
                                             }
                                         } else if (f.lastModified() + diff < currentTime) {
                                             f.delete();

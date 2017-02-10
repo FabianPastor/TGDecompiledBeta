@@ -68,6 +68,7 @@ public class ThemeDescription {
     public static int FLAG_PROGRESSBAR = 2048;
     public static int FLAG_SECTIONS = 524288;
     public static int FLAG_SELECTOR = 4096;
+    public static int FLAG_SELECTORWHITE = 268435456;
     public static int FLAG_TEXTCOLOR = 4;
     public static int FLAG_USEBACKGROUNDDRAWABLE = 131072;
     private HashMap<String, Field> cachedFields;
@@ -138,7 +139,13 @@ public class ThemeDescription {
         if (this.drawablesToUpdate != null) {
             for (a = 0; a < this.drawablesToUpdate.length; a++) {
                 if (this.drawablesToUpdate[a] != null) {
-                    if (this.drawablesToUpdate[a] instanceof AvatarDrawable) {
+                    if (this.drawablesToUpdate[a] instanceof CombinedDrawable) {
+                        if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
+                            ((CombinedDrawable) this.drawablesToUpdate[a]).getBackground().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+                        } else {
+                            ((CombinedDrawable) this.drawablesToUpdate[a]).getIcon().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+                        }
+                    } else if (this.drawablesToUpdate[a] instanceof AvatarDrawable) {
                         ((AvatarDrawable) this.drawablesToUpdate[a]).setColor(color);
                     } else {
                         this.drawablesToUpdate[a].setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
@@ -220,7 +227,7 @@ public class ThemeDescription {
         } else if (this.viewToInvalidate instanceof ContextProgressView) {
             ((ContextProgressView) this.viewToInvalidate).updateColors();
         }
-        if ((this.changeFlags & FLAG_TEXTCOLOR) != 0 && ((this.changeFlags & FLAG_CHECKTAG) == 0 || ((this.changeFlags & FLAG_CHECKTAG) != 0 && this.currentKey.equals(this.viewToInvalidate.getTag())))) {
+        if ((this.changeFlags & FLAG_TEXTCOLOR) != 0 && ((this.changeFlags & FLAG_CHECKTAG) == 0 || !(this.viewToInvalidate == null || (this.changeFlags & FLAG_CHECKTAG) == 0 || !this.currentKey.equals(this.viewToInvalidate.getTag())))) {
             if (this.viewToInvalidate instanceof TextView) {
                 ((TextView) this.viewToInvalidate).setTextColor(color);
             } else if (this.viewToInvalidate instanceof NumberTextView) {
@@ -284,8 +291,12 @@ public class ThemeDescription {
                     processViewColor(header, color);
                 }
             }
-        } else if ((this.changeFlags & FLAG_SELECTOR) != 0) {
-            this.viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        } else if (this.viewToInvalidate != null) {
+            if ((this.changeFlags & FLAG_SELECTOR) != 0) {
+                this.viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            } else if ((this.changeFlags & FLAG_SELECTORWHITE) != 0) {
+                this.viewToInvalidate.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+            }
         }
         if (this.listClasses != null) {
             if (this.viewToInvalidate instanceof ViewGroup) {
@@ -444,7 +455,7 @@ public class ThemeDescription {
                                         }
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             } else {
                                 ((View) obj).setBackgroundColor(color);

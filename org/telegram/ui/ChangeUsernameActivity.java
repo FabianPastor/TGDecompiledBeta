@@ -75,7 +75,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 Selection.removeSelection(buffer);
                 return result;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return false;
             }
         }
@@ -98,7 +98,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.url));
                 Toast.makeText(ChangeUsernameActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -400,7 +400,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                     try {
                                         progressDialog.dismiss();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                     ArrayList<User> users = new ArrayList();
                                     users.add(user);
@@ -417,7 +417,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 ChangeUsernameActivity.this.showErrorAlert(error.text);
                             }
@@ -431,7 +431,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                         try {
                             dialog.dismiss();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });

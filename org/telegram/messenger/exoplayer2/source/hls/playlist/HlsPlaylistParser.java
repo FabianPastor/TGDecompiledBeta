@@ -117,16 +117,15 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
                 if (!line.isEmpty()) {
                     if (line.startsWith(TAG_STREAM_INF)) {
                         break;
-                    }
-                    try {
-                        if (line.startsWith(TAG_TARGET_DURATION) || line.startsWith(TAG_MEDIA_SEQUENCE) || line.startsWith(TAG_MEDIA_DURATION) || line.startsWith(TAG_KEY) || line.startsWith(TAG_BYTERANGE) || line.equals(TAG_DISCONTINUITY) || line.equals(TAG_DISCONTINUITY_SEQUENCE) || line.equals(TAG_ENDLIST)) {
+                    } else if (line.startsWith(TAG_TARGET_DURATION) || line.startsWith(TAG_MEDIA_SEQUENCE) || line.startsWith(TAG_MEDIA_DURATION) || line.startsWith(TAG_KEY) || line.startsWith(TAG_BYTERANGE) || line.equals(TAG_DISCONTINUITY) || line.equals(TAG_DISCONTINUITY_SEQUENCE) || line.equals(TAG_ENDLIST)) {
+                        extraLines.add(line);
+                        parseMediaPlaylist = parseMediaPlaylist(new LineIterator(extraLines, reader), uri.toString());
+                    } else {
+                        try {
                             extraLines.add(line);
-                            parseMediaPlaylist = parseMediaPlaylist(new LineIterator(extraLines, reader), uri.toString());
-                        } else {
-                            extraLines.add(line);
+                        } finally {
+                            reader.close();
                         }
-                    } finally {
-                        reader.close();
                     }
                     return parseMediaPlaylist;
                 }

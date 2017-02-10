@@ -171,7 +171,7 @@ public class StatsController {
                     try {
                         StatsController.this.editor.commit();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });

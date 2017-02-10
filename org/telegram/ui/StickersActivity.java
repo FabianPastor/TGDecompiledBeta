@@ -149,14 +149,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     intent.putExtra("android.intent.extra.TEXT", String.format(Locale.US, "https://" + MessagesController.getInstance().linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name}));
                     StickersActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", R.string.StickersShare)), 500);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             } else if (which == 3) {
                 try {
                     ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", String.format(Locale.US, "https://" + MessagesController.getInstance().linkPrefix + "/addstickers/%s", new Object[]{stickerSet.set.short_name})));
                     Toast.makeText(StickersActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         }
@@ -184,7 +184,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                 ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
                                 return;
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(text);
                                 return;
                             }

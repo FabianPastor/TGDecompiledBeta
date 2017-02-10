@@ -239,7 +239,7 @@ public class LanguageSelectActivity extends BaseFragment {
                 this.searchTimer.cancel();
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.searchTimer = new Timer();
         this.searchTimer.schedule(new TimerTask() {
@@ -248,7 +248,7 @@ public class LanguageSelectActivity extends BaseFragment {
                     LanguageSelectActivity.this.searchTimer.cancel();
                     LanguageSelectActivity.this.searchTimer = null;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 LanguageSelectActivity.this.processSearch(query);
             }

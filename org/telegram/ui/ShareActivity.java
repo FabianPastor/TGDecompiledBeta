@@ -70,7 +70,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog.show();
                 return;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 finish();
                 return;
             }
@@ -86,7 +86,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 }

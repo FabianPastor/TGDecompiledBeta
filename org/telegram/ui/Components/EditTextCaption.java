@@ -140,7 +140,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         } catch (Throwable e) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.captionLayout = null;
         if (this.caption != null && this.caption.length() > 0) {
@@ -161,7 +161,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                         }
                         this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
             }
@@ -192,7 +192,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 paint.setColor(oldColor);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 }

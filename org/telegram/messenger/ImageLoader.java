@@ -346,7 +346,7 @@ public class ImageLoader {
                 } else if (e instanceof FileNotFoundException) {
                     this.canRetry = false;
                 }
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.canRetry) {
                 if (httpConnection != null) {
@@ -358,7 +358,7 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
                 if (httpConnection != null) {
@@ -374,7 +374,7 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
                 if (httpConnectionStream != null) {
@@ -397,9 +397,9 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                     } catch (Throwable e2222) {
-                        FileLog.e("tmessages", e2222);
+                        FileLog.e(e2222);
                     }
                 }
                 try {
@@ -408,13 +408,13 @@ public class ImageLoader {
                         this.fileOutputStream = null;
                     }
                 } catch (Throwable e22222) {
-                    FileLog.e("tmessages", e22222);
+                    FileLog.e(e22222);
                 }
                 if (httpConnectionStream != null) {
                     try {
                         httpConnectionStream.close();
                     } catch (Throwable e222222) {
-                        FileLog.e("tmessages", e222222);
+                        FileLog.e(e222222);
                     }
                 }
             }
@@ -492,7 +492,7 @@ public class ImageLoader {
                     } else if (e instanceof FileNotFoundException) {
                         this.canRetry = false;
                     }
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             if (!isCancelled()) {
@@ -504,7 +504,7 @@ public class ImageLoader {
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 if (this.imageSize == 0 && this.httpConnection != null) {
                     try {
@@ -519,7 +519,7 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
                 if (httpConnectionStream != null) {
@@ -542,9 +542,9 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e222) {
-                        FileLog.e("tmessages", e222);
+                        FileLog.e(e222);
                     } catch (Throwable e2222) {
-                        FileLog.e("tmessages", e2222);
+                        FileLog.e(e2222);
                     }
                 }
             }
@@ -554,13 +554,13 @@ public class ImageLoader {
                     this.fileOutputStream = null;
                 }
             } catch (Throwable e22222) {
-                FileLog.e("tmessages", e22222);
+                FileLog.e(e22222);
             }
             if (httpConnectionStream != null) {
                 try {
                     httpConnectionStream.close();
                 } catch (Throwable e222222) {
-                    FileLog.e("tmessages", e222222);
+                    FileLog.e(e222222);
                 }
             }
             if (!(!done || this.cacheImage.tempFilePath == null || this.cacheImage.tempFilePath.renameTo(this.cacheImage.finalFilePath))) {
@@ -707,9 +707,9 @@ public class ImageLoader {
                     }
                 });
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
                 removeTask();
             }
         }
@@ -847,7 +847,7 @@ public class ImageLoader {
         });
         BroadcastReceiver receiver = new BroadcastReceiver() {
             public void onReceive(Context arg0, Intent intent) {
-                FileLog.e("tmessages", "file system changed");
+                FileLog.e("file system changed");
                 Runnable r = new Runnable() {
                     public void run() {
                         ImageLoader.this.checkMediaPaths();
@@ -878,13 +878,13 @@ public class ImageLoader {
             try {
                 cachePath.mkdirs();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         try {
             new File(cachePath, ".nomedia").createNewFile();
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         mediaDirs.put(Integer.valueOf(4), cachePath);
         FileLoader.getInstance().setMediaDirs(mediaDirs);
@@ -913,16 +913,16 @@ public class ImageLoader {
             try {
                 cachePath.mkdirs();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         try {
             new File(cachePath, ".nomedia").createNewFile();
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         mediaDirs.put(Integer.valueOf(4), cachePath);
-        FileLog.e("tmessages", "cache path = " + cachePath);
+        FileLog.e("cache path = " + cachePath);
         if ("mounted".equals(Environment.getExternalStorageState())) {
             this.telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
             this.telegramPath.mkdirs();
@@ -932,20 +932,20 @@ public class ImageLoader {
                     imagePath.mkdir();
                     if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, 0)) {
                         mediaDirs.put(Integer.valueOf(0), imagePath);
-                        FileLog.e("tmessages", "image path = " + imagePath);
+                        FileLog.e("image path = " + imagePath);
                     }
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
                 try {
                     File videoPath = new File(this.telegramPath, "Telegram Video");
                     videoPath.mkdir();
                     if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, 2)) {
                         mediaDirs.put(Integer.valueOf(2), videoPath);
-                        FileLog.e("tmessages", "video path = " + videoPath);
+                        FileLog.e("video path = " + videoPath);
                     }
                 } catch (Throwable e222) {
-                    FileLog.e("tmessages", e222);
+                    FileLog.e(e222);
                 }
                 try {
                     File audioPath = new File(this.telegramPath, "Telegram Audio");
@@ -953,25 +953,25 @@ public class ImageLoader {
                     if (audioPath.isDirectory() && canMoveFiles(cachePath, audioPath, 1)) {
                         new File(audioPath, ".nomedia").createNewFile();
                         mediaDirs.put(Integer.valueOf(1), audioPath);
-                        FileLog.e("tmessages", "audio path = " + audioPath);
+                        FileLog.e("audio path = " + audioPath);
                     }
-                } catch (Throwable e2222) {
-                    FileLog.e("tmessages", e2222);
-                }
-                try {
-                    File documentPath = new File(this.telegramPath, "Telegram Documents");
-                    documentPath.mkdir();
-                    if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, 3)) {
-                        new File(documentPath, ".nomedia").createNewFile();
-                        mediaDirs.put(Integer.valueOf(3), documentPath);
-                        FileLog.e("tmessages", "documents path = " + documentPath);
+                    try {
+                        File documentPath = new File(this.telegramPath, "Telegram Documents");
+                        documentPath.mkdir();
+                        if (documentPath.isDirectory() && canMoveFiles(cachePath, documentPath, 3)) {
+                            new File(documentPath, ".nomedia").createNewFile();
+                            mediaDirs.put(Integer.valueOf(3), documentPath);
+                            FileLog.e("documents path = " + documentPath);
+                        }
+                    } catch (Throwable e2222) {
+                        FileLog.e(e2222);
                     }
                 } catch (Throwable e22222) {
-                    FileLog.e("tmessages", e22222);
+                    FileLog.e(e22222);
                 }
             }
         } else {
-            FileLog.e("tmessages", "this Android can't rename files");
+            FileLog.e("this Android can't rename files");
         }
         MediaController.getInstance().checkSaveToGalleryFiles();
         return mediaDirs;
@@ -994,12 +994,12 @@ public class ImageLoader {
                     e = e2;
                     srcFile = srcFile2;
                     try {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         if (file != null) {
                             try {
                                 file.close();
                             } catch (Throwable e3) {
-                                FileLog.e("tmessages", e3);
+                                FileLog.e(e3);
                             }
                         }
                         return false;
@@ -1009,7 +1009,7 @@ public class ImageLoader {
                             try {
                                 file.close();
                             } catch (Throwable e32) {
-                                FileLog.e("tmessages", e32);
+                                FileLog.e(e32);
                             }
                         }
                         throw th;
@@ -1017,7 +1017,7 @@ public class ImageLoader {
                 }
             } catch (Exception e4) {
                 e32 = e4;
-                FileLog.e("tmessages", e32);
+                FileLog.e(e32);
                 if (file != null) {
                     file.close();
                 }
@@ -1051,7 +1051,7 @@ public class ImageLoader {
                     try {
                         file.close();
                     } catch (Throwable e322) {
-                        FileLog.e("tmessages", e322);
+                        FileLog.e(e322);
                     }
                 }
                 return false;
@@ -1062,14 +1062,14 @@ public class ImageLoader {
                     file.close();
                     return true;
                 } catch (Throwable e3222) {
-                    FileLog.e("tmessages", e3222);
+                    FileLog.e(e3222);
                     return true;
                 }
             }
         } catch (Exception e5) {
             e3222 = e5;
             file = file2;
-            FileLog.e("tmessages", e3222);
+            FileLog.e(e3222);
             if (file != null) {
                 file.close();
             }
@@ -1727,7 +1727,7 @@ public class ImageLoader {
                 try {
                     path = AndroidUtilities.getPath(uri);
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         }
@@ -1740,7 +1740,7 @@ public class ImageLoader {
                 inputStream.close();
                 inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
             } catch (Throwable e22) {
-                FileLog.e("tmessages", e22);
+                FileLog.e(e22);
                 return null;
             }
         }
@@ -1775,7 +1775,7 @@ public class ImageLoader {
                         } catch (Throwable th) {
                             e22 = th;
                             matrix = matrix2;
-                            FileLog.e("tmessages", e22);
+                            FileLog.e(e22);
                             b = null;
                             if (path == null) {
                                 try {
@@ -1793,7 +1793,7 @@ public class ImageLoader {
                                     b.recycle();
                                     return newBitmap;
                                 } catch (Throwable e23) {
-                                    FileLog.e("tmessages", e23);
+                                    FileLog.e(e23);
                                     return null;
                                 }
                             } else if (uri != null) {
@@ -1815,11 +1815,11 @@ public class ImageLoader {
                                         inputStream.close();
                                         return b;
                                     } catch (Throwable e222) {
-                                        FileLog.e("tmessages", e222);
+                                        FileLog.e(e222);
                                         return b;
                                     }
                                 } catch (Throwable e2222) {
-                                    FileLog.e("tmessages", e2222);
+                                    FileLog.e(e2222);
                                     return null;
                                 }
                             }
@@ -1830,7 +1830,7 @@ public class ImageLoader {
                 }
             } catch (Throwable th2) {
                 e2222 = th2;
-                FileLog.e("tmessages", e2222);
+                FileLog.e(e2222);
                 b = null;
                 if (path == null) {
                     b = BitmapFactory.decodeFile(path, bmOptions);
@@ -1908,7 +1908,7 @@ public class ImageLoader {
                     f.readFully(photoSize.bytes, 0, photoSize.bytes.length);
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -1991,7 +1991,7 @@ public class ImageLoader {
         try {
             return scaleAndSaveImageInternal(bitmap, w, h, photoW, photoH, scaleFactor, quality, cache, scaleAnyway);
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             return null;
         }
     }
@@ -2050,7 +2050,7 @@ public class ImageLoader {
                     writeFile.write(photoSize.bytes);
                     writeFile.close();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             TL_photoSize newPhotoSize = new TL_photoSize();

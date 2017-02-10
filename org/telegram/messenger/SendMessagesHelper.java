@@ -237,7 +237,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
             public void onLocationChanged(Location location) {
                 if (location != null && LocationProvider.this.locationQueryCancelRunnable != null) {
-                    FileLog.e("tmessages", "found location " + location);
+                    FileLog.e("found location " + location);
                     LocationProvider.this.lastKnownLocation = location;
                     if (location.getAccuracy() < 100.0f) {
                         if (LocationProvider.this.delegate != null) {
@@ -289,12 +289,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             try {
                 this.locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 this.locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             try {
                 this.lastKnownLocation = this.locationManager.getLastKnownLocation("gps");
@@ -302,7 +302,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     this.lastKnownLocation = this.locationManager.getLastKnownLocation("network");
                 }
             } catch (Throwable e22) {
-                FileLog.e("tmessages", e22);
+                FileLog.e(e22);
             }
             if (this.locationQueryCancelRunnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(this.locationQueryCancelRunnable);
@@ -570,7 +570,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateMessageMedia, delayedMessage.obj);
                                             return;
                                         }
-                                        FileLog.e("tmessages", "can't load image " + delayedMessage.httpLocation + " to file " + file2.toString());
+                                        FileLog.e("can't load image " + delayedMessage.httpLocation + " to file " + file2.toString());
                                         MessagesStorage.getInstance().markMessageAsSendError(delayedMessage.obj.messageOwner);
                                         delayedMessage.obj.messageOwner.send_state = 2;
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(delayedMessage.obj.getId()));
@@ -598,7 +598,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         }
                                     } catch (Throwable e) {
                                         delayedMessage2.documentLocation.thumb = null;
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                     if (delayedMessage2.documentLocation.thumb == null) {
                                         delayedMessage2.documentLocation.thumb = new TL_photoSizeEmpty();
@@ -808,7 +808,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 newDocument.thumb.type = document.thumb.type;
                                 newDocument.thumb.bytes = arr;
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     }
@@ -943,7 +943,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         arr.add(newMsg);
                         putToSendingMessages(newMsg);
                         if (BuildVars.DEBUG_VERSION) {
-                            FileLog.e("tmessages", "forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
+                            FileLog.e("forward message user_id = " + inputPeer.user_id + " chat_id = " + inputPeer.chat_id + " channel_id = " + inputPeer.channel_id + " access_hash = " + inputPeer.access_hash);
                         }
                         if (!(arr.size() == 100 || a == messages.size() - 1)) {
                             if (a != messages.size() - 1) {
@@ -1319,8 +1319,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
+        long newTaskId;
         if (peer != null && game != null) {
-            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1341,7 +1341,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     } catch (Exception e2) {
                         e = e2;
                         data = data2;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                         ConnectionsManager.getInstance().sendRequest(request, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
@@ -1356,7 +1356,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 } catch (Exception e3) {
                     e = e3;
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     newTaskId = MessagesStorage.getInstance().createPendingTask(data);
                     ConnectionsManager.getInstance().sendRequest(request, /* anonymous class already generated */);
                 }
@@ -1400,9 +1400,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -1468,7 +1468,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 e = e2;
                                 newMsgObj = null;
                                 user = user2;
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                                 MessagesStorage.getInstance().markMessageAsSendError(newMsg);
                                 if (newMsgObj != null) {
                                     newMsgObj.messageOwner.send_state = 2;
@@ -1492,7 +1492,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 } catch (Exception e3) {
                     e = e3;
                     newMsgObj = null;
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     MessagesStorage.getInstance().markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                         newMsgObj.messageOwner.send_state = 2;
@@ -1592,7 +1592,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     e = e4;
                     newMsgObj = null;
                     newMsg = newMsg2;
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     MessagesStorage.getInstance().markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                         newMsgObj.messageOwner.send_state = 2;
@@ -1930,7 +1930,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     e = e5;
                     sendToPeers = sendToPeers2;
                     newMsgObj = null;
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     MessagesStorage.getInstance().markMessageAsSendError(newMsg);
                     if (newMsgObj != null) {
                         newMsgObj.messageOwner.send_state = 2;
@@ -1959,7 +1959,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 MessagesController.getInstance().updateInterfaceWithMessages(peer, objArr);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                 if (BuildVars.DEBUG_VERSION && sendToPeer != null) {
-                    FileLog.e("tmessages", "send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
+                    FileLog.e("send message user_id = " + sendToPeer.user_id + " chat_id = " + sendToPeer.chat_id + " channel_id = " + sendToPeer.channel_id + " access_hash = " + sendToPeer.access_hash);
                 }
                 ArrayList<Long> random_ids;
                 if (type == 0 || !(type != 9 || message == null || encryptedChat == null)) {
@@ -2577,7 +2577,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             } catch (Exception e6) {
                 e = e6;
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 MessagesStorage.getInstance().markMessageAsSendError(newMsg);
                 if (newMsgObj != null) {
                     newMsgObj.messageOwner.send_state = 2;
@@ -3246,7 +3246,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         bitmap.recycle();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             if (tL_document.mime_type.equals("image/webp") && allowSticker) {
@@ -3258,7 +3258,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     Utilities.loadWebpImage(null, buffer, buffer.limit(), bmOptions, true);
                     randomAccessFile.close();
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
                 if (bmOptions.outWidth != 0 && bmOptions.outHeight != 0 && bmOptions.outWidth <= 800 && bmOptions.outHeight <= 800) {
                     TL_documentAttributeSticker attributeSticker = new TL_documentAttributeSticker();
@@ -3399,7 +3399,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     try {
                                         Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment), 0).show();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             });
@@ -3579,7 +3579,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                         break;
                                                     }
                                                 } catch (Throwable e) {
-                                                    FileLog.e("tmessages", e);
+                                                    FileLog.e(e);
                                                     break;
                                                 }
                                                 break;
@@ -3630,7 +3630,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                         break;
                                                     }
                                                 } catch (Throwable e2) {
-                                                    FileLog.e("tmessages", e2);
+                                                    FileLog.e(e2);
                                                     break;
                                                 }
                                                 break;
@@ -3652,7 +3652,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                                         break;
                                                     }
                                                 } catch (Throwable e22) {
-                                                    FileLog.e("tmessages", e22);
+                                                    FileLog.e(e22);
                                                     break;
                                                 }
                                                 break;
@@ -3847,7 +3847,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             bitmap.recycle();
                                         }
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                                 if (tL_document.thumb == null) {
@@ -4246,7 +4246,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     try {
                         mediaMetadataRetriever2.release();
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                         mediaMetadataRetriever = mediaMetadataRetriever2;
                     }
                 }
@@ -4255,12 +4255,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 e2 = e3;
                 mediaMetadataRetriever = mediaMetadataRetriever2;
                 try {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                     if (mediaMetadataRetriever != null) {
                         try {
                             mediaMetadataRetriever.release();
                         } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
+                            FileLog.e(e22);
                         }
                     }
                     if (infoObtained) {
@@ -4273,7 +4273,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 mp.release();
                             }
                         } catch (Throwable e222) {
-                            FileLog.e("tmessages", e222);
+                            FileLog.e(e222);
                             return;
                         }
                     }
@@ -4283,7 +4283,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         try {
                             mediaMetadataRetriever.release();
                         } catch (Throwable e2222) {
-                            FileLog.e("tmessages", e2222);
+                            FileLog.e(e2222);
                         }
                     }
                     throw th;
@@ -4298,7 +4298,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             }
         } catch (Exception e4) {
             e2222 = e4;
-            FileLog.e("tmessages", e2222);
+            FileLog.e(e2222);
             if (mediaMetadataRetriever != null) {
                 mediaMetadataRetriever.release();
             }

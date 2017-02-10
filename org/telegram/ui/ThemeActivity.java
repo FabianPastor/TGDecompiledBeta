@@ -107,10 +107,10 @@ public class ThemeActivity extends BaseFragment {
                     message.setText(LocaleController.formatString("EnterThemeName", R.string.EnterThemeName, new Object[0]));
                     message.setTextSize(16.0f);
                     message.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
-                    message.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    message.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     linearLayout.addView(message, LayoutHelper.createLinear(-1, -2));
                     editText.setTextSize(1, 16.0f);
-                    editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     editText.setMaxLines(1);
                     editText.setLines(1);
                     editText.setInputType(16385);
@@ -190,7 +190,7 @@ public class ThemeActivity extends BaseFragment {
                                     ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         } else if (which == 1) {
                             Theme.applyTheme(themeInfo);

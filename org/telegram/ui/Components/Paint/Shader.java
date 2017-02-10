@@ -26,13 +26,13 @@ public class Shader {
         int i = 0;
         CompilationResult vResult = compileShader(35633, vertexShader);
         if (vResult.status == 0) {
-            FileLog.e("tmessages", "Vertex shader compilation failed");
+            FileLog.e("Vertex shader compilation failed");
             destroyShader(vResult.shader, 0, this.program);
             return;
         }
         CompilationResult fResult = compileShader(35632, fragmentShader);
         if (fResult.status == 0) {
-            FileLog.e("tmessages", "Fragment shader compilation failed");
+            FileLog.e("Fragment shader compilation failed");
             destroyShader(vResult.shader, fResult.shader, this.program);
             return;
         }
@@ -77,7 +77,7 @@ public class Shader {
         int[] compileStatus = new int[1];
         GLES20.glGetShaderiv(shader, 35713, compileStatus, 0);
         if (compileStatus[0] == 0) {
-            FileLog.e("tmessages", GLES20.glGetShaderInfoLog(shader));
+            FileLog.e(GLES20.glGetShaderInfoLog(shader));
         }
         return new CompilationResult(shader, compileStatus[0]);
     }
@@ -87,7 +87,7 @@ public class Shader {
         int[] linkStatus = new int[1];
         GLES20.glGetProgramiv(program, 35714, linkStatus, 0);
         if (linkStatus[0] == 0) {
-            FileLog.e("tmessages", GLES20.glGetProgramInfoLog(program));
+            FileLog.e(GLES20.glGetProgramInfoLog(program));
         }
         return linkStatus[0];
     }

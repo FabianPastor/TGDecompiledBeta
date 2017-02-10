@@ -144,35 +144,36 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
     }
 
     private static CursorWindow[] zza(zza com_google_android_gms_common_data_DataHolder_zza, int i) {
+        int size;
         int i2 = 0;
         if (com_google_android_gms_common_data_DataHolder_zza.zzaCq.length == 0) {
             return new CursorWindow[0];
         }
         List zzb = (i < 0 || i >= com_google_android_gms_common_data_DataHolder_zza.zzaCy.size()) ? com_google_android_gms_common_data_DataHolder_zza.zzaCy : com_google_android_gms_common_data_DataHolder_zza.zzaCy.subList(0, i);
-        int size = zzb.size();
+        int size2 = zzb.size();
         CursorWindow cursorWindow = new CursorWindow(false);
         ArrayList arrayList = new ArrayList();
         arrayList.add(cursorWindow);
         cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
         int i3 = 0;
         int i4 = 0;
-        while (i3 < size) {
+        while (i3 < size2) {
+            if (!cursorWindow.allocRow()) {
+                Log.d("DataHolder", "Allocating additional cursor window for large data set (row " + i3 + ")");
+                cursorWindow = new CursorWindow(false);
+                cursorWindow.setStartPosition(i3);
+                cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
+                arrayList.add(cursorWindow);
+                if (!cursorWindow.allocRow()) {
+                    Log.e("DataHolder", "Unable to allocate row to hold data.");
+                    arrayList.remove(cursorWindow);
+                    return (CursorWindow[]) arrayList.toArray(new CursorWindow[arrayList.size()]);
+                }
+            }
             try {
                 int i5;
                 int i6;
                 CursorWindow cursorWindow2;
-                if (!cursorWindow.allocRow()) {
-                    Log.d("DataHolder", "Allocating additional cursor window for large data set (row " + i3 + ")");
-                    cursorWindow = new CursorWindow(false);
-                    cursorWindow.setStartPosition(i3);
-                    cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
-                    arrayList.add(cursorWindow);
-                    if (!cursorWindow.allocRow()) {
-                        Log.e("DataHolder", "Unable to allocate row to hold data.");
-                        arrayList.remove(cursorWindow);
-                        return (CursorWindow[]) arrayList.toArray(new CursorWindow[arrayList.size()]);
-                    }
-                }
                 Map map = (Map) zzb.get(i3);
                 boolean z = true;
                 for (int i7 = 0; i7 < com_google_android_gms_common_data_DataHolder_zza.zzaCq.length && z; i7++) {
@@ -221,8 +222,8 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
                 i3 = i5 + 1;
             } catch (RuntimeException e) {
                 RuntimeException runtimeException = e;
-                int size2 = arrayList.size();
-                while (i2 < size2) {
+                size = arrayList.size();
+                while (i2 < size) {
                     ((CursorWindow) arrayList.get(i2)).close();
                     i2++;
                 }

@@ -158,7 +158,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 this.mapView.onDestroy();
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.adapter != null) {
             this.adapter.destroy();
@@ -197,7 +197,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         double lon = LocationActivity.this.messageObject.messageOwner.media.geo._long;
                         LocationActivity.this.getParentActivity().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon)));
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -319,7 +319,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                         LocationActivity.this.mapView.onResume();
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -439,7 +439,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         try {
                             LocationActivity.this.getParentActivity().startActivity(new Intent("android.intent.action.VIEW", Uri.parse(String.format(Locale.US, "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f", new Object[]{Double.valueOf(LocationActivity.this.myLocation.getLatitude()), Double.valueOf(LocationActivity.this.myLocation.getLongitude()), Double.valueOf(LocationActivity.this.messageObject.messageOwner.media.geo.lat), Double.valueOf(LocationActivity.this.messageObject.messageOwner.media.geo._long)}))));
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -614,7 +614,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                         LocationActivity.this.mapView.onResume();
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -695,7 +695,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 try {
                     this.googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin)));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, this.googleMap.getMaxZoomLevel() - 4.0f));
             } else {
@@ -706,7 +706,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             try {
                 this.googleMap.setMyLocationEnabled(true);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
             this.googleMap.getUiSettings().setZoomControlsEnabled(false);
@@ -740,7 +740,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                             LocationActivity.this.getParentActivity().startActivity(intent);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -757,7 +757,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     ((ViewGroup) this.mapView.getParent()).removeView(this.mapView);
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (this.mapViewClip != null) {
                 this.mapViewClip.addView(this.mapView, 0, LayoutHelper.createFrame(-1, this.overScrollHeight + AndroidUtilities.dp(10.0f), 51));
@@ -958,7 +958,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             try {
                 this.googleMap.setMyLocationEnabled(true);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -969,7 +969,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             try {
                 this.mapView.onPause();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         this.onResumeCalled = false;
@@ -982,7 +982,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             try {
                 this.mapView.onResume();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         this.onResumeCalled = true;
@@ -990,7 +990,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             try {
                 this.googleMap.setMyLocationEnabled(true);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
         updateUserData();

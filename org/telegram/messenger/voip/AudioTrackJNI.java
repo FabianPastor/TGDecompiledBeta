@@ -40,7 +40,7 @@ public class AudioTrackJNI {
         try {
             this.thread.join();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.thread = null;
         this.audioTrack.release();
@@ -72,7 +72,7 @@ public class AudioTrackJNI {
                             break;
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 Log.i("tg-voip", "audiotrack thread exits");

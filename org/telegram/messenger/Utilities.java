@@ -44,7 +44,7 @@ public class Utilities {
             sUrandomIn.close();
             random.setSeed(buffer);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -64,7 +64,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return val;
         }
     }
@@ -81,7 +81,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return val;
         }
     }
@@ -182,7 +182,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return new byte[20];
         }
     }
@@ -190,17 +190,15 @@ public class Utilities {
     public static byte[] computeSHA1(ByteBuffer convertme, int offset, int len) {
         int oldp = convertme.position();
         int oldl = convertme.limit();
-        byte[] digest;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             convertme.position(offset);
             convertme.limit(len);
             md.update(convertme);
-            digest = md.digest();
+            byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            digest = "tmessages";
-            FileLog.e((String) digest, e);
+            FileLog.e(e);
             return new byte[20];
         } finally {
             convertme.limit(oldl);
@@ -222,7 +220,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -242,7 +240,7 @@ public class Utilities {
                 }
                 str = sb.toString();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         return str;

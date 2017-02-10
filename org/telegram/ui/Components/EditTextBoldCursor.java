@@ -69,7 +69,7 @@ public class EditTextBoldCursor extends EditText {
             this.mCursorDrawable = (Drawable[]) mCursorDrawableField.get(this.editor);
             mCursorDrawableResField.set(this, Integer.valueOf(R.drawable.field_carret_empty));
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         this.cursorSize = AndroidUtilities.dp(24.0f);
     }

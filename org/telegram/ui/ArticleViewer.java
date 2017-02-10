@@ -442,7 +442,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 this.textLayout = ArticleViewer.this.createLayoutForText(text, null, width - AndroidUtilities.dp(36.0f), this.currentBlock);
@@ -792,7 +792,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             ArticleViewer.this.parentActivity.getWindow().addFlags(128);
                             return;
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             return;
                         }
                     }
@@ -802,7 +802,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     try {
                         ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
 
@@ -876,7 +876,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 this.currentBlock = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.videoView.destroy();
         }
@@ -890,7 +890,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 try {
                     this.webView.loadUrl("about:blank");
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 try {
                     if (this.currentBlock.html != null) {
@@ -912,7 +912,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
             requestLayout();
@@ -2608,7 +2608,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             if (this.buttonState < 0 || this.buttonState >= 4) {
                 return null;
             }
-            return Theme.photoStatesDrawables[this.buttonState][this.buttonPressed];
+            return Theme.chat_photoStatesDrawables[this.buttonState][this.buttonPressed];
         }
 
         public void updateButtonState(boolean animated) {
@@ -3431,12 +3431,12 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 layout.getSelectionPath(pressedStart, pressedEnd, this.urlPath);
                                 parentView.invalidate();
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         } else if (event.getAction() == 1) {
@@ -3810,7 +3810,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
                             ArticleViewer.this.closePhoto(false);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -4030,6 +4030,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
+        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4088,8 +4090,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
-            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {
@@ -4119,7 +4119,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 this.containerView.setFocusable(false);
                                 wm.addView(this.windowView, this.windowLayoutParams);
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                                 return false;
                             }
                         }
@@ -4178,7 +4178,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         return true;
                     }
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
             }
         }
@@ -4324,7 +4324,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             AnimatorSet animatorSet = new AnimatorSet();
             Animator[] animatorArr = new Animator[12];
@@ -4500,7 +4500,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         this.visibleDialog = null;
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 AnimatorSet animatorSet = new AnimatorSet();
                 r2 = new Animator[3];
@@ -4548,7 +4548,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         try {
             this.parentActivity.getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         for (int a = 0; a < this.createdWebViews.size(); a++) {
             ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(false);
@@ -4560,7 +4560,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                         ((WindowManager) ArticleViewer.this.parentActivity.getSystemService("window")).removeView(ArticleViewer.this.windowView);
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4589,7 +4589,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 }
                 this.windowView = null;
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             for (int a = 0; a < this.createdWebViews.size(); a++) {
                 ((BlockEmbedCell) this.createdWebViews.get(a)).destroyWebView(true);
@@ -4598,7 +4598,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             try {
                 this.parentActivity.getWindow().clearFlags(128);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             Instance = null;
         }
@@ -4616,7 +4616,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     this.visibleDialog = null;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 this.visibleDialog = dialog;
@@ -4629,7 +4629,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 });
                 dialog.show();
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
     }
@@ -4655,7 +4655,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                 intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
                 this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -4716,13 +4716,13 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                                 try {
                                     ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             } else {
                                 try {
                                     ArticleViewer.this.parentActivity.getWindow().addFlags(128);
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                             if (playbackState == 3 && ArticleViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
@@ -4750,7 +4750,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     }
 
                     public void onError(Exception e) {
-                        FileLog.e("tmessages", (Throwable) e);
+                        FileLog.e((Throwable) e);
                     }
 
                     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -4803,7 +4803,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         try {
             this.parentActivity.getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.aspectRatioFrameLayout != null) {
             this.photoContainerView.removeView(this.aspectRatioFrameLayout);
@@ -5193,7 +5193,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         this.captionTextViewOld = this.captionTextViewNew;
         this.captionTextViewNew = this.captionTextView;
         Theme.createChatResources(null, true);
-        CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+        CharSequence str = Emoji.replaceEmoji(new SpannableStringBuilder(caption.toString()), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
         this.captionTextView.setTag(str);
         this.captionTextView.setText(str);
         this.captionTextView.setTextColor(-1);

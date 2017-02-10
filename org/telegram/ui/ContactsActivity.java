@@ -286,7 +286,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                             intent.putExtra("sms_body", LocaleController.getString("InviteText", R.string.InviteText));
                                             ContactsActivity.this.getParentActivity().startActivityForResult(intent, 500);
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 });
@@ -302,7 +302,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 intent.putExtra("android.intent.extra.TEXT", ContactsController.getInstance().getInviteText());
                                 ContactsActivity.this.getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                     } else if (ContactsActivity.this.chat_id != 0) {
@@ -361,7 +361,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups), 0).show();
                     return;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return;
                 }
             }
@@ -402,7 +402,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });

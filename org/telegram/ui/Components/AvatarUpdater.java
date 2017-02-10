@@ -71,7 +71,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
             }
             this.parentFragment.startActivityForResult(takePictureIntent, 13);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -91,7 +91,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                         photoPickerIntent.setType("image/*");
                         AvatarUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
 
@@ -119,7 +119,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                 activity.presentFragment(photoCropActivity);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             processBitmap(ImageLoader.loadBitmap(path, uri, 800.0f, 800.0f, true));
         }
     }
@@ -144,7 +144,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
                         break;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             final ArrayList<Object> arrayList = new ArrayList();
             arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, orientation, false));

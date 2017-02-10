@@ -285,7 +285,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
                         cursor.close();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     if (cursor != null) {
                         cursor.close();
                     }

@@ -61,7 +61,7 @@ public class ApplicationLoader extends Application {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 RandomAccessFile fileOutputStream = new RandomAccessFile(new File(getFilesDirFixed(), "tgnet.dat"), "rws");
@@ -70,7 +70,7 @@ public class ApplicationLoader extends Application {
                 fileOutputStream.write(bytes);
                 fileOutputStream.close();
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
             buffer.cleanup();
             preferences.edit().clear().commit();
@@ -89,7 +89,7 @@ public class ApplicationLoader extends Application {
             path.mkdirs();
             return path;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return new File("/data/data/org.telegram.messenger/files");
         }
     }
@@ -116,9 +116,9 @@ public class ApplicationLoader extends Application {
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
-                FileLog.e("tmessages", "screen state = " + isScreenOn);
+                FileLog.e("screen state = " + isScreenOn);
             } catch (Throwable e3) {
-                FileLog.e("tmessages", e3);
+                FileLog.e(e3);
             }
             UserConfig.loadConfig();
             String configPath = getFilesDirFixed().toString();
@@ -156,7 +156,7 @@ public class ApplicationLoader extends Application {
                 SendMessagesHelper.getInstance().checkUnsentMessages();
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
-            FileLog.e("tmessages", "app initied");
+            FileLog.e("app initied");
             ContactsController.getInstance().checkAppAccount();
             MediaController.getInstance();
         }
@@ -201,14 +201,14 @@ public class ApplicationLoader extends Application {
             public void run() {
                 if (ApplicationLoader.this.checkPlayServices()) {
                     if (UserConfig.pushString == null || UserConfig.pushString.length() == 0) {
-                        FileLog.d("tmessages", "GCM Registration not found.");
+                        FileLog.d("GCM Registration not found.");
                     } else {
-                        FileLog.d("tmessages", "GCM regId = " + UserConfig.pushString);
+                        FileLog.d("GCM regId = " + UserConfig.pushString);
                     }
                     ApplicationLoader.this.startService(new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class));
                     return;
                 }
-                FileLog.d("tmessages", "No valid Google Play Services APK found.");
+                FileLog.d("No valid Google Play Services APK found.");
             }
         }, 1000);
     }
@@ -220,7 +220,7 @@ public class ApplicationLoader extends Application {
             }
             return false;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return true;
         }
     }

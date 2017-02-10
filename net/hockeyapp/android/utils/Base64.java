@@ -333,7 +333,7 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             };
         L_0x0011:
             r11 = -1;
-            if (r10 == r11) goto L_0x0245;
+            if (r10 == r11) goto L_0x0249;
         L_0x0014:
             r4 = r3 + 1;
             r11 = r10 >> 18;
@@ -355,7 +355,7 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r11 = r1[r11];
             r5[r4] = r11;
             r2 = r2 + -1;
-            if (r2 != 0) goto L_0x0245;
+            if (r2 != 0) goto L_0x0249;
         L_0x003e:
             r11 = r14.do_cr;
             if (r11 == 0) goto L_0x0049;
@@ -408,7 +408,7 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r6 = r7 + 3;
             r3 = r4 + 4;
             r2 = r2 + -1;
-            if (r2 != 0) goto L_0x0245;
+            if (r2 != 0) goto L_0x0249;
         L_0x009b:
             r11 = r14.do_cr;
             if (r11 == 0) goto L_0x00a6;
@@ -471,16 +471,16 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r6 = r7;
             goto L_0x0011;
         L_0x00fc:
-            if (r18 == 0) goto L_0x020d;
+            if (r18 == 0) goto L_0x0211;
         L_0x00fe:
             r11 = r14.tailLen;
             r11 = r7 - r11;
             r12 = r17 + -1;
-            if (r11 != r12) goto L_0x0176;
+            if (r11 != r12) goto L_0x017a;
         L_0x0106:
             r8 = 0;
             r11 = r14.tailLen;
-            if (r11 <= 0) goto L_0x0171;
+            if (r11 <= 0) goto L_0x0175;
         L_0x010b:
             r11 = r14.tail;
             r9 = r8 + 1;
@@ -531,54 +531,54 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r3 = r4;
         L_0x0155:
             r11 = r14.tailLen;
-            if (r11 == 0) goto L_0x0160;
+            if (r11 == 0) goto L_0x0162;
         L_0x0159:
             r11 = "BASE64";
             r12 = "Error during encoding";
             net.hockeyapp.android.utils.HockeyLog.error(r11, r12);
-        L_0x0160:
+        L_0x0162:
             r0 = r17;
-            if (r6 == r0) goto L_0x016b;
-        L_0x0164:
+            if (r6 == r0) goto L_0x016f;
+        L_0x0166:
             r11 = "BASE64";
             r12 = "Error during encoding";
             net.hockeyapp.android.utils.HockeyLog.error(r11, r12);
-        L_0x016b:
+        L_0x016f:
             r14.op = r3;
             r14.count = r2;
             r11 = 1;
             return r11;
-        L_0x0171:
+        L_0x0175:
             r6 = r7 + 1;
             r11 = r15[r7];
             goto L_0x0113;
-        L_0x0176:
+        L_0x017a:
             r11 = r14.tailLen;
             r11 = r7 - r11;
             r12 = r17 + -2;
-            if (r11 != r12) goto L_0x01ef;
-        L_0x017e:
+            if (r11 != r12) goto L_0x01f3;
+        L_0x0182:
             r8 = 0;
             r11 = r14.tailLen;
             r12 = 1;
-            if (r11 <= r12) goto L_0x01e4;
-        L_0x0184:
+            if (r11 <= r12) goto L_0x01e8;
+        L_0x0188:
             r11 = r14.tail;
             r9 = r8 + 1;
             r11 = r11[r8];
             r8 = r9;
             r6 = r7;
-        L_0x018c:
+        L_0x0190:
             r11 = r11 & 255;
             r12 = r11 << 10;
             r11 = r14.tailLen;
-            if (r11 <= 0) goto L_0x01e9;
-        L_0x0194:
+            if (r11 <= 0) goto L_0x01ed;
+        L_0x0198:
             r11 = r14.tail;
             r9 = r8 + 1;
             r11 = r11[r8];
             r8 = r9;
-        L_0x019b:
+        L_0x019f:
             r11 = r11 & 255;
             r11 = r11 << 2;
             r10 = r12 | r11;
@@ -600,64 +600,64 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r11 = r1[r11];
             r5[r4] = r11;
             r11 = r14.do_padding;
-            if (r11 == 0) goto L_0x01cd;
-        L_0x01c6:
+            if (r11 == 0) goto L_0x01d1;
+        L_0x01ca:
             r4 = r3 + 1;
             r11 = 61;
             r5[r3] = r11;
             r3 = r4;
-        L_0x01cd:
+        L_0x01d1:
             r11 = r14.do_newline;
             if (r11 == 0) goto L_0x0155;
-        L_0x01d1:
-            r11 = r14.do_cr;
-            if (r11 == 0) goto L_0x01dc;
         L_0x01d5:
+            r11 = r14.do_cr;
+            if (r11 == 0) goto L_0x01e0;
+        L_0x01d9:
             r4 = r3 + 1;
             r11 = 13;
             r5[r3] = r11;
             r3 = r4;
-        L_0x01dc:
+        L_0x01e0:
             r4 = r3 + 1;
             r11 = 10;
             r5[r3] = r11;
             goto L_0x0154;
-        L_0x01e4:
+        L_0x01e8:
             r6 = r7 + 1;
             r11 = r15[r7];
-            goto L_0x018c;
-        L_0x01e9:
+            goto L_0x0190;
+        L_0x01ed:
             r7 = r6 + 1;
             r11 = r15[r6];
             r6 = r7;
-            goto L_0x019b;
-        L_0x01ef:
-            r11 = r14.do_newline;
-            if (r11 == 0) goto L_0x0209;
+            goto L_0x019f;
         L_0x01f3:
-            if (r4 <= 0) goto L_0x0209;
-        L_0x01f5:
-            r11 = 19;
-            if (r2 == r11) goto L_0x0209;
+            r11 = r14.do_newline;
+            if (r11 == 0) goto L_0x020d;
+        L_0x01f7:
+            if (r4 <= 0) goto L_0x020d;
         L_0x01f9:
-            r11 = r14.do_cr;
-            if (r11 == 0) goto L_0x0243;
+            r11 = 19;
+            if (r2 == r11) goto L_0x020d;
         L_0x01fd:
+            r11 = r14.do_cr;
+            if (r11 == 0) goto L_0x0247;
+        L_0x0201:
             r3 = r4 + 1;
             r11 = 13;
             r5[r4] = r11;
-        L_0x0203:
+        L_0x0207:
             r4 = r3 + 1;
             r11 = 10;
             r5[r3] = r11;
-        L_0x0209:
+        L_0x020d:
             r6 = r7;
             r3 = r4;
             goto L_0x0155;
-        L_0x020d:
-            r11 = r17 + -1;
-            if (r7 != r11) goto L_0x0221;
         L_0x0211:
+            r11 = r17 + -1;
+            if (r7 != r11) goto L_0x0225;
+        L_0x0215:
             r11 = r14.tail;
             r12 = r14.tailLen;
             r13 = r12 + 1;
@@ -666,11 +666,11 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r11[r12] = r13;
             r6 = r7;
             r3 = r4;
-            goto L_0x016b;
-        L_0x0221:
-            r11 = r17 + -2;
-            if (r7 != r11) goto L_0x023f;
+            goto L_0x016f;
         L_0x0225:
+            r11 = r17 + -2;
+            if (r7 != r11) goto L_0x0243;
+        L_0x0229:
             r11 = r14.tail;
             r12 = r14.tailLen;
             r13 = r12 + 1;
@@ -684,14 +684,14 @@ Error: jadx.core.utils.exceptions.JadxOverflowException: Regions stack size limi
             r13 = r7 + 1;
             r13 = r15[r13];
             r11[r12] = r13;
-        L_0x023f:
+        L_0x0243:
             r6 = r7;
             r3 = r4;
-            goto L_0x016b;
-        L_0x0243:
+            goto L_0x016f;
+        L_0x0247:
             r3 = r4;
-            goto L_0x0203;
-        L_0x0245:
+            goto L_0x0207;
+        L_0x0249:
             r7 = r6;
             r4 = r3;
             goto L_0x0052;

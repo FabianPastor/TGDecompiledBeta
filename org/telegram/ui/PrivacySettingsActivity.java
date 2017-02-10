@@ -334,6 +334,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 boolean z = true;
+                if (!view.isEnabled()) {
+                    return;
+                }
                 if (position == PrivacySettingsActivity.this.blockedRow) {
                     PrivacySettingsActivity.this.presentFragment(new BlockedUsersActivity());
                 } else if (position == PrivacySettingsActivity.this.sessionsRow) {
@@ -369,7 +372,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Throwable e) {
-                                                    FileLog.e("tmessages", e);
+                                                    FileLog.e(e);
                                                 }
                                                 if (response instanceof TL_boolTrue) {
                                                     ContactsController.getInstance().setDeleteAccountTTL(req.ttl.days);

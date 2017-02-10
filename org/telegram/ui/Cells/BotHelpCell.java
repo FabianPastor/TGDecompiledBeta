@@ -77,7 +77,7 @@ public class BotHelpCell extends View {
                     stringBuilder.append("\n");
                 }
             }
-            MessageObject.addLinks(stringBuilder);
+            MessageObject.addLinks(false, stringBuilder);
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, help.length(), 33);
             Emoji.replaceEmoji(stringBuilder, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             try {
@@ -91,7 +91,7 @@ public class BotHelpCell extends View {
                 if (this.width > maxWidth) {
                     this.width = maxWidth;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e("tmessage", e);
             }
             this.width += AndroidUtilities.dp(22.0f);
@@ -125,7 +125,7 @@ public class BotHelpCell extends View {
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             } else {
                                 resetPressedLink();
@@ -133,7 +133,7 @@ public class BotHelpCell extends View {
                         }
                     } catch (Throwable e2) {
                         resetPressedLink();
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 } else if (this.pressedLink != null) {
                     try {
@@ -148,7 +148,7 @@ public class BotHelpCell extends View {
                             this.pressedLink.onClick(this);
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                     resetPressedLink();
                     result = true;
@@ -174,6 +174,8 @@ public class BotHelpCell extends View {
         Theme.chat_msgInMediaShadowDrawable.draw(canvas);
         Theme.chat_msgInMediaDrawable.setBounds(x, y, this.width + x, this.height + y);
         Theme.chat_msgInMediaDrawable.draw(canvas);
+        Theme.chat_msgTextPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
+        Theme.chat_msgTextPaint.linkColor = Theme.getColor(Theme.key_chat_messageLinkIn);
         canvas.save();
         int dp = AndroidUtilities.dp(11.0f) + x;
         this.textX = dp;

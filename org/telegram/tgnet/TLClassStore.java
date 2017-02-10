@@ -65,7 +65,7 @@ public class TLClassStore {
             response.readParams(stream, exception);
             return response;
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }

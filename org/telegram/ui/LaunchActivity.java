@@ -171,14 +171,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             try {
                 getWindow().setFlags(8192, 8192);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         super.onCreate(savedInstanceState);
         if (VERSION.SDK_INT >= 24) {
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
         }
-        Theme.loadResources(this);
+        Theme.createChatResources(this, false);
         if (UserConfig.passcodeHash.length() != 0 && UserConfig.appLocked) {
             UserConfig.lastPauseTime = ConnectionsManager.getInstance().getCurrentTime();
         }
@@ -368,7 +368,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         intent.putExtra("android.intent.extra.TEXT", ContactsController.getInstance().getInviteText());
                         LaunchActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteFriends", R.string.InviteFriends)), 500);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     LaunchActivity.this.drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 8) {
@@ -743,7 +743,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         } else {
@@ -787,7 +787,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         }
                         if (height > AndroidUtilities.dp(100.0f) && height < AndroidUtilities.displaySize.y && AndroidUtilities.dp(100.0f) + height > AndroidUtilities.displaySize.y) {
                             AndroidUtilities.displaySize.y = height;
-                            FileLog.e("tmessages", "fix display size y to " + AndroidUtilities.displaySize.y);
+                            FileLog.e("fix display size y to " + AndroidUtilities.displaySize.y);
                         }
                     }
                 };
@@ -795,7 +795,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 viewTreeObserver.addOnGlobalLayoutListener(anonymousClass5);
             }
         } catch (Throwable e22) {
-            FileLog.e("tmessages", e22);
+            FileLog.e(e22);
         }
     }
 
@@ -949,7 +949,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 while (true) {
                                     String line = bufferedReader.readLine();
                                     if (line != null) {
-                                        FileLog.e("tmessages", line);
+                                        FileLog.e(line);
                                         args = line.split(":");
                                         if (args.length == 2) {
                                             if (args[0].equals("BEGIN") && args[1].equals("VCARD")) {
@@ -987,7 +987,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                                             try {
                                                                 currentData.name += line;
                                                             } catch (Throwable e) {
-                                                                FileLog.e("tmessages", e);
+                                                                FileLog.e(e);
                                                                 error = true;
                                                             }
                                                         }
@@ -1015,7 +1015,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         try {
                                             break;
                                         } catch (Throwable e2) {
-                                            FileLog.e("tmessages", e2);
+                                            FileLog.e(e2);
                                         }
                                     }
                                 }
@@ -1173,7 +1173,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             error = true;
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                         error = true;
                     }
                     if (error) {
@@ -1361,7 +1361,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     cursor.close();
                                 }
                             } catch (Throwable e222) {
-                                FileLog.e("tmessages", e222);
+                                FileLog.e(e222);
                             }
                         } else {
                             runLinkRequest(username, group, sticker, botUser, botChat, message, hasUrl, messageId, game, 0);
@@ -1580,7 +1580,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                 try {
                                     progressDialog.dismiss();
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                                 final TL_contacts_resolvedPeer res = response;
                                 if (error != null || LaunchActivity.this.actionBarLayout == null || (str != null && (str == null || res.users.isEmpty()))) {
@@ -1588,7 +1588,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                         Toast.makeText(LaunchActivity.this, LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound), 0).show();
                                         return;
                                     } catch (Throwable e2) {
-                                        FileLog.e("tmessages", e2);
+                                        FileLog.e(e2);
                                         return;
                                     }
                                 }
@@ -1652,7 +1652,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                             Toast.makeText(LaunchActivity.this, LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups), 0).show();
                                             return;
                                         } catch (Throwable e22) {
-                                            FileLog.e("tmessages", e22);
+                                            FileLog.e(e22);
                                             return;
                                         }
                                     }
@@ -1730,7 +1730,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     try {
                                         progressDialog.dismiss();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                     Builder builder;
                                     if (error != null || LaunchActivity.this.actionBarLayout == null) {
@@ -1804,7 +1804,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                                     try {
                                         progressDialog.dismiss();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                     if (error != null) {
                                         Builder builder = new Builder(LaunchActivity.this);
@@ -1889,7 +1889,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     try {
                         dialog.dismiss();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1905,7 +1905,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         try {
             this.visibleDialog = builder.show();
@@ -1917,7 +1917,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             });
             return this.visibleDialog;
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             return alertDialog;
         }
     }
@@ -2097,7 +2097,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                             LaunchActivity.this.startActivity(intent);
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });
@@ -2169,7 +2169,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.visibleDialog = null;
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         try {
             if (this.onGlobalLayoutListener != null) {
@@ -2181,7 +2181,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         super.onDestroy();
         onFinish();
@@ -2266,7 +2266,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         } else if (id == NotificationCenter.didUpdatedConnectionState) {
             int state = ConnectionsManager.getInstance().getConnectionState();
             if (this.currentConnectionState != state) {
-                FileLog.d("tmessages", "switch to state " + state);
+                FileLog.d("switch to state " + state);
                 this.currentConnectionState = state;
                 updateCurrentConnectionState();
             }
@@ -2335,14 +2335,14 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                     getWindow().clearFlags(8192);
                     return;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return;
                 }
             }
             try {
                 getWindow().setFlags(8192, 8192);
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
     }
@@ -2358,10 +2358,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 public void run() {
                     if (LaunchActivity.this.lockRunnable == this) {
                         if (AndroidUtilities.needShowPasscode(true)) {
-                            FileLog.e("tmessages", "lock app");
+                            FileLog.e("lock app");
                             LaunchActivity.this.showPasscodeActivity();
                         } else {
-                            FileLog.e("tmessages", "didn't pass lock check");
+                            FileLog.e("didn't pass lock check");
                         }
                         LaunchActivity.this.lockRunnable = null;
                     }
@@ -2444,7 +2444,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 lastFragment.saveSelfArgs(outState);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -2489,7 +2489,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 this.layersActionBarLayout.extendActionMode(menu);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (VERSION.SDK_INT < 23 || mode.getType() != 1) {
             this.actionBarLayout.onActionModeStarted(mode);

@@ -92,6 +92,8 @@ public class CombinedDrawable extends Drawable {
     }
 
     public void setAlpha(int alpha) {
+        this.icon.setAlpha(alpha);
+        this.background.setAlpha(alpha);
     }
 
     public int getIntrinsicWidth() {
@@ -111,6 +113,6 @@ public class CombinedDrawable extends Drawable {
     }
 
     public int getOpacity() {
-        return 0;
+        return this.icon.getOpacity();
     }
 }

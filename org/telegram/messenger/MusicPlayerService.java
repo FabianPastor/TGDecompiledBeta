@@ -81,7 +81,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                         }
                         this.remoteControlClient.setTransportControlFlags(PsExtractor.PRIVATE_STREAM_1);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 createNotification(messageObject);
@@ -180,7 +180,7 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
                 try {
                     metadataEditor.putBitmap(100, audioInfo.getCover());
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             metadataEditor.apply();

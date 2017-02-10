@@ -114,7 +114,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         boolean playerCheck = VideoEditorActivity.this.videoPlayer != null && VideoEditorActivity.this.videoPlayer.isPlaying();
                     } catch (Throwable e) {
                         playerCheck = false;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 if (playerCheck) {
@@ -139,10 +139,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                                         try {
                                             VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     } catch (Throwable e2) {
-                                        FileLog.e("tmessages", e2);
+                                        FileLog.e(e2);
                                     }
                                 }
                             }
@@ -151,7 +151,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     try {
                         Thread.sleep(50);
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 } else {
                     synchronized (VideoEditorActivity.this.sync) {
@@ -217,7 +217,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.created = true;
             return super.onFragmentCreate();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return false;
         }
     }
@@ -226,7 +226,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         try {
             getParentActivity().getWindow().clearFlags(128);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (this.videoTimelineView != null) {
             this.videoTimelineView.destroy();
@@ -237,7 +237,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 this.videoPlayer.release();
                 this.videoPlayer = null;
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
         if (this.captionEditText != null) {
@@ -431,7 +431,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             VideoEditorActivity.this.videoPlayer.release();
                             VideoEditorActivity.this.videoPlayer = null;
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -507,7 +507,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
             } catch (Throwable e) {
                 this.compressItem.setVisibility(8);
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
         this.muteItem = new ImageView(context);
@@ -532,13 +532,13 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             try {
                                 VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         VideoEditorActivity.this.videoPlayer.setOnSeekCompleteListener(null);
                         VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                     VideoEditorActivity.this.needSeek = true;
                     VideoEditorActivity.this.videoSeekBarView.setProgress(VideoEditorActivity.this.videoTimelineView.getLeftProgress());
@@ -555,13 +555,13 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             try {
                                 VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         VideoEditorActivity.this.videoPlayer.setOnSeekCompleteListener(null);
                         VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                     VideoEditorActivity.this.needSeek = true;
                     VideoEditorActivity.this.videoSeekBarView.setProgress(VideoEditorActivity.this.videoTimelineView.getLeftProgress());
@@ -585,7 +585,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoDuration * progress));
                         VideoEditorActivity.this.lastProgress = progress;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -601,7 +601,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             VideoEditorActivity.this.videoPlayer.seekTo((int) (VideoEditorActivity.this.videoTimelineView.getLeftProgress() * VideoEditorActivity.this.videoDuration));
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -633,7 +633,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
                             return;
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                             return;
                         }
                     }
@@ -661,7 +661,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                                 try {
                                     VideoEditorActivity.this.getParentActivity().getWindow().clearFlags(128);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         });
@@ -669,7 +669,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         try {
                             VideoEditorActivity.this.getParentActivity().getWindow().addFlags(128);
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                         synchronized (VideoEditorActivity.this.sync) {
                             if (VideoEditorActivity.this.thread == null) {
@@ -678,7 +678,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 }
             }
@@ -881,7 +881,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     this.videoPlayer.seekTo((int) (this.videoSeekBarView.getProgress() * this.videoDuration));
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -958,7 +958,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 this.videoPlayer.seekTo((int) (this.videoTimelineView.getLeftProgress() * this.videoDuration));
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1037,7 +1037,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
                     trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / this.videoDuration));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
                 if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
@@ -1091,7 +1091,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             updateVideoInfo();
             return true;
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             return false;
         }
     }

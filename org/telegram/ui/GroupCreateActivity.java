@@ -354,6 +354,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
+            User user;
             switch (holder.getItemViewType()) {
                 case 0:
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
@@ -363,7 +364,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     }
                     return;
                 default:
-                    User user;
                     GroupCreateUserCell cell2 = holder.itemView;
                     CharSequence username = null;
                     CharSequence name = null;
@@ -432,7 +432,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -448,7 +448,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         GroupCreateAdapter.this.searchTimer.cancel();
                         GroupCreateAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {

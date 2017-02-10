@@ -190,7 +190,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     this.searchTimer.cancel();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             if (query == null) {
                 this.searchResult.clear();
@@ -205,7 +205,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                         SearchAdapter.this.searchTimer.cancel();
                         SearchAdapter.this.searchTimer = null;
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                     SearchAdapter.this.processSearch(query);
                 }
@@ -603,7 +603,7 @@ public class SetAdminsActivity extends BaseFragment implements NotificationCente
                     }
                 });
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }

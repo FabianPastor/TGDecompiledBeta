@@ -382,7 +382,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -464,7 +464,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
 
@@ -611,7 +611,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         req.current_number = z;
                     } catch (Throwable e) {
                         req.allow_flashcall = false;
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
                 final Bundle params = new Bundle();
@@ -668,7 +668,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }
@@ -775,7 +775,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             try {
                 this.progressDialog.dismiss();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.progressDialog = null;
         }

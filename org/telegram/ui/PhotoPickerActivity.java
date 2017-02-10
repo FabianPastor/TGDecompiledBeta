@@ -1083,7 +1083,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         } else if (e2 instanceof FileNotFoundException) {
                             canRetry = false;
                         }
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                     if (canRetry) {
                         if (httpConnection != null) {
@@ -1096,7 +1096,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                     }
                                 }
                             } catch (Throwable e22) {
-                                FileLog.e("tmessages", e22);
+                                FileLog.e(e22);
                             }
                         }
                         if (httpConnectionStream != null) {
@@ -1137,12 +1137,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                 result = result2;
                             } catch (Throwable th2) {
                                 e22 = th2;
-                                FileLog.e("tmessages", e22);
+                                FileLog.e(e22);
                                 if (httpConnectionStream != null) {
                                     try {
                                         httpConnectionStream.close();
                                     } catch (Throwable e222) {
-                                        FileLog.e("tmessages", e222);
+                                        FileLog.e(e222);
                                     }
                                 }
                                 if (done) {
@@ -1159,7 +1159,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         return result.toString();
                     }
                     return null;
-                    FileLog.e("tmessages", e222);
+                    FileLog.e(e222);
                     if (httpConnectionStream != null) {
                         httpConnectionStream.close();
                     }
@@ -1177,7 +1177,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     try {
                         return new JSONObject(code);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                         return null;
                     }
                 }
@@ -1205,7 +1205,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                         added = true;
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                             PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
@@ -1214,7 +1214,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             }
                             photoPickerActivity.bingSearchEndReached = z;
                         } catch (Throwable e2) {
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                         PhotoPickerActivity.this.searching = false;
                         PhotoPickerActivity.this.updateSearchInterface();
@@ -1227,7 +1227,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             };
             this.currentBingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             this.bingSearchEndReached = true;
             this.searching = false;
             updateSearchInterface();

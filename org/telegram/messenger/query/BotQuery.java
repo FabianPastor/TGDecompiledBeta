@@ -71,7 +71,7 @@ public class BotQuery {
                         });
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -101,7 +101,7 @@ public class BotQuery {
                             });
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -142,7 +142,7 @@ public class BotQuery {
                     });
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -163,7 +163,7 @@ public class BotQuery {
                         data.reuse();
                         state.dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });

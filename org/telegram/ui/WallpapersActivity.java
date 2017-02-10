@@ -158,14 +158,14 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                             done = AndroidUtilities.copyFile(new File(FileLoader.getInstance().getDirectory(4), size.location.volume_id + "_" + size.location.local_id + ".jpg"), new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg"));
                         } catch (Throwable e) {
                             done = false;
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     } else if (WallpapersActivity.this.selectedBackground == -1) {
                         try {
                             done = AndroidUtilities.copyFile(WallpapersActivity.this.updater.getCurrentWallpaperPath(), new File(ApplicationLoader.getFilesDirFixed(), "wallpaper.jpg"));
                         } catch (Throwable e2) {
                             done = false;
-                            FileLog.e("tmessages", e2);
+                            FileLog.e(e2);
                         }
                     } else {
                         done = true;
@@ -223,7 +223,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 if (position == 0) {
-                    WallpapersActivity.this.updater.showAlert();
+                    WallpapersActivity.this.updater.showAlert(false);
                 } else if (position - 1 >= 0 && position - 1 < WallpapersActivity.this.wallPapers.size()) {
                     WallpapersActivity.this.selectedBackground = ((WallPaper) WallpapersActivity.this.wallPapers.get(position - 1)).id;
                     WallpapersActivity.this.listAdapter.notifyDataSetChanged();
@@ -311,7 +311,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 try {
                     this.backgroundImage.setImageURI(Uri.fromFile(f));
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 this.backgroundImage.setBackgroundColor(0);
                 this.selectedColor = 0;

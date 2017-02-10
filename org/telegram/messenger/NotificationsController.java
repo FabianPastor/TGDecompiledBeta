@@ -167,22 +167,22 @@ public class NotificationsController {
         try {
             this.audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         try {
             this.alarmManager = (AlarmManager) ApplicationLoader.applicationContext.getSystemService("alarm");
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
         try {
             this.notificationDelayWakelock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(1, JoinPoint.SYNCHRONIZATION_LOCK);
             this.notificationDelayWakelock.setReferenceCounted(false);
         } catch (Throwable e22) {
-            FileLog.e("tmessages", e22);
+            FileLog.e(e22);
         }
         this.notificationDelayRunnable = new Runnable() {
             public void run() {
-                FileLog.e("tmessages", "delay reached");
+                FileLog.e("delay reached");
                 if (!NotificationsController.this.delayedPushMessages.isEmpty()) {
                     NotificationsController.this.showOrUpdateNotification(true);
                     NotificationsController.this.delayedPushMessages.clear();
@@ -192,7 +192,7 @@ public class NotificationsController {
                         NotificationsController.this.notificationDelayWakelock.release();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         };
@@ -218,7 +218,7 @@ public class NotificationsController {
                         NotificationsController.this.notificationDelayWakelock.release();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 NotificationsController.this.setBadge(0);
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
@@ -243,7 +243,7 @@ public class NotificationsController {
     public void setLastOnlineFromOtherDevice(final int time) {
         this.notificationsQueue.postRunnable(new Runnable() {
             public void run() {
-                FileLog.e("tmessages", "set last online from other device = " + time);
+                FileLog.e("set last online from other device = " + time);
                 NotificationsController.this.lastOnlineFromOtherDevice = time;
             }
         });
@@ -1186,7 +1186,7 @@ public class NotificationsController {
                 this.alarmManager.set(2, SystemClock.elapsedRealtime() + ((long) ((minutes * 60) * 1000)), pintent);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1201,7 +1201,7 @@ public class NotificationsController {
                 }
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return null;
     }
@@ -1233,7 +1233,7 @@ public class NotificationsController {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1244,7 +1244,7 @@ public class NotificationsController {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             try {
                 if (getNotifyOverride(ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0), this.opened_dialog_id) != 2) {
@@ -1260,7 +1260,7 @@ public class NotificationsController {
                                                     try {
                                                         soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
                                                     } catch (Throwable e) {
-                                                        FileLog.e("tmessages", e);
+                                                        FileLog.e(e);
                                                     }
                                                 }
                                             }
@@ -1274,30 +1274,30 @@ public class NotificationsController {
                                         try {
                                             NotificationsController.this.soundPool.play(NotificationsController.this.soundIn, 1.0f, 1.0f, 1, 0, 1.0f);
                                         } catch (Throwable e) {
-                                            FileLog.e("tmessages", e);
+                                            FileLog.e(e);
                                         }
                                     }
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                         }
                     });
                 }
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
     }
 
     private void scheduleNotificationDelay(boolean onlineReason) {
         try {
-            FileLog.e("tmessages", "delay notification start, onlineReason = " + onlineReason);
+            FileLog.e("delay notification start, onlineReason = " + onlineReason);
             this.notificationDelayWakelock.acquire(10000);
             AndroidUtilities.cancelRunOnUIThread(this.notificationDelayRunnable);
             AndroidUtilities.runOnUIThread(this.notificationDelayRunnable, (long) (onlineReason ? 3000 : 1000));
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             showOrUpdateNotification(this.notifyCheck);
         }
     }
@@ -1459,7 +1459,7 @@ public class NotificationsController {
                             needVibrate = 2;
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             }
@@ -1632,7 +1632,7 @@ public class NotificationsController {
             this.notificationManager.notify(1, mBuilder.build());
             scheduleNotificationRepeat();
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
         }
     }
 
@@ -1921,7 +1921,7 @@ public class NotificationsController {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             this.notificationsQueue.postRunnable(new Runnable() {
                 public void run() {
@@ -1936,7 +1936,7 @@ public class NotificationsController {
                                             try {
                                                 soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
                                             } catch (Throwable e) {
-                                                FileLog.e("tmessages", e);
+                                                FileLog.e(e);
                                             }
                                         }
                                     }
@@ -1950,12 +1950,12 @@ public class NotificationsController {
                                 try {
                                     NotificationsController.this.soundPool.play(NotificationsController.this.soundOut, 1.0f, 1.0f, 1, 0, 1.0f);
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
             });

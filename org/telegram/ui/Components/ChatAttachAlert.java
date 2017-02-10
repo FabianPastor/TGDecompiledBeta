@@ -792,7 +792,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         CharSequence[] items = new CharSequence[]{LocaleController.getString("ChatCamera", R.string.ChatCamera), LocaleController.getString("ChatGallery", R.string.ChatGallery), LocaleController.getString("ChatVideo", R.string.ChatVideo), LocaleController.getString("AttachMusic", R.string.AttachMusic), LocaleController.getString("ChatDocument", R.string.ChatDocument), LocaleController.getString("AttachContact", R.string.AttachContact), LocaleController.getString("ChatLocation", R.string.ChatLocation), ""};
         for (a = 0; a < 8; a++) {
             AttachButton attachButton = new AttachButton(context);
-            attachButton.setTextAndIcon(items[a], Theme.attachButtonDrawables[a]);
+            attachButton.setTextAndIcon(items[a], Theme.chat_attachButtonDrawables[a]);
             this.attachView.addView(attachButton, LayoutHelper.createFrame(85, 90, 51));
             attachButton.setTag(Integer.valueOf(a));
             this.views[a] = attachButton;
@@ -986,7 +986,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                                 break;
                                         }
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                     ChatAttachAlert.this.cameraPhoto.add(new PhotoEntry(0, 0, 0, ChatAttachAlert.this.cameraFile.getAbsolutePath(), orientation, false));
                                     PhotoViewer.getInstance().openPhotoForSelect(ChatAttachAlert.this.cameraPhoto, 0, 2, new EmptyPhotoViewerProvider() {
@@ -2089,7 +2089,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             try {
                 animators.add(ViewAnimationUtils.createCircularReveal(this.containerView, finalRevealX, this.revealY, open ? 0.0f : (float) finalRevealRadius, open ? (float) finalRevealRadius : 0.0f));
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
             animatorSet.setDuration(320);
         } else if (open) {
@@ -2121,7 +2121,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         try {
                             ChatAttachAlert.this.dismissInternal();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 }

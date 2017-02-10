@@ -78,7 +78,7 @@ public class DocumentSelectActivity extends BaseFragment {
                             DocumentSelectActivity.this.listFiles(DocumentSelectActivity.this.currentDir);
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             };
@@ -217,7 +217,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 ApplicationLoader.applicationContext.unregisterReceiver(this.receiver);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         super.onFragmentDestroy();
     }
@@ -447,7 +447,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -590,8 +590,6 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     @SuppressLint({"NewApi"})
     private void listRoots() {
         Throwable e;
@@ -628,7 +626,7 @@ public class DocumentSelectActivity extends BaseFragment {
                     if (line == null) {
                         break;
                     } else if (line.contains("vfat") || line.contains("/mnt")) {
-                        FileLog.e("tmessages", line);
+                        FileLog.e(line);
                         StringTokenizer stringTokenizer = new StringTokenizer(line, " ");
                         String unused = stringTokenizer.nextToken();
                         String path = stringTokenizer.nextToken();
@@ -643,23 +641,30 @@ public class DocumentSelectActivity extends BaseFragment {
                                 }
                             }
                             paths.add(path);
-                            ListItem item = new ListItem();
-                            if (path.toLowerCase().contains("sd")) {
-                                item.title = LocaleController.getString("SdCard", R.string.SdCard);
-                            } else {
-                                item.title = LocaleController.getString("ExternalStorage", R.string.ExternalStorage);
+                            try {
+                                ListItem item = new ListItem();
+                                if (path.toLowerCase().contains("sd")) {
+                                    item.title = LocaleController.getString("SdCard", R.string.SdCard);
+                                } else {
+                                    item.title = LocaleController.getString("ExternalStorage", R.string.ExternalStorage);
+                                }
+                                item.icon = R.drawable.ic_external_storage;
+                                item.subtitle = getRootSubtitle(path);
+                                item.file = new File(path);
+                                this.items.add(item);
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                            } catch (Throwable th2) {
+                                th = th2;
+                                bufferedReader = bufferedReader2;
                             }
-                            item.icon = R.drawable.ic_external_storage;
-                            item.subtitle = getRootSubtitle(path);
-                            item.file = new File(path);
-                            this.items.add(item);
                         }
                     }
-                } catch (Exception e2) {
-                    e = e2;
+                } catch (Exception e3) {
+                    e2 = e3;
                     bufferedReader = bufferedReader2;
-                } catch (Throwable th2) {
-                    th = th2;
+                } catch (Throwable th22) {
+                    th = th22;
                     bufferedReader = bufferedReader2;
                 }
             }
@@ -667,20 +672,20 @@ public class DocumentSelectActivity extends BaseFragment {
                 try {
                     bufferedReader2.close();
                     bufferedReader = bufferedReader2;
-                } catch (Throwable e3) {
-                    FileLog.e("tmessages", e3);
+                } catch (Throwable e22) {
+                    FileLog.e(e22);
                     bufferedReader = bufferedReader2;
                 }
             }
         } catch (Exception e4) {
-            e3 = e4;
+            e22 = e4;
             try {
-                FileLog.e("tmessages", e3);
+                FileLog.e(e22);
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e32) {
-                        FileLog.e("tmessages", e32);
+                    } catch (Throwable e222) {
+                        FileLog.e(e222);
                     }
                 }
                 fs = new ListItem();
@@ -700,9 +705,9 @@ public class DocumentSelectActivity extends BaseFragment {
                         this.items.add(fs2);
                         fs = fs2;
                     } catch (Exception e5) {
-                        e32 = e5;
+                        e222 = e5;
                         fs = fs2;
-                        FileLog.e("tmessages", e32);
+                        FileLog.e(e222);
                         fs = new ListItem();
                         fs.title = LocaleController.getString("Gallery", R.string.Gallery);
                         fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
@@ -728,8 +733,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (bufferedReader != null) {
                     try {
                         bufferedReader.close();
-                    } catch (Throwable e322) {
-                        FileLog.e("tmessages", e322);
+                    } catch (Throwable e2222) {
+                        FileLog.e(e2222);
                     }
                 }
                 throw th;
@@ -753,8 +758,8 @@ public class DocumentSelectActivity extends BaseFragment {
                 fs = fs2;
             }
         } catch (Exception e6) {
-            e322 = e6;
-            FileLog.e("tmessages", e322);
+            e2222 = e6;
+            FileLog.e(e2222);
             fs = new ListItem();
             fs.title = LocaleController.getString("Gallery", R.string.Gallery);
             fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
@@ -785,7 +790,7 @@ public class DocumentSelectActivity extends BaseFragment {
             }
             return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return path;
         }
     }

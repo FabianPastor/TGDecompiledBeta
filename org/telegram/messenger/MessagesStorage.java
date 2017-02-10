@@ -174,7 +174,7 @@ public class MessagesStorage {
             this.database.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
             this.database.executeFast("PRAGMA temp_store = 1").stepThis().dispose();
             if (createTable) {
-                FileLog.e("tmessages", "create new database");
+                FileLog.e("create new database");
                 this.database.executeFast("CREATE TABLE messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE media_holes_v2(uid INTEGER, type INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, type, start));").stepThis().dispose();
@@ -241,7 +241,7 @@ public class MessagesStorage {
                 this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
-                FileLog.e("tmessages", "current db version = " + version);
+                FileLog.e("current db version = " + version);
                 if (version == 0) {
                     throw new Exception("malformed");
                 }
@@ -265,12 +265,12 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     try {
                         this.database.executeFast("CREATE TABLE IF NOT EXISTS params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
                         this.database.executeFast("INSERT INTO params VALUES(1, 0, 0, 0, 0, 0, 0, NULL)").stepThis().dispose();
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                 }
                 if (version < 39) {
@@ -278,7 +278,7 @@ public class MessagesStorage {
                 }
             }
         } catch (Throwable e3) {
-            FileLog.e("tmessages", e3);
+            FileLog.e(e3);
             if (first && e3.getMessage().contains("malformed")) {
                 cleanupInternal();
                 openDatabase(false);
@@ -344,7 +344,7 @@ public class MessagesStorage {
                                     state.dispose();
                                     MessagesStorage.this.database.commitTransaction();
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                         });
@@ -582,7 +582,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -647,7 +647,7 @@ public class MessagesStorage {
                     state.dispose();
                     data.reuse();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -667,7 +667,7 @@ public class MessagesStorage {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 } finally {
                     data.reuse();
                 }
@@ -682,7 +682,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast("DELETE FROM pending_tasks WHERE id = " + id).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -776,7 +776,7 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -792,7 +792,7 @@ public class MessagesStorage {
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -820,7 +820,7 @@ public class MessagesStorage {
                         MessagesStorage.this.lastSavedQts = i4;
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -834,7 +834,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "REPLACE INTO dialog_settings VALUES(%d, %d)", new Object[]{Long.valueOf(j), Long.valueOf(j2)})).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -936,7 +936,7 @@ public class MessagesStorage {
                                         }
                                     }
                                 } catch (Throwable e) {
-                                    FileLog.e("tmessages", e);
+                                    FileLog.e(e);
                                 }
                             }
                         }
@@ -999,7 +999,7 @@ public class MessagesStorage {
                         }
                     });
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         });
@@ -1028,7 +1028,7 @@ public class MessagesStorage {
                     state.dispose();
                     MessagesStorage.this.database.commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1067,7 +1067,7 @@ public class MessagesStorage {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1099,7 +1099,7 @@ public class MessagesStorage {
                             state.step();
                             state.dispose();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                 });
@@ -1113,7 +1113,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + type).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1162,7 +1162,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.commitTransaction();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1189,7 +1189,7 @@ public class MessagesStorage {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1217,7 +1217,7 @@ public class MessagesStorage {
                     }
                     MessagesController.getInstance().processLoadedBlockedUsers(ids, users, true);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1229,7 +1229,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast("DELETE FROM blocked_users WHERE uid = " + id).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1255,7 +1255,7 @@ public class MessagesStorage {
                         state.dispose();
                         MessagesStorage.this.database.commitTransaction();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1299,7 +1299,7 @@ public class MessagesStorage {
                                             }
                                         }
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             }
@@ -1322,7 +1322,7 @@ public class MessagesStorage {
                         });
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         });
@@ -1378,7 +1378,7 @@ public class MessagesStorage {
                                     }
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         cursor.dispose();
@@ -1416,7 +1416,7 @@ public class MessagesStorage {
                                         }
                                     }
                                 } catch (Throwable e2) {
-                                    FileLog.e("tmessages", e2);
+                                    FileLog.e(e2);
                                 }
                             }
                             cursor2.dispose();
@@ -1452,7 +1452,7 @@ public class MessagesStorage {
                         }
                     });
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 }
             }
         });
@@ -1489,7 +1489,7 @@ public class MessagesStorage {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1501,7 +1501,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1513,7 +1513,7 @@ public class MessagesStorage {
                 try {
                     MessagesStorage.this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid + " AND id = " + pid).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1541,7 +1541,7 @@ public class MessagesStorage {
                         }
                         state.dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1570,7 +1570,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     MessagesController.getInstance().processLoadedDeleteTask(date, arr);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1652,7 +1652,7 @@ public class MessagesStorage {
                         MessagesController.getInstance().didAddedNewTask(minDate, messages);
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1731,7 +1731,7 @@ public class MessagesStorage {
                 MessagesController.getInstance().processDialogsUpdateRead(dialogsToUpdate);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -1786,7 +1786,7 @@ public class MessagesStorage {
                             data.reuse();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1819,7 +1819,7 @@ public class MessagesStorage {
                     MessagesStorage.this.database.commitTransaction();
                     MessagesStorage.this.loadChatInfo(channel_id, null, false, true);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1846,7 +1846,7 @@ public class MessagesStorage {
                         state.dispose();
                         data.reuse();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1875,12 +1875,12 @@ public class MessagesStorage {
                                     data.reuse();
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         cursor.dispose();
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     } finally {
                         requestDelegate.run(result, null);
                     }
@@ -1944,7 +1944,7 @@ public class MessagesStorage {
                         cursor.dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -1987,7 +1987,7 @@ public class MessagesStorage {
                         data.reuse();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2077,7 +2077,7 @@ public class MessagesStorage {
                         data.reuse();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2110,77 +2110,76 @@ Error: java.util.NoSuchElementException
                 /*
                 r9 = this;
                 r5 = 0;
-                r6 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r6 = r6.database;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7.<init>();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r8 = "SELECT info FROM chat_settings_v2 WHERE uid = ";	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = r7.append(r8);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r8 = r7;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = r7.append(r8);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = r7.toString();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r8 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r8 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r0 = r6.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r3 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r4.<init>();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r6 = r0.next();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                if (r6 == 0) goto L_0x0043;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x002f:
-                r6 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r1 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                if (r1 == 0) goto L_0x0043;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x0036:
-                r6 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r6 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r3 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r1, r6, r7);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r1.reuse();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x0043:
-                r0.dispose();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r6 = r1;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r7 = 0;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r8 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                if (r8 == 0) goto L_0x0052;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x004d:
-                r8 = r3.migrated_from_chat_id;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                if (r8 == 0) goto L_0x0052;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x0051:
-                r5 = 1;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
+                r6 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r6 = r6.database;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7.<init>();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r8 = "SELECT info FROM chat_settings_v2 WHERE uid = ";	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = r7.append(r8);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r8 = r7;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = r7.append(r8);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = r7.toString();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r8 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r8 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r0 = r6.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r3 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r4.<init>();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r6 = r0.next();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                if (r6 == 0) goto L_0x0044;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x0030:
+                r6 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r1 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                if (r1 == 0) goto L_0x0044;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x0037:
+                r6 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r6 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r3 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r1, r6, r7);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r1.reuse();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x0044:
+                r0.dispose();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r6 = r1;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r7 = 0;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r8 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                if (r8 == 0) goto L_0x0053;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x004e:
+                r8 = r3.migrated_from_chat_id;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                if (r8 == 0) goto L_0x0053;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
             L_0x0052:
-                r6[r7] = r5;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r5 = r2;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                if (r5 == 0) goto L_0x005d;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x0058:
-                r5 = r2;	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                r5.release();	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-            L_0x005d:
+                r5 = 1;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x0053:
+                r6[r7] = r5;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r5 = r2;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                if (r5 == 0) goto L_0x005e;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x0059:
+                r5 = r2;	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+                r5.release();	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
+            L_0x005e:
                 r5 = r2;
-                if (r5 == 0) goto L_0x0066;
-            L_0x0061:
+                if (r5 == 0) goto L_0x0067;
+            L_0x0062:
                 r5 = r2;
                 r5.release();
-            L_0x0066:
-                return;
             L_0x0067:
+                return;
+            L_0x0068:
                 r2 = move-exception;
-                r5 = "tmessages";	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
-                org.telegram.messenger.FileLog.e(r5, r2);	 Catch:{ Exception -> 0x0067, all -> 0x0077 }
+                org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x0068, all -> 0x0076 }
                 r5 = r2;
-                if (r5 == 0) goto L_0x0066;
-            L_0x0071:
+                if (r5 == 0) goto L_0x0067;
+            L_0x0070:
                 r5 = r2;
                 r5.release();
-                goto L_0x0066;
-            L_0x0077:
+                goto L_0x0067;
+            L_0x0076:
                 r5 = move-exception;
                 r6 = r2;
-                if (r6 == 0) goto L_0x0081;
-            L_0x007c:
+                if (r6 == 0) goto L_0x0080;
+            L_0x007b:
                 r6 = r2;
                 r6.release();
-            L_0x0081:
+            L_0x0080:
                 throw r5;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.36.run():void");
@@ -2189,7 +2188,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -2261,7 +2260,7 @@ Error: java.util.NoSuchElementException
                                     info.participants.participants.add(chatChannelParticipant);
                                 }
                             } catch (Throwable e) {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             }
                         }
                         cursor.dispose();
@@ -2288,7 +2287,7 @@ Error: java.util.NoSuchElementException
                         semaphore2.release();
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                     MessagesController.getInstance().processChatInfo(i, info, loadedUsers, true, z, z2, null);
                     if (semaphore2 != null) {
                         semaphore2.release();
@@ -2343,7 +2342,7 @@ Error: java.util.NoSuchElementException
                     state.dispose();
                     MessagesStorage.this.database.commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2370,7 +2369,7 @@ Error: java.util.NoSuchElementException
                         state.dispose();
                         MessagesStorage.this.database.commitTransaction();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -2384,7 +2383,7 @@ Error: java.util.NoSuchElementException
                     try {
                         MessagesStorage.this.database.executeFast("DELETE FROM contacts WHERE uid IN(" + TextUtils.join(",", uids) + ")").stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -2403,7 +2402,7 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v6 SET deleted = 1 WHERE sphone IN(%s)", new Object[]{deletes})).stepThis().dispose();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -2439,7 +2438,7 @@ Error: java.util.NoSuchElementException
                     state2.dispose();
                     MessagesStorage.this.database.commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2484,7 +2483,7 @@ Error: java.util.NoSuchElementException
                     cursor.dispose();
                 } catch (Throwable e) {
                     contactHashMap.clear();
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 ContactsController.getInstance().performSyncPhoneBook(contactHashMap, true, true, false, false);
             }
@@ -2523,7 +2522,7 @@ Error: java.util.NoSuchElementException
                 } catch (Throwable e) {
                     contacts.clear();
                     users.clear();
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
                 ContactsController.getInstance().processLoadedContacts(contacts, users, 1);
             }
@@ -2621,7 +2620,7 @@ Error: java.util.NoSuchElementException
                     }
                     SendMessagesHelper.getInstance().processUnsentMessages(messages, users, chats, encryptedChats);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -2644,7 +2643,7 @@ Error: java.util.NoSuchElementException
                         cursor.dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     if (cursor != null) {
                         cursor.dispose();
                     }
@@ -2659,7 +2658,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -3105,7 +3104,7 @@ Error: java.util.NoSuchElementException
                                         }
                                         cursor2.dispose();
                                     } catch (Throwable e) {
-                                        FileLog.e("tmessages", e);
+                                        FileLog.e(e);
                                     }
                                 }
                             }
@@ -3211,7 +3210,7 @@ Error: java.util.NoSuchElementException
                     res.messages.clear();
                     res.chats.clear();
                     res.users.clear();
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                     MessagesController.getInstance().processLoadedMessages(res, j, count_query, max_id_override, i5, true, i6, min_unread_id, last_message_id, count_unread, max_unread_date, i3, z, isEnd, i7, queryFromServer);
                 } catch (Throwable th) {
                     Throwable th2 = th;
@@ -3228,7 +3227,7 @@ Error: java.util.NoSuchElementException
                     try {
                         MessagesStorage.this.database.beginTransaction();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -3237,7 +3236,7 @@ Error: java.util.NoSuchElementException
         try {
             this.database.beginTransaction();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -3248,7 +3247,7 @@ Error: java.util.NoSuchElementException
                     try {
                         MessagesStorage.this.database.commitTransaction();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -3257,7 +3256,7 @@ Error: java.util.NoSuchElementException
         try {
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -3293,7 +3292,7 @@ Error: java.util.NoSuchElementException
                     }
                     semaphore.release();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 } catch (Throwable th) {
                     semaphore.release();
                 }
@@ -3302,7 +3301,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         if (result.isEmpty()) {
             tLObject = null;
@@ -3338,81 +3337,80 @@ Error: java.util.NoSuchElementException
                     /*
                     r7 = this;
                     r4 = 0;
-                    r5 = r3;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r2 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    if (r2 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
+                    r5 = r3;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r2 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    if (r2 == 0) goto L_0x0079;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
                 L_0x0009:
-                    r3 = 0;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r4;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    if (r5 == 0) goto L_0x0027;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
+                    r3 = 0;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    if (r5 == 0) goto L_0x0028;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
                 L_0x0010:
-                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.<init>();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = "";	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.caption = r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r4;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = (org.telegram.tgnet.TLRPC.Photo) r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.photo = r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                L_0x001f:
+                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.<init>();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = "";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.caption = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = (org.telegram.tgnet.TLRPC.Photo) r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.photo = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                L_0x0020:
                     if (r3 != 0) goto L_0x0049;
-                L_0x0021:
-                    if (r4 == 0) goto L_0x0026;
-                L_0x0023:
+                L_0x0022:
+                    if (r4 == 0) goto L_0x0027;
+                L_0x0024:
                     r4.dispose();
-                L_0x0026:
-                    return;
                 L_0x0027:
-                    r5 = r4;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    if (r5 == 0) goto L_0x001f;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                L_0x002d:
-                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.<init>();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = "";	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.caption = r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r4;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = (org.telegram.tgnet.TLRPC.Document) r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.document = r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    goto L_0x001f;
-                L_0x003d:
+                    return;
+                L_0x0028:
+                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r5 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    if (r5 == 0) goto L_0x0020;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                L_0x002e:
+                    r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.<init>();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = "";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.caption = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r4;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = (org.telegram.tgnet.TLRPC.Document) r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.document = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    goto L_0x0020;
+                L_0x003f:
                     r1 = move-exception;
-                    r5 = "tmessages";	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    org.telegram.messenger.FileLog.e(r5, r1);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    if (r4 == 0) goto L_0x0026;
+                    org.telegram.messenger.FileLog.e(r1);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    if (r4 == 0) goto L_0x0027;
                 L_0x0045:
                     r4.dispose();
-                    goto L_0x0026;
+                    goto L_0x0027;
                 L_0x0049:
-                    r5 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r5.database;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4.requery();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r0.<init>(r5);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r3.serializeToStream(r0);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = 1;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4.bindString(r5, r2);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = 2;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r6 = r5;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4.bindInteger(r5, r6);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r5 = 3;	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r4.step();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                    r0.reuse();	 Catch:{ Exception -> 0x003d, all -> 0x007e }
-                L_0x0078:
-                    if (r4 == 0) goto L_0x0026;
-                L_0x007a:
+                    r5 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r5.database;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4.requery();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r0.<init>(r5);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r3.serializeToStream(r0);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = 1;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4.bindString(r5, r2);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = 2;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r6 = r5;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4.bindInteger(r5, r6);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r5 = 3;	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r4.step();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                    r0.reuse();	 Catch:{ Exception -> 0x003f, all -> 0x007f }
+                L_0x0079:
+                    if (r4 == 0) goto L_0x0027;
+                L_0x007b:
                     r4.dispose();
-                    goto L_0x0026;
-                L_0x007e:
+                    goto L_0x0027;
+                L_0x007f:
                     r5 = move-exception;
-                    if (r4 == 0) goto L_0x0084;
-                L_0x0081:
+                    if (r4 == 0) goto L_0x0085;
+                L_0x0082:
                     r4.dispose();
-                L_0x0084:
+                L_0x0085:
                     throw r5;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.51.run():void");
@@ -3447,54 +3445,53 @@ Error: java.util.NoSuchElementException
                     /*
                     r5 = this;
                     r1 = 0;
-                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = r2.database;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = 1;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3.seq_in;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = 2;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3.seq_out;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = 3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3.key_use_count_in;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3 << 16;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r4 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r4 = r4.key_use_count_out;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3 | r4;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = 4;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3.in_seq_no;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r2 = 5;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r3 = r3.id;	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    r1.step();	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    if (r1 == 0) goto L_0x0044;
-                L_0x0041:
+                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = r2.database;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = 1;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3.seq_in;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = 2;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3.seq_out;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = 3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3.key_use_count_in;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3 << 16;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r4 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r4 = r4.key_use_count_out;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3 | r4;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = 4;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3.in_seq_no;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r2 = 5;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r3 = r3.id;	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    r1.step();	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    if (r1 == 0) goto L_0x0045;
+                L_0x0042:
                     r1.dispose();
-                L_0x0044:
-                    return;
                 L_0x0045:
+                    return;
+                L_0x0046:
                     r0 = move-exception;
-                    r2 = "tmessages";	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    org.telegram.messenger.FileLog.e(r2, r0);	 Catch:{ Exception -> 0x0045, all -> 0x0051 }
-                    if (r1 == 0) goto L_0x0044;
-                L_0x004d:
+                    org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0046, all -> 0x0050 }
+                    if (r1 == 0) goto L_0x0045;
+                L_0x004c:
                     r1.dispose();
-                    goto L_0x0044;
-                L_0x0051:
+                    goto L_0x0045;
+                L_0x0050:
                     r2 = move-exception;
-                    if (r1 == 0) goto L_0x0057;
-                L_0x0054:
+                    if (r1 == 0) goto L_0x0056;
+                L_0x0053:
                     r1.dispose();
-                L_0x0057:
+                L_0x0056:
                     throw r2;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
@@ -3529,38 +3526,37 @@ Error: java.util.NoSuchElementException
                     /*
                     r4 = this;
                     r1 = 0;
-                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = r2.database;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = "UPDATE enc_chats SET ttl = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = 1;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3.ttl;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = 2;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3.id;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.step();	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    if (r1 == 0) goto L_0x0025;
-                L_0x0022:
+                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = r2.database;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = "UPDATE enc_chats SET ttl = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = 1;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3.ttl;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = 2;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3.id;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.step();	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    if (r1 == 0) goto L_0x0026;
+                L_0x0023:
                     r1.dispose();
-                L_0x0025:
-                    return;
                 L_0x0026:
+                    return;
+                L_0x0027:
                     r0 = move-exception;
-                    r2 = "tmessages";	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    org.telegram.messenger.FileLog.e(r2, r0);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    if (r1 == 0) goto L_0x0025;
-                L_0x002e:
+                    org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    if (r1 == 0) goto L_0x0026;
+                L_0x002d:
                     r1.dispose();
-                    goto L_0x0025;
-                L_0x0032:
+                    goto L_0x0026;
+                L_0x0031:
                     r2 = move-exception;
-                    if (r1 == 0) goto L_0x0038;
-                L_0x0035:
+                    if (r1 == 0) goto L_0x0037;
+                L_0x0034:
                     r1.dispose();
-                L_0x0038:
+                L_0x0037:
                     throw r2;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
@@ -3595,38 +3591,37 @@ Error: java.util.NoSuchElementException
                     /*
                     r4 = this;
                     r1 = 0;
-                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = r2.database;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = "UPDATE enc_chats SET layer = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = 1;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3.layer;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r2 = 2;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r3 = r3.id;	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    r1.step();	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    if (r1 == 0) goto L_0x0025;
-                L_0x0022:
+                    r2 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = r2.database;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = "UPDATE enc_chats SET layer = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = 1;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3.layer;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r2 = 2;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r3 = r3.id;	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    r1.step();	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    if (r1 == 0) goto L_0x0026;
+                L_0x0023:
                     r1.dispose();
-                L_0x0025:
-                    return;
                 L_0x0026:
+                    return;
+                L_0x0027:
                     r0 = move-exception;
-                    r2 = "tmessages";	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    org.telegram.messenger.FileLog.e(r2, r0);	 Catch:{ Exception -> 0x0026, all -> 0x0032 }
-                    if (r1 == 0) goto L_0x0025;
-                L_0x002e:
+                    org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0027, all -> 0x0031 }
+                    if (r1 == 0) goto L_0x0026;
+                L_0x002d:
                     r1.dispose();
-                    goto L_0x0025;
-                L_0x0032:
+                    goto L_0x0026;
+                L_0x0031:
                     r2 = move-exception;
-                    if (r1 == 0) goto L_0x0038;
-                L_0x0035:
+                    if (r1 == 0) goto L_0x0037;
+                L_0x0034:
                     r1.dispose();
-                L_0x0038:
+                L_0x0037:
                     throw r2;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
@@ -3662,196 +3657,195 @@ Error: java.util.NoSuchElementException
                     r10 = this;
                     r7 = 1;
                     r6 = 0;
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
                 L_0x0008:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = 16;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = 16;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
                 L_0x0011:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
                 L_0x0017:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8.key_hash = r9;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8.key_hash = r9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
                 L_0x0023:
-                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.database;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r0.<init>(r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x013e;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0042:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0047:
-                    r1.<init>(r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x0141;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0052:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0057:
-                    r2.<init>(r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x0144;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0062:
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0067:
-                    r3.<init>(r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r8 == 0) goto L_0x0077;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0072:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.length;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0077:
-                    r4.<init>(r7);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 1;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r7 == 0) goto L_0x0090;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0089:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0090:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r7 == 0) goto L_0x009d;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x0096:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x009d:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r7 == 0) goto L_0x00aa;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x00a3:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x00aa:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r7 == 0) goto L_0x00b7;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x00b0:
-                    r7 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                L_0x00b7:
-                    r7 = 2;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 4;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.ttl;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 5;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.layer;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 6;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 7;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 8;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8 << 16;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8 | r9;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 9;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 10;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 11;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 12;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 13;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 14;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r7 = 15;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r8 = r8.id;	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r6.step();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r0.reuse();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r1.reuse();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r2.reuse();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r3.reuse();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    r4.reuse();	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r6 == 0) goto L_0x013d;
-                L_0x013a:
+                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.database;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r0.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x013f;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0043:
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0048:
+                    r1.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x0142;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0053:
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0058:
+                    r2.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x0145;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0063:
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0068:
+                    r3.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r8 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0073:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0078:
+                    r4.<init>(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 1;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r7 == 0) goto L_0x0091;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x008a:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0091:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r7 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x0097:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x009e:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r7 == 0) goto L_0x00ab;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x00a4:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x00ab:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r7 == 0) goto L_0x00b8;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x00b1:
+                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                L_0x00b8:
+                    r7 = 2;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 4;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.ttl;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 5;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.layer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 6;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 7;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 8;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8 << 16;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8 | r9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 10;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 11;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 12;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 13;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 14;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = 15;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r8.id;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r6.step();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r0.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r1.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r2.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r3.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r4.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r6 == 0) goto L_0x013e;
+                L_0x013b:
                     r6.dispose();
-                L_0x013d:
-                    return;
                 L_0x013e:
+                    return;
+                L_0x013f:
                     r8 = r7;
-                    goto L_0x0047;
-                L_0x0141:
+                    goto L_0x0048;
+                L_0x0142:
                     r8 = r7;
-                    goto L_0x0057;
-                L_0x0144:
+                    goto L_0x0058;
+                L_0x0145:
                     r8 = r7;
-                    goto L_0x0067;
-                L_0x0147:
+                    goto L_0x0068;
+                L_0x0148:
                     r5 = move-exception;
-                    r7 = "tmessages";	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    org.telegram.messenger.FileLog.e(r7, r5);	 Catch:{ Exception -> 0x0147, all -> 0x0153 }
-                    if (r6 == 0) goto L_0x013d;
-                L_0x014f:
+                    org.telegram.messenger.FileLog.e(r5);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    if (r6 == 0) goto L_0x013e;
+                L_0x014e:
                     r6.dispose();
-                    goto L_0x013d;
-                L_0x0153:
+                    goto L_0x013e;
+                L_0x0152:
                     r7 = move-exception;
-                    if (r6 == 0) goto L_0x0159;
-                L_0x0156:
+                    if (r6 == 0) goto L_0x0158;
+                L_0x0155:
                     r6.dispose();
-                L_0x0159:
+                L_0x0158:
                     throw r7;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
@@ -3871,7 +3865,7 @@ Error: java.util.NoSuchElementException
                     result[0] = cursor.next();
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 } finally {
                     semaphore.release();
                 }
@@ -3880,7 +3874,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -3895,7 +3889,7 @@ Error: java.util.NoSuchElementException
                     result[0] = cursor.next();
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 } finally {
                     semaphore.release();
                 }
@@ -3904,7 +3898,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -3929,7 +3923,7 @@ Error: java.util.NoSuchElementException
                         }
                         semaphore.release();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     } catch (Throwable th) {
                         semaphore.release();
                     }
@@ -4026,7 +4020,7 @@ Error: java.util.NoSuchElementException
                             state.dispose();
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -4084,7 +4078,7 @@ Error: java.util.NoSuchElementException
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     cursor.dispose();
@@ -4146,7 +4140,7 @@ Error: java.util.NoSuchElementException
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            FileLog.e(e);
                         }
                     }
                     cursor.dispose();
@@ -4185,7 +4179,7 @@ Error: java.util.NoSuchElementException
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -4206,7 +4200,7 @@ Error: java.util.NoSuchElementException
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -4246,7 +4240,7 @@ Error: java.util.NoSuchElementException
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -4258,7 +4252,7 @@ Error: java.util.NoSuchElementException
             try {
                 this.database.beginTransaction();
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -4306,7 +4300,7 @@ Error: java.util.NoSuchElementException
                     }
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "DELETE FROM download_queue WHERE uid = %d AND type = %d", new Object[]{Long.valueOf(j), Integer.valueOf(i)})).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4322,7 +4316,7 @@ Error: java.util.NoSuchElementException
                     }
                     MessagesStorage.this.database.executeFast(String.format(Locale.US, "DELETE FROM download_queue WHERE type = %d", new Object[]{Integer.valueOf(type)})).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4357,7 +4351,7 @@ Error: java.util.NoSuchElementException
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4438,7 +4432,7 @@ Error: java.util.NoSuchElementException
                             });
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -4504,7 +4498,7 @@ Error: java.util.NoSuchElementException
                         MessagesController.getInstance().generateJoinMessage(channel_id, false);
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4535,7 +4529,7 @@ Error: java.util.NoSuchElementException
                     state.dispose();
                     MessagesStorage.this.database.commitTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4573,7 +4567,7 @@ Error: java.util.NoSuchElementException
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -4950,7 +4944,7 @@ Error: java.util.NoSuchElementException
                     }
                     MessagesStorage.this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid = " + messageId).stepThis().dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -4968,13 +4962,14 @@ Error: java.util.NoSuchElementException
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -4987,7 +4982,7 @@ Error: java.util.NoSuchElementException
                     cursor.dispose();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -5015,7 +5010,7 @@ Error: java.util.NoSuchElementException
                 cursor.dispose();
             }
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -5027,7 +5022,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5044,7 +5038,7 @@ Error: java.util.NoSuchElementException
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                    FileLog.e(e22);
                 } catch (Throwable th3) {
                     if (state != null) {
                         state.dispose();
@@ -5068,7 +5062,7 @@ Error: java.util.NoSuchElementException
                 try {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e222) {
-                    FileLog.e("tmessages", e222);
+                    FileLog.e(e222);
                 } catch (Throwable th4) {
                     if (state != null) {
                         state.dispose();
@@ -5088,7 +5082,7 @@ Error: java.util.NoSuchElementException
                     state.dispose();
                 }
             } catch (Throwable e23) {
-                FileLog.e("tmessages", e23);
+                FileLog.e(e23);
                 if (state != null) {
                     state.dispose();
                 }
@@ -5109,7 +5103,7 @@ Error: java.util.NoSuchElementException
                 state.dispose();
             }
         } catch (Throwable e232) {
-            FileLog.e("tmessages", e232);
+            FileLog.e(e232);
             if (state != null) {
                 state.dispose();
             }
@@ -5146,7 +5140,7 @@ Error: java.util.NoSuchElementException
                 try {
                     this.database.beginTransaction();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return;
                 }
             }
@@ -5235,7 +5229,7 @@ Error: java.util.NoSuchElementException
                     this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 1 WHERE uid = %d AND mid > 0 AND mid <= %d AND read_state IN(0,2) AND out = 0", new Object[]{Integer.valueOf(key), Long.valueOf(messageId)})).stepThis().dispose();
                     b++;
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return;
                 }
             }
@@ -5267,7 +5261,7 @@ Error: java.util.NoSuchElementException
                     try {
                         MessagesStorage.this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)})).stepThis().dispose();
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -5309,7 +5303,7 @@ Error: java.util.NoSuchElementException
                             MessagesStorage.getInstance().updateDialogsWithDeletedMessagesInternal(mids, null, 0);
                         }
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -5382,7 +5376,7 @@ Error: java.util.NoSuchElementException
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -5406,7 +5400,7 @@ Error: java.util.NoSuchElementException
             BotQuery.clearBotKeyboard(0, messages);
             return arrayList;
         } catch (Throwable e2) {
-            FileLog.e("tmessages", e2);
+            FileLog.e(e2);
             return null;
         }
     }
@@ -5523,7 +5517,7 @@ Error: java.util.NoSuchElementException
                 MessagesController.getInstance().processDialogsUpdate(dialogs, encryptedChats);
             }
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -5653,9 +5647,9 @@ Error: java.util.NoSuchElementException
                             this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET end = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                         } catch (Throwable e) {
                             try {
-                                FileLog.e("tmessages", e);
+                                FileLog.e(e);
                             } catch (Throwable e2) {
-                                FileLog.e("tmessages", e2);
+                                FileLog.e(e2);
                                 return;
                             }
                         }
@@ -5681,7 +5675,7 @@ Error: java.util.NoSuchElementException
                     try {
                         this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET start = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                     } catch (Throwable e22) {
-                        FileLog.e("tmessages", e22);
+                        FileLog.e(e22);
                     }
                 } else {
                     continue;
@@ -5714,11 +5708,15 @@ Error: java.util.NoSuchElementException
                         try {
                             this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                         } catch (Throwable e) {
-                            FileLog.e("tmessages", e);
+                            try {
+                                FileLog.e(e);
+                            } catch (Throwable e2) {
+                                FileLog.e(e2);
+                                return;
+                            }
                         }
-                    } else {
-                        continue;
                     }
+                    continue;
                 } else if (minId > hole.start + 1) {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM " + table + " WHERE uid = %d AND start = %d AND end = %d", new Object[]{Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                     SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO " + table + " VALUES(?, ?, ?)");
@@ -5736,13 +5734,8 @@ Error: java.util.NoSuchElementException
                 } else if (hole.start != maxId) {
                     try {
                         this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
-                    } catch (Throwable e2) {
-                        try {
-                            FileLog.e("tmessages", e2);
-                        } catch (Throwable e22) {
-                            FileLog.e("tmessages", e22);
-                            return;
-                        }
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                     }
                 } else {
                     continue;
@@ -5898,7 +5891,7 @@ Error: java.util.NoSuchElementException
                         MessagesStorage.this.doneHolesInMedia(j, i2, -1);
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -6038,36 +6031,36 @@ Error: java.util.NoSuchElementException
                                     }
                                 }
                             } catch (Throwable e) {
-                                try {
-                                    FileLog.e("tmessages", e);
-                                } catch (Throwable e2) {
-                                    dialogs.dialogs.clear();
-                                    dialogs.users.clear();
-                                    dialogs.chats.clear();
-                                    encryptedChats.clear();
-                                    FileLog.e("tmessages", e2);
-                                    MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false);
-                                    return;
-                                }
+                                FileLog.e(e);
                             }
                         }
                     }
-                    int lower_id = (int) dialog.id;
-                    int high_id = (int) (dialog.id >> 32);
-                    if (lower_id == 0) {
-                        if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                            encryptedToLoad.add(Integer.valueOf(high_id));
+                    try {
+                        int lower_id = (int) dialog.id;
+                        int high_id = (int) (dialog.id >> 32);
+                        if (lower_id == 0) {
+                            if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                                encryptedToLoad.add(Integer.valueOf(high_id));
+                            }
+                        } else if (high_id == 1) {
+                            if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                                chatsToLoad.add(Integer.valueOf(lower_id));
+                            }
+                        } else if (lower_id > 0) {
+                            if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                                usersToLoad.add(Integer.valueOf(lower_id));
+                            }
+                        } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                            chatsToLoad.add(Integer.valueOf(-lower_id));
                         }
-                    } else if (high_id == 1) {
-                        if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                            chatsToLoad.add(Integer.valueOf(lower_id));
-                        }
-                    } else if (lower_id > 0) {
-                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                            usersToLoad.add(Integer.valueOf(lower_id));
-                        }
-                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                        chatsToLoad.add(Integer.valueOf(-lower_id));
+                    } catch (Throwable e2) {
+                        dialogs.dialogs.clear();
+                        dialogs.users.clear();
+                        dialogs.chats.clear();
+                        encryptedChats.clear();
+                        FileLog.e(e2);
+                        MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false);
+                        return;
                     }
                 }
                 cursor.dispose();
@@ -6240,7 +6233,7 @@ Error: java.util.NoSuchElementException
             putChatsInternal(dialogs.chats);
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
     }
 
@@ -6292,7 +6285,7 @@ Error: java.util.NoSuchElementException
                         state.dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -6326,7 +6319,7 @@ Error: java.util.NoSuchElementException
                     state.step();
                     state.dispose();
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         });
@@ -6364,7 +6357,7 @@ Error: java.util.NoSuchElementException
                         cursor.dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     if (cursor != null) {
                         cursor.dispose();
                     }
@@ -6379,7 +6372,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return max[0].intValue();
     }
@@ -6399,7 +6392,7 @@ Error: java.util.NoSuchElementException
                         cursor.dispose();
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     if (cursor != null) {
                         cursor.dispose();
                     }
@@ -6413,14 +6406,14 @@ Error: java.util.NoSuchElementException
                         semaphore.release();
                     }
                 } catch (Throwable e2) {
-                    FileLog.e("tmessages", e2);
+                    FileLog.e(e2);
                 }
             }
         });
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return pts[0].intValue();
     }
@@ -6437,7 +6430,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return user[0];
     }
@@ -6454,7 +6447,7 @@ Error: java.util.NoSuchElementException
         try {
             semaphore.acquire();
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return chat[0];
     }
@@ -6468,7 +6461,7 @@ Error: java.util.NoSuchElementException
             }
             return (User) users.get(0);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -6479,7 +6472,7 @@ Error: java.util.NoSuchElementException
             getUsersInternal(TextUtils.join(",", uids), users);
         } catch (Throwable e) {
             users.clear();
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
         }
         return users;
     }
@@ -6493,7 +6486,7 @@ Error: java.util.NoSuchElementException
             }
             return (Chat) chats.get(0);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -6507,7 +6500,7 @@ Error: java.util.NoSuchElementException
             }
             return (EncryptedChat) encryptedChats.get(0);
         } catch (Throwable e) {
-            FileLog.e("tmessages", e);
+            FileLog.e(e);
             return null;
         }
     }

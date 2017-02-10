@@ -115,7 +115,7 @@ public class UserConfig {
                     oldFile.delete();
                 }
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }
@@ -205,7 +205,7 @@ public class UserConfig {
                         }
                     });
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             } else {
                 byte[] bytes;
@@ -322,7 +322,7 @@ public class UserConfig {
                             editor.commit();
                         }
                     } catch (Throwable e2) {
-                        FileLog.e("tmessages", e2);
+                        FileLog.e(e2);
                     }
                     notificationsConverted = true;
                     saveConfig(false);
@@ -349,7 +349,7 @@ public class UserConfig {
                     passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
                     saveConfig(false);
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                 }
             }
         } else {
@@ -361,7 +361,7 @@ public class UserConfig {
                 System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
                 result = passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
             } catch (Throwable e2) {
-                FileLog.e("tmessages", e2);
+                FileLog.e(e2);
             }
         }
         return result;

@@ -155,7 +155,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Theme.loadResources(this);
+        Theme.createChatResources(this, false);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtilities.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
@@ -406,7 +406,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                         PopupNotificationActivity.this.startActivity(intent);
                     } catch (Throwable e) {
-                        FileLog.e("tmessages", e);
+                        FileLog.e(e);
                     }
                 }
             });
@@ -1036,7 +1036,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         return;
                     }
                 } catch (Throwable e) {
-                    FileLog.e("tmessages", e);
+                    FileLog.e(e);
                     return;
                 }
             }
