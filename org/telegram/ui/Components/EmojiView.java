@@ -100,7 +100,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private boolean backspacePressed;
     private int currentBackgroundType = -1;
     private int currentPage;
-    private Drawable dotDrawable;
+    private Paint dotPaint;
     private ArrayList<GridView> emojiGrids = new ArrayList();
     private int emojiSize;
     private LinearLayout emojiTab;
@@ -702,11 +702,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public void customOnDraw(Canvas canvas, int position) {
-            if (position == 6 && !StickersQuery.getUnreadStickerSets().isEmpty() && EmojiView.this.dotDrawable != null) {
-                int x = (canvas.getWidth() / 2) + AndroidUtilities.dp(4.0f);
-                int y = (canvas.getHeight() / 2) - AndroidUtilities.dp(13.0f);
-                EmojiView.this.dotDrawable.setBounds(x, y, EmojiView.this.dotDrawable.getIntrinsicWidth() + x, EmojiView.this.dotDrawable.getIntrinsicHeight() + y);
-                EmojiView.this.dotDrawable.draw(canvas);
+            if (position == 6 && !StickersQuery.getUnreadStickerSets().isEmpty() && EmojiView.this.dotPaint != null) {
+                canvas.drawCircle((float) ((canvas.getWidth() / 2) + AndroidUtilities.dp(9.0f)), (float) ((canvas.getHeight() / 2) - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(5.0f), EmojiView.this.dotPaint);
             }
         }
 
@@ -1111,7 +1108,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         drawableArr[6] = stickersDrawable;
         this.icons = drawableArr;
         this.showGifs = needGif;
-        this.dotDrawable = context.getResources().getDrawable(R.drawable.bluecircle);
+        this.dotPaint = new Paint(1);
+        this.dotPaint.setColor(Theme.getColor(Theme.key_chat_emojiPanelNewTrending));
         if (VERSION.SDK_INT >= 21) {
             this.outlineProvider = new ViewOutlineProvider() {
                 @TargetApi(21)
@@ -1980,6 +1978,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     setElevation((float) AndroidUtilities.dp(2.0f));
                 }
                 setBackgroundResource(R.drawable.smiles_popup);
+                getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelBackground), Mode.MULTIPLY));
                 this.emojiTab.setBackgroundDrawable(null);
                 this.currentBackgroundType = 1;
             }

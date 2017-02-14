@@ -564,6 +564,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.shadow[1].setBackgroundResource(R.drawable.header_shadow_reverse);
         this.containerView.addView(this.shadow[1], LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         this.pickerBottomLayout = new PickerBottomLayout(context, false);
+        this.pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         this.pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         this.pickerBottomLayout.cancelButton.setTextColor(-12940081);

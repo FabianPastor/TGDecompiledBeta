@@ -26,7 +26,9 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -312,7 +315,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         ViewGroup.LayoutParams layoutParams = this.actionBar.getLayoutParams();
         layoutParams.width = -1;
         this.actionBar.setLayoutParams(layoutParams);
-        this.countText = (TextView) this.actionBar.createMenu().addItemResource(2, R.layout.popup_count_layout).findViewById(R.id.count_text);
+        ActionBarMenuItem view = this.actionBar.createMenu().addItemWithWidth(2, 0, AndroidUtilities.dp(56.0f));
+        this.countText = new TextView(this);
+        this.countText.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
+        this.countText.setTextSize(1, 14.0f);
+        this.countText.setGravity(17);
+        view.addView(this.countText, LayoutHelper.createFrame(56, -1.0f));
         this.avatarContainer = new FrameLayout(this);
         this.avatarContainer.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
         this.actionBar.addView(this.avatarContainer);
@@ -605,7 +613,19 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 this.imageViews.remove(0);
             } else {
                 frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener.addView(getLayoutInflater().inflate(R.layout.popup_image_layout, null));
+                frameLayoutAnimationListener = new FrameLayout(this);
+                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
+                BackupImageView backupImageView = new BackupImageView(this);
+                backupImageView.setTag(Integer.valueOf(311));
+                frameLayoutAnimationListener.addView(backupImageView, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayoutAnimationListener = new TextView(this);
+                frameLayoutAnimationListener.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayoutAnimationListener.setTextSize(1, 16.0f);
+                frameLayoutAnimationListener.setGravity(17);
+                frameLayoutAnimationListener.setTag(Integer.valueOf(312));
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -2, 17));
                 frameLayoutAnimationListener.setTag(Integer.valueOf(2));
                 frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -613,8 +633,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     }
                 });
             }
-            messageText = (TextView) view.findViewById(R.id.message_text);
-            BackupImageView imageView = (BackupImageView) view.findViewById(R.id.message_image);
+            messageText = (TextView) view.findViewWithTag(Integer.valueOf(312));
+            BackupImageView imageView = (BackupImageView) view.findViewWithTag(Integer.valueOf(311));
             imageView.setAspectFit(true);
             if (messageObject.type == 1) {
                 PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
@@ -648,7 +668,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 imageView.setVisibility(0);
                 double lat = messageObject.messageOwner.media.geo.lat;
                 double lon = messageObject.messageOwner.media.geo._long;
-                imageView.setImage(String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=13&size=100x100&maptype=roadmap&scale=%d&markers=color:red|size:big|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)}), null, null);
+                BackupImageView backupImageView2 = imageView;
+                backupImageView2.setImage(String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=13&size=100x100&maptype=roadmap&scale=%d&markers=color:red|size:big|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)}), null, null);
             }
         } else if (messageObject.type == 2) {
             PopupAudioView cell;
@@ -658,17 +679,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 cell = (PopupAudioView) view.findViewWithTag(Integer.valueOf(300));
             } else {
                 frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener.addView(getLayoutInflater().inflate(R.layout.popup_audio_layout, null));
+                frameLayoutAnimationListener = new FrameLayout(this);
+                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayoutAnimationListener = new FrameLayout(this);
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -2.0f, 17, 20.0f, 0.0f, 20.0f, 0.0f));
+                cell = new PopupAudioView(this);
+                cell.setTag(Integer.valueOf(300));
+                frameLayoutAnimationListener.addView(cell);
                 frameLayoutAnimationListener.setTag(Integer.valueOf(3));
                 frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         PopupNotificationActivity.this.openCurrentMessage();
                     }
                 });
-                ViewGroup audioContainer = (ViewGroup) frameLayoutAnimationListener.findViewById(R.id.audio_container);
-                cell = new PopupAudioView(this);
-                cell.setTag(Integer.valueOf(300));
-                audioContainer.addView(cell);
             }
             cell.setMessageObject(messageObject);
             if (MediaController.getInstance().canDownloadMedia(2)) {
@@ -680,16 +705,29 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 this.textViews.remove(0);
             } else {
                 frameLayoutAnimationListener = new FrameLayoutAnimationListener(this);
-                frameLayoutAnimationListener.addView(getLayoutInflater().inflate(R.layout.popup_text_layout, null));
-                frameLayoutAnimationListener.setTag(Integer.valueOf(1));
-                frameLayoutAnimationListener.findViewById(R.id.text_container).setOnClickListener(new View.OnClickListener() {
+                frameLayoutAnimationListener = new ScrollView(this);
+                frameLayoutAnimationListener.setFillViewport(true);
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayoutAnimationListener = new LinearLayout(this);
+                frameLayoutAnimationListener.setOrientation(0);
+                frameLayoutAnimationListener.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createScroll(-1, -2, 1));
+                frameLayoutAnimationListener.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+                frameLayoutAnimationListener.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         PopupNotificationActivity.this.openCurrentMessage();
                     }
                 });
+                frameLayoutAnimationListener = new TextView(this);
+                frameLayoutAnimationListener.setTextSize(1, 16.0f);
+                frameLayoutAnimationListener.setTag(Integer.valueOf(301));
+                frameLayoutAnimationListener.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayoutAnimationListener.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                frameLayoutAnimationListener.setGravity(17);
+                frameLayoutAnimationListener.addView(frameLayoutAnimationListener, LayoutHelper.createLinear(-1, -2, 17));
+                frameLayoutAnimationListener.setTag(Integer.valueOf(1));
             }
-            messageText = (TextView) view.findViewById(R.id.message_text);
-            messageText.setTag(Integer.valueOf(301));
+            messageText = (TextView) view.findViewWithTag(Integer.valueOf(301));
             messageText.setTextSize(2, (float) MessagesController.getInstance().fontSize);
             messageText.setText(messageObject.messageText);
         }
@@ -701,7 +739,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             return view;
         }
         int widht = AndroidUtilities.displaySize.x - AndroidUtilities.dp(24.0f);
-        LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
         layoutParams.gravity = 51;
         layoutParams.height = -1;
         layoutParams.width = widht;

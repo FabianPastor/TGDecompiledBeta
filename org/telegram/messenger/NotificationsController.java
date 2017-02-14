@@ -79,6 +79,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageService;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.LaunchActivity;
@@ -801,7 +802,10 @@ public class NotificationsController {
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
                     return LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionLoginUnknownLocation) {
-                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
+                    r26 = new Object[2];
+                    r26[0] = LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000);
+                    r26[1] = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
+                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, r26);
                     return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                 } else if ((messageObject.messageOwner.action instanceof TL_messageActionGameScore) || (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent)) {
                     return messageObject.messageText.toString();
@@ -810,10 +814,14 @@ public class NotificationsController {
                         return null;
                     }
                     boolean isMissed = messageObject.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonMissed;
-                    if (messageObject.isOut() || !isMissed) {
+                    boolean isBusy = messageObject.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonBusy;
+                    if (messageObject.isOut()) {
                         return null;
                     }
-                    return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                    if (isMissed || isBusy) {
+                        return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                    }
+                    return null;
                 }
             } else if (messageObject.isMediaEmpty()) {
                 if (shortMessage) {

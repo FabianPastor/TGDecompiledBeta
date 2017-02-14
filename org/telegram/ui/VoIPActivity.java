@@ -91,6 +91,7 @@ public class VoIPActivity extends Activity implements StateListener {
     private ImageView keyImage;
     private View keyOverlay;
     private TextView keyText;
+    private String lastStateText;
     private CheckableImageView micToggle;
     private TextView nameText;
     private int packetLossPercent = 5;
@@ -194,6 +195,9 @@ public class VoIPActivity extends Activity implements StateListener {
         });
         this.spkToggle.setChecked(((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn());
         this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
+        if (!VoIPService.getSharedInstance().hasEarpiece()) {
+            this.spkToggle.setVisibility(4);
+        }
         this.nameText.setText(ContactsController.formatName(this.user.first_name, this.user.last_name));
         VoIPService.getSharedInstance().registerStateListener(this);
         this.acceptSwipe.setListener(new Listener() {
@@ -693,7 +697,9 @@ public class VoIPActivity extends Activity implements StateListener {
     private void callAccepted() {
         this.endBtn.setVisibility(0);
         this.micToggle.setVisibility(0);
-        this.spkToggle.setVisibility(0);
+        if (VoIPService.getSharedInstance().hasEarpiece()) {
+            this.spkToggle.setVisibility(0);
+        }
         this.chatBtn.setVisibility(0);
         if (this.didAcceptFromHere) {
             ObjectAnimator colorAnim;
@@ -820,16 +826,26 @@ public class VoIPActivity extends Activity implements StateListener {
                         VoIPActivity.this.keyButton.animate().alpha(1.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
                     }
                 } else if (state == 4) {
+                    int lastError;
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipFailed", R.string.VoipFailed), false);
-                    int err = VoIPService.getSharedInstance().getLastError();
-                    if (err == 1) {
-                        new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show().setOnDismissListener(new OnDismissListener() {
+                    if (VoIPService.getSharedInstance() != null) {
+                        lastError = VoIPService.getSharedInstance().getLastError();
+                    } else {
+                        lastError = 0;
+                    }
+                    AlertDialog dlg;
+                    if (lastError == 1) {
+                        dlg = new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+                        dlg.setCanceledOnTouchOutside(true);
+                        dlg.setOnDismissListener(new OnDismissListener() {
                             public void onDismiss(DialogInterface dialog) {
                                 VoIPActivity.this.finish();
                             }
                         });
-                    } else if (err == -1) {
-                        new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show().setOnDismissListener(new OnDismissListener() {
+                    } else if (lastError == -1) {
+                        dlg = new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+                        dlg.setCanceledOnTouchOutside(true);
+                        dlg.setOnDismissListener(new OnDismissListener() {
                             public void onDismiss(DialogInterface dialog) {
                                 VoIPActivity.this.finish();
                             }
@@ -851,62 +867,65 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void setStateTextAnimated(String _newText, boolean ellipsis) {
-        CharSequence newText;
-        if (this.textChangingAnim != null) {
-            this.textChangingAnim.cancel();
+        if (!_newText.equals(this.lastStateText)) {
+            CharSequence newText;
+            this.lastStateText = _newText;
+            if (this.textChangingAnim != null) {
+                this.textChangingAnim.cancel();
+            }
+            if (ellipsis) {
+                if (!this.ellAnimator.isRunning()) {
+                    this.ellAnimator.start();
+                }
+                SpannableStringBuilder ssb = new SpannableStringBuilder(_newText.toUpperCase());
+                for (TextAlphaSpan s : this.ellSpans) {
+                    s.setAlpha(0);
+                }
+                SpannableString ell = new SpannableString("...");
+                ell.setSpan(this.ellSpans[0], 0, 1, 0);
+                ell.setSpan(this.ellSpans[1], 1, 2, 0);
+                ell.setSpan(this.ellSpans[2], 2, 3, 0);
+                ssb.append(ell);
+                newText = ssb;
+            } else {
+                if (this.ellAnimator.isRunning()) {
+                    this.ellAnimator.cancel();
+                }
+                newText = _newText.toUpperCase();
+            }
+            this.stateText2.setText(newText);
+            this.stateText2.setVisibility(0);
+            this.stateText.setPivotX(0.0f);
+            this.stateText.setPivotY((float) (this.stateText.getHeight() / 2));
+            this.stateText2.setPivotX(0.0f);
+            this.stateText2.setPivotY((float) (this.stateText.getHeight() / 2));
+            this.durationText = this.stateText2;
+            AnimatorSet set = new AnimatorSet();
+            r5 = new Animator[8];
+            r5[1] = ObjectAnimator.ofFloat(this.stateText2, "translationY", new float[]{(float) (this.stateText.getHeight() / 2), 0.0f});
+            r5[2] = ObjectAnimator.ofFloat(this.stateText2, "scaleX", new float[]{0.7f, 1.0f});
+            r5[3] = ObjectAnimator.ofFloat(this.stateText2, "scaleY", new float[]{0.7f, 1.0f});
+            r5[4] = ObjectAnimator.ofFloat(this.stateText, "alpha", new float[]{1.0f, 0.0f});
+            r5[5] = ObjectAnimator.ofFloat(this.stateText, "translationY", new float[]{0.0f, (float) ((-this.stateText.getHeight()) / 2)});
+            r5[6] = ObjectAnimator.ofFloat(this.stateText, "scaleX", new float[]{1.0f, 0.7f});
+            r5[7] = ObjectAnimator.ofFloat(this.stateText, "scaleY", new float[]{1.0f, 0.7f});
+            set.playTogether(r5);
+            set.setDuration(200);
+            set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            set.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animation) {
+                    VoIPActivity.this.textChangingAnim = null;
+                    VoIPActivity.this.stateText2.setVisibility(8);
+                    VoIPActivity.this.durationText = VoIPActivity.this.stateText;
+                    VoIPActivity.this.stateText.setTranslationY(0.0f);
+                    VoIPActivity.this.stateText.setScaleX(1.0f);
+                    VoIPActivity.this.stateText.setScaleY(1.0f);
+                    VoIPActivity.this.stateText.setAlpha(1.0f);
+                    VoIPActivity.this.stateText.setText(VoIPActivity.this.stateText2.getText());
+                }
+            });
+            this.textChangingAnim = set;
+            set.start();
         }
-        if (ellipsis) {
-            if (!this.ellAnimator.isRunning()) {
-                this.ellAnimator.start();
-            }
-            SpannableStringBuilder ssb = new SpannableStringBuilder(_newText.toUpperCase());
-            for (TextAlphaSpan s : this.ellSpans) {
-                s.setAlpha(0);
-            }
-            SpannableString ell = new SpannableString("...");
-            ell.setSpan(this.ellSpans[0], 0, 1, 0);
-            ell.setSpan(this.ellSpans[1], 1, 2, 0);
-            ell.setSpan(this.ellSpans[2], 2, 3, 0);
-            ssb.append(ell);
-            newText = ssb;
-        } else {
-            if (this.ellAnimator.isRunning()) {
-                this.ellAnimator.cancel();
-            }
-            newText = _newText.toUpperCase();
-        }
-        this.stateText2.setText(newText);
-        this.stateText2.setVisibility(0);
-        this.stateText.setPivotX(0.0f);
-        this.stateText.setPivotY((float) (this.stateText.getHeight() / 2));
-        this.stateText2.setPivotX(0.0f);
-        this.stateText2.setPivotY((float) (this.stateText.getHeight() / 2));
-        this.durationText = this.stateText2;
-        AnimatorSet set = new AnimatorSet();
-        r5 = new Animator[8];
-        r5[1] = ObjectAnimator.ofFloat(this.stateText2, "translationY", new float[]{(float) (this.stateText.getHeight() / 2), 0.0f});
-        r5[2] = ObjectAnimator.ofFloat(this.stateText2, "scaleX", new float[]{0.7f, 1.0f});
-        r5[3] = ObjectAnimator.ofFloat(this.stateText2, "scaleY", new float[]{0.7f, 1.0f});
-        r5[4] = ObjectAnimator.ofFloat(this.stateText, "alpha", new float[]{1.0f, 0.0f});
-        r5[5] = ObjectAnimator.ofFloat(this.stateText, "translationY", new float[]{0.0f, (float) ((-this.stateText.getHeight()) / 2)});
-        r5[6] = ObjectAnimator.ofFloat(this.stateText, "scaleX", new float[]{1.0f, 0.7f});
-        r5[7] = ObjectAnimator.ofFloat(this.stateText, "scaleY", new float[]{1.0f, 0.7f});
-        set.playTogether(r5);
-        set.setDuration(200);
-        set.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        set.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                VoIPActivity.this.textChangingAnim = null;
-                VoIPActivity.this.stateText2.setVisibility(8);
-                VoIPActivity.this.durationText = VoIPActivity.this.stateText;
-                VoIPActivity.this.stateText.setTranslationY(0.0f);
-                VoIPActivity.this.stateText.setScaleX(1.0f);
-                VoIPActivity.this.stateText.setScaleY(1.0f);
-                VoIPActivity.this.stateText.setAlpha(1.0f);
-                VoIPActivity.this.stateText.setText(VoIPActivity.this.stateText2.getText());
-            }
-        });
-        this.textChangingAnim = set;
-        set.start();
     }
 }

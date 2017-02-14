@@ -40,6 +40,7 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.view.InputDeviceCompat;
 import android.view.KeyEvent;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -131,6 +132,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private int lastError;
     private long lastKnownDuration = 0;
     private NetworkInfo lastNetInfo;
+    private Boolean mHasEarpiece = null;
     private boolean micMute;
     private boolean needPlayEndSound;
     private Notification ongoingCallNotification;
@@ -154,10 +156,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 VoIPService.this.updateNetworkType();
             } else if ((VoIPService.this.getPackageName() + ".END_CALL").equals(intent.getAction())) {
                 if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                    VoIPService.this.stopForeground(true);
                     VoIPService.this.hangUp();
                 }
-            } else if (!(VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) || intent.getIntExtra("end_hash", 0) != VoIPService.this.endHash) {
-            } else {
+            } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) && intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                VoIPService.this.showNotification();
                 if (VERSION.SDK_INT < 23 || VoIPService.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
                     VoIPService.this.acceptIncomingCall();
                     try {
@@ -206,7 +209,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         this.userID = intent.getIntExtra("user_id", 0);
         this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
         this.user = MessagesController.getInstance().getUser(Integer.valueOf(this.userID));
-        if (this.isOutgoing) {
+        if (this.user == null) {
+            FileLog.w("VoIPService: user==null");
+            stopSelf();
+        } else if (this.isOutgoing) {
             startOutgoingCall();
             if (intent.getBooleanExtra("start_incall_activity", false)) {
                 startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
@@ -528,6 +534,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     VoIPService.this.a_or_b = salt;
                     BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
                     BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), p);
+                    if (VoIPService.this.call.g_a == null) {
+                        FileLog.w("stopping VoIP service, Ga == null");
+                        VoIPService.this.callFailed();
+                        return;
+                    }
                     BigInteger g_a = new BigInteger(1, VoIPService.this.call.g_a);
                     if (Utilities.isGoodGaAndGb(g_a, p)) {
                         byte[] correctedAuth;
@@ -595,7 +606,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void declineIncomingCall(int reason, final Runnable onDone) {
-        int i = 0;
         if (this.currentState != 5 && this.currentState != 6) {
             dispatchStateChanged(5);
             if (this.call == null) {
@@ -610,11 +620,15 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 }
                 return;
             }
+            int i;
+            boolean wasNotConnected;
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
             req.peer.id = this.call.id;
-            if (this.controller != null && this.controllerStarted) {
+            if (this.controller == null || !this.controllerStarted) {
+                i = 0;
+            } else {
                 i = (int) (this.controller.getCallDuration() / 1000);
             }
             req.duration = i;
@@ -634,6 +648,17 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     req.reason = new TL_phoneCallDiscardReasonHangup();
                     break;
             }
+            if (ConnectionsManager.getInstance().getConnectionState() != 3) {
+                wasNotConnected = true;
+            } else {
+                wasNotConnected = false;
+            }
+            if (wasNotConnected) {
+                if (onDone != null) {
+                    onDone.run();
+                }
+                callEnded();
+            }
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
@@ -644,7 +669,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         }
                         FileLog.d("phone.discardCall " + response);
                     }
-                    if (onDone != null) {
+                    if (onDone != null && !wasNotConnected) {
                         AndroidUtilities.runOnUIThread(onDone);
                     }
                 }
@@ -1168,5 +1193,25 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             return 1;
         }
         return this.lastNetInfo.isRoaming() ? 2 : 0;
+    }
+
+    public boolean hasEarpiece() {
+        if (this.mHasEarpiece != null) {
+            return this.mHasEarpiece.booleanValue();
+        }
+        try {
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            Method method = AudioManager.class.getMethod("getDevicesForStream", new Class[]{Integer.TYPE});
+            int earpieceFlag = AudioManager.class.getField("DEVICE_OUT_EARPIECE").getInt(null);
+            if ((((Integer) method.invoke(am, new Object[]{Integer.valueOf(0)})).intValue() & earpieceFlag) == earpieceFlag) {
+                this.mHasEarpiece = Boolean.TRUE;
+            } else {
+                this.mHasEarpiece = Boolean.FALSE;
+            }
+        } catch (Throwable error) {
+            FileLog.e("Error while checking earpiece! ", error);
+            this.mHasEarpiece = Boolean.TRUE;
+        }
+        return this.mHasEarpiece.booleanValue();
     }
 }

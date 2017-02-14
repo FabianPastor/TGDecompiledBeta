@@ -147,7 +147,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private FrameLayout doneButtonContainer;
     private ImageView doneButtonImage;
     private ContextProgressView doneButtonProgress;
-    private Drawable dotDrawable;
+    private Paint dotPaint = new Paint(1);
     private boolean editingCaption;
     private MessageObject editingMessageObject;
     private int editingMessageReqId;
@@ -411,7 +411,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public ChatActivityEnterView(Activity context, SizeNotifierFrameLayout parent, ChatActivity fragment, boolean isChat) {
         super(context);
-        this.dotDrawable = context.getResources().getDrawable(R.drawable.bluecircle);
+        this.dotPaint.setColor(Theme.getColor(Theme.key_chat_emojiPanelNewTrending));
         setFocusable(true);
         setFocusableInTouchMode(true);
         setWillNotDraw(false);
@@ -439,11 +439,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.emojiButton = new ImageView(context) {
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                if ((ChatActivityEnterView.this.emojiView == null || ChatActivityEnterView.this.emojiView.getVisibility() != 0) && !StickersQuery.getUnreadStickerSets().isEmpty() && ChatActivityEnterView.this.dotDrawable != null) {
-                    int x = (canvas.getWidth() / 2) + AndroidUtilities.dp(4.0f);
-                    int y = (canvas.getHeight() / 2) - AndroidUtilities.dp(13.0f);
-                    ChatActivityEnterView.this.dotDrawable.setBounds(x, y, ChatActivityEnterView.this.dotDrawable.getIntrinsicWidth() + x, ChatActivityEnterView.this.dotDrawable.getIntrinsicHeight() + y);
-                    ChatActivityEnterView.this.dotDrawable.draw(canvas);
+                if (ChatActivityEnterView.this.attachLayout == null) {
+                    return;
+                }
+                if ((ChatActivityEnterView.this.emojiView == null || ChatActivityEnterView.this.emojiView.getVisibility() != 0) && !StickersQuery.getUnreadStickerSets().isEmpty() && ChatActivityEnterView.this.dotPaint != null) {
+                    canvas.drawCircle((float) ((canvas.getWidth() / 2) + AndroidUtilities.dp(9.0f)), (float) ((canvas.getHeight() / 2) - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(5.0f), ChatActivityEnterView.this.dotPaint);
                 }
             }
         };
@@ -461,11 +461,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
-                EmojiView access$900 = ChatActivityEnterView.this.emojiView;
+                EmojiView access$1000 = ChatActivityEnterView.this.emojiView;
                 if (ChatActivityEnterView.this.messageEditText.length() <= 0) {
                     z = false;
                 }
-                access$900.onOpen(z);
+                access$1000.onOpen(z);
             }
         });
         this.messageEditText = new EditTextCaption(context) {
@@ -588,9 +588,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (count > 2 || charSequence == null || charSequence.length() == 0) {
                             ChatActivityEnterView.this.messageWebPageSearch = true;
                         }
-                        ChatActivityEnterViewDelegate access$1700 = ChatActivityEnterView.this.delegate;
+                        ChatActivityEnterViewDelegate access$1800 = ChatActivityEnterView.this.delegate;
                         boolean z = before > count + 1 || count - before > 2;
-                        access$1700.onTextChanged(charSequence, z);
+                        access$1800.onTextChanged(charSequence, z);
                     }
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;

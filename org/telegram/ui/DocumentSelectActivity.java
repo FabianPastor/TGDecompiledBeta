@@ -247,7 +247,13 @@ public class DocumentSelectActivity extends BaseFragment {
                     if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
                         DocumentSelectActivity.this.selectedFiles.clear();
                         DocumentSelectActivity.this.actionBar.hideActionMode();
-                        DocumentSelectActivity.this.listView.invalidateViews();
+                        int count = DocumentSelectActivity.this.listView.getChildCount();
+                        for (int a = 0; a < count; a++) {
+                            View child = DocumentSelectActivity.this.listView.getChildAt(a);
+                            if (child instanceof SharedDocumentCell) {
+                                ((SharedDocumentCell) child).setChecked(false, true);
+                            }
+                        }
                         return;
                     }
                     DocumentSelectActivity.this.finishFragment();

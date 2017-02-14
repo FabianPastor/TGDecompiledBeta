@@ -3,7 +3,9 @@ package org.telegram.ui;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Outline;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
@@ -66,6 +68,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.ContactsActivity.ContactsActivityDelegate;
@@ -222,18 +225,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     public void didReceivedNotification(int id, Object... args) {
+        CallLogRow row;
         if (id == NotificationCenter.didReceivedNewMessages && this.firstLoaded) {
             Iterator it = args[1].iterator();
             while (it.hasNext()) {
                 MessageObject msg = (MessageObject) it.next();
                 if (msg.messageOwner.action != null && (msg.messageOwner.action instanceof TL_messageActionPhoneCall)) {
-                    int callType;
                     int userID = msg.messageOwner.from_id == UserConfig.getClientUserId() ? msg.messageOwner.to_id.user_id : msg.messageOwner.from_id;
-                    if (msg.messageOwner.from_id == UserConfig.getClientUserId()) {
-                        callType = 0;
-                    } else {
-                        callType = 1;
-                    }
+                    int callType = msg.messageOwner.from_id == UserConfig.getClientUserId() ? 0 : 1;
                     if (callType == 1 && (((TL_messageActionPhoneCall) msg.messageOwner.action).reason instanceof TL_phoneCallDiscardReasonMissed)) {
                         callType = 2;
                     }
@@ -244,7 +243,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                             this.listViewAdapter.notifyItemChanged(0);
                         }
                     }
-                    CallLogRow row = new CallLogRow();
+                    row = new CallLogRow();
                     row.calls = new ArrayList();
                     row.calls.add(msg.messageOwner);
                     row.user = MessagesController.getInstance().getUser(Integer.valueOf(userID));
@@ -253,6 +252,26 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     this.listViewAdapter.notifyItemInserted(0);
                 }
             }
+        } else if (id == NotificationCenter.messagesDeleted && this.firstLoaded) {
+            boolean didChange = false;
+            ArrayList<Integer> ids = args[0];
+            Iterator<CallLogRow> itrtr = this.calls.iterator();
+            while (itrtr.hasNext()) {
+                row = (CallLogRow) itrtr.next();
+                Iterator<Message> msgs = row.calls.iterator();
+                while (msgs.hasNext()) {
+                    if (ids.contains(Integer.valueOf(((Message) msgs.next()).id))) {
+                        didChange = true;
+                        msgs.remove();
+                    }
+                }
+                if (row.calls.size() == 0) {
+                    itrtr.remove();
+                }
+            }
+            if (didChange && this.listViewAdapter != null) {
+                this.listViewAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -260,12 +279,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         super.onFragmentCreate();
         getCalls(0, 50);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagesDeleted);
         return true;
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceivedNewMessages);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagesDeleted);
     }
 
     public View createView(Context context) {
@@ -319,6 +340,20 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                     CallLogActivity.this.presentFragment(new ChatActivity(args), true);
                 }
+            }
+        });
+        this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+            public boolean onItemClick(View view, int position) {
+                if (position < 0 || position >= CallLogActivity.this.calls.size()) {
+                    return false;
+                }
+                final CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
+                new Builder(CallLogActivity.this.getParentActivity()).setTitle(LocaleController.getString("Calls", R.string.Calls)).setItems(new String[]{LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        CallLogActivity.this.confirmAndDelete(row);
+                    }
+                }).show();
+                return true;
             }
         });
         this.listView.setOnScrollListener(new OnScrollListener() {
@@ -511,6 +546,18 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 }
             }, 2), this.classGuid);
         }
+    }
+
+    private void confirmAndDelete(final CallLogRow row) {
+        new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog)).setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ArrayList<Integer> ids = new ArrayList();
+                for (Message msg : row.calls) {
+                    ids.add(Integer.valueOf(msg.id));
+                }
+                MessagesController.getInstance().deleteMessages(ids, null, null, 0, false);
+            }
+        }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
     }
 
     public void onResume() {

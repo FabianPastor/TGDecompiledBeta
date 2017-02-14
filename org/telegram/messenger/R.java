@@ -117,7 +117,6 @@ public final class R {
         public static final int bar_selector_white = NUM;
         public static final int bg_voip_icon_btn = NUM;
         public static final int blockpanel = NUM;
-        public static final int bluecircle = NUM;
         public static final int bluecounter = NUM;
         public static final int blur_linear = NUM;
         public static final int blur_linear_active = NUM;
@@ -155,7 +154,6 @@ public final class R {
         public static final int cancel_big = NUM;
         public static final int catstile = NUM;
         public static final int channelintro = NUM;
-        public static final int chat_badge = NUM;
         public static final int chats_clear = NUM;
         public static final int chats_delete = NUM;
         public static final int chats_leave = NUM;
@@ -413,6 +411,7 @@ public final class R {
         public static final int notify_members_on = NUM;
         public static final int numberpicker_selection_divider = NUM;
         public static final int pagedown = NUM;
+        public static final int pagedown_shadow = NUM;
         public static final int paint_elliptical_brush = NUM;
         public static final int paint_elliptical_preview = NUM;
         public static final int paint_neon_brush = NUM;
@@ -511,6 +510,7 @@ public final class R {
         public static final int system = NUM;
         public static final int system_loader = NUM;
         public static final int theme_picker = NUM;
+        public static final int theme_preview_image = NUM;
         public static final int tip1 = NUM;
         public static final int tip2 = NUM;
         public static final int tip3 = NUM;
@@ -532,7 +532,6 @@ public final class R {
         public static final int tool_tint = NUM;
         public static final int tool_vignette = NUM;
         public static final int tool_warmth = NUM;
-        public static final int tooltip = NUM;
         public static final int transparent = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
@@ -549,7 +548,6 @@ public final class R {
     public static final class id {
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
-        public static final int audio_container = NUM;
         public static final int auto = NUM;
         public static final int background_image_intro = NUM;
         public static final int bottom_pages = NUM;
@@ -559,7 +557,6 @@ public final class R {
         public static final int button_refresh = NUM;
         public static final int button_send = NUM;
         public static final int button_update = NUM;
-        public static final int count_text = NUM;
         public static final int dark = NUM;
         public static final int header_text = NUM;
         public static final int hybrid = NUM;
@@ -586,7 +583,6 @@ public final class R {
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
         public static final int menu_regular = NUM;
-        public static final int message_image = NUM;
         public static final int message_text = NUM;
         public static final int none = NUM;
         public static final int normal = NUM;
@@ -603,9 +599,7 @@ public final class R {
         public static final int standard = NUM;
         public static final int start_messaging_button = NUM;
         public static final int terrain = NUM;
-        public static final int text_container = NUM;
         public static final int text_headline = NUM;
-        public static final int text_scroll = NUM;
         public static final int view_header = NUM;
         public static final int web_update_details = NUM;
         public static final int wide = NUM;
@@ -630,13 +624,8 @@ public final class R {
         public static final int intro_layout = NUM;
         public static final int intro_layout_tablet = NUM;
         public static final int intro_view_layout = NUM;
-        public static final int media_loading_layout = NUM;
         public static final int player_big_notification = NUM;
         public static final int player_small_notification = NUM;
-        public static final int popup_audio_layout = NUM;
-        public static final int popup_count_layout = NUM;
-        public static final int popup_image_layout = NUM;
-        public static final int popup_text_layout = NUM;
     }
 
     public static final class raw {
@@ -838,6 +827,8 @@ public final class R {
         public static final int CacheEmpty = NUM;
         public static final int CalculatingSize = NUM;
         public static final int Call = NUM;
+        public static final int CallAgain = NUM;
+        public static final int CallBack = NUM;
         public static final int CallEncryptionKeyDescription = NUM;
         public static final int CallMessageIncoming = NUM;
         public static final int CallMessageIncomingMissed = NUM;
@@ -992,6 +983,7 @@ public final class R {
         public static final int ColorWhite = NUM;
         public static final int ColorYellow = NUM;
         public static final int CompatibilityChat = NUM;
+        public static final int ConfirmDeleteCallLog = NUM;
         public static final int Connecting = NUM;
         public static final int ContactJoined = NUM;
         public static final int ContactNotRegistered = NUM;
@@ -1011,6 +1003,8 @@ public final class R {
         public static final int CountSent = NUM;
         public static final int CreateEncryptedChatError = NUM;
         public static final int CreateGroupError = NUM;
+        public static final int CreateNewTheme = NUM;
+        public static final int CreateNewThemeInfo = NUM;
         public static final int Crop = NUM;
         public static final int CropImage = NUM;
         public static final int CropOriginal = NUM;
@@ -1624,11 +1618,9 @@ public final class R {
         public static final int PasswordReset = NUM;
         public static final int PaymentCardCvv = NUM;
         public static final int PaymentCardExpireDateMonth = NUM;
-        public static final int PaymentCardExpireDateTitle = NUM;
         public static final int PaymentCardExpireDateYear = NUM;
         public static final int PaymentCardInfo = NUM;
         public static final int PaymentCardName = NUM;
-        public static final int PaymentCardNameTitle = NUM;
         public static final int PaymentCardNumber = NUM;
         public static final int PaymentCardSavePaymentInformation = NUM;
         public static final int PaymentCardSavePaymentInformationInfoLine1 = NUM;

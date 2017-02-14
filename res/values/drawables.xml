@@ -128,10 +128,6 @@
     <drawable name="blockpanel">res/drawable-hdpi-v4/blockpanel.png</drawable>
     <drawable name="blockpanel">res/drawable-xhdpi-v4/blockpanel.png</drawable>
     <drawable name="blockpanel">res/drawable-xxhdpi-v4/blockpanel.png</drawable>
-    <drawable name="bluecircle">res/drawable-mdpi-v4/bluecircle.png</drawable>
-    <drawable name="bluecircle">res/drawable-hdpi-v4/bluecircle.png</drawable>
-    <drawable name="bluecircle">res/drawable-xhdpi-v4/bluecircle.png</drawable>
-    <drawable name="bluecircle">res/drawable-xxhdpi-v4/bluecircle.png</drawable>
     <drawable name="bluecounter">res/drawable-mdpi-v4/bluecounter.9.png</drawable>
     <drawable name="bluecounter">res/drawable-hdpi-v4/bluecounter.9.png</drawable>
     <drawable name="bluecounter">res/drawable-xhdpi-v4/bluecounter.9.png</drawable>
@@ -271,10 +267,6 @@
     <drawable name="channelintro">res/drawable-hdpi-v4/channelintro.png</drawable>
     <drawable name="channelintro">res/drawable-xhdpi-v4/channelintro.png</drawable>
     <drawable name="channelintro">res/drawable-xxhdpi-v4/channelintro.png</drawable>
-    <drawable name="chat_badge">res/drawable-mdpi-v4/chat_badge.9.png</drawable>
-    <drawable name="chat_badge">res/drawable-hdpi-v4/chat_badge.9.png</drawable>
-    <drawable name="chat_badge">res/drawable-xhdpi-v4/chat_badge.9.png</drawable>
-    <drawable name="chat_badge">res/drawable-xxhdpi-v4/chat_badge.9.png</drawable>
     <drawable name="chats_clear">res/drawable-mdpi-v4/chats_clear.png</drawable>
     <drawable name="chats_clear">res/drawable-hdpi-v4/chats_clear.png</drawable>
     <drawable name="chats_clear">res/drawable-xhdpi-v4/chats_clear.png</drawable>
@@ -1231,6 +1223,10 @@
     <drawable name="pagedown">res/drawable-hdpi-v4/pagedown.png</drawable>
     <drawable name="pagedown">res/drawable-xhdpi-v4/pagedown.png</drawable>
     <drawable name="pagedown">res/drawable-xxhdpi-v4/pagedown.png</drawable>
+    <drawable name="pagedown_shadow">res/drawable-mdpi-v4/pagedown_shadow.png</drawable>
+    <drawable name="pagedown_shadow">res/drawable-hdpi-v4/pagedown_shadow.png</drawable>
+    <drawable name="pagedown_shadow">res/drawable-xhdpi-v4/pagedown_shadow.png</drawable>
+    <drawable name="pagedown_shadow">res/drawable-xxhdpi-v4/pagedown_shadow.png</drawable>
     <drawable name="paint_elliptical_brush">res/drawable/paint_elliptical_brush.png</drawable>
     <drawable name="paint_elliptical_preview">res/drawable/paint_elliptical_preview.png</drawable>
     <drawable name="paint_neon_brush">res/drawable/paint_neon_brush.png</drawable>
@@ -1589,6 +1585,7 @@
     <drawable name="theme_picker">res/drawable-hdpi-v4/theme_picker.png</drawable>
     <drawable name="theme_picker">res/drawable-xhdpi-v4/theme_picker.png</drawable>
     <drawable name="theme_picker">res/drawable-xxhdpi-v4/theme_picker.png</drawable>
+    <drawable name="theme_preview_image">res/drawable/theme_preview_image.jpg</drawable>
     <drawable name="tip1">res/drawable-mdpi-v4/tip1.png</drawable>
     <drawable name="tip1">res/drawable-hdpi-v4/tip1.png</drawable>
     <drawable name="tip1">res/drawable-xhdpi-v4/tip1.png</drawable>
@@ -1673,10 +1670,6 @@
     <drawable name="tool_warmth">res/drawable-hdpi-v4/tool_warmth.png</drawable>
     <drawable name="tool_warmth">res/drawable-xhdpi-v4/tool_warmth.png</drawable>
     <drawable name="tool_warmth">res/drawable-xxhdpi-v4/tool_warmth.png</drawable>
-    <drawable name="tooltip">res/drawable-mdpi-v4/tooltip.9.png</drawable>
-    <drawable name="tooltip">res/drawable-hdpi-v4/tooltip.9.png</drawable>
-    <drawable name="tooltip">res/drawable-xhdpi-v4/tooltip.9.png</drawable>
-    <drawable name="tooltip">res/drawable-xxhdpi-v4/tooltip.9.png</drawable>
     <drawable name="transparent">res/drawable/transparent.xml</drawable>
     <drawable name="verified_area">res/drawable-mdpi-v4/verified_area.png</drawable>
     <drawable name="verified_area">res/drawable-hdpi-v4/verified_area.png</drawable>

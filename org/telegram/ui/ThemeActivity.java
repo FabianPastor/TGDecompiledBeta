@@ -32,6 +32,9 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Cells.ThemeCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -42,7 +45,6 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.ThemeEditorView;
 
 public class ThemeActivity extends BaseFragment {
-    private static final int add_button = 1;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
 
@@ -54,38 +56,59 @@ public class ThemeActivity extends BaseFragment {
         }
 
         public int getItemCount() {
-            return Theme.themes.size();
+            return Theme.themes.size() + 3;
         }
 
         public boolean isEnabled(ViewHolder holder) {
-            return true;
+            int type = holder.getItemViewType();
+            if (type == 0 || type == 1) {
+                return true;
+            }
+            return false;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(new ThemeCell(this.mContext));
+            View view;
+            switch (viewType) {
+                case 0:
+                    view = new ThemeCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 1:
+                    view = new TextSettingsCell(this.mContext);
+                    ((TextSettingsCell) view).setText(LocaleController.getString("CreateNewTheme", R.string.CreateNewTheme), false);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 2:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    ((TextInfoPrivacyCell) view).setText(LocaleController.getString("CreateNewThemeInfo", R.string.CreateNewThemeInfo));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    break;
+                default:
+                    view = new ShadowSectionCell(this.mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    break;
+            }
+            return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z;
-            boolean z2 = true;
-            ThemeInfo themeInfo = (ThemeInfo) Theme.themes.get(position);
-            String text = themeInfo.name;
-            if (text.endsWith(".attheme")) {
-                text = text.substring(0, text.lastIndexOf(46));
+            if (holder.getItemViewType() == 0) {
+                position -= 2;
+                ((ThemeCell) holder.itemView).setTheme((ThemeInfo) Theme.themes.get(position), position != Theme.themes.size() + -1);
             }
-            ThemeCell themeCell = (ThemeCell) holder.itemView;
-            if (themeInfo == Theme.getCurrentTheme()) {
-                z = true;
-            } else {
-                z = false;
-            }
-            if (position == Theme.themes.size() - 1) {
-                z2 = false;
-            }
-            themeCell.setText(text, z, z2);
         }
 
         public int getItemViewType(int i) {
+            if (i == 0) {
+                return 1;
+            }
+            if (i == 1) {
+                return 2;
+            }
+            if (i == Theme.themes.size() + 2) {
+                return 3;
+            }
             return 0;
         }
     }
@@ -98,7 +121,28 @@ public class ThemeActivity extends BaseFragment {
             public void onItemClick(int id) {
                 if (id == -1) {
                     ThemeActivity.this.finishFragment();
-                } else if (id == 1 && ThemeActivity.this.getParentActivity() != null) {
+                }
+            }
+        });
+        this.listAdapter = new ListAdapter(context);
+        FrameLayout frameLayout = new FrameLayout(context);
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.fragmentView = frameLayout;
+        this.listView = new RecyclerListView(context);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        this.listView.setVerticalScrollBarEnabled(false);
+        this.listView.setAdapter(this.listAdapter);
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
+                if (position != 0) {
+                    position -= 2;
+                    if (position < Theme.themes.size()) {
+                        Theme.applyTheme((ThemeInfo) Theme.themes.get(position));
+                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                        ThemeActivity.this.finishFragment();
+                    }
+                } else if (ThemeActivity.this.getParentActivity() != null) {
                     final EditText editText = new EditText(ThemeActivity.this.getParentActivity());
                     Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NewTheme", R.string.NewTheme));
@@ -155,31 +199,23 @@ public class ThemeActivity extends BaseFragment {
                                 AndroidUtilities.shakeView(editText, 2.0f, 0);
                                 return;
                             }
-                            new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), editText.getText().toString() + ".attheme");
+                            ThemeEditorView themeEditorView = new ThemeEditorView();
+                            String name = editText.getText().toString() + ".attheme";
+                            themeEditorView.show(ThemeActivity.this.getParentActivity(), name);
+                            Theme.saveCurrentTheme(name, true);
+                            ThemeActivity.this.listAdapter.notifyDataSetChanged();
                             alertDialog.dismiss();
                         }
                     });
                 }
             }
         });
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.add);
-        this.listAdapter = new ListAdapter(context);
-        FrameLayout frameLayout = new FrameLayout(context);
-        this.fragmentView = frameLayout;
-        this.listView = new RecyclerListView(context);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
-        this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setAdapter(this.listAdapter);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(View view, int position) {
-                Theme.applyTheme((ThemeInfo) Theme.themes.get(position));
-                ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false);
-                ThemeActivity.this.finishFragment();
-            }
-        });
         this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemClick(View view, int position) {
+                position -= 2;
+                if (position < 0 || position >= Theme.themes.size()) {
+                    return false;
+                }
                 final ThemeInfo themeInfo = (ThemeInfo) Theme.themes.get(position);
                 if (themeInfo.pathToFile == null || ThemeActivity.this.getParentActivity() == null) {
                     return false;
@@ -240,10 +276,14 @@ public class ThemeActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[11];
+        r9 = new ThemeDescription[15];
         r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
         r9[9] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         r9[10] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
+        r9[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         return r9;
     }
 }

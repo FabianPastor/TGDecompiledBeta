@@ -8,6 +8,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -74,6 +75,7 @@ public class VoIPFeedbackActivity extends Activity {
                 VoIPFeedbackActivity.this.finish();
             }
         }).show();
+        alert.setCanceledOnTouchOutside(true);
         alert.setOnCancelListener(new OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 VoIPFeedbackActivity.this.finish();
@@ -84,7 +86,7 @@ public class VoIPFeedbackActivity extends Activity {
         bar.setOnRatingChangeListener(new OnRatingChangeListener() {
             public void onRatingChanged(int rating) {
                 boolean z;
-                int i = 0;
+                int i;
                 Button button = btn;
                 if (rating > 0) {
                     z = true;
@@ -95,8 +97,13 @@ public class VoIPFeedbackActivity extends Activity {
                 EditText editText = commentBox;
                 if (rating >= 5 || rating <= 0) {
                     i = 8;
+                } else {
+                    i = 0;
                 }
                 editText.setVisibility(i);
+                if (commentBox.getVisibility() == 8) {
+                    ((InputMethodManager) VoIPFeedbackActivity.this.getSystemService("input_method")).hideSoftInputFromWindow(commentBox.getWindowToken(), 0);
+                }
             }
         });
     }

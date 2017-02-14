@@ -161,7 +161,11 @@ public class ThemeDescription {
             if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                 Drawable drawable = this.viewToInvalidate.getBackground();
                 if (drawable instanceof CombinedDrawable) {
-                    drawable = ((CombinedDrawable) drawable).getIcon();
+                    if ((this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0) {
+                        drawable = ((CombinedDrawable) drawable).getBackground();
+                    } else {
+                        drawable = ((CombinedDrawable) drawable).getIcon();
+                    }
                 }
                 if (drawable != null) {
                     if ((drawable instanceof StateListDrawable) || (VERSION.SDK_INT >= 21 && (drawable instanceof RippleDrawable))) {

@@ -2,6 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
@@ -10,27 +12,37 @@ import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import java.io.File;
+import java.io.FileInputStream;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ThemeCell extends FrameLayout {
+    private static byte[] bytes = new byte[1024];
     private ImageView checkImage;
     private boolean needDivider;
+    private Paint paint = new Paint(1);
     private TextView textView;
 
     public ThemeCell(Context context) {
         int i;
         int i2 = 3;
         super(context);
+        setWillNotDraw(false);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         View view = this.textView;
@@ -39,7 +51,7 @@ public class ThemeCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 53.0f : 17.0f, 0.0f, LocaleController.isRTL ? 17.0f : 53.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 53.0f : BitmapDescriptorFactory.HUE_YELLOW, 0.0f, LocaleController.isRTL ? BitmapDescriptorFactory.HUE_YELLOW : 53.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
@@ -62,24 +74,116 @@ public class ThemeCell extends FrameLayout {
         this.textView.setTextColor(color);
     }
 
-    public void setText(String text, boolean checked, boolean divider) {
-        boolean z = false;
+    public void setTheme(ThemeInfo themeInfo, boolean divider) {
+        Throwable e;
+        Throwable th;
+        String text = themeInfo.name;
+        if (text.endsWith(".attheme")) {
+            text = text.substring(0, text.lastIndexOf(46));
+        }
         this.textView.setText(text);
         this.needDivider = divider;
-        this.checkImage.setVisibility(checked ? 0 : 4);
-        if (!divider) {
-            z = true;
+        this.checkImage.setVisibility(themeInfo == Theme.getCurrentTheme() ? 0 : 4);
+        boolean finished = false;
+        if (themeInfo.pathToFile != null) {
+            FileInputStream fileInputStream = null;
+            int currentPosition = 0;
+            try {
+                FileInputStream fileInputStream2 = new FileInputStream(new File(themeInfo.pathToFile));
+                int linesRead = 0;
+                do {
+                    try {
+                        int read = fileInputStream2.read(bytes);
+                        if (read == -1) {
+                            break;
+                        }
+                        int previousPosition = currentPosition;
+                        int start = 0;
+                        for (int a = 0; a < read; a++) {
+                            if (bytes[a] == (byte) 10) {
+                                linesRead++;
+                                int len = (a - start) + 1;
+                                String line = new String(bytes, start, len - 1, "UTF-8");
+                                if (line.startsWith("WPS")) {
+                                    break;
+                                }
+                                int idx = line.indexOf(61);
+                                if (idx == -1 || !line.substring(0, idx).equals(Theme.key_actionBarDefault)) {
+                                    start += len;
+                                    currentPosition += len;
+                                } else {
+                                    int value;
+                                    String param = line.substring(idx + 1);
+                                    if (param.length() <= 0 || param.charAt(0) != '#') {
+                                        value = Utilities.parseInt(param).intValue();
+                                    } else {
+                                        try {
+                                            value = Color.parseColor(param);
+                                        } catch (Exception e2) {
+                                            value = Utilities.parseInt(param).intValue();
+                                        }
+                                    }
+                                    finished = true;
+                                    this.paint.setColor(value);
+                                }
+                            }
+                        }
+                        if (previousPosition == currentPosition || linesRead >= 500) {
+                            break;
+                        }
+                        fileInputStream2.getChannel().position((long) currentPosition);
+                    } catch (Throwable th2) {
+                        th = th2;
+                        fileInputStream = fileInputStream2;
+                    }
+                } while (!finished);
+                if (fileInputStream2 != null) {
+                    try {
+                        fileInputStream2.close();
+                    } catch (Throwable e3) {
+                        FileLog.e(e3);
+                    }
+                }
+            } catch (Throwable th3) {
+                e3 = th3;
+                try {
+                    FileLog.e(e3);
+                    if (fileInputStream != null) {
+                        try {
+                            fileInputStream.close();
+                        } catch (Throwable e32) {
+                            FileLog.e(e32);
+                        }
+                    }
+                    if (!finished) {
+                        this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+                    }
+                } catch (Throwable th4) {
+                    th = th4;
+                    if (fileInputStream != null) {
+                        try {
+                            fileInputStream.close();
+                        } catch (Throwable e322) {
+                            FileLog.e(e322);
+                        }
+                    }
+                    throw th;
+                }
+            }
         }
-        setWillNotDraw(z);
-    }
-
-    public void setChecked(boolean value) {
-        this.checkImage.setVisibility(value ? 0 : 4);
+        if (!finished) {
+            this.paint.setColor(Theme.getDefaultColor(Theme.key_actionBarDefault));
+        }
     }
 
     protected void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine((float) getPaddingLeft(), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
+        int x = AndroidUtilities.dp(27.0f);
+        if (LocaleController.isRTL) {
+            x = getWidth() - x;
+        }
+        canvas.drawCircle((float) x, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
     }
 }

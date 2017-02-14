@@ -20,7 +20,7 @@ public class ChatLoadingCell extends FrameLayout {
         this.frameLayout.getBackground().setColorFilter(Theme.colorFilter);
         addView(this.frameLayout, LayoutHelper.createFrame(36, 36, 17));
         this.progressBar = new RadialProgressView(context);
-        this.progressBar.setSize(AndroidUtilities.dp(32.0f));
+        this.progressBar.setSize(AndroidUtilities.dp(28.0f));
         this.progressBar.setProgressColor(Theme.getColor(Theme.key_chat_serviceText));
         this.frameLayout.addView(this.progressBar, LayoutHelper.createFrame(32, 32, 17));
     }

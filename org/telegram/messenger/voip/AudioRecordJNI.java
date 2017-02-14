@@ -44,14 +44,18 @@ public class AudioRecordJNI {
 
     public void release() {
         this.running = false;
-        try {
-            this.thread.join();
-        } catch (Throwable e) {
-            FileLog.e(e);
+        if (this.thread != null) {
+            try {
+                this.thread.join();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+            this.thread = null;
         }
-        this.thread = null;
-        this.audioRecord.release();
-        this.audioRecord = null;
+        if (this.audioRecord != null) {
+            this.audioRecord.release();
+            this.audioRecord = null;
+        }
         if (this.agc != null) {
             this.agc.release();
             this.agc = null;

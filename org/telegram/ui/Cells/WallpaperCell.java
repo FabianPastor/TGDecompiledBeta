@@ -38,29 +38,35 @@ public class WallpaperCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(102.0f), NUM));
     }
 
-    public void setWallpaper(WallPaper wallpaper, int selectedBackground) {
+    public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper) {
         int i = 0;
         if (wallpaper == null) {
-            int i2;
             this.imageView.setVisibility(4);
             this.imageView2.setVisibility(0);
-            this.selectionView.setVisibility(selectedBackground == -1 ? 0 : 4);
-            ImageView imageView = this.imageView2;
-            if (selectedBackground == -1 || selectedBackground == 1000001) {
-                i2 = NUM;
-            } else {
-                i2 = NUM;
+            if (themedWallpaper != null) {
+                this.selectionView.setVisibility(selectedBackground == -2 ? 0 : 4);
+                this.imageView2.setImageDrawable(themedWallpaper);
+                this.imageView2.setScaleType(ScaleType.CENTER_CROP);
+                return;
             }
+            View view = this.selectionView;
+            if (selectedBackground != -1) {
+                i = 4;
+            }
+            view.setVisibility(i);
+            ImageView imageView = this.imageView2;
+            int i2 = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
             imageView.setBackgroundColor(i2);
+            this.imageView2.setScaleType(ScaleType.CENTER);
             return;
         }
         this.imageView.setVisibility(0);
         this.imageView2.setVisibility(4);
-        View view = this.selectionView;
+        View view2 = this.selectionView;
         if (selectedBackground != wallpaper.id) {
             i = 4;
         }
-        view.setVisibility(i);
+        view2.setVisibility(i);
         if (wallpaper instanceof TL_wallPaperSolid) {
             this.imageView.setImageBitmap(null);
             this.imageView.setBackgroundColor(-16777216 | wallpaper.bg_color);

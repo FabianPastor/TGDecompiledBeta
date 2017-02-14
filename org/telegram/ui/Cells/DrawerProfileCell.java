@@ -65,7 +65,6 @@ public class DrawerProfileCell extends FrameLayout {
 
     public DrawerProfileCell(Context context) {
         super(context);
-        setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
         this.cloudDrawable = context.getResources().getDrawable(R.drawable.cloud);
         this.cloudDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuCloud), Mode.MULTIPLY));
         this.shadowView = new ImageView(context);
@@ -110,8 +109,13 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
+        int color;
         Drawable backgroundDrawable = Theme.getCachedWallpaper();
-        int color = Theme.getServiceMessageColor();
+        if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
+            color = Theme.getColor(Theme.key_chats_menuTopShadow);
+        } else {
+            color = Theme.getServiceMessageColor();
+        }
         if (this.currentColor != color) {
             this.currentColor = color;
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(-16777216 | color, Mode.MULTIPLY));

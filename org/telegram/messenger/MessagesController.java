@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -7220,29 +7221,30 @@ public class MessagesController implements NotificationCenterDelegate {
                 PhoneCall call = ((TL_updatePhoneCall) update).phone_call;
                 VoIPService svc = VoIPService.getSharedInstance();
                 if (call instanceof TL_phoneCallRequested) {
-                    if (call.date + (this.callRingTimeout / 1000) < ConnectionsManager.getInstance().getCurrentTime()) {
-                        if (BuildVars.DEBUG_VERSION) {
-                            FileLog.d("ignoring too old call");
-                        }
-                    } else if (svc != null) {
-                        TLObject req = new TL_phone_discardCall();
-                        req.peer = new TL_inputPhoneCall();
-                        req.peer.access_hash = call.access_hash;
-                        req.peer.id = call.id;
-                        req.reason = new TL_phoneCallDiscardReasonBusy();
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (response != null) {
-                                    MessagesController.this.processUpdates((Updates) response, false);
+                    if (call.date + (this.callRingTimeout / 1000) >= ConnectionsManager.getInstance().getCurrentTime()) {
+                        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                        if (svc == null && tm.getCallState() == 0) {
+                            VoIPService.callIShouldHavePutIntoIntent = call;
+                            Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
+                            intent.putExtra("is_outgoing", false);
+                            intent.putExtra("user_id", call.participant_id == UserConfig.getClientUserId() ? call.admin_id : call.participant_id);
+                            ApplicationLoader.applicationContext.startService(intent);
+                        } else {
+                            TLObject req = new TL_phone_discardCall();
+                            req.peer = new TL_inputPhoneCall();
+                            req.peer.access_hash = call.access_hash;
+                            req.peer.id = call.id;
+                            req.reason = new TL_phoneCallDiscardReasonBusy();
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    if (response != null) {
+                                        MessagesController.this.processUpdates((Updates) response, false);
+                                    }
                                 }
-                            }
-                        });
-                    } else {
-                        VoIPService.callIShouldHavePutIntoIntent = call;
-                        Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
-                        intent.putExtra("is_outgoing", false);
-                        intent.putExtra("user_id", call.participant_id == UserConfig.getClientUserId() ? call.admin_id : call.participant_id);
-                        ApplicationLoader.applicationContext.startService(intent);
+                            });
+                        }
+                    } else if (BuildVars.DEBUG_VERSION) {
+                        FileLog.d("ignoring too old call");
                     }
                 } else if (svc != null) {
                     svc.onCallUpdated(call);

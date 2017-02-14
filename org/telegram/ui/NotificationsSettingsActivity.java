@@ -27,6 +27,7 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
+import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -51,6 +52,7 @@ import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class NotificationsSettingsActivity extends BaseFragment implements NotificationCenterDelegate {
+    private ListAdapter adapter;
     private int androidAutoAlertRow;
     private int badgeNumberRow;
     private int callsRingtoneRow;
@@ -543,10 +545,19 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.listView = new RecyclerListView(context);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        this.listView.setItemAnimator(null);
+        this.listView.setLayoutAnimation(null);
+        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false) {
+            public boolean supportsPredictiveItemAnimations() {
+                return false;
+            }
+        });
         this.listView.setVerticalScrollBarEnabled(false);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setAdapter(new ListAdapter(context));
+        RecyclerListView recyclerListView = this.listView;
+        Adapter listAdapter = new ListAdapter(context);
+        this.adapter = listAdapter;
+        recyclerListView.setAdapter(listAdapter);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 boolean enabled = false;
@@ -643,9 +654,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                         Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit();
                                         editor.clear();
                                         editor.commit();
-                                        if (NotificationsSettingsActivity.this.listView != null) {
-                                            NotificationsSettingsActivity.this.listView.invalidateViews();
-                                        }
+                                        NotificationsSettingsActivity.this.adapter.notifyDataSetChanged();
                                         if (NotificationsSettingsActivity.this.getParentActivity() != null) {
                                             Toast.makeText(NotificationsSettingsActivity.this.getParentActivity(), LocaleController.getString("ResetNotificationsText", R.string.ResetNotificationsText), 0).show();
                                         }
@@ -737,11 +746,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 } else if (position == NotificationsSettingsActivity.this.messageLedRow || position == NotificationsSettingsActivity.this.groupLedRow) {
                     if (NotificationsSettingsActivity.this.getParentActivity() != null) {
+                        r1 = position;
                         NotificationsSettingsActivity.this.showDialog(AlertsCreator.createColorSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), 0, position == NotificationsSettingsActivity.this.groupLedRow, position == NotificationsSettingsActivity.this.messageLedRow, new Runnable() {
                             public void run() {
-                                if (NotificationsSettingsActivity.this.listView != null) {
-                                    NotificationsSettingsActivity.this.listView.invalidateViews();
-                                }
+                                NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                             }
                         }));
                     } else {
@@ -749,11 +757,10 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     }
                 } else if (position == NotificationsSettingsActivity.this.messagePopupNotificationRow || position == NotificationsSettingsActivity.this.groupPopupNotificationRow) {
                     if (NotificationsSettingsActivity.this.getParentActivity() != null) {
+                        r1 = position;
                         NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPopupSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, position == NotificationsSettingsActivity.this.groupPopupNotificationRow, position == NotificationsSettingsActivity.this.messagePopupNotificationRow, new Runnable() {
                             public void run() {
-                                if (NotificationsSettingsActivity.this.listView != null) {
-                                    NotificationsSettingsActivity.this.listView.invalidateViews();
-                                }
+                                NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                             }
                         }));
                     } else {
@@ -768,24 +775,23 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == NotificationsSettingsActivity.this.callsVibrateRow) {
                         key = "vibrate_calls";
                     }
+                    r1 = position;
                     NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, key, new Runnable() {
                         public void run() {
-                            if (NotificationsSettingsActivity.this.listView != null) {
-                                NotificationsSettingsActivity.this.listView.invalidateViews();
-                            }
+                            NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                         }
                     }));
                 } else if (position == NotificationsSettingsActivity.this.messagePriorityRow || position == NotificationsSettingsActivity.this.groupPriorityRow) {
+                    r1 = position;
                     NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, position == NotificationsSettingsActivity.this.groupPriorityRow, position == NotificationsSettingsActivity.this.messagePriorityRow, new Runnable() {
                         public void run() {
-                            if (NotificationsSettingsActivity.this.listView != null) {
-                                NotificationsSettingsActivity.this.listView.invalidateViews();
-                            }
+                            NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                         }
                     }));
                 } else if (position == NotificationsSettingsActivity.this.repeatRow) {
                     Builder builder = new Builder(NotificationsSettingsActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("RepeatNotifications", R.string.RepeatNotifications));
+                    r1 = position;
                     builder.setItems(new CharSequence[]{LocaleController.getString("RepeatDisabled", R.string.RepeatDisabled), LocaleController.formatPluralString("Minutes", 5), LocaleController.formatPluralString("Minutes", 10), LocaleController.formatPluralString("Minutes", 30), LocaleController.formatPluralString("Hours", 1), LocaleController.formatPluralString("Hours", 2), LocaleController.formatPluralString("Hours", 4)}, new OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             int minutes = 0;
@@ -803,9 +809,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                                 minutes = PsExtractor.VIDEO_STREAM_MASK;
                             }
                             ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).edit().putInt("repeat_messages", minutes).commit();
-                            if (NotificationsSettingsActivity.this.listView != null) {
-                                NotificationsSettingsActivity.this.listView.invalidateViews();
-                            }
+                            NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -864,13 +868,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
             }
             editor.commit();
-            this.listView.invalidateViews();
+            this.adapter.notifyItemChanged(requestCode);
         }
     }
 
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationCenter.notificationsSettingsUpdated) {
-            this.listView.invalidateViews();
+            this.adapter.notifyDataSetChanged();
         }
     }
 

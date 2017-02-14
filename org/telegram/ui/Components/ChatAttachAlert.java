@@ -807,8 +807,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             });
         }
         this.hintTextView = new TextView(context);
-        this.hintTextView.setBackgroundResource(R.drawable.tooltip);
-        this.hintTextView.setTextColor(-1);
+        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
+        this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
         this.hintTextView.setTextSize(1, 14.0f);
         this.hintTextView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         this.hintTextView.setText(LocaleController.getString("AttachBotsHelp", R.string.AttachBotsHelp));

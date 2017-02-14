@@ -82,6 +82,7 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         switch (holder.getItemViewType()) {
             case 0:
                 ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getInstance().getUser(Integer.valueOf(UserConfig.getClientUserId())));
+                holder.itemView.setBackgroundColor(Theme.getColor(Theme.key_avatar_backgroundActionBarBlue));
                 return;
             case 3:
                 ((Item) this.items.get(position)).bind((DrawerActionCell) holder.itemView);

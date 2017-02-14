@@ -985,7 +985,19 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         }
                         MediaActivity.this.cantDeleteMessagesCount = 0;
                         MediaActivity.this.actionBar.hideActionMode();
-                        MediaActivity.this.listView.invalidateViews();
+                        int count = MediaActivity.this.listView.getChildCount();
+                        for (a = 0; a < count; a++) {
+                            View child = MediaActivity.this.listView.getChildAt(a);
+                            if (child instanceof SharedDocumentCell) {
+                                ((SharedDocumentCell) child).setChecked(false, true);
+                            } else if (child instanceof SharedPhotoVideoCell) {
+                                for (int b = 0; b < 6; b++) {
+                                    ((SharedPhotoVideoCell) child).setChecked(b, false, true);
+                                }
+                            } else if (child instanceof SharedLinkCell) {
+                                ((SharedLinkCell) child).setChecked(false, true);
+                            }
+                        }
                         return;
                     }
                     MediaActivity.this.finishFragment();

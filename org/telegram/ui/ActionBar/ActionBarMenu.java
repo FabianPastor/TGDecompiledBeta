@@ -2,7 +2,6 @@ package org.telegram.ui.ActionBar;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -21,22 +20,6 @@ public class ActionBarMenu extends LinearLayout {
 
     public ActionBarMenu(Context context) {
         super(context);
-    }
-
-    public View addItemResource(int id, int resourceId) {
-        View view = ((LayoutInflater) getContext().getSystemService("layout_inflater")).inflate(resourceId, null);
-        view.setTag(Integer.valueOf(id));
-        addView(view);
-        LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-        layoutParams.height = -1;
-        view.setBackgroundDrawable(Theme.createSelectorDrawable(this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor));
-        view.setLayoutParams(layoutParams);
-        view.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                ActionBarMenu.this.onItemClick(((Integer) view.getTag()).intValue());
-            }
-        });
-        return view;
     }
 
     protected void updateItemsBackgroundColor() {

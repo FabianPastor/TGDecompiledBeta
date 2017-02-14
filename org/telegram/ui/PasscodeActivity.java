@@ -378,15 +378,21 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             frameLayout.setTag(Theme.key_windowBackgroundGray);
             frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
             this.listView = new RecyclerListView(context);
-            this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+            this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false) {
+                public boolean supportsPredictiveItemAnimations() {
+                    return false;
+                }
+            });
             this.listView.setVerticalScrollBarEnabled(false);
+            this.listView.setItemAnimator(null);
+            this.listView.setLayoutAnimation(null);
             frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
             RecyclerListView recyclerListView = this.listView;
             Adapter listAdapter = new ListAdapter(context);
             this.listAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
             this.listView.setOnItemClickListener(new OnItemClickListener() {
-                public void onItemClick(View view, int position) {
+                public void onItemClick(View view, final int position) {
                     boolean z = true;
                     if (!view.isEnabled()) {
                         return;
@@ -466,7 +472,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                                     } else if (which == 4) {
                                         UserConfig.autoLockIn = 18000;
                                     }
-                                    PasscodeActivity.this.listView.invalidateViews();
+                                    PasscodeActivity.this.listAdapter.notifyItemChanged(position);
                                     UserConfig.saveConfig(false);
                                 }
                             });

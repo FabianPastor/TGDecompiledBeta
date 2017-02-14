@@ -144,6 +144,7 @@ public class MessageObject {
     public ArrayList<TextLayoutBlock> textLayoutBlocks;
     public int textWidth;
     public int type;
+    public boolean useCustomPhoto;
     public VideoEditedInfo videoEditedInfo;
     public boolean viewsReloaded;
     public int wantedBotKeyboardWidth;
