@@ -3,9 +3,11 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.Drawable.ConstantState;
+import android.support.annotation.NonNull;
 
-public class CombinedDrawable extends Drawable {
+public class CombinedDrawable extends Drawable implements Callback {
     private int backHeight;
     private int backWidth;
     private Drawable background;
@@ -21,6 +23,7 @@ public class CombinedDrawable extends Drawable {
         this.icon = iconDrawable;
         this.left = leftOffset;
         this.top = topOffset;
+        iconDrawable.setCallback(this);
     }
 
     public void setIconSize(int width, int height) {
@@ -31,6 +34,7 @@ public class CombinedDrawable extends Drawable {
     public CombinedDrawable(Drawable backgroundDrawable, Drawable iconDrawable) {
         this.background = backgroundDrawable;
         this.icon = iconDrawable;
+        iconDrawable.setCallback(this);
     }
 
     public void setCustomSize(int width, int height) {
@@ -59,11 +63,16 @@ public class CombinedDrawable extends Drawable {
     }
 
     public boolean setState(int[] stateSet) {
-        return this.icon.setState(stateSet);
+        this.icon.setState(stateSet);
+        return true;
     }
 
     public int[] getState() {
         return this.icon.getState();
+    }
+
+    protected boolean onStateChange(int[] state) {
+        return true;
     }
 
     public void jumpToCurrentState() {
@@ -114,5 +123,17 @@ public class CombinedDrawable extends Drawable {
 
     public int getOpacity() {
         return this.icon.getOpacity();
+    }
+
+    public void invalidateDrawable(@NonNull Drawable who) {
+        invalidateSelf();
+    }
+
+    public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
+        scheduleSelf(what, when);
+    }
+
+    public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
+        unscheduleSelf(what);
     }
 }

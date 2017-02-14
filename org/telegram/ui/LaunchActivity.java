@@ -2789,7 +2789,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             onFinish();
             finish();
             return false;
-        } else if (layout.fragmentsStack.size() == 2) {
+        } else if (layout.fragmentsStack.size() >= 2) {
             this.drawerLayoutContainer.setAllowOpenDrawer(true, false);
         }
         return true;

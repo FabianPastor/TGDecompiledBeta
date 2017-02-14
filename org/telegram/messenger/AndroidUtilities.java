@@ -59,7 +59,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -275,8 +274,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -612,18 +611,6 @@ public class AndroidUtilities {
                 Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
                 mCursorDrawableRes.setAccessible(true);
                 mCursorDrawableRes.setInt(editText, 0);
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-        }
-    }
-
-    public static void setProgressBarAnimationDuration(ProgressBar progressBar, int duration) {
-        if (progressBar != null) {
-            try {
-                Field mCursorDrawableRes = ProgressBar.class.getDeclaredField("mDuration");
-                mCursorDrawableRes.setAccessible(true);
-                mCursorDrawableRes.setInt(progressBar, duration);
             } catch (Throwable e) {
                 FileLog.e(e);
             }

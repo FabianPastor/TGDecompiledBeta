@@ -1190,6 +1190,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.windowLayoutParams.flags = 8;
             }
             this.actionBar = new ActionBar(activity);
+            this.actionBar.setTitleColor(-1);
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);

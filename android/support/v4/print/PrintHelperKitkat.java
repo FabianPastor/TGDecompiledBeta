@@ -174,8 +174,8 @@ class PrintHelperKitkat {
         final WriteResultCallback writeResultCallback2 = writeResultCallback;
         new AsyncTask<Void, Void, Throwable>() {
             protected Throwable doInBackground(Void... params) {
-                PrintedPdfDocument pdfDocument;
                 Throwable th = null;
+                PrintedPdfDocument pdfDocument;
                 Bitmap maybeGrayscale;
                 try {
                     if (!cancellationSignal2.isCanceled()) {

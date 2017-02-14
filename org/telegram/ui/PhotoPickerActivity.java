@@ -369,6 +369,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public View createView(Context context) {
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_MEDIA_PICKER_COLOR);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
+        this.actionBar.setTitleColor(-1);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (this.selectedAlbum != null) {
             this.actionBar.setTitle(this.selectedAlbum.bucketName);

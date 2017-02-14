@@ -123,6 +123,7 @@ public class MessageObject {
     public int audioProgressSec;
     public CharSequence caption;
     public int contentType;
+    public String customReplyName;
     public String dateKey;
     public boolean deleted;
     public boolean forceUpdate;
@@ -1522,10 +1523,13 @@ public class MessageObject {
     }
 
     public String getDocumentName() {
-        if (this.messageOwner.media == null || this.messageOwner.media.document == null) {
-            return "";
+        if (this.messageOwner.media instanceof TL_messageMediaDocument) {
+            return FileLoader.getDocumentFileName(this.messageOwner.media.document);
         }
-        return FileLoader.getDocumentFileName(this.messageOwner.media.document);
+        if (this.messageOwner.media instanceof TL_messageMediaWebPage) {
+            return FileLoader.getDocumentFileName(this.messageOwner.media.webpage.document);
+        }
+        return "";
     }
 
     public static boolean isStickerDocument(Document document) {

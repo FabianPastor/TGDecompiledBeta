@@ -174,6 +174,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private int forwardNameY;
     private StaticLayout[] forwardedNameLayout = new StaticLayout[2];
     private int forwardedNameWidth;
+    private boolean fullyDraw;
     private boolean gamePreviewPressed;
     private boolean hasGamePreview;
     private boolean hasInvoicePreview;
@@ -1169,6 +1170,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         }
     }
 
+    public void setFullyDraw(boolean draw) {
+        this.fullyDraw = draw;
+    }
+
     public void setVisiblePart(int position, int height) {
         if (this.currentMessageObject != null && this.currentMessageObject.textLayoutBlocks != null) {
             position -= this.textY;
@@ -1701,28 +1706,25 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        boolean z;
         int i;
         int dp;
         int linkPreviewMaxWidth;
-        String author;
-        String description;
-        Photo photo;
         TLObject webDocument;
         TLObject document;
-        boolean smallImage;
+        String type;
         int height;
         Throwable e;
         int restLinesCount;
+        int lineLeft;
+        boolean authorIsRTL;
         boolean hasRTL;
         int maxPhotoWidth;
         DocumentAttribute attribute;
         int durationWidth;
         ArrayList arrayList;
-        float scale;
         String fileName;
+        String str;
         int mWidth;
-        int timeWidthTotal;
         int rows;
         boolean fullWidth;
         float f;
@@ -1730,10 +1732,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int maxButtonsWidth;
         TL_keyboardButtonRow row;
         int buttonsCount;
-        int b;
+        int buttonWidth;
         ChatMessageCell chatMessageCell;
         BotButton botButton;
         String key;
+        BotButton oldButton;
         CharSequence buttonText;
         if (messageObject.checkLayout()) {
             this.currentMessageObject = null;
@@ -1744,8 +1747,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
             int width;
             int a;
-            int buttonWidth;
-            BotButton oldButton;
+            int timeWidthTotal;
+            int b;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1814,8 +1817,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            boolean z;
+            float scale;
             boolean photoExist;
-            String str;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1874,12 +1878,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
-                    String type;
+                    String author;
+                    String description;
+                    Photo photo;
                     int duration;
+                    boolean smallImage;
                     int additinalWidth;
                     int restLines;
-                    int lineLeft;
-                    boolean authorIsRTL;
                     PhotoSize photoSize;
                     PhotoSize photoSize2;
                     int dp2;
@@ -5586,29 +5591,35 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             } else {
                 this.textY = AndroidUtilities.dp(10.0f) + this.namesOffset;
             }
-            if (!(this.currentMessageObject.textLayoutBlocks == null || this.currentMessageObject.textLayoutBlocks.isEmpty() || this.firstVisibleBlockNum < 0)) {
-                a = this.firstVisibleBlockNum;
-                while (a <= this.lastVisibleBlockNum && a < this.currentMessageObject.textLayoutBlocks.size()) {
-                    TextLayoutBlock block = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
-                    canvas.save();
-                    canvas.translate((float) (this.textX - ((int) Math.ceil((double) block.textXOffset))), ((float) this.textY) + block.textYOffset);
-                    if (this.pressedLink != null && a == this.linkBlockNum) {
-                        for (b = 0; b < this.urlPath.size(); b++) {
-                            canvas.drawPath((Path) this.urlPath.get(b), Theme.chat_urlPaint);
+            if (!(this.currentMessageObject.textLayoutBlocks == null || this.currentMessageObject.textLayoutBlocks.isEmpty())) {
+                if (this.fullyDraw) {
+                    this.firstVisibleBlockNum = 0;
+                    this.lastVisibleBlockNum = this.currentMessageObject.textLayoutBlocks.size();
+                }
+                if (this.firstVisibleBlockNum >= 0) {
+                    a = this.firstVisibleBlockNum;
+                    while (a <= this.lastVisibleBlockNum && a < this.currentMessageObject.textLayoutBlocks.size()) {
+                        TextLayoutBlock block = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
+                        canvas.save();
+                        canvas.translate((float) (this.textX - ((int) Math.ceil((double) block.textXOffset))), ((float) this.textY) + block.textYOffset);
+                        if (this.pressedLink != null && a == this.linkBlockNum) {
+                            for (b = 0; b < this.urlPath.size(); b++) {
+                                canvas.drawPath((Path) this.urlPath.get(b), Theme.chat_urlPaint);
+                            }
                         }
-                    }
-                    if (a == this.linkSelectionBlockNum && !this.urlPathSelection.isEmpty()) {
-                        for (b = 0; b < this.urlPathSelection.size(); b++) {
-                            canvas.drawPath((Path) this.urlPathSelection.get(b), Theme.chat_textSearchSelectionPaint);
+                        if (a == this.linkSelectionBlockNum && !this.urlPathSelection.isEmpty()) {
+                            for (b = 0; b < this.urlPathSelection.size(); b++) {
+                                canvas.drawPath((Path) this.urlPathSelection.get(b), Theme.chat_textSearchSelectionPaint);
+                            }
                         }
+                        try {
+                            block.textLayout.draw(canvas);
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
+                        canvas.restore();
+                        a++;
                     }
-                    try {
-                        block.textLayout.draw(canvas);
-                    } catch (Throwable e) {
-                        FileLog.e(e);
-                    }
-                    canvas.restore();
-                    a++;
                 }
             }
             if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
@@ -6866,7 +6877,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     maxWidth -= AndroidUtilities.dp(44.0f);
                 }
                 name = null;
-                if (messageObject.replyMessageObject.isFromUser()) {
+                if (messageObject.customReplyName != null) {
+                    name = messageObject.customReplyName;
+                } else if (messageObject.replyMessageObject.isFromUser()) {
                     User user = MessagesController.getInstance().getUser(Integer.valueOf(messageObject.replyMessageObject.messageOwner.from_id));
                     if (user != null) {
                         name = UserObject.getUserName(user);

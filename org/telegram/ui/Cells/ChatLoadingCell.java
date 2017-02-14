@@ -3,16 +3,15 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import com.google.android.gms.common.ConnectionResult;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RadialProgressView;
 
 public class ChatLoadingCell extends FrameLayout {
     private FrameLayout frameLayout;
-    private ProgressBar progressBar;
+    private RadialProgressView progressBar;
 
     public ChatLoadingCell(Context context) {
         super(context);
@@ -20,14 +19,10 @@ public class ChatLoadingCell extends FrameLayout {
         this.frameLayout.setBackgroundResource(R.drawable.system_loader);
         this.frameLayout.getBackground().setColorFilter(Theme.colorFilter);
         addView(this.frameLayout, LayoutHelper.createFrame(36, 36, 17));
-        ProgressBar progressBar = new ProgressBar(context);
-        try {
-            progressBar.setIndeterminateDrawable(getResources().getDrawable(R.drawable.loading_animation));
-        } catch (Exception e) {
-        }
-        progressBar.setIndeterminate(true);
-        AndroidUtilities.setProgressBarAnimationDuration(progressBar, ConnectionResult.DRIVE_EXTERNAL_STORAGE_REQUIRED);
-        this.frameLayout.addView(progressBar, LayoutHelper.createFrame(32, 32, 17));
+        this.progressBar = new RadialProgressView(context);
+        this.progressBar.setSize(AndroidUtilities.dp(32.0f));
+        this.progressBar.setProgressColor(Theme.getColor(Theme.key_chat_serviceText));
+        this.frameLayout.addView(this.progressBar, LayoutHelper.createFrame(32, 32, 17));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -36,9 +31,5 @@ public class ChatLoadingCell extends FrameLayout {
 
     public void setProgressVisible(boolean value) {
         this.frameLayout.setVisibility(value ? 0 : 4);
-    }
-
-    public ProgressBar getProgressBar() {
-        return this.progressBar;
     }
 }

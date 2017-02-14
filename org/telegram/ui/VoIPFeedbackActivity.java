@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -21,6 +22,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
+import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
 import org.telegram.ui.Components.LayoutHelper;
@@ -60,6 +62,9 @@ public class VoIPFeedbackActivity extends Activity {
                 req.peer.id = VoIPFeedbackActivity.this.getIntent().getLongExtra("call_id", 0);
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(TLObject response, TL_error error) {
+                        if (response instanceof TL_updates) {
+                            MessagesController.getInstance().processUpdates((TL_updates) response, false);
+                        }
                     }
                 });
                 VoIPFeedbackActivity.this.finish();

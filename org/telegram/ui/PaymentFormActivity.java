@@ -926,7 +926,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     this.inputFields[a].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     this.inputFields[a].setBackgroundDrawable(null);
                     AndroidUtilities.clearCursorDrawable(this.inputFields[a]);
-                    if (a == 0 || a == 1) {
+                    if (a == 1) {
+                        this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
+                        this.inputFields[a].setTypeface(Typeface.DEFAULT);
+                    } else if (a == 0) {
                         this.inputFields[a].setInputType(2);
                     } else if (a == 2 || a == 3) {
                         final boolean z = a == 2;
@@ -939,6 +942,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     return true;
                                 }
                                 final int[] result = new int[1];
+                                View focusedView = PaymentFormActivity.this.getParentActivity().getCurrentFocus();
+                                if (focusedView != null) {
+                                    AndroidUtilities.hideKeyboard(focusedView);
+                                    focusedView.clearFocus();
+                                }
                                 PaymentFormActivity.this.showDialog(AlertsCreator.createExpireDateAlert(PaymentFormActivity.this.getParentActivity(), z, result, new Runnable() {
                                     public void run() {
                                         PaymentFormActivity.this.inputFields[z ? 2 : 3].setText(String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(result[0])}));
@@ -1665,7 +1673,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 this.validateRequest.info.shipping_address.street_line2 = this.inputFields[1].getText().toString();
                 this.validateRequest.info.shipping_address.city = this.inputFields[2].getText().toString();
                 this.validateRequest.info.shipping_address.state = this.inputFields[3].getText().toString();
-                this.validateRequest.info.shipping_address.country_iso2 = this.countryName;
+                this.validateRequest.info.shipping_address.country_iso2 = this.countryName != null ? this.countryName : "";
                 this.validateRequest.info.shipping_address.post_code = this.inputFields[5].getText().toString();
                 tL_paymentRequestedInfo = this.validateRequest.info;
                 tL_paymentRequestedInfo.flags |= 8;
@@ -1823,7 +1831,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             info.shipping_address.street_line2 = this.inputFields[1].getText().toString();
             info.shipping_address.city = this.inputFields[2].getText().toString();
             info.shipping_address.state = this.inputFields[3].getText().toString();
-            info.shipping_address.country_iso2 = this.countryName;
+            info.shipping_address.country_iso2 = this.countryName != null ? this.countryName : "";
             info.shipping_address.post_code = this.inputFields[5].getText().toString();
             info.flags |= 8;
         }

@@ -24,7 +24,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class FeaturedStickerSetInfoCell extends FrameLayout {
     private TextView addButton;
-    private Drawable addDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
+    private Drawable addDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
     private int angle;
     private Paint botProgressPaint = new Paint(1);
     private Drawable delDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_featuredStickers_delButton), Theme.getColor(Theme.key_featuredStickers_delButtonPressed));
@@ -71,14 +71,14 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.botProgressPaint.setStyle(Style.STROKE);
         this.botProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.nameTextView = new TextView(context);
-        this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelTrendingTitle));
         this.nameTextView.setTextSize(1, 17.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setSingleLine(true);
         addView(this.nameTextView, LayoutHelper.createFrame(-2, -1.0f, 51, (float) left, 8.0f, 100.0f, 0.0f));
         this.infoTextView = new TextView(context);
-        this.infoTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        this.infoTextView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelTrendingDescription));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setEllipsize(TruncateAt.END);
         this.infoTextView.setSingleLine(true);

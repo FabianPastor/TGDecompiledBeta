@@ -188,7 +188,6 @@ public final class R {
         public static final int common_google_signin_btn_text_light_focused = NUM;
         public static final int common_google_signin_btn_text_light_normal = NUM;
         public static final int common_google_signin_btn_text_light_pressed = NUM;
-        public static final int compose_panel = NUM;
         public static final int compose_panel_shadow = NUM;
         public static final int corner_in_bl = NUM;
         public static final int corner_in_br = NUM;
@@ -463,9 +462,7 @@ public final class R {
         public static final int profile_info = NUM;
         public static final int profile_list = NUM;
         public static final int profile_phone = NUM;
-        public static final int rating_bar = NUM;
         public static final int rec = NUM;
-        public static final int recorded = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;

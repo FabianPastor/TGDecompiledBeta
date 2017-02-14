@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
@@ -12,6 +13,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class ChatBigEmptyView extends LinearLayout {
     private TextView secretViewStatusTextView;
+    private ArrayList<TextView> textViews = new ArrayList();
 
     public ChatBigEmptyView(Context context, boolean secretChat) {
         super(context);
@@ -22,9 +24,10 @@ public class ChatBigEmptyView extends LinearLayout {
         if (secretChat) {
             this.secretViewStatusTextView = new TextView(context);
             this.secretViewStatusTextView.setTextSize(1, 15.0f);
-            this.secretViewStatusTextView.setTextColor(-1);
+            this.secretViewStatusTextView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
             this.secretViewStatusTextView.setGravity(1);
             this.secretViewStatusTextView.setMaxWidth(AndroidUtilities.dp(BitmapDescriptorFactory.HUE_AZURE));
+            this.textViews.add(this.secretViewStatusTextView);
             addView(this.secretViewStatusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {
             ImageView imageView = new ImageView(context);
@@ -41,7 +44,8 @@ public class ChatBigEmptyView extends LinearLayout {
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setGravity(1);
         }
-        textView.setTextColor(-1);
+        textView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
+        this.textViews.add(textView);
         textView.setMaxWidth(AndroidUtilities.dp(260.0f));
         int i = secretChat ? LocaleController.isRTL ? 5 : 3 : 1;
         addView(textView, LayoutHelper.createLinear(-2, -2, i | 48, 0, 8, 0, secretChat ? 0 : 8));
@@ -53,7 +57,8 @@ public class ChatBigEmptyView extends LinearLayout {
             imageView.setImageResource(secretChat ? R.drawable.ic_lock_white : R.drawable.list_circle);
             textView = new TextView(context);
             textView.setTextSize(1, 15.0f);
-            textView.setTextColor(-1);
+            textView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
+            this.textViews.add(textView);
             textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             textView.setMaxWidth(AndroidUtilities.dp(260.0f));
             switch (a) {
@@ -105,6 +110,12 @@ public class ChatBigEmptyView extends LinearLayout {
                 }
                 linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2));
             }
+        }
+    }
+
+    public void setTextColor(int color) {
+        for (int a = 0; a < this.textViews.size(); a++) {
+            ((TextView) this.textViews.get(a)).setTextColor(color);
         }
     }
 

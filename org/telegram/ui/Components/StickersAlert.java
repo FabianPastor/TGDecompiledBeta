@@ -589,9 +589,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         closeButton.setImageResource(R.drawable.msg_panel_clear);
         closeButton.setColorFilter(new PorterDuffColorFilter(-5723992, Mode.MULTIPLY));
         closeButton.setScaleType(ScaleType.CENTER);
-        if (VERSION.SDK_INT >= 21) {
-            closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-        }
         this.stickerPreviewLayout.addView(closeButton, LayoutHelper.createFrame(48, 48, 53));
         closeButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

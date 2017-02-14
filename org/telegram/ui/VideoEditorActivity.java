@@ -250,6 +250,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     public View createView(Context context) {
         this.needCompressVideo = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("compress_video", true);
         this.actionBar.setBackgroundColor(-16777216);
+        this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.getString("AttachVideo", R.string.AttachVideo));

@@ -20,7 +20,7 @@ public class CloseProgressDrawable2 extends Drawable {
     private RectF rect = new RectF();
 
     public CloseProgressDrawable2() {
-        this.paint.setColor(-5395027);
+        this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setStrokeCap(Cap.ROUND);
         this.paint.setStyle(Style.STROKE);
@@ -34,6 +34,10 @@ public class CloseProgressDrawable2 extends Drawable {
 
     public void stopAnimation() {
         this.animating = false;
+    }
+
+    public void setColor(int value) {
+        this.paint.setColor(value);
     }
 
     public void draw(Canvas canvas) {
@@ -110,6 +114,7 @@ public class CloseProgressDrawable2 extends Drawable {
     }
 
     public void setColorFilter(ColorFilter cf) {
+        this.paint.setColorFilter(cf);
     }
 
     public int getOpacity() {

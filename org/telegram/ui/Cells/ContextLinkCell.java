@@ -613,7 +613,6 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             canvas.restore();
         }
         if (this.mediaWebpage && (this.documentAttachType == 7 || this.documentAttachType == 2)) {
-            this.radialProgress.setProgressColor(-1);
             this.radialProgress.draw(canvas);
         }
         if (this.needDivider && !this.mediaWebpage) {

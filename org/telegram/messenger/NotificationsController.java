@@ -68,6 +68,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionGameScore;
 import org.telegram.tgnet.TLRPC.TL_messageActionLoginUnknownLocation;
 import org.telegram.tgnet.TLRPC.TL_messageActionPaymentSent;
+import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -78,6 +79,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageService;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PopupNotificationActivity;
@@ -799,15 +801,19 @@ public class NotificationsController {
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
                     return LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionLoginUnknownLocation) {
-                    r24 = new Object[2];
-                    r24[0] = LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000);
-                    r24[1] = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
-                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, r24);
+                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
                     return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                 } else if ((messageObject.messageOwner.action instanceof TL_messageActionGameScore) || (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent)) {
                     return messageObject.messageText.toString();
                 } else {
-                    return null;
+                    if (!(messageObject.messageOwner.action instanceof TL_messageActionPhoneCall)) {
+                        return null;
+                    }
+                    boolean isMissed = messageObject.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonMissed;
+                    if (messageObject.isOut() || !isMissed) {
+                        return null;
+                    }
+                    return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
                 }
             } else if (messageObject.isMediaEmpty()) {
                 if (shortMessage) {
@@ -1684,6 +1690,8 @@ public class NotificationsController {
                 String message;
                 PendingIntent contentIntent;
                 WearableExtender wearableExtender;
+                String dismissalID;
+                WearableExtender summaryExtender;
                 Builder builder;
                 BitmapDrawable img;
                 float scaleFactor;
@@ -1780,6 +1788,16 @@ public class NotificationsController {
                     if (wearReplyAction != null) {
                         wearableExtender.addAction(wearReplyAction);
                     }
+                    dismissalID = null;
+                    if (chat != null) {
+                        dismissalID = "tgchat" + chat.id + "_" + max_id;
+                    } else if (user != null) {
+                        dismissalID = "tguser" + user.id + "_" + max_id;
+                    }
+                    wearableExtender.setDismissalId(dismissalID);
+                    summaryExtender = new WearableExtender();
+                    summaryExtender.setDismissalId("summary_" + dismissalID);
+                    notificationBuilder.extend(summaryExtender);
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup("messages").setContentText(text).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
                     if (photoPath != null) {
                         img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
@@ -1883,6 +1901,16 @@ public class NotificationsController {
                     if (wearReplyAction != null) {
                         wearableExtender.addAction(wearReplyAction);
                     }
+                    dismissalID = null;
+                    if (chat != null) {
+                        dismissalID = "tgchat" + chat.id + "_" + max_id;
+                    } else if (user != null) {
+                        dismissalID = "tguser" + user.id + "_" + max_id;
+                    }
+                    wearableExtender.setDismissalId(dismissalID);
+                    summaryExtender = new WearableExtender();
+                    summaryExtender.setDismissalId("summary_" + dismissalID);
+                    notificationBuilder.extend(summaryExtender);
                     builder = new Builder(ApplicationLoader.applicationContext).setContentTitle(name).setSmallIcon(R.drawable.notification).setGroup("messages").setContentText(text).setAutoCancel(true).setNumber(messageObjects.size()).setColor(-13851168).setGroupSummary(false).setWhen(((long) ((MessageObject) messageObjects.get(0)).messageOwner.date) * 1000).setStyle(messagingStyle).setContentIntent(contentIntent).extend(wearableExtender).extend(new CarExtender().setUnreadConversation(unreadConvBuilder.build())).setCategory("msg");
                     if (photoPath != null) {
                         img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");

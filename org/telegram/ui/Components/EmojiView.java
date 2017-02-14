@@ -105,7 +105,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int emojiSize;
     private LinearLayout emojiTab;
     private HashMap<String, Integer> emojiUseHistory = new HashMap();
-    private int featuresStickersHash;
+    private int featuredStickersHash;
     private ExtendedGridLayoutManager flowLayoutManager;
     private int gifTabNum = -2;
     private GifsAdapter gifsAdapter;
@@ -1062,7 +1062,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 }
                 if (this.totalItems != 0) {
                     EmojiView.this.trendingLoaded = true;
-                    EmojiView.this.featuresStickersHash = StickersQuery.getFeaturesStickersHashWithoutUnread();
+                    EmojiView.this.featuredStickersHash = StickersQuery.getFeaturesStickersHashWithoutUnread();
                 }
                 super.notifyDataSetChanged();
             }
@@ -1792,7 +1792,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
             ArrayList<Long> unread = StickersQuery.getUnreadStickerSets();
             if (!(this.trendingGridAdapter == null || this.trendingGridAdapter.getItemCount() == 0 || unread.isEmpty())) {
-                TextView stickersCounter = this.stickersTab.addIconTabWithCounter(R.drawable.ic_smiles_trend);
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_smiles_trend);
+                Theme.setDrawableColorByKey(drawable, Theme.key_chat_emojiPanelIcon);
+                TextView stickersCounter = this.stickersTab.addIconTabWithCounter(drawable);
                 this.trendingTabNum = this.stickersTabOffset;
                 this.stickersTabOffset++;
                 stickersCounter.setText(String.format("%d", new Object[]{Integer.valueOf(unread.size())}));
@@ -2229,7 +2231,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         } else if (id == NotificationCenter.featuredStickersDidLoaded) {
             if (this.trendingGridAdapter != null) {
-                if (this.featuresStickersHash != StickersQuery.getFeaturesStickersHashWithoutUnread()) {
+                if (this.featuredStickersHash != StickersQuery.getFeaturesStickersHashWithoutUnread()) {
                     this.trendingLoaded = false;
                 }
                 if (this.trendingLoaded) {

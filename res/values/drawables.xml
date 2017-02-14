@@ -377,10 +377,6 @@
     <drawable name="common_google_signin_btn_text_light_pressed">res/drawable-hdpi-v4/common_google_signin_btn_text_light_pressed.9.png</drawable>
     <drawable name="common_google_signin_btn_text_light_pressed">res/drawable-xhdpi-v4/common_google_signin_btn_text_light_pressed.9.png</drawable>
     <drawable name="common_google_signin_btn_text_light_pressed">res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_pressed.9.png</drawable>
-    <drawable name="compose_panel">res/drawable-mdpi-v4/compose_panel.9.png</drawable>
-    <drawable name="compose_panel">res/drawable-hdpi-v4/compose_panel.9.png</drawable>
-    <drawable name="compose_panel">res/drawable-xhdpi-v4/compose_panel.9.png</drawable>
-    <drawable name="compose_panel">res/drawable-xxhdpi-v4/compose_panel.9.png</drawable>
     <drawable name="compose_panel_shadow">res/drawable-mdpi-v4/compose_panel_shadow.png</drawable>
     <drawable name="compose_panel_shadow">res/drawable-hdpi-v4/compose_panel_shadow.png</drawable>
     <drawable name="compose_panel_shadow">res/drawable-xhdpi-v4/compose_panel_shadow.png</drawable>
@@ -1407,15 +1403,10 @@
     <drawable name="profile_phone">res/drawable-hdpi-v4/profile_phone.png</drawable>
     <drawable name="profile_phone">res/drawable-xhdpi-v4/profile_phone.png</drawable>
     <drawable name="profile_phone">res/drawable-xxhdpi-v4/profile_phone.png</drawable>
-    <drawable name="rating_bar">res/drawable/rating_bar.xml</drawable>
     <drawable name="rec">res/drawable-mdpi-v4/rec.png</drawable>
     <drawable name="rec">res/drawable-hdpi-v4/rec.png</drawable>
     <drawable name="rec">res/drawable-xhdpi-v4/rec.png</drawable>
     <drawable name="rec">res/drawable-xxhdpi-v4/rec.png</drawable>
-    <drawable name="recorded">res/drawable-mdpi-v4/recorded.9.png</drawable>
-    <drawable name="recorded">res/drawable-hdpi-v4/recorded.9.png</drawable>
-    <drawable name="recorded">res/drawable-xhdpi-v4/recorded.9.png</drawable>
-    <drawable name="recorded">res/drawable-xxhdpi-v4/recorded.9.png</drawable>
     <drawable name="redcircle">res/drawable-mdpi-v4/redcircle.png</drawable>
     <drawable name="redcircle">res/drawable-hdpi-v4/redcircle.png</drawable>
     <drawable name="redcircle">res/drawable-xhdpi-v4/redcircle.png</drawable>

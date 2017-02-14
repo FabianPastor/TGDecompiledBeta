@@ -32,7 +32,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Cells.ThemeCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -62,20 +62,27 @@ public class ThemeActivity extends BaseFragment {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(new TextSettingsCell(this.mContext));
+            return new Holder(new ThemeCell(this.mContext));
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = false;
-            String text = ((ThemeInfo) Theme.themes.get(position)).name;
+            boolean z;
+            boolean z2 = true;
+            ThemeInfo themeInfo = (ThemeInfo) Theme.themes.get(position);
+            String text = themeInfo.name;
             if (text.endsWith(".attheme")) {
                 text = text.substring(0, text.lastIndexOf(46));
             }
-            TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
-            if (position != Theme.themes.size() - 1) {
+            ThemeCell themeCell = (ThemeCell) holder.itemView;
+            if (themeInfo == Theme.getCurrentTheme()) {
                 z = true;
+            } else {
+                z = false;
             }
-            textSettingsCell.setText(text, z);
+            if (position == Theme.themes.size() - 1) {
+                z2 = false;
+            }
+            themeCell.setText(text, z, z2);
         }
 
         public int getItemViewType(int i) {
@@ -85,7 +92,7 @@ public class ThemeActivity extends BaseFragment {
 
     public View createView(Context context) {
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setAllowOverlayTitle(true);
+        this.actionBar.setAllowOverlayTitle(false);
         this.actionBar.setTitle(LocaleController.getString("Theme", R.string.Theme));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -233,19 +240,10 @@ public class ThemeActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[10];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        themeDescriptionArr[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
-        int i = 0;
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, i, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        i = 0;
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, i, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        return themeDescriptionArr;
+        r9 = new ThemeDescription[11];
+        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
+        return r9;
     }
 }

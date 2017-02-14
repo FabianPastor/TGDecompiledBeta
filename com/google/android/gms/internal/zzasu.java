@@ -297,13 +297,13 @@ class zzasu extends zzats {
 
     @WorkerThread
     static boolean zza(zzati com_google_android_gms_internal_zzati, SQLiteDatabase sQLiteDatabase, String str) {
-        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzati == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
+        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -932,7 +932,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     protected long zzU(String str, String str2) {
-        long zza;
         Object e;
         zzac.zzdv(str);
         zzac.zzdv(str2);
@@ -940,6 +939,7 @@ class zzasu extends zzats {
         zznA();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1465,12 +1465,12 @@ class zzasu extends zzats {
     }
 
     public String zzam(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzmq();
         zznA();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {

@@ -81,9 +81,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_discardCall;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_receivedCall;
 import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
-import org.telegram.tgnet.TLRPC.TL_updatePhoneCall;
 import org.telegram.tgnet.TLRPC.TL_updates;
-import org.telegram.tgnet.TLRPC.Update;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 import org.telegram.ui.VoIPActivity;
@@ -642,21 +640,13 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         FileLog.e("error on phone.discardCall: " + error);
                     } else {
                         if (response instanceof TL_updates) {
-                            Iterator it = ((TL_updates) response).updates.iterator();
-                            while (it.hasNext()) {
-                                Update upd = (Update) it.next();
-                                if (upd instanceof TL_updatePhoneCall) {
-                                    TL_updatePhoneCall updCall = (TL_updatePhoneCall) upd;
-                                    VoIPService.this.startRatingActivity();
-                                }
-                            }
+                            MessagesController.getInstance().processUpdates((TL_updates) response, false);
                         }
                         FileLog.d("phone.discardCall " + response);
                     }
                     if (onDone != null) {
                         AndroidUtilities.runOnUIThread(onDone);
                     }
-                    VoIPService.this.callEnded();
                 }
             }, 2);
         }

@@ -129,8 +129,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private TL_document audioToSend;
     private MessageObject audioToSendMessageObject;
     private String audioToSendPath;
-    private Drawable backgroundDrawable;
-    private Paint backgroundPaint;
     private ImageView botButton;
     private MessageObject botButtonsMessageObject;
     private int botCount;
@@ -172,6 +170,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private EditTextCaption messageEditText;
     private WebPage messageWebPage;
     private boolean messageWebPageSearch = true;
+    private Drawable micDrawable;
     private boolean needShowTopView;
     private ImageView notifyButton;
     private Runnable openKeyboardRunnable = new Runnable() {
@@ -184,20 +183,30 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         }
     };
+    private Paint paint = new Paint(1);
+    private Paint paintRecord = new Paint(1);
     private Activity parentActivity;
     private ChatActivity parentFragment;
+    private Drawable pauseDrawable;
     private KeyboardButton pendingLocationButton;
     private MessageObject pendingMessageObject;
+    private Drawable playDrawable;
     private CloseProgressDrawable2 progressDrawable;
+    private ImageView recordCancelImage;
+    private TextView recordCancelText;
     private RecordCircle recordCircle;
+    private ImageView recordDeleteImageView;
     private RecordDot recordDot;
     private FrameLayout recordPanel;
+    private LinearLayout recordTimeContainer;
     private TextView recordTimeText;
+    private View recordedAudioBackground;
     private FrameLayout recordedAudioPanel;
     private ImageView recordedAudioPlayButton;
     private SeekBarWaveformView recordedAudioSeekBar;
     private TextView recordedAudioTimeTextView;
     private boolean recordingAudio;
+    private Paint redDotPaint = new Paint(1);
     private MessageObject replyingMessageObject;
     private AnimatorSet runningAnimation;
     private AnimatorSet runningAnimation2;
@@ -241,17 +250,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         private float animateAmplitudeDiff;
         private float animateToAmplitude;
         private long lastUpdateTime;
-        private Drawable micDrawable;
-        private Paint paint = new Paint(1);
-        private Paint paintRecord = new Paint(1);
         private float scale;
 
         public RecordCircle(Context context) {
             super(context);
-            this.paint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
-            this.paintRecord.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceShadow));
-            this.micDrawable = getResources().getDrawable(R.drawable.mic).mutate();
-            this.micDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), Mode.MULTIPLY));
+            ChatActivityEnterView.this.paint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
+            ChatActivityEnterView.this.paintRecord.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceShadow));
+            ChatActivityEnterView.this.micDrawable = getResources().getDrawable(R.drawable.mic).mutate();
+            ChatActivityEnterView.this.micDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), Mode.MULTIPLY));
         }
 
         public void setAmplitude(double value) {
@@ -299,23 +305,23 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             this.lastUpdateTime = System.currentTimeMillis();
             if (this.amplitude != 0.0f) {
-                canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, (((float) AndroidUtilities.dp(42.0f)) + (((float) AndroidUtilities.dp(20.0f)) * this.amplitude)) * this.scale, this.paintRecord);
+                canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, (((float) AndroidUtilities.dp(42.0f)) + (((float) AndroidUtilities.dp(20.0f)) * this.amplitude)) * this.scale, ChatActivityEnterView.this.paintRecord);
             }
-            canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) AndroidUtilities.dp(42.0f)) * sc, this.paint);
-            this.micDrawable.setBounds(cx - (this.micDrawable.getIntrinsicWidth() / 2), cy - (this.micDrawable.getIntrinsicHeight() / 2), (this.micDrawable.getIntrinsicWidth() / 2) + cx, (this.micDrawable.getIntrinsicHeight() / 2) + cy);
-            this.micDrawable.setAlpha((int) (255.0f * alpha));
-            this.micDrawable.draw(canvas);
+            canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) AndroidUtilities.dp(42.0f)) * sc, ChatActivityEnterView.this.paint);
+            ChatActivityEnterView.this.micDrawable.setBounds(cx - (ChatActivityEnterView.this.micDrawable.getIntrinsicWidth() / 2), cy - (ChatActivityEnterView.this.micDrawable.getIntrinsicHeight() / 2), (ChatActivityEnterView.this.micDrawable.getIntrinsicWidth() / 2) + cx, (ChatActivityEnterView.this.micDrawable.getIntrinsicHeight() / 2) + cy);
+            ChatActivityEnterView.this.micDrawable.setAlpha((int) (255.0f * alpha));
+            ChatActivityEnterView.this.micDrawable.draw(canvas);
         }
     }
 
     private class RecordDot extends View {
         private float alpha;
-        private Drawable dotDrawable = getResources().getDrawable(R.drawable.rec);
         private boolean isIncr;
         private long lastUpdateTime;
 
         public RecordDot(Context context) {
             super(context);
+            ChatActivityEnterView.this.redDotPaint.setColor(Theme.getColor(Theme.key_chat_recordedVoiceDot));
         }
 
         public void resetAlpha() {
@@ -326,8 +332,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         protected void onDraw(Canvas canvas) {
-            this.dotDrawable.setBounds(0, 0, AndroidUtilities.dp(11.0f), AndroidUtilities.dp(11.0f));
-            this.dotDrawable.setAlpha((int) (255.0f * this.alpha));
+            ChatActivityEnterView.this.redDotPaint.setAlpha((int) (255.0f * this.alpha));
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
             if (this.isIncr) {
                 this.alpha += ((float) dt) / 400.0f;
@@ -343,7 +348,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
             this.lastUpdateTime = System.currentTimeMillis();
-            this.dotDrawable.draw(canvas);
+            canvas.drawCircle((float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(5.0f), (float) AndroidUtilities.dp(5.0f), ChatActivityEnterView.this.redDotPaint);
             invalidate();
         }
     }
@@ -354,7 +359,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         public SeekBarWaveformView(Context context) {
             super(context);
             this.seekBarWaveform = new SeekBarWaveform(context);
-            this.seekBarWaveform.setColors(-6107400, -1, -6107400);
             this.seekBarWaveform.setDelegate(new SeekBarDelegate(ChatActivityEnterView.this) {
                 public void onSeekBarDrag(float progress) {
                     if (ChatActivityEnterView.this.audioToSendMessageObject != null) {
@@ -400,16 +404,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
+            this.seekBarWaveform.setColors(Theme.getColor(Theme.key_chat_recordedVoiceProgress), Theme.getColor(Theme.key_chat_recordedVoiceProgressInner), Theme.getColor(Theme.key_chat_recordedVoiceProgress));
             this.seekBarWaveform.draw(canvas);
         }
     }
 
     public ChatActivityEnterView(Activity context, SizeNotifierFrameLayout parent, ChatActivity fragment, boolean isChat) {
         super(context);
-        this.backgroundDrawable = context.getResources().getDrawable(R.drawable.compose_panel_shadow);
-        this.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelShadow), Mode.MULTIPLY));
-        this.backgroundPaint = new Paint();
-        this.backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
         this.dotDrawable = context.getResources().getDrawable(R.drawable.bluecircle);
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -449,9 +450,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), Mode.MULTIPLY));
         this.emojiButton.setScaleType(ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
-        if (VERSION.SDK_INT >= 21) {
-            this.emojiButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-        }
         setEmojiButtonImage();
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
         this.emojiButton.setOnClickListener(new OnClickListener() {
@@ -463,11 +461,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
-                EmojiView access$500 = ChatActivityEnterView.this.emojiView;
+                EmojiView access$900 = ChatActivityEnterView.this.emojiView;
                 if (ChatActivityEnterView.this.messageEditText.length() <= 0) {
                     z = false;
                 }
-                access$500.onOpen(z);
+                access$900.onOpen(z);
             }
         });
         this.messageEditText = new EditTextCaption(context) {
@@ -590,9 +588,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (count > 2 || charSequence == null || charSequence.length() == 0) {
                             ChatActivityEnterView.this.messageWebPageSearch = true;
                         }
-                        ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
+                        ChatActivityEnterViewDelegate access$1700 = ChatActivityEnterView.this.delegate;
                         boolean z = before > count + 1 || count - before > 2;
-                        access$1300.onTextChanged(charSequence, z);
+                        access$1700.onTextChanged(charSequence, z);
                     }
                     if (!(ChatActivityEnterView.this.innerTextChange == 2 || before == count || count - before <= 1)) {
                         this.processChange = true;
@@ -646,9 +644,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.botButton.setImageResource(R.drawable.bot_keyboard2);
             this.botButton.setScaleType(ScaleType.CENTER);
             this.botButton.setVisibility(8);
-            if (VERSION.SDK_INT >= 21) {
-                this.botButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-            }
             this.attachLayout.addView(this.botButton, LayoutHelper.createLinear(48, 48));
             this.botButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -673,9 +668,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.notifyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), Mode.MULTIPLY));
             this.notifyButton.setScaleType(ScaleType.CENTER);
             this.notifyButton.setVisibility(this.canWriteToChannel ? 0 : 8);
-            if (VERSION.SDK_INT >= 21) {
-                this.notifyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-            }
             this.attachLayout.addView(this.notifyButton, LayoutHelper.createLinear(48, 48));
             this.notifyButton.setOnClickListener(new OnClickListener() {
                 private Toast visibleToast;
@@ -705,9 +697,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), Mode.MULTIPLY));
             this.attachButton.setImageResource(R.drawable.ic_ab_attach);
             this.attachButton.setScaleType(ScaleType.CENTER);
-            if (VERSION.SDK_INT >= 21) {
-                this.attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-            }
             this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
             this.attachButton.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
@@ -717,16 +706,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         this.recordedAudioPanel = new FrameLayout(context);
         this.recordedAudioPanel.setVisibility(this.audioToSend == null ? 8 : 0);
-        this.recordedAudioPanel.setBackgroundColor(-1);
+        this.recordedAudioPanel.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
         this.recordedAudioPanel.setFocusable(true);
         this.recordedAudioPanel.setFocusableInTouchMode(true);
         this.recordedAudioPanel.setClickable(true);
         frameLayout.addView(this.recordedAudioPanel, LayoutHelper.createFrame(-1, 48, 80));
-        ImageView imageView = new ImageView(context);
-        imageView.setScaleType(ScaleType.CENTER);
-        imageView.setImageResource(R.drawable.ic_ab_delete);
-        this.recordedAudioPanel.addView(imageView, LayoutHelper.createFrame(48, 48.0f));
-        imageView.setOnClickListener(new OnClickListener() {
+        this.recordDeleteImageView = new ImageView(context);
+        this.recordDeleteImageView.setScaleType(ScaleType.CENTER);
+        this.recordDeleteImageView.setImageResource(R.drawable.ic_ab_delete);
+        this.recordDeleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoiceDelete), Mode.MULTIPLY));
+        this.recordedAudioPanel.addView(this.recordDeleteImageView, LayoutHelper.createFrame(48, 48.0f));
+        this.recordDeleteImageView.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 MessageObject playing = MediaController.getInstance().getPlayingMessageObject();
                 if (playing != null && playing == ChatActivityEnterView.this.audioToSendMessageObject) {
@@ -739,60 +729,62 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ChatActivityEnterView.this.checkSendButton(true);
             }
         });
-        View view = new View(context);
-        view.setBackgroundResource(R.drawable.recorded);
-        this.recordedAudioPanel.addView(view, LayoutHelper.createFrame(-1, 32.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
+        this.recordedAudioBackground = new View(context);
+        this.recordedAudioBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(16.0f), Theme.getColor(Theme.key_chat_recordedVoiceBackground)));
+        this.recordedAudioPanel.addView(this.recordedAudioBackground, LayoutHelper.createFrame(-1, 32.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
         this.recordedAudioSeekBar = new SeekBarWaveformView(context);
         this.recordedAudioPanel.addView(this.recordedAudioSeekBar, LayoutHelper.createFrame(-1, 32.0f, 19, 92.0f, 0.0f, 52.0f, 0.0f));
+        this.playDrawable = Theme.createSimpleSelectorDrawable(context, R.drawable.s_play, Theme.getColor(Theme.key_chat_recordedVoicePlayPause), Theme.getColor(Theme.key_chat_recordedVoicePlayPausePressed));
+        this.pauseDrawable = Theme.createSimpleSelectorDrawable(context, R.drawable.s_pause, Theme.getColor(Theme.key_chat_recordedVoicePlayPause), Theme.getColor(Theme.key_chat_recordedVoicePlayPausePressed));
         this.recordedAudioPlayButton = new ImageView(context);
-        this.recordedAudioPlayButton.setImageResource(R.drawable.s_play);
+        this.recordedAudioPlayButton.setImageDrawable(this.playDrawable);
         this.recordedAudioPlayButton.setScaleType(ScaleType.CENTER);
         this.recordedAudioPanel.addView(this.recordedAudioPlayButton, LayoutHelper.createFrame(48, 48.0f, 83, 48.0f, 0.0f, 0.0f, 0.0f));
         this.recordedAudioPlayButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (ChatActivityEnterView.this.audioToSend != null) {
                     if (!MediaController.getInstance().isPlayingAudio(ChatActivityEnterView.this.audioToSendMessageObject) || MediaController.getInstance().isAudioPaused()) {
-                        ChatActivityEnterView.this.recordedAudioPlayButton.setImageResource(R.drawable.s_pause);
+                        ChatActivityEnterView.this.recordedAudioPlayButton.setImageDrawable(ChatActivityEnterView.this.pauseDrawable);
                         MediaController.getInstance().playAudio(ChatActivityEnterView.this.audioToSendMessageObject);
                         return;
                     }
                     MediaController.getInstance().pauseAudio(ChatActivityEnterView.this.audioToSendMessageObject);
-                    ChatActivityEnterView.this.recordedAudioPlayButton.setImageResource(R.drawable.s_play);
+                    ChatActivityEnterView.this.recordedAudioPlayButton.setImageDrawable(ChatActivityEnterView.this.playDrawable);
                 }
             }
         });
         this.recordedAudioTimeTextView = new TextView(context);
-        this.recordedAudioTimeTextView.setTextColor(-1);
+        this.recordedAudioTimeTextView.setTextColor(Theme.getColor(Theme.key_chat_messagePanelVoiceDuration));
         this.recordedAudioTimeTextView.setTextSize(1, 13.0f);
         this.recordedAudioPanel.addView(this.recordedAudioTimeTextView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 13.0f, 0.0f));
         this.recordPanel = new FrameLayout(context);
         this.recordPanel.setVisibility(8);
-        this.recordPanel.setBackgroundColor(-1);
+        this.recordPanel.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
         frameLayout.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48, 80));
         this.slideText = new LinearLayout(context);
         this.slideText.setOrientation(0);
         this.recordPanel.addView(this.slideText, LayoutHelper.createFrame(-2, -2.0f, 17, BitmapDescriptorFactory.HUE_ORANGE, 0.0f, 0.0f, 0.0f));
-        imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.slidearrow);
-        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_recordVoiceCancel), Mode.MULTIPLY));
-        this.slideText.addView(imageView, LayoutHelper.createLinear(-2, -2, 16, 0, 1, 0, 0));
-        TextView textView = new TextView(context);
-        textView.setText(LocaleController.getString("SlideToCancel", R.string.SlideToCancel));
-        textView.setTextColor(Theme.getColor(Theme.key_chat_recordVoiceCancel));
-        textView.setTextSize(1, 12.0f);
-        this.slideText.addView(textView, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(0);
-        linearLayout.setPadding(AndroidUtilities.dp(13.0f), 0, 0, 0);
-        linearLayout.setBackgroundColor(-1);
-        this.recordPanel.addView(linearLayout, LayoutHelper.createFrame(-2, -2, 16));
+        this.recordCancelImage = new ImageView(context);
+        this.recordCancelImage.setImageResource(R.drawable.slidearrow);
+        this.recordCancelImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_recordVoiceCancel), Mode.MULTIPLY));
+        this.slideText.addView(this.recordCancelImage, LayoutHelper.createLinear(-2, -2, 16, 0, 1, 0, 0));
+        this.recordCancelText = new TextView(context);
+        this.recordCancelText.setText(LocaleController.getString("SlideToCancel", R.string.SlideToCancel));
+        this.recordCancelText.setTextColor(Theme.getColor(Theme.key_chat_recordVoiceCancel));
+        this.recordCancelText.setTextSize(1, 12.0f);
+        this.slideText.addView(this.recordCancelText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
+        this.recordTimeContainer = new LinearLayout(context);
+        this.recordTimeContainer.setOrientation(0);
+        this.recordTimeContainer.setPadding(AndroidUtilities.dp(13.0f), 0, 0, 0);
+        this.recordTimeContainer.setBackgroundColor(Theme.getColor(Theme.key_chat_messagePanelBackground));
+        this.recordPanel.addView(this.recordTimeContainer, LayoutHelper.createFrame(-2, -2, 16));
         this.recordDot = new RecordDot(context);
-        linearLayout.addView(this.recordDot, LayoutHelper.createLinear(11, 11, 16, 0, 1, 0, 0));
+        this.recordTimeContainer.addView(this.recordDot, LayoutHelper.createLinear(11, 11, 16, 0, 1, 0, 0));
         this.recordTimeText = new TextView(context);
         this.recordTimeText.setText("00:00");
-        this.recordTimeText.setTextColor(-11711413);
+        this.recordTimeText.setTextColor(Theme.getColor(Theme.key_chat_recordTime));
         this.recordTimeText.setTextSize(1, 16.0f);
-        linearLayout.addView(this.recordTimeText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
+        this.recordTimeContainer.addView(this.recordTimeText, LayoutHelper.createLinear(-2, -2, 16, 6, 0, 0, 0));
         this.sendButtonContainer = new FrameLayout(context);
         this.textFieldContainer.addView(this.sendButtonContainer, LayoutHelper.createLinear(48, 48, 80));
         this.audioSendButton = new ImageView(context);
@@ -884,10 +876,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.cancelBotButton = new ImageView(context);
         this.cancelBotButton.setVisibility(4);
         this.cancelBotButton.setScaleType(ScaleType.CENTER_INSIDE);
-        ImageView imageView2 = this.cancelBotButton;
+        ImageView imageView = this.cancelBotButton;
         Drawable closeProgressDrawable2 = new CloseProgressDrawable2();
         this.progressDrawable = closeProgressDrawable2;
-        imageView2.setImageDrawable(closeProgressDrawable2);
+        imageView.setImageDrawable(closeProgressDrawable2);
+        this.progressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelCancelInlineBot), Mode.MULTIPLY));
         this.cancelBotButton.setSoundEffectsEnabled(false);
         this.cancelBotButton.setScaleX(0.1f);
         this.cancelBotButton.setScaleY(0.1f);
@@ -922,9 +915,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.doneButtonContainer = new FrameLayout(context);
         this.doneButtonContainer.setVisibility(8);
         this.textFieldContainer.addView(this.doneButtonContainer, LayoutHelper.createLinear(48, 48, 80));
-        if (VERSION.SDK_INT >= 21) {
-            this.doneButtonContainer.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.INPUT_FIELD_SELECTOR_COLOR));
-        }
         this.doneButtonContainer.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 ChatActivityEnterView.this.doneEditingMessage();
@@ -963,10 +953,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         } else {
             top = (int) this.topView.getTranslationY();
         }
-        int bottom = top + this.backgroundDrawable.getIntrinsicHeight();
-        this.backgroundDrawable.setBounds(0, top, getMeasuredWidth(), bottom);
-        this.backgroundDrawable.draw(canvas);
-        canvas.drawRect(0.0f, (float) bottom, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
+        int bottom = top + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+        Theme.chat_composeShadowDrawable.setBounds(0, top, getMeasuredWidth(), bottom);
+        Theme.chat_composeShadowDrawable.draw(canvas);
+        canvas.drawRect(0.0f, (float) bottom, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.chat_composeBackgroundPaint);
     }
 
     public boolean hasOverlappingRendering() {
@@ -1966,6 +1956,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.audioSendButton;
     }
 
+    public EmojiView getEmojiView() {
+        return this.emojiView;
+    }
+
     public void setFieldText(CharSequence text) {
         if (this.messageEditText != null) {
             this.ignoreTextChange = true;
@@ -2714,7 +2708,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         } else if (id == NotificationCenter.audioDidReset) {
             if (this.audioToSendMessageObject != null && !MediaController.getInstance().isPlayingAudio(this.audioToSendMessageObject)) {
-                this.recordedAudioPlayButton.setImageResource(R.drawable.s_play);
+                this.recordedAudioPlayButton.setImageDrawable(this.playDrawable);
                 this.recordedAudioSeekBar.setProgress(0.0f);
             }
         } else if (id == NotificationCenter.audioProgressDidChanged) {

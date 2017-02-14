@@ -75,14 +75,14 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
-    public TextView addIconTabWithCounter(int resId) {
+    public TextView addIconTabWithCounter(Drawable drawable) {
         final int position = this.tabCount;
         this.tabCount = position + 1;
         FrameLayout tab = new FrameLayout(getContext());
         tab.setFocusable(true);
         this.tabsContainer.addView(tab);
         ImageView imageView = new ImageView(getContext());
-        imageView.setImageResource(resId);
+        imageView.setImageDrawable(drawable);
         imageView.setScaleType(ScaleType.CENTER);
         tab.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

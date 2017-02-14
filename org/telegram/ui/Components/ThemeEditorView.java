@@ -851,10 +851,10 @@ public class ThemeEditorView {
                     if (event.getAction() == 2) {
                         float dx = x - this.startX;
                         float dy = y - this.startY;
-                        LayoutParams access$2500 = ThemeEditorView.this.windowLayoutParams;
-                        access$2500.x = (int) (((float) access$2500.x) + dx);
-                        access$2500 = ThemeEditorView.this.windowLayoutParams;
-                        access$2500.y = (int) (((float) access$2500.y) + dy);
+                        LayoutParams access$2700 = ThemeEditorView.this.windowLayoutParams;
+                        access$2700.x = (int) (((float) access$2700.x) + dx);
+                        access$2700 = ThemeEditorView.this.windowLayoutParams;
+                        access$2700.y = (int) (((float) access$2700.y) + dy);
                         int maxDiff = ThemeEditorView.this.editorWidth / 2;
                         if (ThemeEditorView.this.windowLayoutParams.x < (-maxDiff)) {
                             ThemeEditorView.this.windowLayoutParams.x = -maxDiff;
@@ -922,9 +922,18 @@ public class ThemeEditorView {
             });
             Instance = this;
             this.parentActivity = activity;
+            showWithAnimation();
         } catch (Throwable e) {
             FileLog.e(e);
         }
+    }
+
+    private void showWithAnimation() {
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{0.0f, 1.0f})});
+        animatorSet.setInterpolator(this.decelerateInterpolator);
+        animatorSet.setDuration(150);
+        animatorSet.start();
     }
 
     private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
@@ -948,21 +957,31 @@ public class ThemeEditorView {
         return result + ActionBar.getCurrentActionBarHeight();
     }
 
-    public void hide() {
+    private void hide() {
         if (this.parentActivity != null) {
             try {
-                this.windowManager.removeView(this.windowView);
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleX", new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(this.windowView, "scaleY", new float[]{1.0f, 0.0f})});
+                animatorSet.setInterpolator(this.decelerateInterpolator);
+                animatorSet.setDuration(150);
+                animatorSet.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animation) {
+                        ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
+                    }
+                });
+                animatorSet.start();
                 this.hidden = true;
             } catch (Exception e) {
             }
         }
     }
 
-    public void show() {
+    private void show() {
         if (this.parentActivity != null) {
             try {
                 this.windowManager.addView(this.windowView, this.windowLayoutParams);
                 this.hidden = false;
+                showWithAnimation();
             } catch (Exception e) {
             }
         }

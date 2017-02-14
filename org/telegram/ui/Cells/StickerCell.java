@@ -2,6 +2,9 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.animation.AccelerateInterpolator;
@@ -9,6 +12,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -58,8 +62,10 @@ public class StickerCell extends FrameLayout {
             setBackgroundResource(R.drawable.stickers_back_all);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
-        if (getBackground() != null) {
-            getBackground().setAlpha(230);
+        Drawable background = getBackground();
+        if (background != null) {
+            background.setAlpha(230);
+            background.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_stickersHintPanel), Mode.MULTIPLY));
         }
     }
 

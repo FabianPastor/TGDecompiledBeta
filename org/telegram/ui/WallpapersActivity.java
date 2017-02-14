@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.ProgressBar;
-import com.google.android.gms.common.ConnectionResult;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +49,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.WallpaperCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
@@ -67,7 +66,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
     private String loadingFile = null;
     private File loadingFileObject = null;
     private PhotoSize loadingSize = null;
-    private ProgressBar progressBar;
+    private RadialProgressView progressBar;
     private FrameLayout progressView;
     private View progressViewBackground;
     private int selectedBackground;
@@ -201,13 +200,9 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
         this.progressViewBackground = new View(context);
         this.progressViewBackground.setBackgroundResource(R.drawable.system_loader);
         this.progressView.addView(this.progressViewBackground, LayoutHelper.createFrame(36, 36, 17));
-        this.progressBar = new ProgressBar(context);
-        try {
-            this.progressBar.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.loading_animation));
-        } catch (Exception e) {
-        }
-        this.progressBar.setIndeterminate(true);
-        AndroidUtilities.setProgressBarAnimationDuration(this.progressBar, ConnectionResult.DRIVE_EXTERNAL_STORAGE_REQUIRED);
+        this.progressBar = new RadialProgressView(context);
+        this.progressBar.setSize(AndroidUtilities.dp(32.0f));
+        this.progressBar.setProgressColor(Theme.getColor(Theme.key_chat_serviceText));
         this.progressView.addView(this.progressBar, LayoutHelper.createFrame(32, 32, 17));
         this.listView = new RecyclerListView(context);
         this.listView.setClipToPadding(false);

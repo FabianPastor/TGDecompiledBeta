@@ -26,6 +26,7 @@ public class RadialProgressView extends View {
     private boolean risingCircleLength;
     private final float risingTime = 500.0f;
     private final float rotationTime = 2000.0f;
+    private int size = AndroidUtilities.dp(40.0f);
 
     public RadialProgressView(Context context) {
         super(context);
@@ -64,16 +65,20 @@ public class RadialProgressView extends View {
         invalidate();
     }
 
+    public void setSize(int value) {
+        this.size = value;
+        invalidate();
+    }
+
     public void setProgressColor(int color) {
         this.progressColor = color;
         this.progressPaint.setColor(this.progressColor);
     }
 
     protected void onDraw(Canvas canvas) {
-        int size = AndroidUtilities.dp(40.0f);
-        int x = (getMeasuredWidth() - size) / 2;
-        int y = (getMeasuredHeight() - size) / 2;
-        this.cicleRect.set((float) x, (float) y, (float) (x + size), (float) (y + size));
+        int x = (getMeasuredWidth() - this.size) / 2;
+        int y = (getMeasuredHeight() - this.size) / 2;
+        this.cicleRect.set((float) x, (float) y, (float) (this.size + x), (float) (this.size + y));
         canvas.drawArc(this.cicleRect, this.radOffset, this.currentCircleLength, false, this.progressPaint);
         updateAnimation();
     }

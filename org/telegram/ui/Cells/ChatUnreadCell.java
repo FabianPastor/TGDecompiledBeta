@@ -21,6 +21,7 @@ public class ChatUnreadCell extends FrameLayout {
         super(context);
         this.backgroundLayout = new FrameLayout(context);
         this.backgroundLayout.setBackgroundResource(R.drawable.newmsg_divider);
+        this.backgroundLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_unreadMessagesStartBackground), Mode.MULTIPLY));
         addView(this.backgroundLayout, LayoutHelper.createFrame(-1, 27.0f, 51, 0.0f, 7.0f, 0.0f, 0.0f));
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(R.drawable.ic_ab_new);
