@@ -80,6 +80,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     static final boolean FORCE_INVALIDATE_DISPLAY_LIST;
     static final long FOREVER_NS = Long.MAX_VALUE;
     public static final int HORIZONTAL = 0;
+    private static final boolean IGNORE_DETACHED_FOCUSED_CHILD;
     private static final int INVALID_POINTER = -1;
     public static final int INVALID_TYPE = -1;
     private static final Class<?>[] LAYOUT_MANAGER_CONSTRUCTOR_SIGNATURE = new Class[]{Context.class, AttributeSet.class, Integer.TYPE, Integer.TYPE};
@@ -3567,6 +3568,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             z = false;
         }
         FORCE_ABS_FOCUS_SEARCH_DIRECTION = z;
+        if (VERSION.SDK_INT <= 15) {
+            z = true;
+        } else {
+            z = false;
+        }
+        IGNORE_DETACHED_FOCUSED_CHILD = z;
     }
 
     public void setTopGlowOffset(int offset) {
@@ -5580,7 +5587,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             if (getDescendantFocusability() != 131072 || !isFocused()) {
                 if (!isFocused()) {
                     View focusedChild = getFocusedChild();
-                    if (focusedChild != null && !this.mChildHelper.isHidden(focusedChild) && focusedChild.getParent() == this && focusedChild.hasFocus()) {
+                    if (!IGNORE_DETACHED_FOCUSED_CHILD || (focusedChild.getParent() != null && focusedChild.hasFocus())) {
+                        if (!this.mChildHelper.isHidden(focusedChild)) {
+                            return;
+                        }
+                    } else if (this.mChildHelper.getChildCount() == 0) {
+                        requestFocus();
                         return;
                     }
                 }
@@ -5609,9 +5621,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
 
     private int getDeepestFocusedViewWithId(View view) {
         int lastKnownId = view.getId();
-        while ((view instanceof ViewGroup) && !view.isFocused() && view.hasFocus()) {
+        while (!view.isFocused() && (view instanceof ViewGroup) && view.hasFocus()) {
             view = ((ViewGroup) view).getFocusedChild();
-            if (!(view == null || view.getId() == -1)) {
+            if (view.getId() != -1) {
                 lastKnownId = view.getId();
             }
         }

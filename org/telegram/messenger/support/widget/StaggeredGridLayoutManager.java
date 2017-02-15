@@ -40,7 +40,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     public static final int HORIZONTAL = 0;
     static final int INVALID_OFFSET = Integer.MIN_VALUE;
     private static final float MAX_SCROLL_FACTOR = 0.33333334f;
-    private static final String TAG = "StaggeredGridLayoutMana";
+    private static final String TAG = "StaggeredGridLayoutManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
     private final Runnable mCheckForGapsRunnable = new Runnable() {
@@ -2320,18 +2320,21 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             if (this.mPrefetchDistances == null || this.mPrefetchDistances.length < this.mSpanCount) {
                 this.mPrefetchDistances = new int[this.mSpanCount];
             }
+            int itemPrefetchCount = 0;
             for (i = 0; i < this.mSpanCount; i++) {
-                int startLine;
-                int[] iArr = this.mPrefetchDistances;
+                int distance;
                 if (this.mLayoutState.mItemDirection == -1) {
-                    startLine = this.mLayoutState.mStartLine - this.mSpans[i].getStartLine(this.mLayoutState.mStartLine);
+                    distance = this.mLayoutState.mStartLine - this.mSpans[i].getStartLine(this.mLayoutState.mStartLine);
                 } else {
-                    startLine = this.mSpans[i].getEndLine(this.mLayoutState.mEndLine) - this.mLayoutState.mEndLine;
+                    distance = this.mSpans[i].getEndLine(this.mLayoutState.mEndLine) - this.mLayoutState.mEndLine;
                 }
-                iArr[i] = startLine;
+                if (distance >= 0) {
+                    this.mPrefetchDistances[itemPrefetchCount] = distance;
+                    itemPrefetchCount++;
+                }
             }
-            Arrays.sort(this.mPrefetchDistances, 0, this.mSpanCount);
-            for (i = 0; i < this.mSpanCount && this.mLayoutState.hasMore(state); i++) {
+            Arrays.sort(this.mPrefetchDistances, 0, itemPrefetchCount);
+            for (i = 0; i < itemPrefetchCount && this.mLayoutState.hasMore(state); i++) {
                 layoutPrefetchRegistry.addPosition(this.mLayoutState.mCurrentPosition, this.mPrefetchDistances[i]);
                 LayoutState layoutState = this.mLayoutState;
                 layoutState.mCurrentPosition += this.mLayoutState.mItemDirection;

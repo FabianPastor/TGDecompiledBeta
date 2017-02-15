@@ -297,13 +297,13 @@ class zzasu extends zzats {
 
     @WorkerThread
     static boolean zza(zzati com_google_android_gms_internal_zzati, SQLiteDatabase sQLiteDatabase, String str) {
+        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzati == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
-        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -515,10 +515,10 @@ class zzasu extends zzats {
 
     @WorkerThread
     public String zzKG() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1615,12 +1615,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public byte[] zzfA(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1684,12 +1684,12 @@ class zzasu extends zzats {
     }
 
     Map<Integer, zzf> zzfC(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zznA();
         zzmq();
         zzac.zzdv(str);
+        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {
@@ -1951,6 +1951,7 @@ class zzasu extends zzats {
 
     @WorkerThread
     public List<Pair<zze, Long>> zzn(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zze, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1964,7 +1965,6 @@ class zzasu extends zzats {
         }
         zzac.zzas(z);
         zzac.zzdv(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

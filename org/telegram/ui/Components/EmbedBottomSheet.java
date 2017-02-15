@@ -478,7 +478,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
         textView = new TextView(context);
         textView.setTextSize(1, 14.0f);
-        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         textView.setText(title);
         textView.setSingleLine(true);
         textView.setEllipsize(TruncateAt.END);

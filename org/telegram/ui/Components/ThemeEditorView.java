@@ -698,7 +698,9 @@ public class ThemeEditorView {
                 this.previousScrollPosition = this.scrollOffsetY;
                 return;
             }
-            ((LaunchActivity) ThemeEditorView.this.parentActivity).rebuildAllFragments(false);
+            if (ThemeEditorView.this.parentActivity != null) {
+                ((LaunchActivity) ThemeEditorView.this.parentActivity).rebuildAllFragments(false);
+            }
             Theme.saveCurrentTheme(ThemeEditorView.this.currentThemeName, false);
             AndroidUtilities.hideKeyboard(getCurrentFocus());
             this.animationInProgress = true;
@@ -793,6 +795,14 @@ public class ThemeEditorView {
                 this.windowView = null;
             } catch (Throwable e) {
                 FileLog.e(e);
+            }
+            try {
+                if (this.editorAlert != null) {
+                    this.editorAlert.dismiss();
+                    this.editorAlert = null;
+                }
+            } catch (Throwable e2) {
+                FileLog.e(e2);
             }
             this.parentActivity = null;
             Instance = null;

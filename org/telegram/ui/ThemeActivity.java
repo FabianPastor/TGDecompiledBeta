@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -18,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
@@ -28,7 +29,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -40,7 +41,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
-import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.Components.ThemeEditorView;
 
@@ -73,6 +73,133 @@ public class ThemeActivity extends BaseFragment {
                 case 0:
                     view = new ThemeCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ((ThemeCell) view).setOnOptionsClick(new OnClickListener() {
+                        public void onClick(View v) {
+                            final ThemeInfo themeInfo = ((ThemeCell) v.getParent()).getCurrentThemeInfo();
+                            if (ThemeActivity.this.getParentActivity() != null) {
+                                Builder builder = new Builder(ThemeActivity.this.getParentActivity());
+                                builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        File currentFile;
+                                        Throwable e;
+                                        File finalFile;
+                                        Throwable th;
+                                        if (which == 0) {
+                                            Intent intent;
+                                            if (themeInfo.pathToFile == null) {
+                                                StringBuilder result = new StringBuilder();
+                                                for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
+                                                    result.append((String) entry.getKey()).append("=").append(entry.getValue()).append("\n");
+                                                }
+                                                currentFile = new File(ApplicationLoader.getFilesDirFixed(), "default_theme.attheme");
+                                                FileOutputStream stream = null;
+                                                try {
+                                                    FileOutputStream stream2 = new FileOutputStream(currentFile);
+                                                    try {
+                                                        stream2.write(result.toString().getBytes());
+                                                        if (stream2 != null) {
+                                                            try {
+                                                                stream2.close();
+                                                            } catch (Exception e2) {
+                                                                FileLog.e("tmessage", e2);
+                                                                stream = stream2;
+                                                            }
+                                                        }
+                                                        stream = stream2;
+                                                    } catch (Exception e3) {
+                                                        e = e3;
+                                                        stream = stream2;
+                                                        try {
+                                                            FileLog.e(e);
+                                                            if (stream != null) {
+                                                                try {
+                                                                    stream.close();
+                                                                } catch (Exception e22) {
+                                                                    FileLog.e("tmessage", e22);
+                                                                }
+                                                            }
+                                                            finalFile = new File(FileLoader.getInstance().getDirectory(4), currentFile.getName());
+                                                            if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
+                                                                intent = new Intent("android.intent.action.SEND");
+                                                                intent.setType("text/xml");
+                                                                intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(finalFile));
+                                                                ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                                                            }
+                                                        } catch (Throwable th2) {
+                                                            th = th2;
+                                                            if (stream != null) {
+                                                                try {
+                                                                    stream.close();
+                                                                } catch (Exception e222) {
+                                                                    FileLog.e("tmessage", e222);
+                                                                }
+                                                            }
+                                                            throw th;
+                                                        }
+                                                    } catch (Throwable th3) {
+                                                        th = th3;
+                                                        stream = stream2;
+                                                        if (stream != null) {
+                                                            stream.close();
+                                                        }
+                                                        throw th;
+                                                    }
+                                                } catch (Exception e4) {
+                                                    e = e4;
+                                                    FileLog.e(e);
+                                                    if (stream != null) {
+                                                        stream.close();
+                                                    }
+                                                    finalFile = new File(FileLoader.getInstance().getDirectory(4), currentFile.getName());
+                                                    if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
+                                                        intent = new Intent("android.intent.action.SEND");
+                                                        intent.setType("text/xml");
+                                                        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(finalFile));
+                                                        ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                                                    }
+                                                }
+                                            }
+                                            currentFile = new File(themeInfo.pathToFile);
+                                            finalFile = new File(FileLoader.getInstance().getDirectory(4), currentFile.getName());
+                                            try {
+                                                if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
+                                                    intent = new Intent("android.intent.action.SEND");
+                                                    intent.setType("text/xml");
+                                                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(finalFile));
+                                                    ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                                                }
+                                            } catch (Throwable e5) {
+                                                FileLog.e(e5);
+                                            }
+                                        } else if (which == 1) {
+                                            Theme.applyTheme(themeInfo);
+                                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
+                                            ThemeActivity.this.parentLayout.showLastFragment();
+                                            new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), themeInfo.name);
+                                        } else {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                                            builder.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
+                                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    if (Theme.deleteTheme(themeInfo)) {
+                                                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
+                                                        ThemeActivity.this.parentLayout.showLastFragment();
+                                                    }
+                                                    if (ThemeActivity.this.listAdapter != null) {
+                                                        ThemeActivity.this.listAdapter.notifyDataSetChanged();
+                                                    }
+                                                }
+                                            });
+                                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                            ThemeActivity.this.showDialog(builder.create());
+                                        }
+                                    }
+                                });
+                                ThemeActivity.this.showDialog(builder.create());
+                            }
+                        }
+                    });
                     break;
                 case 1:
                     view = new TextSettingsCell(this.mContext);
@@ -144,10 +271,10 @@ public class ThemeActivity extends BaseFragment {
                     }
                 } else if (ThemeActivity.this.getParentActivity() != null) {
                     final EditText editText = new EditText(ThemeActivity.this.getParentActivity());
-                    Builder builder = new Builder(ThemeActivity.this.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NewTheme", R.string.NewTheme));
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     });
@@ -189,7 +316,7 @@ public class ThemeActivity extends BaseFragment {
                         }
                     });
                     ThemeActivity.this.showDialog(alertDialog);
-                    alertDialog.getButton(-1).setOnClickListener(new View.OnClickListener() {
+                    alertDialog.getButton(-1).setOnClickListener(new OnClickListener() {
                         public void onClick(View v) {
                             if (editText.length() == 0) {
                                 Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
@@ -210,61 +337,6 @@ public class ThemeActivity extends BaseFragment {
                 }
             }
         });
-        this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemClick(View view, int position) {
-                position -= 2;
-                if (position < 0 || position >= Theme.themes.size()) {
-                    return false;
-                }
-                final ThemeInfo themeInfo = (ThemeInfo) Theme.themes.get(position);
-                if (themeInfo.pathToFile == null || ThemeActivity.this.getParentActivity() == null) {
-                    return false;
-                }
-                BottomSheet.Builder builder = new BottomSheet.Builder(ThemeActivity.this.getParentActivity());
-                builder.setItems(new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            File currentFile = new File(themeInfo.pathToFile);
-                            File finalFile = new File(FileLoader.getInstance().getDirectory(4), currentFile.getName());
-                            try {
-                                if (AndroidUtilities.copyFile(currentFile, finalFile)) {
-                                    Intent intent = new Intent("android.intent.action.SEND");
-                                    intent.setType("text/xml");
-                                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(finalFile));
-                                    ThemeActivity.this.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
-                                }
-                            } catch (Throwable e) {
-                                FileLog.e(e);
-                            }
-                        } else if (which == 1) {
-                            Theme.applyTheme(themeInfo);
-                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
-                            ThemeActivity.this.parentLayout.showLastFragment();
-                            new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), themeInfo.name);
-                        } else {
-                            Builder builder = new Builder(ThemeActivity.this.getParentActivity());
-                            builder.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new OnClickListener() {
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    if (Theme.deleteTheme(themeInfo)) {
-                                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
-                                        ThemeActivity.this.parentLayout.showLastFragment();
-                                    }
-                                    if (ThemeActivity.this.listAdapter != null) {
-                                        ThemeActivity.this.listAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                            ThemeActivity.this.showDialog(builder.create());
-                        }
-                    }
-                });
-                ThemeActivity.this.showDialog(builder.create());
-                return true;
-            }
-        });
         return this.fragmentView;
     }
 
@@ -276,14 +348,23 @@ public class ThemeActivity extends BaseFragment {
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        r9 = new ThemeDescription[15];
-        r9[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
-        r9[9] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        r9[10] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
-        r9[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
-        r9[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        r9[14] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
-        return r9;
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[16];
+        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector);
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelectorSDK21);
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider);
+        themeDescriptionArr[9] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"checkImage"}, null, null, null, Theme.key_featuredStickers_addedIcon);
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{ThemeCell.class}, new String[]{"optionsButton"}, null, null, null, Theme.key_stickers_menu);
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow);
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
+        return themeDescriptionArr;
     }
 }

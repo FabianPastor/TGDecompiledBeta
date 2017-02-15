@@ -25,6 +25,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -315,8 +316,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void init(TL_payments_paymentForm form, MessageObject message, int step, TL_payments_validatedRequestedInfo validatedRequestedInfo, TL_shippingOption shipping, String tokenJson, String card, TL_payments_validateRequestedInfo request, boolean saveCard) {
-        boolean z;
-        boolean z2 = true;
+        boolean z = true;
         this.currentStep = step;
         this.paymentJson = tokenJson;
         this.requestedInfo = validatedRequestedInfo;
@@ -332,19 +332,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
         this.currentItemName = message.messageOwner.media.title;
         this.validateRequest = request;
-        if (this.paymentForm.saved_info != null) {
-            z = true;
-        } else {
-            z = false;
-        }
-        this.saveShippingInfo = z;
+        this.saveShippingInfo = true;
         if (saveCard) {
             this.saveCardInfo = saveCard;
         } else {
             if (this.paymentForm.saved_credentials == null) {
-                z2 = false;
+                z = false;
             }
-            this.saveCardInfo = z2;
+            this.saveCardInfo = z;
         }
         if (card != null) {
             this.cardName = card;
@@ -356,6 +351,17 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     public void onResume() {
         super.onResume();
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        if (VERSION.SDK_INT >= 23) {
+            try {
+                if (this.currentStep == 2) {
+                    getParentActivity().getWindow().setFlags(8192, 8192);
+                } else if (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture) {
+                    getParentActivity().getWindow().clearFlags(8192);
+                }
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+        }
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
@@ -928,8 +934,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     this.inputFields[a].setBackgroundDrawable(null);
                     AndroidUtilities.clearCursorDrawable(this.inputFields[a]);
                     if (a == 4) {
+                        this.inputFields[a].setFilters(new InputFilter[]{new LengthFilter(3)});
                         this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_HDMV_DTS);
                         this.inputFields[a].setTypeface(Typeface.DEFAULT);
+                        this.inputFields[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
                     } else if (a == 0) {
                         this.inputFields[a].setInputType(2);
                     } else if (a == 1 || a == 2) {
@@ -1470,13 +1478,26 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 FileLog.e(e);
             }
         }
+        try {
+            if (this.currentStep == 2 && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
+                getParentActivity().getWindow().clearFlags(8192);
+            }
+        } catch (Throwable e2) {
+            FileLog.e(e2);
+        }
         super.onFragmentDestroy();
         this.canceled = true;
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-        if (isOpen && !backward && this.webView != null) {
-            this.webView.loadUrl(this.paymentForm.url);
+        if (isOpen && !backward) {
+            if (this.webView != null) {
+                this.webView.loadUrl(this.paymentForm.url);
+            } else if (this.currentStep == 2) {
+                AndroidUtilities.showKeyboard(this.inputFields[0]);
+            } else if (this.currentStep == 3) {
+                AndroidUtilities.showKeyboard(this.inputFields[1]);
+            }
         }
     }
 

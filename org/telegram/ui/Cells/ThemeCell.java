@@ -9,8 +9,10 @@ import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.io.File;
@@ -27,7 +29,9 @@ import org.telegram.ui.Components.LayoutHelper;
 public class ThemeCell extends FrameLayout {
     private static byte[] bytes = new byte[1024];
     private ImageView checkImage;
+    private ThemeInfo currentThemeInfo;
     private boolean needDivider;
+    private ImageView optionsButton;
     private Paint paint = new Paint(1);
     private TextView textView;
 
@@ -51,19 +55,36 @@ public class ThemeCell extends FrameLayout {
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 53.0f : BitmapDescriptorFactory.HUE_YELLOW, 0.0f, LocaleController.isRTL ? BitmapDescriptorFactory.HUE_YELLOW : 53.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 101.0f : BitmapDescriptorFactory.HUE_YELLOW, 0.0f, LocaleController.isRTL ? BitmapDescriptorFactory.HUE_YELLOW : 101.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), Mode.MULTIPLY));
         this.checkImage.setImageResource(R.drawable.sticker_added);
         view = this.checkImage;
+        if (LocaleController.isRTL) {
+            i = 3;
+        } else {
+            i = 5;
+        }
+        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 55.0f, 0.0f, 55.0f, 0.0f));
+        this.optionsButton = new ImageView(context);
+        this.optionsButton.setFocusable(false);
+        this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+        this.optionsButton.setImageResource(R.drawable.ic_ab_other);
+        this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), Mode.MULTIPLY));
+        this.optionsButton.setScaleType(ScaleType.CENTER);
+        View view2 = this.optionsButton;
         if (!LocaleController.isRTL) {
             i2 = 5;
         }
-        addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 17.0f, 0.0f, 17.0f, 0.0f));
+        addView(view2, LayoutHelper.createFrame(48, 48, i2 | 48));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(48.0f), NUM));
+    }
+
+    public void setOnOptionsClick(OnClickListener listener) {
+        this.optionsButton.setOnClickListener(listener);
     }
 
     public TextView getTextView() {
@@ -74,9 +95,14 @@ public class ThemeCell extends FrameLayout {
         this.textView.setTextColor(color);
     }
 
+    public ThemeInfo getCurrentThemeInfo() {
+        return this.currentThemeInfo;
+    }
+
     public void setTheme(ThemeInfo themeInfo, boolean divider) {
         Throwable e;
         Throwable th;
+        this.currentThemeInfo = themeInfo;
         String text = themeInfo.name;
         if (text.endsWith(".attheme")) {
             text = text.substring(0, text.lastIndexOf(46));

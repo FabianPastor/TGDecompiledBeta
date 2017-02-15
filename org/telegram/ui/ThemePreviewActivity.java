@@ -331,6 +331,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             messageObject = new MessageObject(message, null, true);
             messageObject.audioProgressSec = 1;
             messageObject.audioProgress = 0.3f;
+            messageObject.useCustomPhoto = true;
             this.messages.add(messageObject);
             this.messages.add(replyMessageObject);
             message = new TL_message();
@@ -636,7 +637,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.listView2.setVerticalScrollBarEnabled(true);
         this.listView2.setItemAnimator(null);
         this.listView2.setLayoutAnimation(null);
-        this.listView2.setPadding(0, 0, 0, AndroidUtilities.dp(4.0f));
+        this.listView2.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
         this.listView2.setClipToPadding(false);
         this.listView2.setLayoutManager(new LinearLayoutManager(context, 1, true));
         this.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);

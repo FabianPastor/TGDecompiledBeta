@@ -408,9 +408,16 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     private void sendReorder() {
         if (this.needReorder) {
+            boolean z;
             StickersQuery.calcNewHash(this.currentType);
             this.needReorder = false;
             TL_messages_reorderStickerSets req = new TL_messages_reorderStickerSets();
+            if (this.currentType == 1) {
+                z = true;
+            } else {
+                z = false;
+            }
+            req.masks = z;
             ArrayList<TL_messages_stickerSet> arrayList = StickersQuery.getStickerSets(this.currentType);
             for (int a = 0; a < arrayList.size(); a++) {
                 req.order.add(Long.valueOf(((TL_messages_stickerSet) arrayList.get(a)).set.id));

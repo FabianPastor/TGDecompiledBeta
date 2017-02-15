@@ -47,7 +47,7 @@ public class CheckBoxCell extends FrameLayout {
         }
         addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 17 : 46), 0.0f, (float) (LocaleController.isRTL ? 46 : 17), 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor(alert ? Theme.key_dialogBlueBlack : Theme.key_windowBackgroundWhiteValueText));
+        this.valueTextView.setTextColor(Theme.getColor(alert ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText));
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);

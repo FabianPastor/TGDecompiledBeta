@@ -777,6 +777,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         frameLayout.addView(this.listView);
         this.listView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
+                boolean z = false;
                 if (view instanceof GroupCreateUserCell) {
                     GroupCreateUserCell cell = (GroupCreateUserCell) view;
                     User user = cell.getUser();
@@ -795,6 +796,14 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 GroupCreateActivity.this.showDialog(builder.create());
                                 return;
                             }
+                            boolean z2;
+                            MessagesController instance = MessagesController.getInstance();
+                            if (GroupCreateActivity.this.searching) {
+                                z2 = false;
+                            } else {
+                                z2 = true;
+                            }
+                            instance.putUser(user, z2);
                             GroupCreateSpan span = new GroupCreateSpan(GroupCreateActivity.this.editText.getContext(), user);
                             GroupCreateActivity.this.spansContainer.addSpan(span);
                             span.setOnClickListener(GroupCreateActivity.this);
@@ -803,7 +812,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         if (GroupCreateActivity.this.searching || GroupCreateActivity.this.searchWas) {
                             AndroidUtilities.showKeyboard(GroupCreateActivity.this.editText);
                         } else {
-                            cell.setChecked(!exists, true);
+                            if (!exists) {
+                                z = true;
+                            }
+                            cell.setChecked(z, true);
                         }
                         if (GroupCreateActivity.this.editText.length() > 0) {
                             GroupCreateActivity.this.editText.setText(null);

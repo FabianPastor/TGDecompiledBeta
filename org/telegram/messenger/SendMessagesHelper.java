@@ -812,6 +812,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                         }
                     }
+                    if (newDocument.thumb == null) {
+                        newDocument.thumb = new TL_photoSizeEmpty();
+                        newDocument.thumb.type = "s";
+                    }
                     document = newDocument;
                 } else {
                     return;
@@ -1319,8 +1323,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {

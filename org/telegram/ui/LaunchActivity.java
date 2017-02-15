@@ -806,12 +806,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             return;
         }
         int a;
-        BaseFragment chatFragment;
         if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
             this.tabletFullSize = true;
             if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
                 a = 0;
                 while (this.rightActionBarLayout.fragmentsStack.size() > 0) {
+                    BaseFragment chatFragment;
                     chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
                     if (chatFragment instanceof ChatActivity) {
                         ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);

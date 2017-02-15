@@ -2079,6 +2079,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         if (this.mentionsAdapter != null) {
             this.mentionsAdapter.onDestroy();
         }
+        int scrollToPositionOnRecreate = -1;
+        int scrollToOffsetOnRecreate = 0;
+        if (this.chatLayoutManager != null) {
+            scrollToPositionOnRecreate = this.chatLayoutManager.findFirstVisibleItemPosition();
+            if (scrollToPositionOnRecreate != this.chatLayoutManager.getItemCount() - 1) {
+                Holder holder = (Holder) this.chatListView.findViewHolderForAdapterPosition(scrollToPositionOnRecreate);
+                if (holder != null) {
+                    scrollToOffsetOnRecreate = holder.itemView.getTop();
+                } else {
+                    scrollToPositionOnRecreate = -1;
+                }
+            } else {
+                scrollToPositionOnRecreate = -1;
+            }
+        }
         this.chatListView = new RecyclerListView(context) {
             protected void onLayout(boolean changed, int l, int t, int r, int b) {
                 super.onLayout(changed, l, t, r, b);
@@ -2329,6 +2344,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 return false;
             }
         });
+        if (scrollToPositionOnRecreate != -1) {
+            this.chatLayoutManager.scrollToPositionWithOffset(scrollToPositionOnRecreate, scrollToOffsetOnRecreate);
+        }
         this.progressView = new FrameLayout(context);
         this.progressView.setVisibility(4);
         contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
@@ -7378,6 +7396,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             if (this.bigEmptyView != null) {
                 this.bigEmptyView.getBackground().setColorFilter(Theme.colorFilter);
             }
+            this.chatListView.invalidateViews();
         }
     }
 

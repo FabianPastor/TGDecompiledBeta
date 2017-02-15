@@ -1429,6 +1429,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                                 i = 0;
                             }
                             r3.setVisibility(i);
+                            EmojiView.this.checkScroll();
                             EmojiView.this.saveNewPage();
                         } else if (EmojiView.this.trendingGridView.getVisibility() == 0) {
                             EmojiView.this.trendingGridView.setVisibility(8);
@@ -1590,8 +1591,18 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     private void checkScroll() {
         int firstVisibleItem = this.stickersLayoutManager.findFirstVisibleItemPosition();
-        if (firstVisibleItem != -1) {
-            checkStickersScroll(firstVisibleItem);
+        if (firstVisibleItem != -1 && this.stickersGridView != null) {
+            if (this.stickersGridView.getVisibility() != 0) {
+                if (!(this.gifsGridView == null || this.gifsGridView.getVisibility() == 0)) {
+                    this.gifsGridView.setVisibility(0);
+                }
+                if (this.stickersEmptyView != null && this.stickersEmptyView.getVisibility() == 0) {
+                    this.stickersEmptyView.setVisibility(8);
+                }
+                this.stickersTab.onPageScrolled(this.gifTabNum + 1, (this.recentTabBum > 0 ? this.recentTabBum : this.stickersTabOffset) + 1);
+                return;
+            }
+            this.stickersTab.onPageScrolled(this.stickersGridAdapter.getTabForPosition(firstVisibleItem) + 1, (this.recentTabBum > 0 ? this.recentTabBum : this.stickersTabOffset) + 1);
         }
     }
 
@@ -1634,22 +1645,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.trendingGridView.setVisibility(8);
         this.stickersTab.onPageScrolled(this.gifTabNum + 1, (this.recentTabBum > 0 ? this.recentTabBum : this.stickersTabOffset) + 1);
         saveNewPage();
-    }
-
-    private void checkStickersScroll(int firstVisibleItem) {
-        if (this.stickersGridView != null) {
-            if (this.stickersGridView.getVisibility() != 0) {
-                if (!(this.gifsGridView == null || this.gifsGridView.getVisibility() == 0)) {
-                    this.gifsGridView.setVisibility(0);
-                }
-                if (this.stickersEmptyView != null && this.stickersEmptyView.getVisibility() == 0) {
-                    this.stickersEmptyView.setVisibility(8);
-                }
-                this.stickersTab.onPageScrolled(this.gifTabNum + 1, (this.recentTabBum > 0 ? this.recentTabBum : this.stickersTabOffset) + 1);
-                return;
-            }
-            this.stickersTab.onPageScrolled(this.stickersGridAdapter.getTabForPosition(firstVisibleItem) + 1, (this.recentTabBum > 0 ? this.recentTabBum : this.stickersTabOffset) + 1);
-        }
     }
 
     private void onPageScrolled(int position, int width, int positionOffsetPixels) {

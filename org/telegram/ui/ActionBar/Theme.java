@@ -42,6 +42,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -558,7 +560,6 @@ public class Theme {
     public static final String key_contextProgressOuter2 = "contextProgressOuter2";
     public static final String key_contextProgressOuter3 = "contextProgressOuter3";
     public static final String key_dialogBackground = "dialogBackground";
-    public static final String key_dialogBlueBlack = "dialogBlueBlack";
     public static final String key_dialogCheckboxSquareBackground = "dialogCheckboxSquareBackground";
     public static final String key_dialogCheckboxSquareCheck = "dialogCheckboxSquareCheck";
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
@@ -567,6 +568,8 @@ public class Theme {
     public static final String key_dialogRadioBackground = "dialogRadioBackground";
     public static final String key_dialogRadioBackgroundChecked = "dialogRadioBackgroundChecked";
     public static final String key_dialogTextBlack = "dialogTextBlack";
+    public static final String key_dialogTextBlue = "dialogTextBlue";
+    public static final String key_dialogTextGray = "dialogTextGray";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
     public static final String key_fastScrollActive = "fastScrollActive";
@@ -700,12 +703,35 @@ public class Theme {
         public String name;
         public String pathToFile;
 
-        public String getSaveString() {
-            return this.name + "|" + this.pathToFile;
+        public JSONObject getSaveJson() {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", this.name);
+                jsonObject.put("path", this.pathToFile);
+                return jsonObject;
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return null;
+            }
+        }
+
+        public static ThemeInfo createWithJson(JSONObject object) {
+            if (object == null) {
+                return null;
+            }
+            try {
+                ThemeInfo themeInfo = new ThemeInfo();
+                themeInfo.name = object.getString("name");
+                themeInfo.pathToFile = object.getString("path");
+                return themeInfo;
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return null;
+            }
         }
 
         public static ThemeInfo createWithString(String string) {
-            if (string == null || string.length() == 0) {
+            if (TextUtils.isEmpty(string)) {
                 return null;
             }
             String[] args = string.split("\\|");
@@ -723,7 +749,8 @@ public class Theme {
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
-        defaultColors.put(key_dialogBlueBlack, Integer.valueOf(-13660983));
+        defaultColors.put(key_dialogTextBlue, Integer.valueOf(-13660983));
+        defaultColors.put(key_dialogTextGray, Integer.valueOf(-13333567));
         defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
         defaultColors.put(key_dialogCheckboxSquareBackground, Integer.valueOf(-12345121));
         defaultColors.put(key_dialogCheckboxSquareCheck, Integer.valueOf(-1));
@@ -1169,16 +1196,37 @@ public class Theme {
         currentTheme = themeInfo;
         arrayList.add(themeInfo);
         themesDict.put("Default", defaultTheme);
-        String themesString = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).getString("themes", null);
-        if (!TextUtils.isEmpty(themesString)) {
-            String[] themesArr = themesString.split("&");
-            for (String createWithString : themesArr) {
-                themeInfo = ThemeInfo.createWithString(createWithString);
-                if (themeInfo != null) {
-                    otherThemes.add(themeInfo);
-                    themes.add(themeInfo);
-                    themesDict.put(themeInfo.name, themeInfo);
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
+        String themesString = preferences.getString("themes2", null);
+        int a;
+        if (TextUtils.isEmpty(themesString)) {
+            themesString = preferences.getString("themes", null);
+            if (!TextUtils.isEmpty(themesString)) {
+                String[] themesArr = themesString.split("&");
+                for (String createWithString : themesArr) {
+                    themeInfo = ThemeInfo.createWithString(createWithString);
+                    if (themeInfo != null) {
+                        otherThemes.add(themeInfo);
+                        themes.add(themeInfo);
+                        themesDict.put(themeInfo.name, themeInfo);
+                    }
                 }
+            }
+            saveOtherThemes();
+            preferences.edit().remove("themes").commit();
+        } else {
+            try {
+                JSONArray jsonArray = new JSONArray(themesString);
+                for (a = 0; a < jsonArray.length(); a++) {
+                    themeInfo = ThemeInfo.createWithJson(jsonArray.getJSONObject(a));
+                    if (themeInfo != null) {
+                        otherThemes.add(themeInfo);
+                        themes.add(themeInfo);
+                        themesDict.put(themeInfo.name, themeInfo);
+                    }
+                }
+            } catch (Throwable e) {
+                FileLog.e(e);
             }
         }
         sortThemes();
@@ -1188,8 +1236,8 @@ public class Theme {
             if (theme != null) {
                 applyingTheme = (ThemeInfo) themesDict.get(theme);
             }
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable e2) {
+            FileLog.e(e2);
         }
         if (applyingTheme == null) {
             applyingTheme = defaultTheme;
@@ -1454,18 +1502,19 @@ public class Theme {
 
     private static void saveOtherThemes() {
         Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
-        StringBuilder stringBuilder = new StringBuilder();
+        JSONArray array = new JSONArray();
         for (int a = 0; a < otherThemes.size(); a++) {
-            String loc = ((ThemeInfo) otherThemes.get(a)).getSaveString();
-            if (loc != null) {
-                if (stringBuilder.length() != 0) {
-                    stringBuilder.append("&");
-                }
-                stringBuilder.append(loc);
+            JSONObject jsonObject = ((ThemeInfo) otherThemes.get(a)).getSaveJson();
+            if (jsonObject != null) {
+                array.put(jsonObject);
             }
         }
-        editor.putString("themes", stringBuilder.toString());
+        editor.putString("themes2", array.toString());
         editor.commit();
+    }
+
+    public static HashMap<String, Integer> getDefaultColors() {
+        return defaultColors;
     }
 
     public static String getCurrentThemeName() {
@@ -2314,8 +2363,6 @@ public class Theme {
     public static void reloadWallpaper() {
         wallpaper = null;
         themedWallpaper = null;
-        serviceMessageColor = 0;
-        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().remove("serviceMessageColor").commit();
         loadWallpaper();
     }
 
@@ -2324,9 +2371,6 @@ public class Theme {
             int[] result = AndroidUtilities.calcDrawableColor(drawable);
             serviceMessageColor = result[0];
             serviceSelectedMessageColor = result[1];
-        }
-        if (save != 0) {
-            ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putInt("serviceMessageColor", serviceMessageColor).putInt("serviceSelectedMessageColor", serviceSelectedMessageColor).commit();
         }
     }
 
@@ -2388,8 +2432,6 @@ public class Theme {
                                         preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                                         selectedBackground = preferences.getInt("selectedBackground", 1000001);
                                         i = preferences.getInt("selectedColor", 0);
-                                        Theme.serviceMessageColor = preferences.getInt("serviceMessageColor", 0);
-                                        Theme.serviceSelectedMessageColor = preferences.getInt("serviceSelectedMessageColor", 0);
                                         if (i == 0) {
                                             if (selectedBackground == 1000001) {
                                                 Theme.wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.background_hd);
@@ -2412,9 +2454,7 @@ public class Theme {
                                             Theme.wallpaper = new ColorDrawable(i);
                                         }
                                     }
-                                    if (Theme.serviceMessageColor == 0) {
-                                        Theme.calcBackgroundColor(Theme.wallpaper, 1);
-                                    }
+                                    Theme.calcBackgroundColor(Theme.wallpaper, 1);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
                                             Theme.applyChatServiceMessageColor();
@@ -2429,8 +2469,6 @@ public class Theme {
                             preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                             selectedBackground = preferences.getInt("selectedBackground", 1000001);
                             i = preferences.getInt("selectedColor", 0);
-                            Theme.serviceMessageColor = preferences.getInt("serviceMessageColor", 0);
-                            Theme.serviceSelectedMessageColor = preferences.getInt("serviceSelectedMessageColor", 0);
                             if (i == 0) {
                                 if (selectedBackground == 1000001) {
                                     Theme.wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.background_hd);
@@ -2453,9 +2491,7 @@ public class Theme {
                                 Theme.wallpaper = new ColorDrawable(i);
                             }
                         }
-                        if (Theme.serviceMessageColor == 0) {
-                            Theme.calcBackgroundColor(Theme.wallpaper, 1);
-                        }
+                        Theme.calcBackgroundColor(Theme.wallpaper, 1);
                         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                     }
                 }

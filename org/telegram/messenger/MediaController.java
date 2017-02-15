@@ -2090,6 +2090,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public void playPreviousMessage() {
         ArrayList<MessageObject> currentPlayList = this.shuffleMusic ? this.shuffledPlaylist : this.playlist;
+        MessageObject currentSong = (MessageObject) currentPlayList.get(this.currentPlaylistNum);
+        if (currentSong.audioProgressSec > 10) {
+            getInstance().seekToProgress(currentSong, 0.0f);
+            return;
+        }
         this.currentPlaylistNum--;
         if (this.currentPlaylistNum < 0) {
             this.currentPlaylistNum = currentPlayList.size() - 1;

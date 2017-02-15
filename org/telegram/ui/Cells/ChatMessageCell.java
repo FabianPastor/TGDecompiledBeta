@@ -695,7 +695,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     if (this.documentAttachType != 2 || !this.drawImageButton) {
                         webPage = this.currentMessageObject.messageOwner.media.webpage;
                         if (webPage != null && VERSION.SDK_INT >= 16 && !TextUtils.isEmpty(webPage.embed_url)) {
-                            this.delegate.needOpenWebView(webPage.embed_url, webPage.site_name, webPage.description, webPage.url, webPage.embed_width, webPage.embed_height);
+                            this.delegate.needOpenWebView(webPage.embed_url, webPage.site_name, webPage.title, webPage.url, webPage.embed_width, webPage.embed_height);
                         } else if (this.buttonState == -1) {
                             this.delegate.didPressedImage(this);
                             playSoundEffect(0);
@@ -1706,32 +1706,32 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        boolean z;
         int i;
         int dp;
         int linkPreviewMaxWidth;
         String author;
+        String description;
         Photo photo;
         TLObject webDocument;
-        String type;
         int duration;
         int additinalWidth;
         int height;
         int width;
         Throwable e;
         int restLinesCount;
-        int lineLeft;
+        int a;
         boolean authorIsRTL;
         boolean hasRTL;
+        int maxPhotoWidth;
         ArrayList arrayList;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
-        String fileName;
+        float scale;
         int seconds;
         String str;
-        int mWidth;
         int timeWidthTotal;
         int rows;
         boolean fullWidth;
@@ -1743,7 +1743,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
-        BotButton botButton;
         String key;
         BotButton oldButton;
         CharSequence buttonText;
@@ -1754,7 +1753,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int a;
+            BotButton botButton;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1823,10 +1822,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxPhotoWidth;
-            DocumentAttribute attribute;
-            float scale;
+            boolean z;
             boolean photoExist;
+            String fileName;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1885,10 +1883,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
                     String site_name;
                     String title;
-                    String description;
                     TLObject document;
+                    String type;
                     boolean smallImage;
                     int restLines;
+                    int lineLeft;
+                    int mWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -6252,7 +6252,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 return;
             }
         } else if (this.currentMessageObject.type == 8 || this.documentAttachType == 4 || this.currentMessageObject.type == 9 || this.documentAttachType == 3 || this.documentAttachType == 5) {
-            if (this.currentMessageObject.attachPathExists) {
+            if (this.currentMessageObject.useCustomPhoto) {
+                this.buttonState = 1;
+                this.radialProgress.setBackground(getDrawableForCurrentState(), false, animated);
+                return;
+            } else if (this.currentMessageObject.attachPathExists) {
                 fileName = this.currentMessageObject.messageOwner.attachPath;
                 fileExists = true;
             } else if (!this.currentMessageObject.isSendError() || this.documentAttachType == 3 || this.documentAttachType == 5) {
