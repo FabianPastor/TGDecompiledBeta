@@ -1004,6 +1004,7 @@ public final class R {
         public static final int CreateEncryptedChatError = NUM;
         public static final int CreateGroupError = NUM;
         public static final int CreateNewTheme = NUM;
+        public static final int CreateNewThemeHelp = NUM;
         public static final int CreateNewThemeInfo = NUM;
         public static final int Crop = NUM;
         public static final int CropImage = NUM;
@@ -1616,11 +1617,13 @@ public final class R {
         public static final int PasswordHintText = NUM;
         public static final int PasswordRecovery = NUM;
         public static final int PasswordReset = NUM;
+        public static final int PaymentBillingAddress = NUM;
         public static final int PaymentCardCvv = NUM;
         public static final int PaymentCardExpireDateMonth = NUM;
         public static final int PaymentCardExpireDateYear = NUM;
         public static final int PaymentCardInfo = NUM;
         public static final int PaymentCardName = NUM;
+        public static final int PaymentCardNameTitle = NUM;
         public static final int PaymentCardNumber = NUM;
         public static final int PaymentCardSavePaymentInformation = NUM;
         public static final int PaymentCardSavePaymentInformationInfoLine1 = NUM;
@@ -1635,8 +1638,10 @@ public final class R {
         public static final int PaymentCheckoutShippingMethod = NUM;
         public static final int PaymentConfirmationMessage = NUM;
         public static final int PaymentConfirmationNewCard = NUM;
+        public static final int PaymentFailed = NUM;
         public static final int PaymentInvoice = NUM;
         public static final int PaymentNoShippingMethod = NUM;
+        public static final int PaymentPrecheckoutFailed = NUM;
         public static final int PaymentReceipt = NUM;
         public static final int PaymentShipment = NUM;
         public static final int PaymentShippingAddress = NUM;

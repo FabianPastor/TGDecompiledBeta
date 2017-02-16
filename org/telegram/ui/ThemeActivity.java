@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.view.KeyEvent;
@@ -16,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map.Entry;
@@ -332,6 +334,15 @@ public class ThemeActivity extends BaseFragment {
                             Theme.saveCurrentTheme(name, true);
                             ThemeActivity.this.listAdapter.notifyDataSetChanged();
                             alertDialog.dismiss();
+                            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                            if (!preferences.getBoolean("themehint", false)) {
+                                preferences.edit().putBoolean("themehint", true).commit();
+                                try {
+                                    Toast.makeText(ThemeActivity.this.getParentActivity(), LocaleController.getString("CreateNewThemeHelp", R.string.CreateNewThemeHelp), 1).show();
+                                } catch (Throwable e) {
+                                    FileLog.e(e);
+                                }
+                            }
                         }
                     });
                 }

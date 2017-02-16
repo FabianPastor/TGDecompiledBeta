@@ -190,7 +190,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 }
             }
         }).getSearchField().setHint(LocaleController.getString("Search", R.string.Search));
-        if (!this.createSecretChat) {
+        if (!(this.createSecretChat || this.returnAsResult)) {
             menu.addItem(1, (int) R.drawable.add);
         }
         this.searchListViewAdapter = new SearchAdapter(context, this.ignoreUsers, this.allowUsernameSearch, false, false, this.allowBots);

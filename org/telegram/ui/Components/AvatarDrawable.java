@@ -73,6 +73,10 @@ public class AvatarDrawable extends Drawable {
         return Theme.getColor(Theme.keys_avatar_actionBarSelector[getColorIndex(id)]);
     }
 
+    public static int getIconColorForId(int id) {
+        return Theme.getColor(Theme.keys_avatar_actionBarIcon[getColorIndex(id)]);
+    }
+
     public static int getProfileColorForId(int id) {
         return Theme.getColor(Theme.keys_avatar_backgroundInProfile[getColorIndex(id)]);
     }

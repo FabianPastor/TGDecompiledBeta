@@ -909,9 +909,17 @@ public class LocaleController {
         return String.format("%s %s", new Object[]{formatPluralString("Weeks", days / 7), formatPluralString("Days", days % 7)});
     }
 
-    public String formatCurrencyString(double amount, String type) {
+    public String formatCurrencyString(long amount, String type) {
+        boolean discount;
         String customFormat;
+        double doubleAmount;
         type = type.toUpperCase();
+        if (amount < 0) {
+            discount = true;
+        } else {
+            discount = false;
+        }
+        amount = Math.abs(amount);
         int i = -1;
         switch (type.hashCode()) {
             case 65726:
@@ -1092,7 +1100,7 @@ public class LocaleController {
         switch (i) {
             case 0:
                 customFormat = " %.4f";
-                amount /= 10000.0d;
+                doubleAmount = (double) (amount / 10000);
                 break;
             case 1:
             case 2:
@@ -1102,7 +1110,7 @@ public class LocaleController {
             case 6:
             case 7:
                 customFormat = " %.3f";
-                amount /= 1000.0d;
+                doubleAmount = (double) (amount / 1000);
                 break;
             case 8:
             case 9:
@@ -1125,23 +1133,24 @@ public class LocaleController {
             case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
             case 27:
                 customFormat = " %.0f";
+                doubleAmount = (double) amount;
                 break;
             case 28:
                 customFormat = " %.1f";
-                amount /= 10.0d;
+                doubleAmount = (double) (amount / 10);
                 break;
             default:
                 customFormat = " %.2f";
-                amount /= 100.0d;
+                doubleAmount = (double) (amount / 100);
                 break;
         }
         Currency сurrency = Currency.getInstance(type);
         if (сurrency != null) {
             NumberFormat format = NumberFormat.getCurrencyInstance(this.currentLocale != null ? this.currentLocale : this.systemDefaultLocale);
             format.setCurrency(сurrency);
-            return format.format(amount);
+            return (discount ? "-" : "") + format.format(doubleAmount);
         }
-        return String.format(type + customFormat, new Object[]{Double.valueOf(amount)});
+        return (discount ? "-" : "") + String.format(type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
     }
 
     public static String formatStringSimple(String string, Object... args) {

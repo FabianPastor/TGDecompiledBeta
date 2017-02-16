@@ -3366,7 +3366,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         contentView.addView(this.bottomOverlay, LayoutHelper.createFrame(-1, 51, 80));
         this.bottomOverlayText = new TextView(context);
         this.bottomOverlayText.setTextSize(1, 16.0f);
-        this.bottomOverlayText.setTextColor(Theme.getColor("key_chat_secretChatStatusText"));
+        this.bottomOverlayText.setTextColor(Theme.getColor(Theme.key_chat_secretChatStatusText));
         this.bottomOverlay.addView(this.bottomOverlayText, LayoutHelper.createFrame(-2, -2, 17));
         this.bottomOverlayChat = new FrameLayout(context) {
             public void onDraw(Canvas canvas) {
@@ -3436,7 +3436,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.bottomOverlayChatText = new TextView(context);
         this.bottomOverlayChatText.setTextSize(1, 15.0f);
         this.bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.bottomOverlayChatText.setTextColor(Theme.getColor("key_chat_secretChatStatusText"));
+        this.bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
         this.bottomOverlayChat.addView(this.bottomOverlayChatText, LayoutHelper.createFrame(-2, -2, 17));
         this.chatAdapter.updateRows();
         if (this.loading && this.messages.isEmpty()) {
@@ -9786,8 +9786,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r10[273] = new ThemeDescription(this.searchDownButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_chat_searchPanelIcons);
         r10[274] = new ThemeDescription(this.searchCalendarButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_chat_searchPanelIcons);
         r10[275] = new ThemeDescription(this.searchCountText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_searchPanelText);
-        r10[276] = new ThemeDescription(this.bottomOverlayText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "key_chat_secretChatStatusText");
-        r10[277] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "key_chat_secretChatStatusText");
+        r10[276] = new ThemeDescription(this.bottomOverlayText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_secretChatStatusText);
+        r10[277] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_fieldOverlayText);
         r10[278] = new ThemeDescription(this.bigEmptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_serviceText);
         r10[279] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_serviceText);
         r10[280] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, Theme.key_chat_serviceText);

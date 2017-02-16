@@ -241,6 +241,13 @@ public class Theme {
     public static final String key_actionBarDefaultSubtitle = "actionBarDefaultSubtitle";
     public static final String key_actionBarDefaultTitle = "actionBarDefaultTitle";
     public static final String key_actionBarWhiteSelector = "actionBarWhiteSelector";
+    public static final String key_avatar_actionBarIconBlue = "avatar_actionBarIconBlue";
+    public static final String key_avatar_actionBarIconCyan = "avatar_actionBarIconCyan";
+    public static final String key_avatar_actionBarIconGreen = "avatar_actionBarIconGreen";
+    public static final String key_avatar_actionBarIconOrange = "avatar_actionBarIconOrange";
+    public static final String key_avatar_actionBarIconPink = "avatar_actionBarIconPink";
+    public static final String key_avatar_actionBarIconRed = "avatar_actionBarIconRed";
+    public static final String key_avatar_actionBarIconViolet = "avatar_actionBarIconViolet";
     public static final String key_avatar_actionBarSelectorBlue = "avatar_actionBarSelectorBlue";
     public static final String key_avatar_actionBarSelectorCyan = "avatar_actionBarSelectorCyan";
     public static final String key_avatar_actionBarSelectorGreen = "avatar_actionBarSelectorGreen";
@@ -306,7 +313,7 @@ public class Theme {
     public static final String key_chat_emojiPanelStickerPackSelector = "chat_emojiPanelStickerPackSelector";
     public static final String key_chat_emojiPanelTrendingDescription = "chat_emojiPanelTrendingDescription";
     public static final String key_chat_emojiPanelTrendingTitle = "chat_emojiPanelTrendingTitle";
-    public static final String key_chat_fieldOverlayText = "key_chat_secretChatStatusText";
+    public static final String key_chat_fieldOverlayText = "chat_fieldOverlayText";
     public static final String key_chat_gifSaveHintBackground = "chat_gifSaveHintBackground";
     public static final String key_chat_gifSaveHintText = "chat_gifSaveHintText";
     public static final String key_chat_goDownButton = "chat_goDownButton";
@@ -487,7 +494,7 @@ public class Theme {
     public static final String key_chat_reportSpam = "chat_reportSpam";
     public static final String key_chat_searchPanelIcons = "chat_searchPanelIcons";
     public static final String key_chat_searchPanelText = "chat_searchPanelText";
-    public static final String key_chat_secretChatStatusText = "key_chat_secretChatStatusText";
+    public static final String key_chat_secretChatStatusText = "chat_secretChatStatusText";
     public static final String key_chat_secretTimeText = "chat_secretTimeText";
     public static final String key_chat_selectedBackground = "chat_selectedBackground";
     public static final String key_chat_sentError = "chat_sentError";
@@ -527,7 +534,7 @@ public class Theme {
     public static final String key_chats_menuName = "chats_menuName";
     public static final String key_chats_menuPhone = "chats_menuPhone";
     public static final String key_chats_menuPhoneCats = "chats_menuPhoneCats";
-    public static final String key_chats_menuTopShadow = "key_chats_menuTopShadow";
+    public static final String key_chats_menuTopShadow = "chats_menuTopShadow";
     public static final String key_chats_message = "chats_message";
     public static final String key_chats_muteIcon = "chats_muteIcon";
     public static final String key_chats_name = "chats_name";
@@ -624,7 +631,7 @@ public class Theme {
     public static final String key_profile_actionPressedBackground = "profile_actionPressedBackground";
     public static final String key_profile_adminIcon = "profile_adminIcon";
     public static final String key_profile_creatorIcon = "profile_creatorIcon";
-    public static final String key_profile_title = "key_profile_title";
+    public static final String key_profile_title = "profile_title";
     public static final String key_profile_verifiedBackground = "profile_verifiedBackground";
     public static final String key_profile_verifiedCheck = "profile_verifiedCheck";
     public static final String key_progressCircle = "progressCircle";
@@ -674,6 +681,7 @@ public class Theme {
     public static final String key_windowBackgroundWhiteRedText5 = "windowBackgroundWhiteRedText5";
     public static final String key_windowBackgroundWhiteRedText6 = "windowBackgroundWhiteRedText6";
     public static final String key_windowBackgroundWhiteValueText = "windowBackgroundWhiteValueText";
+    public static String[] keys_avatar_actionBarIcon = new String[]{key_avatar_actionBarIconRed, key_avatar_actionBarIconOrange, key_avatar_actionBarIconViolet, key_avatar_actionBarIconGreen, key_avatar_actionBarIconCyan, key_avatar_actionBarIconBlue, key_avatar_actionBarIconPink};
     public static String[] keys_avatar_actionBarSelector = new String[]{key_avatar_actionBarSelectorRed, key_avatar_actionBarSelectorOrange, key_avatar_actionBarSelectorViolet, key_avatar_actionBarSelectorGreen, key_avatar_actionBarSelectorCyan, key_avatar_actionBarSelectorBlue, key_avatar_actionBarSelectorPink};
     public static String[] keys_avatar_background = new String[]{key_avatar_backgroundRed, key_avatar_backgroundOrange, key_avatar_backgroundViolet, key_avatar_backgroundGreen, key_avatar_backgroundCyan, key_avatar_backgroundBlue, key_avatar_backgroundPink};
     public static String[] keys_avatar_backgroundActionBar = new String[]{key_avatar_backgroundActionBarRed, key_avatar_backgroundActionBarOrange, key_avatar_backgroundActionBarViolet, key_avatar_backgroundActionBarGreen, key_avatar_backgroundActionBarCyan, key_avatar_backgroundActionBarBlue, key_avatar_backgroundActionBarPink};
@@ -860,6 +868,13 @@ public class Theme {
         defaultColors.put(key_avatar_actionBarSelectorCyan, Integer.valueOf(-13007715));
         defaultColors.put(key_avatar_actionBarSelectorBlue, Integer.valueOf(-11959891));
         defaultColors.put(key_avatar_actionBarSelectorPink, Integer.valueOf(-2863493));
+        defaultColors.put(key_avatar_actionBarIconRed, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconOrange, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconViolet, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconGreen, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconCyan, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconBlue, Integer.valueOf(-1));
+        defaultColors.put(key_avatar_actionBarIconPink, Integer.valueOf(-1));
         defaultColors.put(key_actionBarDefault, Integer.valueOf(-11371101));
         defaultColors.put(key_actionBarDefaultIcon, Integer.valueOf(-1));
         defaultColors.put(key_actionBarActionModeDefault, Integer.valueOf(-1));
@@ -1068,8 +1083,8 @@ public class Theme {
         defaultColors.put(key_chat_mediaBroadcast, Integer.valueOf(-1));
         defaultColors.put(key_chat_searchPanelIcons, Integer.valueOf(-10639908));
         defaultColors.put(key_chat_searchPanelText, Integer.valueOf(-11625772));
-        defaultColors.put("key_chat_secretChatStatusText", Integer.valueOf(-8421505));
-        defaultColors.put("key_chat_secretChatStatusText", Integer.valueOf(-12940081));
+        defaultColors.put(key_chat_secretChatStatusText, Integer.valueOf(-8421505));
+        defaultColors.put(key_chat_fieldOverlayText, Integer.valueOf(-12940081));
         defaultColors.put(key_chat_stickersHintPanel, Integer.valueOf(-1));
         defaultColors.put(key_chat_replyPanelIcons, Integer.valueOf(-11032346));
         defaultColors.put(key_chat_replyPanelClose, Integer.valueOf(-5723992));
@@ -1167,7 +1182,7 @@ public class Theme {
         defaultColors.put(key_checkboxCheck, Integer.valueOf(-1));
         defaultColors.put(key_stickers_menu, Integer.valueOf(-4801083));
         defaultColors.put(key_stickers_menuSelector, Integer.valueOf(ACTION_BAR_AUDIO_SELECTOR_COLOR));
-        defaultColors.put(key_changephoneinfo_image, Integer.valueOf(-16777216));
+        defaultColors.put(key_changephoneinfo_image, Integer.valueOf(-5723992));
         defaultColors.put(key_groupcreate_hintText, Integer.valueOf(-6182221));
         defaultColors.put(key_groupcreate_cursor, Integer.valueOf(-11361317));
         defaultColors.put(key_groupcreate_sectionShadow, Integer.valueOf(-16777216));

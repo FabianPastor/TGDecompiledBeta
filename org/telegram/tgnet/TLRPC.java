@@ -1911,7 +1911,7 @@ public class TLRPC {
         public PhoneCallDiscardReason reason;
         public int score;
         public String title;
-        public int total_amount;
+        public long total_amount;
         public int ttl;
         public int user_id;
         public ArrayList<Integer> users = new ArrayList();
@@ -1952,14 +1952,14 @@ public class TLRPC {
                 case -1230047312:
                     result = new TL_messageActionEmpty();
                     break;
-                case -355627904:
-                    result = new TL_messageActionPaymentSent();
-                    break;
                 case -123931160:
                     result = new TL_messageActionChatJoinedByLink();
                     break;
                 case 209540062:
                     result = new TL_messageActionGeoChatCheckin();
+                    break;
+                case 1080663248:
+                    result = new TL_messageActionPaymentSent();
                     break;
                 case 1217033015:
                     result = new TL_messageActionChatAddUser();
@@ -2083,7 +2083,7 @@ public class TLRPC {
         public int receipt_msg_id;
         public boolean shipping_address_requested;
         public String title;
-        public int total_amount;
+        public long total_amount;
         public int user_id;
         public String venue_id;
         public Video video_unused;
@@ -2113,6 +2113,9 @@ public class TLRPC {
                 case -38694904:
                     result = new TL_messageMediaGame();
                     break;
+                case 668593981:
+                    result = new TL_messageMediaInvoice();
+                    break;
                 case 694364726:
                     result = new TL_messageMediaUnsupported_old();
                     break;
@@ -2124,9 +2127,6 @@ public class TLRPC {
                     break;
                 case 1038967584:
                     result = new TL_messageMediaEmpty();
-                    break;
-                case 1216419892:
-                    result = new TL_messageMediaInvoice();
                     break;
                 case 1457575028:
                     result = new TL_messageMediaGeo();
@@ -2524,6 +2524,7 @@ public class TLRPC {
         public byte[] g_a_or_b;
         public long id;
         public long key_fingerprint;
+        public boolean need_rating;
         public int participant_id;
         public TL_phoneCallProtocol protocol;
         public PhoneCallDiscardReason reason;
@@ -7038,8 +7039,8 @@ public class TLRPC {
     }
 
     public static class TL_labeledPrice extends TLObject {
-        public static int constructor = -NUM;
-        public int amount;
+        public static int constructor = -886477832;
+        public long amount;
         public String label;
 
         public static TL_labeledPrice TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -7056,13 +7057,13 @@ public class TLRPC {
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.label = stream.readString(exception);
-            this.amount = stream.readInt32(exception);
+            this.amount = stream.readInt64(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeString(this.label);
-            stream.writeInt32(this.amount);
+            stream.writeInt64(this.amount);
         }
     }
 
@@ -9838,7 +9839,7 @@ public class TLRPC {
     }
 
     public static class TL_payments_paymentReceipt extends TLObject {
-        public static int constructor = 947741752;
+        public static int constructor = NUM;
         public int bot_id;
         public String credentials_title;
         public String currency;
@@ -9848,7 +9849,7 @@ public class TLRPC {
         public TL_invoice invoice;
         public int provider_id;
         public TL_shippingOption shipping;
-        public int total_amount;
+        public long total_amount;
         public ArrayList<User> users = new ArrayList();
 
         public static TL_payments_paymentReceipt TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -9876,7 +9877,7 @@ public class TLRPC {
                 this.shipping = TL_shippingOption.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
             this.currency = stream.readString(exception);
-            this.total_amount = stream.readInt32(exception);
+            this.total_amount = stream.readInt64(exception);
             this.credentials_title = stream.readString(exception);
             if (stream.readInt32(exception) == 481674261) {
                 int count = stream.readInt32(exception);
@@ -9909,7 +9910,7 @@ public class TLRPC {
                 this.shipping.serializeToStream(stream);
             }
             stream.writeString(this.currency);
-            stream.writeInt32(this.total_amount);
+            stream.writeInt64(this.total_amount);
             stream.writeString(this.credentials_title);
             stream.writeInt32(481674261);
             int count = this.users.size();
@@ -10213,38 +10214,6 @@ public class TLRPC {
             stream.writeInt32(this.duration);
             this.reason.serializeToStream(stream);
             stream.writeInt64(this.connection_id);
-        }
-    }
-
-    public static class TL_phone_discardedCall extends TLObject {
-        public static int constructor = -667618994;
-        public int flags;
-        public boolean need_rating;
-        public Updates updates;
-
-        public static TL_phone_discardedCall TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
-            if (constructor == constructor) {
-                TL_phone_discardedCall result = new TL_phone_discardedCall();
-                result.readParams(stream, exception);
-                return result;
-            } else if (!exception) {
-                return null;
-            } else {
-                throw new RuntimeException(String.format("can't parse magic %x in TL_phone_discardedCall", new Object[]{Integer.valueOf(constructor)}));
-            }
-        }
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.flags = stream.readInt32(exception);
-            this.need_rating = (this.flags & 1) != 0;
-            this.updates = Updates.TLdeserialize(stream, stream.readInt32(exception), exception);
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            this.flags = this.need_rating ? this.flags | 1 : this.flags & -2;
-            stream.writeInt32(this.flags);
-            this.updates.serializeToStream(stream);
         }
     }
 
@@ -17211,17 +17180,17 @@ public class TLRPC {
     }
 
     public static class TL_messageActionPaymentSent extends MessageAction {
-        public static int constructor = -355627904;
+        public static int constructor = NUM;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.currency = stream.readString(exception);
-            this.total_amount = stream.readInt32(exception);
+            this.total_amount = stream.readInt64(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeString(this.currency);
-            stream.writeInt32(this.total_amount);
+            stream.writeInt64(this.total_amount);
         }
     }
 
@@ -17656,7 +17625,7 @@ public class TLRPC {
     }
 
     public static class TL_messageMediaInvoice extends MessageMedia {
-        public static int constructor = NUM;
+        public static int constructor = 668593981;
         public TL_webDocument photo;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -17671,7 +17640,7 @@ public class TLRPC {
                 this.receipt_msg_id = stream.readInt32(exception);
             }
             this.currency = stream.readString(exception);
-            this.total_amount = stream.readInt32(exception);
+            this.total_amount = stream.readInt64(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -17687,7 +17656,7 @@ public class TLRPC {
                 stream.writeInt32(this.receipt_msg_id);
             }
             stream.writeString(this.currency);
-            stream.writeInt32(this.total_amount);
+            stream.writeInt64(this.total_amount);
         }
     }
 
@@ -19468,10 +19437,10 @@ public class TLRPC {
 
     public static class TL_phoneCallDiscarded extends PhoneCall {
         public static int constructor = NUM;
-        public boolean need_rating;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.flags = stream.readInt32(exception);
+            this.need_rating = (this.flags & 4) != 0;
             this.id = stream.readInt64(exception);
             if ((this.flags & 1) != 0) {
                 this.reason = PhoneCallDiscardReason.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -19479,14 +19448,11 @@ public class TLRPC {
             if ((this.flags & 2) != 0) {
                 this.duration = stream.readInt32(exception);
             }
-            this.need_rating = (this.flags & 4) != 0;
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
-            if (this.need_rating) {
-                this.flags |= 4;
-            }
             stream.writeInt32(constructor);
+            this.flags = this.need_rating ? this.flags | 4 : this.flags & -5;
             stream.writeInt32(this.flags);
             stream.writeInt64(this.id);
             if ((this.flags & 1) != 0) {

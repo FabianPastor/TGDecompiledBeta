@@ -1951,7 +1951,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     public List<Pair<zze, Long>> zzn(String str, int i, int i2) {
-        Cursor query;
         List<Pair<zze, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -1965,6 +1964,7 @@ class zzasu extends zzats {
         }
         zzac.zzas(z);
         zzac.zzdv(str);
+        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {
