@@ -158,7 +158,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         textCell.setTextAndValue(LocaleController.getString("Sound", R.string.Sound), value, true);
                         return;
                     } else if (position == ProfileNotificationsActivity.this.ringtoneRow) {
-                        value = preferences.getString("ringtone_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("SoundDefault", R.string.SoundDefault));
+                        value = preferences.getString("ringtone_" + ProfileNotificationsActivity.this.dialog_id, LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone));
                         if (value.equals("NoSound")) {
                             value = LocaleController.getString("NoSound", R.string.NoSound);
                         }
@@ -785,7 +785,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             if (ringtone != null) {
                 Ringtone rng = RingtoneManager.getRingtone(ApplicationLoader.applicationContext, ringtone);
                 if (rng != null) {
-                    if (ringtone.equals(requestCode == 13 ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI)) {
+                    if (requestCode == 13) {
+                        if (ringtone.equals(System.DEFAULT_RINGTONE_URI)) {
+                            name = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
+                        } else {
+                            name = rng.getTitle(getParentActivity());
+                        }
+                    } else if (ringtone.equals(System.DEFAULT_NOTIFICATION_URI)) {
                         name = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                     } else {
                         name = rng.getTitle(getParentActivity());

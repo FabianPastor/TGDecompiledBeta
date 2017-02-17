@@ -394,13 +394,14 @@ public class ThemeDescription {
                                     ((Switch) obj).checkColorFilters();
                                 } else if (obj instanceof EditTextCaption) {
                                     if ((this.changeFlags & FLAG_HINTTEXTCOLOR) != 0) {
+                                        ((EditTextCaption) obj).setHintColor(color);
                                         ((EditTextCaption) obj).setHintTextColor(color);
                                     } else {
                                         ((EditTextCaption) obj).setTextColor(color);
                                     }
                                 } else if (obj instanceof SimpleTextView) {
                                     if ((this.changeFlags & FLAG_LINKCOLOR) != 0) {
-                                        ((SimpleTextView) obj).setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+                                        ((SimpleTextView) obj).setLinkTextColor(color);
                                     } else {
                                         ((SimpleTextView) obj).setTextColor(color);
                                     }

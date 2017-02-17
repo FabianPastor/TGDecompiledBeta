@@ -262,7 +262,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         } else if (position == NotificationsSettingsActivity.this.groupSoundRow) {
                             value = preferences.getString("GroupSound", LocaleController.getString("SoundDefault", R.string.SoundDefault));
                         } else if (position == NotificationsSettingsActivity.this.callsRingtoneRow) {
-                            value = preferences.getString("CallsRingtone", LocaleController.getString("SoundDefault", R.string.SoundDefault));
+                            value = preferences.getString("CallsRingtone", LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone));
                         }
                         if (value.equals("NoSound")) {
                             value = LocaleController.getString("NoSound", R.string.NoSound);
@@ -833,7 +833,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             if (ringtone != null) {
                 Ringtone rng = RingtoneManager.getRingtone(getParentActivity(), ringtone);
                 if (rng != null) {
-                    if (ringtone.equals(requestCode == this.callsRingtoneRow ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI)) {
+                    if (requestCode == this.callsRingtoneRow) {
+                        if (ringtone.equals(System.DEFAULT_RINGTONE_URI)) {
+                            name = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
+                        } else {
+                            name = rng.getTitle(getParentActivity());
+                        }
+                    } else if (ringtone.equals(System.DEFAULT_NOTIFICATION_URI)) {
                         name = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                     } else {
                         name = rng.getTitle(getParentActivity());

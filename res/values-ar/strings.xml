@@ -117,6 +117,8 @@
     <string name="AppName">تيليجرام</string>
     <string name="AppNameBeta">نسخة تيليجرام التجريبية</string>
     <string name="ApplyLocalizationFile">تطبيق ملف التعريب</string>
+    <string name="ApplyTheme">تطبيق</string>
+    <string name="ApplyThemeFile">تطبيق ملف النمط</string>
     <string name="ArchivedMasks">الأقنعة المؤرشفة</string>
     <string name="ArchivedMasksAlertInfo">تمت أرشفة بعض من حزم الأقنعة الخاصة بك. يمكنك تفعيل هذه الحزم ان طريق إعدادات الأقنعة.</string>
     <string name="ArchivedMasksAlertTitle">الأقنعة المؤرشفة</string>
@@ -150,7 +152,7 @@
     <string name="ArticleByAuthor">من %1$s</string>
     <string name="ArticleDateByAuthor">%1$s من %2$s</string>
     <string name="AskAQuestion">اسأل سؤالًا</string>
-    <string name="AskAQuestionInfo">نرجو الأخذ بالعلم أن الدعم الفني في تيليجرام يقوم به مجموعة من المتطوعين. نحن نحاول الرد بسرعة قدر المستطاع، لكن ربما نستغرق القليل من الوقت.&lt;br&gt;&lt;br&gt; &lt;a href=\"https://telegram.org/faq/ar\"&gt;صفحة الأسئلة الأكثر شيوعًا&lt;/a&gt;: يوجد بها حلول للمشاكل وإجابات لمعظم الأسئلة.</string>
+    <string name="AskAQuestionInfo">نرجو الأخذ بالعلم أن الدعم الفني في تيليجرام يقوم به مجموعة من المتطوعين. نحن نحاول الرد بسرعة قدر المستطاع، لكن ربما نستغرق القليل من الوقت.&lt;br&gt;&lt;br&gt; &lt;a href=https://telegram.org/faq/ar&gt;صفحة الأسئلة الأكثر شيوعًا&lt;/a&gt;: يوجد بها حلول للمشاكل وإجابات لمعظم الأسئلة.</string>
     <string name="AskButton">اسأل أحد المتطوعين</string>
     <string name="AttachAudio">رسالة صوتية</string>
     <string name="AttachBotsHelp">انتقل إلى الأسفل للبوتات</string>
@@ -203,6 +205,8 @@
     <string name="CacheEmpty">إفراغ</string>
     <string name="CalculatingSize">جاري الحساب...</string>
     <string name="Call">اتصال</string>
+    <string name="CallAgain">اتصل مرة أخرى</string>
+    <string name="CallBack">أعد الاتصال بالرقم</string>
     <string name="CallEncryptionKeyDescription">هذه الصورة والنص تم اشتقاقهم من مفتاح التشفير لهذه المحادثة السرية مع &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;إذا كانت مطابقة لما يظهر على جهاز &lt;b&gt;%2$s&lt;/b&gt; ، التشفير من البداية للنهاية مضمون.</string>
     <string name="CallMessageIncoming">مكالمات واردة</string>
     <string name="CallMessageIncomingMissed">مكالمات فائتة</string>
@@ -344,6 +348,7 @@
     <string name="ClearRecentEmoji">هل ترغب في مسح سجل الإيموجي؟</string>
     <string name="ClearSearch">هل ترغب في مسح سجل البحث؟</string>
     <string name="Close">إغلاق</string>
+    <string name="CloseEditor">أغلق المحرر</string>
     <string name="Code">رمز التفعيل</string>
     <string name="CodeExpired">انتهت صلاحية الرمز الخاص بك، يرجى تسجيل الدخول مرة أخرى</string>
     <string name="ColorBlue">أزرق</string>
@@ -356,6 +361,7 @@
     <string name="ColorWhite">أبيض</string>
     <string name="ColorYellow">أصفر</string>
     <string name="CompatibilityChat">%1$s يستخدم إصدار قديم من تيليجرام، لذلك، الصور السرية ستظهر في وضع الموافقة.\n\nعندما يقوم %2$s بتحديث تيليجرام، الصور التي بها عداد دقيقة أو أقل ستعمل بطريقة \"الاستمرار بالضغط للإستعراض\"، وسيتم إخبارك عندما يلتقط المستقبل صورة من شاشته.</string>
+    <string name="ConfirmDeleteCallLog">هل أنت متأكد من رغبتك في حذف المكالمة من سجل المكالمات؟</string>
     <string name="Connecting">جاري الاتصال...</string>
     <string name="ContactJoined">اشترك صديق في تيليجرام</string>
     <string name="ContactNotRegistered">%1$s لم يقم بالتسجيل في تيليجرام بعد. فضلًا، هل ترغب في دعوتهم؟</string>
@@ -375,6 +381,9 @@
     <string name="CountSent">الصادر</string>
     <string name="CreateEncryptedChatError">حدث خطأ.</string>
     <string name="CreateGroupError">المعذرة، لا يمكنك إنشاء مجموعة مع هؤلاء المستخدمين نظرًا لإعدادات الخصوصية المتعلقة بهم.</string>
+    <string name="CreateNewTheme">إنشاء نمط جديد</string>
+    <string name="CreateNewThemeHelp">اضغط على أيقونة الألوان لاستعراض قائمة الخيارات في كل شاشة - ثم قم بتعديلهم.</string>
+    <string name="CreateNewThemeInfo">يمكنك إنشاء النمط الخاص بك بتغيير الألوان داخل التطبيق. يمكنك دائمًا العودة لنمط تيليجرام الأصلي من هنا.</string>
     <string name="Crop">قطع</string>
     <string name="CropImage">قص الصورة</string>
     <string name="CropOriginal">الأصل</string>
@@ -409,6 +418,7 @@
     <string name="DebugMenuImportContacts">استيراد جهات الاتصال</string>
     <string name="DebugMenuReloadContacts">إعادة تنزيل جهات الاتصال</string>
     <string name="Default">افتراضي</string>
+    <string name="DefaultRingtone">افتراضي</string>
     <string name="Delete">حذف</string>
     <string name="DeleteAccountHelp">إذا لم تقم بتسجيل الدخول خلال هذه الفترة، سيتم حذف حسابك بالإضافة إلى مجموعاتك، رسائلك، وجهات الاتصال الخاصة بك في تيليجرام.</string>
     <string name="DeleteAccountIfAwayFor">إذا كنت غائب لمدة</string>
@@ -429,6 +439,7 @@
     <string name="DeleteMegaMenu">حذف المجموعة</string>
     <string name="DeletePhoto">حذف الصورة</string>
     <string name="DeleteReportSpam">الإبلاغ عن إزعاج</string>
+    <string name="DeleteThemeAlert">هل أنت متأكد من رغبتك في حذف النمط؟</string>
     <string name="DeleteThisChat">حذف هذه الدردشة</string>
     <string name="DeleteThisGroup">حذف هذه المجموعة</string>
     <string name="DescriptionInfo">يمكنك كتابة وصف اختياري لقناتك.</string>
@@ -479,6 +490,7 @@
     <string name="EnterListName">أدخل اسم القائمة</string>
     <string name="EnterNewFirstPasscode">قم بإدخال رمز مرور</string>
     <string name="EnterNewPasscode">قم بإدخال رمز المرور الخاص بك الجديد</string>
+    <string name="EnterThemeName">أدخل اسم النمط</string>
     <string name="EnterYourPasscode">قم بإدخال رمز المرور الخاص بك</string>
     <string name="ErrorOccurred">حدث خطأ.</string>
     <string name="Events">الأحداث</string>
@@ -612,6 +624,7 @@
     <string name="InChatSound">الأصوات داخل المحادثات</string>
     <string name="IncomingCalls">مكالمات واردة</string>
     <string name="IncorrectLocalization">ملف التعريب غير صحيح</string>
+    <string name="IncorrectTheme">ملف النمط غير صحيح</string>
     <string name="Info">معلومات</string>
     <string name="InstantView">استعراض لحظي</string>
     <string name="InternalStorage">الذاكرة الداخلية</string>
@@ -796,6 +809,7 @@
     <string name="NewMessages_two">%1$d رسالتان جديدتان</string>
     <string name="NewMessages_zero">لا يوجد رسائل جديدة</string>
     <string name="NewSecretChat">محادثة سرية جديدة</string>
+    <string name="NewTheme">نمط جديد</string>
     <string name="Next">التالي</string>
     <string name="No">لا</string>
     <string name="NoAudio">فضلًا قم بإضافة ملفات لمكتبتك الموسيقية على جهازك لتتمكن من مشاهدتها هنا.</string>
@@ -833,8 +847,10 @@
     <string name="NoStickers">لا يوجد ملصقات بعد</string>
     <string name="NoUsernameFound">لا يوجد حساب تيليجرام بهذا الاسم.</string>
     <string name="NoVideo">لا يوجد مقاطع مرئية بعد</string>
-    <string name="NobodyLikesSpam1">لقد قمت بمراسلة أشخاص كثيرين اليوم من خارج جهات الاتصال لديك. فضلًا حاول مرة أخرى غدًا. ستتمكن من الرد اليوم إذا قام المستخدم بمراسلتك أولًا.</string>
-    <string name="NobodyLikesSpam2">لا يمكنك إضافة هذا المستخدم لأنك قمت بمراسلة أشخاص كثيرين اليوم من خارج جهات الاتصال لديك. فضلًا حاول مرة أخرى غدًا. يمكنك الطلب من عضو آخر إضافة هذا المستخدم للمجموعة.</string>
+    <string name="NobodyLikesSpam1">المعذرة، فقط يمكنك مراسلة جهات الاتصال المشتركة في الوقت الحالي.</string>
+    <string name="NobodyLikesSpam2">المعذرة، فقط يمكنك إضافة جهات الاتصال المشتركة للمجموعات في الوقت الحالي.</string>
+    <string name="NobodyLikesSpam3">لقد قمت بمراسلة أشخاص كثيرين اليوم من خارج جهات الاتصال لديك. فضلًا حاول مرة أخرى غدًا. ستتمكن من الرد اليوم إذا قام المستخدم بمراسلتك أولًا.</string>
+    <string name="NobodyLikesSpam4">لا يمكنك إضافة هذا المستخدم لأنك قمت بمراسلة أشخاص كثيرين اليوم من خارج جهات الاتصال لديك. فضلًا حاول مرة أخرى غدًا. يمكنك الطلب من عضو آخر إضافة هذا المستخدم للمجموعة.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq/can-39t-send-messages-to-non-contacts</string>
     <string name="NotMounted">الذاكرة غير مثبتة</string>
     <string name="NotificationActionPinnedContact">%1$s ثبت جهة اتصال في المجموعة %2$s</string>
@@ -980,6 +996,54 @@
     <string name="PasswordHintText">فضلًا اختر تلميحة لكلمة المرور الخاصة بك:</string>
     <string name="PasswordRecovery">كلمة مرور الإسترداد</string>
     <string name="PasswordReset">تم تعطيل كلمة المرور</string>
+    <string name="PaymentBillingAddress">عنوان الدفع</string>
+    <string name="PaymentCardCvv">رمز الأمان (CVV)</string>
+    <string name="PaymentCardExpireDateMonth">الشهر</string>
+    <string name="PaymentCardExpireDateYear">السنة</string>
+    <string name="PaymentCardInfo">معلومات الشحن</string>
+    <string name="PaymentCardName">الاسم</string>
+    <string name="PaymentCardNameTitle">صاحب البطاقة</string>
+    <string name="PaymentCardNumber">رقم البطاقة</string>
+    <string name="PaymentCardSavePaymentInformation">حفظ معلومات الدفع</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine1">يمكنك حفظ معلومات الدفع لاستخدامها لاحقًا.</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine2">فضلًا قم بتفعيل *التحقق بخطوتين* للتفعيل.</string>
+    <string name="PaymentCardTitle">بطاقة الدفع</string>
+    <string name="PaymentCheckout">الدفع</string>
+    <string name="PaymentCheckoutEmail">عنوان التواصل</string>
+    <string name="PaymentCheckoutMethod">وسيلة الدفع</string>
+    <string name="PaymentCheckoutName">الاسم</string>
+    <string name="PaymentCheckoutPay">إدفع %1$s</string>
+    <string name="PaymentCheckoutPhoneNumber">رقم الهاتف</string>
+    <string name="PaymentCheckoutShippingMethod">طريقة الشحن</string>
+    <string name="PaymentConfirmationMessage">بطاقتك %1$s مسجلة مسبقًا. لتتمكن من استخدامها، يرجى إدخال كلمة مرور التحقق بخطوتين.</string>
+    <string name="PaymentConfirmationNewCard">اختر بطاقة أخرى</string>
+    <string name="PaymentConnectionFailed">تعذر الوصور إلى خادم الدفع. فضلًا تحقق من اتصال الانترنت وحاول مرة أخرى.</string>
+    <string name="PaymentFailed">المعذرة، تم رفض عملية الدفع.</string>
+    <string name="PaymentInvoice">الفاتورة</string>
+    <string name="PaymentNoShippingMethod">المعذرة، لا يمكن التوصيل لعنوانك.</string>
+    <string name="PaymentPrecheckoutFailed">المعذرة، تم إلغاء عملية الدفع من البوت.</string>
+    <string name="PaymentReceipt">الفاتورة</string>
+    <string name="PaymentShipment">الشحنة</string>
+    <string name="PaymentShippingAddress">عنوان الشحن</string>
+    <string name="PaymentShippingAddress1Placeholder">العنوان ١ (الشارع)</string>
+    <string name="PaymentShippingAddress2Placeholder">العنوان ٢ (الشارع)</string>
+    <string name="PaymentShippingCityPlaceholder">المدينة</string>
+    <string name="PaymentShippingCountry">الدولة</string>
+    <string name="PaymentShippingEmailPlaceholder">البريد الالكتروني</string>
+    <string name="PaymentShippingInfo">معلومات الشحن</string>
+    <string name="PaymentShippingMethod">طرق الشحن</string>
+    <string name="PaymentShippingName">الاسم الكامل</string>
+    <string name="PaymentShippingPhoneNumber">رقم الهاتف</string>
+    <string name="PaymentShippingReceiver">المستقبل</string>
+    <string name="PaymentShippingSave">حفظ معلومات الشحن</string>
+    <string name="PaymentShippingSaveInfo">يمكنك حفظ معلومات الشحن لاستخدامها لاحقًا.</string>
+    <string name="PaymentShippingStatePlaceholder">الولاية</string>
+    <string name="PaymentShippingZipPlaceholder">الرمز البريدي</string>
+    <string name="PaymentSuccessfullyPaid">لقد قمت بنجاح تحويل %1$s إلى %2$s لـ %3$s</string>
+    <string name="PaymentSuccessfullyPaidNoItem">لقد قمت بنجاح تحويل %1$s إلى %2$s</string>
+    <string name="PaymentTransactionMessage">هل حقًا ترغب في تحويل %1$s إلى البوت %2$s لـ %3$s؟</string>
+    <string name="PaymentTransactionReview">مراجعة العملية</string>
+    <string name="PaymentTransactionTotal">الإجمالي</string>
     <string name="PendingEmailText">البريد الإلكتروني لإسترداد الحساب %1$s غير فعّال بعد ويلزم تفعيله</string>
     <string name="PermissionContacts">تيليجرام يحتاج للسماح له بالوصول لجهات الاتصال الخاصة بك لتتمكن من محادثة أصدقائك من كافة أجهزتك.</string>
     <string name="PermissionDrawAboveOtherApps">تيليجرام يحتاج الصلاحية ليقوم بتشغيل الفيديو داخل الشاشة بعد الخروج من التطبيق.</string>
@@ -1099,6 +1163,7 @@
     <string name="Satellite">قمر صناعي</string>
     <string name="Saturation">التشبع</string>
     <string name="Save">حفظ</string>
+    <string name="SaveTheme">حفظ النمط</string>
     <string name="SaveToDownloads">حفظ في الجهاز</string>
     <string name="SaveToGIFs">حفظ في الصور المتحركة</string>
     <string name="SaveToGallery">حفظ في الجهاز</string>
@@ -1132,6 +1197,7 @@
     <string name="SecretWebPage">معاينة الرابط</string>
     <string name="SecurityTitle">الأمان</string>
     <string name="SelectChat">اختر محادثة</string>
+    <string name="SelectColor">اختر لون</string>
     <string name="SelectContact">اختر جهة اتصال</string>
     <string name="SelectFile">اختر ملف</string>
     <string name="Send">إرسال</string>
@@ -1234,6 +1300,7 @@
     <string name="TerminateSessionQuestion">هل ترغب في تسجيل الخروج من هذا الجهاز؟</string>
     <string name="TextSize">حجم نص الرسائل</string>
     <string name="Theme">نمط</string>
+    <string name="ThemePreview">معاينة النمط</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">المعذرة، انتهت مدة التعديل على الرسائل.</string>
     <string name="Times_few">%1$d مرة</string>
@@ -1305,9 +1372,11 @@
     <string name="VoipExchangingKeys">جاري مبادلة مفاتيح التشفير</string>
     <string name="VoipFailed">فشل في الاتصال</string>
     <string name="VoipFeedbackAlert">هل ترغب في ترك أية ملاحظات لتطوير خدمة المكالمات لدينا؟</string>
+    <string name="VoipFeedbackCommentHint">أضف تعليق اختياري</string>
     <string name="VoipHangingUp">جاري إنهاء المكالمة</string>
     <string name="VoipInCallBranding">مكالمة تيليجرام</string>
     <string name="VoipIncoming">مكالمات واردة</string>
+    <string name="VoipNeedMicPermission">تيليجرام يحتاج للسماح له بالوصول للمايكروفون الخاص بك لتتمكن من إجراء مكالمات.</string>
     <string name="VoipNotificationSettings">مكالمات صوتية</string>
     <string name="VoipOffline">أنت حاليًا غير متصل. يرجى الاتصال بالانترنت لتتمكن من إجراء مكالمات.</string>
     <string name="VoipOfflineAirplane">لقد قمت بتفعيل وضع الطيران. يرجى تشغيل الواي فاي لتتمكن من إجراء اتصالات.</string>
@@ -1359,6 +1428,7 @@
     <string name="Yes">نعم</string>
     <string name="Yesterday">أمس</string>
     <string name="YesterdayAt">أمس الساعة</string>
+    <string name="YouBlockedUser">المعذرة، لا يمكنك إضافة هذا المستخدم أو البوت للمجموعات بسبب أنك قمت بحظره. فضلًا قم بإزالة الحظر للإستمرار.</string>
     <string name="YouCreatedBroadcastList">أنت قمت بإنشاء قائمة رسالة جماعية</string>
     <string name="YouHaveNewMessage">لديك رسالة جديدة</string>
     <string name="YouLeft">لقد قمت بمغادرة المجموعة</string>

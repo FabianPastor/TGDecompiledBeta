@@ -575,7 +575,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
 
     public void setUserChannelRole(User user, ChannelParticipantRole role) {
         if (user != null && role != null) {
-            TL_channels_editAdmin req = new TL_channels_editAdmin();
+            final TL_channels_editAdmin req = new TL_channels_editAdmin();
             req.channel = MessagesController.getInputChannel(this.chatId);
             req.user_id = MessagesController.getInputUser(user);
             req.role = role;
@@ -592,7 +592,16 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     }
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            AlertsCreator.showAddUserAlert(error.text, ChannelUsersActivity.this, !ChannelUsersActivity.this.isMegagroup);
+                            boolean z = true;
+                            TL_error tL_error = error;
+                            BaseFragment baseFragment = ChannelUsersActivity.this;
+                            TLObject tLObject = req;
+                            Object[] objArr = new Object[1];
+                            if (ChannelUsersActivity.this.isMegagroup) {
+                                z = false;
+                            }
+                            objArr[0] = Boolean.valueOf(z);
+                            AlertsCreator.processError(tL_error, baseFragment, tLObject, objArr);
                         }
                     });
                 }

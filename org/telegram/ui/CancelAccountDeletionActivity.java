@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -65,6 +63,7 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
@@ -227,7 +226,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 LoginActivitySmsView.this.getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                                 return;
                             } catch (Exception e) {
-                                CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                                AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                                 return;
                             }
                         }
@@ -242,7 +241,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             params.putString("phone", this.phone);
             this.nextPressed = true;
             CancelAccountDeletionActivity.this.needShowProgress();
-            TL_auth_resendCode req = new TL_auth_resendCode();
+            final TL_auth_resendCode req = new TL_auth_resendCode();
             req.phone_number = this.phone;
             req.phone_code_hash = this.phoneHash;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -252,14 +251,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             LoginActivitySmsView.this.nextPressed = false;
                             if (error == null) {
                                 CancelAccountDeletionActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
-                            } else if (error.text != null) {
-                                if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
-                                }
+                            } else {
+                                AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
                             }
                             CancelAccountDeletionActivity.this.needHideProgress();
                         }
@@ -479,7 +472,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
-                TL_account_confirmPhone req = new TL_account_confirmPhone();
+                final TL_account_confirmPhone req = new TL_account_confirmPhone();
                 req.phone_code = this.codeField.getText().toString();
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
@@ -491,7 +484,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 CancelAccountDeletionActivity.this.needHideProgress();
                                 LoginActivitySmsView.this.nextPressed = false;
                                 if (error == null) {
-                                    CancelAccountDeletionActivity.this.errorDialog = CancelAccountDeletionActivity.this.needShowAlert(LocaleController.formatString("CancelLinkSuccess", R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
+                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + LoginActivitySmsView.this.phone)));
                                     return;
                                 }
                                 LoginActivitySmsView.this.lastError = error.text;
@@ -506,17 +499,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
                                 }
                                 LoginActivitySmsView.this.waitingForEvent = true;
-                                if (LoginActivitySmsView.this.currentType == 3) {
-                                    return;
-                                }
-                                if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                    CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                } else {
-                                    CancelAccountDeletionActivity.this.needShowAlert(error.text);
+                                if (LoginActivitySmsView.this.currentType != 3) {
+                                    AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
                                 }
                             }
                         });
@@ -582,7 +566,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
         public void onNextPressed() {
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
-                TL_account_sendConfirmPhoneCode req;
+                final TL_account_sendConfirmPhoneCode req;
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 boolean simcardAvailable;
                 if (tm.getSimState() == 1 || tm.getPhoneType() == 0) {
@@ -624,15 +608,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 PhoneView.this.nextPressed = false;
                                 if (error == null) {
                                     CancelAccountDeletionActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
-                                } else if (error.code == 400) {
-                                    CancelAccountDeletionActivity.this.errorDialog = CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("CancelLinkExpired", R.string.CancelLinkExpired));
-                                } else if (error.text == null) {
                                 } else {
-                                    if (error.text.startsWith("FLOOD_WAIT")) {
-                                        CancelAccountDeletionActivity.this.errorDialog = CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                    } else {
-                                        CancelAccountDeletionActivity.this.errorDialog = CancelAccountDeletionActivity.this.needShowAlert(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
-                                    }
+                                    CancelAccountDeletionActivity.this.errorDialog = AlertsCreator.processError(error, CancelAccountDeletionActivity.this, req, new Object[0]);
                                 }
                             }
                         });
@@ -745,19 +722,6 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         if (isOpen) {
             this.views[this.currentViewNum].onShow();
         }
-    }
-
-    public Dialog needShowAlert(String text) {
-        if (text == null || getParentActivity() == null) {
-            return null;
-        }
-        Builder builder = new Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(text);
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        Dialog dialog = builder.create();
-        showDialog(dialog);
-        return dialog;
     }
 
     public void needShowProgress() {

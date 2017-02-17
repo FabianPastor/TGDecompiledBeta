@@ -297,6 +297,9 @@ public class Theme {
     public static final String key_changephoneinfo_image = "changephoneinfo_image";
     public static final String key_chat_addContact = "chat_addContact";
     public static final String key_chat_botButtonText = "chat_botButtonText";
+    public static final String key_chat_botKeyboardButtonBackground = "chat_botKeyboardButtonBackground";
+    public static final String key_chat_botKeyboardButtonBackgroundPressed = "chat_botKeyboardButtonBackgroundPressed";
+    public static final String key_chat_botKeyboardButtonText = "chat_botKeyboardButtonText";
     public static final String key_chat_botProgress = "chat_botProgress";
     public static final String key_chat_botSwitchToInlineText = "chat_botSwitchToInlineText";
     public static final String key_chat_editDoneIcon = "chat_editDoneIcon";
@@ -1063,6 +1066,9 @@ public class Theme {
         defaultColors.put(key_chat_emojiPanelMasksIconSelected, Integer.valueOf(-10305560));
         defaultColors.put(key_chat_emojiPanelTrendingTitle, Integer.valueOf(-14606047));
         defaultColors.put(key_chat_emojiPanelTrendingDescription, Integer.valueOf(-7697782));
+        defaultColors.put(key_chat_botKeyboardButtonText, Integer.valueOf(-13220017));
+        defaultColors.put(key_chat_botKeyboardButtonBackground, Integer.valueOf(-1775639));
+        defaultColors.put(key_chat_botKeyboardButtonBackgroundPressed, Integer.valueOf(-3354156));
         defaultColors.put(key_chat_unreadMessagesStartArrowIcon, Integer.valueOf(-6113849));
         defaultColors.put(key_chat_unreadMessagesStartText, Integer.valueOf(-11102772));
         defaultColors.put(key_chat_unreadMessagesStartBackground, Integer.valueOf(-1));
@@ -2399,12 +2405,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

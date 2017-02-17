@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
+import org.telegram.tgnet.TLRPC.TL_channels_deleteMessages;
 import org.telegram.tgnet.TLRPC.TL_chatChannelParticipant;
 import org.telegram.tgnet.TLRPC.TL_chatFull;
 import org.telegram.tgnet.TLRPC.TL_chatInviteEmpty;
@@ -71,6 +72,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
 import org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer;
 import org.telegram.tgnet.TLRPC.TL_messages_botResults;
+import org.telegram.tgnet.TLRPC.TL_messages_deleteMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_messages_messages;
 import org.telegram.tgnet.TLRPC.TL_peerChannel;
@@ -769,6 +771,26 @@ public class MessagesStorage {
                                             MessagesController.getInstance().getChannelDifference(channelId, newDialogType, taskId, inputChannel);
                                         }
                                     });
+                                    break;
+                                case 7:
+                                    channelId = data.readInt32(false);
+                                    int constructor = data.readInt32(false);
+                                    TLObject request = TL_messages_deleteMessages.TLdeserialize(data, constructor, false);
+                                    if (request == null) {
+                                        request = TL_channels_deleteMessages.TLdeserialize(data, constructor, false);
+                                    }
+                                    if (request != null) {
+                                        final TLObject finalRequest = request;
+                                        final int i = channelId;
+                                        final long j3 = taskId;
+                                        AndroidUtilities.runOnUIThread(new Runnable() {
+                                            public void run() {
+                                                MessagesController.getInstance().deleteMessages(null, null, null, i, true, j3, finalRequest);
+                                            }
+                                        });
+                                        break;
+                                    }
+                                    MessagesStorage.this.removePendingTask(taskId);
                                     break;
                             }
                             data.reuse();

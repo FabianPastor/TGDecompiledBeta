@@ -184,6 +184,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.PaymentFormActivity;
 
 public class SendMessagesHelper implements NotificationCenterDelegate {
@@ -959,7 +960,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         MessagesController.getInstance().updateInterfaceWithMessages(peer, objArr);
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                         UserConfig.saveConfig(false);
-                        TLObject req = new TL_messages_forwardMessages();
+                        final TL_messages_forwardMessages req = new TL_messages_forwardMessages();
                         req.to_peer = inputPeer;
                         if (req.to_peer instanceof TL_inputPeerChannel) {
                             req.silent = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("silent_" + peer, false);
@@ -1071,9 +1072,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     final TL_error tL_error = error;
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
-                                            if (tL_error.text.equals("PEER_FLOOD")) {
-                                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
-                                            }
+                                            AlertsCreator.processError(tL_error, null, req, new Object[0]);
                                         }
                                     });
                                 }
@@ -1117,7 +1116,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (fragment == null || fragment.getParentActivity() == null || callback == null) {
             return 0;
         }
-        TL_messages_editMessage req = new TL_messages_editMessage();
+        final TL_messages_editMessage req = new TL_messages_editMessage();
         req.peer = MessagesController.getInputPeer((int) messageObject.getDialogId());
         req.message = message;
         req.flags |= 2048;
@@ -1131,7 +1130,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             req.flags |= 8;
         }
         return ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
+            public void run(TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
                         callback.run();
@@ -1139,14 +1138,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 });
                 if (error == null) {
                     MessagesController.getInstance().processUpdates((Updates) response, false);
-                } else if (!error.text.equals("MESSAGE_NOT_MODIFIED")) {
+                } else {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
-                            Builder builder = new Builder(fragment.getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setMessage(LocaleController.getString("EditMessageError", R.string.EditMessageError));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                            fragment.showDialog(builder.create());
+                            AlertsCreator.processError(error, fragment, req, new Object[0]);
                         }
                     });
                 }
@@ -2889,9 +2884,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 });
                             }
                         } else {
-                            if (error.text.equals("PEER_FLOOD")) {
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
-                            }
+                            AlertsCreator.processError(error, null, tLObject, new Object[0]);
                             isSentError = true;
                         }
                         if (isSentError) {

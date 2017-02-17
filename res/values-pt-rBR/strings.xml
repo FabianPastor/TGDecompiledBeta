@@ -117,6 +117,8 @@
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram Beta</string>
     <string name="ApplyLocalizationFile">Aplicar arquivo de localização</string>
+    <string name="ApplyTheme">APLICAR</string>
+    <string name="ApplyThemeFile">Aplicar tema</string>
     <string name="ArchivedMasks">Máscaras Arquivadas</string>
     <string name="ArchivedMasksAlertInfo">Alguns de seus pacotes de máscaras antigos foram arquivados. Você pode reativá-los nas Configurações de Máscaras.</string>
     <string name="ArchivedMasksAlertTitle">Máscaras arquivadas</string>
@@ -150,7 +152,7 @@
     <string name="ArticleByAuthor">por %1$s</string>
     <string name="ArticleDateByAuthor">%1$s por %2$s</string>
     <string name="AskAQuestion">Fazer uma Pergunta</string>
-    <string name="AskAQuestionInfo">Por favor entenda que o suporte do Telegram é feito por voluntários. Tentaremos responder o mais rápido possível, mas poderemos demorar um pouco.&lt;br&gt;&lt;br&gt;Por favor verifique a &lt;a href=\"https://telegram.org/faq/br#questes-gerais\"&gt;página de perguntas frequentes do Telegram&lt;/a&gt;: há dicas e respostas para a maioria dos &lt;a href=\"https://telegram.org/faq/br#soluo-de-problemas\"&gt;problemas&lt;/a&gt;.</string>
+    <string name="AskAQuestionInfo">Por favor entenda que o suporte do Telegram é feito por voluntários. Tentaremos responder o mais rápido possível, mas poderemos demorar um pouco.&lt;br&gt;&lt;br&gt;Por favor verifique a &lt;a href=https://telegram.org/faq/br#questes-gerais&gt;página de perguntas frequentes do Telegram&lt;/a&gt;: há dicas e respostas para a maioria dos &lt;a href=https://telegram.org/faq/br#soluo-de-problemas&gt;problemas&lt;/a&gt;.</string>
     <string name="AskButton">Pergunte a um voluntário</string>
     <string name="AttachAudio">Mensagem de voz</string>
     <string name="AttachBotsHelp">Desça para ver os bots</string>
@@ -203,6 +205,8 @@
     <string name="CacheEmpty">Vazio</string>
     <string name="CalculatingSize">Calculando...</string>
     <string name="Call">Ligar</string>
+    <string name="CallAgain">Ligar Novamente</string>
+    <string name="CallBack">Ligar de Volta</string>
     <string name="CallEncryptionKeyDescription">Essa imagem e texto foram derivadas da chave criptográfica para essa chamada com &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Se você vê o mesmo no dispositivo de &lt;b&gt;%2$s\'s&lt;/b&gt;, a criptografia ponta a ponta está garantida.</string>
     <string name="CallMessageIncoming">Recebendo Chamada</string>
     <string name="CallMessageIncomingMissed">Chamada Perdida</string>
@@ -344,6 +348,7 @@
     <string name="ClearRecentEmoji">Limpar emojis recentes?</string>
     <string name="ClearSearch">Limpar histórico de busca?</string>
     <string name="Close">Fechar</string>
+    <string name="CloseEditor">FECHAR EDITOR</string>
     <string name="Code">Código</string>
     <string name="CodeExpired">O código expirou. Por favor, identifique-se novamente.</string>
     <string name="ColorBlue">Azul</string>
@@ -356,6 +361,7 @@
     <string name="ColorWhite">Branco</string>
     <string name="ColorYellow">Amarelo</string>
     <string name="CompatibilityChat">%1$s está usando uma versão mais antiga do Telegram, por isso fotos secretas serão mostradas em modo de compatibilidade.\n\nAssim que %2$s atualizar o Telegram, fotos com timers de 1 minuto ou menos passarão a funcionar no modo ‘Toque e segure para ver’, e você será notificado caso a outra pessoa salve a tela.</string>
+    <string name="ConfirmDeleteCallLog">Você tem certeza que deseja apagar essa entrada do registro de chamadas?</string>
     <string name="Connecting">Conectando...</string>
     <string name="ContactJoined">Contato entrou para o Telegram</string>
     <string name="ContactNotRegistered">%1$s ainda não está no Telegram, deseja lhe enviar um convite para entrar?</string>
@@ -375,6 +381,9 @@
     <string name="CountSent">Enviados</string>
     <string name="CreateEncryptedChatError">Ocorreu um erro.</string>
     <string name="CreateGroupError">Você não pode criar um grupo com esses usuários devido as configurações de privacidade deles.</string>
+    <string name="CreateNewTheme">Criar Novo Tema</string>
+    <string name="CreateNewThemeHelp">Toque no ícone da paleta para visualizar a lista de elementos de cada tela - e editá-los.</string>
+    <string name="CreateNewThemeInfo">Você pode criar seu próprio tema alterando as cores do app. Você pode voltar ao tema padrão do Telegram aqui.</string>
     <string name="Crop">CORTAR</string>
     <string name="CropImage">Recortar imagem</string>
     <string name="CropOriginal">Original</string>
@@ -409,6 +418,7 @@
     <string name="DebugMenuImportContacts">Importar Contatos</string>
     <string name="DebugMenuReloadContacts">Recarregar Contatos</string>
     <string name="Default">Padrão</string>
+    <string name="DefaultRingtone">Padrão</string>
     <string name="Delete">Apagar</string>
     <string name="DeleteAccountHelp">Se você não ficar online ao menos uma vez nesse período, sua conta será apagada junto com seus grupos, mensagens e contatos.</string>
     <string name="DeleteAccountIfAwayFor">Se você estiver inativo por</string>
@@ -429,6 +439,7 @@
     <string name="DeleteMegaMenu">Apagar Grupo</string>
     <string name="DeletePhoto">Apagar foto</string>
     <string name="DeleteReportSpam">Reportar spam</string>
+    <string name="DeleteThemeAlert">Você tem certeza que deseja apagar esse tema?</string>
     <string name="DeleteThisChat">Apagar este chat</string>
     <string name="DeleteThisGroup">Apagar este grupo</string>
     <string name="DescriptionInfo">Você pode providenciar uma descrição opcional para o seu canal.</string>
@@ -479,6 +490,7 @@
     <string name="EnterListName">Digite o nome da lista</string>
     <string name="EnterNewFirstPasscode">Insira uma senha</string>
     <string name="EnterNewPasscode">Insira sua nova senha</string>
+    <string name="EnterThemeName">Insira o nome do tema</string>
     <string name="EnterYourPasscode">Insira sua senha</string>
     <string name="ErrorOccurred">Ocorreu um erro.</string>
     <string name="Events">Eventos</string>
@@ -612,6 +624,7 @@
     <string name="InChatSound">Sons no Chat</string>
     <string name="IncomingCalls">Chamadas Recebidas</string>
     <string name="IncorrectLocalization">Arquivo de localização incorreto</string>
+    <string name="IncorrectTheme">Arquivo de tema incorreto</string>
     <string name="Info">Info</string>
     <string name="InstantView">LEITURA RÁPIDA</string>
     <string name="InternalStorage">Armazenamento Interno</string>
@@ -796,6 +809,7 @@
     <string name="NewMessages_two">%1$d novas mensagens</string>
     <string name="NewMessages_zero">sem novas mensagens</string>
     <string name="NewSecretChat">Novo Chat Secreto</string>
+    <string name="NewTheme">Novo Tema</string>
     <string name="Next">Próximo</string>
     <string name="No">Não</string>
     <string name="NoAudio">Por favor, adicione arquivos à biblioteca de música de seu dispositivo para vê-los aqui.</string>
@@ -833,8 +847,10 @@
     <string name="NoStickers">Nenhum sticker</string>
     <string name="NoUsernameFound">Não há conta do Telegram com esse nome de usuário</string>
     <string name="NoVideo">Nenhum vídeo ainda</string>
-    <string name="NobodyLikesSpam1">Você contatou muitos não-contatos hoje, tente novamente amanhã. Hoje você poderá responder se esse usuário te enviar uma mensagem primeiro.</string>
-    <string name="NobodyLikesSpam2">Você não pode adicionar esse usuário porque você contatou muitos não-contatos hoje. Tente novamente amanhã. Você pode pedir para outro membro adicionar este usuário ao grupo.</string>
+    <string name="NobodyLikesSpam1">Desculpe, você só pode enviar mensagens para contatos mútuos no momento.</string>
+    <string name="NobodyLikesSpam2">Desculpe, você só pode adicionar contatos mútuos à grupos no momento.</string>
+    <string name="NobodyLikesSpam3">Você contatou muitos não-contatos hoje, tente novamente amanhã. Você poderá responder hoje se esse usuário te enviar uma mensagem primeiro.</string>
+    <string name="NobodyLikesSpam4">Você não pode adicionar esse usuário porque você contatou muitos não-contatos hoje. Tente novamente amanhã. Você pode pedir para outro membro adicionar este usuário ao grupo.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq/br#no-consigo-enviar-mensagens-para-no-contatos</string>
     <string name="NotMounted">Armazenamento não está montado</string>
     <string name="NotificationActionPinnedContact">%1$s fixou um contato no grupo %2$s</string>
@@ -980,6 +996,54 @@
     <string name="PasswordHintText">Por favor, crie uma dica para a sua senha</string>
     <string name="PasswordRecovery">Recuperação de senha</string>
     <string name="PasswordReset">Senha desativada</string>
+    <string name="PaymentBillingAddress">Endereço de cobrança</string>
+    <string name="PaymentCardCvv">Código de Segurança (CVV)</string>
+    <string name="PaymentCardExpireDateMonth">Mês</string>
+    <string name="PaymentCardExpireDateYear">Ano</string>
+    <string name="PaymentCardInfo">Informação de pagamento</string>
+    <string name="PaymentCardName">Nome Sobrenome</string>
+    <string name="PaymentCardNameTitle">Titular do cartão</string>
+    <string name="PaymentCardNumber">Número do Cartão</string>
+    <string name="PaymentCardSavePaymentInformation">Salvar Informação de Pagamento</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine1">Você pode salvar sua informação de pagamento para uso futuro.</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine2">Por favor, *ative a Verificação em Duas Etapas* para habilitar isso.</string>
+    <string name="PaymentCardTitle">Cartão de pagamento</string>
+    <string name="PaymentCheckout">Finalizar</string>
+    <string name="PaymentCheckoutEmail">Endereço de contato</string>
+    <string name="PaymentCheckoutMethod">Método de pagamento</string>
+    <string name="PaymentCheckoutName">Nome</string>
+    <string name="PaymentCheckoutPay">PAGAR %1$s</string>
+    <string name="PaymentCheckoutPhoneNumber">Número de telefone</string>
+    <string name="PaymentCheckoutShippingMethod">Método de envio</string>
+    <string name="PaymentConfirmationMessage">Seu cartão %1$s está no arquivo. Para pagar com este cartão, insira sua senha da Verificação em Duas Etapas.</string>
+    <string name="PaymentConfirmationNewCard">Escolher um cartão diferente</string>
+    <string name="PaymentConnectionFailed">Não foi possível encontrar o servidor de pagamento. Verifique sua conexão e tente novamente.</string>
+    <string name="PaymentFailed">Desculpe, o pagamento foi recusado.</string>
+    <string name="PaymentInvoice">FATURA</string>
+    <string name="PaymentNoShippingMethod">Desculpe, não é possível entregar neste endereço.</string>
+    <string name="PaymentPrecheckoutFailed">Desculpe, o pagamento foi cancelado pelo bot.</string>
+    <string name="PaymentReceipt">Recibo</string>
+    <string name="PaymentShipment">ENVIO</string>
+    <string name="PaymentShippingAddress">Endereço do envio</string>
+    <string name="PaymentShippingAddress1Placeholder">Endereço 1 (Rua)</string>
+    <string name="PaymentShippingAddress2Placeholder">Endereço 2 (Rua)</string>
+    <string name="PaymentShippingCityPlaceholder">Cidade</string>
+    <string name="PaymentShippingCountry">País</string>
+    <string name="PaymentShippingEmailPlaceholder">E-Mail</string>
+    <string name="PaymentShippingInfo">Informação de envio</string>
+    <string name="PaymentShippingMethod">Métodos de envio</string>
+    <string name="PaymentShippingName">Nome Completo</string>
+    <string name="PaymentShippingPhoneNumber">Número de Telefone</string>
+    <string name="PaymentShippingReceiver">Destinatário</string>
+    <string name="PaymentShippingSave">Salvar Informação de Envio</string>
+    <string name="PaymentShippingSaveInfo">Você pode salvar sua informação de envio para uso futuro.</string>
+    <string name="PaymentShippingStatePlaceholder">Estado</string>
+    <string name="PaymentShippingZipPlaceholder">Código Postal</string>
+    <string name="PaymentSuccessfullyPaid">Você transferiu com sucesso %1$s para %2$s por %3$s</string>
+    <string name="PaymentSuccessfullyPaidNoItem">Você transferiu com sucesso %1$s para %2$s</string>
+    <string name="PaymentTransactionMessage">Você realmente deseja transferir %1$s para o bot %2$s por %3$s?</string>
+    <string name="PaymentTransactionReview">Revisão da Transação</string>
+    <string name="PaymentTransactionTotal">Total</string>
     <string name="PendingEmailText">O seu e-mail de recuperação %1$s ainda não está ativo e aguarda confirmação.</string>
     <string name="PermissionContacts">Telegram precisa acessar seus contatos para que você possa se conectar aos seus amigos em todos os seus dispositivos.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram precisa de acesso para sobrescrever outros apps para reproduzir vídeos no modo PiP.</string>
@@ -1099,6 +1163,7 @@
     <string name="Satellite">Satélite</string>
     <string name="Saturation">Saturação</string>
     <string name="Save">Salvar</string>
+    <string name="SaveTheme">SALVAR TEMA</string>
     <string name="SaveToDownloads">Salvar em downloads</string>
     <string name="SaveToGIFs">Salvar em GIFs</string>
     <string name="SaveToGallery">Salvar na galeria</string>
@@ -1132,6 +1197,7 @@
     <string name="SecretWebPage">Pré-visualização de Link</string>
     <string name="SecurityTitle">Segurança</string>
     <string name="SelectChat">Selecione um Chat</string>
+    <string name="SelectColor">Selecionar cor</string>
     <string name="SelectContact">Selecionar Contato</string>
     <string name="SelectFile">Selecione um Arquivo</string>
     <string name="Send">Enviar</string>
@@ -1234,6 +1300,7 @@
     <string name="TerminateSessionQuestion">Encerrar essa sessão?</string>
     <string name="TextSize">Tamanho do Texto</string>
     <string name="Theme">Tema</string>
+    <string name="ThemePreview">Preview do Tema</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Desculpe, o tempo para editar expirou.</string>
     <string name="Times_few">%1$d vezes</string>
@@ -1305,9 +1372,11 @@
     <string name="VoipExchangingKeys">Trocando chaves criptográficas</string>
     <string name="VoipFailed">Falha ao conectar</string>
     <string name="VoipFeedbackAlert">Você gostaria de deixar algum feedback para nos ajudar a melhorar o serviço de chamadas?</string>
+    <string name="VoipFeedbackCommentHint">Adicionar um comentário opcional</string>
     <string name="VoipHangingUp">Desligando</string>
     <string name="VoipInCallBranding">Chamada do Telegram</string>
     <string name="VoipIncoming">Recebendo Chamada</string>
+    <string name="VoipNeedMicPermission">O Telegram precisa acessar seu microfone para poder fazer chamadas.</string>
     <string name="VoipNotificationSettings">Chamadas de voz</string>
     <string name="VoipOffline">Você está offline. Conecte à internet para poder realizar chamadas.</string>
     <string name="VoipOfflineAirplane">Você está com o modo avião habilitado. Desligue-o ou se conecte ao Wi-Fi para realizar chamadas.</string>
@@ -1359,6 +1428,7 @@
     <string name="Yes">Sim</string>
     <string name="Yesterday">ontem</string>
     <string name="YesterdayAt">ontem às</string>
+    <string name="YouBlockedUser">Desculpe, você não pode adicionar esse usuário ou bot à grupos por tê-lo bloqueado. Desbloqueie para prosseguir.</string>
     <string name="YouCreatedBroadcastList">Você criou uma lista de transmissão</string>
     <string name="YouHaveNewMessage">Você tem uma nova mensagem</string>
     <string name="YouLeft">Você saiu deste grupo</string>

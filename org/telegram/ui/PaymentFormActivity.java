@@ -47,9 +47,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
+import com.stripe.android.exception.APIConnectionException;
+import com.stripe.android.exception.APIException;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import java.io.BufferedReader;
@@ -377,20 +378,30 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         } else if (this.currentStep == 3) {
             this.actionBar.setTitle(LocaleController.getString("PaymentCardInfo", R.string.PaymentCardInfo));
         } else if (this.currentStep == 4) {
-            this.actionBar.setTitle(LocaleController.getString("PaymentCheckout", R.string.PaymentCheckout));
+            if (this.paymentForm.invoice.test) {
+                this.actionBar.setTitle("Test " + LocaleController.getString("PaymentCheckout", R.string.PaymentCheckout));
+            } else {
+                this.actionBar.setTitle(LocaleController.getString("PaymentCheckout", R.string.PaymentCheckout));
+            }
         } else if (this.currentStep == 5) {
-            this.actionBar.setTitle(LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt));
+            if (this.paymentForm.invoice.test) {
+                this.actionBar.setTitle("Test " + LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt));
+            } else {
+                this.actionBar.setTitle(LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt));
+            }
         }
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    PaymentFormActivity.this.finishFragment();
+                    if (!PaymentFormActivity.this.donePressed) {
+                        PaymentFormActivity.this.finishFragment();
+                    }
                 } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
                     AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
                     if (PaymentFormActivity.this.currentStep == 0) {
-                        PaymentFormActivity.this.donePressed = true;
+                        PaymentFormActivity.this.setDonePressed(true);
                         PaymentFormActivity.this.sendForm();
                     } else if (PaymentFormActivity.this.currentStep == 1) {
                         for (int a = 0; a < PaymentFormActivity.this.radioCells.length; a++) {
@@ -987,18 +998,18 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     public void run() {
                                         int i;
                                         int i2 = 2;
-                                        EditText[] access$1100 = PaymentFormActivity.this.inputFields;
+                                        EditText[] access$1200 = PaymentFormActivity.this.inputFields;
                                         if (z) {
                                             i = 1;
                                         } else {
                                             i = 2;
                                         }
-                                        access$1100[i].setHint(null);
-                                        EditText[] access$11002 = PaymentFormActivity.this.inputFields;
+                                        access$1200[i].setHint(null);
+                                        EditText[] access$12002 = PaymentFormActivity.this.inputFields;
                                         if (z) {
                                             i2 = 1;
                                         }
-                                        access$11002[i2].setText(String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(result[0])}));
+                                        access$12002[i2].setText(String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(result[0])}));
                                     }
                                 }));
                                 return true;
@@ -1449,7 +1460,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 PaymentFormActivity.this.showEditDoneProgress(true);
-                                PaymentFormActivity.this.donePressed = true;
+                                PaymentFormActivity.this.setDonePressed(true);
                                 PaymentFormActivity.this.sendData();
                             }
                         });
@@ -1702,17 +1713,26 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         if (!card.validateNumber()) {
             shakeField(0);
             return false;
-        } else if (!card.validateCVC()) {
-            shakeField(4);
-            return false;
         } else if (!card.validateExpMonth()) {
             shakeField(1);
             return false;
         } else if (!card.validateExpYear()) {
             shakeField(2);
             return false;
+        } else if (!card.validateExpiryDate()) {
+            shakeField(1);
+            return false;
         } else if (this.inputFields[3].length() == 0) {
             shakeField(3);
+            return false;
+        } else if (!card.validateCVC()) {
+            shakeField(4);
+            return false;
+        } else if (this.inputFields[5].length() == 0) {
+            shakeField(5);
+            return false;
+        } else if (this.inputFields[6].length() == 0) {
+            shakeField(6);
             return false;
         } else {
             showEditDoneProgress(true);
@@ -1725,7 +1745,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 public void run() {
                                     PaymentFormActivity.this.goToNextStep();
                                     PaymentFormActivity.this.showEditDoneProgress(false);
-                                    PaymentFormActivity.this.donePressed = false;
+                                    PaymentFormActivity.this.setDonePressed(false);
                                 }
                             });
                         }
@@ -1734,8 +1754,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     public void onError(Exception error) {
                         if (!PaymentFormActivity.this.canceled) {
                             PaymentFormActivity.this.showEditDoneProgress(false);
-                            PaymentFormActivity.this.donePressed = false;
-                            PaymentFormActivity.this.showError(error.getMessage());
+                            PaymentFormActivity.this.setDonePressed(false);
+                            if ((error instanceof APIConnectionException) || (error instanceof APIException)) {
+                                AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString("PaymentConnectionFailed", R.string.PaymentConnectionFailed));
+                            } else {
+                                AlertsCreator.showSimpleToast(PaymentFormActivity.this, error.getMessage());
+                            }
                         }
                     }
                 });
@@ -1780,6 +1804,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 tL_paymentRequestedInfo = this.validateRequest.info;
                 tL_paymentRequestedInfo.flags |= 8;
             }
+            final TLObject req = this.validateRequest;
             ConnectionsManager.getInstance().sendRequest(this.validateRequest, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     if (response instanceof TL_payments_validatedRequestedInfo) {
@@ -1795,14 +1820,14 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     });
                                 }
                                 PaymentFormActivity.this.goToNextStep();
-                                PaymentFormActivity.this.donePressed = false;
+                                PaymentFormActivity.this.setDonePressed(false);
                                 PaymentFormActivity.this.showEditDoneProgress(false);
                             }
                         });
                     } else {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                PaymentFormActivity.this.donePressed = false;
+                                PaymentFormActivity.this.setDonePressed(false);
                                 PaymentFormActivity.this.showEditDoneProgress(false);
                                 if (error != null) {
                                     String str = error.text;
@@ -1862,12 +1887,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                                 break;
                                             }
                                             break;
-                                        case 1758025548:
-                                            if (str.equals("SHIPPING_NOT_AVAILABLE")) {
-                                                z = true;
-                                                break;
-                                            }
-                                            break;
                                     }
                                     switch (z) {
                                         case false:
@@ -1897,11 +1916,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                         case true:
                                             PaymentFormActivity.this.shakeField(1);
                                             return;
-                                        case true:
-                                            PaymentFormActivity.this.showError(LocaleController.getString("PaymentNoShippingMethod", R.string.PaymentNoShippingMethod));
-                                            return;
                                         default:
-                                            PaymentFormActivity.this.showError(error.text);
+                                            AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                             return;
                                     }
                                 }
@@ -1943,7 +1959,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private void sendData() {
         if (!this.canceled) {
             showEditDoneProgress(true);
-            TL_payments_sendPaymentForm req = new TL_payments_sendPaymentForm();
+            final TL_payments_sendPaymentForm req = new TL_payments_sendPaymentForm();
             req.msg_id = this.messageObject.getId();
             if (UserConfig.tmpPassword != null) {
                 req.credentials = new TL_inputPaymentCredentialsSaved();
@@ -1968,34 +1984,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     if (response == null) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                String str = error.text;
-                                boolean z = true;
-                                switch (str.hashCode()) {
-                                    case -1144062453:
-                                        if (str.equals("BOT_PRECHECKOUT_FAILED")) {
-                                            z = false;
-                                            break;
-                                        }
-                                        break;
-                                    case -784238410:
-                                        if (str.equals("PAYMENT_FAILED")) {
-                                            z = true;
-                                            break;
-                                        }
-                                        break;
-                                }
-                                switch (z) {
-                                    case false:
-                                        PaymentFormActivity.this.showError(LocaleController.getString("PaymentPrecheckoutFailed", R.string.PaymentPrecheckoutFailed));
-                                        break;
-                                    case true:
-                                        PaymentFormActivity.this.showError(LocaleController.getString("PaymentFailed", R.string.PaymentFailed));
-                                        break;
-                                    default:
-                                        PaymentFormActivity.this.showError(error.text);
-                                        break;
-                                }
-                                PaymentFormActivity.this.donePressed = false;
+                                AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
+                                PaymentFormActivity.this.setDonePressed(false);
                                 PaymentFormActivity.this.showEditDoneProgress(false);
                             }
                         });
@@ -2027,10 +2017,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         AndroidUtilities.shakeView(this.inputFields[field], 2.0f, 0);
     }
 
-    private void showError(String text) {
-        if (getParentActivity() != null) {
-            Toast.makeText(getParentActivity(), text, 1).show();
+    private void setDonePressed(boolean value) {
+        boolean z;
+        boolean z2 = true;
+        this.donePressed = value;
+        if (value) {
+            z = false;
+        } else {
+            z = true;
         }
+        this.swipeBackEnabled = z;
+        View backButton = this.actionBar.getBackButton();
+        if (this.donePressed) {
+            z2 = false;
+        }
+        backButton.setEnabled(z2);
     }
 
     private void checkPassword() {
@@ -2049,8 +2050,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         } else {
             final String password = this.inputFields[1].getText().toString();
             showEditDoneProgress(true);
-            this.donePressed = true;
-            ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
+            setDonePressed(true);
+            final TL_account_getPassword req = new TL_account_getPassword();
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(final TLObject response, final TL_error error) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
@@ -2062,10 +2064,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                     }
                                     AndroidUtilities.shakeView(PaymentFormActivity.this.inputFields[1], 2.0f, 0);
                                 } else {
-                                    PaymentFormActivity.this.showError(error.text);
+                                    AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                 }
                                 PaymentFormActivity.this.showEditDoneProgress(false);
-                                PaymentFormActivity.this.donePressed = false;
+                                PaymentFormActivity.this.setDonePressed(false);
                             } else if (response instanceof TL_account_noPassword) {
                                 PaymentFormActivity.this.passwordOk = false;
                                 PaymentFormActivity.this.goToNextStep();
@@ -2081,7 +2083,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 System.arraycopy(currentPassword.current_salt, 0, hash, 0, currentPassword.current_salt.length);
                                 System.arraycopy(passwordBytes, 0, hash, currentPassword.current_salt.length, passwordBytes.length);
                                 System.arraycopy(currentPassword.current_salt, 0, hash, hash.length - currentPassword.current_salt.length, currentPassword.current_salt.length);
-                                TL_account_getTmpPassword req = new TL_account_getTmpPassword();
+                                final TL_account_getTmpPassword req = new TL_account_getTmpPassword();
                                 req.password_hash = Utilities.computeSHA256(hash, 0, hash.length);
                                 req.period = 1800;
                                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -2089,7 +2091,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
                                                 PaymentFormActivity.this.showEditDoneProgress(false);
-                                                PaymentFormActivity.this.donePressed = false;
+                                                PaymentFormActivity.this.setDonePressed(false);
                                                 if (response != null) {
                                                     PaymentFormActivity.this.passwordOk = true;
                                                     UserConfig.tmpPassword = (TL_account_tmpPassword) response;
@@ -2097,7 +2099,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                                     PaymentFormActivity.this.goToNextStep();
                                                     return;
                                                 }
-                                                PaymentFormActivity.this.showError(error.text);
+                                                AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                             }
                                         });
                                     }
@@ -2216,6 +2218,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             this.doneItemAnimation.setDuration(150);
             this.doneItemAnimation.start();
         }
+    }
+
+    public boolean onBackPressed() {
+        return !this.donePressed;
     }
 
     public ThemeDescription[] getThemeDescriptions() {

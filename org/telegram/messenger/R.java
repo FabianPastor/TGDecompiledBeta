@@ -78,6 +78,7 @@ public final class R {
     public static final class drawable {
         public static final int ab_progress = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
+        public static final int abc_popup_background_mtrl_mult = NUM;
         public static final int add = NUM;
         public static final int admin_star = NUM;
         public static final int attach_audio = NUM;
@@ -133,9 +134,6 @@ public final class R {
         public static final int bot_file = NUM;
         public static final int bot_keyboard = NUM;
         public static final int bot_keyboard2 = NUM;
-        public static final int bot_keyboard_button = NUM;
-        public static final int bot_keyboard_button_pressed = NUM;
-        public static final int bot_keyboard_states = NUM;
         public static final int bot_lines = NUM;
         public static final int bot_link = NUM;
         public static final int bot_location = NUM;
@@ -1040,6 +1038,7 @@ public final class R {
         public static final int DebugMenuImportContacts = NUM;
         public static final int DebugMenuReloadContacts = NUM;
         public static final int Default = NUM;
+        public static final int DefaultRingtone = NUM;
         public static final int Delete = NUM;
         public static final int DeleteAccountHelp = NUM;
         public static final int DeleteAccountIfAwayFor = NUM;
@@ -1638,6 +1637,7 @@ public final class R {
         public static final int PaymentCheckoutShippingMethod = NUM;
         public static final int PaymentConfirmationMessage = NUM;
         public static final int PaymentConfirmationNewCard = NUM;
+        public static final int PaymentConnectionFailed = NUM;
         public static final int PaymentFailed = NUM;
         public static final int PaymentInvoice = NUM;
         public static final int PaymentNoShippingMethod = NUM;
@@ -2048,6 +2048,7 @@ public final class R {
         public static final int Yes = NUM;
         public static final int Yesterday = NUM;
         public static final int YesterdayAt = NUM;
+        public static final int YouBlockedUser = NUM;
         public static final int YouCreatedBroadcastList = NUM;
         public static final int YouHaveNewMessage = NUM;
         public static final int YouLeft = NUM;

@@ -244,7 +244,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.shadowAnimation = new AnimatorSet[2];
         this.shadow = new View[2];
         this.parentActivity = (Activity) context;
-        TL_messages_getAttachedStickers req = new TL_messages_getAttachedStickers();
+        final TL_messages_getAttachedStickers req = new TL_messages_getAttachedStickers();
         TL_inputStickeredMediaPhoto inputStickeredMediaPhoto = new TL_inputStickeredMediaPhoto();
         inputStickeredMediaPhoto.id = new TL_inputPhoto();
         inputStickeredMediaPhoto.id.id = photo.id;
@@ -279,7 +279,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                                 return;
                             }
                         }
-                        Toast.makeText(StickersAlert.this.getContext(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
+                        AlertsCreator.processError(error, StickersAlert.this.parentFragment, req, new Object[0]);
                         StickersAlert.this.dismiss();
                     }
                 });

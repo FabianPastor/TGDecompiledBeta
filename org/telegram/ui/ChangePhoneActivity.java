@@ -16,7 +16,6 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -80,6 +79,7 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SlideView;
@@ -243,7 +243,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                 LoginActivitySmsView.this.getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                                 return;
                             } catch (Exception e) {
-                                ChangePhoneActivity.this.needShowAlert(LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                                AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                                 return;
                             }
                         }
@@ -284,7 +284,7 @@ public class ChangePhoneActivity extends BaseFragment {
             params.putString("phoneFormated", this.requestPhone);
             this.nextPressed = true;
             ChangePhoneActivity.this.needShowProgress();
-            TL_auth_resendCode req = new TL_auth_resendCode();
+            final TL_auth_resendCode req = new TL_auth_resendCode();
             req.phone_number = this.requestPhone;
             req.phone_code_hash = this.phoneHash;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -294,19 +294,11 @@ public class ChangePhoneActivity extends BaseFragment {
                             LoginActivitySmsView.this.nextPressed = false;
                             if (error == null) {
                                 ChangePhoneActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
-                            } else if (error.text != null) {
-                                if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                            } else {
+                                AlertsCreator.processError(error, ChangePhoneActivity.this, req, new Object[0]);
+                                if (error.text.contains("PHONE_CODE_EXPIRED")) {
                                     LoginActivitySmsView.this.onBackPressed();
                                     ChangePhoneActivity.this.setPage(0, true, null, true);
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
                                 }
                             }
                             ChangePhoneActivity.this.needHideProgress();
@@ -539,7 +531,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
-                TL_account_changePhone req = new TL_account_changePhone();
+                final TL_account_changePhone req = new TL_account_changePhone();
                 req.phone_number = this.requestPhone;
                 req.phone_code = this.codeField.getText().toString();
                 req.phone_code_hash = this.phoneHash;
@@ -577,19 +569,8 @@ public class ChangePhoneActivity extends BaseFragment {
                                     NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
                                 }
                                 LoginActivitySmsView.this.waitingForEvent = true;
-                                if (LoginActivitySmsView.this.currentType == 3) {
-                                    return;
-                                }
-                                if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                } else {
-                                    ChangePhoneActivity.this.needShowAlert(error.text);
+                                if (LoginActivitySmsView.this.currentType != 3) {
+                                    AlertsCreator.processError(error, ChangePhoneActivity.this, req, new Object[0]);
                                 }
                             }
                         });
@@ -1033,13 +1014,13 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                 }
                 if (this.countryState == 1) {
-                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 } else if (this.countryState == 2 && !BuildVars.DEBUG_VERSION) {
-                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("WrongCountry", R.string.WrongCountry));
                 } else if (this.codeField.length() == 0) {
-                    ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 } else {
-                    TL_account_sendChangePhoneCode req = new TL_account_sendChangePhoneCode();
+                    final TL_account_sendChangePhoneCode req = new TL_account_sendChangePhoneCode();
                     String phone = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
                     req.phone_number = phone;
                     boolean z = simcardAvailable && allowCall;
@@ -1072,20 +1053,8 @@ public class ChangePhoneActivity extends BaseFragment {
                                     PhoneView.this.nextPressed = false;
                                     if (error == null) {
                                         ChangePhoneActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
-                                    } else if (error.text != null) {
-                                        if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                        } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                        } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else if (error.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.formatString("ChangePhoneNumberOccupied", R.string.ChangePhoneNumberOccupied, params.getString("phone")));
-                                        } else {
-                                            ChangePhoneActivity.this.needShowAlert(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
-                                        }
+                                    } else {
+                                        AlertsCreator.processError(error, ChangePhoneActivity.this, req, params.getString("phone"));
                                     }
                                     ChangePhoneActivity.this.needHideProgress();
                                 }
@@ -1204,16 +1173,6 @@ public class ChangePhoneActivity extends BaseFragment {
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
             this.views[this.currentViewNum].onShow();
-        }
-    }
-
-    public void needShowAlert(String text) {
-        if (text != null && getParentActivity() != null) {
-            Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(text);
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            showDialog(builder.create());
         }
     }
 

@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -179,7 +178,7 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 JoinGroupAlert.this.dismiss();
-                TL_messages_importChatInvite req = new TL_messages_importChatInvite();
+                final TL_messages_importChatInvite req = new TL_messages_importChatInvite();
                 req.hash = JoinGroupAlert.this.hash;
                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                     public void run(final TLObject response, final TL_error error) {
@@ -207,17 +206,7 @@ public class JoinGroupAlert extends BottomSheet {
                                         }
                                         return;
                                     }
-                                    Builder builder = new Builder(JoinGroupAlert.this.fragment.getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                    if (error.text.startsWith("FLOOD_WAIT")) {
-                                        builder.setMessage(LocaleController.getString("FloodWait", R.string.FloodWait));
-                                    } else if (error.text.equals("USERS_TOO_MUCH")) {
-                                        builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", R.string.JoinToGroupErrorFull));
-                                    } else {
-                                        builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
-                                    }
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                    JoinGroupAlert.this.fragment.showDialog(builder.create());
+                                    AlertsCreator.processError(error, JoinGroupAlert.this.fragment, req, new Object[0]);
                                 }
                             }
                         });

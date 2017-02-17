@@ -1217,7 +1217,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                 channelParticipant.channelParticipant.inviter_id = UserConfig.getClientUserId();
                                 channelParticipant.channelParticipant.user_id = user.user_id;
                                 channelParticipant.channelParticipant.date = user.date;
-                                TL_channels_editAdmin req = new TL_channels_editAdmin();
+                                final TL_channels_editAdmin req = new TL_channels_editAdmin();
                                 req.channel = MessagesController.getInputChannel(ProfileActivity.this.chat_id);
                                 req.user_id = MessagesController.getInputUser(ProfileActivity.this.selectedUser);
                                 req.role = new TL_channelRoleEditor();
@@ -1234,7 +1234,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                                         }
                                         AndroidUtilities.runOnUIThread(new Runnable() {
                                             public void run() {
-                                                AlertsCreator.showAddUserAlert(error.text, ProfileActivity.this, false);
+                                                AlertsCreator.processError(error, ProfileActivity.this, req, Boolean.valueOf(false));
                                             }
                                         });
                                     }

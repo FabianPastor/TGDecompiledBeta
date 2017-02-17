@@ -1015,13 +1015,22 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         }
 
         public void notifyDataSetChanged() {
-            if (!EmojiView.this.trendingLoaded) {
-                int width = EmojiView.this.getMeasuredWidth();
-                if (width == 0) {
+            int width = EmojiView.this.getMeasuredWidth();
+            if (width == 0) {
+                if (AndroidUtilities.isTablet()) {
+                    int smallSide = AndroidUtilities.displaySize.x;
+                    int leftSide = (smallSide * 35) / 100;
+                    if (leftSide < AndroidUtilities.dp(320.0f)) {
+                        leftSide = AndroidUtilities.dp(320.0f);
+                    }
+                    width = smallSide - leftSide;
+                } else {
                     width = AndroidUtilities.displaySize.x;
                 }
-                this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
-                EmojiView.this.trendingLayoutManager.setSpanCount(this.stickersPerRow);
+            }
+            this.stickersPerRow = width / AndroidUtilities.dp(72.0f);
+            EmojiView.this.trendingLayoutManager.setSpanCount(this.stickersPerRow);
+            if (!EmojiView.this.trendingLoaded) {
                 this.cache.clear();
                 this.positionsToSets.clear();
                 this.sets.clear();

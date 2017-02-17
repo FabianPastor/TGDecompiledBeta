@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -103,6 +104,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private int[] cameraViewLocation = new int[2];
     private int cameraViewOffsetX;
     private int cameraViewOffsetY;
+    private Paint ciclePaint = new Paint(1);
     private AnimatorSet currentHintAnimation;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private ChatAttachViewDelegate delegate;
@@ -537,6 +539,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         int a;
         super(context, false);
         this.baseFragment = parentFragment;
+        this.ciclePaint.setColor(-1);
         setDelegate(this);
         setUseRevealAnimation(true);
         checkCamera(false);
@@ -1635,11 +1638,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             }
                         }
                         ChatAttachAlert.this.switchCameraButton.setImageResource(ChatAttachAlert.this.cameraView.isFrontface() ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
-                        ImageView access$4600 = ChatAttachAlert.this.switchCameraButton;
+                        ImageView access$4500 = ChatAttachAlert.this.switchCameraButton;
                         if (!ChatAttachAlert.this.cameraView.hasFrontFaceCamera()) {
                             i = 4;
                         }
-                        access$4600.setVisibility(i);
+                        access$4500.setVisibility(i);
                     }
                 });
                 this.cameraIcon = new FrameLayout(this.baseFragment.getParentActivity());
@@ -1762,10 +1765,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.sendPhotosButton.imageView.setPadding(AndroidUtilities.dp(2.0f), 0, 0, 0);
             this.sendPhotosButton.imageView.setBackgroundResource(R.drawable.attach_send_states);
             this.sendPhotosButton.imageView.setImageResource(R.drawable.attach_send2);
-            TextView access$6500 = this.sendPhotosButton.textView;
+            TextView access$6400 = this.sendPhotosButton.textView;
             Object[] objArr = new Object[1];
             objArr[0] = String.format("(%d)", new Object[]{Integer.valueOf(count)});
-            access$6500.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
+            access$6400.setText(LocaleController.formatString("SendItems", R.string.SendItems, objArr));
         }
         if (VERSION.SDK_INT < 23 || getContext().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
             this.progressView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));

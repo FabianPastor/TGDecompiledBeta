@@ -11,10 +11,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_replyKeyboardMarkup;
+import org.telegram.ui.ActionBar.Theme;
 
 public class BotKeyboardView extends LinearLayout {
     private TL_replyKeyboardMarkup botButtons;
@@ -37,7 +37,8 @@ public class BotKeyboardView extends LinearLayout {
         this.container = new LinearLayout(context);
         this.container.setOrientation(1);
         scrollView.addView(this.container);
-        setBackgroundColor(-657673);
+        AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor(Theme.key_chat_emojiPanelBackground));
+        setBackgroundColor(Theme.getColor(Theme.key_chat_emojiPanelBackground));
     }
 
     public void setDelegate(BotKeyboardViewDelegate botKeyboardViewDelegate) {
@@ -105,10 +106,10 @@ public class BotKeyboardView extends LinearLayout {
                     KeyboardButton button = (KeyboardButton) row.buttons.get(b);
                     TextView textView = new TextView(getContext());
                     textView.setTag(button);
-                    textView.setTextColor(-13220017);
+                    textView.setTextColor(Theme.getColor(Theme.key_chat_botKeyboardButtonText));
                     textView.setTextSize(1, 16.0f);
                     textView.setGravity(17);
-                    textView.setBackgroundResource(R.drawable.bot_keyboard_states);
+                    textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor(Theme.key_chat_botKeyboardButtonBackground), Theme.getColor(Theme.key_chat_botKeyboardButtonBackgroundPressed)));
                     textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
                     textView.setText(Emoji.replaceEmoji(button.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
                     layout.addView(textView, LayoutHelper.createLinear(0, -1, weight, 0, 0, b != row.buttons.size() + -1 ? 10 : 0, 0));

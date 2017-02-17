@@ -57,6 +57,7 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ContextProgressView;
@@ -119,7 +120,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                     } else {
                         NewContactActivity.this.donePressed = true;
                         NewContactActivity.this.showEditDoneProgress(true, true);
-                        TL_contacts_importContacts req = new TL_contacts_importContacts();
+                        final TL_contacts_importContacts req = new TL_contacts_importContacts();
                         final TL_inputPhoneContact inputPhoneContact = new TL_inputPhoneContact();
                         inputPhoneContact.first_name = NewContactActivity.this.firstNameField.getText().toString();
                         inputPhoneContact.last_name = NewContactActivity.this.lastNameField.getText().toString();
@@ -133,11 +134,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                         NewContactActivity.this.donePressed = false;
                                         if (res == null) {
                                             NewContactActivity.this.showEditDoneProgress(false, true);
-                                            if (error == null || error.text.startsWith("FLOOD_WAIT")) {
-                                                NewContactActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
-                                            } else {
-                                                NewContactActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
-                                            }
+                                            AlertsCreator.processError(error, NewContactActivity.this, req, new Object[0]);
                                         } else if (!res.users.isEmpty()) {
                                             MessagesController.getInstance().putUsers(res.users, false);
                                             MessagesController.openChatOrProfileWith((User) res.users.get(0), null, NewContactActivity.this, 1, true);
@@ -646,16 +643,6 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             this.editDoneItem.getImageView().setVisibility(0);
             this.editDoneItemProgress.setVisibility(4);
             this.editDoneItem.setEnabled(true);
-        }
-    }
-
-    private void needShowAlert(String title, String text) {
-        if (text != null && getParentActivity() != null) {
-            Builder builder = new Builder(getParentActivity());
-            builder.setTitle(title);
-            builder.setMessage(text);
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            showDialog(builder.create());
         }
     }
 

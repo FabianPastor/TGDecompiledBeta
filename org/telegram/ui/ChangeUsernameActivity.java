@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -47,6 +46,7 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ChangeUsernameActivity extends BaseFragment {
@@ -208,50 +208,6 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
     }
 
-    private void showErrorAlert(String error) {
-        if (getParentActivity() != null) {
-            Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            Object obj = -1;
-            switch (error.hashCode()) {
-                case -141887186:
-                    if (error.equals("USERNAMES_UNAVAILABLE")) {
-                        obj = 2;
-                        break;
-                    }
-                    break;
-                case 288843630:
-                    if (error.equals("USERNAME_INVALID")) {
-                        obj = null;
-                        break;
-                    }
-                    break;
-                case 533175271:
-                    if (error.equals("USERNAME_OCCUPIED")) {
-                        obj = 1;
-                        break;
-                    }
-                    break;
-            }
-            switch (obj) {
-                case null:
-                    builder.setMessage(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
-                    break;
-                case 1:
-                    builder.setMessage(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
-                    break;
-                case 2:
-                    builder.setMessage(LocaleController.getString("FeatureUnavailable", R.string.FeatureUnavailable));
-                    break;
-                default:
-                    builder.setMessage(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
-                    break;
-            }
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            showDialog(builder.create());
-        }
-    }
-
     private boolean checkUserName(final String name, boolean alert) {
         if (name == null || name.length() <= 0) {
             this.checkTextView.setVisibility(8);
@@ -282,7 +238,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 char ch = name.charAt(a);
                 if (a == 0 && ch >= '0' && ch <= '9') {
                     if (alert) {
-                        showErrorAlert(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                     } else {
                         this.checkTextView.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                         this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
@@ -291,7 +247,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                     return false;
                 } else if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
                     if (alert) {
-                        showErrorAlert(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                     } else {
                         this.checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                         this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
@@ -305,7 +261,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
         if (name == null || name.length() < 5) {
             if (alert) {
-                showErrorAlert(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
             } else {
                 this.checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
                 this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
@@ -314,7 +270,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             return false;
         } else if (name.length() > 32) {
             if (alert) {
-                showErrorAlert(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
             } else {
                 this.checkTextView.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
                 this.checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
@@ -388,7 +344,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);
-                TL_account_updateUsername req = new TL_account_updateUsername();
+                final TL_account_updateUsername req = new TL_account_updateUsername();
                 req.username = newName;
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(1));
                 final int reqId = ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -419,7 +375,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                                 } catch (Throwable e) {
                                     FileLog.e(e);
                                 }
-                                ChangeUsernameActivity.this.showErrorAlert(error.text);
+                                AlertsCreator.processError(error, ChangeUsernameActivity.this, req, new Object[0]);
                             }
                         });
                     }

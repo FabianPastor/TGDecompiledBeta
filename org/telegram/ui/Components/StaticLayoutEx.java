@@ -4,6 +4,7 @@ import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
+import android.text.StaticLayout.Builder;
 import android.text.TextDirectionHeuristic;
 import android.text.TextDirectionHeuristics;
 import android.text.TextPaint;
@@ -59,7 +60,12 @@ public class StaticLayoutEx {
                 return null;
             }
         }
-        StaticLayout layout = new StaticLayout(source, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
+        StaticLayout layout;
+        if (VERSION.SDK_INT >= 23) {
+            layout = Builder.obtain(source, 0, source.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(2).build();
+        } else {
+            layout = new StaticLayout(source, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
+        }
         if (layout.getLineCount() <= maxLines) {
             return layout;
         }

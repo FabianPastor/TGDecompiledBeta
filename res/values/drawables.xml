@@ -8,6 +8,10 @@
     <drawable name="abc_ic_menu_share_mtrl_alpha">res/drawable-hdpi-v4/abc_ic_menu_share_mtrl_alpha.png</drawable>
     <drawable name="abc_ic_menu_share_mtrl_alpha">res/drawable-xhdpi-v4/abc_ic_menu_share_mtrl_alpha.png</drawable>
     <drawable name="abc_ic_menu_share_mtrl_alpha">res/drawable-xxhdpi-v4/abc_ic_menu_share_mtrl_alpha.png</drawable>
+    <drawable name="abc_popup_background_mtrl_mult">res/drawable-mdpi-v4/abc_popup_background_mtrl_mult.9.png</drawable>
+    <drawable name="abc_popup_background_mtrl_mult">res/drawable-hdpi-v4/abc_popup_background_mtrl_mult.9.png</drawable>
+    <drawable name="abc_popup_background_mtrl_mult">res/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png</drawable>
+    <drawable name="abc_popup_background_mtrl_mult">res/drawable-xxhdpi-v4/abc_popup_background_mtrl_mult.9.png</drawable>
     <drawable name="add">res/drawable-mdpi-v4/add.png</drawable>
     <drawable name="add">res/drawable-hdpi-v4/add.png</drawable>
     <drawable name="add">res/drawable-xhdpi-v4/add.png</drawable>
@@ -189,15 +193,6 @@
     <drawable name="bot_keyboard2">res/drawable-hdpi-v4/bot_keyboard2.png</drawable>
     <drawable name="bot_keyboard2">res/drawable-xhdpi-v4/bot_keyboard2.png</drawable>
     <drawable name="bot_keyboard2">res/drawable-xxhdpi-v4/bot_keyboard2.png</drawable>
-    <drawable name="bot_keyboard_button">res/drawable-mdpi-v4/bot_keyboard_button.9.png</drawable>
-    <drawable name="bot_keyboard_button">res/drawable-hdpi-v4/bot_keyboard_button.9.png</drawable>
-    <drawable name="bot_keyboard_button">res/drawable-xhdpi-v4/bot_keyboard_button.9.png</drawable>
-    <drawable name="bot_keyboard_button">res/drawable-xxhdpi-v4/bot_keyboard_button.9.png</drawable>
-    <drawable name="bot_keyboard_button_pressed">res/drawable-mdpi-v4/bot_keyboard_button_pressed.9.png</drawable>
-    <drawable name="bot_keyboard_button_pressed">res/drawable-hdpi-v4/bot_keyboard_button_pressed.9.png</drawable>
-    <drawable name="bot_keyboard_button_pressed">res/drawable-xhdpi-v4/bot_keyboard_button_pressed.9.png</drawable>
-    <drawable name="bot_keyboard_button_pressed">res/drawable-xxhdpi-v4/bot_keyboard_button_pressed.9.png</drawable>
-    <drawable name="bot_keyboard_states">res/drawable/bot_keyboard_states.xml</drawable>
     <drawable name="bot_lines">res/drawable-mdpi-v4/bot_lines.png</drawable>
     <drawable name="bot_lines">res/drawable-hdpi-v4/bot_lines.png</drawable>
     <drawable name="bot_lines">res/drawable-xhdpi-v4/bot_lines.png</drawable>

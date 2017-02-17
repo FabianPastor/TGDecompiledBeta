@@ -2027,57 +2027,135 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll) {
-        if (messages != null && !messages.isEmpty()) {
-            int a;
-            if (channelId == 0) {
-                for (a = 0; a < messages.size(); a++) {
-                    MessageObject obj = (MessageObject) this.dialogMessagesByIds.get((Integer) messages.get(a));
-                    if (obj != null) {
-                        obj.deleted = true;
-                    }
-                }
-            } else {
-                markChannelDialogMessageAsDeleted(messages, channelId);
-            }
-            ArrayList<Integer> toSend = new ArrayList();
-            for (a = 0; a < messages.size(); a++) {
-                Integer mid = (Integer) messages.get(a);
-                if (mid.intValue() > 0) {
-                    toSend.add(mid);
-                }
-            }
-            MessagesStorage.getInstance().markMessagesAsDeleted(messages, true, channelId);
-            MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
-            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
-            if (channelId != 0) {
-                TL_channels_deleteMessages req = new TL_channels_deleteMessages();
-                req.id = toSend;
-                req.channel = getInputChannel(channelId);
-                final int i = channelId;
-                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                    public void run(TLObject response, TL_error error) {
-                        if (error == null) {
-                            TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
-                            MessagesController.this.processNewChannelDifferenceParams(res.pts, res.pts_count, i);
+        deleteMessages(messages, randoms, encryptedChat, channelId, forAll, 0, null);
+    }
+
+    public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
+        TL_channels_deleteMessages req;
+        long newTaskId;
+        NativeByteBuffer data;
+        NativeByteBuffer data2;
+        Throwable e;
+        final int i;
+        TL_messages_deleteMessages req2;
+        if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
+            ArrayList<Integer> toSend = null;
+            if (taskId == 0) {
+                int a;
+                if (channelId == 0) {
+                    for (a = 0; a < messages.size(); a++) {
+                        MessageObject obj = (MessageObject) this.dialogMessagesByIds.get((Integer) messages.get(a));
+                        if (obj != null) {
+                            obj.deleted = true;
                         }
                     }
-                });
+                } else {
+                    markChannelDialogMessageAsDeleted(messages, channelId);
+                }
+                toSend = new ArrayList();
+                for (a = 0; a < messages.size(); a++) {
+                    Integer mid = (Integer) messages.get(a);
+                    if (mid.intValue() > 0) {
+                        toSend.add(mid);
+                    }
+                }
+                MessagesStorage.getInstance().markMessagesAsDeleted(messages, true, channelId);
+                MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
+            }
+            if (channelId != 0) {
+                if (taskRequest != null) {
+                    req = (TL_channels_deleteMessages) taskRequest;
+                    newTaskId = taskId;
+                } else {
+                    req = new TL_channels_deleteMessages();
+                    req.id = toSend;
+                    req.channel = getInputChannel(channelId);
+                    data = null;
+                    try {
+                        data2 = new NativeByteBuffer(req.getObjectSize() + 8);
+                        try {
+                            data2.writeInt32(7);
+                            data2.writeInt32(channelId);
+                            req.serializeToStream(data2);
+                            data = data2;
+                        } catch (Exception e2) {
+                            e = e2;
+                            data = data2;
+                            FileLog.e(e);
+                            newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                            i = channelId;
+                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                public void run(TLObject response, TL_error error) {
+                                    if (error == null) {
+                                        TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
+                                        MessagesController.this.processNewChannelDifferenceParams(res.pts, res.pts_count, i);
+                                    }
+                                    if (newTaskId != 0) {
+                                        MessagesStorage.getInstance().removePendingTask(newTaskId);
+                                    }
+                                }
+                            });
+                            return;
+                        }
+                    } catch (Exception e3) {
+                        e = e3;
+                        FileLog.e(e);
+                        newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                        i = channelId;
+                        ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
+                        return;
+                    }
+                    newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                }
+                i = channelId;
+                ConnectionsManager.getInstance().sendRequest(req, /* anonymous class already generated */);
                 return;
             }
             if (!(randoms == null || encryptedChat == null || randoms.isEmpty())) {
                 SecretChatHelper.getInstance().sendMessagesDeleteMessage(encryptedChat, randoms, null);
             }
-            TL_messages_deleteMessages req2 = new TL_messages_deleteMessages();
-            req2.id = toSend;
-            req2.revoke = forAll;
-            ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (error == null) {
-                        TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
-                        MessagesController.this.processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
+            if (taskRequest != null) {
+                req2 = (TL_messages_deleteMessages) taskRequest;
+                newTaskId = taskId;
+            } else {
+                req2 = new TL_messages_deleteMessages();
+                req2.id = toSend;
+                req2.revoke = forAll;
+                data = null;
+                try {
+                    data2 = new NativeByteBuffer(req2.getObjectSize() + 8);
+                    try {
+                        data2.writeInt32(7);
+                        data2.writeInt32(channelId);
+                        req2.serializeToStream(data2);
+                        data = data2;
+                    } catch (Exception e4) {
+                        e = e4;
+                        data = data2;
+                        FileLog.e(e);
+                        newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                        ConnectionsManager.getInstance().sendRequest(req2, new RequestDelegate() {
+                            public void run(TLObject response, TL_error error) {
+                                if (error == null) {
+                                    TL_messages_affectedMessages res = (TL_messages_affectedMessages) response;
+                                    MessagesController.this.processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
+                                }
+                                if (newTaskId != 0) {
+                                    MessagesStorage.getInstance().removePendingTask(newTaskId);
+                                }
+                            }
+                        });
                     }
+                } catch (Exception e5) {
+                    e = e5;
+                    FileLog.e(e);
+                    newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+                    ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
                 }
-            });
+                newTaskId = MessagesStorage.getInstance().createPendingTask(data);
+            }
+            ConnectionsManager.getInstance().sendRequest(req2, /* anonymous class already generated */);
         }
     }
 
@@ -3240,6 +3318,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
+                Chat chat;
                 Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
@@ -3257,7 +3336,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     MessagesController.this.nextDialogsCacheOffset = i3 + i2;
                 }
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) org_telegram_tgnet_TLRPC_messages_Dialogs.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -3418,6 +3496,8 @@ public class MessagesController implements NotificationCenterDelegate {
                                     if (i != 1) {
                                         currentDialog.notify_settings = value.notify_settings;
                                     }
+                                    currentDialog.pinned = value.pinned;
+                                    currentDialog.pinnedNum = value.pinnedNum;
                                     MessageObject oldMsg = (MessageObject) MessagesController.this.dialogMessage.get(key);
                                     if ((oldMsg == null || !oldMsg.deleted) && oldMsg != null && currentDialog.top_message <= 0) {
                                         MessageObject newMsg = (MessageObject) new_dialogMessage.get(Long.valueOf(value.id));
@@ -3693,6 +3773,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3707,7 +3788,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -4109,16 +4189,13 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             r1 = fragment;
+            r2 = req;
             return ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, final TL_error error) {
                     if (error != null) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                if (error.text.startsWith("FLOOD_WAIT")) {
-                                    AlertsCreator.showFloodWaitAlert(error.text, r1);
-                                } else {
-                                    AlertsCreator.showAddUserAlert(error.text, r1, false);
-                                }
+                                AlertsCreator.processError(error, r1, r2, new Object[0]);
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
                             }
                         });
@@ -4151,14 +4228,13 @@ public class MessagesController implements NotificationCenterDelegate {
                 req.broadcast = true;
             }
             r1 = fragment;
+            r2 = req;
             return ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, final TL_error error) {
                     if (error != null) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                if (error.text.startsWith("FLOOD_WAIT")) {
-                                    AlertsCreator.showFloodWaitAlert(error.text, r1);
-                                }
+                                AlertsCreator.processError(error, r1, r2, new Object[0]);
                                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.chatDidFailCreate, new Object[0]);
                             }
                         });
@@ -4243,7 +4319,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void addUsersToChannel(int chat_id, ArrayList<InputUser> users, final BaseFragment fragment) {
         if (users != null && !users.isEmpty()) {
-            TL_channels_inviteToChannel req = new TL_channels_inviteToChannel();
+            final TL_channels_inviteToChannel req = new TL_channels_inviteToChannel();
             req.channel = getInputChannel(chat_id);
             req.users = users;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
@@ -4251,11 +4327,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (error != null) {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
-                                if (fragment != null) {
-                                    AlertsCreator.showAddUserAlert(error.text, fragment, true);
-                                } else if (error.text.equals("PEER_FLOOD")) {
-                                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
-                                }
+                                AlertsCreator.processError(error, fragment, req, Boolean.valueOf(true));
                             }
                         });
                     } else {
@@ -4449,16 +4521,15 @@ public class MessagesController implements NotificationCenterDelegate {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
                                     boolean z = true;
-                                    if (baseFragment != null) {
-                                        String str = error.text;
-                                        BaseFragment baseFragment = baseFragment;
-                                        if (!isChannel || isMegagroup) {
-                                            z = false;
-                                        }
-                                        AlertsCreator.showAddUserAlert(str, baseFragment, z);
-                                    } else if (error.text.equals("PEER_FLOOD")) {
-                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
+                                    TL_error tL_error = error;
+                                    BaseFragment baseFragment = baseFragment;
+                                    TLObject tLObject = request;
+                                    Object[] objArr = new Object[1];
+                                    if (!isChannel || isMegagroup) {
+                                        z = false;
                                     }
+                                    objArr[0] = Boolean.valueOf(z);
+                                    AlertsCreator.processError(tL_error, baseFragment, tLObject, objArr);
                                 }
                             });
                             return;
@@ -6557,6 +6628,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6610,7 +6682,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

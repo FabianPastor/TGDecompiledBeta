@@ -221,7 +221,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         } else {
             this.call = callIShouldHavePutIntoIntent;
             callIShouldHavePutIntoIntent = null;
-            startRinging();
+            acknowledgeCallAndStartRinging();
         }
         return 2;
     }
@@ -439,6 +439,24 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         }, 2);
     }
 
+    private void acknowledgeCallAndStartRinging() {
+        TL_phone_receivedCall req = new TL_phone_receivedCall();
+        req.peer = new TL_inputPhoneCall();
+        req.peer.id = this.call.id;
+        req.peer.access_hash = this.call.access_hash;
+        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+            public void run(TLObject response, TL_error error) {
+                FileLog.w("receivedCall response = " + response);
+                if (error != null) {
+                    FileLog.e("error on receivedCall: " + error);
+                    VoIPService.this.stopSelf();
+                    return;
+                }
+                VoIPService.this.startRinging();
+            }
+        }, 2);
+    }
+
     private void startRinging() {
         int vibrate;
         dispatchStateChanged(10);
@@ -484,24 +502,13 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
+                return;
             } catch (Exception x) {
                 FileLog.e("Error starting incall activity", x);
+                return;
             }
-        } else {
-            showIncomingNotification();
         }
-        TL_phone_receivedCall req = new TL_phone_receivedCall();
-        req.peer = new TL_inputPhoneCall();
-        req.peer.id = this.call.id;
-        req.peer.access_hash = this.call.access_hash;
-        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
-                FileLog.w("receivedCall response = " + response);
-                if (error != null) {
-                    FileLog.e("error on receivedCall: " + error);
-                }
-            }
-        }, 2);
+        showIncomingNotification();
     }
 
     public void acceptIncomingCall() {
@@ -698,7 +705,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 } else {
                     callEnded();
                 }
-                if (((TL_phoneCallDiscarded) call).need_rating) {
+                if (call.need_rating) {
                     startRatingActivity();
                 }
             } else if ((call instanceof TL_phoneCall) && this.authKey == null) {

@@ -6008,7 +6008,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (load_type != 2) {
                                     this.cacheEndReached[loadIndex] = true;
                                 }
-                            } else if (load_type != 2) {
+                            } else if (load_type != 2 || (messArr.size() == 0 && this.messages.isEmpty())) {
                                 this.endReached[loadIndex] = true;
                             }
                         }

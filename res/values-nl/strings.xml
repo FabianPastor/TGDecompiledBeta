@@ -117,6 +117,8 @@
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram-bèta</string>
     <string name="ApplyLocalizationFile">Vertaling toepassen</string>
+    <string name="ApplyTheme">TOEPASSEN</string>
+    <string name="ApplyThemeFile">Thema toepassen</string>
     <string name="ArchivedMasks">Gearchiveerde maskers</string>
     <string name="ArchivedMasksAlertInfo">Een aantal ongebruikte maskerbundels zijn gearchiveerd. Je kunt deze opnieuw activeren via de maskerinstellingen.</string>
     <string name="ArchivedMasksAlertTitle">Gearchiveerde maskers</string>
@@ -150,7 +152,7 @@
     <string name="ArticleByAuthor">door %1$s</string>
     <string name="ArticleDateByAuthor">%1$s door %2$s</string>
     <string name="AskAQuestion">Een vraag stellen</string>
-    <string name="AskAQuestionInfo">De ondersteuning van Telegram wordt gedaan door vrijwilligers. We doen ons best om zo snel mogelijk te antwoorden.&lt;br&gt;&lt;br&gt;Bekijk ook de &lt;a href=\"https://telegram.org/faq#general\"&gt;veelgestelde vragen&lt;/a&gt;: Hier staan de antwoorden op de meeste vragen en belangrijke tips voor &lt;a href=\"https://telegram.org/faq#troubleshooting\"&gt;het oplossen van problemen&lt;/a&gt;.</string>
+    <string name="AskAQuestionInfo">De ondersteuning van Telegram wordt gedaan door vrijwilligers. We doen ons best om zo snel mogelijk te antwoorden.&lt;br&gt;&lt;br&gt;Bekijk ook de &lt;a href=https://telegram.org/faq#general&gt;veelgestelde vragen&lt;/a&gt;: Hier staan de antwoorden op de meeste vragen en belangrijke tips voor &lt;a href=https://telegram.org/faq#troubleshooting&gt;het oplossen van problemen&lt;/a&gt;.</string>
     <string name="AskButton">Vraag een vrijwilliger</string>
     <string name="AttachAudio">Spraakbericht</string>
     <string name="AttachBotsHelp">Scrollen voor bots</string>
@@ -203,6 +205,8 @@
     <string name="CacheEmpty">Leeg</string>
     <string name="CalculatingSize">Berekenen...</string>
     <string name="Call">Bellen</string>
+    <string name="CallAgain">Opnieuw bellen</string>
+    <string name="CallBack">Terugbellen</string>
     <string name="CallEncryptionKeyDescription">Deze afbeelding en tekst zijn afgeleid van de encryptiesleutel voor deze oproep met &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Als dit er hetzelfde uitziet op het apparaat van &lt;b&gt;%2$s&lt;/b&gt;, dan is end-to-end-encryptie gegarandeerd.</string>
     <string name="CallMessageIncoming">Inkomende oproep</string>
     <string name="CallMessageIncomingMissed">Gemiste oproep</string>
@@ -344,6 +348,7 @@
     <string name="ClearRecentEmoji">Recente emoji\'s wissen?</string>
     <string name="ClearSearch">Zoekgeschiedenis wissen?</string>
     <string name="Close">Sluit</string>
+    <string name="CloseEditor">BEWERKER SLUITEN</string>
     <string name="Code">Code</string>
     <string name="CodeExpired">Code verlopen. Log opnieuw in.</string>
     <string name="ColorBlue">Blauw</string>
@@ -356,6 +361,7 @@
     <string name="ColorWhite">Wit</string>
     <string name="ColorYellow">Geel</string>
     <string name="CompatibilityChat">%1$s gebruikt een oudere versie van Telegram, dus worden geheime foto\'s weergegeven in de compatibiliteitsmodus.\n\nZodra %2$s Telegram updatet werken foto\'s met timers voor 1 minuut of minder in de \'Druk en houd ingedrukt\'-modus en krijg je een bericht wanneer de andere partij een schermafdruk maakt.</string>
+    <string name="ConfirmDeleteCallLog">Gesprek echt uit oproepgeschiedenis wissen?</string>
     <string name="Connecting">Verbinden</string>
     <string name="ContactJoined">Contact lid van Telegram</string>
     <string name="ContactNotRegistered">%1$s is nog geen lid, uitnodigen?</string>
@@ -375,6 +381,9 @@
     <string name="CountSent">Verzonden</string>
     <string name="CreateEncryptedChatError">Er is een fout opgetreden.</string>
     <string name="CreateGroupError">Je kan geen groep maken met deze gebruikers vanwege de privacyinstellingen van deze gebruikers.</string>
+    <string name="CreateNewTheme">Nieuw thema maken</string>
+    <string name="CreateNewThemeHelp">Tik op het palet-icoon om een lijst met elementen voor elk scherm te zien en deze te bewerken.</string>
+    <string name="CreateNewThemeInfo">Door het veranderen van de kleuren in de app kun je je eigen thema maken. Je kunt hier altijd terugschakelen naar het standaardthema.</string>
     <string name="Crop">BIJSNIJDEN</string>
     <string name="CropImage">Foto bijsnijden</string>
     <string name="CropOriginal">Origineel</string>
@@ -409,6 +418,7 @@
     <string name="DebugMenuImportContacts">Contacten importeren</string>
     <string name="DebugMenuReloadContacts">Contacten verversen</string>
     <string name="Default">Standaard</string>
+    <string name="DefaultRingtone">Standaard</string>
     <string name="Delete">Verwijder</string>
     <string name="DeleteAccountHelp">Als je binnen deze periode niet minimaal één keer ingelogd bent geweest zal je account worden verwijderd, inclusief alle groepen, berichten en contacten.</string>
     <string name="DeleteAccountIfAwayFor">Indien afwezig voor</string>
@@ -429,6 +439,7 @@
     <string name="DeleteMegaMenu">Groep verwijderen</string>
     <string name="DeletePhoto">Foto verwijderen</string>
     <string name="DeleteReportSpam">Spam melden</string>
+    <string name="DeleteThemeAlert">Thema echt verwijderen?</string>
     <string name="DeleteThisChat">Chat verwijderen</string>
     <string name="DeleteThisGroup">Deze groep verwijderen</string>
     <string name="DescriptionInfo">Optioneel kun je een kanaalbeschrijving geven.</string>
@@ -479,6 +490,7 @@
     <string name="EnterListName">Naam van lijst</string>
     <string name="EnterNewFirstPasscode">Toegangscode invoeren</string>
     <string name="EnterNewPasscode">Nieuwe toegangscode invoeren</string>
+    <string name="EnterThemeName">Geef een naam aan je thema</string>
     <string name="EnterYourPasscode">Toegangscode invoeren</string>
     <string name="ErrorOccurred">Er is een fout opgetreden.</string>
     <string name="Events">Gebeurtenissen</string>
@@ -612,6 +624,7 @@
     <string name="InChatSound">Chatgeluiden</string>
     <string name="IncomingCalls">Inkomende oproepen</string>
     <string name="IncorrectLocalization">Ongeldig vertalingsbestand</string>
+    <string name="IncorrectTheme">Themabestand is ongeldig</string>
     <string name="Info">Info</string>
     <string name="InstantView">SNELLE WEERGAVE</string>
     <string name="InternalStorage">Interne opslag</string>
@@ -796,6 +809,7 @@
     <string name="NewMessages_two">%1$d nieuwe berichten</string>
     <string name="NewMessages_zero">geen nieuwe berichten</string>
     <string name="NewSecretChat">Nieuwe geheime chat</string>
+    <string name="NewTheme">Nieuw Thema</string>
     <string name="Next">Volgende</string>
     <string name="No">Nee</string>
     <string name="NoAudio">Voeg bestanden toe aan de muziekbibliotheek op je apparaat om ze hier te zien.</string>
@@ -833,8 +847,10 @@
     <string name="NoStickers">Nog geen stickers</string>
     <string name="NoUsernameFound">Er is geen Telegram-account met deze gebruikersnaam.</string>
     <string name="NoVideo">Nog geen video\'s</string>
-    <string name="NobodyLikesSpam1">Je hebt vandaag teveel mensen aangeschreven die niet in je contacten staan, probeer het morgen nog eens. Je kunt wel antwoorden als deze gebruiker eerst contact met jou opneemt,</string>
-    <string name="NobodyLikesSpam2">Je kunt deze gebruiker niet toevoegen omdat je vandaag teveel mensen hebt aangeschreven die niet in je contacten staan, probeer het morgen nog eens. Je kunt een ander lid vragen om deze gebruiker aan de groep toe te voegen.</string>
+    <string name="NobodyLikesSpam1">Je kunt momenteel alleen berichten sturen aan onderlingen contacten.</string>
+    <string name="NobodyLikesSpam2">Je kunt momenteel alleen onderlinge contacten aan groepen toevoegen</string>
+    <string name="NobodyLikesSpam3">Je hebt vandaag teveel mensen aangeschreven die niet in je contacten staan, probeer het morgen nog eens. Je kunt wel antwoorden als deze gebruiker eerst contact met jou opneemt,</string>
+    <string name="NobodyLikesSpam4">Je kunt deze gebruiker niet toevoegen omdat je vandaag teveel mensen hebt aangeschreven die niet in je contacten staan, probeer het morgen nog eens. Je kunt een ander lid vragen om deze gebruiker aan de groep toe te voegen.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq#can-39t-send-messages-to-non-contacts</string>
     <string name="NotMounted">Geen opslagmedium gevonden</string>
     <string name="NotificationActionPinnedContact">%1$s heeft contact vastgezet in de groep %2$s</string>
@@ -980,6 +996,54 @@
     <string name="PasswordHintText">Stel een hint voor je wachtwoord in</string>
     <string name="PasswordRecovery">Wachtwoordherstel</string>
     <string name="PasswordReset">Wachtwoord uitgeschakeld</string>
+    <string name="PaymentBillingAddress">Factuuradres</string>
+    <string name="PaymentCardCvv">Veiligheidscode (CVV)</string>
+    <string name="PaymentCardExpireDateMonth">Maand</string>
+    <string name="PaymentCardExpireDateYear">Jaar</string>
+    <string name="PaymentCardInfo">Betaalinformatie</string>
+    <string name="PaymentCardName">Achternaam</string>
+    <string name="PaymentCardNameTitle">Kaarthouder</string>
+    <string name="PaymentCardNumber">Kaartnummer</string>
+    <string name="PaymentCardSavePaymentInformation">Betalingsinformatie opslaan</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine1">Je kunt je betalingsinformatie voor toekomstig gebruik opslaan.</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine2">Activeer \"twee-staps-verificatie\" om deze functie te gebruiken.</string>
+    <string name="PaymentCardTitle">Betaalkaart</string>
+    <string name="PaymentCheckout">Afrekenen</string>
+    <string name="PaymentCheckoutEmail">Contactadres</string>
+    <string name="PaymentCheckoutMethod">Betalingsmethode</string>
+    <string name="PaymentCheckoutName">Naam</string>
+    <string name="PaymentCheckoutPay">%1$s BETALEN</string>
+    <string name="PaymentCheckoutPhoneNumber">Telefoonnummer</string>
+    <string name="PaymentCheckoutShippingMethod">Verzendmethode</string>
+    <string name="PaymentConfirmationMessage">Kaartinformatie %1$s is opgeslagen. Geef je 2-staps-verificatie-wachtwoord in om met deze kaart te betalen.</string>
+    <string name="PaymentConfirmationNewCard">Kies een andere kaart</string>
+    <string name="PaymentConnectionFailed">Betalingsprovider kon niet worden bereikt, controleer je internetverbinding en probeer het opnieuw.</string>
+    <string name="PaymentFailed">Sorry, de betaling werd geweigerd.</string>
+    <string name="PaymentInvoice">FACTUUR</string>
+    <string name="PaymentNoShippingMethod">Sorry, afleveren op jouw adres is niet mogelijk.</string>
+    <string name="PaymentPrecheckoutFailed">Sorry, de bot heeft je betaling geannuleerd.</string>
+    <string name="PaymentReceipt">Betalingsbewijs</string>
+    <string name="PaymentShipment">VERZENDING</string>
+    <string name="PaymentShippingAddress">Verzendadres</string>
+    <string name="PaymentShippingAddress1Placeholder">Adres 1 (Straat)</string>
+    <string name="PaymentShippingAddress2Placeholder">Adres 2 (Straat)</string>
+    <string name="PaymentShippingCityPlaceholder">Stad</string>
+    <string name="PaymentShippingCountry">Land</string>
+    <string name="PaymentShippingEmailPlaceholder">E-mail</string>
+    <string name="PaymentShippingInfo">Verzendinformatie</string>
+    <string name="PaymentShippingMethod">Verzendmethodes</string>
+    <string name="PaymentShippingName">Naam</string>
+    <string name="PaymentShippingPhoneNumber">Telefoonnummer</string>
+    <string name="PaymentShippingReceiver">Ontvanger</string>
+    <string name="PaymentShippingSave">Verzendinformatie opslaan</string>
+    <string name="PaymentShippingSaveInfo">Je kunt je verzendinformatie opslaan voor toekomstig gebruik.</string>
+    <string name="PaymentShippingStatePlaceholder">Provincie</string>
+    <string name="PaymentShippingZipPlaceholder">Postcode</string>
+    <string name="PaymentSuccessfullyPaid">%1$s is succesvol overgemaakt naar %2$s voor %3$s</string>
+    <string name="PaymentSuccessfullyPaidNoItem">%1$s is succesvol overgemaakt naar %2$s</string>
+    <string name="PaymentTransactionMessage">Echt %1$s overmaken naar de bot %2$s voor %3$s?</string>
+    <string name="PaymentTransactionReview">Transactie-overzicht</string>
+    <string name="PaymentTransactionTotal">Totaal</string>
     <string name="PendingEmailText">Je herstel-e-mailadres %1$s is nog niet actief en in afwachting van bevestiging.</string>
     <string name="PermissionContacts">Telegram heeft toegang tot je contacten nodig zodat je kan chatten met je vrienden vanaf al je apparaten.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in Picture-in-Picture-modus.</string>
@@ -1099,6 +1163,7 @@
     <string name="Satellite">Satelliet</string>
     <string name="Saturation">Verzadiging</string>
     <string name="Save">Opslaan</string>
+    <string name="SaveTheme">THEME OPSLAAN</string>
     <string name="SaveToDownloads">Opslaan in Downloads</string>
     <string name="SaveToGIFs">GIF opslaan</string>
     <string name="SaveToGallery">Opslaan in galerij</string>
@@ -1132,6 +1197,7 @@
     <string name="SecretWebPage">Linkvoorvertoningen</string>
     <string name="SecurityTitle">Veiligheid</string>
     <string name="SelectChat">Kies een chat</string>
+    <string name="SelectColor">Selecteer kleur</string>
     <string name="SelectContact">Contact kiezen</string>
     <string name="SelectFile">Kies een bestand</string>
     <string name="Send">Stuur</string>
@@ -1234,6 +1300,7 @@
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TextSize">Tekstgrootte berichten</string>
     <string name="Theme">Thema</string>
+    <string name="ThemePreview">Thema-voorvertoning</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Wijzigen kan niet meer.</string>
     <string name="Times_few">%1$d keer</string>
@@ -1305,9 +1372,11 @@
     <string name="VoipExchangingKeys">Encryptiesleutels uitwisselen</string>
     <string name="VoipFailed">Verbinden mislukt</string>
     <string name="VoipFeedbackAlert">Wil je feedback geven zodat we onze oproepfunctie kunnen verbeteren?</string>
+    <string name="VoipFeedbackCommentHint">Opmerking toevoegen</string>
     <string name="VoipHangingUp">Ophangen</string>
     <string name="VoipInCallBranding">Telegram-oproep</string>
     <string name="VoipIncoming">Inkomende oproep</string>
+    <string name="VoipNeedMicPermission">Telegram heeft toegang tot je microfoon nodig zodat je kunt bellen.</string>
     <string name="VoipNotificationSettings">Spraakoproepen</string>
     <string name="VoipOffline">Je bent offline, maak verbinding met het internet om een oproep te starten.</string>
     <string name="VoipOfflineAirplane">Vliegtuigmodus is actief, schakel vliegtuigmodus uit of verbind met Wi-Fi om een oproep te starten</string>
@@ -1359,6 +1428,7 @@
     <string name="Yes">Ja</string>
     <string name="Yesterday">gisteren</string>
     <string name="YesterdayAt">gisteren om</string>
+    <string name="YouBlockedUser">Je hebt deze gebruiker of bot geblokkeerd, toevoegen aan een groep kan pas na deblokkeren.</string>
     <string name="YouCreatedBroadcastList">Je hebt een verzendlijst gemaakt</string>
     <string name="YouHaveNewMessage">Je hebt een nieuw bericht</string>
     <string name="YouLeft">Je hebt deze groep verlaten</string>

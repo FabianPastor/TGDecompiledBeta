@@ -747,6 +747,10 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                 }
             }
         } else {
+            BaseFragment fragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(0);
+            if (fragment instanceof DialogsActivity) {
+                ((DialogsActivity) fragment).setSideMenu(this.sideMenu);
+            }
             boolean allowOpen = true;
             if (AndroidUtilities.isTablet()) {
                 allowOpen = this.actionBarLayout.fragmentsStack.size() <= 1 && this.layersActionBarLayout.fragmentsStack.isEmpty();

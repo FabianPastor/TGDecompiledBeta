@@ -111,12 +111,12 @@ public class zzt implements zzf {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
-        HttpResponse zza;
         int statusCode;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
+            HttpResponse zza;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzk_.zzh());

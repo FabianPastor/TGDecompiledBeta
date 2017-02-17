@@ -2082,6 +2082,7 @@ public class TLRPC {
         public String provider;
         public int receipt_msg_id;
         public boolean shipping_address_requested;
+        public boolean test;
         public String title;
         public long total_amount;
         public int user_id;
@@ -4326,8 +4327,32 @@ public class TLRPC {
         public InputChannel channel;
         public ArrayList<Integer> id = new ArrayList();
 
+        public static TL_channels_deleteMessages TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (constructor == constructor) {
+                TL_channels_deleteMessages result = new TL_channels_deleteMessages();
+                result.readParams(stream, exception);
+                return result;
+            } else if (!exception) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_channels_deleteMessages", new Object[]{Integer.valueOf(constructor)}));
+            }
+        }
+
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_messages_affectedMessages.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.channel = InputChannel.TLdeserialize(stream, stream.readInt32(exception), exception);
+            if (stream.readInt32(exception) == 481674261) {
+                int count = stream.readInt32(exception);
+                for (int a = 0; a < count; a++) {
+                    this.id.add(Integer.valueOf(stream.readInt32(exception)));
+                }
+            } else if (exception) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+            }
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -7626,8 +7651,39 @@ public class TLRPC {
         public ArrayList<Integer> id = new ArrayList();
         public boolean revoke;
 
+        public static TL_messages_deleteMessages TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            if (constructor == constructor) {
+                TL_messages_deleteMessages result = new TL_messages_deleteMessages();
+                result.readParams(stream, exception);
+                return result;
+            } else if (!exception) {
+                return null;
+            } else {
+                throw new RuntimeException(String.format("can't parse magic %x in TL_messages_deleteMessages", new Object[]{Integer.valueOf(constructor)}));
+            }
+        }
+
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
             return TL_messages_affectedMessages.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z;
+            this.flags = stream.readInt32(exception);
+            if ((this.flags & 1) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.revoke = z;
+            if (stream.readInt32(exception) == 481674261) {
+                int count = stream.readInt32(exception);
+                for (int a = 0; a < count; a++) {
+                    this.id.add(Integer.valueOf(stream.readInt32(exception)));
+                }
+            } else if (exception) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
+            }
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -17629,8 +17685,13 @@ public class TLRPC {
         public TL_webDocument photo;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z = true;
             this.flags = stream.readInt32(exception);
             this.shipping_address_requested = (this.flags & 2) != 0;
+            if ((this.flags & 8) == 0) {
+                z = false;
+            }
+            this.test = z;
             this.title = stream.readString(exception);
             this.description = stream.readString(exception);
             if ((this.flags & 1) != 0) {
@@ -17646,6 +17707,7 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             this.flags = this.shipping_address_requested ? this.flags | 2 : this.flags & -3;
+            this.flags = this.test ? this.flags | 8 : this.flags & -9;
             stream.writeInt32(this.flags);
             stream.writeString(this.title);
             stream.writeString(this.description);

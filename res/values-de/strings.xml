@@ -117,6 +117,8 @@
     <string name="AppName">Telegram</string>
     <string name="AppNameBeta">Telegram Beta</string>
     <string name="ApplyLocalizationFile">Sprachdatei benutzen</string>
+    <string name="ApplyTheme">ANWENDEN</string>
+    <string name="ApplyThemeFile">Thema benutzen</string>
     <string name="ArchivedMasks">Archivierte Masken</string>
     <string name="ArchivedMasksAlertInfo">Einige deiner Masken wurden archiviert. Du kannst sie in den Masken-Einstellungen erneut hinzufügen.</string>
     <string name="ArchivedMasksAlertTitle">Archivierte Masken</string>
@@ -150,7 +152,7 @@
     <string name="ArticleByAuthor">von %1$s</string>
     <string name="ArticleDateByAuthor">%1$s von %2$s</string>
     <string name="AskAQuestion">Eine Frage stellen</string>
-    <string name="AskAQuestionInfo">Bedenke bitte, dass der Telegram Support von ehrenamtlichen Helfern betreut wird. Wir versuchen so schnell wie möglich zu antworten, dies kann jedoch manchmal ein bisschen dauern.&lt;br&gt;&lt;br&gt;Bitte schau auch in den &lt;a href=\"https://telegram.org/faq/de\"&gt;Fragen und Antworten &lt;/a&gt; nach. Dort findest du Antworten auf die meisten Fragen und wichtige Tipps zur &lt;a href=\"https://telegram.org/faq/de#problembehandlung\"&gt;Problembehandlung&lt;/a&gt;.</string>
+    <string name="AskAQuestionInfo">Bedenke bitte, dass der Telegram Support von ehrenamtlichen Helfern betreut wird. Wir versuchen so schnell wie möglich zu antworten, dies kann jedoch manchmal ein bisschen dauern.&lt;br&gt;&lt;br&gt;Bitte schau auch in den &lt;a href=https://telegram.org/faq/de&gt;Fragen und Antworten &lt;/a&gt; nach. Dort findest du Antworten auf die meisten Fragen und wichtige Tipps zur &lt;a href=https://telegram.org/faq/de#problembehandlung&gt;Problembehandlung&lt;/a&gt;.</string>
     <string name="AskButton">Eine Frage stellen</string>
     <string name="AttachAudio">Sprachnachricht</string>
     <string name="AttachBotsHelp">Runterscrollen für Bots</string>
@@ -203,6 +205,8 @@
     <string name="CacheEmpty">Leer</string>
     <string name="CalculatingSize">Berechne...</string>
     <string name="Call">Anrufen</string>
+    <string name="CallAgain">Erneut Anrufen</string>
+    <string name="CallBack">Zurückrufen</string>
     <string name="CallEncryptionKeyDescription">Bild und Text zeigen den Schlüssel dieses Anrufs mit &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Sehen sie auf dem Gerät von &lt;b&gt;%2$s\'s&lt;/b&gt; genau so aus, ist Ende-zu-Ende Verschlüsselung garantiert.</string>
     <string name="CallMessageIncoming">Eingehender Anruf</string>
     <string name="CallMessageIncomingMissed">Verpasster Anruf</string>
@@ -344,6 +348,7 @@
     <string name="ClearRecentEmoji">Zuletzt benutzte Emoji leeren?</string>
     <string name="ClearSearch">Suchverlauf löschen?</string>
     <string name="Close">Schließen</string>
+    <string name="CloseEditor">EDITOR SCHLIESSEN</string>
     <string name="Code">Code</string>
     <string name="CodeExpired">Code ist abgelaufen, bitte melde dich erneut an</string>
     <string name="ColorBlue">Blau</string>
@@ -356,6 +361,7 @@
     <string name="ColorWhite">Weiß</string>
     <string name="ColorYellow">Gelb</string>
     <string name="CompatibilityChat">%1$s benutzt eine ältere Version von Telegram, sodass Bilder in Geheimen Chats im Kompatibilitätsmodus angezeigt werden.\n\nSobald %2$s Telegram aktualisiert, werden Bilder mit Timern von 1 Minute und kürzer per \"Tippen und Halten\" angezeigt. Du wirst benachrichtigt, sobald dein Chatpartner ein Bildschirmfoto macht.</string>
+    <string name="ConfirmDeleteCallLog">Möchtest du wirklich diesen Eintrag aus der Anrufliste löschen?</string>
     <string name="Connecting">Verbinde…</string>
     <string name="ContactJoined">Kontakt ist Telegram beigetreten</string>
     <string name="ContactNotRegistered">%1$s ist noch nicht bei Telegram. Willst du diesen Nutzer einladen?</string>
@@ -375,6 +381,9 @@
     <string name="CountSent">Gesendet</string>
     <string name="CreateEncryptedChatError">Es ist ein Fehler aufgetreten.</string>
     <string name="CreateGroupError">Du kannst mit diesen Nutzern keine Gruppe erstellen, weil sie es nicht erlauben.</string>
+    <string name="CreateNewTheme">Neues Thema erstellen</string>
+    <string name="CreateNewThemeHelp">Tippe auf das kleine Palettensymbol um eine Auswahl des jeweiligen Bildschirms anzuzeigen und wähle deine Wunschfarben.</string>
+    <string name="CreateNewThemeInfo">Erstelle dein eigenes Thema, indem du die Farben innerhalb der App änderst. Hier kannst du jederzeit zum vorgegebenen Telegram Thema zurückwechseln.</string>
     <string name="Crop">SCHNEIDEN</string>
     <string name="CropImage">Bild zuschneiden</string>
     <string name="CropOriginal">Original</string>
@@ -409,6 +418,7 @@
     <string name="DebugMenuImportContacts">Kontakte importieren</string>
     <string name="DebugMenuReloadContacts">Kontakte neu laden</string>
     <string name="Default">Standard</string>
+    <string name="DefaultRingtone">Standard</string>
     <string name="Delete">Löschen</string>
     <string name="DeleteAccountHelp">Wenn du dich innerhalb dieser Zeit nicht anmeldest, wird dein Konto mit allen Nachrichten, Gruppen und Kontakten gelöscht.</string>
     <string name="DeleteAccountIfAwayFor">Wenn inaktiv für</string>
@@ -429,6 +439,7 @@
     <string name="DeleteMegaMenu">Gruppe löschen</string>
     <string name="DeletePhoto">Bild löschen</string>
     <string name="DeleteReportSpam">Spam melden</string>
+    <string name="DeleteThemeAlert">Möchtest du wirklich dieses Thema löschen?</string>
     <string name="DeleteThisChat">Diesen Chat löschen</string>
     <string name="DeleteThisGroup">Diese Gruppe löschen</string>
     <string name="DescriptionInfo">Beschreibe deinen Kanal (optional).</string>
@@ -479,6 +490,7 @@
     <string name="EnterListName">Listenname</string>
     <string name="EnterNewFirstPasscode">Pincode eingeben</string>
     <string name="EnterNewPasscode">Neuen Pincode eingeben</string>
+    <string name="EnterThemeName">Einen Namen festlegen</string>
     <string name="EnterYourPasscode">Deinen Pincode eingeben</string>
     <string name="ErrorOccurred">Es ist ein Fehler aufgetreten.</string>
     <string name="Events">Ereignisse</string>
@@ -612,6 +624,7 @@
     <string name="InChatSound">In-Chat-Töne</string>
     <string name="IncomingCalls">Eingehende Anrufe</string>
     <string name="IncorrectLocalization">Falsche Sprachdatei</string>
+    <string name="IncorrectTheme">Themen-Datei ist fehlerhaft.</string>
     <string name="Info">Info</string>
     <string name="InstantView">SCHNELLANSICHT</string>
     <string name="InternalStorage">Interner Speicher</string>
@@ -796,6 +809,7 @@
     <string name="NewMessages_two">%1$d neue Nachrichten</string>
     <string name="NewMessages_zero">keine neuen Nachrichten</string>
     <string name="NewSecretChat">Neuer Geheimer Chat</string>
+    <string name="NewTheme">Neues Thema</string>
     <string name="Next">Weiter</string>
     <string name="No">Nein</string>
     <string name="NoAudio">Bitte füge Musikdateien einfach deiner Android Musikbibliothek hinzu, um sie hier zu sehen.</string>
@@ -833,8 +847,10 @@
     <string name="NoStickers">Noch keine Sticker</string>
     <string name="NoUsernameFound">Kein Konto mit diesem Benutzernamen</string>
     <string name="NoVideo">Noch keine Videos</string>
-    <string name="NobodyLikesSpam1">Du hast heute zu viele nicht-gemeinsame Kontakte angeschrieben, bitte probiere es morgen wieder. Du kannst auf Nachrichten antworten, wenn dir die Person zuerst geschrieben hat.</string>
-    <string name="NobodyLikesSpam2">Du kannst diesen Nutzer nicht hinzufügen, weil du heute zu viele nicht-gemeinsame Kontakte angeschrieben hast. Bitte morgen wieder probieren oder einen anderen Teilnehmer der Gruppe fragen, den Nutzer hinzuzufügen.</string>
+    <string name="NobodyLikesSpam1">Du kannst im Moment nur Kontakten schreiben, die auch deine Nummer haben.</string>
+    <string name="NobodyLikesSpam2">Derzeit kannst du nur gemeinsame Kontakte Gruppen hinzufügen.</string>
+    <string name="NobodyLikesSpam3">Du hast heute zu viele nicht-gemeinsame Kontakte angeschrieben, bitte probiere es morgen wieder. Du kannst auf Nachrichten antworten, wenn dir die Person zuerst geschrieben hat.</string>
+    <string name="NobodyLikesSpam4">Du kannst diesen Nutzer nicht hinzufügen, weil du heute zu viele nicht-gemeinsame Kontakte angeschrieben hast. Bitte morgen wieder probieren oder einen anderen Teilnehmer der Gruppe fragen, den Nutzer hinzuzufügen.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq/de#kann-keine-nachrichten-an-nicht-kontakte-senden</string>
     <string name="NotMounted">Speicher nicht eingebunden</string>
     <string name="NotificationActionPinnedContact">%1$s hat einen Kontakt in der Gruppe %2$s angeheftet</string>
@@ -980,6 +996,54 @@
     <string name="PasswordHintText">Bitte Hinweis auf dein Kennwort eingeben</string>
     <string name="PasswordRecovery">Kennwort zurücksetzen</string>
     <string name="PasswordReset">Kennwort deaktiviert</string>
+    <string name="PaymentBillingAddress">Rechnungsadresse</string>
+    <string name="PaymentCardCvv">Kartenprüfnummer (CVV)</string>
+    <string name="PaymentCardExpireDateMonth">Month</string>
+    <string name="PaymentCardExpireDateYear">Jahr</string>
+    <string name="PaymentCardInfo">Zahlungsinformationen</string>
+    <string name="PaymentCardName">Vollständiger Name</string>
+    <string name="PaymentCardNameTitle">Karteninhaber</string>
+    <string name="PaymentCardNumber">Kartennummer</string>
+    <string name="PaymentCardSavePaymentInformation">Zahlungsinformationen speichern</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine1">Du kannst deine Zahlungsinformationen für zukünftige Bestellungen speichern.</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine2">Bitte *schalte die zweistufige Bestätigung ein*, um es zu aktivieren.</string>
+    <string name="PaymentCardTitle">Zahlungskarte</string>
+    <string name="PaymentCheckout">Kasse</string>
+    <string name="PaymentCheckoutEmail">Kontaktadresse</string>
+    <string name="PaymentCheckoutMethod">Zahlungsmethode</string>
+    <string name="PaymentCheckoutName">Name</string>
+    <string name="PaymentCheckoutPay">%1$s BEZAHLEN</string>
+    <string name="PaymentCheckoutPhoneNumber">Telefonnummer</string>
+    <string name="PaymentCheckoutShippingMethod">Versandart</string>
+    <string name="PaymentConfirmationMessage">Deine Karte %1$s ist bereits gespeichert. Um mit dieser Karte zu bezahlen, tippe dein Kennwort der zweistufigen Bestätigung ein.</string>
+    <string name="PaymentConfirmationNewCard">Wähle eine andere Karte</string>
+    <string name="PaymentConnectionFailed">Kann den Zahlungsserver nicht erreichen. Bitte prüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="PaymentFailed">Tut uns sehr leid. Die Zahlung wurde abgelehnt.</string>
+    <string name="PaymentInvoice">RECHNUNG</string>
+    <string name="PaymentNoShippingMethod">Tut uns sehr leid, leider kann an deine Adresse nichts geliefert werden.</string>
+    <string name="PaymentPrecheckoutFailed">Tut uns sehr leid. Die Zahlung wurde durch den Bot abgebrochen.</string>
+    <string name="PaymentReceipt">Beleg</string>
+    <string name="PaymentShipment">LIEFERUNG</string>
+    <string name="PaymentShippingAddress">Lieferanschrift</string>
+    <string name="PaymentShippingAddress1Placeholder">Adresse 1 (Straße)</string>
+    <string name="PaymentShippingAddress2Placeholder">Adresse 2 (Straße)</string>
+    <string name="PaymentShippingCityPlaceholder">Stadt</string>
+    <string name="PaymentShippingCountry">Land</string>
+    <string name="PaymentShippingEmailPlaceholder">E-Mail</string>
+    <string name="PaymentShippingInfo">Versandinformationen</string>
+    <string name="PaymentShippingMethod">Versandarten</string>
+    <string name="PaymentShippingName">Vor- und Nachname</string>
+    <string name="PaymentShippingPhoneNumber">Telefonnummer</string>
+    <string name="PaymentShippingReceiver">Empfänger</string>
+    <string name="PaymentShippingSave">Versandinformationen speichern</string>
+    <string name="PaymentShippingSaveInfo">Du kannst deine Versandinformationen für zukünftige Bestellungen speichern.</string>
+    <string name="PaymentShippingStatePlaceholder">Bundesland</string>
+    <string name="PaymentShippingZipPlaceholder">PLZ</string>
+    <string name="PaymentSuccessfullyPaid">Du hast erfolgreich %1$s an %2$s für %3$s transferiert.</string>
+    <string name="PaymentSuccessfullyPaidNoItem">Du hast erfolgreich %1$s an %2$s transferiert.</string>
+    <string name="PaymentTransactionMessage">Möchtest du wirklich %1$s an den %2$s Bot für %3$s transferieren?</string>
+    <string name="PaymentTransactionReview">Überprüfung der Transaktion</string>
+    <string name="PaymentTransactionTotal">Gesamtsumme</string>
     <string name="PendingEmailText">Deine E-Mail Adresse %1$s wurde noch verifiziert und ist daher noch nicht aktiv.</string>
     <string name="PermissionContacts">Telegram benötigt Zugriff auf deine Kontakte um dich auf all denen Geräten mit deinen Freunden zu verbinden.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
@@ -1099,6 +1163,7 @@
     <string name="Satellite">Satellit</string>
     <string name="Saturation">Sättigung</string>
     <string name="Save">Speichern</string>
+    <string name="SaveTheme">THEMA SPEICHERN</string>
     <string name="SaveToDownloads">In Downloads speichern</string>
     <string name="SaveToGIFs">GIF hinzufügen</string>
     <string name="SaveToGallery">In der Galerie speichern</string>
@@ -1132,6 +1197,7 @@
     <string name="SecretWebPage">Linkvorschau</string>
     <string name="SecurityTitle">Sicherheit</string>
     <string name="SelectChat">Chat auswählen</string>
+    <string name="SelectColor">Farbe wählen</string>
     <string name="SelectContact">Kontakt auswählen</string>
     <string name="SelectFile">Datei auswählen</string>
     <string name="Send">Senden</string>
@@ -1234,6 +1300,7 @@
     <string name="TerminateSessionQuestion">Dieses Gerät abmelden?</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>
+    <string name="ThemePreview">Vorschau</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Bearbeitungszeit leider abgelaufen.</string>
     <string name="Times_few">%1$d Mal</string>
@@ -1305,9 +1372,11 @@
     <string name="VoipExchangingKeys">Tausche Schlüssel aus</string>
     <string name="VoipFailed">Keine Verbindung möglich</string>
     <string name="VoipFeedbackAlert">Möchtest du eine Rückmeldung zu unseren Sprachanrufen hinterlassen, damit wir den Dienst optimieren können?</string>
+    <string name="VoipFeedbackCommentHint">Optionalen Kommentar hinzufügen</string>
     <string name="VoipHangingUp">Anruf wird beendet</string>
     <string name="VoipInCallBranding">Telegram Anruf</string>
     <string name="VoipIncoming">Eingehender Anruf</string>
+    <string name="VoipNeedMicPermission">Telegram benötigt für Sprachanrufe Zugriff auf dein Mikrofon.</string>
     <string name="VoipNotificationSettings">Sprachanrufe</string>
     <string name="VoipOffline">Du bist derzeit offline. Bitte verbinde dich mit dem Internet und versuche es erneut.</string>
     <string name="VoipOfflineAirplane">Du hast derzeit den Flugmodus aktiviert. Deaktiviere den Flugmodus oder verbinde dich per W-LAN um jemanden anzurufen.</string>
@@ -1359,6 +1428,7 @@
     <string name="Yes">Ja</string>
     <string name="Yesterday">gestern</string>
     <string name="YesterdayAt">gestern um</string>
+    <string name="YouBlockedUser">Du kannst diesen Nutzer oder Bot Gruppen leider nicht hinzufügen, da du ihn blockiert hast. Gebe ihn wieder frei, um fortzufahren.</string>
     <string name="YouCreatedBroadcastList">Du hast eine Broadcast Liste erstellt</string>
     <string name="YouHaveNewMessage">Du hast eine neue Nachricht</string>
     <string name="YouLeft">Du hast die Gruppe verlassen</string>

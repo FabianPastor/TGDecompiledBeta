@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +10,11 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -19,6 +22,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.Utilities;
@@ -27,15 +31,43 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.TL_account_changePhone;
+import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
+import org.telegram.tgnet.TLRPC.TL_account_getPassword;
+import org.telegram.tgnet.TLRPC.TL_account_getTmpPassword;
 import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
+import org.telegram.tgnet.TLRPC.TL_account_sendChangePhoneCode;
+import org.telegram.tgnet.TLRPC.TL_account_sendConfirmPhoneCode;
+import org.telegram.tgnet.TLRPC.TL_auth_resendCode;
+import org.telegram.tgnet.TLRPC.TL_channels_createChannel;
+import org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
+import org.telegram.tgnet.TLRPC.TL_channels_inviteToChannel;
+import org.telegram.tgnet.TLRPC.TL_channels_joinChannel;
+import org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_geochats_sendMedia;
+import org.telegram.tgnet.TLRPC.TL_geochats_sendMessage;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonSpam;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonViolence;
+import org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
+import org.telegram.tgnet.TLRPC.TL_messages_createChat;
+import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
+import org.telegram.tgnet.TLRPC.TL_messages_forwardMessages;
+import org.telegram.tgnet.TLRPC.TL_messages_getAttachedStickers;
+import org.telegram.tgnet.TLRPC.TL_messages_importChatInvite;
+import org.telegram.tgnet.TLRPC.TL_messages_sendBroadcast;
+import org.telegram.tgnet.TLRPC.TL_messages_sendInlineBotResult;
+import org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
+import org.telegram.tgnet.TLRPC.TL_messages_sendMessage;
+import org.telegram.tgnet.TLRPC.TL_messages_startBot;
+import org.telegram.tgnet.TLRPC.TL_payments_sendPaymentForm;
+import org.telegram.tgnet.TLRPC.TL_payments_validateRequestedInfo;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_updateUserName;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet.Builder;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
@@ -48,11 +80,233 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static Dialog processError(TL_error error, BaseFragment fragment, TLObject request, Object... args) {
+        boolean z = false;
+        if (error.code == 406 || error.text == null) {
+            return null;
+        }
+        if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot)) {
+            if (!(request instanceof TL_messages_createChat)) {
+                if (!(request instanceof TL_channels_createChannel)) {
+                    if (!(request instanceof TL_messages_editMessage)) {
+                        if (!(request instanceof TL_messages_sendMessage) && !(request instanceof TL_messages_sendMedia) && !(request instanceof TL_geochats_sendMessage) && !(request instanceof TL_messages_sendBroadcast) && !(request instanceof TL_messages_sendInlineBotResult) && !(request instanceof TL_geochats_sendMedia) && !(request instanceof TL_messages_forwardMessages)) {
+                            if (!(request instanceof TL_messages_importChatInvite)) {
+                                if (!(request instanceof TL_messages_getAttachedStickers)) {
+                                    if (!(request instanceof TL_account_confirmPhone)) {
+                                        if (!(request instanceof TL_auth_resendCode)) {
+                                            if (!(request instanceof TL_account_sendConfirmPhoneCode)) {
+                                                if (!(request instanceof TL_account_changePhone)) {
+                                                    if (!(request instanceof TL_account_sendChangePhoneCode)) {
+                                                        String str;
+                                                        if (!(request instanceof TL_updateUserName)) {
+                                                            if (!(request instanceof TL_contacts_importContacts)) {
+                                                                if (!(request instanceof TL_account_getPassword) && !(request instanceof TL_account_getTmpPassword)) {
+                                                                    if (!(request instanceof TL_payments_sendPaymentForm)) {
+                                                                        if (request instanceof TL_payments_validateRequestedInfo) {
+                                                                            String str2 = error.text;
+                                                                            boolean z2 = true;
+                                                                            switch (str2.hashCode()) {
+                                                                                case 1758025548:
+                                                                                    if (str2.equals("SHIPPING_NOT_AVAILABLE")) {
+                                                                                        z2 = false;
+                                                                                        break;
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                            switch (z2) {
+                                                                                case false:
+                                                                                    showSimpleToast(fragment, LocaleController.getString("PaymentNoShippingMethod", R.string.PaymentNoShippingMethod));
+                                                                                    break;
+                                                                                default:
+                                                                                    showSimpleToast(fragment, error.text);
+                                                                                    break;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    str = error.text;
+                                                                    switch (str.hashCode()) {
+                                                                        case -1144062453:
+                                                                            if (str.equals("BOT_PRECHECKOUT_FAILED")) {
+                                                                                break;
+                                                                            }
+                                                                        case -784238410:
+                                                                            if (str.equals("PAYMENT_FAILED")) {
+                                                                                z = true;
+                                                                                break;
+                                                                            }
+                                                                        default:
+                                                                            z = true;
+                                                                            break;
+                                                                    }
+                                                                    switch (z) {
+                                                                        case false:
+                                                                            showSimpleToast(fragment, LocaleController.getString("PaymentPrecheckoutFailed", R.string.PaymentPrecheckoutFailed));
+                                                                            break;
+                                                                        case true:
+                                                                            showSimpleToast(fragment, LocaleController.getString("PaymentFailed", R.string.PaymentFailed));
+                                                                            break;
+                                                                        default:
+                                                                            showSimpleToast(fragment, error.text);
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                showSimpleToast(fragment, error.text);
+                                                            } else if (error == null || error.text.startsWith("FLOOD_WAIT")) {
+                                                                showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                                            } else {
+                                                                showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                                            }
+                                                        } else {
+                                                            str = error.text;
+                                                            switch (str.hashCode()) {
+                                                                case -141887186:
+                                                                    if (str.equals("USERNAMES_UNAVAILABLE")) {
+                                                                        z = true;
+                                                                        break;
+                                                                    }
+                                                                case 288843630:
+                                                                    if (str.equals("USERNAME_INVALID")) {
+                                                                        break;
+                                                                    }
+                                                                case 533175271:
+                                                                    if (str.equals("USERNAME_OCCUPIED")) {
+                                                                        z = true;
+                                                                        break;
+                                                                    }
+                                                                default:
+                                                                    z = true;
+                                                                    break;
+                                                            }
+                                                            switch (z) {
+                                                                case false:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                                                                    break;
+                                                                case true:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
+                                                                    break;
+                                                                case true:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("FeatureUnavailable", R.string.FeatureUnavailable));
+                                                                    break;
+                                                                default:
+                                                                    showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                                                                    break;
+                                                            }
+                                                        }
+                                                    } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                                    } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                                    } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                                    } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                        showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                                    } else if (error.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
+                                                        showSimpleAlert(fragment, LocaleController.formatString("ChangePhoneNumberOccupied", R.string.ChangePhoneNumberOccupied, (String) args[0]));
+                                                    } else {
+                                                        showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                                                    }
+                                                } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                                } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                                } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                    showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                                } else {
+                                                    showSimpleAlert(fragment, error.text);
+                                                }
+                                            } else if (error.code == 400) {
+                                                return showSimpleAlert(fragment, LocaleController.getString("CancelLinkExpired", R.string.CancelLinkExpired));
+                                            } else {
+                                                if (error.text != null) {
+                                                    if (error.text.startsWith("FLOOD_WAIT")) {
+                                                        return showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                                    }
+                                                    return showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                                                }
+                                            }
+                                        } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                        } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                        } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                            showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                        } else if (error.code != NotificationManagerCompat.IMPORTANCE_UNSPECIFIED) {
+                                            showSimpleAlert(fragment, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                        }
+                                    } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                    } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                    } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                        showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                                    } else {
+                                        showSimpleAlert(fragment, error.text);
+                                    }
+                                } else if (!(fragment == null || fragment.getParentActivity() == null)) {
+                                    Toast.makeText(fragment.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
+                                }
+                            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
+                            } else if (error.text.equals("USERS_TOO_MUCH")) {
+                                showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorFull", R.string.JoinToGroupErrorFull));
+                            } else {
+                                showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                            }
+                        } else if (error.text.equals("PEER_FLOOD")) {
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(0));
+                        }
+                    } else if (!error.text.equals("MESSAGE_NOT_MODIFIED")) {
+                        showSimpleAlert(fragment, LocaleController.getString("EditMessageError", R.string.EditMessageError));
+                    }
+                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                    showFloodWaitAlert(error.text, fragment);
+                }
+            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                showFloodWaitAlert(error.text, fragment);
+            } else {
+                showAddUserAlert(error.text, fragment, false);
+            }
+        } else if (fragment != null) {
+            showAddUserAlert(error.text, fragment, ((Boolean) args[0]).booleanValue());
+        } else if (error.text.equals("PEER_FLOOD")) {
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.needShowAlert, Integer.valueOf(1));
+        }
+        return null;
+    }
+
+    public static Toast showSimpleToast(BaseFragment baseFragment, String text) {
+        if (text == null || baseFragment == null || baseFragment.getParentActivity() == null) {
+            return null;
+        }
+        Toast toast = Toast.makeText(baseFragment.getParentActivity(), text, 1);
+        toast.show();
+        return toast;
+    }
+
+    public static Dialog showSimpleAlert(BaseFragment baseFragment, String text) {
+        if (text == null || baseFragment == null || baseFragment.getParentActivity() == null) {
+            return null;
+        }
+        Builder builder = new Builder(baseFragment.getParentActivity());
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setMessage(text);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        Dialog dialog = builder.create();
+        baseFragment.showDialog(dialog);
+        return dialog;
+    }
+
     public static Dialog createMuteAlert(Context context, final long dialog_id) {
         if (context == null) {
             return null;
         }
-        Builder builder = new Builder(context);
+        BottomSheet.Builder builder = new BottomSheet.Builder(context);
         builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
         CharSequence[] items = new CharSequence[4];
         items[0] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1));
@@ -99,7 +353,7 @@ public class AlertsCreator {
         if (context == null || parentFragment == null) {
             return null;
         }
-        Builder builder = new Builder(context);
+        BottomSheet.Builder builder = new BottomSheet.Builder(context);
         builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
         builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -136,7 +390,7 @@ public class AlertsCreator {
             } else {
                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+            Builder builder = new Builder(fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             builder.setMessage(LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
@@ -146,7 +400,7 @@ public class AlertsCreator {
 
     public static void showAddUserAlert(String error, final BaseFragment fragment, boolean isChannel) {
         if (error != null && fragment != null && fragment.getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+            Builder builder = new Builder(fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
             boolean z = true;
             switch (error.hashCode()) {
@@ -182,6 +436,12 @@ public class AlertsCreator {
                     break;
                 case 517420851:
                     if (error.equals("USER_BOT")) {
+                        z = true;
+                        break;
+                    }
+                    break;
+                case 845559454:
+                    if (error.equals("YOU_BLOCKED_USER")) {
                         z = true;
                         break;
                     }
@@ -282,6 +542,9 @@ public class AlertsCreator {
                 case true:
                     builder.setMessage(LocaleController.getString("UserRestricted", R.string.UserRestricted));
                     break;
+                case true:
+                    builder.setMessage(LocaleController.getString("YouBlockedUser", R.string.YouBlockedUser));
+                    break;
                 default:
                     builder.setMessage(error);
                     break;
@@ -339,7 +602,7 @@ public class AlertsCreator {
                 }
             });
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
         builder.setView(scrollView);
         final boolean z = globalAll;
@@ -485,7 +748,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -555,7 +818,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -601,7 +864,7 @@ public class AlertsCreator {
             });
             a++;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -633,15 +896,15 @@ public class AlertsCreator {
             });
             a++;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        Builder builder = new Builder(parentActivity);
         builder.setTitle(title);
         builder.setView(scrollView);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
 
-    public static AlertDialog.Builder createTTLAlert(Context context, final EncryptedChat encryptedChat) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static Builder createTTLAlert(Context context, final EncryptedChat encryptedChat) {
+        Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("MessageLifetime", R.string.MessageLifetime));
         final NumberPicker numberPicker = new NumberPicker(context);
         numberPicker.setMinValue(0);
@@ -716,7 +979,7 @@ public class AlertsCreator {
 
     public static AlertDialog createExpireDateAlert(Context context, final boolean month, int[] result, Runnable callback) {
         int currentYear;
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        Builder builder = new Builder(context);
         builder.setTitle(month ? LocaleController.getString("PaymentCardExpireDateMonth", R.string.PaymentCardExpireDateMonth) : LocaleController.getString("PaymentCardExpireDateYear", R.string.PaymentCardExpireDateYear));
         final NumberPicker numberPicker = new NumberPicker(context);
         if (month) {

@@ -462,7 +462,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
                 EmojiView access$1000 = ChatActivityEnterView.this.emojiView;
-                if (ChatActivityEnterView.this.messageEditText.length() <= 0) {
+                if (ChatActivityEnterView.this.messageEditText.length() <= 0 || ChatActivityEnterView.this.messageEditText.getText().toString().startsWith("@gif")) {
                     z = false;
                 }
                 access$1000.onOpen(z);
@@ -519,6 +519,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.messageEditText.setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(12.0f));
         this.messageEditText.setBackgroundDrawable(null);
         this.messageEditText.setTextColor(Theme.getColor(Theme.key_chat_messagePanelText));
+        this.messageEditText.setHintColor(Theme.getColor(Theme.key_chat_messagePanelHint));
         this.messageEditText.setHintTextColor(Theme.getColor(Theme.key_chat_messagePanelHint));
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 80, 52.0f, 0.0f, isChat ? 50.0f : 2.0f, 0.0f));
         this.messageEditText.setOnKeyListener(new OnKeyListener() {
@@ -659,6 +660,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().remove("hidekeyboard_" + ChatActivityEnterView.this.dialog_id).commit();
                     } else if (ChatActivityEnterView.this.hasBotCommands) {
                         ChatActivityEnterView.this.setFieldText("/");
+                        ChatActivityEnterView.this.messageEditText.requestFocus();
                         ChatActivityEnterView.this.openKeyboard();
                     }
                 }

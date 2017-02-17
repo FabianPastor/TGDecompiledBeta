@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -56,7 +55,6 @@ public class BottomSheet extends Dialog {
     private boolean applyBottomPadding = true;
     private boolean applyTopPadding = true;
     protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
-    protected Paint ciclePaint = new Paint(1);
     protected ContainerView container;
     protected ViewGroup containerView;
     protected AnimatorSet currentSheetAnimation;
@@ -576,7 +574,6 @@ public class BottomSheet extends Dialog {
             });
             this.container.setSystemUiVisibility(1280);
         }
-        this.ciclePaint.setColor(-1);
         this.backDrawable.setAlpha(0);
     }
 

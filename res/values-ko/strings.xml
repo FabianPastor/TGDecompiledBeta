@@ -117,6 +117,8 @@
     <string name="AppName">텔레그램</string>
     <string name="AppNameBeta">텔레그램 베타</string>
     <string name="ApplyLocalizationFile">언어 파일 적용</string>
+    <string name="ApplyTheme">적용</string>
+    <string name="ApplyThemeFile">테마 파일 적용</string>
     <string name="ArchivedMasks">보관된 마스크</string>
     <string name="ArchivedMasksAlertInfo">오래된 마스크중 일부가 보관되어집니다. 마스크 설정에서 다시 재설정이 가능합니다.</string>
     <string name="ArchivedMasksAlertTitle">보관된 마스크</string>
@@ -150,7 +152,7 @@
     <string name="ArticleByAuthor">%1$s 이내</string>
     <string name="ArticleDateByAuthor">%1$s by %2$s</string>
     <string name="AskAQuestion">질문하기</string>
-    <string name="AskAQuestionInfo">텔레그램에 관한 질문은 자원봉사자들이 답변해 드립니다. 신속한 답변을 위해 노력하지만 답변이 다소 늦을 수 있습니다.&lt;br&gt;&lt;br&gt;일반적인 문제와 &lt;a href=\"https://telegram.org/faq/ko#g\"&gt;해결방법&lt;/a&gt;에 대해서는 \'&lt;a href=\"https://telegram.org/faq/ko#a\"&gt;자주 묻는 질문&lt;/a&gt;\'을 확인해 보세요.</string>
+    <string name="AskAQuestionInfo">텔레그램에 관한 질문은 자원봉사자들이 답변해 드립니다. 신속한 답변을 위해 노력하지만 답변이 다소 늦을 수 있습니다.&lt;br&gt;&lt;br&gt;일반적인 문제와 &lt;a href=https://telegram.org/faq/ko#g&gt;해결방법&lt;/a&gt;에 대해서는 \'&lt;a href=https://telegram.org/faq/ko#a&gt;자주 묻는 질문&lt;/a&gt;\'을 확인해 보세요.</string>
     <string name="AskButton">질문하기</string>
     <string name="AttachAudio">음성 메시지</string>
     <string name="AttachBotsHelp">봇을 보려면 스크롤 다운하세요</string>
@@ -203,6 +205,8 @@
     <string name="CacheEmpty">없음</string>
     <string name="CalculatingSize">계산중...</string>
     <string name="Call">전화 걸기</string>
+    <string name="CallAgain">다시 전화걸기</string>
+    <string name="CallBack">전화 회신</string>
     <string name="CallEncryptionKeyDescription">이 이미지와 텍스트는 &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt; 님과의 현재 전화를 위하여 파생된 것입니다. 이 이미지와 텍스트가 &lt;b&gt;%2$s\'s&lt;/b&gt; 님의 휴대전화와 동일하다면 단말기간(end-to-end)의 암호화가 정상적으로 진행되고 있음을 보장합니다.</string>
     <string name="CallMessageIncoming">수신 전화</string>
     <string name="CallMessageIncomingMissed">부재중 전화</string>
@@ -344,6 +348,7 @@
     <string name="ClearRecentEmoji">최근 사용한 이모티콘 삭제?</string>
     <string name="ClearSearch">검색기록을 지우시겠습니까?</string>
     <string name="Close">닫기</string>
+    <string name="CloseEditor">에디터 닫기</string>
     <string name="Code">코드</string>
     <string name="CodeExpired">코드가 만료되었습니다. 다시 로그인하세요</string>
     <string name="ColorBlue">파란색</string>
@@ -356,6 +361,7 @@
     <string name="ColorWhite">하얀색</string>
     <string name="ColorYellow">노란색</string>
     <string name="CompatibilityChat">%1$s님의 텔레그램 버전이 낮아 비밀 사진을 호환성 모드로 표시합니다.\n\n%2$s님이 텔레그램을 업데이트하고 나면, 자동삭제 시간이 1분 이하인 사진은 \"탭하고 누르고 있어야 보임\" 상태가 되며, 상대방이 화면을 캡처할 때 마다 알림을 받습니다.</string>
+    <string name="ConfirmDeleteCallLog">이 통화내역을 삭제하시겠습니까?</string>
     <string name="Connecting">연결 중...</string>
     <string name="ContactJoined">친구의 텔레그램 가입 알림</string>
     <string name="ContactNotRegistered">아직 %1$s님이 텔레그램에 가입하시지 않았습니다. 초대하시겠습니까?</string>
@@ -375,6 +381,9 @@
     <string name="CountSent">보냄</string>
     <string name="CreateEncryptedChatError">오류가 발생했습니다.</string>
     <string name="CreateGroupError">죄송합니다, 이 이용자들의 개인 설정으로 인하여 그룹을 생성 할 수 없습니다.</string>
+    <string name="CreateNewTheme">새로운 테마 생성</string>
+    <string name="CreateNewThemeHelp">팔레트 아이콘을 클릭하여 화면 구성 리스트를 볼 수 있으며 - 편집을 할 수 있습니다.</string>
+    <string name="CreateNewThemeInfo">앱내에 색상을 변경하여 원하는 테마를 생성할 수 있습니다. 여기에서 언제든지 기존 텔레그램 테마로 복원이 가능합니다.</string>
     <string name="Crop">자르기</string>
     <string name="CropImage">사진 자르기</string>
     <string name="CropOriginal">원본</string>
@@ -429,6 +438,7 @@
     <string name="DeleteMegaMenu">그룹 삭제</string>
     <string name="DeletePhoto">사진 삭제</string>
     <string name="DeleteReportSpam">스팸 신고</string>
+    <string name="DeleteThemeAlert">이 테마를 삭제하시겠습니까?</string>
     <string name="DeleteThisChat">이 채팅방 삭제</string>
     <string name="DeleteThisGroup">이 그룹 삭제</string>
     <string name="DescriptionInfo">채널에 추가 설명을 제공 할 수 있습니다.</string>
@@ -479,6 +489,7 @@
     <string name="EnterListName">리스트 이름을 입력하세요</string>
     <string name="EnterNewFirstPasscode">잠금코드 입력</string>
     <string name="EnterNewPasscode">새로운 잠금코드 입력</string>
+    <string name="EnterThemeName">테마명을 입력하세요</string>
     <string name="EnterYourPasscode">잠금코드를 입력해주세요</string>
     <string name="ErrorOccurred">오류가 발생했습니다.</string>
     <string name="Events">이벤트</string>
@@ -612,6 +623,7 @@
     <string name="InChatSound">채팅중 소리 설정</string>
     <string name="IncomingCalls">수신 전화</string>
     <string name="IncorrectLocalization">언어 파일이 올바르지 않습니다.</string>
+    <string name="IncorrectTheme">올바르지 않은 테마 파일</string>
     <string name="Info">정보</string>
     <string name="InstantView">즉시 보기</string>
     <string name="InternalStorage">내부 저장소</string>
@@ -796,6 +808,7 @@
     <string name="NewMessages_two">새 메시지 %1$d건</string>
     <string name="NewMessages_zero">새 메시지 없음</string>
     <string name="NewSecretChat">비밀대화 시작</string>
+    <string name="NewTheme">새로운 테마</string>
     <string name="Next">다음</string>
     <string name="No">아니오</string>
     <string name="NoAudio">음악 라이브러리에 파일을 추가하셔야지만 볼 수 있습니다.</string>
@@ -833,8 +846,10 @@
     <string name="NoStickers">스티커가 아직 없음</string>
     <string name="NoUsernameFound">입력된 아이디와 일치하는 텔레그램 계정이 없습니다.</string>
     <string name="NoVideo">동영상이 아직 없음</string>
-    <string name="NobodyLikesSpam1">오늘 연락처가 없는 분들과 너무 많은 연락을 하셨습니다. 내일 다시 시도해주세요. 오늘은 메시지가 오는 분들하고만 대화가 가능합니다.</string>
-    <string name="NobodyLikesSpam2">오늘 연락처가 없는 분들과 너무 많은 연락을 하셨습니다. 내일 다시 시도해주세요. 그룹에 추가하시려면 다른 분이 초대해주셔야합니다.</string>
+    <string name="NobodyLikesSpam1">죄송합니다, 서로 연락처가 추가된 경우에만 메시지 전송이 가능합니다.</string>
+    <string name="NobodyLikesSpam2">죄송합니다, 서로 연락처가 추가된 경우에만 그룹에 구성원을 추가 할 수 있습니다.</string>
+    <string name="NobodyLikesSpam3">오늘 연락처가 없는 분들과 너무 많은 연락을 하셨습니다. 내일 다시 시도해주세요. 오늘은 메시지가 오는 분들하고만 대화가 가능합니다.</string>
+    <string name="NobodyLikesSpam4">오늘 연락처가 없는 분들과 너무 많은 연락을 하셨습니다. 내일 다시 시도해주세요. 그룹에 추가하시려면 다른 분이 초대해주셔야합니다.</string>
     <string name="NobodyLikesSpamUrl">https://telegram.org/faq#can-39t-send-messages-to-non-contacts</string>
     <string name="NotMounted">스토리지가 마운트되지 않음</string>
     <string name="NotificationActionPinnedContact">%1$s 님이 연락처를 %2$s 그룹방에 고정함</string>
@@ -980,6 +995,53 @@
     <string name="PasswordHintText">비밀번호 힌트를 생성해주세요</string>
     <string name="PasswordRecovery">비밀번호 복구</string>
     <string name="PasswordReset">비밀번호 비활성화</string>
+    <string name="PaymentBillingAddress">결제주소</string>
+    <string name="PaymentCardCvv">보안코드 (CVV)</string>
+    <string name="PaymentCardExpireDateMonth">월</string>
+    <string name="PaymentCardExpireDateYear">년</string>
+    <string name="PaymentCardInfo">결제정보</string>
+    <string name="PaymentCardName">성</string>
+    <string name="PaymentCardNameTitle">카드소유자</string>
+    <string name="PaymentCardNumber">카드번호</string>
+    <string name="PaymentCardSavePaymentInformation">결제정보 저장</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine1">향후 사용을 위하여 결제정보를 저장 할 수 있습니다.</string>
+    <string name="PaymentCardSavePaymentInformationInfoLine2">이 기능을 사용하시려면 2단계 인증 비밀번호를 사용해야합니다.</string>
+    <string name="PaymentCardTitle">결제카드</string>
+    <string name="PaymentCheckout">체크아웃</string>
+    <string name="PaymentCheckoutEmail">연락주소</string>
+    <string name="PaymentCheckoutMethod">결제방법</string>
+    <string name="PaymentCheckoutName">이름</string>
+    <string name="PaymentCheckoutPay">%1$s 결제</string>
+    <string name="PaymentCheckoutPhoneNumber">전화번호</string>
+    <string name="PaymentCheckoutShippingMethod">배송방법</string>
+    <string name="PaymentConfirmationMessage">%1$s 카드정보가 파일로 있습니다. 이 카드로 결제하시려면 2단계 비밀번호를 입력해주세요</string>
+    <string name="PaymentConfirmationNewCard">다른 카드를 선택해주세요</string>
+    <string name="PaymentFailed">죄송합니다, 결제가 거절되었습니다.</string>
+    <string name="PaymentInvoice">인보이스</string>
+    <string name="PaymentNoShippingMethod">죄송합니다. 이 주소로 배송이 가능하지 않습니다.</string>
+    <string name="PaymentPrecheckoutFailed">죄송합니다, 결제가 봇에 의하여 거절되었습니다.</string>
+    <string name="PaymentReceipt">영수증</string>
+    <string name="PaymentShipment">배송</string>
+    <string name="PaymentShippingAddress">배송주소</string>
+    <string name="PaymentShippingAddress1Placeholder">주소 1 (Street)</string>
+    <string name="PaymentShippingAddress2Placeholder">주소 2 (Street)</string>
+    <string name="PaymentShippingCityPlaceholder">시</string>
+    <string name="PaymentShippingCountry">국가</string>
+    <string name="PaymentShippingEmailPlaceholder">이메일</string>
+    <string name="PaymentShippingInfo">배송정보</string>
+    <string name="PaymentShippingMethod">배송방법</string>
+    <string name="PaymentShippingName">이름</string>
+    <string name="PaymentShippingPhoneNumber">전화번호</string>
+    <string name="PaymentShippingReceiver">수신자</string>
+    <string name="PaymentShippingSave">배송정보 저장</string>
+    <string name="PaymentShippingSaveInfo">향후 사용을 위하여 배송정보를 저장 할 수 있습니다.</string>
+    <string name="PaymentShippingStatePlaceholder">주</string>
+    <string name="PaymentShippingZipPlaceholder">우편번호</string>
+    <string name="PaymentSuccessfullyPaid">%3$s에 대한 %1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
+    <string name="PaymentSuccessfullyPaidNoItem">%1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
+    <string name="PaymentTransactionMessage">%3$s에 대한 %1$s 금액을 %2$s 봇에게 전송하시겠습니까?</string>
+    <string name="PaymentTransactionReview">거래내역 확인</string>
+    <string name="PaymentTransactionTotal">전체</string>
     <string name="PendingEmailText">복구 이메일 %1$s 이 아직 활성화 되지 않았으며 미승인 상태입니다.</string>
     <string name="PermissionContacts">Telegram은 여러 기기에서 친구와 메시지를 주고받을 수 있도록 회원님의 연락처 접근이 필요합니다.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram이 화면속화면 기능을 위하여 화면위 그리기에 대한 접근이 필요합니다.</string>
@@ -1099,6 +1161,7 @@
     <string name="Satellite">위성</string>
     <string name="Saturation">채도</string>
     <string name="Save">저장</string>
+    <string name="SaveTheme">테마 저장</string>
     <string name="SaveToDownloads">다운로드 폴더에 저장</string>
     <string name="SaveToGIFs">GIF파일로 저장</string>
     <string name="SaveToGallery">앨범에 저장</string>
@@ -1132,6 +1195,7 @@
     <string name="SecretWebPage">링크 프리뷰</string>
     <string name="SecurityTitle">보안</string>
     <string name="SelectChat">채팅방 선택</string>
+    <string name="SelectColor">색상 선택</string>
     <string name="SelectContact">대화상대 선택</string>
     <string name="SelectFile">파일 선택</string>
     <string name="Send">보내기</string>
@@ -1234,6 +1298,7 @@
     <string name="TerminateSessionQuestion">해당 세션을 종료하시겠습니까?</string>
     <string name="TextSize">채팅 글자 크기</string>
     <string name="Theme">테마</string>
+    <string name="ThemePreview">테마 미리보기</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">죄송합니다, 수정가능시간이 만료되었습니다.</string>
     <string name="Times_few">%1$d 번</string>
@@ -1305,9 +1370,11 @@
     <string name="VoipExchangingKeys">암호화 키 교환 중</string>
     <string name="VoipFailed">연결 실패</string>
     <string name="VoipFeedbackAlert">전화서비스 품질개선을 위하여 피드백을 남겨주시겠나요?</string>
+    <string name="VoipFeedbackCommentHint">코멘트 추가</string>
     <string name="VoipHangingUp">전화 끊는 중</string>
     <string name="VoipInCallBranding">텔레그램 전화</string>
     <string name="VoipIncoming">수신 전화</string>
+    <string name="VoipNeedMicPermission">Telegram이전화를 걸기 위하여 마이크에 대한 접근이 필요합니다.</string>
     <string name="VoipNotificationSettings">음성 전화</string>
     <string name="VoipOffline">현재 오프라인입니다. 인터넷에 접속하여 전화를 시도해주세요</string>
     <string name="VoipOfflineAirplane">현재 비행기 모드가 활성화 되어져 있습니다. 모드를 끄시거나 WIFI를 연결하여 전화를 시도해주세요</string>
