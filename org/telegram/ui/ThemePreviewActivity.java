@@ -16,7 +16,7 @@ import android.support.v4.view.InputDeviceCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.style.ClickableSpan;
+import android.text.style.CharacterStyle;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -249,7 +249,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             this.mContext = context;
             int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;
             Message message = new TL_message();
-            message.message = "Reinhardt, we need to find you some new tunes.";
+            message.message = "Reinhardt, we need to find you some new tunes 🎶.";
             message.date = date + 60;
             message.dialog_id = 1;
             message.flags = 259;
@@ -413,7 +413,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         return false;
                     }
 
-                    public void didPressedUrl(MessageObject messageObject, ClickableSpan url, boolean longPress) {
+                    public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
                     }
 
                     public void needOpenWebView(String url, String title, String description, String originalUrl, int w, int h) {

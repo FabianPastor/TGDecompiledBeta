@@ -1540,6 +1540,7 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
+    <string name="TextCopied">Text copied to clipboard</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

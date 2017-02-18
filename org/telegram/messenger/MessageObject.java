@@ -107,6 +107,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
+import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.URLSpanReplacement;
@@ -1222,7 +1223,7 @@ public class MessageObject {
                         } else if (entity instanceof TL_messageEntityItalic) {
                             spannable.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), entity.offset, entity.offset + entity.length, 33);
                         } else if ((entity instanceof TL_messageEntityCode) || (entity instanceof TL_messageEntityPre)) {
-                            spannable.setSpan(new TypefaceSpan(Typeface.MONOSPACE, AndroidUtilities.dp((float) (MessagesController.getInstance().fontSize - 1))), entity.offset, entity.offset + entity.length, 33);
+                            spannable.setSpan(new URLSpanMono(spannable, entity.offset, entity.offset + entity.length, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_messageEntityMentionName) {
                             spannable.setSpan(new URLSpanUserMention("" + ((TL_messageEntityMentionName) entity).user_id, isOutOwner()), entity.offset, entity.offset + entity.length, 33);
                         } else if (entity instanceof TL_inputMessageEntityMentionName) {

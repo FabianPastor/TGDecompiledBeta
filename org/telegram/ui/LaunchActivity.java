@@ -2159,6 +2159,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         SecretPhotoViewer.getInstance().destroyPhotoViewer();
         ArticleViewer.getInstance().destroyArticleViewer();
         StickerPreviewViewer.getInstance().destroy();
+        Theme.destroyResources();
         EmbedBottomSheet embedBottomSheet = EmbedBottomSheet.getInstance();
         if (embedBottomSheet != null) {
             embedBottomSheet.destroy();

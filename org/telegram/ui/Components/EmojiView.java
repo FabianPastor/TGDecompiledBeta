@@ -1891,7 +1891,6 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void addRecentGif(Document document) {
         if (document != null) {
-            StickersQuery.addRecentGif(document, (int) (System.currentTimeMillis() / 1000));
             boolean wasEmpty = this.recentGifs.isEmpty();
             this.recentGifs = StickersQuery.getRecentGifs();
             if (this.gifsAdapter != null) {

@@ -2542,6 +2542,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void addRecentGif(Document searchImage) {
+        StickersQuery.addRecentGif(searchImage, (int) (System.currentTimeMillis() / 1000));
         if (this.emojiView != null) {
             this.emojiView.addRecentGif(searchImage);
         }

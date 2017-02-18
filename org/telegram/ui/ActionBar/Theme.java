@@ -1304,6 +1304,14 @@ public class Theme {
         return stateListDrawable;
     }
 
+    public static Drawable createCircleDrawable(int size, int color) {
+        OvalShape ovalShape = new OvalShape();
+        ovalShape.resize((float) size, (float) size);
+        ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
+        defaultDrawable.getPaint().setColor(color);
+        return defaultDrawable;
+    }
+
     public static Drawable createCircleDrawableWithIcon(int size, int iconRes) {
         OvalShape ovalShape = new OvalShape();
         ovalShape.resize((float) size, (float) size);
@@ -1857,6 +1865,14 @@ public class Theme {
         }
     }
 
+    public static void destroyResources() {
+        for (int a = 0; a < chat_attachButtonDrawables.length; a++) {
+            if (chat_attachButtonDrawables[a] != null) {
+                chat_attachButtonDrawables[a].setCallback(null);
+            }
+        }
+    }
+
     public static void createChatResources(Context context, boolean fontsOnly) {
         synchronized (sync) {
             if (chat_msgTextPaint == null) {
@@ -2405,12 +2421,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

@@ -158,6 +158,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private String currentBotName;
     private String currentItemName;
     private int currentStep;
+    private PaymentFormActivityDelegate delegate;
     private TextDetailSettingsCell[] detailSettingsCell;
     private ArrayList<View> dividers;
     private ActionBarMenuItem doneItem;
@@ -218,6 +219,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         public void onClick(View widget) {
             PaymentFormActivity.this.presentFragment(new TwoStepVerificationActivity(0));
         }
+    }
+
+    private interface PaymentFormActivityDelegate {
+        void didSelectNewCard(String str, String str2, boolean z);
     }
 
     private class TelegramWebviewProxy {
@@ -316,6 +321,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         this.bottomCell = new TextInfoPrivacyCell[2];
         this.detailSettingsCell = new TextDetailSettingsCell[6];
         init(form, message, step, validatedRequestedInfo, shipping, tokenJson, card, request, saveCard);
+    }
+
+    private void setDelegate(PaymentFormActivityDelegate paymentFormActivityDelegate) {
+        this.delegate = paymentFormActivityDelegate;
     }
 
     private void init(TL_payments_paymentForm form, MessageObject message, int step, TL_payments_validatedRequestedInfo validatedRequestedInfo, TL_shippingOption shipping, String tokenJson, String card, TL_payments_validateRequestedInfo request, boolean saveCard) {
@@ -1411,9 +1420,23 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             view.setBackgroundColor(Theme.getColor(Theme.key_divider));
             this.linearLayout2.addView(view, new LayoutParams(-1, 1, 83));
             this.detailSettingsCell[0] = new TextDetailSettingsCell(context);
-            this.detailSettingsCell[0].setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            this.detailSettingsCell[0].setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.detailSettingsCell[0].setTextAndValue(this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
             this.linearLayout2.addView(this.detailSettingsCell[0]);
+            this.detailSettingsCell[0].setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    PaymentFormActivity activity = new PaymentFormActivity(PaymentFormActivity.this.paymentForm, PaymentFormActivity.this.messageObject, 2, PaymentFormActivity.this.requestedInfo, PaymentFormActivity.this.shippingOption, null, PaymentFormActivity.this.cardName, PaymentFormActivity.this.validateRequest, PaymentFormActivity.this.saveCardInfo);
+                    activity.setDelegate(new PaymentFormActivityDelegate() {
+                        public void didSelectNewCard(String tokenJson, String card, boolean saveCard) {
+                            PaymentFormActivity.this.paymentJson = tokenJson;
+                            PaymentFormActivity.this.saveCardInfo = saveCard;
+                            PaymentFormActivity.this.cardName = card;
+                            PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
+                        }
+                    });
+                    PaymentFormActivity.this.presentFragment(activity);
+                }
+            });
             if (this.validateRequest != null) {
                 if (this.validateRequest.info.shipping_address != null) {
                     String address = String.format("%s %s, %s, %s, %s, %s", new Object[]{this.validateRequest.info.shipping_address.street_line1, this.validateRequest.info.shipping_address.street_line2, this.validateRequest.info.shipping_address.city, this.validateRequest.info.shipping_address.state, this.validateRequest.info.shipping_address.country_iso2, this.validateRequest.info.shipping_address.post_code});
@@ -1596,6 +1619,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             }
             presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, nextStep, this.requestedInfo, this.shippingOption, null, this.cardName, this.validateRequest, this.saveCardInfo));
         } else if (this.currentStep == 2) {
+            if (this.delegate != null) {
+                this.delegate.didSelectNewCard(this.paymentJson, this.cardName, this.saveCardInfo);
+                finishFragment();
+                return;
+            }
             presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, 4, this.requestedInfo, this.shippingOption, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo));
         } else if (this.currentStep == 3) {
             if (this.passwordOk) {
@@ -2018,20 +2046,17 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     private void setDonePressed(boolean value) {
-        boolean z;
-        boolean z2 = true;
+        boolean z = true;
         this.donePressed = value;
-        if (value) {
-            z = false;
-        } else {
-            z = true;
-        }
-        this.swipeBackEnabled = z;
+        this.swipeBackEnabled = !value;
         View backButton = this.actionBar.getBackButton();
         if (this.donePressed) {
-            z2 = false;
+            z = false;
         }
-        backButton.setEnabled(z2);
+        backButton.setEnabled(z);
+        if (this.detailSettingsCell[0] != null) {
+            this.detailSettingsCell[0].setEnabled(false);
+        }
     }
 
     private void checkPassword() {
@@ -2296,7 +2321,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextPriceCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
         arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextPriceCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
         arrayList.add(new ThemeDescription(this.linearLayout2, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextPriceCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-        for (a = 0; a < this.detailSettingsCell.length; a++) {
+        arrayList.add(new ThemeDescription(this.detailSettingsCell[0], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_windowBackgroundWhite));
+        arrayList.add(new ThemeDescription(this.detailSettingsCell[0], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_listSelector));
+        arrayList.add(new ThemeDescription(this.detailSettingsCell[0], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_listSelectorSDK21));
+        for (a = 1; a < this.detailSettingsCell.length; a++) {
             arrayList.add(new ThemeDescription(this.detailSettingsCell[a], ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
             arrayList.add(new ThemeDescription(this.detailSettingsCell[a], 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
             arrayList.add(new ThemeDescription(this.detailSettingsCell[a], 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));

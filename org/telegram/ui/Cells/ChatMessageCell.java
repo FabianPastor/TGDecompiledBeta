@@ -19,6 +19,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
@@ -93,6 +94,7 @@ import org.telegram.ui.Components.SeekBarWaveform;
 import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
+import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.PhotoViewer;
 
@@ -225,7 +227,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private boolean pinnedBottom;
     private boolean pinnedTop;
     private int pressedBotButton;
-    private ClickableSpan pressedLink;
+    private CharacterStyle pressedLink;
     private int pressedLinkType;
     private RadialProgress radialProgress;
     private RectF rect = new RectF();
@@ -311,7 +313,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
 
         void didPressedShare(ChatMessageCell chatMessageCell);
 
-        void didPressedUrl(MessageObject messageObject, ClickableSpan clickableSpan, boolean z);
+        void didPressedUrl(MessageObject messageObject, CharacterStyle characterStyle, boolean z);
 
         void didPressedUserAvatar(ChatMessageCell chatMessageCell, User user);
 
@@ -404,7 +406,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     float left = block.textLayout.getLineLeft(line);
                     if (left <= ((float) x) && block.textLayout.getLineWidth(line) + left >= ((float) x)) {
                         Spannable buffer = this.currentMessageObject.messageText;
-                        ClickableSpan[] link = (ClickableSpan[]) buffer.getSpans(off, off, ClickableSpan.class);
+                        CharacterStyle[] link = (CharacterStyle[]) buffer.getSpans(off, off, ClickableSpan.class);
+                        boolean isMono = false;
+                        if (link == null || link.length == 0) {
+                            link = (CharacterStyle[]) buffer.getSpans(off, off, URLSpanMono.class);
+                            isMono = true;
+                        }
                         boolean ignore = false;
                         if (link.length == 0 || !(link.length == 0 || !(link[0] instanceof URLSpanBotCommand) || URLSpanBotCommand.enabled)) {
                             ignore = true;
@@ -417,7 +424,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 resetUrlPaths(false);
                                 try {
                                     TextLayoutBlock nextBlock;
-                                    ClickableSpan[] nextLink;
+                                    CharacterStyle[] nextLink;
                                     Path path = obtainNewUrlPath(false);
                                     int start = buffer.getSpanStart(this.pressedLink) - block.charactersOffset;
                                     int end = buffer.getSpanEnd(this.pressedLink);
@@ -429,7 +436,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         while (a < this.currentMessageObject.textLayoutBlocks.size()) {
                                             nextBlock = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
                                             length = nextBlock.textLayout.getText().length();
-                                            nextLink = (ClickableSpan[]) buffer.getSpans(nextBlock.charactersOffset, nextBlock.charactersOffset, ClickableSpan.class);
+                                            nextLink = (CharacterStyle[]) buffer.getSpans(nextBlock.charactersOffset, nextBlock.charactersOffset, isMono ? URLSpanMono.class : ClickableSpan.class);
                                             if (nextLink != null && nextLink.length != 0 && nextLink[0] == this.pressedLink) {
                                                 path = obtainNewUrlPath(false);
                                                 path.setCurrentLayout(nextBlock.textLayout, 0, (float) nextBlock.height);
@@ -448,7 +455,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         while (a >= 0) {
                                             nextBlock = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
                                             length = nextBlock.textLayout.getText().length();
-                                            nextLink = (ClickableSpan[]) buffer.getSpans((nextBlock.charactersOffset + length) - 1, (nextBlock.charactersOffset + length) - 1, ClickableSpan.class);
+                                            nextLink = (CharacterStyle[]) buffer.getSpans((nextBlock.charactersOffset + length) - 1, (nextBlock.charactersOffset + length) - 1, isMono ? URLSpanMono.class : ClickableSpan.class);
                                             if (nextLink != null && nextLink.length != 0) {
                                                 if (nextLink[0] == this.pressedLink) {
                                                     path = obtainNewUrlPath(false);
@@ -583,8 +590,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             } else if (this.pressedLink != null) {
                 if (this.pressedLink instanceof URLSpan) {
                     Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
-                } else {
-                    this.pressedLink.onClick(this);
+                } else if (this.pressedLink instanceof ClickableSpan) {
+                    ((ClickableSpan) this.pressedLink).onClick(this);
                 }
                 resetPressedLink(2);
             } else {
@@ -687,8 +694,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 } else if (this.pressedLink != null) {
                     if (this.pressedLink instanceof URLSpan) {
                         Browser.openUrl(getContext(), ((URLSpan) this.pressedLink).getURL());
-                    } else {
-                        this.pressedLink.onClick(this);
+                    } else if (this.pressedLink instanceof ClickableSpan) {
+                        ((ClickableSpan) this.pressedLink).onClick(this);
                     }
                     resetPressedLink(2);
                 } else {
@@ -1436,7 +1443,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     protected void onLongPress() {
-        if (this.pressedLink instanceof URLSpanNoUnderline) {
+        if (this.pressedLink instanceof URLSpanMono) {
+            this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, true);
+        } else if (this.pressedLink instanceof URLSpanNoUnderline) {
             if (this.pressedLink.getURL().startsWith("/")) {
                 this.delegate.didPressedUrl(this.currentMessageObject, this.pressedLink, true);
                 return;
@@ -1706,38 +1715,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        int dp;
-        int linkPreviewMaxWidth;
-        String author;
+        int i;
         String description;
         Photo photo;
-        TLObject document;
+        TLObject webDocument;
+        String type;
+        int duration;
         boolean smallImage;
         int additinalWidth;
+        int width;
         Throwable e;
         int restLinesCount;
-        int a;
-        boolean authorIsRTL;
+        int lineLeft;
+        boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
-        ArrayList arrayList;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp2;
+        DocumentAttribute attribute;
         int durationWidth;
         float scale;
+        String fileName;
+        int seconds;
         String str;
         int mWidth;
-        int timeWidthTotal;
         int rows;
         boolean fullWidth;
+        float f;
         int maxButtonWidth;
-        int maxButtonsWidth;
         TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
+        int b;
         ChatMessageCell chatMessageCell;
-        BotButton botButton;
         String key;
         BotButton oldButton;
         CharSequence buttonText;
@@ -1748,10 +1756,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int i;
-            int width;
-            float f;
-            int b;
+            int dp;
+            int a;
+            int timeWidthTotal;
+            int maxButtonsWidth;
+            BotButton botButton;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1821,9 +1830,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             boolean z;
-            DocumentAttribute attribute;
             boolean photoExist;
-            String fileName;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1880,16 +1887,18 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    TLObject webDocument;
-                    String type;
-                    int duration;
+                    String author;
+                    TLObject document;
                     int height;
                     int restLines;
-                    int lineLeft;
-                    boolean hasRTL;
-                    int seconds;
+                    boolean authorIsRTL;
+                    ArrayList arrayList;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

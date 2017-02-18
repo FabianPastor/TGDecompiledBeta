@@ -515,10 +515,10 @@ class zzasu extends zzats {
 
     @WorkerThread
     public String zzKG() {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -932,7 +932,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     protected long zzU(String str, String str2) {
-        long zza;
         Object e;
         zzac.zzdv(str);
         zzac.zzdv(str2);
@@ -940,6 +939,7 @@ class zzasu extends zzats {
         zznA();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1615,12 +1615,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public byte[] zzfA(String str) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
-        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {

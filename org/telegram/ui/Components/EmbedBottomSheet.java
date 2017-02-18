@@ -225,7 +225,9 @@ public class EmbedBottomSheet extends BottomSheet {
                 EmbedBottomSheet.this.videoView.setVisibility(4);
                 EmbedBottomSheet.this.videoView.getControlsView().setVisibility(4);
                 EmbedBottomSheet.this.videoView.getTextureView().setVisibility(4);
-                EmbedBottomSheet.this.videoView.getTextureImageView().setVisibility(4);
+                if (EmbedBottomSheet.this.videoView.getTextureImageView() != null) {
+                    EmbedBottomSheet.this.videoView.getTextureImageView().setVisibility(4);
+                }
                 EmbedBottomSheet.this.videoView.loadVideo(null, null, null, false);
                 HashMap<String, String> args = new HashMap();
                 args.put("Referer", "http://youtube.com");
@@ -559,7 +561,9 @@ public class EmbedBottomSheet extends BottomSheet {
                 EmbedBottomSheet.this.videoView.setVisibility(4);
                 EmbedBottomSheet.this.videoView.getControlsView().setVisibility(4);
                 EmbedBottomSheet.this.videoView.getTextureView().setVisibility(4);
-                EmbedBottomSheet.this.videoView.getTextureImageView().setVisibility(4);
+                if (EmbedBottomSheet.this.videoView.getTextureImageView() != null) {
+                    EmbedBottomSheet.this.videoView.getTextureImageView().setVisibility(4);
+                }
                 EmbedBottomSheet.this.videoView.loadVideo(null, null, null, false);
                 HashMap<String, String> args = new HashMap();
                 args.put("Referer", "http://youtube.com");

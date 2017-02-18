@@ -501,15 +501,22 @@ public class ThemeEditorView {
                 }
 
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    int width = MeasureSpec.getSize(widthMeasureSpec);
                     int height = MeasureSpec.getSize(heightMeasureSpec);
                     if (VERSION.SDK_INT >= 21) {
                         height -= AndroidUtilities.statusBarHeight;
                     }
-                    int contentSize = (((AndroidUtilities.dp(48.0f) * (EditorAlert.this.listAdapter.getItemCount() + 1)) + EditorAlert.this.listAdapter.getItemCount()) - 1) + EditorAlert.backgroundPaddingTop;
-                    int padding = (height - ((height / 5) * 3)) + AndroidUtilities.dp(8.0f);
+                    int padding = height - Math.min(width, height);
                     if (EditorAlert.this.listView.getPaddingTop() != padding) {
                         this.ignoreLayout = true;
+                        int previousPadding = EditorAlert.this.listView.getPaddingTop();
                         EditorAlert.this.listView.setPadding(0, padding, 0, AndroidUtilities.dp(48.0f));
+                        if (EditorAlert.this.colorPicker.getVisibility() == 0) {
+                            EditorAlert.this.scrollOffsetY = EditorAlert.this.listView.getPaddingTop();
+                            EditorAlert.this.listView.setTopGlowOffset(EditorAlert.this.scrollOffsetY);
+                            EditorAlert.this.colorPicker.setTranslationY((float) EditorAlert.this.scrollOffsetY);
+                            EditorAlert.this.previousScrollPosition = 0;
+                        }
                         this.ignoreLayout = false;
                     }
                     super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, NUM));
@@ -575,7 +582,7 @@ public class ThemeEditorView {
             });
             this.colorPicker = new ColorPicker(context);
             this.colorPicker.setVisibility(8);
-            this.containerView.addView(this.colorPicker, LayoutHelper.createFrame(-1, -1.0f));
+            this.containerView.addView(this.colorPicker, LayoutHelper.createFrame(-1, -1, 1));
             this.shadow = new View(context);
             this.shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
             this.containerView.addView(this.shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
@@ -683,7 +690,7 @@ public class ThemeEditorView {
                 r1[1] = ObjectAnimator.ofFloat(this.bottomLayout, "alpha", new float[]{1.0f});
                 r1[2] = ObjectAnimator.ofFloat(this.listView, "alpha", new float[]{0.0f});
                 r1[3] = ObjectAnimator.ofFloat(this.bottomSaveLayout, "alpha", new float[]{0.0f});
-                r1[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{(this.listView.getPaddingTop() - backgroundPaddingTop) - AndroidUtilities.dp(8.0f)});
+                r1[4] = ObjectAnimator.ofInt(this, "scrollOffsetY", new int[]{this.listView.getPaddingTop()});
                 animatorSet.playTogether(r1);
                 animatorSet.setDuration(150);
                 animatorSet.setInterpolator(ThemeEditorView.this.decelerateInterpolator);

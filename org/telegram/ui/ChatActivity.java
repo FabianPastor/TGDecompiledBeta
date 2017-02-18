@@ -38,6 +38,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.SparseArray;
@@ -254,6 +255,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
+import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
@@ -719,9 +721,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         return (ChatActivity.this.actionBar == null || ChatActivity.this.actionBar.isActionModeShowed()) ? false : true;
                     }
 
-                    public void didPressedUrl(MessageObject messageObject, ClickableSpan url, boolean longPress) {
+                    public void didPressedUrl(MessageObject messageObject, CharacterStyle url, boolean longPress) {
                         if (url != null) {
-                            if (url instanceof URLSpanUserMention) {
+                            if (url instanceof URLSpanMono) {
+                                ((URLSpanMono) url).copyToClipboard();
+                                Toast.makeText(ChatActivity.this.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), 0).show();
+                            } else if (url instanceof URLSpanUserMention) {
                                 User user = MessagesController.getInstance().getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
                                 if (user != null) {
                                     MessagesController.openChatOrProfileWith(user, null, ChatActivity.this, 0, false);
@@ -783,8 +788,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         }
                                     }
                                     Browser.openUrl(ChatActivity.this.getParentActivity(), urlFinal, ChatActivity.this.inlineReturn == 0);
-                                } else {
-                                    url.onClick(ChatActivity.this.fragmentView);
+                                } else if (url instanceof ClickableSpan) {
+                                    ((ClickableSpan) url).onClick(ChatActivity.this.fragmentView);
                                 }
                             }
                         }
@@ -1458,6 +1463,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
         if (this.mentionsAdapter != null) {
             this.mentionsAdapter.onDestroy();
+        }
+        if (this.chatAttachAlert != null) {
+            this.chatAttachAlert.dismissInternal();
         }
         MessagesController.getInstance().setLastCreatedDialogId(this.dialog_id, false);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagesDidLoaded);
@@ -2976,7 +2984,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         this.pagedownButtonImage.setScaleType(ScaleType.CENTER);
         this.pagedownButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonIcon), Mode.MULTIPLY));
         this.pagedownButtonImage.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(Theme.key_chat_goDownButton), Theme.getColor(Theme.key_chat_goDownButton));
+        Drawable drawable = Theme.createCircleDrawable(AndroidUtilities.dp(42.0f), Theme.getColor(Theme.key_chat_goDownButton));
         Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.pagedown_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonShadow), Mode.MULTIPLY));
         Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
@@ -6993,7 +7001,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 for (a = 0; a < count; a++) {
                     view = this.mentionListView.getChildAt(a);
                     if (view instanceof ContextLinkCell) {
-                        ContextLinkCell cell = (ContextLinkCell) view;
+                        cell = (ContextLinkCell) view;
                         messageObject = cell.getMessageObject();
                         if (messageObject != null && (messageObject.isVoice() || messageObject.isMusic())) {
                             cell.updateButtonState(false);
@@ -7127,12 +7135,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         } else if (id == NotificationCenter.audioDidStarted) {
             sendSecretMessageRead((MessageObject) args[0]);
             if (this.chatListView != null) {
+                MessageObject messageObject1;
                 count = this.chatListView.getChildCount();
                 for (a = 0; a < count; a++) {
                     view = this.chatListView.getChildAt(a);
                     if (view instanceof ChatMessageCell) {
                         cell = (ChatMessageCell) view;
-                        MessageObject messageObject1 = cell.getMessageObject();
+                        messageObject1 = cell.getMessageObject();
+                        if (messageObject1 != null && (messageObject1.isVoice() || messageObject1.isMusic())) {
+                            cell.updateButtonState(false);
+                        }
+                    }
+                }
+                count = this.mentionListView.getChildCount();
+                for (a = 0; a < count; a++) {
+                    view = this.mentionListView.getChildAt(a);
+                    if (view instanceof ContextLinkCell) {
+                        cell = (ContextLinkCell) view;
+                        messageObject1 = cell.getMessageObject();
                         if (messageObject1 != null && (messageObject1.isVoice() || messageObject1.isMusic())) {
                             cell.updateButtonState(false);
                         }

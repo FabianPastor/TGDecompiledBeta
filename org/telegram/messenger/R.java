@@ -1918,6 +1918,7 @@ public final class R {
         public static final int TerminateAllSessions = NUM;
         public static final int TerminateSessionInfo = NUM;
         public static final int TerminateSessionQuestion = NUM;
+        public static final int TextCopied = NUM;
         public static final int TextSize = NUM;
         public static final int Theme = NUM;
         public static final int ThemePreview = NUM;
