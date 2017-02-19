@@ -83,6 +83,7 @@ public class ThemeDescription {
     private String[] listClassesFieldName;
     private Paint[] paintToUpdate;
     private int previousColor;
+    private boolean[] previousIsDefault;
     private View viewToInvalidate;
 
     public interface ThemeDescriptionDelegate {
@@ -90,6 +91,7 @@ public class ThemeDescription {
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key, Object unused) {
+        this.previousIsDefault = new boolean[1];
         this.currentKey = key;
         this.paintToUpdate = paint;
         this.drawablesToUpdate = drawables;
@@ -100,6 +102,7 @@ public class ThemeDescription {
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, Paint paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
+        this.previousIsDefault = new boolean[1];
         this.currentKey = key;
         if (paint != null) {
             this.paintToUpdate = new Paint[]{paint};
@@ -112,6 +115,7 @@ public class ThemeDescription {
     }
 
     public ThemeDescription(View view, int flags, Class[] classes, String[] classesFields, Paint[] paint, Drawable[] drawables, ThemeDescriptionDelegate themeDescriptionDelegate, String key) {
+        this.previousIsDefault = new boolean[1];
         this.currentKey = key;
         this.paintToUpdate = paint;
         this.drawablesToUpdate = drawables;
@@ -123,9 +127,10 @@ public class ThemeDescription {
         this.cachedFields = new HashMap();
     }
 
-    public void setColor(int color) {
+    public void setColor(int color, boolean useDefault) {
         int a;
-        Theme.setColor(this.currentKey, color);
+        Drawable drawable;
+        Theme.setColor(this.currentKey, color, useDefault);
         if (this.paintToUpdate != null) {
             a = 0;
             while (a < this.paintToUpdate.length) {
@@ -159,7 +164,7 @@ public class ThemeDescription {
                 this.viewToInvalidate.setBackgroundColor(color);
             }
             if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
-                Drawable drawable = this.viewToInvalidate.getBackground();
+                drawable = this.viewToInvalidate.getBackground();
                 if (drawable instanceof CombinedDrawable) {
                     if ((this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0) {
                         drawable = ((CombinedDrawable) drawable).getBackground();
@@ -169,13 +174,7 @@ public class ThemeDescription {
                 }
                 if (drawable != null) {
                     if ((drawable instanceof StateListDrawable) || (VERSION.SDK_INT >= 21 && (drawable instanceof RippleDrawable))) {
-                        boolean z;
-                        if ((this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0) {
-                            z = true;
-                        } else {
-                            z = false;
-                        }
-                        Theme.setSelectorDrawableColor(drawable, color, z);
+                        Theme.setSelectorDrawableColor(drawable, color, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
                     } else {
                         drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
                     }
@@ -259,9 +258,16 @@ public class ThemeDescription {
                 background.setColorFilter(Theme.colorFilter);
             }
         }
-        if ((this.changeFlags & FLAG_IMAGECOLOR) != 0) {
+        if ((this.changeFlags & FLAG_IMAGECOLOR) != 0 && ((this.changeFlags & FLAG_CHECKTAG) == 0 || ((this.changeFlags & FLAG_CHECKTAG) != 0 && this.currentKey.equals(this.viewToInvalidate.getTag())))) {
             if (this.viewToInvalidate instanceof ImageView) {
-                ((ImageView) this.viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+                if ((this.changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0) {
+                    drawable = ((ImageView) this.viewToInvalidate).getDrawable();
+                    if ((drawable instanceof StateListDrawable) || (VERSION.SDK_INT >= 21 && (drawable instanceof RippleDrawable))) {
+                        Theme.setSelectorDrawableColor(drawable, color, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                    }
+                } else {
+                    ((ImageView) this.viewToInvalidate).setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+                }
             } else if (this.viewToInvalidate instanceof BackupImageView) {
             }
         }
@@ -500,7 +506,7 @@ public class ThemeDescription {
     }
 
     public void startEditing() {
-        int color = Theme.getColor(this.currentKey);
+        int color = Theme.getColor(this.currentKey, this.previousIsDefault);
         this.previousColor = color;
         this.currentColor = color;
     }
@@ -514,17 +520,11 @@ public class ThemeDescription {
     }
 
     public void setDefaultColor() {
-        setColor(Theme.getDefaultColor(this.currentKey));
+        setColor(Theme.getDefaultColor(this.currentKey), true);
     }
 
     public void setPreviousColor() {
-        setColor(this.previousColor);
-    }
-
-    public void endEditing() {
-        if (this.currentColor != this.previousColor) {
-            Theme.setColor(this.currentKey, this.currentColor);
-        }
+        setColor(this.previousColor, this.previousIsDefault[0]);
     }
 
     public String getTitle() {

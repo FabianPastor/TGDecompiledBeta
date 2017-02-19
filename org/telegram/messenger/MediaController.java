@@ -2749,6 +2749,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static void saveFile(String fullPath, Context context, int type, String name, String mime) {
         Throwable e;
+        final ProgressDialog finalProgress;
+        final int i;
+        final String str;
+        final String str2;
         if (fullPath != null) {
             File file = null;
             if (!(fullPath == null || fullPath.length() == 0)) {
@@ -2761,10 +2765,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 final File sourceFile = file;
                 final boolean[] cancelled = new boolean[1];
                 if (sourceFile.exists()) {
-                    final ProgressDialog finalProgress;
-                    final int i;
-                    final String str;
-                    final String str2;
                     ProgressDialog progressDialog = null;
                     if (context != null) {
                         try {
@@ -3793,6 +3793,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* Code decompiled incorrectly, please refer to instructions dump. */
     @TargetApi(16)
     private boolean convertVideo(MessageObject messageObject) {
+        long videoStartTime;
         Throwable e;
         Throwable th;
         String videoPath = messageObject.videoEditedInfo.originalPath;
@@ -3838,7 +3839,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
         if (file.canRead() && isPreviousOk) {
             this.videoConvertFirstWrite = true;
             boolean error = false;
-            long videoStartTime = startTime;
+            long videoStartTime2 = startTime;
             long time = System.currentTimeMillis();
             if (resultWidth == 0 || resultHeight == 0) {
                 preferences.edit().putBoolean("isPreviousOk", true).commit();
@@ -3847,7 +3848,6 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
             }
             MP4Builder mP4Builder = null;
             MediaExtractor extractor = null;
-            long videoStartTime2;
             try {
                 BufferInfo info = new BufferInfo();
                 Mp4Movie movie = new Mp4Movie();
@@ -3863,9 +3863,9 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                     if (resultWidth == originalWidth && resultHeight == originalHeight && rotateRender == 0) {
                         videoTime = readAndWriteTrack(messageObject, extractor2, mP4Builder, info, startTime, endTime, file, false);
                         if (videoTime != -1) {
-                            videoStartTime2 = videoTime;
+                            videoStartTime = videoTime;
                         }
-                        videoStartTime2 = videoStartTime;
+                        videoStartTime = videoStartTime2;
                     } else {
                         int videoIndex = selectTrack(extractor2, false);
                         if (videoIndex >= 0) {
@@ -3966,7 +3966,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     inputSurface = inputSurface2;
                                     FileLog.e(e);
                                     error = true;
-                                    videoStartTime2 = videoStartTime;
+                                    videoStartTime = videoStartTime2;
                                     extractor2.unselectTrack(videoIndex);
                                     if (outputSurface != null) {
                                         outputSurface.release();
@@ -3983,7 +3983,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                         encoder.release();
                                     }
                                     checkConversionCanceled();
-                                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                                    readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                                     if (extractor2 != null) {
                                         extractor2.release();
                                     }
@@ -4002,7 +4002,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 } catch (Throwable th2) {
                                     th = th2;
                                     extractor = extractor2;
-                                    videoStartTime2 = videoStartTime;
+                                    videoStartTime = videoStartTime2;
                                 }
                             }
                             try {
@@ -4192,16 +4192,16 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                     }
                                 }
                                 if (videoTime != -1) {
-                                    videoStartTime2 = videoTime;
+                                    videoStartTime = videoTime;
                                 } else {
-                                    videoStartTime2 = videoStartTime;
+                                    videoStartTime = videoStartTime2;
                                 }
                             } catch (Exception e4) {
                                 e3 = e4;
                             } catch (Throwable th22) {
                                 th = th22;
                                 extractor = extractor2;
-                                videoStartTime2 = videoStartTime;
+                                videoStartTime = videoStartTime2;
                             }
                             try {
                                 extractor2.unselectTrack(videoIndex);
@@ -4268,10 +4268,10 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                                 throw th;
                             }
                         }
-                        videoStartTime2 = videoStartTime;
+                        videoStartTime = videoStartTime2;
                     }
                     if (!(error || bitrate == -1)) {
-                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime2, endTime, file, true);
+                        readAndWriteTrack(messageObject, extractor2, mP4Builder, info, videoStartTime, endTime, file, true);
                     }
                     if (extractor2 != null) {
                         extractor2.release();
@@ -4284,7 +4284,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 } catch (Exception e6) {
                     e322 = e6;
                     extractor = extractor2;
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                     error = true;
                     FileLog.e(e322);
                     if (extractor != null) {
@@ -4300,11 +4300,11 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 } catch (Throwable th222) {
                     th = th222;
                     extractor = extractor2;
-                    videoStartTime2 = videoStartTime;
+                    videoStartTime = videoStartTime2;
                 }
             } catch (Exception e7) {
                 e322 = e7;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
                 error = true;
                 FileLog.e(e322);
                 if (extractor != null) {
@@ -4319,7 +4319,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 return true;
             } catch (Throwable th5) {
                 th = th5;
-                videoStartTime2 = videoStartTime;
+                videoStartTime = videoStartTime2;
                 if (extractor != null) {
                     extractor.release();
                 }

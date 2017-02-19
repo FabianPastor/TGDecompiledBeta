@@ -188,6 +188,10 @@ public class ChatAvatarContainer extends FrameLayout {
         this.titleTextView.setText(value);
     }
 
+    public ImageView getTimeItem() {
+        return this.timeItem;
+    }
+
     public SimpleTextView getTitleTextView() {
         return this.titleTextView;
     }

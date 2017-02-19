@@ -499,6 +499,8 @@ public class Theme {
     public static final String key_chat_searchPanelText = "chat_searchPanelText";
     public static final String key_chat_secretChatStatusText = "chat_secretChatStatusText";
     public static final String key_chat_secretTimeText = "chat_secretTimeText";
+    public static final String key_chat_secretTimerBackground = "chat_secretTimerBackground";
+    public static final String key_chat_secretTimerText = "chat_secretTimerText";
     public static final String key_chat_selectedBackground = "chat_selectedBackground";
     public static final String key_chat_sentError = "chat_sentError";
     public static final String key_chat_sentErrorIcon = "chat_sentErrorIcon";
@@ -627,8 +629,20 @@ public class Theme {
     public static final String key_picker_badgeText = "picker_badgeText";
     public static final String key_picker_disabledButton = "picker_disabledButton";
     public static final String key_picker_enabledButton = "picker_enabledButton";
+    public static final String key_player_actionBar = "player_actionBar";
+    public static final String key_player_actionBarItems = "player_actionBarItems";
+    public static final String key_player_actionBarSelector = "player_actionBarSelector";
+    public static final String key_player_actionBarSubtitle = "player_actionBarSubtitle";
+    public static final String key_player_actionBarTitle = "player_actionBarTitle";
+    public static final String key_player_actionBarTop = "player_actionBarTop";
     public static final String key_player_button = "player_button";
     public static final String key_player_buttonActive = "player_buttonActive";
+    public static final String key_player_duration = "player_duration";
+    public static final String key_player_placeholder = "player_placeholder";
+    public static final String key_player_progress = "player_progress";
+    public static final String key_player_progressBackground = "player_progressBackground";
+    public static final String key_player_seekBarBackground = "player_seekBarBackground";
+    public static final String key_player_time = "player_time";
     public static final String key_profile_actionBackground = "profile_actionBackground";
     public static final String key_profile_actionIcon = "profile_actionIcon";
     public static final String key_profile_actionPressedBackground = "profile_actionPressedBackground";
@@ -1149,6 +1163,8 @@ public class Theme {
         defaultColors.put(key_chat_mediaLoaderPhotoSelected, Integer.valueOf(ACTION_BAR_PHOTO_VIEWER_COLOR));
         defaultColors.put(key_chat_mediaLoaderPhotoIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_mediaLoaderPhotoIconSelected, Integer.valueOf(-2500135));
+        defaultColors.put(key_chat_secretTimerBackground, Integer.valueOf(-868326258));
+        defaultColors.put(key_chat_secretTimerText, Integer.valueOf(-1));
         defaultColors.put(key_profile_creatorIcon, Integer.valueOf(-11888682));
         defaultColors.put(key_profile_adminIcon, Integer.valueOf(-8026747));
         defaultColors.put(key_profile_actionIcon, Integer.valueOf(-9211021));
@@ -1157,6 +1173,18 @@ public class Theme {
         defaultColors.put(key_profile_verifiedBackground, Integer.valueOf(-5056776));
         defaultColors.put(key_profile_verifiedCheck, Integer.valueOf(-11959368));
         defaultColors.put(key_profile_title, Integer.valueOf(-1));
+        defaultColors.put(key_player_actionBar, Integer.valueOf(-1));
+        defaultColors.put(key_player_actionBarSelector, Integer.valueOf(ACTION_BAR_AUDIO_SELECTOR_COLOR));
+        defaultColors.put(key_player_actionBarTitle, Integer.valueOf(-14606047));
+        defaultColors.put(key_player_actionBarTop, Integer.valueOf(-NUM));
+        defaultColors.put(key_player_actionBarSubtitle, Integer.valueOf(-7697782));
+        defaultColors.put(key_player_actionBarItems, Integer.valueOf(-7697782));
+        defaultColors.put(key_player_seekBarBackground, Integer.valueOf(-436207617));
+        defaultColors.put(key_player_time, Integer.valueOf(-15095832));
+        defaultColors.put(key_player_duration, Integer.valueOf(-7697782));
+        defaultColors.put(key_player_progressBackground, Integer.valueOf(419430400));
+        defaultColors.put(key_player_progress, Integer.valueOf(-14438417));
+        defaultColors.put(key_player_placeholder, Integer.valueOf(-2500135));
         defaultColors.put(key_player_button, Integer.valueOf(-7697782));
         defaultColors.put(key_player_buttonActive, Integer.valueOf(-14438417));
         defaultColors.put(key_files_folderIcon, Integer.valueOf(JOIN_SHEET_COUNT_TEXT_COLOR));
@@ -2276,10 +2304,25 @@ public class Theme {
         return currentColors.containsKey(key);
     }
 
+    public static Integer getColorOrNull(String key) {
+        Integer color = (Integer) currentColors.get(key);
+        if (color == null) {
+            return (Integer) defaultColors.get(key);
+        }
+        return color;
+    }
+
     public static int getColor(String key) {
+        return getColor(key, null);
+    }
+
+    public static int getColor(String key, boolean[] isDefault) {
         Integer color = (Integer) currentColors.get(key);
         if (color != null) {
             return color.intValue();
+        }
+        if (isDefault != null) {
+            isDefault[0] = true;
         }
         if (key.equals(key_chat_serviceBackground)) {
             return serviceMessageColor;
@@ -2290,11 +2333,11 @@ public class Theme {
         return getDefaultColor(key);
     }
 
-    public static void setColor(String key, int color) {
+    public static void setColor(String key, int color, boolean useDefault) {
         if (key.equals(key_chat_wallpaper)) {
             color |= -16777216;
         }
-        if (Integer.valueOf(getDefaultColor(key)).intValue() == color) {
+        if (useDefault) {
             currentColors.remove(key);
         } else {
             currentColors.put(key, Integer.valueOf(color));
@@ -2424,9 +2467,9 @@ public class Theme {
                     int i;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

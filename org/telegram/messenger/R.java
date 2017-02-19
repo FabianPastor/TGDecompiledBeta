@@ -220,8 +220,6 @@ public final class R {
         public static final int hd_on = NUM;
         public static final int header_shadow = NUM;
         public static final int header_shadow_reverse = NUM;
-        public static final int header_timer = NUM;
-        public static final int header_timer2 = NUM;
         public static final int hockeyapp_btn_background = NUM;
         public static final int ic_ab_attach = NUM;
         public static final int ic_ab_back = NUM;

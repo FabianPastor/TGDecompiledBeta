@@ -79,7 +79,7 @@ public class VoIPHelper {
     }
 
     private static void doInitiateCall(User user, Activity activity) {
-        if (activity != null) {
+        if (activity != null && user != null) {
             Intent intent = new Intent(activity, VoIPService.class);
             intent.putExtra("user_id", user.id);
             intent.putExtra("is_outgoing", true);

@@ -203,7 +203,7 @@ public class ThemeEditorView {
                                 }
                                 ColorPicker.this.setColor(currentColor);
                                 for (int a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
-                                    ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(ColorPicker.this.getColor());
+                                    ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(ColorPicker.this.getColor(), false);
                                 }
                                 EditorAlert.this.ignoreTextChange = false;
                             }
@@ -367,7 +367,7 @@ public class ThemeEditorView {
                             startColorChange(true);
                             int color = getColor();
                             for (a = 0; a < ThemeEditorView.this.currentThemeDesription.size(); a++) {
-                                ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(color);
+                                ((ThemeDescription) ThemeEditorView.this.currentThemeDesription.get(a)).setColor(color, false);
                             }
                             int red = Color.red(color);
                             int green = Color.green(color);

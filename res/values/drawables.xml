@@ -491,14 +491,6 @@
     <drawable name="header_shadow_reverse">res/drawable-hdpi-v4/header_shadow_reverse.png</drawable>
     <drawable name="header_shadow_reverse">res/drawable-xhdpi-v4/header_shadow_reverse.png</drawable>
     <drawable name="header_shadow_reverse">res/drawable-xxhdpi-v4/header_shadow_reverse.png</drawable>
-    <drawable name="header_timer">res/drawable-mdpi-v4/header_timer.png</drawable>
-    <drawable name="header_timer">res/drawable-hdpi-v4/header_timer.png</drawable>
-    <drawable name="header_timer">res/drawable-xhdpi-v4/header_timer.png</drawable>
-    <drawable name="header_timer">res/drawable-xxhdpi-v4/header_timer.png</drawable>
-    <drawable name="header_timer2">res/drawable-mdpi-v4/header_timer2.png</drawable>
-    <drawable name="header_timer2">res/drawable-hdpi-v4/header_timer2.png</drawable>
-    <drawable name="header_timer2">res/drawable-xhdpi-v4/header_timer2.png</drawable>
-    <drawable name="header_timer2">res/drawable-xxhdpi-v4/header_timer2.png</drawable>
     <drawable name="hockeyapp_btn_background">res/drawable/hockeyapp_btn_background.xml</drawable>
     <drawable name="ic_ab_attach">res/drawable-mdpi-v4/ic_ab_attach.png</drawable>
     <drawable name="ic_ab_attach">res/drawable-hdpi-v4/ic_ab_attach.png</drawable>

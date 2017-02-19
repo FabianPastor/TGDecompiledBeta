@@ -114,11 +114,11 @@ public class DrawerProfileCell extends FrameLayout {
         if (Theme.hasThemeKey(Theme.key_chats_menuTopShadow)) {
             color = Theme.getColor(Theme.key_chats_menuTopShadow);
         } else {
-            color = Theme.getServiceMessageColor();
+            color = Theme.getServiceMessageColor() | -16777216;
         }
         if (this.currentColor != color) {
             this.currentColor = color;
-            this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(-16777216 | color, Mode.MULTIPLY));
+            this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));
         if (!Theme.isCustomTheme() || backgroundDrawable == null) {
