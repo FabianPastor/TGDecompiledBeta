@@ -242,7 +242,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         try {
             this.controller = new VoIPController();
             this.controller.setConnectionStateListener(this);
-            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0), 40);
+            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0), 60);
             this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
             this.cpuWakelock.acquire();
             IntentFilter filter = new IntentFilter();

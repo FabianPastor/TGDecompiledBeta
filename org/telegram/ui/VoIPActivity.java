@@ -31,7 +31,6 @@ import android.text.style.CharacterStyle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -44,6 +43,7 @@ import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
@@ -147,14 +147,15 @@ public class VoIPActivity extends Activity implements StateListener {
         }
         setVolumeControlStream(0);
         this.nameText.setOnClickListener(new OnClickListener() {
+            private int tapCount = 0;
+
             public void onClick(View v) {
-                VoIPActivity.this.showDebugAlert();
-            }
-        });
-        this.nameText.setOnLongClickListener(new OnLongClickListener() {
-            public boolean onLongClick(View v) {
-                VoIPActivity.this.showDebugCtlAlert();
-                return true;
+                if (BuildVars.DEBUG_VERSION || this.tapCount == 9) {
+                    VoIPActivity.this.showDebugAlert();
+                    this.tapCount = 0;
+                    return;
+                }
+                this.tapCount++;
             }
         });
         this.endBtn.setOnClickListener(new OnClickListener() {
@@ -312,7 +313,7 @@ public class VoIPActivity extends Activity implements StateListener {
         Drawable drawable;
         FrameLayout frameLayout = new FrameLayout(this);
         frameLayout.setBackgroundColor(0);
-        View anonymousClass10 = new BackupImageView(this) {
+        View anonymousClass9 = new BackupImageView(this) {
             private Drawable bottomGradient = getResources().getDrawable(R.drawable.gradient_bottom);
             private Paint paint = new Paint();
             private Drawable topGradient = getResources().getDrawable(R.drawable.gradient_top);
@@ -329,8 +330,8 @@ public class VoIPActivity extends Activity implements StateListener {
                 this.bottomGradient.draw(canvas);
             }
         };
-        this.photoView = anonymousClass10;
-        frameLayout.addView(anonymousClass10);
+        this.photoView = anonymousClass9;
+        frameLayout.addView(anonymousClass9);
         TextView branding = new TextView(this);
         branding.setTextColor(-855638017);
         branding.setText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
@@ -351,55 +352,55 @@ public class VoIPActivity extends Activity implements StateListener {
         branding.setCompoundDrawablePadding(AndroidUtilities.dp(5.0f));
         branding.setTextSize(1, 14.0f);
         frameLayout.addView(branding, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 18.0f, 18.0f, 0.0f));
-        anonymousClass10 = new TextView(this);
-        anonymousClass10.setSingleLine();
-        anonymousClass10.setTextColor(-1);
-        anonymousClass10.setTextSize(1, 40.0f);
-        anonymousClass10.setEllipsize(TruncateAt.END);
-        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
-        anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        anonymousClass10.setTypeface(Typeface.create("sans-serif-light", 0));
-        this.nameText = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 43.0f, 18.0f, 0.0f));
-        anonymousClass10 = new TextView(this);
-        anonymousClass10.setTextColor(-855638017);
-        anonymousClass10.setSingleLine();
-        anonymousClass10.setEllipsize(TruncateAt.END);
-        anonymousClass10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        anonymousClass10.setTextSize(1, 15.0f);
-        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.stateText = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
-        this.durationText = anonymousClass10;
-        anonymousClass10 = new TextView(this);
-        anonymousClass10.setTextColor(-855638017);
-        anonymousClass10.setSingleLine();
-        anonymousClass10.setEllipsize(TruncateAt.END);
-        anonymousClass10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        anonymousClass10.setTextSize(1, 15.0f);
-        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
-        anonymousClass10.setVisibility(8);
-        this.stateText2 = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        anonymousClass9 = new TextView(this);
+        anonymousClass9.setSingleLine();
+        anonymousClass9.setTextColor(-1);
+        anonymousClass9.setTextSize(1, 40.0f);
+        anonymousClass9.setEllipsize(TruncateAt.END);
+        anonymousClass9.setGravity(LocaleController.isRTL ? 5 : 3);
+        anonymousClass9.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass9.setTypeface(Typeface.create("sans-serif-light", 0));
+        this.nameText = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 43.0f, 18.0f, 0.0f));
+        anonymousClass9 = new TextView(this);
+        anonymousClass9.setTextColor(-855638017);
+        anonymousClass9.setSingleLine();
+        anonymousClass9.setEllipsize(TruncateAt.END);
+        anonymousClass9.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        anonymousClass9.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass9.setTextSize(1, 15.0f);
+        anonymousClass9.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.stateText = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
+        this.durationText = anonymousClass9;
+        anonymousClass9 = new TextView(this);
+        anonymousClass9.setTextColor(-855638017);
+        anonymousClass9.setSingleLine();
+        anonymousClass9.setEllipsize(TruncateAt.END);
+        anonymousClass9.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        anonymousClass9.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        anonymousClass9.setTextSize(1, 15.0f);
+        anonymousClass9.setGravity(LocaleController.isRTL ? 5 : 3);
+        anonymousClass9.setVisibility(8);
+        this.stateText2 = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
         this.ellSpans = new TextAlphaSpan[]{new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
-        anonymousClass10 = new CheckableImageView(this);
-        anonymousClass10.setBackgroundResource(R.drawable.bg_voip_icon_btn);
+        anonymousClass9 = new CheckableImageView(this);
+        anonymousClass9.setBackgroundResource(R.drawable.bg_voip_icon_btn);
         Drawable micIcon = getResources().getDrawable(R.drawable.ic_mic_off_white_24dp).mutate();
         micIcon.setAlpha(204);
-        anonymousClass10.setImageDrawable(micIcon);
-        anonymousClass10.setScaleType(ScaleType.CENTER);
-        this.micToggle = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(38, 38.0f, 83, 16.0f, 0.0f, 0.0f, 10.0f));
-        anonymousClass10 = new CheckableImageView(this);
-        anonymousClass10.setBackgroundResource(R.drawable.bg_voip_icon_btn);
+        anonymousClass9.setImageDrawable(micIcon);
+        anonymousClass9.setScaleType(ScaleType.CENTER);
+        this.micToggle = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(38, 38.0f, 83, 16.0f, 0.0f, 0.0f, 10.0f));
+        anonymousClass9 = new CheckableImageView(this);
+        anonymousClass9.setBackgroundResource(R.drawable.bg_voip_icon_btn);
         Drawable speakerIcon = getResources().getDrawable(R.drawable.ic_volume_up_white_24dp).mutate();
         speakerIcon.setAlpha(204);
-        anonymousClass10.setImageDrawable(speakerIcon);
-        anonymousClass10.setScaleType(ScaleType.CENTER);
-        this.spkToggle = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(38, 38.0f, 85, 0.0f, 0.0f, 16.0f, 10.0f));
+        anonymousClass9.setImageDrawable(speakerIcon);
+        anonymousClass9.setScaleType(ScaleType.CENTER);
+        this.spkToggle = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(38, 38.0f, 85, 0.0f, 0.0f, 16.0f, 10.0f));
         ImageView chat = new ImageView(this);
         Drawable chatIcon = getResources().getDrawable(R.drawable.ic_chat_bubble_white_24dp).mutate();
         chatIcon.setAlpha(204);
@@ -407,18 +408,18 @@ public class VoIPActivity extends Activity implements StateListener {
         chat.setScaleType(ScaleType.CENTER);
         this.chatBtn = chat;
         frameLayout.addView(chat, LayoutHelper.createFrame(38, 38.0f, 81, 0.0f, 0.0f, 0.0f, 10.0f));
-        anonymousClass10 = new LinearLayout(this);
-        anonymousClass10.setOrientation(0);
+        anonymousClass9 = new LinearLayout(this);
+        anonymousClass9.setOrientation(0);
         CallSwipeView acceptSwipe = new CallSwipeView(this);
         acceptSwipe.setColor(-12207027);
         this.acceptSwipe = acceptSwipe;
-        anonymousClass10.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, 4, 4, -35, 4));
-        anonymousClass10 = new CallSwipeView(this);
-        anonymousClass10.setColor(-1696188);
-        this.declineSwipe = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
-        this.swipeViewsWrap = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
+        anonymousClass9.addView(acceptSwipe, LayoutHelper.createLinear(-1, 70, 1.0f, 4, 4, -35, 4));
+        anonymousClass9 = new CallSwipeView(this);
+        anonymousClass9.setColor(-1696188);
+        this.declineSwipe = anonymousClass9;
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, 70, 1.0f, -35, 4, 4, 4));
+        this.swipeViewsWrap = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(-1, -2.0f, 80, 20.0f, 0.0f, 20.0f, 68.0f));
         ImageView acceptBtn = new ImageView(this);
         FabBackgroundDrawable acceptBtnBg = new FabBackgroundDrawable();
         acceptBtnBg.setColor(-12207027);
@@ -431,42 +432,42 @@ public class VoIPActivity extends Activity implements StateListener {
         acceptBtn.setImageMatrix(matrix);
         this.acceptBtn = acceptBtn;
         frameLayout.addView(acceptBtn, LayoutHelper.createFrame(78, 78.0f, 83, 20.0f, 0.0f, 0.0f, 68.0f));
-        anonymousClass10 = new ImageView(this);
+        anonymousClass9 = new ImageView(this);
         Drawable rejectBtnBg = new FabBackgroundDrawable();
         rejectBtnBg.setColor(-1696188);
-        anonymousClass10.setBackgroundDrawable(rejectBtnBg);
-        anonymousClass10.setImageResource(R.drawable.ic_call_end_white_36dp);
-        anonymousClass10.setScaleType(ScaleType.CENTER);
-        this.declineBtn = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
+        anonymousClass9.setBackgroundDrawable(rejectBtnBg);
+        anonymousClass9.setImageResource(R.drawable.ic_call_end_white_36dp);
+        anonymousClass9.setScaleType(ScaleType.CENTER);
+        this.declineBtn = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(78, 78.0f, 85, 0.0f, 0.0f, 20.0f, 68.0f));
         acceptSwipe.setViewToDrag(acceptBtn, false);
-        anonymousClass10.setViewToDrag(anonymousClass10, true);
-        anonymousClass10 = new FrameLayout(this);
+        anonymousClass9.setViewToDrag(anonymousClass9, true);
+        anonymousClass9 = new FrameLayout(this);
         FabBackgroundDrawable endBtnBg = new FabBackgroundDrawable();
         endBtnBg.setColor(-1696188);
         this.endBtnBg = endBtnBg;
-        anonymousClass10.setBackgroundDrawable(endBtnBg);
-        anonymousClass10 = new ImageView(this);
-        anonymousClass10.setImageResource(R.drawable.ic_call_end_white_36dp);
-        anonymousClass10.setScaleType(ScaleType.CENTER);
-        this.endBtnIcon = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createFrame(70, 70.0f));
-        anonymousClass10.setForeground(getResources().getDrawable(R.drawable.fab_highlight_dark));
-        this.endBtn = anonymousClass10;
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
-        anonymousClass10 = new FrameLayout(this);
+        anonymousClass9.setBackgroundDrawable(endBtnBg);
+        anonymousClass9 = new ImageView(this);
+        anonymousClass9.setImageResource(R.drawable.ic_call_end_white_36dp);
+        anonymousClass9.setScaleType(ScaleType.CENTER);
+        this.endBtnIcon = anonymousClass9;
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createFrame(70, 70.0f));
+        anonymousClass9.setForeground(getResources().getDrawable(R.drawable.fab_highlight_dark));
+        this.endBtn = anonymousClass9;
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(78, 78.0f, 81, 0.0f, 0.0f, 0.0f, 68.0f));
+        anonymousClass9 = new FrameLayout(this);
         this.keyButton = new ImageView(this);
         this.keyButton.setScaleType(ScaleType.CENTER);
         this.keyButton.setAlpha(204);
         this.keyButton.setBackgroundResource(R.drawable.bar_selector_white);
         this.keyButton.setImageResource(R.drawable.ic_vpn_key_white_24dp);
-        anonymousClass10.setBackgroundColor(0);
-        anonymousClass10.addView(this.keyButton);
-        anonymousClass10.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-        frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(56, 56.0f, 53, 0.0f, -4.0f, -4.0f, 0.0f));
-        anonymousClass10 = new LinearLayout(this);
-        anonymousClass10.setBackgroundColor(-452984832);
-        anonymousClass10.setOrientation(1);
+        anonymousClass9.setBackgroundColor(0);
+        anonymousClass9.addView(this.keyButton);
+        anonymousClass9.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
+        frameLayout.addView(anonymousClass9, LayoutHelper.createFrame(56, 56.0f, 53, 0.0f, -4.0f, -4.0f, 0.0f));
+        anonymousClass9 = new LinearLayout(this);
+        anonymousClass9.setBackgroundColor(-452984832);
+        anonymousClass9.setOrientation(1);
         ActionBar bar = new ActionBar(this);
         bar.setTitle(LocaleController.getString("EncryptionKey", R.string.EncryptionKey));
         bar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -478,21 +479,21 @@ public class VoIPActivity extends Activity implements StateListener {
                 }
             }
         });
-        anonymousClass10.addView(bar, new LayoutParams(-1, ActionBar.getCurrentActionBarHeight()));
-        anonymousClass10 = new ImageView(this);
-        anonymousClass10.setScaleType(ScaleType.FIT_XY);
-        this.keyImage = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, 1.0f, 20, 20, 20, 20));
-        anonymousClass10 = new TextView(this);
-        anonymousClass10.setTextSize(1, 16.0f);
-        anonymousClass10.setTextColor(-1);
-        anonymousClass10.setGravity(17);
-        this.keyText = anonymousClass10;
-        anonymousClass10.addView(anonymousClass10, LayoutHelper.createLinear(-1, -1, 1.0f, 10, 10, 10, 10));
-        anonymousClass10.setVisibility(8);
-        anonymousClass10.setAlpha(0.0f);
-        this.keyOverlay = anonymousClass10;
-        frameLayout.addView(anonymousClass10);
+        anonymousClass9.addView(bar, new LayoutParams(-1, ActionBar.getCurrentActionBarHeight()));
+        anonymousClass9 = new ImageView(this);
+        anonymousClass9.setScaleType(ScaleType.FIT_XY);
+        this.keyImage = anonymousClass9;
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, -1, 1.0f, 20, 20, 20, 20));
+        anonymousClass9 = new TextView(this);
+        anonymousClass9.setTextSize(1, 16.0f);
+        anonymousClass9.setTextColor(-1);
+        anonymousClass9.setGravity(17);
+        this.keyText = anonymousClass9;
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, -1, 1.0f, 10, 10, 10, 10));
+        anonymousClass9.setVisibility(8);
+        anonymousClass9.setAlpha(0.0f);
+        this.keyOverlay = anonymousClass9;
+        frameLayout.addView(anonymousClass9);
         int ellMaxAlpha = this.stateText.getPaint().getAlpha();
         this.ellAnimator = new AnimatorSet();
         AnimatorSet animatorSet = this.ellAnimator;
@@ -686,13 +687,13 @@ public class VoIPActivity extends Activity implements StateListener {
                 if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null && VoIPActivity.this.callState == 3) {
                     CharSequence format;
                     long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                    TextView access$2100 = VoIPActivity.this.durationText;
+                    TextView access$2000 = VoIPActivity.this.durationText;
                     if (duration > 3600) {
                         format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
                     } else {
                         format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                     }
-                    access$2100.setText(format);
+                    access$2000.setText(format);
                     VoIPActivity.this.durationText.postDelayed(this, 500);
                 }
             }

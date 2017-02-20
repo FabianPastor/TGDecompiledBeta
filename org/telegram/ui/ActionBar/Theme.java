@@ -1253,10 +1253,10 @@ public class Theme {
         themes.add(themeInfo);
         themesDict.put("Dark", themeInfo);
         themeInfo = new ThemeInfo();
-        themeInfo.name = "BlueBubbles";
+        themeInfo.name = "Blue";
         themeInfo.assetName = "bluebubbles.attheme";
         themes.add(themeInfo);
-        themesDict.put("BlueBubbles", themeInfo);
+        themesDict.put("Blue", themeInfo);
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
         String themesString = preferences.getString("themes2", null);
         int a;
@@ -1494,7 +1494,7 @@ public class Theme {
 
     public static ThemeInfo applyThemeFile(File file, String themeName, boolean temporary) {
         try {
-            if (themeName.equals("Default") || themeName.equals("Dark")) {
+            if (themeName.equals("Default") || themeName.equals("Dark") || themeName.equals("Blue")) {
                 return null;
             }
             File finalFile = new File(ApplicationLoader.getFilesDirFixed(), themeName);
@@ -2520,9 +2520,9 @@ public class Theme {
                     int i;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

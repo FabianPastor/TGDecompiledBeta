@@ -1715,44 +1715,38 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        boolean z;
-        int i;
         int dp;
-        int linkPreviewMaxWidth;
+        String author;
         String description;
         TLObject webDocument;
+        TLObject document;
         String type;
         int duration;
         boolean smallImage;
-        int additinalWidth;
-        int height;
         int width;
         Throwable e;
+        int a;
         int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
-        int textWidth;
-        int maxPhotoWidth;
         ArrayList arrayList;
         DocumentAttribute attribute;
-        PhotoSize photoSize;
-        PhotoSize photoSize2;
-        int dp2;
-        int durationWidth;
         float scale;
         String fileName;
         int seconds;
+        String str;
         int mWidth;
-        int timeWidthTotal;
         int rows;
         boolean fullWidth;
         float f;
+        int maxButtonWidth;
         int maxButtonsWidth;
         TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
+        BotButton botButton;
         String key;
         BotButton oldButton;
         CharSequence buttonText;
@@ -1763,9 +1757,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int a;
-            int maxButtonWidth;
-            BotButton botButton;
+            int i;
+            int timeWidthTotal;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1834,8 +1827,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            boolean z;
+            int maxPhotoWidth;
             boolean photoExist;
-            String str;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1892,13 +1886,19 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    String author;
                     Photo photo;
-                    TLObject document;
+                    int additinalWidth;
+                    int height;
                     int restLines;
                     int restLinesCount;
+                    int textWidth;
+                    PhotoSize photoSize;
+                    PhotoSize photoSize2;
+                    int dp2;
+                    int durationWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
