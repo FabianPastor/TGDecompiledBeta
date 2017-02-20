@@ -13,11 +13,11 @@ public class zzt {
     private static final int zzaHa = Process.myPid();
 
     static String zzdk(int i) {
-        Closeable bufferedReader;
+        ThreadPolicy allowThreadDiskReads;
         Throwable th;
         String str = null;
         if (i > 0) {
-            ThreadPolicy allowThreadDiskReads;
+            Closeable bufferedReader;
             try {
                 allowThreadDiskReads = StrictMode.allowThreadDiskReads();
                 bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));

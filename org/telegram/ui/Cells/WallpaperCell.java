@@ -38,12 +38,12 @@ public class WallpaperCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(102.0f), NUM));
     }
 
-    public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper) {
+    public void setWallpaper(WallPaper wallpaper, int selectedBackground, Drawable themedWallpaper, boolean themed) {
         int i = 0;
         if (wallpaper == null) {
             this.imageView.setVisibility(4);
             this.imageView2.setVisibility(0);
-            if (themedWallpaper != null) {
+            if (themed) {
                 this.selectionView.setVisibility(selectedBackground == -2 ? 0 : 4);
                 this.imageView2.setImageDrawable(themedWallpaper);
                 this.imageView2.setScaleType(ScaleType.CENTER_CROP);

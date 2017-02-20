@@ -978,21 +978,21 @@ public class ImageLoader {
     }
 
     private boolean canMoveFiles(File from, File to, int type) {
-        File srcFile;
         Throwable e;
         Throwable th;
         RandomAccessFile file = null;
-        File srcFile2 = null;
+        File srcFile = null;
         File dstFile = null;
+        File srcFile2;
         if (type == 0) {
             try {
-                srcFile = new File(from, "000000000_999999_temp.jpg");
+                srcFile2 = new File(from, "000000000_999999_temp.jpg");
                 try {
                     dstFile = new File(to, "000000000_999999.jpg");
-                    srcFile2 = srcFile;
+                    srcFile = srcFile2;
                 } catch (Exception e2) {
                     e = e2;
-                    srcFile2 = srcFile;
+                    srcFile = srcFile2;
                     try {
                         FileLog.e(e);
                         if (file != null) {
@@ -1024,27 +1024,27 @@ public class ImageLoader {
                 return false;
             }
         } else if (type == 3) {
-            srcFile = new File(from, "000000000_999999_temp.doc");
+            srcFile2 = new File(from, "000000000_999999_temp.doc");
             dstFile = new File(to, "000000000_999999.doc");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         } else if (type == 1) {
-            srcFile = new File(from, "000000000_999999_temp.ogg");
+            srcFile2 = new File(from, "000000000_999999_temp.ogg");
             dstFile = new File(to, "000000000_999999.ogg");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         } else if (type == 2) {
-            srcFile = new File(from, "000000000_999999_temp.mp4");
+            srcFile2 = new File(from, "000000000_999999_temp.mp4");
             dstFile = new File(to, "000000000_999999.mp4");
-            srcFile2 = srcFile;
+            srcFile = srcFile2;
         }
         byte[] buffer = new byte[1024];
-        srcFile2.createNewFile();
-        RandomAccessFile file2 = new RandomAccessFile(srcFile2, "rws");
+        srcFile.createNewFile();
+        RandomAccessFile file2 = new RandomAccessFile(srcFile, "rws");
         try {
             file2.write(buffer);
             file2.close();
             file = null;
-            boolean canRename = srcFile2.renameTo(dstFile);
-            srcFile2.delete();
+            boolean canRename = srcFile.renameTo(dstFile);
+            srcFile.delete();
             dstFile.delete();
             if (!canRename) {
                 if (file != null) {
@@ -1714,6 +1714,7 @@ public class ImageLoader {
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Bitmap loadBitmap(String path, Uri uri, float maxWidth, float maxHeight, boolean useMaxScale) {
+        Throwable e;
         Bitmap b;
         Bitmap newBitmap;
         Options bmOptions = new Options();
@@ -1725,8 +1726,7 @@ public class ImageLoader {
             } else {
                 try {
                     path = AndroidUtilities.getPath(uri);
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
             }

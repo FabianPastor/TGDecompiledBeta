@@ -35,6 +35,7 @@ import android.util.StateSet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -725,6 +726,7 @@ public class Theme {
     private static final Object wallpaperSync = new Object();
 
     public static class ThemeInfo {
+        public String assetName;
         public String name;
         public String pathToFile;
 
@@ -1245,6 +1247,16 @@ public class Theme {
         currentTheme = themeInfo;
         arrayList.add(themeInfo);
         themesDict.put("Default", defaultTheme);
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "Dark";
+        themeInfo.assetName = "dark.attheme";
+        themes.add(themeInfo);
+        themesDict.put("Dark", themeInfo);
+        themeInfo = new ThemeInfo();
+        themeInfo.name = "BlueBubbles";
+        themeInfo.assetName = "bluebubbles.attheme";
+        themes.add(themeInfo);
+        themesDict.put("BlueBubbles", themeInfo);
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
         String themesString = preferences.getString("themes2", null);
         int a;
@@ -1469,10 +1481,10 @@ public class Theme {
     private static void sortThemes() {
         Collections.sort(themes, new Comparator<ThemeInfo>() {
             public int compare(ThemeInfo o1, ThemeInfo o2) {
-                if (o1.pathToFile == null) {
+                if (o1.pathToFile == null && o1.assetName == null) {
                     return -1;
                 }
-                if (o2.pathToFile == null) {
+                if (o2.pathToFile == null && o2.assetName == null) {
                     return 1;
                 }
                 return o1.name.compareTo(o2.name);
@@ -1482,7 +1494,7 @@ public class Theme {
 
     public static ThemeInfo applyThemeFile(File file, String themeName, boolean temporary) {
         try {
-            if (themeName.equals("Default")) {
+            if (themeName.equals("Default") || themeName.equals("Dark")) {
                 return null;
             }
             File finalFile = new File(ApplicationLoader.getFilesDirFixed(), themeName);
@@ -1526,15 +1538,7 @@ public class Theme {
             }
             try {
                 Editor editor;
-                if (themeInfo.pathToFile != null) {
-                    if (save) {
-                        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
-                        editor.putString("theme", themeInfo.name);
-                        editor.remove("overrideThemeWallpaper");
-                        editor.commit();
-                    }
-                    currentColors = getThemeFileValues(new File(themeInfo.pathToFile));
-                } else {
+                if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                     if (save) {
                         editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                         editor.remove("theme");
@@ -1544,6 +1548,18 @@ public class Theme {
                     currentColors.clear();
                     wallpaper = null;
                     themedWallpaper = null;
+                } else {
+                    if (save) {
+                        editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
+                        editor.putString("theme", themeInfo.name);
+                        editor.remove("overrideThemeWallpaper");
+                        editor.commit();
+                    }
+                    if (themeInfo.assetName != null) {
+                        currentColors = getThemeFileValues(null, themeInfo.assetName);
+                    } else {
+                        currentColors = getThemeFileValues(new File(themeInfo.pathToFile), null);
+                    }
                 }
                 currentTheme = themeInfo;
                 reloadWallpaper();
@@ -1693,7 +1709,40 @@ public class Theme {
         }
     }
 
-    private static HashMap<String, Integer> getThemeFileValues(File file) {
+    public static File getAssetFile(String assetName) {
+        File file = new File(ApplicationLoader.getFilesDirFixed(), assetName);
+        if (!file.exists()) {
+            InputStream in = null;
+            try {
+                in = ApplicationLoader.applicationContext.getAssets().open(assetName);
+                AndroidUtilities.copyFile(in, file);
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (Exception e) {
+                    }
+                }
+            } catch (Throwable e2) {
+                FileLog.e(e2);
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (Exception e3) {
+                    }
+                }
+            } catch (Throwable th) {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (Exception e4) {
+                    }
+                }
+            }
+        }
+        return file;
+    }
+
+    private static HashMap<String, Integer> getThemeFileValues(File file, String assetName) {
         Throwable e;
         Throwable th;
         FileInputStream stream = null;
@@ -1701,6 +1750,9 @@ public class Theme {
         try {
             byte[] bytes = new byte[1024];
             int currentPosition = 0;
+            if (assetName != null) {
+                file = getAssetFile(assetName);
+            }
             FileInputStream fileInputStream = new FileInputStream(file);
             boolean finished = false;
             try {
@@ -2476,10 +2528,16 @@ public class Theme {
                             if (backgroundColor != null) {
                                 Theme.wallpaper = new ColorDrawable(backgroundColor.intValue());
                                 Theme.isCustomTheme = true;
-                            } else if (Theme.themedWallpaperFileOffset > 0 && Theme.currentTheme.pathToFile != null) {
+                            } else if (Theme.themedWallpaperFileOffset > 0 && !(Theme.currentTheme.pathToFile == null && Theme.currentTheme.assetName == null)) {
                                 FileInputStream stream = null;
                                 try {
-                                    FileInputStream stream2 = new FileInputStream(new File(Theme.currentTheme.pathToFile));
+                                    File file;
+                                    if (Theme.currentTheme.assetName != null) {
+                                        file = Theme.getAssetFile(Theme.currentTheme.assetName);
+                                    } else {
+                                        file = new File(Theme.currentTheme.pathToFile);
+                                    }
+                                    FileInputStream stream2 = new FileInputStream(file);
                                     try {
                                         stream2.getChannel().position((long) Theme.themedWallpaperFileOffset);
                                         Bitmap bitmap = BitmapFactory.decodeStream(stream2);
@@ -2587,10 +2645,16 @@ public class Theme {
         if (backgroundColor != null) {
             return new ColorDrawable(backgroundColor.intValue());
         }
-        if (themedWallpaperFileOffset > 0 && currentTheme.pathToFile != null) {
+        if (themedWallpaperFileOffset > 0 && !(currentTheme.pathToFile == null && currentTheme.assetName == null)) {
             FileInputStream stream = null;
             try {
-                FileInputStream stream2 = new FileInputStream(new File(currentTheme.pathToFile));
+                File file;
+                if (currentTheme.assetName != null) {
+                    file = getAssetFile(currentTheme.assetName);
+                } else {
+                    file = new File(currentTheme.pathToFile);
+                }
+                FileInputStream stream2 = new FileInputStream(file);
                 try {
                     stream2.getChannel().position((long) themedWallpaperFileOffset);
                     Options opts = new Options();

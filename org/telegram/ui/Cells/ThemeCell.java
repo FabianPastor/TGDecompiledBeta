@@ -111,11 +111,17 @@ public class ThemeCell extends FrameLayout {
         this.needDivider = divider;
         this.checkImage.setVisibility(themeInfo == Theme.getCurrentTheme() ? 0 : 4);
         boolean finished = false;
-        if (themeInfo.pathToFile != null) {
+        if (!(themeInfo.pathToFile == null && themeInfo.assetName == null)) {
             FileInputStream fileInputStream = null;
             int currentPosition = 0;
             try {
-                FileInputStream fileInputStream2 = new FileInputStream(new File(themeInfo.pathToFile));
+                File file;
+                if (themeInfo.assetName != null) {
+                    file = Theme.getAssetFile(themeInfo.assetName);
+                } else {
+                    file = new File(themeInfo.pathToFile);
+                }
+                FileInputStream fileInputStream2 = new FileInputStream(file);
                 int linesRead = 0;
                 do {
                     try {

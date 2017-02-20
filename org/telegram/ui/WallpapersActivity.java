@@ -115,7 +115,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 } else {
                     access$000 = -2;
                 }
-                wallpaperCell.setWallpaper(null, access$000, null);
+                wallpaperCell.setWallpaper(null, access$000, null, false);
                 return;
             }
             if (!Theme.hasWallpaperFromTheme()) {
@@ -124,7 +124,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
                 if (WallpapersActivity.this.overrideThemeWallpaper) {
                     i2 = -1;
                 }
-                wallpaperCell.setWallpaper(null, i2, WallpapersActivity.this.themedWallpaper);
+                wallpaperCell.setWallpaper(null, i2, WallpapersActivity.this.themedWallpaper, true);
                 return;
             } else {
                 i -= 2;
@@ -133,7 +133,7 @@ public class WallpapersActivity extends BaseFragment implements NotificationCent
             if (!Theme.hasWallpaperFromTheme() || WallpapersActivity.this.overrideThemeWallpaper) {
                 i2 = WallpapersActivity.this.selectedBackground;
             }
-            wallpaperCell.setWallpaper(wallPaper, i2, null);
+            wallpaperCell.setWallpaper(wallPaper, i2, null, false);
         }
     }
 
