@@ -1298,6 +1298,7 @@
     <string name="TerminateAllSessions">سجل الخروج من كافة الأجهزة الأخرى</string>
     <string name="TerminateSessionInfo">اضغط على الجهاز لتسجيل الخروج منه.</string>
     <string name="TerminateSessionQuestion">هل ترغب في تسجيل الخروج من هذا الجهاز؟</string>
+    <string name="TextCopied">تم نسخ النص للحافظة</string>
     <string name="TextSize">حجم نص الرسائل</string>
     <string name="Theme">نمط</string>
     <string name="ThemePreview">معاينة النمط</string>

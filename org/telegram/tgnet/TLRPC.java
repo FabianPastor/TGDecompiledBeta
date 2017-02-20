@@ -2082,6 +2082,7 @@ public class TLRPC {
         public String provider;
         public int receipt_msg_id;
         public boolean shipping_address_requested;
+        public String start_param;
         public boolean test;
         public String title;
         public long total_amount;
@@ -2093,6 +2094,9 @@ public class TLRPC {
         public static MessageMedia TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             MessageMedia result = null;
             switch (constructor) {
+                case -2074799289:
+                    result = new TL_messageMediaInvoice();
+                    break;
                 case -1618676578:
                     result = new TL_messageMediaUnsupported();
                     break;
@@ -2113,9 +2117,6 @@ public class TLRPC {
                     break;
                 case -38694904:
                     result = new TL_messageMediaGame();
-                    break;
-                case 668593981:
-                    result = new TL_messageMediaInvoice();
                     break;
                 case 694364726:
                     result = new TL_messageMediaUnsupported_old();
@@ -9790,18 +9791,19 @@ public class TLRPC {
     }
 
     public static class TL_payments_paymentForm extends TLObject {
-        public static int constructor = -NUM;
+        public static int constructor = NUM;
         public int bot_id;
         public boolean can_save_credentials;
         public int flags;
         public TL_invoice invoice;
+        public TL_dataJSON native_params;
+        public String native_provider;
         public boolean password_missing;
         public int provider_id;
         public TL_paymentSavedCredentialsCard saved_credentials;
         public TL_paymentRequestedInfo saved_info;
         public String url;
         public ArrayList<User> users = new ArrayList();
-        public boolean webview_only;
 
         public static TL_payments_paymentForm TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             if (constructor == constructor) {
@@ -9830,16 +9832,16 @@ public class TLRPC {
                 z = false;
             }
             this.password_missing = z;
-            if ((this.flags & 16) != 0) {
-                z = true;
-            } else {
-                z = false;
-            }
-            this.webview_only = z;
             this.bot_id = stream.readInt32(exception);
             this.invoice = TL_invoice.TLdeserialize(stream, stream.readInt32(exception), exception);
             this.provider_id = stream.readInt32(exception);
             this.url = stream.readString(exception);
+            if ((this.flags & 16) != 0) {
+                this.native_provider = stream.readString(exception);
+            }
+            if ((this.flags & 16) != 0) {
+                this.native_params = TL_dataJSON.TLdeserialize(stream, stream.readInt32(exception), exception);
+            }
             if ((this.flags & 1) != 0) {
                 this.saved_info = TL_paymentRequestedInfo.TLdeserialize(stream, stream.readInt32(exception), exception);
             }
@@ -9867,11 +9869,10 @@ public class TLRPC {
             int i;
             stream.writeInt32(constructor);
             this.flags = this.can_save_credentials ? this.flags | 4 : this.flags & -5;
-            this.flags = this.password_missing ? this.flags | 8 : this.flags & -9;
-            if (this.webview_only) {
-                i = this.flags | 16;
+            if (this.password_missing) {
+                i = this.flags | 8;
             } else {
-                i = this.flags & -17;
+                i = this.flags & -9;
             }
             this.flags = i;
             stream.writeInt32(this.flags);
@@ -9879,6 +9880,12 @@ public class TLRPC {
             this.invoice.serializeToStream(stream);
             stream.writeInt32(this.provider_id);
             stream.writeString(this.url);
+            if ((this.flags & 16) != 0) {
+                stream.writeString(this.native_provider);
+            }
+            if ((this.flags & 16) != 0) {
+                this.native_params.serializeToStream(stream);
+            }
             if ((this.flags & 1) != 0) {
                 this.saved_info.serializeToStream(stream);
             }
@@ -17681,7 +17688,7 @@ public class TLRPC {
     }
 
     public static class TL_messageMediaInvoice extends MessageMedia {
-        public static int constructor = 668593981;
+        public static int constructor = -NUM;
         public TL_webDocument photo;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
@@ -17702,6 +17709,7 @@ public class TLRPC {
             }
             this.currency = stream.readString(exception);
             this.total_amount = stream.readInt64(exception);
+            this.start_param = stream.readString(exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -17719,6 +17727,7 @@ public class TLRPC {
             }
             stream.writeString(this.currency);
             stream.writeInt64(this.total_amount);
+            stream.writeString(this.start_param);
         }
     }
 

@@ -309,6 +309,7 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private View createContentView() {
+        Drawable drawable;
         FrameLayout frameLayout = new FrameLayout(this);
         frameLayout.setBackgroundColor(0);
         View anonymousClass10 = new BackupImageView(this) {
@@ -336,8 +337,17 @@ public class VoIPActivity extends Activity implements StateListener {
         Drawable logo = getResources().getDrawable(R.drawable.notification).mutate();
         logo.setAlpha(204);
         logo.setBounds(0, 0, AndroidUtilities.dp(15.0f), AndroidUtilities.dp(15.0f));
-        branding.setCompoundDrawables(logo, null, null, null);
+        if (LocaleController.isRTL) {
+            drawable = null;
+        } else {
+            drawable = logo;
+        }
+        if (!LocaleController.isRTL) {
+            logo = null;
+        }
+        branding.setCompoundDrawables(drawable, null, logo, null);
         branding.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        branding.setGravity(LocaleController.isRTL ? 5 : 3);
         branding.setCompoundDrawablePadding(AndroidUtilities.dp(5.0f));
         branding.setTextSize(1, 14.0f);
         frameLayout.addView(branding, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 18.0f, 18.0f, 0.0f));
@@ -346,6 +356,7 @@ public class VoIPActivity extends Activity implements StateListener {
         anonymousClass10.setTextColor(-1);
         anonymousClass10.setTextSize(1, 40.0f);
         anonymousClass10.setEllipsize(TruncateAt.END);
+        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
         anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         anonymousClass10.setTypeface(Typeface.create("sans-serif-light", 0));
         this.nameText = anonymousClass10;
@@ -357,6 +368,7 @@ public class VoIPActivity extends Activity implements StateListener {
         anonymousClass10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         anonymousClass10.setTextSize(1, 15.0f);
+        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
         this.stateText = anonymousClass10;
         frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
         this.durationText = anonymousClass10;
@@ -367,6 +379,7 @@ public class VoIPActivity extends Activity implements StateListener {
         anonymousClass10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         anonymousClass10.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         anonymousClass10.setTextSize(1, 15.0f);
+        anonymousClass10.setGravity(LocaleController.isRTL ? 5 : 3);
         anonymousClass10.setVisibility(8);
         this.stateText2 = anonymousClass10;
         frameLayout.addView(anonymousClass10, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 98.0f, 18.0f, 0.0f));
@@ -895,9 +908,9 @@ public class VoIPActivity extends Activity implements StateListener {
             }
             this.stateText2.setText(newText);
             this.stateText2.setVisibility(0);
-            this.stateText.setPivotX(0.0f);
+            this.stateText.setPivotX(LocaleController.isRTL ? (float) this.stateText.getWidth() : 0.0f);
             this.stateText.setPivotY((float) (this.stateText.getHeight() / 2));
-            this.stateText2.setPivotX(0.0f);
+            this.stateText2.setPivotX(LocaleController.isRTL ? (float) this.stateText.getWidth() : 0.0f);
             this.stateText2.setPivotY((float) (this.stateText.getHeight() / 2));
             this.durationText = this.stateText2;
             AnimatorSet set = new AnimatorSet();

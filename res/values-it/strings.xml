@@ -490,7 +490,7 @@
     <string name="EnterListName">Inserisci il nome della lista</string>
     <string name="EnterNewFirstPasscode">Inserisci un codice</string>
     <string name="EnterNewPasscode">Inserisci il nuovo codice</string>
-    <string name="EnterThemeName">Inserisci il nome dell tema</string>
+    <string name="EnterThemeName">Inserisci il nome del tema</string>
     <string name="EnterYourPasscode">Inserisci il tuo codice</string>
     <string name="ErrorOccurred">Si è verificato un errore.</string>
     <string name="Events">Eventi</string>
@@ -1298,6 +1298,7 @@
     <string name="TerminateAllSessions">Termina le altre sessioni</string>
     <string name="TerminateSessionInfo">Premi su una sessione per terminarla.</string>
     <string name="TerminateSessionQuestion">Terminare questa sessione?</string>
+    <string name="TextCopied">Testo copiato negli appunti</string>
     <string name="TextSize">Dimensione testo messaggi</string>
     <string name="Theme">Tema</string>
     <string name="ThemePreview">Anteprima tema</string>

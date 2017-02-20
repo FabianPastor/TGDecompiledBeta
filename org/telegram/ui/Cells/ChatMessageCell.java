@@ -1714,32 +1714,25 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        boolean z;
         int i;
         int dp;
-        String author;
         String description;
-        Photo photo;
         TLObject webDocument;
         int duration;
-        int height;
+        boolean smallImage;
         int width;
         Throwable e;
-        int restLinesCount;
-        int a;
-        boolean authorIsRTL;
+        int lineLeft;
         boolean hasRTL;
-        int maxPhotoWidth;
-        ArrayList arrayList;
+        int textWidth;
         DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
+        int durationWidth;
         float scale;
         String fileName;
         int seconds;
-        String str;
         int mWidth;
         int timeWidthTotal;
         int rows;
@@ -1749,6 +1742,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int maxButtonsWidth;
         TL_keyboardButtonRow row;
         int buttonsCount;
+        int buttonWidth;
         int b;
         ChatMessageCell chatMessageCell;
         BotButton botButton;
@@ -1762,7 +1756,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int buttonWidth;
+            int a;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1831,7 +1825,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
+            boolean z;
+            int maxPhotoWidth;
             boolean photoExist;
+            String str;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1891,14 +1889,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     int linkPreviewMaxWidth;
                     String site_name;
                     String title;
+                    String author;
+                    Photo photo;
                     TLObject document;
                     String type;
-                    boolean smallImage;
                     int additinalWidth;
+                    int height;
                     int restLines;
-                    int lineLeft;
-                    int textWidth;
-                    int durationWidth;
+                    int restLinesCount;
+                    boolean authorIsRTL;
+                    ArrayList arrayList;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -6685,7 +6685,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (messageObject.type == 13 || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
+        if (messageObject.type == 13) {
             return false;
         }
         if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_id != 0 && !messageObject.isOut()) {
@@ -6700,7 +6700,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 return true;
             }
             if (!messageObject.isOut()) {
-                if (messageObject.messageOwner.media instanceof TL_messageMediaGame) {
+                if ((messageObject.messageOwner.media instanceof TL_messageMediaGame) || (messageObject.messageOwner.media instanceof TL_messageMediaInvoice)) {
                     return true;
                 }
                 if (messageObject.isMegagroup()) {

@@ -118,6 +118,8 @@ import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_disabledFeature;
 import org.telegram.tgnet.TLRPC.TL_draftMessage;
 import org.telegram.tgnet.TLRPC.TL_encryptedChat;
+import org.telegram.tgnet.TLRPC.TL_encryptedChatRequested;
+import org.telegram.tgnet.TLRPC.TL_encryptedChatWaiting;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_help_appChangelog;
 import org.telegram.tgnet.TLRPC.TL_help_getAppChangelog;
@@ -933,10 +935,15 @@ public class MessagesController implements NotificationCenterDelegate {
         return (EncryptedChat) this.encryptedChats.get(id);
     }
 
-    public EncryptedChat getEncryptedChatDB(int chat_id) {
+    public EncryptedChat getEncryptedChatDB(int chat_id, boolean created) {
         EncryptedChat chat = (EncryptedChat) this.encryptedChats.get(Integer.valueOf(chat_id));
-        if (chat != null && chat.auth_key != null) {
-            return chat;
+        if (chat != null) {
+            if (!created) {
+                return chat;
+            }
+            if (!((chat instanceof TL_encryptedChatWaiting) || (chat instanceof TL_encryptedChatRequested))) {
+                return chat;
+            }
         }
         Semaphore semaphore = new Semaphore(0);
         ArrayList<TLObject> result = new ArrayList();
@@ -2031,8 +2038,8 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        NativeByteBuffer data;
         Throwable e;
+        final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2059,10 +2066,10 @@ public class MessagesController implements NotificationCenterDelegate {
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
             long newTaskId;
+            NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req;
-                final int i;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3319,7 +3326,6 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 int a;
                 Chat chat;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3363,6 +3369,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -6996,7 +7003,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
             } else if (update instanceof TL_updateEncryptedChatTyping) {
-                EncryptedChat encryptedChat = getEncryptedChatDB(update.chat_id);
+                EncryptedChat encryptedChat = getEncryptedChatDB(update.chat_id, true);
                 if (encryptedChat != null) {
                     update.user_id = encryptedChat.user_id;
                     uid = ((long) update.chat_id) << 32;

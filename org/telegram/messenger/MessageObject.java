@@ -1249,7 +1249,7 @@ public class MessageObject {
                     }
                 }
             }
-            boolean needShare = this.messageOwner.from_id > 0 && !((this.messageOwner.to_id.channel_id == 0 && this.messageOwner.to_id.chat_id == 0 && !(this.messageOwner.media instanceof TL_messageMediaGame)) || isOut());
+            boolean needShare = this.messageOwner.from_id > 0 && ((this.messageOwner.to_id.channel_id != 0 || this.messageOwner.to_id.chat_id != 0 || (this.messageOwner.media instanceof TL_messageMediaGame) || (this.messageOwner.media instanceof TL_messageMediaInvoice)) && !isOut());
             this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
             int maxWidth = this.generatedWithMinSize - AndroidUtilities.dp(needShare ? 122.0f : 80.0f);
             if ((fromUser != null && fromUser.bot) || ((isMegagroup() || !(this.messageOwner.fwd_from == null || this.messageOwner.fwd_from.channel_id == 0)) && !isOut())) {

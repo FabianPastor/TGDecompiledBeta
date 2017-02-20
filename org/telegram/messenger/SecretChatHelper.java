@@ -261,7 +261,7 @@ public class SecretChatHelper {
     protected void processUpdateEncryption(TL_updateEncryption update, ConcurrentHashMap<Integer, User> usersDict) {
         final EncryptedChat newChat = update.chat;
         long dialog_id = ((long) newChat.id) << 32;
-        EncryptedChat existingChat = MessagesController.getInstance().getEncryptedChatDB(newChat.id);
+        EncryptedChat existingChat = MessagesController.getInstance().getEncryptedChatDB(newChat.id, false);
         if ((newChat instanceof TL_encryptedChatRequested) && existingChat == null) {
             int user_id = newChat.participant_id;
             if (user_id == UserConfig.getClientUserId()) {
@@ -642,7 +642,7 @@ public class SecretChatHelper {
                     try {
                         TLObject reqToSend;
                         TLObject layer = new TL_decryptedMessageLayer();
-                        layer.layer = Math.min(Math.max(17, AndroidUtilities.getMyLayerVersion(encryptedChat.layer)), AndroidUtilities.getPeerLayerVersion(encryptedChat.layer));
+                        layer.layer = Math.min(Math.max(17, AndroidUtilities.getMyLayerVersion(encryptedChat.layer)), Math.max(17, AndroidUtilities.getPeerLayerVersion(encryptedChat.layer)));
                         layer.message = decryptedMessage;
                         layer.random_bytes = new byte[15];
                         Utilities.random.nextBytes(layer.random_bytes);
@@ -1461,7 +1461,7 @@ public class SecretChatHelper {
     }
 
     protected ArrayList<Message> decryptMessage(EncryptedMessage message) {
-        EncryptedChat chat = MessagesController.getInstance().getEncryptedChatDB(message.chat_id);
+        EncryptedChat chat = MessagesController.getInstance().getEncryptedChatDB(message.chat_id, true);
         if (chat == null || (chat instanceof TL_encryptedChatDiscarded)) {
             return null;
         }
@@ -1557,7 +1557,7 @@ public class SecretChatHelper {
                         arr.add(holder);
                         return null;
                     }
-                } else if (!(object instanceof TL_decryptedMessageActionNotifyLayer)) {
+                } else if (!((object instanceof TL_decryptedMessageService) && (((TL_decryptedMessageService) object).action instanceof TL_decryptedMessageActionNotifyLayer))) {
                     return null;
                 }
                 ArrayList<Message> messages = new ArrayList();

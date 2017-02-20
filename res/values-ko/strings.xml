@@ -418,6 +418,7 @@
     <string name="DebugMenuImportContacts">연락처 가져오기</string>
     <string name="DebugMenuReloadContacts">연락처 재동기화</string>
     <string name="Default">기본값</string>
+    <string name="DefaultRingtone">기본값</string>
     <string name="Delete">삭제</string>
     <string name="DeleteAccountHelp">이 기간 동안 최소 한 번 이상 로그인을 하지 않으면 자동으로 모든 메시지, 연락처와 대화상대를 삭제하고 텔레그램을 탈퇴합니다.</string>
     <string name="DeleteAccountIfAwayFor">자동 회원 탈퇴</string>
@@ -1016,6 +1017,7 @@
     <string name="PaymentCheckoutShippingMethod">배송방법</string>
     <string name="PaymentConfirmationMessage">%1$s 카드정보가 파일로 있습니다. 이 카드로 결제하시려면 2단계 비밀번호를 입력해주세요</string>
     <string name="PaymentConfirmationNewCard">다른 카드를 선택해주세요</string>
+    <string name="PaymentConnectionFailed">결제 서버로 연결을 할 수 없습니다. 인터넷 연결을 확인해주시고 다시 시도해주세요.</string>
     <string name="PaymentFailed">죄송합니다, 결제가 거절되었습니다.</string>
     <string name="PaymentInvoice">인보이스</string>
     <string name="PaymentNoShippingMethod">죄송합니다. 이 주소로 배송이 가능하지 않습니다.</string>
@@ -1296,6 +1298,7 @@
     <string name="TerminateAllSessions">다른 모든 세션 종료</string>
     <string name="TerminateSessionInfo">탭하여 세션 종료</string>
     <string name="TerminateSessionQuestion">해당 세션을 종료하시겠습니까?</string>
+    <string name="TextCopied">클립보드로 텍스트가 복하되었습니다.</string>
     <string name="TextSize">채팅 글자 크기</string>
     <string name="Theme">테마</string>
     <string name="ThemePreview">테마 미리보기</string>
@@ -1426,6 +1429,7 @@
     <string name="Yes">네</string>
     <string name="Yesterday">어제</string>
     <string name="YesterdayAt">어제</string>
+    <string name="YouBlockedUser">죄송합니다, 그룹에 이 이용자나 봇을 차단하였기 대문에 추가를 할 수 없습니다. 초대하시렴녀 차단해제를 부탁드립니다.</string>
     <string name="YouCreatedBroadcastList">단체 메시지 리스트를 만들었습니다</string>
     <string name="YouHaveNewMessage">새 메시지가 있습니다</string>
     <string name="YouLeft">그룹을 떠났습니다</string>

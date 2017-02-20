@@ -2350,6 +2350,7 @@ public class Theme {
     }
 
     public static void setThemeWallpaper(String themeName, Bitmap bitmap, File path) {
+        currentColors.remove(key_chat_wallpaper);
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().remove("overrideThemeWallpaper").commit();
         if (bitmap != null) {
             themedWallpaper = new BitmapDrawable(bitmap);
@@ -2467,9 +2468,9 @@ public class Theme {
                     int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

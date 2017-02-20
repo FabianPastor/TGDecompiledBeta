@@ -226,10 +226,6 @@ public class ProfileSearchCell extends BaseCell {
         }
         int nameWidth2 = nameWidth - this.paddingRight;
         onlineWidth -= this.paddingRight;
-        if (LocaleController.isRTL) {
-            this.nameLeft += this.paddingRight;
-            this.onlineLeft += this.paddingRight;
-        }
         if (this.drawCount) {
             TL_dialog dialog = (TL_dialog) MessagesController.getInstance().dialogs_dict.get(Long.valueOf(this.dialog_id));
             if (dialog == null || dialog.unread_count == 0) {
@@ -304,23 +300,25 @@ public class ProfileSearchCell extends BaseCell {
                 widthpx = Math.ceil((double) this.onlineLayout.getLineWidth(0));
                 if (widthpx < ((double) onlineWidth)) {
                     this.onlineLeft = (int) (((double) this.onlineLeft) + (((double) onlineWidth) - widthpx));
-                    return;
                 }
-                return;
             }
-            return;
+        } else {
+            if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineRight(0) == ((float) nameWidth)) {
+                widthpx = Math.ceil((double) this.nameLayout.getLineWidth(0));
+                if (widthpx < ((double) nameWidth)) {
+                    this.nameLeft = (int) (((double) this.nameLeft) - (((double) nameWidth) - widthpx));
+                }
+            }
+            if (this.onlineLayout != null && this.onlineLayout.getLineCount() > 0 && this.onlineLayout.getLineRight(0) == ((float) onlineWidth)) {
+                widthpx = Math.ceil((double) this.onlineLayout.getLineWidth(0));
+                if (widthpx < ((double) onlineWidth)) {
+                    this.onlineLeft = (int) (((double) this.onlineLeft) - (((double) onlineWidth) - widthpx));
+                }
+            }
         }
-        if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineRight(0) == ((float) nameWidth)) {
-            widthpx = Math.ceil((double) this.nameLayout.getLineWidth(0));
-            if (widthpx < ((double) nameWidth)) {
-                this.nameLeft = (int) (((double) this.nameLeft) - (((double) nameWidth) - widthpx));
-            }
-        }
-        if (this.onlineLayout != null && this.onlineLayout.getLineCount() > 0 && this.onlineLayout.getLineRight(0) == ((float) onlineWidth)) {
-            widthpx = Math.ceil((double) this.onlineLayout.getLineWidth(0));
-            if (widthpx < ((double) onlineWidth)) {
-                this.onlineLeft = (int) (((double) this.onlineLeft) - (((double) onlineWidth) - widthpx));
-            }
+        if (LocaleController.isRTL) {
+            this.nameLeft += this.paddingRight;
+            this.onlineLeft += this.paddingRight;
         }
     }
 

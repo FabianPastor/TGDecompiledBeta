@@ -1298,6 +1298,7 @@
     <string name="TerminateAllSessions">Beëindig alle andere sessies</string>
     <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
+    <string name="TextCopied">Tekst gekopieerd naar klembord.</string>
     <string name="TextSize">Tekstgrootte berichten</string>
     <string name="Theme">Thema</string>
     <string name="ThemePreview">Thema-voorvertoning</string>

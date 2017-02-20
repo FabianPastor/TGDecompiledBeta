@@ -1298,6 +1298,7 @@
     <string name="TerminateAllSessions">Alle anderen Geräte abmelden</string>
     <string name="TerminateSessionInfo">Tippe auf eine Sitzung um sie zu beenden.</string>
     <string name="TerminateSessionQuestion">Dieses Gerät abmelden?</string>
+    <string name="TextCopied">Text in die Zwischenablage kopiert</string>
     <string name="TextSize">Textgröße für Nachrichten</string>
     <string name="Theme">Thema</string>
     <string name="ThemePreview">Vorschau</string>

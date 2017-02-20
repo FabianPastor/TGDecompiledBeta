@@ -474,12 +474,12 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
         themeDescriptionArr[17] = new ThemeDescription(this.shuffleButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_player_buttonActive);
         themeDescriptionArr[18] = new ThemeDescription(this.shuffleButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_player_button);
         themeDescriptionArr[19] = new ThemeDescription(this.placeholder, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_player_placeholder);
-        themeDescriptionArr[20] = new ThemeDescription(this.prevButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
-        themeDescriptionArr[21] = new ThemeDescription(this.prevButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
-        themeDescriptionArr[22] = new ThemeDescription(this.playButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
-        themeDescriptionArr[23] = new ThemeDescription(this.playButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
-        themeDescriptionArr[24] = new ThemeDescription(this.nextButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
-        themeDescriptionArr[25] = new ThemeDescription(this.nextButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
+        themeDescriptionArr[20] = new ThemeDescription(this.prevButton, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
+        themeDescriptionArr[21] = new ThemeDescription(this.prevButton, (ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
+        themeDescriptionArr[22] = new ThemeDescription(this.playButton, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
+        themeDescriptionArr[23] = new ThemeDescription(this.playButton, (ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
+        themeDescriptionArr[24] = new ThemeDescription(this.nextButton, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, null, null, null, null, Theme.key_player_button);
+        themeDescriptionArr[25] = new ThemeDescription(this.nextButton, (ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE) | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_player_buttonActive);
         return themeDescriptionArr;
     }
 }

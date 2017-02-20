@@ -181,33 +181,31 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = false;
             if (holder.getItemViewType() == 0) {
                 SpannableString subtitle;
                 ViewItem viewItem = (ViewItem) holder.itemView.getTag();
                 ProfileSearchCell cell = viewItem.cell;
                 CallLogRow row = (CallLogRow) CallLogActivity.this.calls.get(position);
                 Message last = (Message) row.calls.get(0);
+                String ldir = LocaleController.isRTL ? "‫" : "";
                 if (row.calls.size() == 1) {
-                    subtitle = new SpannableString("  " + LocaleController.formatDateCallLog((long) last.date));
+                    subtitle = new SpannableString(ldir + "  " + LocaleController.formatDateCallLog((long) last.date));
                 } else {
-                    subtitle = new SpannableString(String.format("  (%d) %s", new Object[]{Integer.valueOf(row.calls.size()), LocaleController.formatDateCallLog((long) last.date)}));
+                    subtitle = new SpannableString(String.format(ldir + "  (%d) %s", new Object[]{Integer.valueOf(row.calls.size()), LocaleController.formatDateCallLog((long) last.date)}));
                 }
                 switch (row.type) {
                     case 0:
-                        subtitle.setSpan(CallLogActivity.this.iconOut, 0, 1, 0);
+                        subtitle.setSpan(CallLogActivity.this.iconOut, ldir.length(), ldir.length() + 1, 0);
                         break;
                     case 1:
-                        subtitle.setSpan(CallLogActivity.this.iconIn, 0, 1, 0);
+                        subtitle.setSpan(CallLogActivity.this.iconIn, ldir.length(), ldir.length() + 1, 0);
                         break;
                     case 2:
-                        subtitle.setSpan(CallLogActivity.this.iconMissed, 0, 1, 0);
+                        subtitle.setSpan(CallLogActivity.this.iconMissed, ldir.length(), ldir.length() + 1, 0);
                         break;
                 }
                 cell.setData(row.user, null, null, subtitle, false);
-                if (!(position == CallLogActivity.this.calls.size() - 1 && CallLogActivity.this.endReached)) {
-                    z = true;
-                }
+                boolean z = (position == CallLogActivity.this.calls.size() + -1 && CallLogActivity.this.endReached) ? false : true;
                 cell.useSeparator = z;
                 viewItem.button.setTag(row);
             }

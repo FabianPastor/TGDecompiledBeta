@@ -1298,6 +1298,7 @@
     <string name="TerminateAllSessions">Cerrar todas las otras sesiones</string>
     <string name="TerminateSessionInfo">Toca una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
+    <string name="TextCopied">Texto copiado al portapapeles</string>
     <string name="TextSize">Tamaño del texto</string>
     <string name="Theme">Tema</string>
     <string name="ThemePreview">Vista previa del tema</string>
