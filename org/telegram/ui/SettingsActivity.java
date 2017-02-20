@@ -742,12 +742,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                             spannableString.setSpan(new URLSpanNoUnderline(span.getURL()), start, end, 0);
                         }
                         message.setText(spannableString);
-                        message.setTextSize(18.0f);
-                        message.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
-                        message.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
+                        message.setTextSize(1, 18.0f);
+                        message.setLinkTextColor(Theme.getColor(Theme.key_dialogTextLink));
+                        message.setHighlightColor(Theme.getColor(Theme.key_dialogLinkSelection));
                         message.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
                         message.setMovementMethod(new LinkMovementMethodMy());
-                        message.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                        message.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                         builder = new Builder(SettingsActivity.this.getParentActivity());
                         builder.setView(message);
                         builder.setTitle(LocaleController.getString("AskAQuestion", R.string.AskAQuestion));

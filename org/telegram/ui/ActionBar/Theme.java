@@ -578,11 +578,13 @@ public class Theme {
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
     public static final String key_dialogCheckboxSquareUnchecked = "dialogCheckboxSquareUnchecked";
     public static final String key_dialogIcon = "dialogIcon";
+    public static final String key_dialogLinkSelection = "dialogLinkSelection";
     public static final String key_dialogRadioBackground = "dialogRadioBackground";
     public static final String key_dialogRadioBackgroundChecked = "dialogRadioBackgroundChecked";
     public static final String key_dialogTextBlack = "dialogTextBlack";
     public static final String key_dialogTextBlue = "dialogTextBlue";
     public static final String key_dialogTextGray = "dialogTextGray";
+    public static final String key_dialogTextLink = "dialogTextLink";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
     public static final String key_fastScrollActive = "fastScrollActive";
@@ -776,6 +778,8 @@ public class Theme {
         defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
+        defaultColors.put(key_dialogTextLink, Integer.valueOf(-14255946));
+        defaultColors.put(key_dialogLinkSelection, Integer.valueOf(862104035));
         defaultColors.put(key_dialogTextBlue, Integer.valueOf(-13660983));
         defaultColors.put(key_dialogTextGray, Integer.valueOf(-13333567));
         defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
@@ -2517,12 +2521,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        File toFile;
+                        int i;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {
