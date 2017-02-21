@@ -420,7 +420,6 @@
     <drawable name="edit_done">res/drawable-hdpi-v4/edit_done.png</drawable>
     <drawable name="edit_done">res/drawable-xhdpi-v4/edit_done.png</drawable>
     <drawable name="edit_done">res/drawable-xxhdpi-v4/edit_done.png</drawable>
-    <drawable name="edit_text">res/drawable/edit_text.xml</drawable>
     <drawable name="fab_highlight_dark">res/drawable/fab_highlight_dark.xml</drawable>
     <drawable name="fab_highlight_dark">res/drawable-v21/fab_highlight_dark.xml</drawable>
     <drawable name="field_carret">res/drawable/field_carret.xml</drawable>

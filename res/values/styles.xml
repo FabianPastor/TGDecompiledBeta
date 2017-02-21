@@ -72,7 +72,6 @@
         <item>?unknown_ref: 106000b</item>
         <item>true</item>
         <item>?unknown_ref: 0</item>
-        <item>@style/Theme.TMessages.EditText</item>
         <item>@style/Theme.TMessages.ListView</item>
         <item>@style/ActionBar.Transparent.TMessages.Item</item>
         <item>false</item>
@@ -85,7 +84,6 @@
         <item>?unknown_ref: 106000b</item>
         <item>true</item>
         <item>?unknown_ref: 0</item>
-        <item>@style/Theme.TMessages.EditText</item>
         <item>@style/Theme.TMessages.ListView</item>
         <item>@style/ActionBar.Transparent.TMessages.Item</item>
         <item>false</item>
@@ -115,14 +113,6 @@
     </style>
     <style name="Theme.TMessages.Dialog.Alert">
         <item>#4991cc</item>
-    </style>
-    <style name="Theme.TMessages.EditText">
-        <item>#000000</item>
-        <item>@drawable/edit_text</item>
-    </style>
-    <style name="Theme.TMessages.EditText">
-        <item>#000000</item>
-        <item>@drawable/edit_text</item>
     </style>
     <style name="Theme.TMessages.ListView">
         <item>0</item>

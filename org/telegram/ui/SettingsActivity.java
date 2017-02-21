@@ -532,11 +532,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.backgroundRow = i;
-        if (BuildVars.DEBUG_VERSION) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.themeRow = i;
-        }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.themeRow = i;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.languageRow = i;

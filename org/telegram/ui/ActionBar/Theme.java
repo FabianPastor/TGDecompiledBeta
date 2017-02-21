@@ -578,6 +578,8 @@ public class Theme {
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
     public static final String key_dialogCheckboxSquareUnchecked = "dialogCheckboxSquareUnchecked";
     public static final String key_dialogIcon = "dialogIcon";
+    public static final String key_dialogInputField = "dialogInputField";
+    public static final String key_dialogInputFieldActivated = "dialogInputFieldActivated";
     public static final String key_dialogLinkSelection = "dialogLinkSelection";
     public static final String key_dialogRadioBackground = "dialogRadioBackground";
     public static final String key_dialogRadioBackgroundChecked = "dialogRadioBackgroundChecked";
@@ -692,6 +694,8 @@ public class Theme {
     public static final String key_windowBackgroundWhiteGreenText = "windowBackgroundWhiteGreenText";
     public static final String key_windowBackgroundWhiteGreenText2 = "windowBackgroundWhiteGreenText2";
     public static final String key_windowBackgroundWhiteHintText = "windowBackgroundWhiteHintText";
+    public static final String key_windowBackgroundWhiteInputField = "windowBackgroundWhiteInputField";
+    public static final String key_windowBackgroundWhiteInputFieldActivated = "windowBackgroundWhiteInputFieldActivated";
     public static final String key_windowBackgroundWhiteLinkSelection = "windowBackgroundWhiteLinkSelection";
     public static final String key_windowBackgroundWhiteLinkText = "windowBackgroundWhiteLinkText";
     public static final String key_windowBackgroundWhiteRedText = "windowBackgroundWhiteRedText";
@@ -783,6 +787,8 @@ public class Theme {
         defaultColors.put(key_dialogTextBlue, Integer.valueOf(-13660983));
         defaultColors.put(key_dialogTextGray, Integer.valueOf(-13333567));
         defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
+        defaultColors.put(key_dialogInputField, Integer.valueOf(-2368549));
+        defaultColors.put(key_dialogInputFieldActivated, Integer.valueOf(-13129232));
         defaultColors.put(key_dialogCheckboxSquareBackground, Integer.valueOf(-12345121));
         defaultColors.put(key_dialogCheckboxSquareCheck, Integer.valueOf(-1));
         defaultColors.put(key_dialogCheckboxSquareUnchecked, Integer.valueOf(-9211021));
@@ -821,6 +827,8 @@ public class Theme {
         defaultColors.put(key_windowBackgroundWhiteLinkText, Integer.valueOf(-14255946));
         defaultColors.put(key_windowBackgroundWhiteLinkSelection, Integer.valueOf(862104035));
         defaultColors.put(key_windowBackgroundWhiteBlueHeader, Integer.valueOf(-12676913));
+        defaultColors.put(key_windowBackgroundWhiteInputField, Integer.valueOf(-2368549));
+        defaultColors.put(key_windowBackgroundWhiteInputFieldActivated, Integer.valueOf(-13129232));
         defaultColors.put(key_switchThumb, Integer.valueOf(-1184275));
         defaultColors.put(key_switchTrack, Integer.valueOf(-3684409));
         defaultColors.put(key_switchThumbChecked, Integer.valueOf(-12211217));
@@ -1328,6 +1336,19 @@ public class Theme {
         stateListDrawable.setExitFadeDuration(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
         stateListDrawable.addState(new int[0], defaultDrawable);
+        return stateListDrawable;
+    }
+
+    public static Drawable createEditTextDrawable(Context context, boolean alert) {
+        Resources resources = context.getResources();
+        Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();
+        defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), Mode.MULTIPLY));
+        Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
+        pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{16842910, 16842908}, pressedDrawable);
+        stateListDrawable.addState(new int[]{16842908}, pressedDrawable);
+        stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
         return stateListDrawable;
     }
 
@@ -2523,10 +2544,10 @@ public class Theme {
                     Throwable e;
                     SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
                         int i;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

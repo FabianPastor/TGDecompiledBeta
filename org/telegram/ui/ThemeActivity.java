@@ -82,13 +82,13 @@ public class ThemeActivity extends BaseFragment {
                                 Builder builder = new Builder(ThemeActivity.this.getParentActivity());
                                 builder.setItems(themeInfo.pathToFile == null ? new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile)} : new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Edit", R.string.Edit), LocaleController.getString("Delete", R.string.Delete)}, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        File currentFile;
                                         Throwable e;
                                         File finalFile;
+                                        Intent intent;
                                         Throwable th;
                                         if (which == 0) {
-                                            Intent intent;
-                                            if (themeInfo.pathToFile == null) {
+                                            File currentFile;
+                                            if (themeInfo.pathToFile == null && themeInfo.assetName == null) {
                                                 StringBuilder result = new StringBuilder();
                                                 for (Entry<String, Integer> entry : Theme.getDefaultColors().entrySet()) {
                                                     result.append((String) entry.getKey()).append("=").append(entry.getValue()).append("\n");
@@ -161,7 +161,7 @@ public class ThemeActivity extends BaseFragment {
                                                     }
                                                 }
                                             }
-                                            currentFile = new File(themeInfo.pathToFile);
+                                            currentFile = themeInfo.assetName != null ? Theme.getAssetFile(themeInfo.assetName) : new File(themeInfo.pathToFile);
                                             finalFile = new File(FileLoader.getInstance().getDirectory(4), currentFile.getName());
                                             try {
                                                 if (!AndroidUtilities.copyFile(currentFile, finalFile)) {
@@ -273,6 +273,7 @@ public class ThemeActivity extends BaseFragment {
                     }
                 } else if (ThemeActivity.this.getParentActivity() != null) {
                     final EditText editText = new EditText(ThemeActivity.this.getParentActivity());
+                    editText.setBackgroundDrawable(Theme.createEditTextDrawable(ThemeActivity.this.getParentActivity(), true));
                     AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("NewTheme", R.string.NewTheme));
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

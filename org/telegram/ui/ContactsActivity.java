@@ -377,6 +377,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 editText.setGravity(17);
                 editText.setInputType(2);
                 editText.setImeOptions(6);
+                editText.setBackgroundDrawable(Theme.createEditTextDrawable(getParentActivity(), true));
                 final EditText editTextFinal = editText;
                 editText.addTextChangedListener(new TextWatcher() {
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

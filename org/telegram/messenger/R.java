@@ -198,7 +198,6 @@ public final class R {
         public static final int doc_big = NUM;
         public static final int edit_cancel = NUM;
         public static final int edit_done = NUM;
-        public static final int edit_text = NUM;
         public static final int fab_highlight_dark = NUM;
         public static final int field_carret = NUM;
         public static final int field_carret_empty = NUM;
@@ -2200,7 +2199,6 @@ public final class R {
         public static final int Theme_TMessages_DatePicker = NUM;
         public static final int Theme_TMessages_DayOfWeek = NUM;
         public static final int Theme_TMessages_Dialog_Alert = NUM;
-        public static final int Theme_TMessages_EditText = NUM;
         public static final int Theme_TMessages_ListView = NUM;
         public static final int Theme_TMessages_PopupNotification = NUM;
         public static final int Theme_TMessages_Start = NUM;

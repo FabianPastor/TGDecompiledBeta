@@ -155,6 +155,7 @@ public class ThemeEditorView {
                     this.colorEditText[a].setTextColor(-14606047);
                     AndroidUtilities.clearCursorDrawable(this.colorEditText[a]);
                     this.colorEditText[a].setTextSize(1, 18.0f);
+                    this.colorEditText[a].setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
                     this.colorEditText[a].setMaxLines(1);
                     this.colorEditText[a].setTag(Integer.valueOf(a));
                     this.colorEditText[a].setGravity(17);
