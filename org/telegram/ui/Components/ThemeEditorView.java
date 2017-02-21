@@ -277,7 +277,7 @@ public class ThemeEditorView {
             }
 
             protected void onSizeChanged(int width, int height, int oldw, int oldh) {
-                this.colorWheelRadius = ((width / 2) - (this.paramValueSliderWidth * 2)) - AndroidUtilities.dp(20.0f);
+                this.colorWheelRadius = Math.max(1, ((width / 2) - (this.paramValueSliderWidth * 2)) - AndroidUtilities.dp(20.0f));
                 this.colorWheelBitmap = createColorWheelBitmap(this.colorWheelRadius * 2, this.colorWheelRadius * 2);
                 this.colorGradient = null;
                 this.alphaGradient = null;
@@ -984,7 +984,9 @@ public class ThemeEditorView {
                 animatorSet.setDuration(150);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animation) {
-                        ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
+                        if (ThemeEditorView.this.windowView != null) {
+                            ThemeEditorView.this.windowManager.removeView(ThemeEditorView.this.windowView);
+                        }
                     }
                 });
                 animatorSet.start();

@@ -379,7 +379,7 @@ public class RecyclerListView extends RecyclerView {
                 public void onLongPress(MotionEvent event) {
                     if (RecyclerListView.this.currentChildView != null) {
                         View child = RecyclerListView.this.currentChildView;
-                        if (RecyclerListView.this.onItemLongClickListener != null && RecyclerListView.this.onItemLongClickListener.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
+                        if (RecyclerListView.this.onItemLongClickListener != null && RecyclerListView.this.currentChildPosition != -1 && RecyclerListView.this.onItemLongClickListener.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
                             child.performHapticFeedback(0);
                         }
                     }

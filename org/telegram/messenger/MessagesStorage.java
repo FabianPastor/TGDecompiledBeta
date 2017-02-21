@@ -220,7 +220,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE users_data(uid INTEGER PRIMARY KEY, about TEXT)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE users(uid INTEGER PRIMARY KEY, name TEXT, status INTEGER, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE wallpapers(uid INTEGER PRIMARY KEY, data BLOB)").stepThis().dispose();
@@ -240,7 +240,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE bot_info(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -275,7 +275,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 39) {
+                if (version < 40) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -582,6 +582,11 @@ public class MessagesStorage {
                     if (version == 38) {
                         MessagesStorage.this.database.executeFast("ALTER TABLE dialogs ADD COLUMN pinned INTEGER default 0").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 39").stepThis().dispose();
+                        version = 39;
+                    }
+                    if (version == 39) {
+                        MessagesStorage.this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -3283,10 +3288,9 @@ Error: java.util.NoSuchElementException
     }
 
     public TLObject getSentFile(String path, int type) {
-        if (path == null) {
+        if (path == null || path.endsWith("attheme")) {
             return null;
         }
-        TLObject tLObject;
         final Semaphore semaphore = new Semaphore(0);
         final ArrayList<TLObject> result = new ArrayList();
         final String str = path;
@@ -3326,11 +3330,9 @@ Error: java.util.NoSuchElementException
             FileLog.e(e);
         }
         if (result.isEmpty()) {
-            tLObject = null;
-        } else {
-            tLObject = (TLObject) result.get(0);
+            return null;
         }
-        return tLObject;
+        return (TLObject) result.get(0);
     }
 
     public void putSentFile(final String path, final TLObject file, final int type) {
@@ -3677,197 +3679,201 @@ Error: java.util.NoSuchElementException
 */
                     /*
                     r10 = this;
+                    r9 = 16;
                     r7 = 1;
                     r6 = 0;
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                L_0x0008:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = 16;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                L_0x000a:
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 >= r9) goto L_0x0023;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0011:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x0023;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0017:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8.key_hash = r9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = r9.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r9);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8.key_hash = r9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0023:
-                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.database;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r0.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x013f;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = org.telegram.messenger.MessagesStorage.this;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.database;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ? WHERE uid = ?";	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.getObjectSize();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r0.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x0148;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0043:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0048:
-                    r1.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x0142;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r1.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x014b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0053:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0058:
-                    r2.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x0145;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r2.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x014e;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0063:
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0068:
-                    r3.<init>(r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r8 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r3.<init>(r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r8 == 0) goto L_0x0078;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0073:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.length;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.length;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0078:
-                    r4.<init>(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 1;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r7 == 0) goto L_0x0091;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r4.<init>(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7.serializeToStream(r0);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 1;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r7 == 0) goto L_0x0091;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x008a:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.a_or_b;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r1.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0091:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r7 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r7 == 0) goto L_0x009e;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x0097:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r2.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x009e:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r7 == 0) goto L_0x00ab;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r7 == 0) goto L_0x00ab;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x00a4:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.future_auth_key;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r3.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x00ab:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r7 == 0) goto L_0x00b8;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r7 == 0) goto L_0x00b8;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x00b1:
-                    r7 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
+                    r7 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = r7.key_hash;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r4.writeBytes(r7);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
                 L_0x00b8:
-                    r7 = 2;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 4;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.ttl;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 5;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.layer;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 6;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 7;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 8;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8 << 16;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8 | r9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 9;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 10;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 11;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 12;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 13;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 14;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r7 = 15;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r3;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r8 = r8.id;	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r6.step();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r0.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r1.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r2.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r3.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    r4.reuse();	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r6 == 0) goto L_0x013e;
-                L_0x013b:
+                    r7 = 2;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 4;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.ttl;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 5;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.layer;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 6;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.seq_in;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 7;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.seq_out;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 8;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.key_use_count_in;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8 << 16;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r9 = r9.key_use_count_out;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8 | r9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 9;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.exchange_id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 10;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.key_create_date;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 11;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.future_key_fingerprint;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 12;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 13;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 14;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.in_seq_no;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 15;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.admin_id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r7 = 16;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r3;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r8 = r8.id;	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r6.step();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r0.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r1.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r2.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r3.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    r4.reuse();	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r6 == 0) goto L_0x0147;
+                L_0x0144:
                     r6.dispose();
-                L_0x013e:
+                L_0x0147:
                     return;
-                L_0x013f:
+                L_0x0148:
                     r8 = r7;
                     goto L_0x0048;
-                L_0x0142:
+                L_0x014b:
                     r8 = r7;
                     goto L_0x0058;
-                L_0x0145:
+                L_0x014e:
                     r8 = r7;
                     goto L_0x0068;
-                L_0x0148:
+                L_0x0151:
                     r5 = move-exception;
-                    org.telegram.messenger.FileLog.e(r5);	 Catch:{ Exception -> 0x0148, all -> 0x0152 }
-                    if (r6 == 0) goto L_0x013e;
-                L_0x014e:
+                    org.telegram.messenger.FileLog.e(r5);	 Catch:{ Exception -> 0x0151, all -> 0x015b }
+                    if (r6 == 0) goto L_0x0147;
+                L_0x0157:
                     r6.dispose();
-                    goto L_0x013e;
-                L_0x0152:
+                    goto L_0x0147;
+                L_0x015b:
                     r7 = move-exception;
-                    if (r6 == 0) goto L_0x0158;
-                L_0x0155:
+                    if (r6 == 0) goto L_0x0161;
+                L_0x015e:
                     r6.dispose();
-                L_0x0158:
+                L_0x0161:
                     throw r7;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
@@ -3964,7 +3970,7 @@ Error: java.util.NoSuchElementException
                         if ((chat.key_hash == null || chat.key_hash.length < 16) && chat.auth_key != null) {
                             chat.key_hash = AndroidUtilities.calcAuthKeyHash(chat.auth_key);
                         }
-                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_chats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO enc_chats VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                         NativeByteBuffer data = new NativeByteBuffer(chat.getObjectSize());
                         if (chat.a_or_b != null) {
                             length = chat.a_or_b.length;
@@ -4018,6 +4024,7 @@ Error: java.util.NoSuchElementException
                         state.bindByteBuffer(15, data4);
                         state.bindByteBuffer(16, data5);
                         state.bindInteger(17, chat.in_seq_no);
+                        state.bindInteger(18, chat.admin_id);
                         state.step();
                         state.dispose();
                         data.reuse();
@@ -4231,7 +4238,7 @@ Error: java.util.NoSuchElementException
 
     public void getEncryptedChatsInternal(String chatsToLoad, ArrayList<EncryptedChat> result, ArrayList<Integer> usersToLoad) throws Exception {
         if (chatsToLoad != null && chatsToLoad.length() != 0 && result != null) {
-            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, user, g, authkey, ttl, layer, seq_in, seq_out, use_count, exchange_id, key_date, fprint, fauthkey, khash, in_seq_no FROM enc_chats WHERE uid IN(%s)", new Object[]{chatsToLoad}), new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, user, g, authkey, ttl, layer, seq_in, seq_out, use_count, exchange_id, key_date, fprint, fauthkey, khash, in_seq_no, admin_id FROM enc_chats WHERE uid IN(%s)", new Object[]{chatsToLoad}), new Object[0]);
             while (cursor.next()) {
                 try {
                     NativeByteBuffer data = cursor.byteBufferValue(0);
@@ -4258,6 +4265,10 @@ Error: java.util.NoSuchElementException
                             chat.future_auth_key = cursor.byteArrayValue(12);
                             chat.key_hash = cursor.byteArrayValue(13);
                             chat.in_seq_no = cursor.intValue(14);
+                            int admin_id = cursor.intValue(15);
+                            if (admin_id != 0) {
+                                chat.admin_id = admin_id;
+                            }
                             result.add(chat);
                         }
                     }
@@ -4991,7 +5002,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5044,6 +5054,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {
@@ -5981,7 +5992,6 @@ Error: java.util.NoSuchElementException
     public void getDialogs(final int offset, final int count) {
         this.storageQueue.postRunnable(new Runnable() {
             public void run() {
-                Message message;
                 messages_Dialogs dialogs = new messages_Dialogs();
                 ArrayList<EncryptedChat> encryptedChats = new ArrayList();
                 ArrayList<Integer> usersToLoad = new ArrayList();
@@ -5992,6 +6002,7 @@ Error: java.util.NoSuchElementException
                 HashMap<Long, Message> replyMessageOwners = new HashMap();
                 SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
                 while (cursor.next()) {
+                    Message message;
                     TL_dialog dialog = new TL_dialog();
                     dialog.id = cursor.longValue(0);
                     dialog.top_message = cursor.intValue(1);

@@ -174,11 +174,13 @@ public class ThemeActivity extends BaseFragment {
                                                 FileLog.e(e5);
                                             }
                                         } else if (which == 1) {
-                                            Theme.applyTheme(themeInfo);
-                                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
-                                            ThemeActivity.this.parentLayout.showLastFragment();
-                                            new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), themeInfo.name);
-                                        } else {
+                                            if (ThemeActivity.this.parentLayout != null) {
+                                                Theme.applyTheme(themeInfo);
+                                                ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true);
+                                                ThemeActivity.this.parentLayout.showLastFragment();
+                                                new ThemeEditorView().show(ThemeActivity.this.getParentActivity(), themeInfo.name);
+                                            }
+                                        } else if (ThemeActivity.this.getParentActivity() != null) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
                                             builder.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
                                             builder.setTitle(LocaleController.getString("AppName", R.string.AppName));

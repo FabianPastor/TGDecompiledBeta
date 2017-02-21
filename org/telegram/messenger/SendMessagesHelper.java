@@ -1318,8 +1318,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1872,7 +1872,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     newMsg.to_id.user_id = encryptedChat.participant_id;
                 }
                 newMsg.ttl = encryptedChat.ttl;
-                if (newMsg.ttl != 0) {
+                if (!(newMsg.ttl == 0 || newMsg.media.document == null)) {
                     int duration;
                     if (MessageObject.isVoiceMessage(newMsg)) {
                         duration = 0;
@@ -3196,15 +3196,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 attributeAudio.flags |= 2;
             }
         }
+        boolean sendNew = false;
         if (originalPath != null) {
-            if (attributeAudio != null) {
+            if (originalPath.endsWith("attheme")) {
+                sendNew = true;
+            } else if (attributeAudio != null) {
                 originalPath = originalPath + MimeTypes.BASE_TYPE_AUDIO + file.length();
             } else {
                 originalPath = originalPath + "" + file.length();
             }
         }
         TL_document tL_document = null;
-        if (!isEncrypted) {
+        if (!(sendNew || isEncrypted)) {
             tL_document = (TL_document) MessagesStorage.getInstance().getSentFile(originalPath, !isEncrypted ? 1 : 4);
             if (!(tL_document != null || path.equals(originalPath) || isEncrypted)) {
                 tL_document = (TL_document) MessagesStorage.getInstance().getSentFile(path + file.length(), !isEncrypted ? 1 : 4);

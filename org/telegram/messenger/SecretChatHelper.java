@@ -299,6 +299,7 @@ public class SecretChatHelper {
                 newChat.ttl = exist.ttl;
                 newChat.seq_in = exist.seq_in;
                 newChat.seq_out = exist.seq_out;
+                newChat.admin_id = exist.admin_id;
             }
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
@@ -1639,6 +1640,7 @@ public class SecretChatHelper {
             newChat.key_use_count_out = encryptedChat.key_use_count_out;
             newChat.seq_in = encryptedChat.seq_in;
             newChat.seq_out = encryptedChat.seq_out;
+            newChat.admin_id = encryptedChat.admin_id;
             MessagesStorage.getInstance().updateEncryptedChat(newChat);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {

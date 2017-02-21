@@ -11,6 +11,7 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -85,7 +86,7 @@ public class NotificationBadge {
         }
     }
 
-    public static class AsusHomeLauncher implements Badger {
+    public static class AsusHomeBadger implements Badger {
         private static final String INTENT_ACTION = "android.intent.action.BADGE_COUNT_UPDATE";
         private static final String INTENT_EXTRA_ACTIVITY_NAME = "badge_count_class_name";
         private static final String INTENT_EXTRA_BADGE_COUNT = "badge_count";
@@ -125,7 +126,10 @@ public class NotificationBadge {
             if (NotificationBadge.canResolveBroadcast(intent)) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public void run() {
-                        ApplicationLoader.applicationContext.sendBroadcast(intent);
+                        try {
+                            ApplicationLoader.applicationContext.sendBroadcast(intent);
+                        } catch (Exception e) {
+                        }
                     }
                 });
             }
@@ -351,15 +355,28 @@ public class NotificationBadge {
         }
     }
 
-    public static class SamsungHomeBadger implements Badger {
-        private static final String[] CONTENT_PROJECTION = new String[]{"_id", "class"};
-        private static final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
+    public class SamsungHomeBadger implements Badger {
+        private final String[] CONTENT_PROJECTION = new String[]{"_id", "class"};
+        private final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
+        private DefaultBadger defaultBadger;
+
+        public SamsungHomeBadger() {
+            if (VERSION.SDK_INT >= 21) {
+                this.defaultBadger = new DefaultBadger();
+            }
+        }
 
         public void executeBadge(int badgeCount) {
-            Uri mUri = Uri.parse(CONTENT_URI);
+            if (this.defaultBadger != null) {
+                try {
+                    this.defaultBadger.executeBadge(badgeCount);
+                } catch (Exception e) {
+                }
+            }
+            Uri mUri = Uri.parse("content://com.sec.badge/apps?notify=true");
             ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
             try {
-                Cursor cursor = contentResolver.query(mUri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
+                Cursor cursor = contentResolver.query(mUri, this.CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
                 if (cursor != null) {
                     String entryActivityName = NotificationBadge.componentName.getClassName();
                     boolean entryActivityExist = false;
@@ -418,7 +435,7 @@ public class NotificationBadge {
         }
 
         public List<String> getSupportLaunchers() {
-            return Arrays.asList(new String[]{"com.sonyericsson.home"});
+            return Arrays.asList(new String[]{"com.sonyericsson.home", "com.sonymobile.home"});
         }
 
         private static void executeBadgeByBroadcast(int badgeCount) {
@@ -457,6 +474,20 @@ public class NotificationBadge {
                 return true;
             }
             return false;
+        }
+    }
+
+    public static class VivoHomeBadger implements Badger {
+        public void executeBadge(int badgeCount) {
+            Intent intent = new Intent("launcher.action.CHANGE_APPLICATION_NOTIFICATION_NUM");
+            intent.putExtra("packageName", ApplicationLoader.applicationContext.getPackageName());
+            intent.putExtra("className", NotificationBadge.componentName.getClassName());
+            intent.putExtra("notificationNum", badgeCount);
+            ApplicationLoader.applicationContext.sendBroadcast(intent);
+        }
+
+        public List<String> getSupportLaunchers() {
+            return Arrays.asList(new String[]{"com.vivo.launcher"});
         }
     }
 
@@ -526,11 +557,12 @@ public class NotificationBadge {
         BADGERS.add(NovaHomeBadger.class);
         BADGERS.add(SonyHomeBadger.class);
         BADGERS.add(XiaomiHomeBadger.class);
-        BADGERS.add(AsusHomeLauncher.class);
+        BADGERS.add(AsusHomeBadger.class);
         BADGERS.add(HuaweiHomeBadger.class);
         BADGERS.add(OPPOHomeBader.class);
         BADGERS.add(SamsungHomeBadger.class);
         BADGERS.add(ZukHomeBadger.class);
+        BADGERS.add(VivoHomeBadger.class);
     }
 
     public static boolean applyCount(int badgeCount) {
@@ -581,6 +613,8 @@ public class NotificationBadge {
                 badger = new ZukHomeBadger();
             } else if (Build.MANUFACTURER.equalsIgnoreCase("OPPO")) {
                 badger = new OPPOHomeBader();
+            } else if (Build.MANUFACTURER.equalsIgnoreCase("VIVO")) {
+                badger = new VivoHomeBadger();
             } else {
                 badger = new DefaultBadger();
             }
