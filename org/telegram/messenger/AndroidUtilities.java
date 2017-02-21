@@ -88,11 +88,12 @@ import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.TypefaceSpan;
 
 public class AndroidUtilities {
-    public static final int FLAG_TAG_ALL = 7;
+    public static final int FLAG_TAG_ALL = 3;
     public static final int FLAG_TAG_BOLD = 2;
     public static final int FLAG_TAG_BR = 1;
     public static final int FLAG_TAG_COLOR = 4;
@@ -276,8 +277,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -874,14 +875,12 @@ public class AndroidUtilities {
     }
 
     public static SpannableStringBuilder replaceTags(String str) {
-        return replaceTags(str, 7);
+        return replaceTags(str, 3);
     }
 
     public static SpannableStringBuilder replaceTags(String str, int flag) {
         try {
             int start;
-            int end;
-            int a;
             StringBuilder stringBuilder = new StringBuilder(str);
             if ((flag & 1) != 0) {
                 while (true) {
@@ -908,7 +907,7 @@ public class AndroidUtilities {
                         break;
                     }
                     stringBuilder.replace(start, start + 3, "");
-                    end = stringBuilder.indexOf("</b>");
+                    int end = stringBuilder.indexOf("</b>");
                     if (end == -1) {
                         end = stringBuilder.indexOf("<b>");
                     }
@@ -917,30 +916,9 @@ public class AndroidUtilities {
                     bolds.add(Integer.valueOf(end));
                 }
             }
-            ArrayList<Integer> colors = new ArrayList();
-            if ((flag & 4) != 0) {
-                while (true) {
-                    start = stringBuilder.indexOf("<c#");
-                    if (start == -1) {
-                        break;
-                    }
-                    stringBuilder.replace(start, start + 2, "");
-                    end = stringBuilder.indexOf(">", start);
-                    int color = Color.parseColor(stringBuilder.substring(start, end));
-                    stringBuilder.replace(start, end + 1, "");
-                    end = stringBuilder.indexOf("</c>");
-                    stringBuilder.replace(end, end + 4, "");
-                    colors.add(Integer.valueOf(start));
-                    colors.add(Integer.valueOf(end));
-                    colors.add(Integer.valueOf(color));
-                }
-            }
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringBuilder);
-            for (a = 0; a < bolds.size() / 2; a++) {
+            for (int a = 0; a < bolds.size() / 2; a++) {
                 spannableStringBuilder.setSpan(new TypefaceSpan(getTypeface("fonts/rmedium.ttf")), ((Integer) bolds.get(a * 2)).intValue(), ((Integer) bolds.get((a * 2) + 1)).intValue(), 33);
-            }
-            for (a = 0; a < colors.size() / 3; a++) {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(((Integer) colors.get((a * 3) + 2)).intValue()), ((Integer) colors.get(a * 3)).intValue(), ((Integer) colors.get((a * 3) + 1)).intValue(), 33);
             }
             return spannableStringBuilder;
         } catch (Throwable e) {
@@ -1180,20 +1158,8 @@ public class AndroidUtilities {
             if (index == -1) {
                 break;
             }
-            int i;
-            if (index == 0) {
-                i = 0;
-            } else {
-                i = 1;
-            }
-            int idx = index - i;
-            int length = q.length();
-            if (index == 0) {
-                i = 0;
-            } else {
-                i = 1;
-            }
-            int end = (i + length) + idx;
+            int idx = index - (index == 0 ? 0 : 1);
+            int end = ((index == 0 ? 0 : 1) + q.length()) + idx;
             if (lastIndex != 0 && lastIndex != idx + 1) {
                 builder.append(wholeString.substring(lastIndex, idx));
             } else if (lastIndex == 0 && idx != 0) {
@@ -1203,7 +1169,10 @@ public class AndroidUtilities {
             if (query.startsWith(" ")) {
                 builder.append(" ");
             }
-            builder.append(replaceTags("<c#ff4d83b3>" + query.trim() + "</c>"));
+            query = query.trim();
+            int start = builder.length();
+            builder.append(query);
+            builder.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), start, query.length() + start, 33);
             lastIndex = end;
         }
         if (lastIndex == -1 || lastIndex == wholeString.length()) {

@@ -11,8 +11,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
@@ -390,15 +392,27 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                     foundUserName = foundUserName.substring(1);
                                 }
                                 try {
-                                    username = AndroidUtilities.replaceTags(String.format("<c#ff4d83b3>@%s</c>%s", new Object[]{user.username.substring(0, foundUserName.length()), user.username.substring(foundUserName.length())}));
-                                } catch (Exception e) {
+                                    CharSequence username2 = new SpannableStringBuilder(null);
+                                    try {
+                                        ((SpannableStringBuilder) username2).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                                        username = username2;
+                                    } catch (Exception e) {
+                                        username = username2;
+                                        username = user.username;
+                                        cell2.setUser(user, name, username);
+                                        cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
+                                        return;
+                                    }
+                                } catch (Exception e2) {
                                     username = user.username;
+                                    cell2.setUser(user, name, username);
+                                    cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
+                                    return;
                                 }
                             }
                         }
-                    } else {
-                        user = (User) this.contacts.get(position);
                     }
+                    user = (User) this.contacts.get(position);
                     cell2.setUser(user, name, username);
                     cell2.setChecked(GroupCreateActivity.this.selectedContacts.containsKey(Integer.valueOf(user.id)), false);
                     return;

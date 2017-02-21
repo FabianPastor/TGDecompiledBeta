@@ -1,6 +1,8 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.GraySectionCell;
@@ -230,9 +233,14 @@ public class SearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Throwable e;
+        Object username;
+        ProfileSearchCell profileSearchCell;
+        boolean z;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
+                UserCell userCell;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {
@@ -242,12 +250,12 @@ public class SearchAdapter extends SelectionAdapter {
                     un = ((Chat) object).username;
                     id = ((Chat) object).id;
                 }
-                CharSequence username = null;
+                CharSequence username2 = null;
                 CharSequence name = null;
                 if (position < this.searchResult.size()) {
                     name = (CharSequence) this.searchResultNames.get(position);
                     if (name != null && un != null && un.length() > 0 && name.toString().startsWith("@" + un)) {
-                        username = name;
+                        username2 = name;
                         name = null;
                     }
                 } else if (position > this.searchResult.size() && un != null) {
@@ -256,24 +264,78 @@ public class SearchAdapter extends SelectionAdapter {
                         foundUserName = foundUserName.substring(1);
                     }
                     try {
-                        username = AndroidUtilities.replaceTags(String.format("<c#ff4d83b3>@%s</c>%s", new Object[]{un.substring(0, foundUserName.length()), un.substring(foundUserName.length())}));
-                    } catch (Throwable e) {
-                        Object username2 = un;
+                        CharSequence username3 = new SpannableStringBuilder(un);
+                        try {
+                            ((SpannableStringBuilder) username3).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                            username2 = username3;
+                        } catch (Exception e2) {
+                            e = e2;
+                            username2 = username3;
+                            username = un;
+                            FileLog.e(e);
+                            if (this.useUserCell) {
+                                userCell = holder.itemView;
+                                userCell.setData(object, name, username2, 0);
+                                if (this.checkedMap == null) {
+                                    userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
+                                    return;
+                                }
+                                return;
+                            }
+                            profileSearchCell = holder.itemView;
+                            profileSearchCell.setData(object, null, name, username2, false);
+                            if (position == getItemCount() + -1) {
+                            }
+                            profileSearchCell.useSeparator = z;
+                            if (this.ignoreUsers == null) {
+                                return;
+                            }
+                            if (this.ignoreUsers.containsKey(Integer.valueOf(id))) {
+                                profileSearchCell.drawAlpha = 0.5f;
+                            } else {
+                                profileSearchCell.drawAlpha = 1.0f;
+                            }
+                        }
+                    } catch (Exception e3) {
+                        e = e3;
+                        username = un;
                         FileLog.e(e);
+                        if (this.useUserCell) {
+                            profileSearchCell = holder.itemView;
+                            profileSearchCell.setData(object, null, name, username2, false);
+                            if (position == getItemCount() + -1) {
+                            }
+                            profileSearchCell.useSeparator = z;
+                            if (this.ignoreUsers == null) {
+                                if (this.ignoreUsers.containsKey(Integer.valueOf(id))) {
+                                    profileSearchCell.drawAlpha = 1.0f;
+                                } else {
+                                    profileSearchCell.drawAlpha = 0.5f;
+                                }
+                            }
+                            return;
+                        }
+                        userCell = holder.itemView;
+                        userCell.setData(object, name, username2, 0);
+                        if (this.checkedMap == null) {
+                            userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
+                            return;
+                        }
+                        return;
                     }
                 }
                 if (this.useUserCell) {
-                    UserCell userCell = holder.itemView;
-                    userCell.setData(object, name, username, 0);
-                    if (this.checkedMap != null) {
+                    userCell = holder.itemView;
+                    userCell.setData(object, name, username2, 0);
+                    if (this.checkedMap == null) {
                         userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
                         return;
                     }
                     return;
                 }
-                ProfileSearchCell profileSearchCell = holder.itemView;
-                profileSearchCell.setData(object, null, name, username, false);
-                boolean z = (position == getItemCount() + -1 || position == this.searchResult.size() - 1) ? false : true;
+                profileSearchCell = holder.itemView;
+                profileSearchCell.setData(object, null, name, username2, false);
+                z = position == getItemCount() + -1 && position != this.searchResult.size() - 1;
                 profileSearchCell.useSeparator = z;
                 if (this.ignoreUsers == null) {
                     return;

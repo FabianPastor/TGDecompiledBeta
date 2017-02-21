@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC.TL_game;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetEmpty;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
@@ -690,7 +691,14 @@ public class MessageObject {
                 int maxButtonSize = 0;
                 int size = row.buttons.size();
                 for (int b = 0; b < size; b++) {
-                    StaticLayout staticLayout = new StaticLayout(Emoji.replaceEmoji(((KeyboardButton) row.buttons.get(b)).text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    CharSequence text;
+                    KeyboardButton button = (KeyboardButton) row.buttons.get(b);
+                    if (!(button instanceof TL_keyboardButtonBuy) || (this.messageOwner.media.flags & 4) == 0) {
+                        text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false);
+                    } else {
+                        text = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt);
+                    }
+                    StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout.getLineCount() > 0) {
                         maxButtonSize = Math.max(maxButtonSize, ((int) Math.ceil((double) (staticLayout.getLineWidth(0) - staticLayout.getLineLeft(0)))) + AndroidUtilities.dp(4.0f));
                     }
@@ -1294,6 +1302,7 @@ public class MessageObject {
                                 CharSequence str = this.messageText.subSequence(startCharacter, endCharacter);
                                 if (VERSION.SDK_INT >= 24) {
                                     block.textLayout = Builder.obtain(str, 0, str.length(), paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setIncludePad(false).setEllipsize(null).setBreakStrategy(1).setHyphenationFrequency(2).build();
+                                    currentBlockLinesCount = block.textLayout.getLineCount();
                                 } else {
                                     block.textLayout = new StaticLayout(str, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }

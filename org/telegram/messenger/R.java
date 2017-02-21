@@ -1658,6 +1658,8 @@ public final class R {
         public static final int PaymentShippingZipPlaceholder = NUM;
         public static final int PaymentSuccessfullyPaid = NUM;
         public static final int PaymentSuccessfullyPaidNoItem = NUM;
+        public static final int PaymentTestInvoice = NUM;
+        public static final int PaymentTestShipment = NUM;
         public static final int PaymentTransactionMessage = NUM;
         public static final int PaymentTransactionReview = NUM;
         public static final int PaymentTransactionTotal = NUM;

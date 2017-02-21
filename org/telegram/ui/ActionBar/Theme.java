@@ -181,6 +181,7 @@ public class Theme {
     public static TextPaint chat_replyTextPaint = null;
     public static Drawable chat_shareDrawable = null;
     public static Drawable chat_shareIconDrawable = null;
+    public static TextPaint chat_shipmentPaint = null;
     public static Paint chat_statusPaint = null;
     public static Paint chat_statusRecordPaint = null;
     public static Drawable chat_systemDrawable = null;
@@ -2016,6 +2017,7 @@ public class Theme {
             chat_durationPaint = new TextPaint(1);
             chat_gamePaint = new TextPaint(1);
             chat_gamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            chat_shipmentPaint = new TextPaint(1);
             chat_timePaint = new TextPaint(1);
             chat_namePaint = new TextPaint(1);
             chat_namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -2197,6 +2199,7 @@ public class Theme {
             chat_replyNamePaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_replyTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             chat_gamePaint.setTextSize((float) AndroidUtilities.dp(13.0f));
+            chat_shipmentPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_instantViewPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             chat_instantViewRectPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
             chat_statusRecordPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -2544,10 +2547,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
+                    int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int selectedBackground;
-                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

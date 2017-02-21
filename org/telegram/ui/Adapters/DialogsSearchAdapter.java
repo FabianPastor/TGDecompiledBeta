@@ -1,7 +1,9 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_searchGlobal;
 import org.telegram.tgnet.TLRPC.TL_topPeer;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_Messages;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.DialogCell;
@@ -679,7 +682,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                                 user.status.expires = cursor.intValue(7);
                                             }
                                             if (found == 1) {
-                                                dialogSearchResult.name = AndroidUtilities.replaceTags("<c#ff00a60e>" + ContactsController.formatName(user.first_name, user.last_name) + "</c>");
+                                                dialogSearchResult.name = new SpannableStringBuilder(ContactsController.formatName(user.first_name, user.last_name));
+                                                ((SpannableStringBuilder) dialogSearchResult.name).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_chats_secretName)), 0, dialogSearchResult.name.length(), 33);
                                             } else {
                                                 dialogSearchResult.name = AndroidUtilities.generateSearchName("@" + user.username, null, "@" + q);
                                             }
@@ -1035,14 +1039,16 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Throwable e;
+        Object username;
+        TLObject tLObject;
         switch (holder.getItemViewType()) {
             case 0:
-                TLObject tLObject;
                 ProfileSearchCell cell = holder.itemView;
                 TLObject user = null;
                 TLObject chat = null;
                 EncryptedChat encryptedChat = null;
-                CharSequence username = null;
+                CharSequence username2 = null;
                 CharSequence name = null;
                 boolean isRecent = false;
                 String un = null;
@@ -1077,7 +1083,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     if (position < this.searchResult.size()) {
                         name = (CharSequence) this.searchResultNames.get(position);
                         if (!(name == null || user == null || user.username == null || user.username.length() <= 0 || !name.toString().startsWith("@" + user.username))) {
-                            username = name;
+                            username2 = name;
                             name = null;
                         }
                     } else if (position > this.searchResult.size() && un != null) {
@@ -1086,10 +1092,34 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                             foundUserName = foundUserName.substring(1);
                         }
                         try {
-                            username = AndroidUtilities.replaceTags(String.format("<c#ff4d83b3>@%s</c>%s", new Object[]{un.substring(0, foundUserName.length()), un.substring(foundUserName.length())}));
-                        } catch (Throwable e) {
-                            Object username2 = un;
+                            CharSequence spannableStringBuilder = new SpannableStringBuilder(un);
+                            try {
+                                ((SpannableStringBuilder) spannableStringBuilder).setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4)), 0, foundUserName.length(), 33);
+                                username2 = spannableStringBuilder;
+                            } catch (Exception e2) {
+                                e = e2;
+                                username2 = spannableStringBuilder;
+                                username = un;
+                                FileLog.e(e);
+                                if (user != null) {
+                                    tLObject = chat;
+                                } else {
+                                    tLObject = user;
+                                }
+                                cell.setData(tLObject, encryptedChat, name, username2, isRecent);
+                                return;
+                            }
+                        } catch (Exception e3) {
+                            e = e3;
+                            username = un;
                             FileLog.e(e);
+                            if (user != null) {
+                                tLObject = user;
+                            } else {
+                                tLObject = chat;
+                            }
+                            cell.setData(tLObject, encryptedChat, name, username2, isRecent);
+                            return;
                         }
                     }
                 }
@@ -1098,7 +1128,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 } else {
                     tLObject = chat;
                 }
-                cell.setData(tLObject, encryptedChat, name, username, isRecent);
+                cell.setData(tLObject, encryptedChat, name, username2, isRecent);
                 return;
             case 1:
                 GraySectionCell cell2 = holder.itemView;
@@ -1127,7 +1157,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 cell3.setDialog(messageObject.getDialogId(), messageObject, messageObject.messageOwner.date);
                 return;
             case 4:
-                HashtagSearchCell cell4 = holder.itemView;
+                HashtagSearchCell cell4 = (HashtagSearchCell) holder.itemView;
                 cell4.setText((CharSequence) this.searchResultHashtags.get(position - 1));
                 cell4.setNeedDivider(position != this.searchResultHashtags.size());
                 return;

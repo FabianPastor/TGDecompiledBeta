@@ -1294,16 +1294,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             if (this.buttonState == -1) {
                 this.delegate.didPressedImage(this);
             }
-        } else if (this.documentAttachType == 2 && this.buttonState == -1) {
-            WebPage webPage = this.currentMessageObject.messageOwner.media.webpage;
-            if (webPage == null) {
-                return;
+        } else if (this.documentAttachType == 2) {
+            if (this.buttonState == -1) {
+                WebPage webPage = this.currentMessageObject.messageOwner.media.webpage;
+                if (webPage == null) {
+                    return;
+                }
+                if (VERSION.SDK_INT < 16 || webPage.embed_url == null || webPage.embed_url.length() == 0) {
+                    Browser.openUrl(getContext(), webPage.url);
+                } else {
+                    this.delegate.needOpenWebView(webPage.embed_url, webPage.site_name, webPage.description, webPage.url, webPage.embed_width, webPage.embed_height);
+                }
             }
-            if (VERSION.SDK_INT < 16 || webPage.embed_url == null || webPage.embed_url.length() == 0) {
-                Browser.openUrl(getContext(), webPage.url);
-            } else {
-                this.delegate.needOpenWebView(webPage.embed_url, webPage.site_name, webPage.description, webPage.url, webPage.embed_width, webPage.embed_height);
-            }
+        } else if (this.hasInvoicePreview && this.buttonState == -1) {
+            this.delegate.didPressedImage(this);
         }
     }
 
@@ -1720,26 +1724,36 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int dp;
         String description;
         Photo photo;
-        TLObject webDocument;
+        TLObject document;
         String type;
         int duration;
         boolean smallImage;
+        int additinalWidth;
         int height;
+        int width;
         Throwable e;
+        int restLinesCount;
         int a;
         int lineLeft;
         boolean authorIsRTL;
+        boolean hasRTL;
+        int textWidth;
+        int maxPhotoWidth;
         ArrayList arrayList;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
-        float scale;
         String fileName;
         int seconds;
         String str;
+        CharSequence str2;
+        String price;
+        SpannableStringBuilder stringBuilder;
         int mWidth;
         int timeWidthTotal;
+        int rows;
         boolean fullWidth;
         float f;
         int maxButtonWidth;
@@ -1760,8 +1774,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int width;
-            int rows;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1830,8 +1842,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            int maxPhotoWidth;
-            DocumentAttribute attribute;
+            float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -1893,12 +1904,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
-                    TLObject document;
-                    int additinalWidth;
+                    TLObject webDocument;
                     int restLines;
-                    int restLinesCount;
-                    boolean hasRTL;
-                    int textWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -2331,6 +2338,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.hasInvoicePreview) {
+                                        if (messageObject.messageOwner.media.shipping_address_requested) {
+                                            if (messageObject.messageOwner.media.test) {
+                                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            } else {
+                                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            }
+                                        } else if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        }
+                                        price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                        stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                        this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        if (!this.drawPhotoImage) {
+                                            this.totalHeight += AndroidUtilities.dp(6.0f);
+                                            if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                                maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                            } else {
+                                                maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                                this.totalHeight += AndroidUtilities.dp(12.0f);
+                                            }
+                                        }
+                                    }
                                     this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                     this.totalHeight += AndroidUtilities.dp(4.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -2428,21 +2462,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     updateWaveform();
                                     updateButtonState(dataChanged);
                                 }
-                                if (!this.hasGamePreview) {
+                                if (this.hasGamePreview) {
                                     str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                } else if (this.hasInvoicePreview) {
+                                }
+                                if (this.hasInvoicePreview) {
                                     if (messageObject.messageOwner.media.shipping_address_requested) {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        }
+                                    } else if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
-                                    if (messageObject.messageOwner.media.test) {
-                                        str = "TEST " + str;
+                                    price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                    stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                    this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.drawPhotoImage) {
+                                        this.totalHeight += AndroidUtilities.dp(6.0f);
+                                        if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                            maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                            this.totalHeight += AndroidUtilities.dp(12.0f);
+                                        } else {
+                                            maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                        }
                                     }
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                 this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -2621,6 +2671,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                if (this.hasInvoicePreview) {
+                                    if (messageObject.messageOwner.media.shipping_address_requested) {
+                                        if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        }
+                                    } else if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    } else {
+                                        str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                    }
+                                    price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                    stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                    this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.drawPhotoImage) {
+                                        this.totalHeight += AndroidUtilities.dp(6.0f);
+                                        if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                            maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                        } else {
+                                            maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                            this.totalHeight += AndroidUtilities.dp(12.0f);
+                                        }
+                                    }
+                                }
                                 this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                 this.totalHeight += AndroidUtilities.dp(4.0f);
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -2720,21 +2797,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 updateWaveform();
                                 updateButtonState(dataChanged);
                             }
-                            if (!this.hasGamePreview) {
+                            if (this.hasGamePreview) {
                                 str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                            } else if (this.hasInvoicePreview) {
+                            }
+                            if (this.hasInvoicePreview) {
                                 if (messageObject.messageOwner.media.shipping_address_requested) {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                    if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                    } else {
+                                        str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    }
+                                } else if (messageObject.messageOwner.media.test) {
+                                    str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                 } else {
-                                    str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                 }
-                                if (messageObject.messageOwner.media.test) {
-                                    str = "TEST " + str;
+                                price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                if (this.drawPhotoImage) {
+                                    this.totalHeight += AndroidUtilities.dp(6.0f);
+                                    if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                        maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                        this.totalHeight += AndroidUtilities.dp(12.0f);
+                                    } else {
+                                        maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                    }
                                 }
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                             this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                             this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -3145,6 +3238,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                         this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        if (this.hasInvoicePreview) {
+                                            if (messageObject.messageOwner.media.shipping_address_requested) {
+                                                if (messageObject.messageOwner.media.test) {
+                                                    str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                                } else {
+                                                    str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                                }
+                                            } else if (messageObject.messageOwner.media.test) {
+                                                str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                            } else {
+                                                str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                            }
+                                            price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                            stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                            this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                            this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                            if (this.drawPhotoImage) {
+                                                this.totalHeight += AndroidUtilities.dp(6.0f);
+                                                if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                                    maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                                } else {
+                                                    maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                                    this.totalHeight += AndroidUtilities.dp(12.0f);
+                                                }
+                                            }
+                                        }
                                         this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                         this.totalHeight += AndroidUtilities.dp(4.0f);
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -3244,21 +3364,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         updateWaveform();
                                         updateButtonState(dataChanged);
                                     }
-                                    if (!this.hasGamePreview) {
+                                    if (this.hasGamePreview) {
                                         str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                         this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                         this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                    } else if (this.hasInvoicePreview) {
+                                    }
+                                    if (this.hasInvoicePreview) {
                                         if (messageObject.messageOwner.media.shipping_address_requested) {
-                                            str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                            if (messageObject.messageOwner.media.test) {
+                                                str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                            } else {
+                                                str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                            }
+                                        } else if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                         } else {
-                                            str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                         }
-                                        if (messageObject.messageOwner.media.test) {
-                                            str = "TEST " + str;
+                                        price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                        stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                        this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        if (this.drawPhotoImage) {
+                                            this.totalHeight += AndroidUtilities.dp(6.0f);
+                                            if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                                maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                                this.totalHeight += AndroidUtilities.dp(12.0f);
+                                            } else {
+                                                maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                            }
                                         }
-                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                        this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     }
                                     this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                     this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -3437,6 +3573,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.hasInvoicePreview) {
+                                        if (messageObject.messageOwner.media.shipping_address_requested) {
+                                            if (messageObject.messageOwner.media.test) {
+                                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            } else {
+                                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            }
+                                        } else if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        }
+                                        price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                        stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                        this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        if (this.drawPhotoImage) {
+                                            this.totalHeight += AndroidUtilities.dp(6.0f);
+                                            if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                                maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                            } else {
+                                                maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                                this.totalHeight += AndroidUtilities.dp(12.0f);
+                                            }
+                                        }
+                                    }
                                     this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                     this.totalHeight += AndroidUtilities.dp(4.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -3536,21 +3699,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     updateWaveform();
                                     updateButtonState(dataChanged);
                                 }
-                                if (!this.hasGamePreview) {
+                                if (this.hasGamePreview) {
                                     str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                } else if (this.hasInvoicePreview) {
+                                }
+                                if (this.hasInvoicePreview) {
                                     if (messageObject.messageOwner.media.shipping_address_requested) {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        }
+                                    } else if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
-                                    if (messageObject.messageOwner.media.test) {
-                                        str = "TEST " + str;
+                                    price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                    stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                    this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.drawPhotoImage) {
+                                        this.totalHeight += AndroidUtilities.dp(6.0f);
+                                        if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                            maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                            this.totalHeight += AndroidUtilities.dp(12.0f);
+                                        } else {
+                                            maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                        }
                                     }
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                 this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -3929,6 +4108,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.hasInvoicePreview) {
+                                        if (messageObject.messageOwner.media.shipping_address_requested) {
+                                            if (messageObject.messageOwner.media.test) {
+                                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                            } else {
+                                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                            }
+                                        } else if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        }
+                                        price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                        stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                        this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                        this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        if (this.drawPhotoImage) {
+                                            this.totalHeight += AndroidUtilities.dp(6.0f);
+                                            if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                                maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                            } else {
+                                                maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                                this.totalHeight += AndroidUtilities.dp(12.0f);
+                                            }
+                                        }
+                                    }
                                     this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                     this.totalHeight += AndroidUtilities.dp(4.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -4028,21 +4234,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     updateWaveform();
                                     updateButtonState(dataChanged);
                                 }
-                                if (!this.hasGamePreview) {
+                                if (this.hasGamePreview) {
                                     str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                } else if (this.hasInvoicePreview) {
+                                }
+                                if (this.hasInvoicePreview) {
                                     if (messageObject.messageOwner.media.shipping_address_requested) {
-                                        str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                        }
+                                    } else if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                     } else {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                     }
-                                    if (messageObject.messageOwner.media.test) {
-                                        str = "TEST " + str;
+                                    price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                    stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                    this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.drawPhotoImage) {
+                                        this.totalHeight += AndroidUtilities.dp(6.0f);
+                                        if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                            maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                            this.totalHeight += AndroidUtilities.dp(12.0f);
+                                        } else {
+                                            maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                        }
                                     }
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                 this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -4221,6 +4443,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 str = String.format("%d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(seconds)});
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                if (this.hasInvoicePreview) {
+                                    if (messageObject.messageOwner.media.shipping_address_requested) {
+                                        if (messageObject.messageOwner.media.test) {
+                                            str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                        } else {
+                                            str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                        }
+                                    } else if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    } else {
+                                        str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                    }
+                                    price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                    stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                    stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                    this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    if (this.drawPhotoImage) {
+                                        this.totalHeight += AndroidUtilities.dp(6.0f);
+                                        if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                            maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                        } else {
+                                            maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                            this.totalHeight += AndroidUtilities.dp(12.0f);
+                                        }
+                                    }
+                                }
                                 this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                                 this.totalHeight += AndroidUtilities.dp(4.0f);
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
@@ -4320,21 +4569,37 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 updateWaveform();
                                 updateButtonState(dataChanged);
                             }
-                            if (!this.hasGamePreview) {
+                            if (this.hasGamePreview) {
                                 str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                            } else if (this.hasInvoicePreview) {
+                            }
+                            if (this.hasInvoicePreview) {
                                 if (messageObject.messageOwner.media.shipping_address_requested) {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                    if (messageObject.messageOwner.media.test) {
+                                        str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                    } else {
+                                        str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    }
+                                } else if (messageObject.messageOwner.media.test) {
+                                    str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
                                 } else {
-                                    str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                    str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
                                 }
-                                if (messageObject.messageOwner.media.test) {
-                                    str = "TEST " + str;
+                                price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                                stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                                stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                                this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                                this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                if (this.drawPhotoImage) {
+                                    this.totalHeight += AndroidUtilities.dp(6.0f);
+                                    if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                        maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                        this.totalHeight += AndroidUtilities.dp(12.0f);
+                                    } else {
+                                        maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                    }
                                 }
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
                             this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
                             this.totalHeight += AndroidUtilities.dp(4.0f);
@@ -4757,19 +5022,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                     }
                                 }
-                                if (!this.hasGamePreview) {
+                                if (this.hasGamePreview) {
                                     str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                    this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                    this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                } else if (this.hasInvoicePreview) {
-                                    if (messageObject.messageOwner.media.shipping_address_requested) {
-                                        str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
-                                    } else {
-                                        str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
-                                    }
-                                    if (messageObject.messageOwner.media.test) {
-                                        str = "TEST " + str;
-                                    }
                                     this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                     this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
@@ -4853,19 +5107,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_durationPaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
-                            if (!this.hasGamePreview) {
+                            if (this.hasGamePreview) {
                                 str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
-                                this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
-                                this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                            } else if (this.hasInvoicePreview) {
-                                if (messageObject.messageOwner.media.shipping_address_requested) {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
-                                } else {
-                                    str = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
-                                }
-                                if (messageObject.messageOwner.media.test) {
-                                    str = "TEST " + str;
-                                }
                                 this.durationWidth = (int) Math.ceil((double) Theme.chat_gamePaint.measureText(str));
                                 this.videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, this.durationWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
@@ -4873,6 +5116,33 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageBitmap((Drawable) null);
                             this.linkPreviewHeight -= AndroidUtilities.dp(6.0f);
                             this.totalHeight += AndroidUtilities.dp(4.0f);
+                        }
+                        if (this.hasInvoicePreview) {
+                            if (messageObject.messageOwner.media.shipping_address_requested) {
+                                if (messageObject.messageOwner.media.test) {
+                                    str2 = LocaleController.getString("PaymentTestShipment", R.string.PaymentTestShipment).toUpperCase();
+                                } else {
+                                    str2 = LocaleController.getString("PaymentShipment", R.string.PaymentShipment).toUpperCase();
+                                }
+                            } else if (messageObject.messageOwner.media.test) {
+                                str2 = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                            } else {
+                                str2 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                            }
+                            price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
+                            stringBuilder = new SpannableStringBuilder(price + " " + str2);
+                            stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, price.length(), 33);
+                            this.durationWidth = (int) Math.ceil((double) Theme.chat_shipmentPaint.measureText(stringBuilder, 0, stringBuilder.length()));
+                            this.videoInfoLayout = new StaticLayout(stringBuilder, Theme.chat_shipmentPaint, this.durationWidth + AndroidUtilities.dp(10.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            if (this.drawPhotoImage) {
+                                this.totalHeight += AndroidUtilities.dp(6.0f);
+                                if ((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f) > maxWidth) {
+                                    maxChildWidth = Math.max(this.durationWidth, maxChildWidth);
+                                    this.totalHeight += AndroidUtilities.dp(12.0f);
+                                } else {
+                                    maxChildWidth = Math.max((this.durationWidth + this.timeWidth) + AndroidUtilities.dp(6.0f), maxChildWidth);
+                                }
+                            }
                         }
                         if (this.hasGamePreview && messageObject.textHeight != 0) {
                             this.linkPreviewHeight += messageObject.textHeight + AndroidUtilities.dp(6.0f);
@@ -4927,13 +5197,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     this.contactAvatarDrawable.setInfo(user);
                 }
                 ImageReceiver imageReceiver = this.photoImage;
-                String str2 = "50_50";
+                String str3 = "50_50";
                 if (user != null) {
                     drawable = this.contactAvatarDrawable;
                 } else {
                     drawable = Theme.chat_contactDrawable[messageObject.isOutOwner() ? 1 : 0];
                 }
-                imageReceiver.setImage(currentPhoto, str2, drawable, null, false);
+                imageReceiver.setImage(currentPhoto, str3, drawable, null, false);
                 String phone = messageObject.messageOwner.media.phone_number;
                 if (phone == null || phone.length() == 0) {
                     phone = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
@@ -5075,15 +5345,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         i2 = AndroidUtilities.dp(86.0f);
                         this.currentUrl = String.format(Locale.US, "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=72x72&maptype=roadmap&scale=%d&markers=color:red|size:mid|%f,%f&sensor=false", new Object[]{Double.valueOf(lat), Double.valueOf(lon), Integer.valueOf(Math.min(2, (int) Math.ceil((double) AndroidUtilities.density))), Double.valueOf(lat), Double.valueOf(lon)});
                     }
-                    r22 = this.photoImage;
-                    String str3 = this.currentUrl;
+                    r24 = this.photoImage;
+                    String str4 = this.currentUrl;
                     Drawable[] drawableArr = Theme.chat_locationDrawable;
                     if (messageObject.isOutOwner()) {
                         dp = 1;
                     } else {
                         dp = 0;
                     }
-                    r22.setImage(str3, null, drawableArr[dp], null, 0);
+                    r24.setImage(str4, null, drawableArr[dp], null, 0);
                 } else if (messageObject.type == 13) {
                     float maxWidth3;
                     float maxHeight;
@@ -5305,20 +5575,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoNotSet = true;
                             this.photoImage.setImage(null, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilter, 0, null, false);
                         } else if (localFile == 1) {
-                            String str4;
+                            String str5;
                             FileLocation fileLocation;
-                            r22 = this.photoImage;
+                            r24 = this.photoImage;
                             if (messageObject.isSendError()) {
-                                str4 = null;
+                                str5 = null;
                             } else {
-                                str4 = messageObject.messageOwner.attachPath;
+                                str5 = messageObject.messageOwner.attachPath;
                             }
                             if (this.currentPhotoObject != null) {
                                 fileLocation = this.currentPhotoObject.location;
                             } else {
                                 fileLocation = null;
                             }
-                            r22.setImage(null, str4, null, null, fileLocation, this.currentPhotoFilter, 0, null, false);
+                            r24.setImage(null, str5, null, null, fileLocation, this.currentPhotoFilter, 0, null, false);
                         } else {
                             this.photoImage.setImage(messageObject.messageOwner.media.document, null, this.currentPhotoObject != null ? this.currentPhotoObject.location : null, this.currentPhotoFilter, messageObject.messageOwner.media.document.size, null, false);
                         }
@@ -5780,23 +6050,35 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         }
                     }
                     imageDrawn = this.photoImage.draw(canvas);
-                    if (this.videoInfoLayout != null) {
-                        if (this.hasGamePreview || this.hasInvoicePreview) {
-                            x = this.photoImage.getImageX() + AndroidUtilities.dp(8.5f);
-                            y = this.photoImage.getImageY() + AndroidUtilities.dp(6.0f);
-                            Theme.chat_timeBackgroundDrawable.setBounds(x - AndroidUtilities.dp(4.0f), y - AndroidUtilities.dp(1.5f), (this.durationWidth + x) + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(16.5f) + y);
-                            Theme.chat_timeBackgroundDrawable.draw(canvas);
-                        } else {
-                            x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.dp(8.0f)) - this.durationWidth;
-                            y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.dp(19.0f);
-                            Theme.chat_timeBackgroundDrawable.setBounds(x - AndroidUtilities.dp(4.0f), y - AndroidUtilities.dp(1.5f), (this.durationWidth + x) + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(14.5f) + y);
-                            Theme.chat_timeBackgroundDrawable.draw(canvas);
-                        }
-                        canvas.save();
-                        canvas.translate((float) x, (float) y);
-                        this.videoInfoLayout.draw(canvas);
-                        canvas.restore();
+                }
+                if (this.videoInfoLayout != null && (!this.drawPhotoImage || this.photoImage.getVisible())) {
+                    if (!this.hasGamePreview && !this.hasInvoicePreview) {
+                        x = ((this.photoImage.getImageX() + this.photoImage.getImageWidth()) - AndroidUtilities.dp(8.0f)) - this.durationWidth;
+                        y = (this.photoImage.getImageY() + this.photoImage.getImageHeight()) - AndroidUtilities.dp(19.0f);
+                        Theme.chat_timeBackgroundDrawable.setBounds(x - AndroidUtilities.dp(4.0f), y - AndroidUtilities.dp(1.5f), (this.durationWidth + x) + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(14.5f) + y);
+                        Theme.chat_timeBackgroundDrawable.draw(canvas);
+                    } else if (this.drawPhotoImage) {
+                        x = this.photoImage.getImageX() + AndroidUtilities.dp(8.5f);
+                        y = this.photoImage.getImageY() + AndroidUtilities.dp(6.0f);
+                        Theme.chat_timeBackgroundDrawable.setBounds(x - AndroidUtilities.dp(4.0f), y - AndroidUtilities.dp(1.5f), (this.durationWidth + x) + AndroidUtilities.dp(4.0f), AndroidUtilities.dp(16.5f) + y);
+                        Theme.chat_timeBackgroundDrawable.draw(canvas);
+                    } else {
+                        x = linkX;
+                        y = linkPreviewY;
                     }
+                    canvas.save();
+                    canvas.translate((float) x, (float) y);
+                    if (this.hasInvoicePreview) {
+                        if (this.drawPhotoImage) {
+                            Theme.chat_shipmentPaint.setColor(Theme.getColor(Theme.key_chat_previewGameText));
+                        } else if (this.currentMessageObject.isOutOwner()) {
+                            Theme.chat_shipmentPaint.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
+                        } else {
+                            Theme.chat_shipmentPaint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
+                        }
+                    }
+                    this.videoInfoLayout.draw(canvas);
+                    canvas.restore();
                 }
                 if (this.drawInstantView) {
                     Drawable instantDrawable;

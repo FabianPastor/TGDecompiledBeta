@@ -94,6 +94,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
@@ -105,6 +106,7 @@ import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_inputPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
+import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
@@ -2936,7 +2938,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         }
     }
 
-    private FileLocation getFileLocation(int index, int[] size) {
+    private TLObject getFileLocation(int index, int[] size) {
         if (index < 0) {
             return null;
         }
@@ -2971,9 +2973,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 }
                 size[0] = -1;
                 return null;
-            } else if (message.getDocument() == null || message.getDocument().thumb == null) {
-                return null;
+            } else if (message.messageOwner.media instanceof TL_messageMediaInvoice) {
+                return ((TL_messageMediaInvoice) message.messageOwner.media).photo;
             } else {
+                if (message.getDocument() == null || message.getDocument().thumb == null) {
+                    return null;
+                }
                 size[0] = message.getDocument().thumb.size;
                 if (size[0] == 0) {
                     size[0] = -1;
@@ -2984,7 +2989,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             return null;
         } else {
             size[0] = ((Integer) this.imagesArrLocationsSizes.get(index)).intValue();
-            return (FileLocation) this.imagesArrLocations.get(index);
+            return (TLObject) this.imagesArrLocations.get(index);
         }
     }
 
@@ -3033,6 +3038,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.menuItem.setVisibility(0);
         this.bottomLayout.setVisibility(0);
         this.bottomLayout.setTranslationY(0.0f);
+        this.captionTextView.setTranslationY(0.0f);
+        this.captionTextViewNew.setTranslationY(0.0f);
+        this.bottomLayout.setTranslationY(0.0f);
         this.shareButton.setVisibility(8);
         this.allowShare = false;
         this.menuItem.hideSubItem(2);
@@ -3072,7 +3080,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             this.imagesArr.add(messageObject);
             if (this.currentAnimation != null) {
                 this.needSearchImageInArr = false;
-            } else if (!(messageObject.messageOwner.media instanceof TL_messageMediaWebPage) && (messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty))) {
+            } else if (!((messageObject.messageOwner.media instanceof TL_messageMediaInvoice) || (messageObject.messageOwner.media instanceof TL_messageMediaWebPage) || (messageObject.messageOwner.action != null && !(messageObject.messageOwner.action instanceof TL_messageActionEmpty)))) {
                 this.needSearchImageInArr = true;
                 this.imagesByIds[0].put(Integer.valueOf(messageObject.getId()), messageObject);
                 this.menuItem.showSubItem(2);
@@ -3295,42 +3303,54 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 sameImage = this.currentMessageObject != null && this.currentMessageObject.getId() == newMessageObject.getId();
                 this.currentMessageObject = newMessageObject;
                 isVideo = this.currentMessageObject.isVideo();
-                ActionBarMenuItem actionBarMenuItem = this.masksItem;
-                i = (!this.currentMessageObject.hasPhotoStickers() || ((int) this.currentMessageObject.getDialogId()) == 0) ? 4 : 0;
-                actionBarMenuItem.setVisibility(i);
-                if (this.currentMessageObject.canDeleteMessage(null)) {
-                    this.menuItem.showSubItem(6);
-                } else {
+                boolean isInvoice = this.currentMessageObject.isInvoice();
+                if (isInvoice) {
+                    this.masksItem.setVisibility(8);
                     this.menuItem.hideSubItem(6);
-                }
-                if (!isVideo || VERSION.SDK_INT < 16) {
                     this.menuItem.hideSubItem(11);
+                    setCurrentCaption(this.currentMessageObject.messageOwner.media.description);
+                    this.allowShare = false;
+                    this.bottomLayout.setTranslationY((float) AndroidUtilities.dp(48.0f));
+                    this.captionTextView.setTranslationY((float) AndroidUtilities.dp(48.0f));
+                    this.captionTextViewNew.setTranslationY((float) AndroidUtilities.dp(48.0f));
                 } else {
-                    this.menuItem.showSubItem(11);
-                }
-                if (this.currentMessageObject.isFromUser()) {
-                    User user = MessagesController.getInstance().getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
-                    if (user != null) {
-                        this.nameTextView.setText(UserObject.getUserName(user));
+                    ActionBarMenuItem actionBarMenuItem = this.masksItem;
+                    i = (!this.currentMessageObject.hasPhotoStickers() || ((int) this.currentMessageObject.getDialogId()) == 0) ? 4 : 0;
+                    actionBarMenuItem.setVisibility(i);
+                    if (this.currentMessageObject.canDeleteMessage(null)) {
+                        this.menuItem.showSubItem(6);
                     } else {
-                        this.nameTextView.setText("");
+                        this.menuItem.hideSubItem(6);
                     }
-                } else {
-                    Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentMessageObject.messageOwner.to_id.channel_id));
-                    if (chat != null) {
-                        this.nameTextView.setText(chat.title);
+                    if (!isVideo || VERSION.SDK_INT < 16) {
+                        this.menuItem.hideSubItem(11);
                     } else {
-                        this.nameTextView.setText("");
+                        this.menuItem.showSubItem(11);
                     }
+                    if (this.currentMessageObject.isFromUser()) {
+                        User user = MessagesController.getInstance().getUser(Integer.valueOf(this.currentMessageObject.messageOwner.from_id));
+                        if (user != null) {
+                            this.nameTextView.setText(UserObject.getUserName(user));
+                        } else {
+                            this.nameTextView.setText("");
+                        }
+                    } else {
+                        Chat chat = MessagesController.getInstance().getChat(Integer.valueOf(this.currentMessageObject.messageOwner.to_id.channel_id));
+                        if (chat != null) {
+                            this.nameTextView.setText(chat.title);
+                        } else {
+                            this.nameTextView.setText("");
+                        }
+                    }
+                    long date = ((long) this.currentMessageObject.messageOwner.date) * 1000;
+                    String dateString = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
+                    if (this.currentFileNames[0] == null || !isVideo) {
+                        this.dateTextView.setText(dateString);
+                    } else {
+                        this.dateTextView.setText(String.format("%s (%s)", new Object[]{dateString, AndroidUtilities.formatFileSize((long) this.currentMessageObject.getDocument().size)}));
+                    }
+                    setCurrentCaption(this.currentMessageObject.caption);
                 }
-                long date = ((long) this.currentMessageObject.messageOwner.date) * 1000;
-                String dateString = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
-                if (this.currentFileNames[0] == null || !isVideo) {
-                    this.dateTextView.setText(dateString);
-                } else {
-                    this.dateTextView.setText(String.format("%s (%s)", new Object[]{dateString, AndroidUtilities.formatFileSize((long) this.currentMessageObject.getDocument().size)}));
-                }
-                setCurrentCaption(this.currentMessageObject.caption);
                 if (this.currentAnimation != null) {
                     this.menuItem.hideSubItem(1);
                     this.menuItem.hideSubItem(10);
@@ -3348,6 +3368,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             } else {
                                 this.actionBar.setTitle(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
                             }
+                        } else if (isInvoice) {
+                            this.actionBar.setTitle(this.currentMessageObject.messageOwner.media.title);
                         }
                     } else if (this.opennedFromMedia) {
                         if (this.imagesArr.size() < this.totalImagesCount + this.totalImagesCountMerge && !this.loadingMoreImages && this.currentIndex > this.imagesArr.size() - 5) {
@@ -3607,7 +3629,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         Bitmap placeHolder;
         if (this.imagesArrLocals.isEmpty()) {
             int[] size = new int[1];
-            FileLocation fileLocation = getFileLocation(index, size);
+            TLObject fileLocation = getFileLocation(index, size);
             if (fileLocation != null) {
                 MessageObject messageObject = null;
                 if (!this.imagesArr.isEmpty()) {

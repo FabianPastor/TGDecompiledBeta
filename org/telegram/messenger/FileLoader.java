@@ -649,6 +649,11 @@ public class FileLoader {
                         return getAttachFileName(((TL_messageMediaInvoice) message.media).photo);
                     }
                 }
+            } else if (message.media instanceof TL_messageMediaInvoice) {
+                TL_webDocument document = ((TL_messageMediaInvoice) message.media).photo;
+                if (document != null) {
+                    return Utilities.MD5(document.url) + "." + ImageLoader.getHttpUrlExtension(document.url, getExtensionByMime(document.mime_type));
+                }
             }
         }
         return "";
