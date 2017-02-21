@@ -77,9 +77,9 @@ public class zzatj extends zzats {
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
+            Map map2;
             this.zzbsb.zzJf();
             int i2 = 0;
-            Map map2;
             try {
                 zzc = this.zzbsb.zzc(this.zzHD);
                 try {

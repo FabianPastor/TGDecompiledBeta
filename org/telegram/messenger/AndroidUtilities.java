@@ -144,7 +144,9 @@ public class AndroidUtilities {
                     Bitmap b = Bitmaps.createScaledBitmap(bitmap, 1, 1, true);
                     if (b != null) {
                         bitmapColor = b.getPixel(0, 0);
-                        b.recycle();
+                        if (bitmap != b) {
+                            b.recycle();
+                        }
                     }
                 }
             } else if (drawable instanceof ColorDrawable) {

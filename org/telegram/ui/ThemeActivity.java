@@ -266,9 +266,11 @@ public class ThemeActivity extends BaseFragment {
             public void onItemClick(View view, int position) {
                 if (position != 0) {
                     position -= 2;
-                    if (position < Theme.themes.size()) {
+                    if (position >= 0 && position < Theme.themes.size()) {
                         Theme.applyTheme((ThemeInfo) Theme.themes.get(position));
-                        ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                        if (ThemeActivity.this.parentLayout != null) {
+                            ThemeActivity.this.parentLayout.rebuildAllFragmentViews(false);
+                        }
                         ThemeActivity.this.finishFragment();
                     }
                 } else if (ThemeActivity.this.getParentActivity() != null) {

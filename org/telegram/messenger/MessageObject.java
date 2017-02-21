@@ -1,12 +1,14 @@
 package org.telegram.messenger;
 
 import android.graphics.Typeface;
+import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
+import android.text.StaticLayout.Builder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
@@ -1264,7 +1266,12 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             try {
-                StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                StaticLayout textLayout;
+                if (VERSION.SDK_INT >= 24) {
+                    textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setIncludePad(false).setEllipsize(null).setBreakStrategy(1).setHyphenationFrequency(2).build();
+                } else {
+                    textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                }
                 this.textHeight = textLayout.getHeight();
                 int linesCount = textLayout.getLineCount();
                 int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
@@ -1284,7 +1291,12 @@ public class MessageObject {
                         if (endCharacter >= startCharacter) {
                             block.charactersOffset = startCharacter;
                             try {
-                                block.textLayout = new StaticLayout(this.messageText.subSequence(startCharacter, endCharacter), paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                CharSequence str = this.messageText.subSequence(startCharacter, endCharacter);
+                                if (VERSION.SDK_INT >= 24) {
+                                    block.textLayout = Builder.obtain(str, 0, str.length(), paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setIncludePad(false).setEllipsize(null).setBreakStrategy(1).setHyphenationFrequency(2).build();
+                                } else {
+                                    block.textLayout = new StaticLayout(str, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                }
                                 block.textYOffset = (float) textLayout.getLineTop(linesOffset);
                                 if (a != 0) {
                                     block.height = (int) (block.textYOffset - prevOffset);

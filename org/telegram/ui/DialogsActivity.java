@@ -319,6 +319,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         });
         if (this.sideMenu != null) {
             this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
+            this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
             this.sideMenu.getAdapter().notifyDataSetChanged();
         }
         FrameLayout frameLayout = new FrameLayout(context);
@@ -1092,6 +1093,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     public void setSideMenu(RecyclerView recyclerView) {
         this.sideMenu = recyclerView;
         this.sideMenu.setBackgroundColor(Theme.getColor(Theme.key_chats_menuBackground));
+        this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
     }
 
     private void updatePasscodeButton() {

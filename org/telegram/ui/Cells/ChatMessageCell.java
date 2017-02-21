@@ -1718,17 +1718,18 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int i;
         int dp;
         int linkPreviewMaxWidth;
-        String description;
-        Photo photo;
         TLObject webDocument;
-        String type;
         int duration;
+        boolean smallImage;
+        int additinalWidth;
         int height;
+        int width;
         Throwable e;
         int restLinesCount;
         int a;
+        int lineLeft;
         boolean authorIsRTL;
-        boolean hasRTL;
+        int textWidth;
         int maxPhotoWidth;
         DocumentAttribute attribute;
         PhotoSize photoSize;
@@ -1736,7 +1737,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int dp2;
         int durationWidth;
         float scale;
-        String fileName;
         int seconds;
         String str;
         int mWidth;
@@ -1762,7 +1762,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int width;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1833,6 +1832,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
             boolean z;
             boolean photoExist;
+            String fileName;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
                 if (AndroidUtilities.isTablet()) {
@@ -1892,12 +1892,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
+                    String description;
+                    Photo photo;
                     TLObject document;
-                    boolean smallImage;
-                    int additinalWidth;
+                    String type;
                     int restLines;
-                    int lineLeft;
-                    int textWidth;
+                    boolean hasRTL;
                     ArrayList arrayList;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {

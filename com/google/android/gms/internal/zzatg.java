@@ -290,6 +290,7 @@ public class zzatg extends zzats {
     public List<com.google.android.gms.common.internal.safeparcel.zza> zzls(int i) {
         Object obj;
         Throwable th;
+        Object obj2;
         int i2;
         zzmq();
         zzJe();
@@ -337,7 +338,6 @@ public class zzatg extends zzats {
                         long j2 = query.getLong(0);
                         int i5 = query.getInt(1);
                         byte[] blob = query.getBlob(2);
-                        Object obj2;
                         if (i5 == 0) {
                             Parcel obtain = Parcel.obtain();
                             try {

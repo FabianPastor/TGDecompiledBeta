@@ -148,7 +148,11 @@ public class DrawerProfileCell extends FrameLayout {
             int y = (bitmap.getHeight() - height) / 2;
             this.srcRect.set(x, y, x + width, y + height);
             this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
+            try {
+                canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
+            } catch (Throwable e) {
+                FileLog.e("tmessages", e);
+            }
         }
     }
 
