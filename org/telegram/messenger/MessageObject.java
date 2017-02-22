@@ -117,7 +117,7 @@ import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 
 public class MessageObject {
-    private static final int LINES_PER_BLOCK = 10;
+    private static final int LINES_PER_BLOCK = 2;
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -154,6 +154,7 @@ public class MessageObject {
     public int wantedBotKeyboardWidth;
 
     public static class TextLayoutBlock {
+        public int charactersEnd;
         public int charactersOffset;
         public int height;
         public StaticLayout textLayout;
@@ -1274,19 +1275,14 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             try {
-                StaticLayout textLayout;
-                if (VERSION.SDK_INT >= 24) {
-                    textLayout = Builder.obtain(this.messageText, 0, this.messageText.length(), paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setIncludePad(false).setEllipsize(null).setBreakStrategy(1).setHyphenationFrequency(2).build();
-                } else {
-                    textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                }
+                StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.textHeight = textLayout.getHeight();
                 int linesCount = textLayout.getLineCount();
-                int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
+                int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 2.0f));
                 int linesOffset = 0;
                 float prevOffset = 0.0f;
                 for (a = 0; a < blocksCount; a++) {
-                    int currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
+                    int currentBlockLinesCount = Math.min(2, linesCount - linesOffset);
                     TextLayoutBlock block = new TextLayoutBlock();
                     if (blocksCount == 1) {
                         block.textLayout = textLayout;
@@ -1298,13 +1294,12 @@ public class MessageObject {
                         int endCharacter = textLayout.getLineEnd((linesOffset + currentBlockLinesCount) - 1);
                         if (endCharacter >= startCharacter) {
                             block.charactersOffset = startCharacter;
+                            block.charactersEnd = endCharacter;
                             try {
-                                CharSequence str = this.messageText.subSequence(startCharacter, endCharacter);
                                 if (VERSION.SDK_INT >= 24) {
-                                    block.textLayout = Builder.obtain(str, 0, str.length(), paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setIncludePad(false).setEllipsize(null).setBreakStrategy(1).setHyphenationFrequency(2).build();
-                                    currentBlockLinesCount = block.textLayout.getLineCount();
+                                    block.textLayout = Builder.obtain(this.messageText, startCharacter, endCharacter, paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setEllipsize(null).setIncludePad(false).setBreakStrategy(1).setHyphenationFrequency(0).build();
                                 } else {
-                                    block.textLayout = new StaticLayout(str, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 }
                                 block.textYOffset = (float) textLayout.getLineTop(linesOffset);
                                 if (a != 0) {

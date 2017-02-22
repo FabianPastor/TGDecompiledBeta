@@ -70,16 +70,16 @@ public class zzatj extends zzats {
         }
 
         public void run() {
-            HttpURLConnection zzc;
             OutputStream outputStream;
             Throwable e;
             Map map;
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
+            Map map2;
             this.zzbsb.zzJf();
             int i2 = 0;
-            Map map2;
+            HttpURLConnection zzc;
             try {
                 zzc = this.zzbsb.zzc(this.zzHD);
                 try {

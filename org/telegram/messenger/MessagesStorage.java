@@ -5002,6 +5002,7 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
+        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5054,7 +5055,6 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
-        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

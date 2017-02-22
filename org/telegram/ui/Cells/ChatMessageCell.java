@@ -402,7 +402,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     TextLayoutBlock block = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(blockNum);
                     x -= this.textX - ((int) Math.ceil((double) block.textXOffset));
                     int line = block.textLayout.getLineForVertical((int) (((float) y) - block.textYOffset));
-                    int off = block.textLayout.getOffsetForHorizontal(line, (float) x) + block.charactersOffset;
+                    int off = block.textLayout.getOffsetForHorizontal(line, (float) x);
                     float left = block.textLayout.getLineLeft(line);
                     if (left <= ((float) x) && block.textLayout.getLineWidth(line) + left >= ((float) x)) {
                         Spannable buffer = this.currentMessageObject.messageText;
@@ -426,22 +426,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     TextLayoutBlock nextBlock;
                                     CharacterStyle[] nextLink;
                                     Path path = obtainNewUrlPath(false);
-                                    int start = buffer.getSpanStart(this.pressedLink) - block.charactersOffset;
+                                    int start = buffer.getSpanStart(this.pressedLink);
                                     int end = buffer.getSpanEnd(this.pressedLink);
-                                    int length = block.textLayout.getText().length();
                                     path.setCurrentLayout(block.textLayout, start, 0.0f);
-                                    block.textLayout.getSelectionPath(start, end - block.charactersOffset, path);
-                                    if (end >= block.charactersOffset + length) {
+                                    block.textLayout.getSelectionPath(start, end, path);
+                                    if (end >= block.charactersEnd) {
                                         a = blockNum + 1;
                                         while (a < this.currentMessageObject.textLayoutBlocks.size()) {
                                             nextBlock = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
-                                            length = nextBlock.textLayout.getText().length();
                                             nextLink = (CharacterStyle[]) buffer.getSpans(nextBlock.charactersOffset, nextBlock.charactersOffset, isMono ? URLSpanMono.class : ClickableSpan.class);
                                             if (nextLink != null && nextLink.length != 0 && nextLink[0] == this.pressedLink) {
                                                 path = obtainNewUrlPath(false);
-                                                path.setCurrentLayout(nextBlock.textLayout, 0, (float) nextBlock.height);
-                                                nextBlock.textLayout.getSelectionPath(0, end - nextBlock.charactersOffset, path);
-                                                if (end < (block.charactersOffset + length) - 1) {
+                                                path.setCurrentLayout(nextBlock.textLayout, 0, nextBlock.textYOffset - block.textYOffset);
+                                                nextBlock.textLayout.getSelectionPath(0, end, path);
+                                                if (end < nextBlock.charactersEnd - 1) {
                                                     break;
                                                 }
                                                 a++;
@@ -450,19 +448,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             }
                                         }
                                     }
-                                    if (start < 0) {
+                                    if (start <= block.charactersOffset) {
+                                        int offsetY = 0;
                                         a = blockNum - 1;
                                         while (a >= 0) {
                                             nextBlock = (TextLayoutBlock) this.currentMessageObject.textLayoutBlocks.get(a);
-                                            length = nextBlock.textLayout.getText().length();
-                                            nextLink = (CharacterStyle[]) buffer.getSpans((nextBlock.charactersOffset + length) - 1, (nextBlock.charactersOffset + length) - 1, isMono ? URLSpanMono.class : ClickableSpan.class);
+                                            nextLink = (CharacterStyle[]) buffer.getSpans(nextBlock.charactersEnd - 1, nextBlock.charactersEnd - 1, isMono ? URLSpanMono.class : ClickableSpan.class);
                                             if (nextLink != null && nextLink.length != 0) {
                                                 if (nextLink[0] == this.pressedLink) {
                                                     path = obtainNewUrlPath(false);
-                                                    start = buffer.getSpanStart(this.pressedLink) - nextBlock.charactersOffset;
-                                                    path.setCurrentLayout(nextBlock.textLayout, start, (float) (-nextBlock.height));
-                                                    nextBlock.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink) - nextBlock.charactersOffset, path);
-                                                    if (start < 0) {
+                                                    start = buffer.getSpanStart(this.pressedLink);
+                                                    offsetY -= nextBlock.height;
+                                                    path.setCurrentLayout(nextBlock.textLayout, start, (float) offsetY);
+                                                    nextBlock.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), path);
+                                                    if (start <= nextBlock.charactersOffset) {
                                                         a--;
                                                     }
                                                 }
@@ -1718,19 +1717,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
-        boolean z;
         int i;
         int dp;
-        String description;
+        int linkPreviewMaxWidth;
         Photo photo;
+        TLObject webDocument;
         TLObject document;
         String type;
         int duration;
         boolean smallImage;
         int additinalWidth;
-        int height;
-        int width;
         Throwable e;
         int restLinesCount;
         int a;
@@ -1739,7 +1735,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
-        ArrayList arrayList;
         DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
@@ -1751,7 +1746,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         CharSequence str2;
         String price;
         SpannableStringBuilder stringBuilder;
-        int mWidth;
         int timeWidthTotal;
         int rows;
         boolean fullWidth;
@@ -1774,6 +1768,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
+            int width;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1842,6 +1837,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
+            boolean z;
             float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
@@ -1900,12 +1897,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
-                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
                     String author;
-                    TLObject webDocument;
+                    String description;
+                    int height;
                     int restLines;
+                    ArrayList arrayList;
+                    int mWidth;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

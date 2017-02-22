@@ -3,12 +3,9 @@ package org.telegram.messenger;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -1202,22 +1199,6 @@ public class NotificationsController {
         } catch (Throwable e) {
             FileLog.e(e);
         }
-    }
-
-    private static String getLauncherClassName(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            Intent intent = new Intent("android.intent.action.MAIN");
-            intent.addCategory("android.intent.category.LAUNCHER");
-            for (ResolveInfo resolveInfo : pm.queryIntentActivities(intent, 0)) {
-                if (resolveInfo.activityInfo.applicationInfo.packageName.equalsIgnoreCase(context.getPackageName())) {
-                    return resolveInfo.activityInfo.name;
-                }
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-        return null;
     }
 
     private boolean isPersonalMessage(MessageObject messageObject) {

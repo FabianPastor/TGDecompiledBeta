@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -123,16 +122,14 @@ public class NotificationBadge {
             intent.putExtra(INTENT_EXTRA_BADGE_COUNT, badgeCount);
             intent.putExtra(INTENT_EXTRA_PACKAGENAME, NotificationBadge.componentName.getPackageName());
             intent.putExtra(INTENT_EXTRA_ACTIVITY_NAME, NotificationBadge.componentName.getClassName());
-            if (NotificationBadge.canResolveBroadcast(intent)) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        try {
-                            ApplicationLoader.applicationContext.sendBroadcast(intent);
-                        } catch (Exception e) {
-                        }
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    try {
+                        ApplicationLoader.applicationContext.sendBroadcast(intent);
+                    } catch (Exception e) {
                     }
-                });
-            }
+                }
+            });
         }
 
         public List<String> getSupportLaunchers() {
@@ -355,28 +352,23 @@ public class NotificationBadge {
         }
     }
 
-    public class SamsungHomeBadger implements Badger {
-        private final String[] CONTENT_PROJECTION = new String[]{"_id", "class"};
-        private final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
-        private DefaultBadger defaultBadger;
-
-        public SamsungHomeBadger() {
-            if (VERSION.SDK_INT >= 21) {
-                this.defaultBadger = new DefaultBadger();
-            }
-        }
+    public static class SamsungHomeBadger implements Badger {
+        private static final String[] CONTENT_PROJECTION = new String[]{"_id", "class"};
+        private static final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
+        private static DefaultBadger defaultBadger;
 
         public void executeBadge(int badgeCount) {
-            if (this.defaultBadger != null) {
-                try {
-                    this.defaultBadger.executeBadge(badgeCount);
-                } catch (Exception e) {
+            try {
+                if (defaultBadger == null) {
+                    defaultBadger = new DefaultBadger();
                 }
+                defaultBadger.executeBadge(badgeCount);
+            } catch (Exception e) {
             }
-            Uri mUri = Uri.parse("content://com.sec.badge/apps?notify=true");
+            Uri mUri = Uri.parse(CONTENT_URI);
             ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
             try {
-                Cursor cursor = contentResolver.query(mUri, this.CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
+                Cursor cursor = contentResolver.query(mUri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
                 if (cursor != null) {
                     String entryActivityName = NotificationBadge.componentName.getClassName();
                     boolean entryActivityExist = false;

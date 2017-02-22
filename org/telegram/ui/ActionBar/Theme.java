@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -37,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,9 +70,9 @@ public class Theme {
     public static final int ARTICLE_VIEWER_MEDIA_PROGRESS_COLOR = -1;
     public static final int ATTACH_SHEET_TEXT_COLOR = -9079435;
     public static final int AUTODOWNLOAD_SHEET_SAVE_TEXT_COLOR = -12940081;
+    private static Field BitmapDrawable_mColorFilter = null;
     public static final int JOIN_SHEET_COUNT_TEXT_COLOR = -6710887;
     public static final int JOIN_SHEET_NAME_TEXT_COLOR = -14606047;
-    private static Method RippleDrawable_getStateDrawableMethod = null;
     public static final int SHARE_SHEET_BADGE_TEXT_COLOR = -1;
     public static final int SHARE_SHEET_COPY_TEXT_COLOR = -12940081;
     public static final int SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR = -6842473;
@@ -1319,20 +1321,53 @@ public class Theme {
         applyTheme(applyingTheme, false);
     }
 
+    private static Drawable getStateDrawable(Drawable drawable, int index) {
+        if (StateListDrawable_getStateDrawableMethod == null) {
+            try {
+                StateListDrawable_getStateDrawableMethod = StateListDrawable.class.getDeclaredMethod("getStateDrawable", new Class[]{Integer.TYPE});
+            } catch (Throwable th) {
+            }
+        }
+        if (StateListDrawable_getStateDrawableMethod == null) {
+            return null;
+        }
+        try {
+            return (Drawable) StateListDrawable_getStateDrawableMethod.invoke(drawable, new Object[]{Integer.valueOf(index)});
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Drawable createEmojiIconSelectorDrawable(Context context, int resource, int defaultColor, int pressedColor) {
         Resources resources = context.getResources();
         Drawable defaultDrawable = resources.getDrawable(resource).mutate();
         if (defaultColor != 0) {
             defaultDrawable.setColorFilter(new PorterDuffColorFilter(defaultColor, Mode.MULTIPLY));
         }
-        if (VERSION.SDK_INT < 21) {
-            return defaultDrawable;
-        }
         Drawable pressedDrawable = resources.getDrawable(resource).mutate();
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        Drawable stateListDrawable = new StateListDrawable();
+        StateListDrawable stateListDrawable = new StateListDrawable() {
+            public boolean selectDrawable(int index) {
+                if (VERSION.SDK_INT >= 21) {
+                    return super.selectDrawable(index);
+                }
+                Drawable drawable = Theme.getStateDrawable(this, index);
+                ColorFilter colorFilter = null;
+                if (drawable instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();
+                } else if (drawable instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) drawable).getPaint().getColorFilter();
+                }
+                boolean result = super.selectDrawable(index);
+                if (colorFilter == null) {
+                    return result;
+                }
+                drawable.setColorFilter(colorFilter);
+                return result;
+            }
+        };
         stateListDrawable.setEnterFadeDuration(1);
         stateListDrawable.setExitFadeDuration(Callback.DEFAULT_DRAG_ANIMATION_DURATION);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
@@ -1346,7 +1381,26 @@ public class Theme {
         defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), Mode.MULTIPLY));
         Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
         pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), Mode.MULTIPLY));
-        StateListDrawable stateListDrawable = new StateListDrawable();
+        StateListDrawable stateListDrawable = new StateListDrawable() {
+            public boolean selectDrawable(int index) {
+                if (VERSION.SDK_INT >= 21) {
+                    return super.selectDrawable(index);
+                }
+                Drawable drawable = Theme.getStateDrawable(this, index);
+                ColorFilter colorFilter = null;
+                if (drawable instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();
+                } else if (drawable instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) drawable).getPaint().getColorFilter();
+                }
+                boolean result = super.selectDrawable(index);
+                if (colorFilter == null) {
+                    return result;
+                }
+                drawable.setColorFilter(colorFilter);
+                return result;
+            }
+        };
         stateListDrawable.addState(new int[]{16842910, 16842908}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842908}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -1363,7 +1417,26 @@ public class Theme {
         if (pressedColor != 0) {
             pressedDrawable.setColorFilter(new PorterDuffColorFilter(pressedColor, Mode.MULTIPLY));
         }
-        StateListDrawable stateListDrawable = new StateListDrawable();
+        StateListDrawable stateListDrawable = new StateListDrawable() {
+            public boolean selectDrawable(int index) {
+                if (VERSION.SDK_INT >= 21) {
+                    return super.selectDrawable(index);
+                }
+                Drawable drawable = Theme.getStateDrawable(this, index);
+                ColorFilter colorFilter = null;
+                if (drawable instanceof BitmapDrawable) {
+                    colorFilter = ((BitmapDrawable) drawable).getPaint().getColorFilter();
+                } else if (drawable instanceof NinePatchDrawable) {
+                    colorFilter = ((NinePatchDrawable) drawable).getPaint().getColorFilter();
+                }
+                boolean result = super.selectDrawable(index);
+                if (colorFilter == null) {
+                    return result;
+                }
+                drawable.setColorFilter(colorFilter);
+                return result;
+            }
+        };
         stateListDrawable.addState(new int[]{16842919}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
@@ -2456,26 +2529,16 @@ public class Theme {
 
     public static void setSelectorDrawableColor(Drawable drawable, int color, boolean selected) {
         if (drawable instanceof StateListDrawable) {
-            if (StateListDrawable_getStateDrawableMethod == null) {
-                try {
-                    StateListDrawable_getStateDrawableMethod = StateListDrawable.class.getDeclaredMethod("getStateDrawable", new Class[]{Integer.TYPE});
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
-            if (StateListDrawable_getStateDrawableMethod == null) {
-                return;
-            }
             Drawable state;
             if (selected) {
                 try {
-                    state = (Drawable) StateListDrawable_getStateDrawableMethod.invoke(drawable, new Object[]{Integer.valueOf(0)});
+                    state = getStateDrawable(drawable, 0);
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                     } else {
                         state.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
                     }
-                    state = (Drawable) StateListDrawable_getStateDrawableMethod.invoke(drawable, new Object[]{Integer.valueOf(1)});
+                    state = getStateDrawable(drawable, 1);
                     if (state instanceof ShapeDrawable) {
                         ((ShapeDrawable) state).getPaint().setColor(color);
                         return;
@@ -2483,12 +2546,11 @@ public class Theme {
                         state.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
                         return;
                     }
-                } catch (Throwable e2) {
-                    FileLog.e(e2);
+                } catch (Throwable th) {
                     return;
                 }
             }
-            state = (Drawable) StateListDrawable_getStateDrawableMethod.invoke(drawable, new Object[]{Integer.valueOf(2)});
+            state = getStateDrawable(drawable, 2);
             if (state instanceof ShapeDrawable) {
                 ((ShapeDrawable) state).getPaint().setColor(color);
             } else {
@@ -2545,12 +2607,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
-                    SharedPreferences preferences;
                     int selectedBackground;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
+                        SharedPreferences preferences;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

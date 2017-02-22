@@ -862,7 +862,6 @@ class zzasu extends zzats {
     }
 
     Map<Integer, List<zzauf.zze>> zzT(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zznA();
@@ -870,6 +869,7 @@ class zzasu extends zzats {
         zzac.zzdv(str);
         zzac.zzdv(str2);
         Map<Integer, List<zzauf.zze>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -932,7 +932,6 @@ class zzasu extends zzats {
 
     @WorkerThread
     protected long zzU(String str, String str2) {
-        long zza;
         Object e;
         zzac.zzdv(str);
         zzac.zzdv(str2);
@@ -940,6 +939,7 @@ class zzasu extends zzats {
         zznA();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         writableDatabase.beginTransaction();
+        long zza;
         try {
             zza = zza(new StringBuilder(String.valueOf(str2).length() + 32).append("select ").append(str2).append(" from app2 where app_id=?").toString(), new String[]{str}, -1);
             if (zza == -1) {
@@ -1615,12 +1615,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public byte[] zzfA(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -1684,12 +1684,12 @@ class zzasu extends zzats {
     }
 
     Map<Integer, zzf> zzfC(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zznA();
         zzmq();
         zzac.zzdv(str);
+        Cursor query;
         try {
             query = getWritableDatabase().query("audience_filter_values", new String[]{"audience_id", "current_results"}, "app_id=?", new String[]{str}, null, null, null);
             if (query.moveToFirst()) {

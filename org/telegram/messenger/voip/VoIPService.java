@@ -459,6 +459,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
 
     private void startRinging() {
         int vibrate;
+        FileLog.d("starting ringing for call " + this.call.id);
         dispatchStateChanged(10);
         SharedPreferences prefs = getSharedPreferences("Notifications", 0);
         this.ringtonePlayer = new MediaPlayer();
@@ -500,6 +501,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.vibrator.vibrate(new long[]{0, duration, 500}, 0);
         }
         if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
+            FileLog.d("Starting incall activity for incoming call");
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
                 return;
@@ -509,6 +511,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             }
         }
         showIncomingNotification();
+        FileLog.d("Showing incoming call notification");
     }
 
     public void acceptIncomingCall() {
@@ -947,44 +950,46 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void callFailed(int errorCode) {
-        this.lastError = errorCode;
-        if (this.call != null) {
-            int i;
-            TL_phone_discardCall req = new TL_phone_discardCall();
-            req.peer = new TL_inputPhoneCall();
-            req.peer.access_hash = this.call.access_hash;
-            req.peer.id = this.call.id;
-            if (this.controller == null || !this.controllerStarted) {
-                i = 0;
-            } else {
-                i = (int) (this.controller.getCallDuration() / 1000);
-            }
-            req.duration = i;
-            long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
-            req.connection_id = preferredRelayID;
-            req.reason = new TL_phoneCallDiscardReasonDisconnect();
-            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (error != null) {
-                        FileLog.e("error on phone.discardCall: " + error);
-                    } else {
-                        FileLog.d("phone.discardCall " + response);
+        try {
+            throw new Exception("Call " + (this.call != null ? this.call.id : 0) + " failed with error code " + errorCode);
+        } catch (Throwable x) {
+            FileLog.e(x);
+            this.lastError = errorCode;
+            if (this.call != null) {
+                FileLog.d("Discarding failed call");
+                TL_phone_discardCall req = new TL_phone_discardCall();
+                req.peer = new TL_inputPhoneCall();
+                req.peer.access_hash = this.call.access_hash;
+                req.peer.id = this.call.id;
+                int callDuration = (this.controller == null || !this.controllerStarted) ? 0 : (int) (this.controller.getCallDuration() / 1000);
+                req.duration = callDuration;
+                long preferredRelayID = (this.controller == null || !this.controllerStarted) ? 0 : this.controller.getPreferredRelayID();
+                req.connection_id = preferredRelayID;
+                req.reason = new TL_phoneCallDiscardReasonDisconnect();
+                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        if (error != null) {
+                            FileLog.e("error on phone.discardCall: " + error);
+                        } else {
+                            FileLog.d("phone.discardCall " + response);
+                        }
                     }
-                }
-            });
-        }
-        dispatchStateChanged(4);
-        this.playingSound = true;
-        this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public void run() {
-                VoIPService.this.soundPool.release();
+                });
             }
-        }, 1000);
-        stopSelf();
+            dispatchStateChanged(4);
+            this.playingSound = true;
+            this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public void run() {
+                    VoIPService.this.soundPool.release();
+                }
+            }, 1000);
+            stopSelf();
+        }
     }
 
     private void callEnded() {
+        FileLog.d("Call " + (this.call != null ? this.call.id : 0) + " ended");
         dispatchStateChanged(6);
         if (this.needPlayEndSound) {
             this.playingSound = true;
