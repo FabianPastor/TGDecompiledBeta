@@ -297,13 +297,13 @@ class zzasu extends zzats {
 
     @WorkerThread
     static boolean zza(zzati com_google_android_gms_internal_zzati, SQLiteDatabase sQLiteDatabase, String str) {
+        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzati == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
-        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -515,10 +515,10 @@ class zzasu extends zzats {
 
     @WorkerThread
     public String zzKG() {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue where app_id not in (select app_id from apps where measurement_enabled=0) order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1465,12 +1465,12 @@ class zzasu extends zzats {
     }
 
     public String zzam(long j) {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzmq();
         zznA();
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -1851,12 +1851,12 @@ class zzasu extends zzats {
 
     @WorkerThread
     public zzasp zzfy(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdv(str);
         zzmq();
         zznA();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample"}, "app_id=?", new String[]{str}, null, null, null);
             try {

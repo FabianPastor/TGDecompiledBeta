@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
@@ -240,7 +241,7 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE bot_info(uid INTEGER PRIMARY KEY, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 FileLog.e("current db version = " + version);
@@ -275,7 +276,7 @@ public class MessagesStorage {
                         FileLog.e(e2);
                     }
                 }
-                if (version < 40) {
+                if (version < 41) {
                     updateDbToLastVersion(version);
                 }
             }
@@ -318,38 +319,7 @@ public class MessagesStorage {
                         MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_messages ON messages(mid, send_state, date) WHERE mid < 0 AND send_state = 1;").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_count_idx_dialogs ON dialogs(unread_count);").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid < 0 AND send_state = 1").stepThis().dispose();
-                        MessagesStorage.this.storageQueue.postRunnable(new Runnable() {
-                            public void run() {
-                                Iterator it;
-                                ArrayList<Integer> ids = new ArrayList();
-                                for (Entry<String, ?> entry : ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getAll().entrySet()) {
-                                    String key = (String) entry.getKey();
-                                    if (key.startsWith("notify2_") && ((Integer) entry.getValue()).intValue() == 2) {
-                                        try {
-                                            ids.add(Integer.valueOf(Integer.parseInt(key.replace("notify2_", ""))));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                                try {
-                                    MessagesStorage.this.database.beginTransaction();
-                                    SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
-                                    it = ids.iterator();
-                                    while (it.hasNext()) {
-                                        Integer id = (Integer) it.next();
-                                        state.requery();
-                                        state.bindLong(1, (long) id.intValue());
-                                        state.bindInteger(2, 1);
-                                        state.step();
-                                    }
-                                    state.dispose();
-                                    MessagesStorage.this.database.commitTransaction();
-                                } catch (Throwable e2) {
-                                    FileLog.e(e2);
-                                }
-                            }
-                        });
+                        MessagesStorage.this.fixNotificationSettings();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
                         version = 4;
                     }
@@ -587,6 +557,11 @@ public class MessagesStorage {
                     if (version == 39) {
                         MessagesStorage.this.database.executeFast("ALTER TABLE enc_chats ADD COLUMN admin_id INTEGER default 0").stepThis().dispose();
                         MessagesStorage.this.database.executeFast("PRAGMA user_version = 40").stepThis().dispose();
+                        version = 40;
+                    }
+                    if (version == 40) {
+                        MessagesStorage.this.fixNotificationSettings();
+                        MessagesStorage.this.database.executeFast("PRAGMA user_version = 41").stepThis().dispose();
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);
@@ -655,6 +630,57 @@ public class MessagesStorage {
                     data.reuse();
                 } catch (Throwable e) {
                     FileLog.e(e);
+                }
+            }
+        });
+    }
+
+    private void fixNotificationSettings() {
+        this.storageQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    HashMap<Long, Long> ids = new HashMap();
+                    Map<String, ?> values = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getAll();
+                    for (Entry<String, ?> entry : values.entrySet()) {
+                        String key = (String) entry.getKey();
+                        if (key.startsWith("notify2_")) {
+                            Integer value = (Integer) entry.getValue();
+                            if (value.intValue() == 2 || value.intValue() == 3) {
+                                long flags;
+                                key = key.replace("notify2_", "");
+                                if (value.intValue() == 2) {
+                                    flags = 1;
+                                } else {
+                                    Integer time = (Integer) values.get("notifyuntil_" + key);
+                                    if (time != null) {
+                                        flags = (((long) time.intValue()) << 32) | 1;
+                                    } else {
+                                        flags = 1;
+                                    }
+                                }
+                                ids.put(Long.valueOf(Long.parseLong(key)), Long.valueOf(flags));
+                            } else if (value.intValue() == 3) {
+                            }
+                        }
+                    }
+                    try {
+                        MessagesStorage.this.database.beginTransaction();
+                        SQLitePreparedStatement state = MessagesStorage.this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
+                        for (Entry<Long, Long> entry2 : ids.entrySet()) {
+                            state.requery();
+                            state.bindLong(1, ((Long) entry2.getKey()).longValue());
+                            state.bindLong(2, ((Long) entry2.getValue()).longValue());
+                            state.step();
+                        }
+                        state.dispose();
+                        MessagesStorage.this.database.commitTransaction();
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                    }
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                } catch (Throwable e3) {
+                    FileLog.e(e3);
                 }
             }
         });
@@ -879,8 +905,12 @@ public class MessagesStorage {
                     final HashMap<Long, Integer> pushDialogs = new HashMap();
                     SQLiteCursor cursor = MessagesStorage.this.database.queryFinalized("SELECT d.did, d.unread_count, s.flags FROM dialogs as d LEFT JOIN dialog_settings as s ON d.did = s.did WHERE d.unread_count != 0", new Object[0]);
                     StringBuilder ids = new StringBuilder();
+                    int currentTime = ConnectionsManager.getInstance().getCurrentTime();
                     while (cursor.next()) {
-                        if (cursor.isNull(2) || cursor.intValue(2) != 1) {
+                        long flags = cursor.longValue(2);
+                        boolean muted = (1 & flags) != 0;
+                        int mutedUntil = (int) (flags >> 32);
+                        if (cursor.isNull(2) || !muted || (mutedUntil != 0 && mutedUntil < currentTime)) {
                             did = cursor.longValue(0);
                             pushDialogs.put(Long.valueOf(did), Integer.valueOf(cursor.intValue(1)));
                             if (ids.length() != 0) {
@@ -2209,7 +2239,7 @@ Error: java.util.NoSuchElementException
             L_0x0080:
                 throw r5;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.36.run():void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.37.run():void");
             }
         });
         try {
@@ -3437,7 +3467,7 @@ Error: java.util.NoSuchElementException
                 L_0x0085:
                     throw r5;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.51.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
                 }
             });
         }
@@ -3518,7 +3548,7 @@ Error: java.util.NoSuchElementException
                 L_0x0056:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.52.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
                 }
             });
         }
@@ -3583,7 +3613,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.53.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
                 }
             });
         }
@@ -3648,7 +3678,7 @@ Error: java.util.NoSuchElementException
                 L_0x0037:
                     throw r2;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.54.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
                 }
             });
         }
@@ -3876,7 +3906,7 @@ Error: java.util.NoSuchElementException
                 L_0x0161:
                     throw r7;
                     */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.55.run():void");
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.56.run():void");
                 }
             });
         }
@@ -5002,7 +5032,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5055,6 +5084,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

@@ -36,7 +36,6 @@ import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import org.aspectj.lang.JoinPoint;
 import org.telegram.messenger.beta.R;
@@ -162,6 +161,7 @@ public class NotificationsController {
         this.notifyCheck = false;
         this.lastOnlineFromOtherDevice = 0;
         this.inChatSoundEnabled = true;
+        this.lastBadgeCount = -1;
         this.notificationManager = NotificationManagerCompat.from(ApplicationLoader.applicationContext);
         this.inChatSoundEnabled = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("EnableInChatSound", true);
         try {
@@ -647,7 +647,6 @@ public class NotificationsController {
         MessagesController.getInstance().putEncryptedChats(encryptedChats, true);
         this.notificationsQueue.postRunnable(new Runnable() {
             public void run() {
-                Iterator it;
                 long dialog_id;
                 Boolean value;
                 NotificationsController.this.pushDialogs.clear();
@@ -658,9 +657,8 @@ public class NotificationsController {
                 SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
                 HashMap<Long, Boolean> settingsCache = new HashMap();
                 if (messages != null) {
-                    it = messages.iterator();
-                    while (it.hasNext()) {
-                        Message message = (Message) it.next();
+                    for (int a = 0; a < messages.size(); a++) {
+                        Message message = (Message) messages.get(a);
                         long mid = (long) message.id;
                         if (message.to_id.channel_id != 0) {
                             mid |= ((long) message.to_id.channel_id) << 32;
