@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">Postcode</string>
     <string name="PaymentSuccessfullyPaid">%1$s is succesvol overgemaakt naar %2$s voor %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">%1$s is succesvol overgemaakt naar %2$s</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">Echt %1$s overmaken naar de bot %2$s voor %3$s?</string>
     <string name="PaymentTransactionReview">Transactie-overzicht</string>
     <string name="PaymentTransactionTotal">Totaal</string>

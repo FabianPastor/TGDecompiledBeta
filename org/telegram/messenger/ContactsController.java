@@ -496,9 +496,9 @@ public class ContactsController {
             final boolean z4 = force;
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public void run() {
+                    int a;
                     HashMap<String, Contact> contactShortHashMap = new HashMap();
                     for (Entry<Integer, Contact> entry : hashMap.entrySet()) {
-                        int a;
                         Contact c = (Contact) entry.getValue();
                         for (a = 0; a < c.shortPhones.size(); a++) {
                             contactShortHashMap.put(c.shortPhones.get(a), c);

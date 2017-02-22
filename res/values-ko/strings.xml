@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">우편번호</string>
     <string name="PaymentSuccessfullyPaid">%3$s에 대한 %1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
     <string name="PaymentSuccessfullyPaidNoItem">%1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">%3$s에 대한 %1$s 금액을 %2$s 봇에게 전송하시겠습니까?</string>
     <string name="PaymentTransactionReview">거래내역 확인</string>
     <string name="PaymentTransactionTotal">전체</string>

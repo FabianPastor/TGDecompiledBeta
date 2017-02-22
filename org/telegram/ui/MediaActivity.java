@@ -87,6 +87,7 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.CheckBoxCell;
@@ -1294,6 +1295,21 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.linksAdapter = new SharedLinksAdapter(context);
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
+        int scrollToPositionOnRecreate = -1;
+        int scrollToOffsetOnRecreate = 0;
+        if (this.layoutManager != null) {
+            scrollToPositionOnRecreate = this.layoutManager.findFirstVisibleItemPosition();
+            if (scrollToPositionOnRecreate != this.layoutManager.getItemCount() - 1) {
+                Holder holder = (Holder) this.listView.findViewHolderForAdapterPosition(scrollToPositionOnRecreate);
+                if (holder != null) {
+                    scrollToOffsetOnRecreate = holder.itemView.getTop();
+                } else {
+                    scrollToPositionOnRecreate = -1;
+                }
+            } else {
+                scrollToPositionOnRecreate = -1;
+            }
+        }
         this.listView = new RecyclerListView(context);
         this.listView.setClipToPadding(false);
         this.listView.setSectionsType(2);
@@ -1364,6 +1380,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                 }
             }
         });
+        if (scrollToPositionOnRecreate != -1) {
+            this.layoutManager.scrollToPositionWithOffset(scrollToPositionOnRecreate, scrollToOffsetOnRecreate);
+        }
         for (a = 0; a < 6; a++) {
             this.cellCache.add(new SharedPhotoVideoCell(context));
         }
@@ -1891,6 +1910,20 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 f = FileLoader.getPathToMessage(message.messageOwner);
                             }
                             if (f != null && f.exists()) {
+                                Builder builder;
+                                if (f.getName().endsWith("attheme")) {
+                                    ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
+                                    if (themeInfo != null) {
+                                        presentFragment(new ThemePreviewActivity(f, themeInfo));
+                                        return;
+                                    }
+                                    builder = new Builder(getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
+                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                    showDialog(builder.create());
+                                    return;
+                                }
                                 String realMimeType = null;
                                 try {
                                     Intent intent = new Intent("android.intent.action.VIEW");
@@ -1928,7 +1961,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                     getParentActivity().startActivityForResult(intent, 500);
                                 } catch (Exception e2) {
                                     if (getParentActivity() != null) {
-                                        Builder builder = new Builder(getParentActivity());
+                                        builder = new Builder(getParentActivity());
                                         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                                         builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));

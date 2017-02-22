@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">PLZ</string>
     <string name="PaymentSuccessfullyPaid">Du hast erfolgreich %1$s an %2$s für %3$s transferiert.</string>
     <string name="PaymentSuccessfullyPaidNoItem">Du hast erfolgreich %1$s an %2$s transferiert.</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">Möchtest du wirklich %1$s an den %2$s Bot für %3$s transferieren?</string>
     <string name="PaymentTransactionReview">Überprüfung der Transaktion</string>
     <string name="PaymentTransactionTotal">Gesamtsumme</string>

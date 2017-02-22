@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">Postcode</string>
     <string name="PaymentSuccessfullyPaid">You have just successfully transferred %1$s to %2$s for %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">You have just successfully transferred %1$s to %2$s</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">Do you really want to transfer %1$s to the %2$s bot for %3$s?</string>
     <string name="PaymentTransactionReview">Transaction Review</string>
     <string name="PaymentTransactionTotal">Total</string>
@@ -1541,8 +1543,6 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

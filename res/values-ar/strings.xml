@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">الرمز البريدي</string>
     <string name="PaymentSuccessfullyPaid">لقد قمت بنجاح تحويل %1$s إلى %2$s لـ %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">لقد قمت بنجاح تحويل %1$s إلى %2$s</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">هل حقًا ترغب في تحويل %1$s إلى البوت %2$s لـ %3$s؟</string>
     <string name="PaymentTransactionReview">مراجعة العملية</string>
     <string name="PaymentTransactionTotal">الإجمالي</string>

@@ -1041,6 +1041,8 @@
     <string name="PaymentShippingZipPlaceholder">Código Postal</string>
     <string name="PaymentSuccessfullyPaid">Você transferiu com sucesso %1$s para %2$s por %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">Você transferiu com sucesso %1$s para %2$s</string>
+    <string name="PaymentTestInvoice">TEST INVOICE</string>
+    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">Você realmente deseja transferir %1$s para o bot %2$s por %3$s?</string>
     <string name="PaymentTransactionReview">Revisão da Transação</string>
     <string name="PaymentTransactionTotal">Total</string>
