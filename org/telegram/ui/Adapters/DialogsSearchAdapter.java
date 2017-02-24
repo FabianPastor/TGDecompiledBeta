@@ -514,7 +514,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         ArrayList<User> encUsers = new ArrayList();
                         int resultCount = 0;
                         HashMap<Long, DialogSearchResult> dialogsResult = new HashMap();
-                        SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 400", new Object[0]);
+                        SQLiteCursor cursor = MessagesStorage.getInstance().getDatabase().queryFinalized("SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600", new Object[0]);
                         while (cursor.next()) {
                             long id = cursor.longValue(0);
                             dialogSearchResult = new DialogSearchResult();

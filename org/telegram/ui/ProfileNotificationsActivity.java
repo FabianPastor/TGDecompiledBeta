@@ -709,7 +709,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
                                 public void onBindViewHolder(ViewHolder holder, int position) {
                                     TextView textView = holder.itemView;
-                                    textView.setTextColor(Theme.getColor(position == i ? Theme.key_windowBackgroundWhiteBlueText2 : Theme.key_windowBackgroundWhiteBlackText));
+                                    textView.setTextColor(Theme.getColor(position == i ? Theme.key_dialogTextGray : Theme.key_dialogTextBlack));
                                     int notifyDelay = position / 10;
                                     String times = LocaleController.formatPluralString("Times", (position % 10) + 1);
                                     String minutes = LocaleController.formatPluralString("Minutes", notifyDelay + 1);

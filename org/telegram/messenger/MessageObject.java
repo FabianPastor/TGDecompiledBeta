@@ -1,14 +1,12 @@
 package org.telegram.messenger;
 
 import android.graphics.Typeface;
-import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
-import android.text.StaticLayout.Builder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
@@ -117,7 +115,7 @@ import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 
 public class MessageObject {
-    private static final int LINES_PER_BLOCK = 2;
+    private static final int LINES_PER_BLOCK = 10;
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
     public static final int MESSAGE_SEND_STATE_SEND_ERROR = 2;
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -132,6 +130,7 @@ public class MessageObject {
     public boolean deleted;
     public boolean forceUpdate;
     private int generatedWithMinSize;
+    public boolean hasRtl;
     public boolean isDateObject;
     public int lastLineWidth;
     private boolean layoutCreated;
@@ -147,6 +146,7 @@ public class MessageObject {
     public int textHeight;
     public ArrayList<TextLayoutBlock> textLayoutBlocks;
     public int textWidth;
+    public float textXOffset;
     public int type;
     public boolean useCustomPhoto;
     public VideoEditedInfo videoEditedInfo;
@@ -156,10 +156,14 @@ public class MessageObject {
     public static class TextLayoutBlock {
         public int charactersEnd;
         public int charactersOffset;
+        public byte directionFlags;
         public int height;
         public StaticLayout textLayout;
-        public float textXOffset;
         public float textYOffset;
+
+        public boolean isRtl() {
+            return (this.directionFlags & 1) != 0 && (this.directionFlags & 2) == 0;
+        }
     }
 
     public MessageObject(Message message, AbstractMap<Integer, User> users, boolean generateLayout) {
@@ -1278,11 +1282,13 @@ public class MessageObject {
                 StaticLayout textLayout = new StaticLayout(this.messageText, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.textHeight = textLayout.getHeight();
                 int linesCount = textLayout.getLineCount();
-                int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 2.0f));
+                int blocksCount = (int) Math.ceil((double) (((float) linesCount) / 10.0f));
                 int linesOffset = 0;
                 float prevOffset = 0.0f;
                 for (a = 0; a < blocksCount; a++) {
-                    int currentBlockLinesCount = Math.min(2, linesCount - linesOffset);
+                    float lastLeft;
+                    float lastLine;
+                    int currentBlockLinesCount = Math.min(10, linesCount - linesOffset);
                     TextLayoutBlock block = new TextLayoutBlock();
                     if (blocksCount == 1) {
                         block.textLayout = textLayout;
@@ -1296,11 +1302,7 @@ public class MessageObject {
                             block.charactersOffset = startCharacter;
                             block.charactersEnd = endCharacter;
                             try {
-                                if (VERSION.SDK_INT >= 24) {
-                                    block.textLayout = Builder.obtain(this.messageText, startCharacter, endCharacter, paint, maxWidth).setAlignment(Alignment.ALIGN_NORMAL).setLineSpacing(0.0f, 1.0f).setEllipsize(null).setIncludePad(false).setBreakStrategy(1).setHyphenationFrequency(0).build();
-                                } else {
-                                    block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                                }
+                                block.textLayout = new StaticLayout(this.messageText, startCharacter, endCharacter, paint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                                 block.textYOffset = (float) textLayout.getLineTop(linesOffset);
                                 if (a != 0) {
                                     block.height = (int) (block.textYOffset - prevOffset);
@@ -1321,35 +1323,36 @@ public class MessageObject {
                         }
                     }
                     this.textLayoutBlocks.add(block);
-                    float lastLeft = 0.0f;
-                    block.textXOffset = 0.0f;
                     try {
-                        float lastLeft2 = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
-                        block.textXOffset = lastLeft2;
-                        lastLeft = lastLeft2;
+                        lastLeft = block.textLayout.getLineLeft(currentBlockLinesCount - 1);
+                        if (a == 0) {
+                            this.textXOffset = lastLeft;
+                        }
                     } catch (Throwable e222) {
+                        lastLeft = 0.0f;
+                        if (a == 0) {
+                            this.textXOffset = 0.0f;
+                        }
                         FileLog.e(e222);
                     }
-                    float lastLine = 0.0f;
                     try {
                         lastLine = block.textLayout.getLineWidth(currentBlockLinesCount - 1);
                     } catch (Throwable e2222) {
+                        lastLine = 0.0f;
                         FileLog.e(e2222);
                     }
                     int linesMaxWidth = (int) Math.ceil((double) lastLine);
-                    boolean hasNonRTL = false;
                     if (a == blocksCount - 1) {
                         this.lastLineWidth = linesMaxWidth;
                     }
                     int lastLineWidthWithLeft = (int) Math.ceil((double) (lastLine + lastLeft));
                     int linesMaxWidthWithLeft = lastLineWidthWithLeft;
-                    if (lastLeft == 0.0f) {
-                        hasNonRTL = true;
-                    }
                     if (currentBlockLinesCount > 1) {
+                        boolean hasNonRTL = false;
                         float textRealMaxWidth = 0.0f;
                         float textRealMaxWidthWithLeft = 0.0f;
-                        for (int n = 0; n < currentBlockLinesCount; n++) {
+                        int n = 0;
+                        while (n < currentBlockLinesCount) {
                             float lineWidth;
                             float lineLeft;
                             try {
@@ -1367,16 +1370,21 @@ public class MessageObject {
                                 FileLog.e(e222222);
                                 lineLeft = 0.0f;
                             }
-                            if (lineLeft >= 0.0f) {
-                                block.textXOffset = Math.min(block.textXOffset, lineLeft);
+                            if (lineLeft > 0.0f) {
+                                this.textXOffset = Math.min(this.textXOffset, lineLeft);
+                                block.directionFlags = (byte) (block.directionFlags | 1);
+                                this.hasRtl = true;
+                            } else {
+                                block.directionFlags = (byte) (block.directionFlags | 2);
                             }
-                            if (lineLeft == 0.0f) {
+                            if (!hasNonRTL && lineLeft == 0.0f && block.textLayout.getParagraphDirection(n) == 1) {
                                 hasNonRTL = true;
                             }
                             textRealMaxWidth = Math.max(textRealMaxWidth, lineWidth);
                             textRealMaxWidthWithLeft = Math.max(textRealMaxWidthWithLeft, lineWidth + lineLeft);
                             linesMaxWidth = Math.max(linesMaxWidth, (int) Math.ceil((double) lineWidth));
                             linesMaxWidthWithLeft = Math.max(linesMaxWidthWithLeft, (int) Math.ceil((double) (lineWidth + lineLeft)));
+                            n++;
                         }
                         if (hasNonRTL) {
                             textRealMaxWidth = textRealMaxWidthWithLeft;
@@ -1388,10 +1396,14 @@ public class MessageObject {
                         }
                         this.textWidth = Math.max(this.textWidth, (int) Math.ceil((double) textRealMaxWidth));
                     } else {
+                        if (lastLeft > 0.0f) {
+                            this.textXOffset = Math.min(this.textXOffset, lastLeft);
+                            this.hasRtl = true;
+                            block.directionFlags = (byte) (block.directionFlags | 1);
+                        } else {
+                            block.directionFlags = (byte) (block.directionFlags | 2);
+                        }
                         this.textWidth = Math.max(this.textWidth, Math.min(maxWidth, linesMaxWidth));
-                    }
-                    if (hasNonRTL) {
-                        block.textXOffset = 0.0f;
                     }
                     linesOffset += currentBlockLinesCount;
                 }

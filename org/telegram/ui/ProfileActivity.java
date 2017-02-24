@@ -1998,6 +1998,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     @Keep
     public void setAnimationProgress(float progress) {
         int i;
+        int i2;
         this.animationProgress = progress;
         this.listView.setAlpha(progress);
         this.listView.setTranslationX(((float) AndroidUtilities.dp(48.0f)) - (((float) AndroidUtilities.dp(48.0f)) * progress));
@@ -2023,6 +2024,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         g = Color.green(iconColor);
         b = Color.blue(iconColor);
         this.actionBar.setItemsColor(Color.rgb(r + ((int) (((float) (Color.red(color) - r)) * progress)), g + ((int) (((float) (Color.green(color) - g)) * progress)), b + ((int) (((float) (Color.blue(color) - b)) * progress))), false);
+        color = Theme.getColor(Theme.key_profile_title);
+        int titleColor = Theme.getColor(Theme.key_actionBarDefaultTitle);
+        r = Color.red(titleColor);
+        g = Color.green(titleColor);
+        b = Color.blue(titleColor);
+        int a = Color.alpha(titleColor);
+        int rD = (int) (((float) (Color.red(color) - r)) * progress);
+        int gD = (int) (((float) (Color.green(color) - g)) * progress);
+        int bD = (int) (((float) (Color.blue(color) - b)) * progress);
+        int aD = (int) (((float) (Color.alpha(color) - a)) * progress);
+        for (i2 = 0; i2 < 2; i2++) {
+            if (this.nameTextView[i2] != null) {
+                this.nameTextView[i2].setTextColor(Color.argb(a + aD, r + rD, g + gD, b + bD));
+            }
+        }
         if (this.user_id != 0 || (ChatObject.isChannel(this.chat_id) && !this.currentChat.megagroup)) {
             i = 5;
         } else {
@@ -2033,12 +2049,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         r = Color.red(subtitleColor);
         g = Color.green(subtitleColor);
         b = Color.blue(subtitleColor);
-        int rD = (int) (((float) (Color.red(color) - r)) * progress);
-        int gD = (int) (((float) (Color.green(color) - g)) * progress);
-        int bD = (int) (((float) (Color.blue(color) - b)) * progress);
-        for (int a = 0; a < 2; a++) {
-            if (this.onlineTextView[a] != null) {
-                this.onlineTextView[a].setTextColor(Color.rgb(r + rD, g + gD, b + bD));
+        a = Color.alpha(subtitleColor);
+        rD = (int) (((float) (Color.red(color) - r)) * progress);
+        gD = (int) (((float) (Color.green(color) - g)) * progress);
+        bD = (int) (((float) (Color.blue(color) - b)) * progress);
+        aD = (int) (((float) (Color.alpha(color) - a)) * progress);
+        for (i2 = 0; i2 < 2; i2++) {
+            if (this.onlineTextView[i2] != null) {
+                this.onlineTextView[i2].setTextColor(Color.argb(a + aD, r + rD, g + gD, b + bD));
             }
         }
         this.extraHeight = (int) (((float) this.initialAnimationExtraHeight) * progress);

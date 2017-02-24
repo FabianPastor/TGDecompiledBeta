@@ -1339,6 +1339,10 @@ public class LocaleController {
         this.formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
     }
 
+    public static boolean isRTLCharacter(char ch) {
+        return Character.getDirectionality(ch) == (byte) 1 || Character.getDirectionality(ch) == (byte) 2 || Character.getDirectionality(ch) == (byte) 16 || Character.getDirectionality(ch) == (byte) 17;
+    }
+
     public static String stringForMessageListDate(long date) {
         date *= 1000;
         try {

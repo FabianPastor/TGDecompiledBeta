@@ -1318,7 +1318,7 @@ public class Theme {
         if (applyingTheme == null) {
             applyingTheme = defaultTheme;
         }
-        applyTheme(applyingTheme, false);
+        applyTheme(applyingTheme, false, false);
     }
 
     private static Drawable getStateDrawable(Drawable drawable, int index) {
@@ -1572,7 +1572,7 @@ public class Theme {
 
     public static void applyPreviousTheme() {
         if (previousTheme != null) {
-            applyTheme(previousTheme);
+            applyTheme(previousTheme, true, false);
             previousTheme = null;
         }
     }
@@ -1592,6 +1592,7 @@ public class Theme {
     }
 
     public static ThemeInfo applyThemeFile(File file, String themeName, boolean temporary) {
+        boolean z = true;
         try {
             if (themeName.equals("Default") || themeName.equals("Dark") || themeName.equals("Blue")) {
                 return null;
@@ -1617,7 +1618,10 @@ public class Theme {
                 sortThemes();
                 saveOtherThemes();
             }
-            applyTheme(themeInfo, !temporary);
+            if (temporary) {
+                z = false;
+            }
+            applyTheme(themeInfo, z, true);
             return themeInfo;
         } catch (Throwable e) {
             FileLog.e(e);
@@ -1626,10 +1630,10 @@ public class Theme {
     }
 
     public static void applyTheme(ThemeInfo themeInfo) {
-        applyTheme(themeInfo, true);
+        applyTheme(themeInfo, true, true);
     }
 
-    public static void applyTheme(ThemeInfo themeInfo, boolean save) {
+    public static void applyTheme(ThemeInfo themeInfo, boolean save, boolean removeWallpaperOverride) {
         if (themeInfo != null) {
             ThemeEditorView editorView = ThemeEditorView.getInstance();
             if (editorView != null) {
@@ -1641,7 +1645,9 @@ public class Theme {
                     if (save) {
                         editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                         editor.remove("theme");
-                        editor.remove("overrideThemeWallpaper");
+                        if (removeWallpaperOverride) {
+                            editor.remove("overrideThemeWallpaper");
+                        }
                         editor.commit();
                     }
                     currentColors.clear();
@@ -1651,7 +1657,9 @@ public class Theme {
                     if (save) {
                         editor = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit();
                         editor.putString("theme", themeInfo.name);
-                        editor.remove("overrideThemeWallpaper");
+                        if (removeWallpaperOverride) {
+                            editor.remove("overrideThemeWallpaper");
+                        }
                         editor.commit();
                     }
                     if (themeInfo.assetName != null) {
@@ -1707,7 +1715,7 @@ public class Theme {
         }
         boolean currentThemeDeleted = false;
         if (currentTheme == themeInfo) {
-            applyTheme(defaultTheme, true);
+            applyTheme(defaultTheme, true, false);
             currentThemeDeleted = true;
         }
         otherThemes.remove(themeInfo);
@@ -2608,11 +2616,11 @@ public class Theme {
                 public void run() {
                     Throwable e;
                     int i;
-                    File toFile;
+                    SharedPreferences preferences;
+                    int selectedBackground;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        SharedPreferences preferences;
-                        int selectedBackground;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

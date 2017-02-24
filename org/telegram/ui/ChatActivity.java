@@ -1537,8 +1537,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public View createView(Context context) {
         int a;
         boolean z;
@@ -3474,11 +3472,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         updateSpamView();
         updatePinnedMessageView(true);
         try {
-            if (this.currentEncryptedChat != null) {
-                if (VERSION.SDK_INT >= 23) {
-                    if (UserConfig.passcodeHash.length() != 0) {
-                    }
-                }
+            if (this.currentEncryptedChat != null && VERSION.SDK_INT >= 23 && (UserConfig.passcodeHash.length() == 0 || UserConfig.allowScreenCapture)) {
+                getParentActivity().getWindow().setFlags(8192, 8192);
             }
         } catch (Throwable e) {
             FileLog.e(e);

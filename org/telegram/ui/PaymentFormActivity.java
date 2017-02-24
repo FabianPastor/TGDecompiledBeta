@@ -1457,20 +1457,22 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             this.detailSettingsCell[0].setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.detailSettingsCell[0].setTextAndValue(this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
             this.linearLayout2.addView(this.detailSettingsCell[0]);
-            this.detailSettingsCell[0].setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    PaymentFormActivity activity = new PaymentFormActivity(PaymentFormActivity.this.paymentForm, PaymentFormActivity.this.messageObject, 2, PaymentFormActivity.this.requestedInfo, PaymentFormActivity.this.shippingOption, null, PaymentFormActivity.this.cardName, PaymentFormActivity.this.validateRequest, PaymentFormActivity.this.saveCardInfo);
-                    activity.setDelegate(new PaymentFormActivityDelegate() {
-                        public void didSelectNewCard(String tokenJson, String card, boolean saveCard) {
-                            PaymentFormActivity.this.paymentJson = tokenJson;
-                            PaymentFormActivity.this.saveCardInfo = saveCard;
-                            PaymentFormActivity.this.cardName = card;
-                            PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
-                        }
-                    });
-                    PaymentFormActivity.this.presentFragment(activity);
-                }
-            });
+            if (this.currentStep == 4) {
+                this.detailSettingsCell[0].setOnClickListener(new OnClickListener() {
+                    public void onClick(View v) {
+                        PaymentFormActivity activity = new PaymentFormActivity(PaymentFormActivity.this.paymentForm, PaymentFormActivity.this.messageObject, 2, PaymentFormActivity.this.requestedInfo, PaymentFormActivity.this.shippingOption, null, PaymentFormActivity.this.cardName, PaymentFormActivity.this.validateRequest, PaymentFormActivity.this.saveCardInfo);
+                        activity.setDelegate(new PaymentFormActivityDelegate() {
+                            public void didSelectNewCard(String tokenJson, String card, boolean saveCard) {
+                                PaymentFormActivity.this.paymentJson = tokenJson;
+                                PaymentFormActivity.this.saveCardInfo = saveCard;
+                                PaymentFormActivity.this.cardName = card;
+                                PaymentFormActivity.this.detailSettingsCell[0].setTextAndValue(PaymentFormActivity.this.cardName, LocaleController.getString("PaymentCheckoutMethod", R.string.PaymentCheckoutMethod), true);
+                            }
+                        });
+                        PaymentFormActivity.this.presentFragment(activity);
+                    }
+                });
+            }
             if (this.validateRequest != null) {
                 if (this.validateRequest.info.shipping_address != null) {
                     String address = String.format("%s %s, %s, %s, %s, %s", new Object[]{this.validateRequest.info.shipping_address.street_line1, this.validateRequest.info.shipping_address.street_line2, this.validateRequest.info.shipping_address.city, this.validateRequest.info.shipping_address.state, this.validateRequest.info.shipping_address.country_iso2, this.validateRequest.info.shipping_address.post_code});
@@ -2123,15 +2125,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public void run() {
                             if (error != null) {
-                                if (error.text.equals("PASSWORD_HASH_INVALID")) {
-                                    Vibrator v = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
-                                    if (v != null) {
-                                        v.vibrate(200);
-                                    }
-                                    AndroidUtilities.shakeView(PaymentFormActivity.this.inputFields[1], 2.0f, 0);
-                                } else {
-                                    AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
-                                }
+                                AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                 PaymentFormActivity.this.showEditDoneProgress(false);
                                 PaymentFormActivity.this.setDonePressed(false);
                             } else if (response instanceof TL_account_noPassword) {
@@ -2163,9 +2157,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                                     UserConfig.tmpPassword = (TL_account_tmpPassword) response;
                                                     UserConfig.saveConfig(false);
                                                     PaymentFormActivity.this.goToNextStep();
-                                                    return;
+                                                } else if (error.text.equals("PASSWORD_HASH_INVALID")) {
+                                                    Vibrator v = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
+                                                    if (v != null) {
+                                                        v.vibrate(200);
+                                                    }
+                                                    AndroidUtilities.shakeView(PaymentFormActivity.this.inputFields[1], 2.0f, 0);
+                                                } else {
+                                                    AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                                 }
-                                                AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                             }
                                         });
                                     }
