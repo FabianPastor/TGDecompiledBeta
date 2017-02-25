@@ -10,15 +10,15 @@ public class Frame {
     public static final int ROTATION_270 = 3;
     public static final int ROTATION_90 = 1;
     private Bitmap mBitmap;
-    private Metadata zzbMy;
-    private ByteBuffer zzbMz;
+    private Metadata zzbOx;
+    private ByteBuffer zzbOy;
 
     public static class Builder {
-        private Frame zzbMA = new Frame();
+        private Frame zzbOz = new Frame();
 
         public Frame build() {
-            if (this.zzbMA.zzbMz != null || this.zzbMA.mBitmap != null) {
-                return this.zzbMA;
+            if (this.zzbOz.zzbOy != null || this.zzbOz.mBitmap != null) {
+                return this.zzbOz;
             }
             throw new IllegalStateException("Missing image data.  Call either setBitmap or setImageData to specify the image");
         }
@@ -26,15 +26,15 @@ public class Frame {
         public Builder setBitmap(Bitmap bitmap) {
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            this.zzbMA.mBitmap = bitmap;
-            Metadata metadata = this.zzbMA.getMetadata();
-            metadata.zzrG = width;
-            metadata.zzrH = height;
+            this.zzbOz.mBitmap = bitmap;
+            Metadata metadata = this.zzbOz.getMetadata();
+            metadata.zzrC = width;
+            metadata.zzrD = height;
             return this;
         }
 
         public Builder setId(int i) {
-            this.zzbMA.getMetadata().mId = i;
+            this.zzbOz.getMetadata().mId = i;
             return this;
         }
 
@@ -48,10 +48,10 @@ public class Frame {
                     case 16:
                     case 17:
                     case 842094169:
-                        this.zzbMA.zzbMz = byteBuffer;
-                        Metadata metadata = this.zzbMA.getMetadata();
-                        metadata.zzrG = i;
-                        metadata.zzrH = i2;
+                        this.zzbOz.zzbOy = byteBuffer;
+                        Metadata metadata = this.zzbOz.getMetadata();
+                        metadata.zzrC = i;
+                        metadata.zzrD = i2;
                         metadata.format = i3;
                         return this;
                     default:
@@ -61,12 +61,12 @@ public class Frame {
         }
 
         public Builder setRotation(int i) {
-            this.zzbMA.getMetadata().zzLS = i;
+            this.zzbOz.getMetadata().zzMA = i;
             return this;
         }
 
         public Builder setTimestampMillis(long j) {
-            this.zzbMA.getMetadata().zzbde = j;
+            this.zzbOz.getMetadata().zzbdJ = j;
             return this;
         }
     }
@@ -74,17 +74,17 @@ public class Frame {
     public static class Metadata {
         private int format = -1;
         private int mId;
-        private int zzLS;
-        private long zzbde;
-        private int zzrG;
-        private int zzrH;
+        private int zzMA;
+        private long zzbdJ;
+        private int zzrC;
+        private int zzrD;
 
         public Metadata(Metadata metadata) {
-            this.zzrG = metadata.getWidth();
-            this.zzrH = metadata.getHeight();
+            this.zzrC = metadata.getWidth();
+            this.zzrD = metadata.getHeight();
             this.mId = metadata.getId();
-            this.zzbde = metadata.getTimestampMillis();
-            this.zzLS = metadata.getRotation();
+            this.zzbdJ = metadata.getTimestampMillis();
+            this.zzMA = metadata.getRotation();
         }
 
         public int getFormat() {
@@ -92,7 +92,7 @@ public class Frame {
         }
 
         public int getHeight() {
-            return this.zzrH;
+            return this.zzrD;
         }
 
         public int getId() {
@@ -100,34 +100,34 @@ public class Frame {
         }
 
         public int getRotation() {
-            return this.zzLS;
+            return this.zzMA;
         }
 
         public long getTimestampMillis() {
-            return this.zzbde;
+            return this.zzbdJ;
         }
 
         public int getWidth() {
-            return this.zzrG;
+            return this.zzrC;
         }
 
-        public void zzSm() {
-            if (this.zzLS % 2 != 0) {
-                int i = this.zzrG;
-                this.zzrG = this.zzrH;
-                this.zzrH = i;
+        public void zzTN() {
+            if (this.zzMA % 2 != 0) {
+                int i = this.zzrC;
+                this.zzrC = this.zzrD;
+                this.zzrD = i;
             }
-            this.zzLS = 0;
+            this.zzMA = 0;
         }
     }
 
     private Frame() {
-        this.zzbMy = new Metadata();
-        this.zzbMz = null;
+        this.zzbOx = new Metadata();
+        this.zzbOy = null;
         this.mBitmap = null;
     }
 
-    private ByteBuffer zzSl() {
+    private ByteBuffer zzTM() {
         int i = 0;
         int width = this.mBitmap.getWidth();
         int height = this.mBitmap.getHeight();
@@ -146,10 +146,10 @@ public class Frame {
     }
 
     public ByteBuffer getGrayscaleImageData() {
-        return this.mBitmap != null ? zzSl() : this.zzbMz;
+        return this.mBitmap != null ? zzTM() : this.zzbOy;
     }
 
     public Metadata getMetadata() {
-        return this.zzbMy;
+        return this.zzbOx;
     }
 }

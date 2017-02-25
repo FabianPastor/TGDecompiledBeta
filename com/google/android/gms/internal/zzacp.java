@@ -2,57 +2,89 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.internal.zzaco.zza;
+import android.util.SparseArray;
+import com.google.android.gms.internal.zzacs.zzb;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
-public class zzacp implements Creator<zzaco> {
-    static void zza(zzaco com_google_android_gms_internal_zzaco, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzaco.mVersionCode);
-        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzaco.zzxX(), false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzaco.zzxY(), false);
-        zzc.zzJ(parcel, zzaV);
-    }
+public final class zzacp extends com.google.android.gms.common.internal.safeparcel.zza implements zzb<String, Integer> {
+    public static final Creator<zzacp> CREATOR = new zzacq();
+    private final HashMap<String, Integer> zzaGS;
+    private final SparseArray<String> zzaGT;
+    private final ArrayList<zza> zzaGU;
+    final int zzaiI;
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzbc(parcel);
-    }
+    public static final class zza extends com.google.android.gms.common.internal.safeparcel.zza {
+        public static final Creator<zza> CREATOR = new zzacr();
+        final int versionCode;
+        final String zzaGV;
+        final int zzaGW;
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzde(i);
-    }
-
-    public zzaco zzbc(Parcel parcel) {
-        String str = null;
-        int zzaU = zzb.zzaU(parcel);
-        int i = 0;
-        ArrayList arrayList = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
-                case 2:
-                    arrayList = zzb.zzc(parcel, zzaT, zza.CREATOR);
-                    break;
-                case 3:
-                    str = zzb.zzq(parcel, zzaT);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaT);
-                    break;
-            }
+        zza(int i, String str, int i2) {
+            this.versionCode = i;
+            this.zzaGV = str;
+            this.zzaGW = i2;
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new zzaco(i, arrayList, str);
+
+        zza(String str, int i) {
+            this.versionCode = 1;
+            this.zzaGV = str;
+            this.zzaGW = i;
         }
-        throw new zzb.zza("Overread allowed size end=" + zzaU, parcel);
+
+        public void writeToParcel(Parcel parcel, int i) {
+            zzacr.zza(this, parcel, i);
+        }
     }
 
-    public zzaco[] zzde(int i) {
-        return new zzaco[i];
+    public zzacp() {
+        this.zzaiI = 1;
+        this.zzaGS = new HashMap();
+        this.zzaGT = new SparseArray();
+        this.zzaGU = null;
+    }
+
+    zzacp(int i, ArrayList<zza> arrayList) {
+        this.zzaiI = i;
+        this.zzaGS = new HashMap();
+        this.zzaGT = new SparseArray();
+        this.zzaGU = null;
+        zzh(arrayList);
+    }
+
+    private void zzh(ArrayList<zza> arrayList) {
+        Iterator it = arrayList.iterator();
+        while (it.hasNext()) {
+            zza com_google_android_gms_internal_zzacp_zza = (zza) it.next();
+            zzj(com_google_android_gms_internal_zzacp_zza.zzaGV, com_google_android_gms_internal_zzacp_zza.zzaGW);
+        }
+    }
+
+    public /* synthetic */ Object convertBack(Object obj) {
+        return zzd((Integer) obj);
+    }
+
+    public void writeToParcel(Parcel parcel, int i) {
+        zzacq.zza(this, parcel, i);
+    }
+
+    public String zzd(Integer num) {
+        String str = (String) this.zzaGT.get(num.intValue());
+        return (str == null && this.zzaGS.containsKey("gms_unknown")) ? "gms_unknown" : str;
+    }
+
+    public zzacp zzj(String str, int i) {
+        this.zzaGS.put(str, Integer.valueOf(i));
+        this.zzaGT.put(i, str);
+        return this;
+    }
+
+    ArrayList<zza> zzyq() {
+        ArrayList<zza> arrayList = new ArrayList();
+        for (String str : this.zzaGS.keySet()) {
+            arrayList.add(new zza(str, ((Integer) this.zzaGS.get(str)).intValue()));
+        }
+        return arrayList;
     }
 }

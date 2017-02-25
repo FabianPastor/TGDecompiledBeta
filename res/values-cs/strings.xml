@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Otevřít v telefonu</string>
     <string name="common_signin_button_text">Přihlásit se</string>
     <string name="common_signin_button_text_long">Přihlásit se k účtu Google</string>
+    <string name="wallet_buy_button_place_holder">Koupit pomocí Googlu</string>
 </resources>

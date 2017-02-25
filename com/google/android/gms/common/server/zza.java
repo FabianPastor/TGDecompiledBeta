@@ -7,50 +7,50 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zza implements Creator<FavaDiagnosticsEntity> {
     static void zza(FavaDiagnosticsEntity favaDiagnosticsEntity, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, favaDiagnosticsEntity.mVersionCode);
-        zzc.zza(parcel, 2, favaDiagnosticsEntity.zzaFs, false);
-        zzc.zzc(parcel, 3, favaDiagnosticsEntity.zzaFt);
-        zzc.zzJ(parcel, zzaV);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, favaDiagnosticsEntity.zzaiI);
+        zzc.zza(parcel, 2, favaDiagnosticsEntity.zzaGP, false);
+        zzc.zzc(parcel, 3, favaDiagnosticsEntity.zzaGQ);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaW(parcel);
+        return zzba(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcY(i);
+        return zzde(i);
     }
 
-    public FavaDiagnosticsEntity zzaW(Parcel parcel) {
+    public FavaDiagnosticsEntity zzba(Parcel parcel) {
         int i = 0;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         String str = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new FavaDiagnosticsEntity(i2, str, i);
         }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaU, parcel);
+        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public FavaDiagnosticsEntity[] zzcY(int i) {
+    public FavaDiagnosticsEntity[] zzde(int i) {
         return new FavaDiagnosticsEntity[i];
     }
 }

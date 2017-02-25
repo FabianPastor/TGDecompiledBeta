@@ -2,17 +2,17 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.internal.zzac;
 
-public class StreetViewPanoramaCamera extends zza {
-    public static final Creator<StreetViewPanoramaCamera> CREATOR = new zzk();
+public class StreetViewPanoramaCamera extends zza implements ReflectedParcelable {
+    public static final Creator<StreetViewPanoramaCamera> CREATOR = new zzm();
     public final float bearing;
-    private final int mVersionCode;
     public final float tilt;
     public final float zoom;
-    private StreetViewPanoramaOrientation zzbpo;
+    private StreetViewPanoramaOrientation zzbpY;
 
     public static final class Builder {
         public float bearing;
@@ -52,20 +52,15 @@ public class StreetViewPanoramaCamera extends zza {
     }
 
     public StreetViewPanoramaCamera(float f, float f2, float f3) {
-        this(1, f, f2, f3);
-    }
-
-    StreetViewPanoramaCamera(int i, float f, float f2, float f3) {
         boolean z = -90.0f <= f2 && f2 <= 90.0f;
         zzac.zzb(z, (Object) "Tilt needs to be between -90 and 90 inclusive");
-        this.mVersionCode = i;
         if (((double) f) <= 0.0d) {
             f = 0.0f;
         }
         this.zoom = f;
         this.tilt = f2 + 0.0f;
         this.bearing = (((double) f3) <= 0.0d ? (f3 % 360.0f) + 360.0f : f3) % 360.0f;
-        this.zzbpo = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
+        this.zzbpY = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
     }
 
     public static Builder builder() {
@@ -88,11 +83,7 @@ public class StreetViewPanoramaCamera extends zza {
     }
 
     public StreetViewPanoramaOrientation getOrientation() {
-        return this.zzbpo;
-    }
-
-    int getVersionCode() {
-        return this.mVersionCode;
+        return this.zzbpY;
     }
 
     public int hashCode() {
@@ -104,6 +95,6 @@ public class StreetViewPanoramaCamera extends zza {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzk.zza(this, parcel, i);
+        zzm.zza(this, parcel, i);
     }
 }

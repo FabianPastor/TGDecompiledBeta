@@ -9,9 +9,10 @@ import android.os.Build.VERSION;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Base64;
 import android.util.Log;
+import com.google.android.gms.wallet.WalletConstants;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
-    private static String zzbfQ = "gcm.googleapis.com/refresh";
+    private static String zzbgu = "gcm.googleapis.com/refresh";
 
     private void doStartService(Context context, Intent intent) {
         if (isOrderedBroadcast()) {
@@ -29,7 +30,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             if (startWakefulService == null) {
                 Log.e("GcmReceiver", "Error while delivering the message: ServiceIntent not found.");
                 if (isOrderedBroadcast()) {
-                    setResultCode(404);
+                    setResultCode(WalletConstants.ERROR_CODE_INVALID_PARAMETERS);
                 }
             } else if (isOrderedBroadcast()) {
                 setResultCode(-1);
@@ -77,7 +78,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             intent.removeCategory(context.getPackageName());
         }
         String stringExtra = intent.getStringExtra("from");
-        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || zzbfQ.equals(stringExtra)) {
+        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || zzbgu.equals(stringExtra)) {
             intent.setAction("com.google.android.gms.iid.InstanceID");
         }
         stringExtra = intent.getStringExtra("gcm.rawData64");

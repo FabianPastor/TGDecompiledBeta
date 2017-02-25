@@ -34,21 +34,21 @@ public final class ConnectionResult extends zza {
     public static final int SIGN_IN_REQUIRED = 4;
     public static final int SUCCESS = 0;
     public static final int TIMEOUT = 14;
-    public static final ConnectionResult zzawX = new ConnectionResult(0);
+    public static final ConnectionResult zzayj = new ConnectionResult(0);
     private final PendingIntent mPendingIntent;
-    final int mVersionCode;
-    private final int zzauz;
-    private final String zzawY;
+    final int zzaiI;
+    private final int zzavD;
+    private final String zzayk;
 
     public ConnectionResult(int i) {
         this(i, null, null);
     }
 
     ConnectionResult(int i, int i2, PendingIntent pendingIntent, String str) {
-        this.mVersionCode = i;
-        this.zzauz = i2;
+        this.zzaiI = i;
+        this.zzavD = i2;
         this.mPendingIntent = pendingIntent;
-        this.zzawY = str;
+        this.zzayk = str;
     }
 
     public ConnectionResult(int i, PendingIntent pendingIntent) {
@@ -122,16 +122,16 @@ public final class ConnectionResult extends zza {
             return false;
         }
         ConnectionResult connectionResult = (ConnectionResult) obj;
-        return this.zzauz == connectionResult.zzauz && zzaa.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzaa.equal(this.zzawY, connectionResult.zzawY);
+        return this.zzavD == connectionResult.zzavD && zzaa.equal(this.mPendingIntent, connectionResult.mPendingIntent) && zzaa.equal(this.zzayk, connectionResult.zzayk);
     }
 
     public int getErrorCode() {
-        return this.zzauz;
+        return this.zzavD;
     }
 
     @Nullable
     public String getErrorMessage() {
-        return this.zzawY;
+        return this.zzayk;
     }
 
     @Nullable
@@ -140,15 +140,15 @@ public final class ConnectionResult extends zza {
     }
 
     public boolean hasResolution() {
-        return (this.zzauz == 0 || this.mPendingIntent == null) ? false : true;
+        return (this.zzavD == 0 || this.mPendingIntent == null) ? false : true;
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.zzauz), this.mPendingIntent, this.zzawY);
+        return zzaa.hashCode(Integer.valueOf(this.zzavD), this.mPendingIntent, this.zzayk);
     }
 
     public boolean isSuccess() {
-        return this.zzauz == 0;
+        return this.zzavD == 0;
     }
 
     public void startResolutionForResult(Activity activity, int i) throws SendIntentException {
@@ -158,7 +158,7 @@ public final class ConnectionResult extends zza {
     }
 
     public String toString() {
-        return zzaa.zzv(this).zzg("statusCode", getStatusString(this.zzauz)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzawY).toString();
+        return zzaa.zzv(this).zzg("statusCode", getStatusString(this.zzavD)).zzg("resolution", this.mPendingIntent).zzg("message", this.zzayk).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {

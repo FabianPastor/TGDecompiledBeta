@@ -1,64 +1,186 @@
 package com.google.android.gms.internal;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
-public final class zzaqd extends zzapk<Date> {
-    public static final zzapl bpG = new zzapl() {
-        public <T> zzapk<T> zza(zzaos com_google_android_gms_internal_zzaos, zzaqo<T> com_google_android_gms_internal_zzaqo_T) {
-            return com_google_android_gms_internal_zzaqo_T.bB() == Date.class ? new zzaqd() : null;
-        }
-    };
-    private final DateFormat bnQ = DateFormat.getDateTimeInstance(2, 2, Locale.US);
-    private final DateFormat bnR = DateFormat.getDateTimeInstance(2, 2);
-    private final DateFormat bnS = bp();
+public interface zzaqd extends IInterface {
 
-    private static DateFormat bp() {
-        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return simpleDateFormat;
-    }
+    public static abstract class zza extends Binder implements zzaqd {
 
-    private synchronized Date zzur(String str) {
-        Date parse;
-        try {
-            parse = this.bnR.parse(str);
-        } catch (ParseException e) {
-            try {
-                parse = this.bnQ.parse(str);
-            } catch (ParseException e2) {
+        private static class zza implements zzaqd {
+            private IBinder zzrk;
+
+            zza(IBinder iBinder) {
+                this.zzrk = iBinder;
+            }
+
+            public IBinder asBinder() {
+                return this.zzrk;
+            }
+
+            public boolean getBooleanFlagValue(String str, boolean z, int i) throws RemoteException {
+                boolean z2 = true;
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
                 try {
-                    parse = this.bnS.parse(str);
-                } catch (Throwable e3) {
-                    throw new zzaph(str, e3);
+                    obtain.writeInterfaceToken("com.google.android.gms.flags.IFlagProvider");
+                    obtain.writeString(str);
+                    obtain.writeInt(z ? 1 : 0);
+                    obtain.writeInt(i);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
+                    obtain2.readException();
+                    if (obtain2.readInt() == 0) {
+                        z2 = false;
+                    }
+                    obtain2.recycle();
+                    obtain.recycle();
+                    return z2;
+                } catch (Throwable th) {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public int getIntFlagValue(String str, int i, int i2) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.flags.IFlagProvider");
+                    obtain.writeString(str);
+                    obtain.writeInt(i);
+                    obtain.writeInt(i2);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
+                    obtain2.readException();
+                    int readInt = obtain2.readInt();
+                    return readInt;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public long getLongFlagValue(String str, long j, int i) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.flags.IFlagProvider");
+                    obtain.writeString(str);
+                    obtain.writeLong(j);
+                    obtain.writeInt(i);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
+                    obtain2.readException();
+                    long readLong = obtain2.readLong();
+                    return readLong;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public String getStringFlagValue(String str, String str2, int i) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.flags.IFlagProvider");
+                    obtain.writeString(str);
+                    obtain.writeString(str2);
+                    obtain.writeInt(i);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
+                    obtain2.readException();
+                    String readString = obtain2.readString();
+                    return readString;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void init(IObjectWrapper iObjectWrapper) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.flags.IFlagProvider");
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
                 }
             }
         }
-        return parse;
-    }
 
-    public synchronized void zza(zzaqr com_google_android_gms_internal_zzaqr, Date date) throws IOException {
-        if (date == null) {
-            com_google_android_gms_internal_zzaqr.bA();
-        } else {
-            com_google_android_gms_internal_zzaqr.zzut(this.bnQ.format(date));
+        public zza() {
+            attachInterface(this, "com.google.android.gms.flags.IFlagProvider");
+        }
+
+        public static zzaqd asInterface(IBinder iBinder) {
+            if (iBinder == null) {
+                return null;
+            }
+            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.flags.IFlagProvider");
+            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzaqd)) ? new zza(iBinder) : (zzaqd) queryLocalInterface;
+        }
+
+        public IBinder asBinder() {
+            return this;
+        }
+
+        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+            int i3 = 0;
+            switch (i) {
+                case 1:
+                    parcel.enforceInterface("com.google.android.gms.flags.IFlagProvider");
+                    init(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    return true;
+                case 2:
+                    parcel.enforceInterface("com.google.android.gms.flags.IFlagProvider");
+                    boolean booleanFlagValue = getBooleanFlagValue(parcel.readString(), parcel.readInt() != 0, parcel.readInt());
+                    parcel2.writeNoException();
+                    if (booleanFlagValue) {
+                        i3 = 1;
+                    }
+                    parcel2.writeInt(i3);
+                    return true;
+                case 3:
+                    parcel.enforceInterface("com.google.android.gms.flags.IFlagProvider");
+                    int intFlagValue = getIntFlagValue(parcel.readString(), parcel.readInt(), parcel.readInt());
+                    parcel2.writeNoException();
+                    parcel2.writeInt(intFlagValue);
+                    return true;
+                case 4:
+                    parcel.enforceInterface("com.google.android.gms.flags.IFlagProvider");
+                    long longFlagValue = getLongFlagValue(parcel.readString(), parcel.readLong(), parcel.readInt());
+                    parcel2.writeNoException();
+                    parcel2.writeLong(longFlagValue);
+                    return true;
+                case 5:
+                    parcel.enforceInterface("com.google.android.gms.flags.IFlagProvider");
+                    String stringFlagValue = getStringFlagValue(parcel.readString(), parcel.readString(), parcel.readInt());
+                    parcel2.writeNoException();
+                    parcel2.writeString(stringFlagValue);
+                    return true;
+                case 1598968902:
+                    parcel2.writeString("com.google.android.gms.flags.IFlagProvider");
+                    return true;
+                default:
+                    return super.onTransact(i, parcel, parcel2, i2);
+            }
         }
     }
 
-    public /* synthetic */ Object zzb(zzaqp com_google_android_gms_internal_zzaqp) throws IOException {
-        return zzk(com_google_android_gms_internal_zzaqp);
-    }
+    boolean getBooleanFlagValue(String str, boolean z, int i) throws RemoteException;
 
-    public Date zzk(zzaqp com_google_android_gms_internal_zzaqp) throws IOException {
-        if (com_google_android_gms_internal_zzaqp.bq() != zzaqq.NULL) {
-            return zzur(com_google_android_gms_internal_zzaqp.nextString());
-        }
-        com_google_android_gms_internal_zzaqp.nextNull();
-        return null;
-    }
+    int getIntFlagValue(String str, int i, int i2) throws RemoteException;
+
+    long getLongFlagValue(String str, long j, int i) throws RemoteException;
+
+    String getStringFlagValue(String str, String str2, int i) throws RemoteException;
+
+    void init(IObjectWrapper iObjectWrapper) throws RemoteException;
 }

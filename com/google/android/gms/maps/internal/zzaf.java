@@ -11,14 +11,14 @@ public interface zzaf extends IInterface {
     public static abstract class zza extends Binder implements zzaf {
 
         private static class zza implements zzaf {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public void zza(IStreetViewPanoramaDelegate iStreetViewPanoramaDelegate) throws RemoteException {
@@ -27,7 +27,7 @@ public interface zzaf extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback");
                     obtain.writeStrongBinder(iStreetViewPanoramaDelegate != null ? iStreetViewPanoramaDelegate.asBinder() : null);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();

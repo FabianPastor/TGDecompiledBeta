@@ -9,16 +9,16 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 
 public class zzad extends zza {
     public static final Creator<zzad> CREATOR = new zzae();
-    final int mVersionCode;
-    private final int zzaFf;
-    private final GoogleSignInAccount zzaFg;
-    private final Account zzagg;
+    private final int zzaGC;
+    private final GoogleSignInAccount zzaGD;
+    private final Account zzahh;
+    final int zzaiI;
 
     zzad(int i, Account account, int i2, GoogleSignInAccount googleSignInAccount) {
-        this.mVersionCode = i;
-        this.zzagg = account;
-        this.zzaFf = i2;
-        this.zzaFg = googleSignInAccount;
+        this.zzaiI = i;
+        this.zzahh = account;
+        this.zzaGC = i2;
+        this.zzaGD = googleSignInAccount;
     }
 
     public zzad(Account account, int i, GoogleSignInAccount googleSignInAccount) {
@@ -26,11 +26,11 @@ public class zzad extends zza {
     }
 
     public Account getAccount() {
-        return this.zzagg;
+        return this.zzahh;
     }
 
     public int getSessionId() {
-        return this.zzaFf;
+        return this.zzaGC;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
@@ -38,7 +38,7 @@ public class zzad extends zza {
     }
 
     @Nullable
-    public GoogleSignInAccount zzxy() {
-        return this.zzaFg;
+    public GoogleSignInAccount zzyf() {
+        return this.zzaGD;
     }
 }

@@ -19,47 +19,47 @@ import com.google.android.gms.common.internal.zzm.zza;
 import java.util.Set;
 
 public abstract class zzl<T extends IInterface> extends zzf<T> implements zze, zza {
-    private final Account zzagg;
-    private final Set<Scope> zzajm;
-    private final zzg zzazs;
+    private final zzg zzaAL;
+    private final Account zzahh;
+    private final Set<Scope> zzakq;
 
     class AnonymousClass1 implements zzb {
-        final /* synthetic */ ConnectionCallbacks zzaEu;
+        final /* synthetic */ ConnectionCallbacks zzaFS;
 
         AnonymousClass1(ConnectionCallbacks connectionCallbacks) {
-            this.zzaEu = connectionCallbacks;
+            this.zzaFS = connectionCallbacks;
         }
 
         public void onConnected(@Nullable Bundle bundle) {
-            this.zzaEu.onConnected(bundle);
+            this.zzaFS.onConnected(bundle);
         }
 
         public void onConnectionSuspended(int i) {
-            this.zzaEu.onConnectionSuspended(i);
+            this.zzaFS.onConnectionSuspended(i);
         }
     }
 
     class AnonymousClass2 implements zzc {
-        final /* synthetic */ OnConnectionFailedListener zzaEv;
+        final /* synthetic */ OnConnectionFailedListener zzaFT;
 
         AnonymousClass2(OnConnectionFailedListener onConnectionFailedListener) {
-            this.zzaEv = onConnectionFailedListener;
+            this.zzaFT = onConnectionFailedListener;
         }
 
         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-            this.zzaEv.onConnectionFailed(connectionResult);
+            this.zzaFT.onConnectionFailed(connectionResult);
         }
     }
 
     protected zzl(Context context, Looper looper, int i, zzg com_google_android_gms_common_internal_zzg, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        this(context, looper, zzn.zzaC(context), GoogleApiAvailability.getInstance(), i, com_google_android_gms_common_internal_zzg, (ConnectionCallbacks) zzac.zzw(connectionCallbacks), (OnConnectionFailedListener) zzac.zzw(onConnectionFailedListener));
+        this(context, looper, zzn.zzaU(context), GoogleApiAvailability.getInstance(), i, com_google_android_gms_common_internal_zzg, (ConnectionCallbacks) zzac.zzw(connectionCallbacks), (OnConnectionFailedListener) zzac.zzw(onConnectionFailedListener));
     }
 
     protected zzl(Context context, Looper looper, zzn com_google_android_gms_common_internal_zzn, GoogleApiAvailability googleApiAvailability, int i, zzg com_google_android_gms_common_internal_zzg, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-        super(context, looper, com_google_android_gms_common_internal_zzn, googleApiAvailability, i, zza(connectionCallbacks), zza(onConnectionFailedListener), com_google_android_gms_common_internal_zzg.zzxi());
-        this.zzazs = com_google_android_gms_common_internal_zzg;
-        this.zzagg = com_google_android_gms_common_internal_zzg.getAccount();
-        this.zzajm = zzb(com_google_android_gms_common_internal_zzg.zzxf());
+        super(context, looper, com_google_android_gms_common_internal_zzn, googleApiAvailability, i, zza(connectionCallbacks), zza(onConnectionFailedListener), com_google_android_gms_common_internal_zzg.zzxP());
+        this.zzaAL = com_google_android_gms_common_internal_zzg;
+        this.zzahh = com_google_android_gms_common_internal_zzg.getAccount();
+        this.zzakq = zzb(com_google_android_gms_common_internal_zzg.zzxM());
     }
 
     @Nullable
@@ -83,7 +83,7 @@ public abstract class zzl<T extends IInterface> extends zzf<T> implements zze, z
     }
 
     public final Account getAccount() {
-        return this.zzagg;
+        return this.zzahh;
     }
 
     @NonNull
@@ -91,11 +91,15 @@ public abstract class zzl<T extends IInterface> extends zzf<T> implements zze, z
         return set;
     }
 
-    protected final Set<Scope> zzwY() {
-        return this.zzajm;
+    public com.google.android.gms.common.zzc[] zzxA() {
+        return new com.google.android.gms.common.zzc[0];
     }
 
-    protected final zzg zzxp() {
-        return this.zzazs;
+    protected final Set<Scope> zzxF() {
+        return this.zzakq;
+    }
+
+    protected final zzg zzxW() {
+        return this.zzaAL;
     }
 }

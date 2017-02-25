@@ -1,26 +1,44 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.Releasable;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.data.DataHolder;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.zzac;
 
-public abstract class zzaag implements Releasable, Result {
-    protected final Status zzahq;
-    protected final DataHolder zzazI;
+public class zzaag implements ConnectionCallbacks, OnConnectionFailedListener {
+    private final boolean zzaAu;
+    private zzaah zzaAv;
+    public final Api<?> zzaxf;
 
-    protected zzaag(DataHolder dataHolder, Status status) {
-        this.zzahq = status;
-        this.zzazI = dataHolder;
+    public zzaag(Api<?> api, boolean z) {
+        this.zzaxf = api;
+        this.zzaAu = z;
     }
 
-    public Status getStatus() {
-        return this.zzahq;
+    private void zzvL() {
+        zzac.zzb(this.zzaAv, (Object) "Callbacks must be attached to a ClientConnectionHelper instance before connecting the client.");
     }
 
-    public void release() {
-        if (this.zzazI != null) {
-            this.zzazI.close();
-        }
+    public void onConnected(@Nullable Bundle bundle) {
+        zzvL();
+        this.zzaAv.onConnected(bundle);
+    }
+
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        zzvL();
+        this.zzaAv.zza(connectionResult, this.zzaxf, this.zzaAu);
+    }
+
+    public void onConnectionSuspended(int i) {
+        zzvL();
+        this.zzaAv.onConnectionSuspended(i);
+    }
+
+    public void zza(zzaah com_google_android_gms_internal_zzaah) {
+        this.zzaAv = com_google_android_gms_internal_zzaah;
     }
 }

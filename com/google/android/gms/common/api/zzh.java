@@ -9,55 +9,55 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzh implements Creator<Status> {
     static void zza(Status status, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, status.getStatusCode());
         zzc.zza(parcel, 2, status.getStatusMessage(), false);
-        zzc.zza(parcel, 3, status.zzuT(), i, false);
-        zzc.zzc(parcel, 1000, status.mVersionCode);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zza(parcel, 3, status.zzvu(), i, false);
+        zzc.zzc(parcel, 1000, status.zzaiI);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaI(parcel);
+        return zzaM(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzct(i);
+        return zzcz(i);
     }
 
-    public Status zzaI(Parcel parcel) {
+    public Status zzaM(Parcel parcel) {
         PendingIntent pendingIntent = null;
         int i = 0;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         String str = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    pendingIntent = (PendingIntent) zzb.zza(parcel, zzaT, PendingIntent.CREATOR);
+                    pendingIntent = (PendingIntent) zzb.zza(parcel, zzaX, PendingIntent.CREATOR);
                     break;
                 case 1000:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new Status(i2, i, str, pendingIntent);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Status[] zzct(int i) {
+    public Status[] zzcz(int i) {
         return new Status[i];
     }
 }

@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
@@ -16,10 +16,10 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
     public static abstract class zza extends Binder implements IStreetViewPanoramaDelegate {
 
         private static class zza implements IStreetViewPanoramaDelegate {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public void animateTo(StreetViewPanoramaCamera streetViewPanoramaCamera, long j) throws RemoteException {
@@ -34,7 +34,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeLong(j);
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -43,7 +43,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public void enablePanning(boolean z) throws RemoteException {
@@ -56,7 +56,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -74,7 +74,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -92,7 +92,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -110,7 +110,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         i = 0;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -123,7 +123,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     StreetViewPanoramaCamera streetViewPanoramaCamera = obtain2.readInt() != 0 ? (StreetViewPanoramaCamera) StreetViewPanoramaCamera.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -140,7 +140,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(14, obtain, obtain2, 0);
+                    this.zzrk.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                     StreetViewPanoramaLocation streetViewPanoramaLocation = obtain2.readInt() != 0 ? (StreetViewPanoramaLocation) StreetViewPanoramaLocation.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -158,7 +158,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -178,7 +178,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -198,7 +198,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -218,7 +218,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -232,7 +232,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 }
             }
 
-            public zzd orientationToPoint(StreetViewPanoramaOrientation streetViewPanoramaOrientation) throws RemoteException {
+            public IObjectWrapper orientationToPoint(StreetViewPanoramaOrientation streetViewPanoramaOrientation) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -243,9 +243,9 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(19, obtain, obtain2, 0);
+                    this.zzrk.transact(19, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -253,14 +253,14 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 }
             }
 
-            public StreetViewPanoramaOrientation pointToOrientation(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public StreetViewPanoramaOrientation pointToOrientation(IObjectWrapper iObjectWrapper) throws RemoteException {
                 StreetViewPanoramaOrientation streetViewPanoramaOrientation = null;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(18, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(18, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         streetViewPanoramaOrientation = (StreetViewPanoramaOrientation) StreetViewPanoramaOrientation.CREATOR.createFromParcel(obtain2);
@@ -280,7 +280,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzab != null ? com_google_android_gms_maps_internal_zzab.asBinder() : null);
-                    this.zzrp.transact(16, obtain, obtain2, 0);
+                    this.zzrk.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -294,7 +294,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzac != null ? com_google_android_gms_maps_internal_zzac.asBinder() : null);
-                    this.zzrp.transact(15, obtain, obtain2, 0);
+                    this.zzrk.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -308,7 +308,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzad != null ? com_google_android_gms_maps_internal_zzad.asBinder() : null);
-                    this.zzrp.transact(17, obtain, obtain2, 0);
+                    this.zzrk.transact(17, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -322,7 +322,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzae != null ? com_google_android_gms_maps_internal_zzae.asBinder() : null);
-                    this.zzrp.transact(20, obtain, obtain2, 0);
+                    this.zzrk.transact(20, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -341,7 +341,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(12, obtain, obtain2, 0);
+                    this.zzrk.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -355,7 +355,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
                     obtain.writeString(str);
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -375,7 +375,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(13, obtain, obtain2, 0);
+                    this.zzrk.transact(13, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -525,7 +525,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                     return true;
                 case 18:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    StreetViewPanoramaOrientation pointToOrientation = pointToOrientation(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    StreetViewPanoramaOrientation pointToOrientation = pointToOrientation(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (pointToOrientation != null) {
                         parcel2.writeInt(1);
@@ -536,7 +536,7 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
                     return true;
                 case 19:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate");
-                    zzd orientationToPoint = orientationToPoint(parcel.readInt() != 0 ? (StreetViewPanoramaOrientation) StreetViewPanoramaOrientation.CREATOR.createFromParcel(parcel) : null);
+                    IObjectWrapper orientationToPoint = orientationToPoint(parcel.readInt() != 0 ? (StreetViewPanoramaOrientation) StreetViewPanoramaOrientation.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (orientationToPoint != null) {
                         iBinder = orientationToPoint.asBinder();
@@ -579,9 +579,9 @@ public interface IStreetViewPanoramaDelegate extends IInterface {
 
     boolean isZoomGesturesEnabled() throws RemoteException;
 
-    zzd orientationToPoint(StreetViewPanoramaOrientation streetViewPanoramaOrientation) throws RemoteException;
+    IObjectWrapper orientationToPoint(StreetViewPanoramaOrientation streetViewPanoramaOrientation) throws RemoteException;
 
-    StreetViewPanoramaOrientation pointToOrientation(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    StreetViewPanoramaOrientation pointToOrientation(IObjectWrapper iObjectWrapper) throws RemoteException;
 
     void setOnStreetViewPanoramaCameraChangeListener(zzab com_google_android_gms_maps_internal_zzab) throws RemoteException;
 

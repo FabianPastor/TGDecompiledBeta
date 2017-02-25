@@ -1,313 +1,102 @@
 package com.google.android.gms.internal;
 
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.IInterface;
 import android.os.Parcel;
-import android.os.RemoteException;
-import java.util.List;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.internal.safeparcel.zzb;
+import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public interface zzate extends IInterface {
-
-    public static abstract class zza extends Binder implements zzate {
-
-        private static class zza implements zzate {
-            private IBinder zzrp;
-
-            zza(IBinder iBinder) {
-                this.zzrp = iBinder;
-            }
-
-            public IBinder asBinder() {
-                return this.zzrp;
-            }
-
-            public List<zzaub> zza(zzasq com_google_android_gms_internal_zzasq, boolean z) throws RemoteException {
-                int i = 1;
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    if (!z) {
-                        i = 0;
-                    }
-                    obtain.writeInt(i);
-                    this.zzrp.transact(7, obtain, obtain2, 0);
-                    obtain2.readException();
-                    List<zzaub> createTypedArrayList = obtain2.createTypedArrayList(zzaub.CREATOR);
-                    return createTypedArrayList;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zza(long j, String str, String str2, String str3) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    obtain.writeLong(j);
-                    obtain.writeString(str);
-                    obtain.writeString(str2);
-                    obtain.writeString(str3);
-                    this.zzrp.transact(10, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zza(zzasq com_google_android_gms_internal_zzasq) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(4, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zza(zzatb com_google_android_gms_internal_zzatb, zzasq com_google_android_gms_internal_zzasq) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzatb != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzatb.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(1, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zza(zzatb com_google_android_gms_internal_zzatb, String str, String str2) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzatb != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzatb.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    obtain.writeString(str);
-                    obtain.writeString(str2);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zza(zzaub com_google_android_gms_internal_zzaub, zzasq com_google_android_gms_internal_zzasq) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzaub != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzaub.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(2, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public byte[] zza(zzatb com_google_android_gms_internal_zzatb, String str) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzatb != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzatb.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    obtain.writeString(str);
-                    this.zzrp.transact(9, obtain, obtain2, 0);
-                    obtain2.readException();
-                    byte[] createByteArray = obtain2.createByteArray();
-                    return createByteArray;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public void zzb(zzasq com_google_android_gms_internal_zzasq) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(6, obtain, obtain2, 0);
-                    obtain2.readException();
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-
-            public String zzc(zzasq com_google_android_gms_internal_zzasq) throws RemoteException {
-                Parcel obtain = Parcel.obtain();
-                Parcel obtain2 = Parcel.obtain();
-                try {
-                    obtain.writeInterfaceToken("com.google.android.gms.measurement.internal.IMeasurementService");
-                    if (com_google_android_gms_internal_zzasq != null) {
-                        obtain.writeInt(1);
-                        com_google_android_gms_internal_zzasq.writeToParcel(obtain, 0);
-                    } else {
-                        obtain.writeInt(0);
-                    }
-                    this.zzrp.transact(11, obtain, obtain2, 0);
-                    obtain2.readException();
-                    String readString = obtain2.readString();
-                    return readString;
-                } finally {
-                    obtain2.recycle();
-                    obtain.recycle();
-                }
-            }
-        }
-
-        public zza() {
-            attachInterface(this, "com.google.android.gms.measurement.internal.IMeasurementService");
-        }
-
-        public static zzate zzer(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzate)) ? new zza(iBinder) : (zzate) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zza(parcel.readInt() != 0 ? (zzatb) zzatb.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    return true;
-                case 2:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zza(parcel.readInt() != 0 ? (zzaub) zzaub.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    return true;
-                case 4:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zza(parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    return true;
-                case 5:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zza(parcel.readInt() != 0 ? (zzatb) zzatb.CREATOR.createFromParcel(parcel) : null, parcel.readString(), parcel.readString());
-                    parcel2.writeNoException();
-                    return true;
-                case 6:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zzb(parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    return true;
-                case 7:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    List zza = zza(parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0);
-                    parcel2.writeNoException();
-                    parcel2.writeTypedList(zza);
-                    return true;
-                case 9:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    byte[] zza2 = zza(parcel.readInt() != 0 ? (zzatb) zzatb.CREATOR.createFromParcel(parcel) : null, parcel.readString());
-                    parcel2.writeNoException();
-                    parcel2.writeByteArray(zza2);
-                    return true;
-                case 10:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    zza(parcel.readLong(), parcel.readString(), parcel.readString(), parcel.readString());
-                    parcel2.writeNoException();
-                    return true;
-                case 11:
-                    parcel.enforceInterface("com.google.android.gms.measurement.internal.IMeasurementService");
-                    String zzc = zzc(parcel.readInt() != 0 ? (zzasq) zzasq.CREATOR.createFromParcel(parcel) : null);
-                    parcel2.writeNoException();
-                    parcel2.writeString(zzc);
-                    return true;
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.measurement.internal.IMeasurementService");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
-            }
-        }
+public class zzate implements Creator<zzatd> {
+    static void zza(zzatd com_google_android_gms_internal_zzatd, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, com_google_android_gms_internal_zzatd.packageName, false);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatd.zzbqP, false);
+        zzc.zza(parcel, 4, com_google_android_gms_internal_zzatd.zzbhM, false);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatd.zzbqQ, false);
+        zzc.zza(parcel, 6, com_google_android_gms_internal_zzatd.zzbqR);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzatd.zzbqS);
+        zzc.zza(parcel, 8, com_google_android_gms_internal_zzatd.zzbqT, false);
+        zzc.zza(parcel, 9, com_google_android_gms_internal_zzatd.zzbqU);
+        zzc.zza(parcel, 10, com_google_android_gms_internal_zzatd.zzbqV);
+        zzc.zza(parcel, 11, com_google_android_gms_internal_zzatd.zzbqW);
+        zzc.zza(parcel, 12, com_google_android_gms_internal_zzatd.zzbqX, false);
+        zzc.zza(parcel, 13, com_google_android_gms_internal_zzatd.zzbqY);
+        zzc.zzJ(parcel, zzaZ);
     }
 
-    List<zzaub> zza(zzasq com_google_android_gms_internal_zzasq, boolean z) throws RemoteException;
+    public /* synthetic */ Object createFromParcel(Parcel parcel) {
+        return zzhQ(parcel);
+    }
 
-    void zza(long j, String str, String str2, String str3) throws RemoteException;
+    public /* synthetic */ Object[] newArray(int i) {
+        return zzlz(i);
+    }
 
-    void zza(zzasq com_google_android_gms_internal_zzasq) throws RemoteException;
+    public zzatd zzhQ(Parcel parcel) {
+        int zzaY = zzb.zzaY(parcel);
+        String str = null;
+        String str2 = null;
+        String str3 = null;
+        String str4 = null;
+        long j = 0;
+        long j2 = 0;
+        String str5 = null;
+        boolean z = true;
+        boolean z2 = false;
+        long j3 = -2147483648L;
+        String str6 = null;
+        long j4 = 0;
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
+                case 2:
+                    str = zzb.zzq(parcel, zzaX);
+                    break;
+                case 3:
+                    str2 = zzb.zzq(parcel, zzaX);
+                    break;
+                case 4:
+                    str3 = zzb.zzq(parcel, zzaX);
+                    break;
+                case 5:
+                    str4 = zzb.zzq(parcel, zzaX);
+                    break;
+                case 6:
+                    j = zzb.zzi(parcel, zzaX);
+                    break;
+                case 7:
+                    j2 = zzb.zzi(parcel, zzaX);
+                    break;
+                case 8:
+                    str5 = zzb.zzq(parcel, zzaX);
+                    break;
+                case 9:
+                    z = zzb.zzc(parcel, zzaX);
+                    break;
+                case 10:
+                    z2 = zzb.zzc(parcel, zzaX);
+                    break;
+                case 11:
+                    j3 = zzb.zzi(parcel, zzaX);
+                    break;
+                case 12:
+                    str6 = zzb.zzq(parcel, zzaX);
+                    break;
+                case 13:
+                    j4 = zzb.zzi(parcel, zzaX);
+                    break;
+                default:
+                    zzb.zzb(parcel, zzaX);
+                    break;
+            }
+        }
+        if (parcel.dataPosition() == zzaY) {
+            return new zzatd(str, str2, str3, str4, j, j2, str5, z, z2, j3, str6, j4);
+        }
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
+    }
 
-    void zza(zzatb com_google_android_gms_internal_zzatb, zzasq com_google_android_gms_internal_zzasq) throws RemoteException;
-
-    void zza(zzatb com_google_android_gms_internal_zzatb, String str, String str2) throws RemoteException;
-
-    void zza(zzaub com_google_android_gms_internal_zzaub, zzasq com_google_android_gms_internal_zzasq) throws RemoteException;
-
-    byte[] zza(zzatb com_google_android_gms_internal_zzatb, String str) throws RemoteException;
-
-    void zzb(zzasq com_google_android_gms_internal_zzasq) throws RemoteException;
-
-    String zzc(zzasq com_google_android_gms_internal_zzasq) throws RemoteException;
+    public zzatd[] zzlz(int i) {
+        return new zzatd[i];
+    }
 }

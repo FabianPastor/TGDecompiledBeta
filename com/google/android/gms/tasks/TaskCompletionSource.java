@@ -3,26 +3,26 @@ package com.google.android.gms.tasks;
 import android.support.annotation.NonNull;
 
 public class TaskCompletionSource<TResult> {
-    private final zzh<TResult> zzbLF = new zzh();
+    private final zzh<TResult> zzbNG = new zzh();
 
     @NonNull
     public Task<TResult> getTask() {
-        return this.zzbLF;
+        return this.zzbNG;
     }
 
     public void setException(@NonNull Exception exception) {
-        this.zzbLF.setException(exception);
+        this.zzbNG.setException(exception);
     }
 
     public void setResult(TResult tResult) {
-        this.zzbLF.setResult(tResult);
+        this.zzbNG.setResult(tResult);
     }
 
     public boolean trySetException(@NonNull Exception exception) {
-        return this.zzbLF.trySetException(exception);
+        return this.zzbNG.trySetException(exception);
     }
 
     public boolean trySetResult(TResult tResult) {
-        return this.zzbLF.trySetResult(tResult);
+        return this.zzbNG.trySetResult(tResult);
     }
 }

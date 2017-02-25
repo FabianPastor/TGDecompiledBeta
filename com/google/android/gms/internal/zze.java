@@ -1,59 +1,40 @@
 package com.google.android.gms.internal;
 
-import android.os.Handler;
-import java.util.concurrent.Executor;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 
-public class zze implements zzn {
-    private final Executor zzr;
+public class zze implements zzp {
+    private int zzn;
+    private int zzo;
+    private final int zzp;
+    private final float zzq;
 
-    private class zza implements Runnable {
-        private final zzk zzt;
-        private final zzm zzu;
-        private final Runnable zzv;
+    public zze() {
+        this(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS, 1, 1.0f);
+    }
 
-        public zza(zze com_google_android_gms_internal_zze, zzk com_google_android_gms_internal_zzk, zzm com_google_android_gms_internal_zzm, Runnable runnable) {
-            this.zzt = com_google_android_gms_internal_zzk;
-            this.zzu = com_google_android_gms_internal_zzm;
-            this.zzv = runnable;
-        }
+    public zze(int i, int i2, float f) {
+        this.zzn = i;
+        this.zzp = i2;
+        this.zzq = f;
+    }
 
-        public void run() {
-            if (this.zzu.isSuccess()) {
-                this.zzt.zza(this.zzu.result);
-            } else {
-                this.zzt.zzc(this.zzu.zzaf);
-            }
-            if (this.zzu.zzag) {
-                this.zzt.zzc("intermediate-response");
-            } else {
-                this.zzt.zzd("done");
-            }
-            if (this.zzv != null) {
-                this.zzv.run();
-            }
+    public void zza(zzs com_google_android_gms_internal_zzs) throws zzs {
+        this.zzo++;
+        this.zzn = (int) (((float) this.zzn) + (((float) this.zzn) * this.zzq));
+        if (!zze()) {
+            throw com_google_android_gms_internal_zzs;
         }
     }
 
-    public zze(final Handler handler) {
-        this.zzr = new Executor(this) {
-            public void execute(Runnable runnable) {
-                handler.post(runnable);
-            }
-        };
+    public int zzc() {
+        return this.zzn;
     }
 
-    public void zza(zzk<?> com_google_android_gms_internal_zzk_, zzm<?> com_google_android_gms_internal_zzm_) {
-        zza(com_google_android_gms_internal_zzk_, com_google_android_gms_internal_zzm_, null);
+    public int zzd() {
+        return this.zzo;
     }
 
-    public void zza(zzk<?> com_google_android_gms_internal_zzk_, zzm<?> com_google_android_gms_internal_zzm_, Runnable runnable) {
-        com_google_android_gms_internal_zzk_.zzr();
-        com_google_android_gms_internal_zzk_.zzc("post-response");
-        this.zzr.execute(new zza(this, com_google_android_gms_internal_zzk_, com_google_android_gms_internal_zzm_, runnable));
-    }
-
-    public void zza(zzk<?> com_google_android_gms_internal_zzk_, zzr com_google_android_gms_internal_zzr) {
-        com_google_android_gms_internal_zzk_.zzc("post-error");
-        this.zzr.execute(new zza(this, com_google_android_gms_internal_zzk_, zzm.zzd(com_google_android_gms_internal_zzr), null));
+    protected boolean zze() {
+        return this.zzo <= this.zzp;
     }
 }

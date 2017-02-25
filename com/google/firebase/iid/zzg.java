@@ -10,17 +10,18 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
+import com.google.android.gms.wallet.WalletConstants;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class zzg {
-    private static zzg zzcje;
-    private final SimpleArrayMap<String, String> zzcjf = new SimpleArrayMap();
-    private Boolean zzcjg = null;
+    private static zzg zzcls;
+    private final SimpleArrayMap<String, String> zzclt = new SimpleArrayMap();
+    private Boolean zzclu = null;
     @VisibleForTesting
-    final Queue<Intent> zzcjh = new LinkedList();
+    final Queue<Intent> zzclv = new LinkedList();
     @VisibleForTesting
-    final Queue<Intent> zzcji = new LinkedList();
+    final Queue<Intent> zzclw = new LinkedList();
 
     private zzg() {
     }
@@ -36,13 +37,13 @@ public class zzg {
         return PendingIntent.getBroadcast(context, i, intent2, i2);
     }
 
-    public static synchronized zzg zzaaj() {
+    public static synchronized zzg zzabT() {
         zzg com_google_firebase_iid_zzg;
         synchronized (zzg.class) {
-            if (zzcje == null) {
-                zzcje = new zzg();
+            if (zzcls == null) {
+                zzcls = new zzg();
             }
-            com_google_firebase_iid_zzg = zzcje;
+            com_google_firebase_iid_zzg = zzcls;
         }
         return com_google_firebase_iid_zzg;
     }
@@ -51,17 +52,17 @@ public class zzg {
         return zza(context, i, "com.google.firebase.MESSAGING_EVENT", intent, i2);
     }
 
-    private boolean zzbY(Context context) {
-        if (this.zzcjg == null) {
-            this.zzcjg = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+    private boolean zzcw(Context context) {
+        if (this.zzclu == null) {
+            this.zzclu = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
         }
-        return this.zzcjg.booleanValue();
+        return this.zzclu.booleanValue();
     }
 
     private void zze(Context context, Intent intent) {
         String str;
-        synchronized (this.zzcjf) {
-            str = (String) this.zzcjf.get(intent.getAction());
+        synchronized (this.zzclt) {
+            str = (String) this.zzclt.get(intent.getAction());
         }
         if (str == null) {
             ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
@@ -82,8 +83,8 @@ public class zzg {
                 str = String.valueOf(str);
                 str = str.length() != 0 ? valueOf2.concat(str) : new String(valueOf2);
             }
-            synchronized (this.zzcjf) {
-                this.zzcjf.put(intent.getAction(), str);
+            synchronized (this.zzclt) {
+                this.zzclt.put(intent.getAction(), str);
             }
         }
         if (Log.isLoggable("FirebaseInstanceId", 3)) {
@@ -99,7 +100,7 @@ public class zzg {
         zze(context, intent);
         try {
             ComponentName startWakefulService;
-            if (zzbY(context)) {
+            if (zzcw(context)) {
                 startWakefulService = WakefulBroadcastReceiver.startWakefulService(context, intent);
             } else {
                 startWakefulService = context.startService(intent);
@@ -109,19 +110,19 @@ public class zzg {
                 return -1;
             }
             Log.e("FirebaseInstanceId", "Error while delivering the message: ServiceIntent not found.");
-            return 404;
+            return WalletConstants.ERROR_CODE_INVALID_PARAMETERS;
         } catch (Throwable e) {
             Log.e("FirebaseInstanceId", "Error while delivering the message to the serviceIntent", e);
             return 401;
         }
     }
 
-    public Intent zzaak() {
-        return (Intent) this.zzcjh.poll();
+    public Intent zzabU() {
+        return (Intent) this.zzclv.poll();
     }
 
-    public Intent zzaal() {
-        return (Intent) this.zzcji.poll();
+    public Intent zzabV() {
+        return (Intent) this.zzclw.poll();
     }
 
     public int zzb(Context context, String str, Intent intent) {
@@ -142,10 +143,10 @@ public class zzg {
         }
         switch (obj) {
             case null:
-                this.zzcjh.offer(intent);
+                this.zzclv.offer(intent);
                 break;
             case 1:
-                this.zzcji.offer(intent);
+                this.zzclw.offer(intent);
                 break;
             default:
                 String str2 = "FirebaseInstanceId";

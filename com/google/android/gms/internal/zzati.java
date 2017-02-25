@@ -1,354 +1,443 @@
 package com.google.android.gms.internal;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri.Builder;
+import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Pair;
 import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.util.zze;
-import com.google.android.gms.measurement.AppMeasurement;
+import com.google.android.gms.common.util.zzu;
+import com.google.android.gms.common.zze;
+import com.google.android.gms.internal.zzats.zza;
+import java.lang.reflect.InvocationTargetException;
+import org.telegram.messenger.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 
-public class zzati extends zzats {
-    private final String zzaEU = zzJv().zzJS();
-    private final long zzbpS = zzJv().zzJD();
-    private final char zzbrG;
-    private final zza zzbrH;
-    private final zza zzbrI;
-    private final zza zzbrJ;
-    private final zza zzbrK;
-    private final zza zzbrL;
-    private final zza zzbrM;
-    private final zza zzbrN;
-    private final zza zzbrO;
-    private final zza zzbrP;
+public class zzati extends zzaug {
+    static final String zzbrj = String.valueOf(zze.GOOGLE_PLAY_SERVICES_VERSION_CODE / 1000).replaceAll("(\\d+)(\\d)(\\d\\d)", "$1.$2.$3");
+    private Boolean zzaeZ;
 
-    public class zza {
-        private final int mPriority;
-        final /* synthetic */ zzati zzbrR;
-        private final boolean zzbrS;
-        private final boolean zzbrT;
-
-        zza(zzati com_google_android_gms_internal_zzati, int i, boolean z, boolean z2) {
-            this.zzbrR = com_google_android_gms_internal_zzati;
-            this.mPriority = i;
-            this.zzbrS = z;
-            this.zzbrT = z2;
-        }
-
-        public void log(String str) {
-            this.zzbrR.zza(this.mPriority, this.zzbrS, this.zzbrT, str, null, null, null);
-        }
-
-        public void zzd(String str, Object obj, Object obj2, Object obj3) {
-            this.zzbrR.zza(this.mPriority, this.zzbrS, this.zzbrT, str, obj, obj2, obj3);
-        }
-
-        public void zze(String str, Object obj, Object obj2) {
-            this.zzbrR.zza(this.mPriority, this.zzbrS, this.zzbrT, str, obj, obj2, null);
-        }
-
-        public void zzj(String str, Object obj) {
-            this.zzbrR.zza(this.mPriority, this.zzbrS, this.zzbrT, str, obj, null, null);
-        }
-    }
-
-    private static class zzb {
-        private final String zzbrU;
-
-        public zzb(@NonNull String str) {
-            this.zzbrU = str;
-        }
-    }
-
-    zzati(zzatp com_google_android_gms_internal_zzatp) {
-        super(com_google_android_gms_internal_zzatp);
-        if (zzJv().zzow()) {
-            zzJv().zzKk();
-            this.zzbrG = 'C';
-        } else {
-            zzJv().zzKk();
-            this.zzbrG = 'c';
-        }
-        this.zzbrH = new zza(this, 6, false, false);
-        this.zzbrI = new zza(this, 6, true, false);
-        this.zzbrJ = new zza(this, 6, false, true);
-        this.zzbrK = new zza(this, 5, false, false);
-        this.zzbrL = new zza(this, 5, true, false);
-        this.zzbrM = new zza(this, 5, false, true);
-        this.zzbrN = new zza(this, 4, false, false);
-        this.zzbrO = new zza(this, 3, false, false);
-        this.zzbrP = new zza(this, 2, false, false);
-    }
-
-    static String zza(boolean z, String str, Object obj, Object obj2, Object obj3) {
-        if (str == null) {
-            Object obj4 = "";
-        }
-        Object zzc = zzc(z, obj);
-        Object zzc2 = zzc(z, obj2);
-        Object zzc3 = zzc(z, obj3);
-        StringBuilder stringBuilder = new StringBuilder();
-        String str2 = "";
-        if (!TextUtils.isEmpty(obj4)) {
-            stringBuilder.append(obj4);
-            str2 = ": ";
-        }
-        if (!TextUtils.isEmpty(zzc)) {
-            stringBuilder.append(str2);
-            stringBuilder.append(zzc);
-            str2 = ", ";
-        }
-        if (!TextUtils.isEmpty(zzc2)) {
-            stringBuilder.append(str2);
-            stringBuilder.append(zzc2);
-            str2 = ", ";
-        }
-        if (!TextUtils.isEmpty(zzc3)) {
-            stringBuilder.append(str2);
-            stringBuilder.append(zzc3);
-        }
-        return stringBuilder.toString();
-    }
-
-    static String zzc(boolean z, Object obj) {
-        if (obj == null) {
-            return "";
-        }
-        Object valueOf = obj instanceof Integer ? Long.valueOf((long) ((Integer) obj).intValue()) : obj;
-        if (valueOf instanceof Long) {
-            if (!z) {
-                return String.valueOf(valueOf);
-            }
-            if (Math.abs(((Long) valueOf).longValue()) < 100) {
-                return String.valueOf(valueOf);
-            }
-            String str = String.valueOf(valueOf).charAt(0) == '-' ? "-" : "";
-            String valueOf2 = String.valueOf(Math.abs(((Long) valueOf).longValue()));
-            return new StringBuilder((String.valueOf(str).length() + 43) + String.valueOf(str).length()).append(str).append(Math.round(Math.pow(10.0d, (double) (valueOf2.length() - 1)))).append("...").append(str).append(Math.round(Math.pow(10.0d, (double) valueOf2.length()) - 1.0d)).toString();
-        } else if (valueOf instanceof Boolean) {
-            return String.valueOf(valueOf);
-        } else {
-            if (!(valueOf instanceof Throwable)) {
-                return valueOf instanceof zzb ? ((zzb) valueOf).zzbrU : z ? "-" : String.valueOf(valueOf);
-            } else {
-                Throwable th = (Throwable) valueOf;
-                StringBuilder stringBuilder = new StringBuilder(z ? th.getClass().getName() : th.toString());
-                String zzfJ = zzfJ(AppMeasurement.class.getCanonicalName());
-                String zzfJ2 = zzfJ(zzatp.class.getCanonicalName());
-                for (StackTraceElement stackTraceElement : th.getStackTrace()) {
-                    if (!stackTraceElement.isNativeMethod()) {
-                        String className = stackTraceElement.getClassName();
-                        if (className != null) {
-                            className = zzfJ(className);
-                            if (className.equals(zzfJ) || className.equals(zzfJ2)) {
-                                stringBuilder.append(": ");
-                                stringBuilder.append(stackTraceElement);
-                                break;
-                            }
-                        } else {
-                            continue;
-                        }
-                    }
-                }
-                return stringBuilder.toString();
-            }
-        }
-    }
-
-    protected static Object zzfI(String str) {
-        return str == null ? null : new zzb(str);
-    }
-
-    private static String zzfJ(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return "";
-        }
-        int lastIndexOf = str.lastIndexOf(46);
-        return lastIndexOf != -1 ? str.substring(0, lastIndexOf) : str;
+    zzati(zzaue com_google_android_gms_internal_zzaue) {
+        super(com_google_android_gms_internal_zzaue);
     }
 
     public /* bridge */ /* synthetic */ Context getContext() {
         return super.getContext();
     }
 
-    public /* bridge */ /* synthetic */ void zzJd() {
-        super.zzJd();
+    public /* bridge */ /* synthetic */ void zzJU() {
+        super.zzJU();
     }
 
-    public /* bridge */ /* synthetic */ void zzJe() {
-        super.zzJe();
+    public /* bridge */ /* synthetic */ void zzJV() {
+        super.zzJV();
     }
 
-    public /* bridge */ /* synthetic */ void zzJf() {
-        super.zzJf();
+    public /* bridge */ /* synthetic */ void zzJW() {
+        super.zzJW();
     }
 
-    public /* bridge */ /* synthetic */ zzaso zzJg() {
-        return super.zzJg();
+    public /* bridge */ /* synthetic */ zzatb zzJX() {
+        return super.zzJX();
     }
 
-    public /* bridge */ /* synthetic */ zzass zzJh() {
-        return super.zzJh();
+    public /* bridge */ /* synthetic */ zzatf zzJY() {
+        return super.zzJY();
     }
 
-    public /* bridge */ /* synthetic */ zzatu zzJi() {
-        return super.zzJi();
+    public /* bridge */ /* synthetic */ zzauj zzJZ() {
+        return super.zzJZ();
     }
 
-    public /* bridge */ /* synthetic */ zzatf zzJj() {
-        return super.zzJj();
+    String zzKJ() {
+        return (String) zzats.zzbrS.get();
     }
 
-    public /* bridge */ /* synthetic */ zzasw zzJk() {
-        return super.zzJk();
+    public int zzKK() {
+        return 25;
     }
 
-    public /* bridge */ /* synthetic */ zzatw zzJl() {
-        return super.zzJl();
+    public int zzKL() {
+        return 40;
     }
 
-    public /* bridge */ /* synthetic */ zzatv zzJm() {
-        return super.zzJm();
+    public int zzKM() {
+        return 24;
     }
 
-    public /* bridge */ /* synthetic */ zzatg zzJn() {
-        return super.zzJn();
+    int zzKN() {
+        return 40;
     }
 
-    public /* bridge */ /* synthetic */ zzasu zzJo() {
-        return super.zzJo();
+    int zzKO() {
+        return 100;
     }
 
-    public /* bridge */ /* synthetic */ zzaue zzJp() {
-        return super.zzJp();
+    int zzKP() {
+        return 256;
     }
 
-    public /* bridge */ /* synthetic */ zzatn zzJq() {
-        return super.zzJq();
+    public int zzKQ() {
+        return 36;
     }
 
-    public /* bridge */ /* synthetic */ zzaty zzJr() {
-        return super.zzJr();
+    public int zzKR() {
+        return 2048;
     }
 
-    public /* bridge */ /* synthetic */ zzato zzJs() {
-        return super.zzJs();
+    int zzKS() {
+        return 500;
     }
 
-    public /* bridge */ /* synthetic */ zzati zzJt() {
-        return super.zzJt();
+    public long zzKT() {
+        return (long) ((Integer) zzats.zzbsc.get()).intValue();
     }
 
-    public /* bridge */ /* synthetic */ zzatl zzJu() {
-        return super.zzJu();
+    public long zzKU() {
+        return (long) ((Integer) zzats.zzbse.get()).intValue();
     }
 
-    public /* bridge */ /* synthetic */ zzast zzJv() {
-        return super.zzJv();
+    int zzKV() {
+        return 25;
     }
 
-    public zza zzLa() {
-        return this.zzbrH;
+    int zzKW() {
+        return 1000;
     }
 
-    public zza zzLb() {
-        return this.zzbrI;
+    int zzKX() {
+        return 25;
     }
 
-    public zza zzLc() {
-        return this.zzbrK;
+    int zzKY() {
+        return 1000;
     }
 
-    public zza zzLd() {
-        return this.zzbrM;
+    long zzKZ() {
+        return 15552000000L;
     }
 
-    public zza zzLe() {
-        return this.zzbrN;
+    public /* bridge */ /* synthetic */ zzatu zzKa() {
+        return super.zzKa();
     }
 
-    public zza zzLf() {
-        return this.zzbrO;
+    public /* bridge */ /* synthetic */ zzatl zzKb() {
+        return super.zzKb();
     }
 
-    public zza zzLg() {
-        return this.zzbrP;
+    public /* bridge */ /* synthetic */ zzaul zzKc() {
+        return super.zzKc();
     }
 
-    public String zzLh() {
-        Pair zzpM = zzJu().zzbsf.zzpM();
-        if (zzpM == null || zzpM == zzatl.zzbse) {
-            return null;
+    public /* bridge */ /* synthetic */ zzauk zzKd() {
+        return super.zzKd();
+    }
+
+    public /* bridge */ /* synthetic */ zzatv zzKe() {
+        return super.zzKe();
+    }
+
+    public /* bridge */ /* synthetic */ zzatj zzKf() {
+        return super.zzKf();
+    }
+
+    public /* bridge */ /* synthetic */ zzaut zzKg() {
+        return super.zzKg();
+    }
+
+    public /* bridge */ /* synthetic */ zzauc zzKh() {
+        return super.zzKh();
+    }
+
+    public /* bridge */ /* synthetic */ zzaun zzKi() {
+        return super.zzKi();
+    }
+
+    public /* bridge */ /* synthetic */ zzaud zzKj() {
+        return super.zzKj();
+    }
+
+    public /* bridge */ /* synthetic */ zzatx zzKk() {
+        return super.zzKk();
+    }
+
+    public /* bridge */ /* synthetic */ zzaua zzKl() {
+        return super.zzKl();
+    }
+
+    public /* bridge */ /* synthetic */ zzati zzKm() {
+        return super.zzKm();
+    }
+
+    public long zzKu() {
+        return 10298;
+    }
+
+    public int zzLA() {
+        return Math.min(20, Math.max(0, ((Integer) zzats.zzbsu.get()).intValue()));
+    }
+
+    public String zzLB() {
+        try {
+            return (String) Class.forName("android.os.SystemProperties").getMethod("get", new Class[]{String.class, String.class}).invoke(null, new Object[]{"debug.firebase.analytics.app", ""});
+        } catch (ClassNotFoundException e) {
+            zzKk().zzLX().zzj("Could not find SystemProperties class", e);
+        } catch (NoSuchMethodException e2) {
+            zzKk().zzLX().zzj("Could not find SystemProperties.get() method", e2);
+        } catch (IllegalAccessException e3) {
+            zzKk().zzLX().zzj("Could not access SystemProperties.get()", e3);
+        } catch (InvocationTargetException e4) {
+            zzKk().zzLX().zzj("SystemProperties.get() threw an exception", e4);
         }
-        String valueOf = String.valueOf(String.valueOf(zzpM.second));
-        String str = (String) zzpM.first;
-        return new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(str).length()).append(valueOf).append(":").append(str).toString();
+        return "";
     }
 
-    protected void zza(int i, boolean z, boolean z2, String str, Object obj, Object obj2, Object obj3) {
-        if (!z && zzai(i)) {
-            zzn(i, zza(false, str, obj, obj2, obj3));
+    long zzLa() {
+        return 15552000000L;
+    }
+
+    long zzLb() {
+        return 3600000;
+    }
+
+    long zzLc() {
+        return ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS;
+    }
+
+    long zzLd() {
+        return 61000;
+    }
+
+    String zzLe() {
+        return "google_app_measurement_local.db";
+    }
+
+    public boolean zzLf() {
+        return false;
+    }
+
+    public boolean zzLg() {
+        Boolean zzfp = zzfp("firebase_analytics_collection_deactivated");
+        return zzfp != null && zzfp.booleanValue();
+    }
+
+    public Boolean zzLh() {
+        return zzfp("firebase_analytics_collection_enabled");
+    }
+
+    public long zzLi() {
+        return ((Long) zzats.zzbsv.get()).longValue();
+    }
+
+    public long zzLj() {
+        return ((Long) zzats.zzbsq.get()).longValue();
+    }
+
+    public long zzLk() {
+        return ((Long) zzats.zzbsr.get()).longValue();
+    }
+
+    public long zzLl() {
+        return 1000;
+    }
+
+    public int zzLm() {
+        return Math.max(0, ((Integer) zzats.zzbsa.get()).intValue());
+    }
+
+    public int zzLn() {
+        return Math.max(1, ((Integer) zzats.zzbsb.get()).intValue());
+    }
+
+    public int zzLo() {
+        return DefaultOggSeeker.MATCH_BYTE_RANGE;
+    }
+
+    public String zzLp() {
+        return (String) zzats.zzbsi.get();
+    }
+
+    public long zzLq() {
+        return ((Long) zzats.zzbrV.get()).longValue();
+    }
+
+    public long zzLr() {
+        return Math.max(0, ((Long) zzats.zzbsj.get()).longValue());
+    }
+
+    public long zzLs() {
+        return Math.max(0, ((Long) zzats.zzbsl.get()).longValue());
+    }
+
+    public long zzLt() {
+        return Math.max(0, ((Long) zzats.zzbsm.get()).longValue());
+    }
+
+    public long zzLu() {
+        return Math.max(0, ((Long) zzats.zzbsn.get()).longValue());
+    }
+
+    public long zzLv() {
+        return Math.max(0, ((Long) zzats.zzbso.get()).longValue());
+    }
+
+    public long zzLw() {
+        return Math.max(0, ((Long) zzats.zzbsp.get()).longValue());
+    }
+
+    public long zzLx() {
+        return ((Long) zzats.zzbsk.get()).longValue();
+    }
+
+    public long zzLy() {
+        return Math.max(0, ((Long) zzats.zzbss.get()).longValue());
+    }
+
+    public long zzLz() {
+        return Math.max(0, ((Long) zzats.zzbst.get()).longValue());
+    }
+
+    public String zzP(String str, String str2) {
+        Builder builder = new Builder();
+        Builder encodedAuthority = builder.scheme((String) zzats.zzbrW.get()).encodedAuthority((String) zzats.zzbrX.get());
+        String str3 = "config/app/";
+        String valueOf = String.valueOf(str);
+        encodedAuthority.path(valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3)).appendQueryParameter("app_instance_id", str2).appendQueryParameter("platform", "android").appendQueryParameter("gmp_version", String.valueOf(10298));
+        return builder.build().toString();
+    }
+
+    public long zza(String str, zza<Long> com_google_android_gms_internal_zzats_zza_java_lang_Long) {
+        if (str == null) {
+            return ((Long) com_google_android_gms_internal_zzats_zza_java_lang_Long.get()).longValue();
         }
-        if (!z2 && i >= 5) {
-            zzb(i, str, obj, obj2, obj3);
+        Object zzZ = zzKh().zzZ(str, com_google_android_gms_internal_zzats_zza_java_lang_Long.getKey());
+        if (TextUtils.isEmpty(zzZ)) {
+            return ((Long) com_google_android_gms_internal_zzats_zza_java_lang_Long.get()).longValue();
+        }
+        try {
+            return ((Long) com_google_android_gms_internal_zzats_zza_java_lang_Long.get(Long.valueOf(Long.valueOf(zzZ).longValue()))).longValue();
+        } catch (NumberFormatException e) {
+            return ((Long) com_google_android_gms_internal_zzats_zza_java_lang_Long.get()).longValue();
         }
     }
 
-    protected boolean zzai(int i) {
-        return Log.isLoggable(this.zzaEU, i);
+    public int zzb(String str, zza<Integer> com_google_android_gms_internal_zzats_zza_java_lang_Integer) {
+        if (str == null) {
+            return ((Integer) com_google_android_gms_internal_zzats_zza_java_lang_Integer.get()).intValue();
+        }
+        Object zzZ = zzKh().zzZ(str, com_google_android_gms_internal_zzats_zza_java_lang_Integer.getKey());
+        if (TextUtils.isEmpty(zzZ)) {
+            return ((Integer) com_google_android_gms_internal_zzats_zza_java_lang_Integer.get()).intValue();
+        }
+        try {
+            return ((Integer) com_google_android_gms_internal_zzats_zza_java_lang_Integer.get(Integer.valueOf(Integer.valueOf(zzZ).intValue()))).intValue();
+        } catch (NumberFormatException e) {
+            return ((Integer) com_google_android_gms_internal_zzats_zza_java_lang_Integer.get()).intValue();
+        }
     }
 
-    public void zzb(int i, String str, Object obj, Object obj2, Object obj3) {
-        zzac.zzw(str);
-        zzato zzLv = this.zzbpw.zzLv();
-        if (zzLv == null) {
-            zzn(6, "Scheduler not set. Not logging error/warn");
-        } else if (zzLv.isInitialized()) {
-            if (i < 0) {
-                i = 0;
-            }
-            if (i >= "01VDIWEA?".length()) {
-                i = "01VDIWEA?".length() - 1;
-            }
-            String valueOf = String.valueOf("2");
-            char charAt = "01VDIWEA?".charAt(i);
-            char c = this.zzbrG;
-            long j = this.zzbpS;
-            String valueOf2 = String.valueOf(zza(true, str, obj, obj2, obj3));
-            valueOf = new StringBuilder((String.valueOf(valueOf).length() + 23) + String.valueOf(valueOf2).length()).append(valueOf).append(charAt).append(c).append(j).append(":").append(valueOf2).toString();
-            if (valueOf.length() > 1024) {
-                valueOf = str.substring(0, 1024);
-            }
-            zzLv.zzm(new Runnable(this) {
-                final /* synthetic */ zzati zzbrR;
+    public int zzfj(@Size(min = 1) String str) {
+        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbsd)));
+    }
 
-                public void run() {
-                    zzatl zzJu = this.zzbrR.zzbpw.zzJu();
-                    if (zzJu.isInitialized()) {
-                        zzJu.zzbsf.zzcb(valueOf);
-                    } else {
-                        this.zzbrR.zzn(6, "Persisted config not initialized. Not logging error/warn");
+    public int zzfk(@Size(min = 1) String str) {
+        return zzb(str, zzats.zzbsf);
+    }
+
+    public int zzfl(@Size(min = 1) String str) {
+        return zzb(str, zzats.zzbsg);
+    }
+
+    long zzfm(String str) {
+        return zza(str, zzats.zzbrT);
+    }
+
+    int zzfn(String str) {
+        return zzb(str, zzats.zzbsw);
+    }
+
+    int zzfo(String str) {
+        return Math.max(0, Math.min(2000, zzb(str, zzats.zzbsx)));
+    }
+
+    @Nullable
+    Boolean zzfp(@Size(min = 1) String str) {
+        Boolean bool = null;
+        zzac.zzdr(str);
+        try {
+            if (getContext().getPackageManager() == null) {
+                zzKk().zzLX().log("Failed to load metadata: PackageManager is null");
+            } else {
+                ApplicationInfo applicationInfo = zzadg.zzbi(getContext()).getApplicationInfo(getContext().getPackageName(), 128);
+                if (applicationInfo == null) {
+                    zzKk().zzLX().log("Failed to load metadata: ApplicationInfo is null");
+                } else if (applicationInfo.metaData == null) {
+                    zzKk().zzLX().log("Failed to load metadata: Metadata bundle is null");
+                } else if (applicationInfo.metaData.containsKey(str)) {
+                    bool = Boolean.valueOf(applicationInfo.metaData.getBoolean(str));
+                }
+            }
+        } catch (NameNotFoundException e) {
+            zzKk().zzLX().zzj("Failed to load metadata: Package name not found", e);
+        }
+        return bool;
+    }
+
+    public int zzfq(String str) {
+        return zzb(str, zzats.zzbrY);
+    }
+
+    public int zzfr(String str) {
+        return Math.max(0, zzb(str, zzats.zzbrZ));
+    }
+
+    public int zzfs(String str) {
+        return Math.max(0, Math.min(1000000, zzb(str, zzats.zzbsh)));
+    }
+
+    public /* bridge */ /* synthetic */ void zzmR() {
+        super.zzmR();
+    }
+
+    public /* bridge */ /* synthetic */ com.google.android.gms.common.util.zze zznR() {
+        return super.zznR();
+    }
+
+    public boolean zzoW() {
+        if (this.zzaeZ == null) {
+            synchronized (this) {
+                if (this.zzaeZ == null) {
+                    ApplicationInfo applicationInfo = getContext().getApplicationInfo();
+                    String zzzq = zzu.zzzq();
+                    if (applicationInfo != null) {
+                        String str = applicationInfo.processName;
+                        boolean z = str != null && str.equals(zzzq);
+                        this.zzaeZ = Boolean.valueOf(z);
+                    }
+                    if (this.zzaeZ == null) {
+                        this.zzaeZ = Boolean.TRUE;
+                        zzKk().zzLX().log("My process not in the list of running processes");
                     }
                 }
-            });
-        } else {
-            zzn(6, "Scheduler not initialized. Not logging error/warn");
+            }
         }
+        return this.zzaeZ.booleanValue();
     }
 
-    public /* bridge */ /* synthetic */ void zzmq() {
-        super.zzmq();
+    long zzpq() {
+        return ((Long) zzats.zzbsy.get()).longValue();
     }
 
-    protected void zzmr() {
+    public String zzpv() {
+        return "google_app_measurement.db";
     }
 
-    protected void zzn(int i, String str) {
-        Log.println(i, this.zzaEU, str);
+    public long zzpz() {
+        return Math.max(0, ((Long) zzats.zzbrU.get()).longValue());
     }
 
-    public /* bridge */ /* synthetic */ zze zznq() {
-        return super.zznq();
+    public boolean zzwR() {
+        return zzaba.zzwR();
     }
 }

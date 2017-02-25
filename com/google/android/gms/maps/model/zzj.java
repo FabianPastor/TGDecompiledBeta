@@ -5,79 +5,70 @@ import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
-import java.util.List;
 
-public class zzj implements Creator<PolylineOptions> {
-    static void zza(PolylineOptions polylineOptions, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, polylineOptions.getVersionCode());
-        zzc.zzc(parcel, 2, polylineOptions.getPoints(), false);
-        zzc.zza(parcel, 3, polylineOptions.getWidth());
-        zzc.zzc(parcel, 4, polylineOptions.getColor());
-        zzc.zza(parcel, 5, polylineOptions.getZIndex());
-        zzc.zza(parcel, 6, polylineOptions.isVisible());
-        zzc.zza(parcel, 7, polylineOptions.isGeodesic());
-        zzc.zza(parcel, 8, polylineOptions.isClickable());
-        zzc.zzJ(parcel, zzaV);
+public class zzj implements Creator<PointOfInterest> {
+    static void zza(PointOfInterest pointOfInterest, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, pointOfInterest.latLng, i, false);
+        zzc.zza(parcel, 3, pointOfInterest.placeId, false);
+        zzc.zza(parcel, 4, pointOfInterest.name, false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhC(parcel);
+        return zzhG(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzlg(i);
+        return zzlo(i);
     }
 
-    public PolylineOptions zzhC(Parcel parcel) {
-        float f = 0.0f;
-        boolean z = false;
-        int zzaU = zzb.zzaU(parcel);
-        List list = null;
-        boolean z2 = false;
-        boolean z3 = false;
-        int i = 0;
-        float f2 = 0.0f;
-        int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
-                    break;
+    public PointOfInterest zzhG(Parcel parcel) {
+        String str = null;
+        int zzaY = zzb.zzaY(parcel);
+        String str2 = null;
+        LatLng latLng = null;
+        while (parcel.dataPosition() < zzaY) {
+            LatLng latLng2;
+            String str3;
+            int zzaX = zzb.zzaX(parcel);
+            String str4;
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    list = zzb.zzc(parcel, zzaT, LatLng.CREATOR);
+                    str4 = str;
+                    str = str2;
+                    latLng2 = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
+                    str3 = str4;
                     break;
                 case 3:
-                    f2 = zzb.zzl(parcel, zzaT);
+                    latLng2 = latLng;
+                    str4 = zzb.zzq(parcel, zzaX);
+                    str3 = str;
+                    str = str4;
                     break;
                 case 4:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
-                case 5:
-                    f = zzb.zzl(parcel, zzaT);
-                    break;
-                case 6:
-                    z3 = zzb.zzc(parcel, zzaT);
-                    break;
-                case 7:
-                    z2 = zzb.zzc(parcel, zzaT);
-                    break;
-                case 8:
-                    z = zzb.zzc(parcel, zzaT);
+                    str3 = zzb.zzq(parcel, zzaX);
+                    str = str2;
+                    latLng2 = latLng;
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
+                    str3 = str;
+                    str = str2;
+                    latLng2 = latLng;
                     break;
             }
+            latLng = latLng2;
+            str2 = str;
+            str = str3;
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new PolylineOptions(i2, list, f2, i, f, z3, z2, z);
+        if (parcel.dataPosition() == zzaY) {
+            return new PointOfInterest(latLng, str2, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public PolylineOptions[] zzlg(int i) {
-        return new PolylineOptions[i];
+    public PointOfInterest[] zzlo(int i) {
+        return new PointOfInterest[i];
     }
 }

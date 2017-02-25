@@ -1,73 +1,71 @@
 package com.google.android.gms.internal;
 
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.api.PendingResult;
+import android.os.DeadObjectException;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.zzc;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.zza;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.WeakHashMap;
+import com.google.android.gms.common.internal.zzac;
 
 public class zzaad {
-    private final Map<zzzx<?>, Boolean> zzazC = Collections.synchronizedMap(new WeakHashMap());
-    private final Map<TaskCompletionSource<?>, Boolean> zzazD = Collections.synchronizedMap(new WeakHashMap());
 
-    private void zza(boolean z, Status status) {
-        synchronized (this.zzazC) {
-            Map hashMap = new HashMap(this.zzazC);
+    public interface zzb<R> {
+        void setResult(R r);
+
+        void zzB(Status status);
+    }
+
+    public static abstract class zza<R extends Result, A extends com.google.android.gms.common.api.Api.zzb> extends zzaaf<R> implements zzb<R> {
+        private final Api<?> zzaxf;
+        private final zzc<A> zzazY;
+
+        @Deprecated
+        protected zza(zzc<A> com_google_android_gms_common_api_Api_zzc_A, GoogleApiClient googleApiClient) {
+            super((GoogleApiClient) zzac.zzb((Object) googleApiClient, (Object) "GoogleApiClient must not be null"));
+            this.zzazY = (zzc) zzac.zzw(com_google_android_gms_common_api_Api_zzc_A);
+            this.zzaxf = null;
         }
-        synchronized (this.zzazD) {
-            Map hashMap2 = new HashMap(this.zzazD);
+
+        protected zza(Api<?> api, GoogleApiClient googleApiClient) {
+            super((GoogleApiClient) zzac.zzb((Object) googleApiClient, (Object) "GoogleApiClient must not be null"));
+            this.zzazY = api.zzvg();
+            this.zzaxf = api;
         }
-        for (Entry entry : hashMap.entrySet()) {
-            if (z || ((Boolean) entry.getValue()).booleanValue()) {
-                ((zzzx) entry.getKey()).zzB(status);
+
+        private void zzc(RemoteException remoteException) {
+            zzB(new Status(8, remoteException.getLocalizedMessage(), null));
+        }
+
+        public final Api<?> getApi() {
+            return this.zzaxf;
+        }
+
+        public /* synthetic */ void setResult(Object obj) {
+            super.zzb((Result) obj);
+        }
+
+        public final void zzB(Status status) {
+            zzac.zzb(!status.isSuccess(), (Object) "Failed result must not be success");
+            zzb(zzc(status));
+        }
+
+        protected abstract void zza(A a) throws RemoteException;
+
+        public final void zzb(A a) throws DeadObjectException {
+            try {
+                zza(a);
+            } catch (RemoteException e) {
+                zzc(e);
+                throw e;
+            } catch (RemoteException e2) {
+                zzc(e2);
             }
         }
-        for (Entry entry2 : hashMap2.entrySet()) {
-            if (z || ((Boolean) entry2.getValue()).booleanValue()) {
-                ((TaskCompletionSource) entry2.getKey()).trySetException(new zza(status));
-            }
+
+        public final zzc<A> zzvg() {
+            return this.zzazY;
         }
-    }
-
-    void zza(final zzzx<? extends Result> com_google_android_gms_internal_zzzx__extends_com_google_android_gms_common_api_Result, boolean z) {
-        this.zzazC.put(com_google_android_gms_internal_zzzx__extends_com_google_android_gms_common_api_Result, Boolean.valueOf(z));
-        com_google_android_gms_internal_zzzx__extends_com_google_android_gms_common_api_Result.zza(new PendingResult.zza(this) {
-            final /* synthetic */ zzaad zzazF;
-
-            public void zzx(Status status) {
-                this.zzazF.zzazC.remove(com_google_android_gms_internal_zzzx__extends_com_google_android_gms_common_api_Result);
-            }
-        });
-    }
-
-    <TResult> void zza(final TaskCompletionSource<TResult> taskCompletionSource, boolean z) {
-        this.zzazD.put(taskCompletionSource, Boolean.valueOf(z));
-        taskCompletionSource.getTask().addOnCompleteListener(new OnCompleteListener<TResult>(this) {
-            final /* synthetic */ zzaad zzazF;
-
-            public void onComplete(@NonNull Task<TResult> task) {
-                this.zzazF.zzazD.remove(taskCompletionSource);
-            }
-        });
-    }
-
-    boolean zzvu() {
-        return (this.zzazC.isEmpty() && this.zzazD.isEmpty()) ? false : true;
-    }
-
-    public void zzvv() {
-        zza(false, zzaap.zzaAO);
-    }
-
-    public void zzvw() {
-        zza(true, zzabq.zzaBV);
     }
 }

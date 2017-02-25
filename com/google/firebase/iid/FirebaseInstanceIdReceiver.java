@@ -41,6 +41,6 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
     }
 
     public int zza(Context context, String str, Intent intent) {
-        return zzg.zzaaj().zzb(context, str, intent);
+        return zzg.zzabT().zzb(context, str, intent);
     }
 }

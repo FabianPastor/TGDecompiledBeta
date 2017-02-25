@@ -5,32 +5,32 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface zzw extends IInterface {
 
     public static abstract class zza extends Binder implements zzw {
 
         private static class zza implements zzw {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public boolean zzd(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public boolean zze(String str, IObjectWrapper iObjectWrapper) throws RemoteException {
                 boolean z = false;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
                     obtain.writeString(str);
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -44,15 +44,15 @@ public interface zzw extends IInterface {
                 }
             }
 
-            public boolean zze(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public boolean zzf(String str, IObjectWrapper iObjectWrapper) throws RemoteException {
                 boolean z = false;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
                     obtain.writeString(str);
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -66,14 +66,14 @@ public interface zzw extends IInterface {
                 }
             }
 
-            public zzd zzxv() throws RemoteException {
+            public IObjectWrapper zzyc() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -81,14 +81,14 @@ public interface zzw extends IInterface {
                 }
             }
 
-            public zzd zzxw() throws RemoteException {
+            public IObjectWrapper zzyd() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -108,38 +108,38 @@ public interface zzw extends IInterface {
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             IBinder iBinder = null;
             int i3 = 0;
-            zzd zzxv;
-            boolean zzd;
+            IObjectWrapper zzyc;
+            boolean zze;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    zzxv = zzxv();
+                    zzyc = zzyc();
                     parcel2.writeNoException();
-                    if (zzxv != null) {
-                        iBinder = zzxv.asBinder();
+                    if (zzyc != null) {
+                        iBinder = zzyc.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    zzxv = zzxw();
+                    zzyc = zzyd();
                     parcel2.writeNoException();
-                    if (zzxv != null) {
-                        iBinder = zzxv.asBinder();
+                    if (zzyc != null) {
+                        iBinder = zzyc.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    zzd = zzd(parcel.readString(), com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    zze = zze(parcel.readString(), com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
-                    parcel2.writeInt(zzd ? 1 : 0);
+                    parcel2.writeInt(zze ? 1 : 0);
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.common.internal.IGoogleCertificatesApi");
-                    zzd = zze(parcel.readString(), com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    zze = zzf(parcel.readString(), com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
-                    if (zzd) {
+                    if (zze) {
                         i3 = 1;
                     }
                     parcel2.writeInt(i3);
@@ -153,11 +153,11 @@ public interface zzw extends IInterface {
         }
     }
 
-    boolean zzd(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    boolean zze(String str, IObjectWrapper iObjectWrapper) throws RemoteException;
 
-    boolean zze(String str, zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    boolean zzf(String str, IObjectWrapper iObjectWrapper) throws RemoteException;
 
-    zzd zzxv() throws RemoteException;
+    IObjectWrapper zzyc() throws RemoteException;
 
-    zzd zzxw() throws RemoteException;
+    IObjectWrapper zzyd() throws RemoteException;
 }

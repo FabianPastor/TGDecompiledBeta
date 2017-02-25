@@ -15,32 +15,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class zzm implements Callback {
     private final Handler mHandler;
-    private volatile boolean zzaEA = false;
-    private final AtomicInteger zzaEB = new AtomicInteger(0);
-    private boolean zzaEC = false;
-    private final zza zzaEw;
-    private final ArrayList<ConnectionCallbacks> zzaEx = new ArrayList();
-    final ArrayList<ConnectionCallbacks> zzaEy = new ArrayList();
-    private final ArrayList<OnConnectionFailedListener> zzaEz = new ArrayList();
-    private final Object zzrN = new Object();
+    private final zza zzaFU;
+    private final ArrayList<ConnectionCallbacks> zzaFV = new ArrayList();
+    final ArrayList<ConnectionCallbacks> zzaFW = new ArrayList();
+    private final ArrayList<OnConnectionFailedListener> zzaFX = new ArrayList();
+    private volatile boolean zzaFY = false;
+    private final AtomicInteger zzaFZ = new AtomicInteger(0);
+    private boolean zzaGa = false;
+    private final Object zzrJ = new Object();
 
     public interface zza {
         boolean isConnected();
 
-        Bundle zzud();
+        Bundle zzuC();
     }
 
     public zzm(Looper looper, zza com_google_android_gms_common_internal_zzm_zza) {
-        this.zzaEw = com_google_android_gms_common_internal_zzm_zza;
+        this.zzaFU = com_google_android_gms_common_internal_zzm_zza;
         this.mHandler = new Handler(looper, this);
     }
 
     public boolean handleMessage(Message message) {
         if (message.what == 1) {
             ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) message.obj;
-            synchronized (this.zzrN) {
-                if (this.zzaEA && this.zzaEw.isConnected() && this.zzaEx.contains(connectionCallbacks)) {
-                    connectionCallbacks.onConnected(this.zzaEw.zzud());
+            synchronized (this.zzrJ) {
+                if (this.zzaFY && this.zzaFU.isConnected() && this.zzaFV.contains(connectionCallbacks)) {
+                    connectionCallbacks.onConnected(this.zzaFU.zzuC());
                 }
             }
             return true;
@@ -52,8 +52,8 @@ public final class zzm implements Callback {
     public boolean isConnectionCallbacksRegistered(ConnectionCallbacks connectionCallbacks) {
         boolean contains;
         zzac.zzw(connectionCallbacks);
-        synchronized (this.zzrN) {
-            contains = this.zzaEx.contains(connectionCallbacks);
+        synchronized (this.zzrJ) {
+            contains = this.zzaFV.contains(connectionCallbacks);
         }
         return contains;
     }
@@ -61,99 +61,99 @@ public final class zzm implements Callback {
     public boolean isConnectionFailedListenerRegistered(OnConnectionFailedListener onConnectionFailedListener) {
         boolean contains;
         zzac.zzw(onConnectionFailedListener);
-        synchronized (this.zzrN) {
-            contains = this.zzaEz.contains(onConnectionFailedListener);
+        synchronized (this.zzrJ) {
+            contains = this.zzaFX.contains(onConnectionFailedListener);
         }
         return contains;
     }
 
     public void registerConnectionCallbacks(ConnectionCallbacks connectionCallbacks) {
         zzac.zzw(connectionCallbacks);
-        synchronized (this.zzrN) {
-            if (this.zzaEx.contains(connectionCallbacks)) {
+        synchronized (this.zzrJ) {
+            if (this.zzaFV.contains(connectionCallbacks)) {
                 String valueOf = String.valueOf(connectionCallbacks);
                 Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 62).append("registerConnectionCallbacks(): listener ").append(valueOf).append(" is already registered").toString());
             } else {
-                this.zzaEx.add(connectionCallbacks);
+                this.zzaFV.add(connectionCallbacks);
             }
         }
-        if (this.zzaEw.isConnected()) {
+        if (this.zzaFU.isConnected()) {
             this.mHandler.sendMessage(this.mHandler.obtainMessage(1, connectionCallbacks));
         }
     }
 
     public void registerConnectionFailedListener(OnConnectionFailedListener onConnectionFailedListener) {
         zzac.zzw(onConnectionFailedListener);
-        synchronized (this.zzrN) {
-            if (this.zzaEz.contains(onConnectionFailedListener)) {
+        synchronized (this.zzrJ) {
+            if (this.zzaFX.contains(onConnectionFailedListener)) {
                 String valueOf = String.valueOf(onConnectionFailedListener);
                 Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 67).append("registerConnectionFailedListener(): listener ").append(valueOf).append(" is already registered").toString());
             } else {
-                this.zzaEz.add(onConnectionFailedListener);
+                this.zzaFX.add(onConnectionFailedListener);
             }
         }
     }
 
     public void unregisterConnectionCallbacks(ConnectionCallbacks connectionCallbacks) {
         zzac.zzw(connectionCallbacks);
-        synchronized (this.zzrN) {
-            if (!this.zzaEx.remove(connectionCallbacks)) {
+        synchronized (this.zzrJ) {
+            if (!this.zzaFV.remove(connectionCallbacks)) {
                 String valueOf = String.valueOf(connectionCallbacks);
                 Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 52).append("unregisterConnectionCallbacks(): listener ").append(valueOf).append(" not found").toString());
-            } else if (this.zzaEC) {
-                this.zzaEy.add(connectionCallbacks);
+            } else if (this.zzaGa) {
+                this.zzaFW.add(connectionCallbacks);
             }
         }
     }
 
     public void unregisterConnectionFailedListener(OnConnectionFailedListener onConnectionFailedListener) {
         zzac.zzw(onConnectionFailedListener);
-        synchronized (this.zzrN) {
-            if (!this.zzaEz.remove(onConnectionFailedListener)) {
+        synchronized (this.zzrJ) {
+            if (!this.zzaFX.remove(onConnectionFailedListener)) {
                 String valueOf = String.valueOf(onConnectionFailedListener);
                 Log.w("GmsClientEvents", new StringBuilder(String.valueOf(valueOf).length() + 57).append("unregisterConnectionFailedListener(): listener ").append(valueOf).append(" not found").toString());
             }
         }
     }
 
-    public void zzcP(int i) {
+    public void zzcV(int i) {
         boolean z = false;
         if (Looper.myLooper() == this.mHandler.getLooper()) {
             z = true;
         }
         zzac.zza(z, (Object) "onUnintentionalDisconnection must only be called on the Handler thread");
         this.mHandler.removeMessages(1);
-        synchronized (this.zzrN) {
-            this.zzaEC = true;
-            ArrayList arrayList = new ArrayList(this.zzaEx);
-            int i2 = this.zzaEB.get();
+        synchronized (this.zzrJ) {
+            this.zzaGa = true;
+            ArrayList arrayList = new ArrayList(this.zzaFV);
+            int i2 = this.zzaFZ.get();
             Iterator it = arrayList.iterator();
             while (it.hasNext()) {
                 ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) it.next();
-                if (!this.zzaEA || this.zzaEB.get() != i2) {
+                if (!this.zzaFY || this.zzaFZ.get() != i2) {
                     break;
-                } else if (this.zzaEx.contains(connectionCallbacks)) {
+                } else if (this.zzaFV.contains(connectionCallbacks)) {
                     connectionCallbacks.onConnectionSuspended(i);
                 }
             }
-            this.zzaEy.clear();
-            this.zzaEC = false;
+            this.zzaFW.clear();
+            this.zzaGa = false;
         }
     }
 
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void zzo(ConnectionResult connectionResult) {
+    public void zzn(ConnectionResult connectionResult) {
         zzac.zza(Looper.myLooper() == this.mHandler.getLooper(), (Object) "onConnectionFailure must only be called on the Handler thread");
         this.mHandler.removeMessages(1);
-        synchronized (this.zzrN) {
-            ArrayList arrayList = new ArrayList(this.zzaEz);
-            int i = this.zzaEB.get();
+        synchronized (this.zzrJ) {
+            ArrayList arrayList = new ArrayList(this.zzaFX);
+            int i = this.zzaFZ.get();
             Iterator it = arrayList.iterator();
             while (it.hasNext()) {
                 OnConnectionFailedListener onConnectionFailedListener = (OnConnectionFailedListener) it.next();
-                if (!this.zzaEA || this.zzaEB.get() != i) {
-                } else if (this.zzaEz.contains(onConnectionFailedListener)) {
+                if (!this.zzaFY || this.zzaFZ.get() != i) {
+                } else if (this.zzaFX.contains(onConnectionFailedListener)) {
                     onConnectionFailedListener.onConnectionFailed(connectionResult);
                 }
             }
@@ -163,36 +163,36 @@ public final class zzm implements Callback {
     public void zzq(Bundle bundle) {
         boolean z = true;
         zzac.zza(Looper.myLooper() == this.mHandler.getLooper(), (Object) "onConnectionSuccess must only be called on the Handler thread");
-        synchronized (this.zzrN) {
-            zzac.zzar(!this.zzaEC);
+        synchronized (this.zzrJ) {
+            zzac.zzaw(!this.zzaGa);
             this.mHandler.removeMessages(1);
-            this.zzaEC = true;
-            if (this.zzaEy.size() != 0) {
+            this.zzaGa = true;
+            if (this.zzaFW.size() != 0) {
                 z = false;
             }
-            zzac.zzar(z);
-            ArrayList arrayList = new ArrayList(this.zzaEx);
-            int i = this.zzaEB.get();
+            zzac.zzaw(z);
+            ArrayList arrayList = new ArrayList(this.zzaFV);
+            int i = this.zzaFZ.get();
             Iterator it = arrayList.iterator();
             while (it.hasNext()) {
                 ConnectionCallbacks connectionCallbacks = (ConnectionCallbacks) it.next();
-                if (!this.zzaEA || !this.zzaEw.isConnected() || this.zzaEB.get() != i) {
+                if (!this.zzaFY || !this.zzaFU.isConnected() || this.zzaFZ.get() != i) {
                     break;
-                } else if (!this.zzaEy.contains(connectionCallbacks)) {
+                } else if (!this.zzaFW.contains(connectionCallbacks)) {
                     connectionCallbacks.onConnected(bundle);
                 }
             }
-            this.zzaEy.clear();
-            this.zzaEC = false;
+            this.zzaFW.clear();
+            this.zzaGa = false;
         }
     }
 
-    public void zzxq() {
-        this.zzaEA = false;
-        this.zzaEB.incrementAndGet();
+    public void zzxX() {
+        this.zzaFY = false;
+        this.zzaFZ.incrementAndGet();
     }
 
-    public void zzxr() {
-        this.zzaEA = true;
+    public void zzxY() {
+        this.zzaFY = true;
     }
 }

@@ -19,10 +19,10 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class Api<O extends ApiOptions> {
     private final String mName;
-    private final zza<?, O> zzaxu;
-    private final zzh<?, O> zzaxv = null;
-    private final zzf<?> zzaxw;
-    private final zzi<?> zzaxx;
+    private final zza<?, O> zzayH;
+    private final zzh<?, O> zzayI = null;
+    private final zzf<?> zzayJ;
+    private final zzi<?> zzayK;
 
     public interface ApiOptions {
 
@@ -74,25 +74,25 @@ public final class Api<O extends ApiOptions> {
 
         void zza(zzr com_google_android_gms_common_internal_zzr, Set<Scope> set);
 
-        boolean zzqD();
+        boolean zzrd();
 
-        boolean zzqS();
+        boolean zzrr();
 
-        Intent zzqT();
+        Intent zzrs();
 
-        boolean zzuI();
+        boolean zzvh();
 
         @Nullable
-        IBinder zzuJ();
+        IBinder zzvi();
     }
 
     public static final class zzf<C extends zze> extends zzc<C> {
     }
 
     public interface zzg<T extends IInterface> extends zzb {
-        String zzeu();
+        String zzeA();
 
-        String zzev();
+        String zzez();
 
         T zzh(IBinder iBinder);
     }
@@ -107,27 +107,27 @@ public final class Api<O extends ApiOptions> {
         zzac.zzb((Object) com_google_android_gms_common_api_Api_zza_C__O, (Object) "Cannot construct an Api with a null ClientBuilder");
         zzac.zzb((Object) com_google_android_gms_common_api_Api_zzf_C, (Object) "Cannot construct an Api with a null ClientKey");
         this.mName = str;
-        this.zzaxu = com_google_android_gms_common_api_Api_zza_C__O;
-        this.zzaxw = com_google_android_gms_common_api_Api_zzf_C;
-        this.zzaxx = null;
+        this.zzayH = com_google_android_gms_common_api_Api_zza_C__O;
+        this.zzayJ = com_google_android_gms_common_api_Api_zzf_C;
+        this.zzayK = null;
     }
 
     public String getName() {
         return this.mName;
     }
 
-    public zzd<?, O> zzuF() {
-        return this.zzaxu;
+    public zzd<?, O> zzve() {
+        return this.zzayH;
     }
 
-    public zza<?, O> zzuG() {
-        zzac.zza(this.zzaxu != null, (Object) "This API was constructed with a SimpleClientBuilder. Use getSimpleClientBuilder");
-        return this.zzaxu;
+    public zza<?, O> zzvf() {
+        zzac.zza(this.zzayH != null, (Object) "This API was constructed with a SimpleClientBuilder. Use getSimpleClientBuilder");
+        return this.zzayH;
     }
 
-    public zzc<?> zzuH() {
-        if (this.zzaxw != null) {
-            return this.zzaxw;
+    public zzc<?> zzvg() {
+        if (this.zzayJ != null) {
+            return this.zzayJ;
         }
         throw new IllegalStateException("This API was constructed with null client keys. This should not be possible.");
     }

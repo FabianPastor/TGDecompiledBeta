@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class FileProvider extends ContentProvider {
                 } else {
                     path = path.substring(rootPath.length() + 1);
                 }
-                return new Builder().scheme("content").authority(this.mAuthority).encodedPath(Uri.encode((String) mostSpecific.getKey()) + '/' + Uri.encode(path, "/")).build();
+                return new Builder().scheme(Param.CONTENT).authority(this.mAuthority).encodedPath(Uri.encode((String) mostSpecific.getKey()) + '/' + Uri.encode(path, "/")).build();
             } catch (IOException e) {
                 throw new IllegalArgumentException("Failed to resolve canonical path for " + file);
             }

@@ -7,17 +7,17 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 
 public class zzah extends zza {
     public static final Creator<zzah> CREATOR = new zzai();
-    final int mVersionCode;
     @Deprecated
-    private final Scope[] zzaDy;
-    private final int zzaFj;
-    private final int zzaFk;
+    private final Scope[] zzaEX;
+    private final int zzaGG;
+    private final int zzaGH;
+    final int zzaiI;
 
     zzah(int i, int i2, int i3, Scope[] scopeArr) {
-        this.mVersionCode = i;
-        this.zzaFj = i2;
-        this.zzaFk = i3;
-        this.zzaDy = scopeArr;
+        this.zzaiI = i;
+        this.zzaGG = i2;
+        this.zzaGH = i3;
+        this.zzaEX = scopeArr;
     }
 
     public zzah(int i, int i2, Scope[] scopeArr) {
@@ -28,16 +28,16 @@ public class zzah extends zza {
         zzai.zza(this, parcel, i);
     }
 
-    public int zzxD() {
-        return this.zzaFj;
+    public int zzyk() {
+        return this.zzaGG;
     }
 
-    public int zzxE() {
-        return this.zzaFk;
+    public int zzyl() {
+        return this.zzaGH;
     }
 
     @Deprecated
-    public Scope[] zzxF() {
-        return this.zzaDy;
+    public Scope[] zzym() {
+        return this.zzaEX;
     }
 }

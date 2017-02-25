@@ -1,56 +1,122 @@
 package com.google.android.gms.internal;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamClass;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import android.os.RemoteException;
 
-public abstract class zzaqa {
-    public static zzaqa bo() {
-        final Method method;
-        try {
-            Class cls = Class.forName("sun.misc.Unsafe");
-            Field declaredField = cls.getDeclaredField("theUnsafe");
-            declaredField.setAccessible(true);
-            final Object obj = declaredField.get(null);
-            method = cls.getMethod("allocateInstance", new Class[]{Class.class});
-            return new zzaqa() {
-                public <T> T zzf(Class<T> cls) throws Exception {
-                    return method.invoke(obj, new Object[]{cls});
-                }
-            };
-        } catch (Exception e) {
+public abstract class zzaqa<T> {
+    private final int zzAW;
+    private final String zzAX;
+    private final T zzAY;
+
+    public static class zza extends zzaqa<Boolean> {
+        public zza(int i, String str, Boolean bool) {
+            super(i, str, bool);
+        }
+
+        public /* synthetic */ Object zza(zzaqd com_google_android_gms_internal_zzaqd) {
+            return zzb(com_google_android_gms_internal_zzaqd);
+        }
+
+        public Boolean zzb(zzaqd com_google_android_gms_internal_zzaqd) {
             try {
-                Method declaredMethod = ObjectStreamClass.class.getDeclaredMethod("getConstructorId", new Class[]{Class.class});
-                declaredMethod.setAccessible(true);
-                final int intValue = ((Integer) declaredMethod.invoke(null, new Object[]{Object.class})).intValue();
-                method = ObjectStreamClass.class.getDeclaredMethod("newInstance", new Class[]{Class.class, Integer.TYPE});
-                method.setAccessible(true);
-                return new zzaqa() {
-                    public <T> T zzf(Class<T> cls) throws Exception {
-                        return method.invoke(null, new Object[]{cls, Integer.valueOf(intValue)});
-                    }
-                };
-            } catch (Exception e2) {
-                try {
-                    final Method declaredMethod2 = ObjectInputStream.class.getDeclaredMethod("newInstance", new Class[]{Class.class, Class.class});
-                    declaredMethod2.setAccessible(true);
-                    return new zzaqa() {
-                        public <T> T zzf(Class<T> cls) throws Exception {
-                            return declaredMethod2.invoke(null, new Object[]{cls, Object.class});
-                        }
-                    };
-                } catch (Exception e3) {
-                    return new zzaqa() {
-                        public <T> T zzf(Class<T> cls) {
-                            String valueOf = String.valueOf(cls);
-                            throw new UnsupportedOperationException(new StringBuilder(String.valueOf(valueOf).length() + 16).append("Cannot allocate ").append(valueOf).toString());
-                        }
-                    };
-                }
+                return Boolean.valueOf(com_google_android_gms_internal_zzaqd.getBooleanFlagValue(getKey(), ((Boolean) zzfr()).booleanValue(), getSource()));
+            } catch (RemoteException e) {
+                return (Boolean) zzfr();
             }
         }
     }
 
-    public abstract <T> T zzf(Class<T> cls) throws Exception;
+    public static class zzb extends zzaqa<Integer> {
+        public zzb(int i, String str, Integer num) {
+            super(i, str, num);
+        }
+
+        public /* synthetic */ Object zza(zzaqd com_google_android_gms_internal_zzaqd) {
+            return zzc(com_google_android_gms_internal_zzaqd);
+        }
+
+        public Integer zzc(zzaqd com_google_android_gms_internal_zzaqd) {
+            try {
+                return Integer.valueOf(com_google_android_gms_internal_zzaqd.getIntFlagValue(getKey(), ((Integer) zzfr()).intValue(), getSource()));
+            } catch (RemoteException e) {
+                return (Integer) zzfr();
+            }
+        }
+    }
+
+    public static class zzc extends zzaqa<Long> {
+        public zzc(int i, String str, Long l) {
+            super(i, str, l);
+        }
+
+        public /* synthetic */ Object zza(zzaqd com_google_android_gms_internal_zzaqd) {
+            return zzd(com_google_android_gms_internal_zzaqd);
+        }
+
+        public Long zzd(zzaqd com_google_android_gms_internal_zzaqd) {
+            try {
+                return Long.valueOf(com_google_android_gms_internal_zzaqd.getLongFlagValue(getKey(), ((Long) zzfr()).longValue(), getSource()));
+            } catch (RemoteException e) {
+                return (Long) zzfr();
+            }
+        }
+    }
+
+    public static class zzd extends zzaqa<String> {
+        public zzd(int i, String str, String str2) {
+            super(i, str, str2);
+        }
+
+        public /* synthetic */ Object zza(zzaqd com_google_android_gms_internal_zzaqd) {
+            return zze(com_google_android_gms_internal_zzaqd);
+        }
+
+        public String zze(zzaqd com_google_android_gms_internal_zzaqd) {
+            try {
+                return com_google_android_gms_internal_zzaqd.getStringFlagValue(getKey(), (String) zzfr(), getSource());
+            } catch (RemoteException e) {
+                return (String) zzfr();
+            }
+        }
+    }
+
+    private zzaqa(int i, String str, T t) {
+        this.zzAW = i;
+        this.zzAX = str;
+        this.zzAY = t;
+        zzaqe.zzDD().zza(this);
+    }
+
+    public static zza zzb(int i, String str, Boolean bool) {
+        return new zza(i, str, bool);
+    }
+
+    public static zzb zzb(int i, String str, int i2) {
+        return new zzb(i, str, Integer.valueOf(i2));
+    }
+
+    public static zzc zzb(int i, String str, long j) {
+        return new zzc(i, str, Long.valueOf(j));
+    }
+
+    public static zzd zzc(int i, String str, String str2) {
+        return new zzd(i, str, str2);
+    }
+
+    public T get() {
+        return zzaqe.zzDE().zzb(this);
+    }
+
+    public String getKey() {
+        return this.zzAX;
+    }
+
+    public int getSource() {
+        return this.zzAW;
+    }
+
+    protected abstract T zza(zzaqd com_google_android_gms_internal_zzaqd);
+
+    public T zzfr() {
+        return this.zzAY;
+    }
 }

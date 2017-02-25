@@ -4,33 +4,33 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zzc<TResult> implements zzf<TResult> {
-    private final Executor zzbDK;
-    private OnCompleteListener<TResult> zzbLx;
-    private final Object zzrN = new Object();
+    private final Executor zzbFQ;
+    private OnCompleteListener<TResult> zzbNy;
+    private final Object zzrJ = new Object();
 
     public zzc(@NonNull Executor executor, @NonNull OnCompleteListener<TResult> onCompleteListener) {
-        this.zzbDK = executor;
-        this.zzbLx = onCompleteListener;
+        this.zzbFQ = executor;
+        this.zzbNy = onCompleteListener;
     }
 
     public void cancel() {
-        synchronized (this.zzrN) {
-            this.zzbLx = null;
+        synchronized (this.zzrJ) {
+            this.zzbNy = null;
         }
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
-        synchronized (this.zzrN) {
-            if (this.zzbLx == null) {
+        synchronized (this.zzrJ) {
+            if (this.zzbNy == null) {
                 return;
             }
-            this.zzbDK.execute(new Runnable(this) {
-                final /* synthetic */ zzc zzbLy;
+            this.zzbFQ.execute(new Runnable(this) {
+                final /* synthetic */ zzc zzbNz;
 
                 public void run() {
-                    synchronized (this.zzbLy.zzrN) {
-                        if (this.zzbLy.zzbLx != null) {
-                            this.zzbLy.zzbLx.onComplete(task);
+                    synchronized (this.zzbNz.zzrJ) {
+                        if (this.zzbNz.zzbNy != null) {
+                            this.zzbNz.zzbNy.onComplete(task);
                         }
                     }
                 }

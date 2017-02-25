@@ -12,14 +12,14 @@ public interface zzr extends IInterface {
     public static abstract class zza extends Binder implements zzr {
 
         private static class zza implements zzr {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public Account getAccount() throws RemoteException {
@@ -27,7 +27,7 @@ public interface zzr extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.IAccountAccessor");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     Account account = obtain2.readInt() != 0 ? (Account) Account.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();

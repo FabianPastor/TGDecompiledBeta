@@ -16,14 +16,14 @@ public final class BitmapDescriptorFactory {
     public static final float HUE_ROSE = 330.0f;
     public static final float HUE_VIOLET = 270.0f;
     public static final float HUE_YELLOW = 60.0f;
-    private static zza zzboB;
+    private static zza zzbpd;
 
     private BitmapDescriptorFactory() {
     }
 
     public static BitmapDescriptor defaultMarker() {
         try {
-            return new BitmapDescriptor(zzIS().zzIY());
+            return new BitmapDescriptor(zzJF().zzJQ());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -31,7 +31,7 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor defaultMarker(float f) {
         try {
-            return new BitmapDescriptor(zzIS().zzi(f));
+            return new BitmapDescriptor(zzJF().zzi(f));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -39,7 +39,7 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor fromAsset(String str) {
         try {
-            return new BitmapDescriptor(zzIS().zzfe(str));
+            return new BitmapDescriptor(zzJF().zzfa(str));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -47,7 +47,7 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor fromBitmap(Bitmap bitmap) {
         try {
-            return new BitmapDescriptor(zzIS().zze(bitmap));
+            return new BitmapDescriptor(zzJF().zze(bitmap));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -55,7 +55,7 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor fromFile(String str) {
         try {
-            return new BitmapDescriptor(zzIS().zzff(str));
+            return new BitmapDescriptor(zzJF().zzfb(str));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -63,7 +63,7 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor fromPath(String str) {
         try {
-            return new BitmapDescriptor(zzIS().zzfg(str));
+            return new BitmapDescriptor(zzJF().zzfc(str));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -71,19 +71,19 @@ public final class BitmapDescriptorFactory {
 
     public static BitmapDescriptor fromResource(int i) {
         try {
-            return new BitmapDescriptor(zzIS().zzlo(i));
+            return new BitmapDescriptor(zzJF().zzly(i));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    private static zza zzIS() {
-        return (zza) zzac.zzb(zzboB, (Object) "IBitmapDescriptorFactory is not initialized");
+    private static zza zzJF() {
+        return (zza) zzac.zzb(zzbpd, (Object) "IBitmapDescriptorFactory is not initialized");
     }
 
     public static void zza(zza com_google_android_gms_maps_model_internal_zza) {
-        if (zzboB == null) {
-            zzboB = (zza) zzac.zzw(com_google_android_gms_maps_model_internal_zza);
+        if (zzbpd == null) {
+            zzbpd = (zza) zzac.zzw(com_google_android_gms_maps_model_internal_zza);
         }
     }
 }

@@ -6,7 +6,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 
 public interface IMapFragmentDelegate extends IInterface {
@@ -14,14 +14,14 @@ public interface IMapFragmentDelegate extends IInterface {
     public static abstract class zza extends Binder implements IMapFragmentDelegate {
 
         private static class zza implements IMapFragmentDelegate {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public IGoogleMapDelegate getMap() throws RemoteException {
@@ -29,7 +29,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     IGoogleMapDelegate zzdu = com.google.android.gms.maps.internal.IGoogleMapDelegate.zza.zzdu(obtain2.readStrongBinder());
                     return zzdu;
@@ -45,7 +45,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_internal_zzt != null ? com_google_android_gms_maps_internal_zzt.asBinder() : null);
-                    this.zzrp.transact(12, obtain, obtain2, 0);
+                    this.zzrk.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -59,7 +59,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -84,7 +84,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -92,15 +92,15 @@ public interface IMapFragmentDelegate extends IInterface {
                 }
             }
 
-            public zzd onCreateView(zzd com_google_android_gms_dynamic_zzd, zzd com_google_android_gms_dynamic_zzd2, Bundle bundle) throws RemoteException {
+            public IObjectWrapper onCreateView(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2, Bundle bundle) throws RemoteException {
                 IBinder iBinder = null;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    if (com_google_android_gms_dynamic_zzd2 != null) {
-                        iBinder = com_google_android_gms_dynamic_zzd2.asBinder();
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    if (iObjectWrapper2 != null) {
+                        iBinder = iObjectWrapper2.asBinder();
                     }
                     obtain.writeStrongBinder(iBinder);
                     if (bundle != null) {
@@ -109,9 +109,9 @@ public interface IMapFragmentDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -124,7 +124,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -137,7 +137,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -156,7 +156,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(13, obtain, obtain2, 0);
+                    this.zzrk.transact(13, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -169,7 +169,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(14, obtain, obtain2, 0);
+                    this.zzrk.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -177,12 +177,12 @@ public interface IMapFragmentDelegate extends IInterface {
                 }
             }
 
-            public void onInflate(zzd com_google_android_gms_dynamic_zzd, GoogleMapOptions googleMapOptions, Bundle bundle) throws RemoteException {
+            public void onInflate(IObjectWrapper iObjectWrapper, GoogleMapOptions googleMapOptions, Bundle bundle) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
                     if (googleMapOptions != null) {
                         obtain.writeInt(1);
                         googleMapOptions.writeToParcel(obtain, 0);
@@ -195,7 +195,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -208,7 +208,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -221,7 +221,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -234,7 +234,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -253,7 +253,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         bundle.readFromParcel(obtain2);
@@ -271,7 +271,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(15, obtain, obtain2, 0);
+                    this.zzrk.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -284,7 +284,7 @@ public interface IMapFragmentDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    this.zzrp.transact(16, obtain, obtain2, 0);
+                    this.zzrk.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -312,7 +312,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    onInflate(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (GoogleMapOptions) GoogleMapOptions.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (Bundle) Bundle.CREATOR.createFromParcel(parcel) : null);
+                    onInflate(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (GoogleMapOptions) GoogleMapOptions.CREATOR.createFromParcel(parcel) : null, parcel.readInt() != 0 ? (Bundle) Bundle.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     return true;
                 case 3:
@@ -322,7 +322,7 @@ public interface IMapFragmentDelegate extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IMapFragmentDelegate");
-                    zzd onCreateView = onCreateView(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()), com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (Bundle) Bundle.CREATOR.createFromParcel(parcel) : null);
+                    IObjectWrapper onCreateView = onCreateView(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), parcel.readInt() != 0 ? (Bundle) Bundle.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (onCreateView != null) {
                         iBinder = onCreateView.asBinder();
@@ -414,7 +414,7 @@ public interface IMapFragmentDelegate extends IInterface {
 
     void onCreate(Bundle bundle) throws RemoteException;
 
-    zzd onCreateView(zzd com_google_android_gms_dynamic_zzd, zzd com_google_android_gms_dynamic_zzd2, Bundle bundle) throws RemoteException;
+    IObjectWrapper onCreateView(IObjectWrapper iObjectWrapper, IObjectWrapper iObjectWrapper2, Bundle bundle) throws RemoteException;
 
     void onDestroy() throws RemoteException;
 
@@ -424,7 +424,7 @@ public interface IMapFragmentDelegate extends IInterface {
 
     void onExitAmbient() throws RemoteException;
 
-    void onInflate(zzd com_google_android_gms_dynamic_zzd, GoogleMapOptions googleMapOptions, Bundle bundle) throws RemoteException;
+    void onInflate(IObjectWrapper iObjectWrapper, GoogleMapOptions googleMapOptions, Bundle bundle) throws RemoteException;
 
     void onLowMemory() throws RemoteException;
 

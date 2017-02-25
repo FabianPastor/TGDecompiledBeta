@@ -37,13 +37,13 @@ public final class zzac {
         }
     }
 
-    public static void zzar(boolean z) {
+    public static void zzaw(boolean z) {
         if (!z) {
             throw new IllegalStateException();
         }
     }
 
-    public static void zzas(boolean z) {
+    public static void zzax(boolean z) {
         if (!z) {
             throw new IllegalArgumentException();
         }
@@ -68,26 +68,26 @@ public final class zzac {
         }
     }
 
-    public static int zzcR(int i) {
+    public static int zzcX(int i) {
         if (i != 0) {
             return i;
         }
         throw new IllegalArgumentException("Given Integer is zero");
     }
 
-    public static void zzdn(String str) {
+    public static void zzdj(String str) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException(str);
         }
     }
 
-    public static void zzdo(String str) {
+    public static void zzdk(String str) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             throw new IllegalStateException(str);
         }
     }
 
-    public static String zzdv(String str) {
+    public static String zzdr(String str) {
         if (!TextUtils.isEmpty(str)) {
             return str;
         }
@@ -108,7 +108,7 @@ public final class zzac {
         throw new NullPointerException("null reference");
     }
 
-    public static void zzxx() {
-        zzdo("Must not be called on the main application thread");
+    public static void zzye() {
+        zzdk("Must not be called on the main application thread");
     }
 }

@@ -6,57 +6,69 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzo implements Creator<Tile> {
-    static void zza(Tile tile, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, tile.getVersionCode());
-        zzc.zzc(parcel, 2, tile.width);
-        zzc.zzc(parcel, 3, tile.height);
-        zzc.zza(parcel, 4, tile.data, false);
-        zzc.zzJ(parcel, zzaV);
+public class zzo implements Creator<StreetViewPanoramaLocation> {
+    static void zza(StreetViewPanoramaLocation streetViewPanoramaLocation, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, streetViewPanoramaLocation.links, i, false);
+        zzc.zza(parcel, 3, streetViewPanoramaLocation.position, i, false);
+        zzc.zza(parcel, 4, streetViewPanoramaLocation.panoId, false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhH(parcel);
+        return zzhL(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzll(i);
+        return zzlt(i);
     }
 
-    public Tile zzhH(Parcel parcel) {
-        int i = 0;
-        int zzaU = zzb.zzaU(parcel);
-        byte[] bArr = null;
-        int i2 = 0;
-        int i3 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i3 = zzb.zzg(parcel, zzaT);
-                    break;
+    public StreetViewPanoramaLocation zzhL(Parcel parcel) {
+        String str = null;
+        int zzaY = zzb.zzaY(parcel);
+        LatLng latLng = null;
+        StreetViewPanoramaLink[] streetViewPanoramaLinkArr = null;
+        while (parcel.dataPosition() < zzaY) {
+            LatLng latLng2;
+            StreetViewPanoramaLink[] streetViewPanoramaLinkArr2;
+            String str2;
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    String str3 = str;
+                    latLng2 = latLng;
+                    streetViewPanoramaLinkArr2 = (StreetViewPanoramaLink[]) zzb.zzb(parcel, zzaX, StreetViewPanoramaLink.CREATOR);
+                    str2 = str3;
                     break;
                 case 3:
-                    i = zzb.zzg(parcel, zzaT);
+                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
+                    LatLng latLng3 = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
+                    str2 = str;
+                    latLng2 = latLng3;
                     break;
                 case 4:
-                    bArr = zzb.zzt(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
+                    latLng2 = latLng;
+                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
+                    str2 = str;
+                    latLng2 = latLng;
+                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
                     break;
             }
+            streetViewPanoramaLinkArr = streetViewPanoramaLinkArr2;
+            latLng = latLng2;
+            str = str2;
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new Tile(i3, i2, i, bArr);
+        if (parcel.dataPosition() == zzaY) {
+            return new StreetViewPanoramaLocation(streetViewPanoramaLinkArr, latLng, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Tile[] zzll(int i) {
-        return new Tile[i];
+    public StreetViewPanoramaLocation[] zzlt(int i) {
+        return new StreetViewPanoramaLocation[i];
     }
 }

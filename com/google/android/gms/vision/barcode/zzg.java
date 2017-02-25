@@ -9,60 +9,60 @@ import com.google.android.gms.vision.barcode.Barcode.Email;
 
 public class zzg implements Creator<Email> {
     static void zza(Email email, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, email.versionCode);
         zzc.zzc(parcel, 2, email.type);
         zzc.zza(parcel, 3, email.address, false);
         zzc.zza(parcel, 4, email.subject, false);
         zzc.zza(parcel, 5, email.body, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zziZ(parcel);
+        return zzjF(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzno(i);
+        return zznZ(i);
     }
 
-    public Email zziZ(Parcel parcel) {
+    public Email zzjF(Parcel parcel) {
         int i = 0;
         String str = null;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         String str2 = null;
         String str3 = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 3:
-                    str3 = zzb.zzq(parcel, zzaT);
+                    str3 = zzb.zzq(parcel, zzaX);
                     break;
                 case 4:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 5:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new Email(i2, i, str3, str2, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Email[] zzno(int i) {
+    public Email[] zznZ(int i) {
         return new Email[i];
     }
 }

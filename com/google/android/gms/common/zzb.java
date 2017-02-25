@@ -8,46 +8,46 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzb implements Creator<ConnectionResult> {
     static void zza(ConnectionResult connectionResult, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, connectionResult.mVersionCode);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, connectionResult.zzaiI);
         zzc.zzc(parcel, 2, connectionResult.getErrorCode());
         zzc.zza(parcel, 3, connectionResult.getResolution(), i, false);
         zzc.zza(parcel, 4, connectionResult.getErrorMessage(), false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaG(parcel);
+        return zzaJ(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcq(i);
+        return zzcu(i);
     }
 
-    public ConnectionResult zzaG(Parcel parcel) {
+    public ConnectionResult zzaJ(Parcel parcel) {
         String str = null;
         int i = 0;
-        int zzaU = com.google.android.gms.common.internal.safeparcel.zzb.zzaU(parcel);
+        int zzaY = com.google.android.gms.common.internal.safeparcel.zzb.zzaY(parcel);
         PendingIntent pendingIntent = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
+        while (parcel.dataPosition() < zzaY) {
             PendingIntent pendingIntent2;
             int i3;
             String str2;
-            int zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzaT(parcel);
+            int zzaX = com.google.android.gms.common.internal.safeparcel.zzb.zzaX(parcel);
             String str3;
-            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzcW(zzaT)) {
+            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzdc(zzaX)) {
                 case 1:
                     str3 = str;
                     pendingIntent2 = pendingIntent;
                     i3 = i;
-                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
+                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
                     str2 = str3;
                     break;
                 case 2:
                     i = i2;
                     PendingIntent pendingIntent3 = pendingIntent;
-                    i3 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
+                    i3 = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
                     str2 = str;
                     pendingIntent2 = pendingIntent3;
                     break;
@@ -55,17 +55,17 @@ public class zzb implements Creator<ConnectionResult> {
                     i3 = i;
                     i = i2;
                     str3 = str;
-                    pendingIntent2 = (PendingIntent) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaT, PendingIntent.CREATOR);
+                    pendingIntent2 = (PendingIntent) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, PendingIntent.CREATOR);
                     str2 = str3;
                     break;
                 case 4:
-                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaT);
+                    str2 = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaX);
                     pendingIntent2 = pendingIntent;
                     i3 = i;
                     i = i2;
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaT);
+                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaX);
                     str2 = str;
                     pendingIntent2 = pendingIntent;
                     i3 = i;
@@ -77,13 +77,13 @@ public class zzb implements Creator<ConnectionResult> {
             pendingIntent = pendingIntent2;
             str = str2;
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new ConnectionResult(i2, i, pendingIntent, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public ConnectionResult[] zzcq(int i) {
+    public ConnectionResult[] zzcu(int i) {
         return new ConnectionResult[i];
     }
 }

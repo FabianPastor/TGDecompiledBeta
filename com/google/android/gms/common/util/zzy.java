@@ -1,163 +1,31 @@
 package com.google.android.gms.common.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.WorkSource;
 import android.util.Log;
-import com.google.android.gms.internal.zzacx;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.google.android.gms.common.zzh;
+import com.google.android.gms.internal.zzadg;
 
-public class zzy {
-    private static final Method zzaHc = zzyL();
-    private static final Method zzaHd = zzyM();
-    private static final Method zzaHe = zzyN();
-    private static final Method zzaHf = zzyO();
-    private static final Method zzaHg = zzyP();
-
-    public static int zza(WorkSource workSource) {
-        if (zzaHe != null) {
-            try {
-                return ((Integer) zzaHe.invoke(workSource, new Object[0])).intValue();
-            } catch (Throwable e) {
-                Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
-            }
-        }
-        return 0;
+public final class zzy {
+    @TargetApi(19)
+    public static boolean zzc(Context context, int i, String str) {
+        return zzadg.zzbi(context).zzg(i, str);
     }
 
-    public static String zza(WorkSource workSource, int i) {
-        if (zzaHg != null) {
-            try {
-                return (String) zzaHg.invoke(workSource, new Object[]{Integer.valueOf(i)});
-            } catch (Throwable e) {
-                Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
-            }
+    public static boolean zzf(Context context, int i) {
+        boolean z = false;
+        if (!zzc(context, i, "com.google.android.gms")) {
+            return z;
         }
-        return null;
-    }
-
-    public static void zza(WorkSource workSource, int i, String str) {
-        if (zzaHd != null) {
-            if (str == null) {
-                str = "";
-            }
-            try {
-                zzaHd.invoke(workSource, new Object[]{Integer.valueOf(i), str});
-            } catch (Throwable e) {
-                Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e);
-            }
-        } else if (zzaHc != null) {
-            try {
-                zzaHc.invoke(workSource, new Object[]{Integer.valueOf(i)});
-            } catch (Throwable e2) {
-                Log.wtf("WorkSourceUtil", "Unable to assign blame through WorkSource", e2);
-            }
-        }
-    }
-
-    public static boolean zzaO(Context context) {
-        return (context == null || context.getPackageManager() == null || zzacx.zzaQ(context).checkPermission("android.permission.UPDATE_DEVICE_STATS", context.getPackageName()) != 0) ? false : true;
-    }
-
-    public static List<String> zzb(WorkSource workSource) {
-        int i = 0;
-        int zza = workSource == null ? 0 : zza(workSource);
-        if (zza == 0) {
-            return Collections.EMPTY_LIST;
-        }
-        List<String> arrayList = new ArrayList();
-        while (i < zza) {
-            String zza2 = zza(workSource, i);
-            if (!zzv.zzdD(zza2)) {
-                arrayList.add(zza2);
-            }
-            i++;
-        }
-        return arrayList;
-    }
-
-    public static WorkSource zzf(int i, String str) {
-        WorkSource workSource = new WorkSource();
-        zza(workSource, i, str);
-        return workSource;
-    }
-
-    public static WorkSource zzy(Context context, String str) {
-        if (context == null || context.getPackageManager() == null) {
-            return null;
-        }
-        String str2;
-        String str3;
-        String valueOf;
         try {
-            ApplicationInfo applicationInfo = zzacx.zzaQ(context).getApplicationInfo(str, 0);
-            if (applicationInfo != null) {
-                return zzf(applicationInfo.uid, str);
-            }
-            str2 = "WorkSourceUtil";
-            str3 = "Could not get applicationInfo from package: ";
-            valueOf = String.valueOf(str);
-            Log.e(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
-            return null;
+            return zzh.zzaN(context).zza(context.getPackageManager(), context.getPackageManager().getPackageInfo("com.google.android.gms", 64));
         } catch (NameNotFoundException e) {
-            str2 = "WorkSourceUtil";
-            str3 = "Could not find package: ";
-            valueOf = String.valueOf(str);
-            Log.e(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
-            return null;
-        }
-    }
-
-    private static Method zzyL() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE});
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzyM() {
-        Method method = null;
-        if (zzs.zzyE()) {
-            try {
-                method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE, String.class});
-            } catch (Exception e) {
+            if (!Log.isLoggable("UidVerifier", 3)) {
+                return z;
             }
+            Log.d("UidVerifier", "Package manager can't find google play services package, defaulting to false");
+            return z;
         }
-        return method;
-    }
-
-    private static Method zzyN() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("size", new Class[0]);
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzyO() {
-        Method method = null;
-        try {
-            method = WorkSource.class.getMethod("get", new Class[]{Integer.TYPE});
-        } catch (Exception e) {
-        }
-        return method;
-    }
-
-    private static Method zzyP() {
-        Method method = null;
-        if (zzs.zzyE()) {
-            try {
-                method = WorkSource.class.getMethod("getName", new Class[]{Integer.TYPE});
-            } catch (Exception e) {
-            }
-        }
-        return method;
     }
 }

@@ -17,6 +17,7 @@
     <string name="common_open_on_phone">Abrir en teléfono</string>
     <string name="common_signin_button_text">Iniciar sesión</string>
     <string name="common_signin_button_text_long">Iniciar sesión con Google</string>
+    <string name="wallet_buy_button_place_holder">Comprar con Google</string>
     <string name="ALongTimeAgo">últ. vez hace mucho tiempo</string>
     <string name="AbortPassword">Anular la configuración de la verificación en dos pasos</string>
     <string name="AccessError">Error de acceso</string>

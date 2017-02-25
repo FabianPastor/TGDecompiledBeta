@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -15,17 +15,17 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
     public static abstract class zza extends Binder implements ICameraUpdateFactoryDelegate {
 
         private static class zza implements ICameraUpdateFactoryDelegate {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public zzd newCameraPosition(CameraPosition cameraPosition) throws RemoteException {
+            public IObjectWrapper newCameraPosition(CameraPosition cameraPosition) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -36,9 +36,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -46,7 +46,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd newLatLng(LatLng latLng) throws RemoteException {
+            public IObjectWrapper newLatLng(LatLng latLng) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -57,9 +57,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -67,7 +67,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException {
+            public IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -79,9 +79,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -89,7 +89,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i2, int i3) throws RemoteException {
+            public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i2, int i3) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -103,9 +103,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                     obtain.writeInt(i);
                     obtain.writeInt(i2);
                     obtain.writeInt(i3);
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -113,7 +113,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd newLatLngZoom(LatLng latLng, float f) throws RemoteException {
+            public IObjectWrapper newLatLngZoom(LatLng latLng, float f) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -125,9 +125,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                         obtain.writeInt(0);
                     }
                     obtain.writeFloat(f);
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -135,16 +135,16 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd scrollBy(float f, float f2) throws RemoteException {
+            public IObjectWrapper scrollBy(float f, float f2) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
                     obtain.writeFloat(f);
                     obtain.writeFloat(f2);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -152,15 +152,15 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd zoomBy(float f) throws RemoteException {
+            public IObjectWrapper zoomBy(float f) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -168,7 +168,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd zoomByWithFocus(float f, int i, int i2) throws RemoteException {
+            public IObjectWrapper zoomByWithFocus(float f, int i, int i2) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -176,9 +176,9 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                     obtain.writeFloat(f);
                     obtain.writeInt(i);
                     obtain.writeInt(i2);
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -186,14 +186,14 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd zoomIn() throws RemoteException {
+            public IObjectWrapper zoomIn() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -201,14 +201,14 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd zoomOut() throws RemoteException {
+            public IObjectWrapper zoomOut() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -216,15 +216,15 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
                 }
             }
 
-            public zzd zoomTo(float f) throws RemoteException {
+            public IObjectWrapper zoomTo(float f) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -243,7 +243,7 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             IBinder iBinder = null;
-            zzd zoomIn;
+            IObjectWrapper zoomIn;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate");
@@ -350,25 +350,25 @@ public interface ICameraUpdateFactoryDelegate extends IInterface {
         }
     }
 
-    zzd newCameraPosition(CameraPosition cameraPosition) throws RemoteException;
+    IObjectWrapper newCameraPosition(CameraPosition cameraPosition) throws RemoteException;
 
-    zzd newLatLng(LatLng latLng) throws RemoteException;
+    IObjectWrapper newLatLng(LatLng latLng) throws RemoteException;
 
-    zzd newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException;
+    IObjectWrapper newLatLngBounds(LatLngBounds latLngBounds, int i) throws RemoteException;
 
-    zzd newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i2, int i3) throws RemoteException;
+    IObjectWrapper newLatLngBoundsWithSize(LatLngBounds latLngBounds, int i, int i2, int i3) throws RemoteException;
 
-    zzd newLatLngZoom(LatLng latLng, float f) throws RemoteException;
+    IObjectWrapper newLatLngZoom(LatLng latLng, float f) throws RemoteException;
 
-    zzd scrollBy(float f, float f2) throws RemoteException;
+    IObjectWrapper scrollBy(float f, float f2) throws RemoteException;
 
-    zzd zoomBy(float f) throws RemoteException;
+    IObjectWrapper zoomBy(float f) throws RemoteException;
 
-    zzd zoomByWithFocus(float f, int i, int i2) throws RemoteException;
+    IObjectWrapper zoomByWithFocus(float f, int i, int i2) throws RemoteException;
 
-    zzd zoomIn() throws RemoteException;
+    IObjectWrapper zoomIn() throws RemoteException;
 
-    zzd zoomOut() throws RemoteException;
+    IObjectWrapper zoomOut() throws RemoteException;
 
-    zzd zoomTo(float f) throws RemoteException;
+    IObjectWrapper zoomTo(float f) throws RemoteException;
 }

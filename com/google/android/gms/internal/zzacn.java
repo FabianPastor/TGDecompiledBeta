@@ -2,56 +2,43 @@ package com.google.android.gms.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.internal.zzack.zza;
-import com.google.android.gms.internal.zzaco.zzb;
+import com.google.android.gms.common.internal.safeparcel.zza;
+import com.google.android.gms.internal.zzacs.zzb;
 
-public class zzacn implements Creator<zzb> {
-    static void zza(zzb com_google_android_gms_internal_zzaco_zzb, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzaco_zzb.versionCode);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzaco_zzb.zzaA, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzaco_zzb.zzaFO, i, false);
-        zzc.zzJ(parcel, zzaV);
+public class zzacn extends zza {
+    public static final Creator<zzacn> CREATOR = new zzaco();
+    private final zzacp zzaGR;
+    final int zzaiI;
+
+    zzacn(int i, zzacp com_google_android_gms_internal_zzacp) {
+        this.zzaiI = i;
+        this.zzaGR = com_google_android_gms_internal_zzacp;
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzbb(parcel);
+    private zzacn(zzacp com_google_android_gms_internal_zzacp) {
+        this.zzaiI = 1;
+        this.zzaGR = com_google_android_gms_internal_zzacp;
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzdd(i);
-    }
-
-    public zzb zzbb(Parcel parcel) {
-        zza com_google_android_gms_internal_zzack_zza = null;
-        int zzaU = com.google.android.gms.common.internal.safeparcel.zzb.zzaU(parcel);
-        int i = 0;
-        String str = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzaT(parcel);
-            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzcW(zzaT)) {
-                case 1:
-                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
-                    break;
-                case 2:
-                    str = com.google.android.gms.common.internal.safeparcel.zzb.zzq(parcel, zzaT);
-                    break;
-                case 3:
-                    com_google_android_gms_internal_zzack_zza = (zza) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaT, zza.CREATOR);
-                    break;
-                default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaT);
-                    break;
-            }
+    public static zzacn zza(zzb<?, ?> com_google_android_gms_internal_zzacs_zzb___) {
+        if (com_google_android_gms_internal_zzacs_zzb___ instanceof zzacp) {
+            return new zzacn((zzacp) com_google_android_gms_internal_zzacs_zzb___);
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new zzb(i, str, com_google_android_gms_internal_zzack_zza);
-        }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaU, parcel);
+        throw new IllegalArgumentException("Unsupported safe parcelable field converter class.");
     }
 
-    public zzb[] zzdd(int i) {
-        return new zzb[i];
+    public void writeToParcel(Parcel parcel, int i) {
+        zzaco.zza(this, parcel, i);
+    }
+
+    zzacp zzyo() {
+        return this.zzaGR;
+    }
+
+    public zzb<?, ?> zzyp() {
+        if (this.zzaGR != null) {
+            return this.zzaGR;
+        }
+        throw new IllegalStateException("There was no converter wrapped in this ConverterWrapper.");
     }
 }

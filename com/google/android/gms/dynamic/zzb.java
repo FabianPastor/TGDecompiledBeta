@@ -9,10 +9,10 @@ import com.google.android.gms.dynamic.zzc.zza;
 
 @SuppressLint({"NewApi"})
 public final class zzb extends zza {
-    private Fragment zzaQn;
+    private Fragment zzaRK;
 
     private zzb(Fragment fragment) {
-        this.zzaQn = fragment;
+        this.zzaRK = fragment;
     }
 
     public static zzb zza(Fragment fragment) {
@@ -20,106 +20,106 @@ public final class zzb extends zza {
     }
 
     public Bundle getArguments() {
-        return this.zzaQn.getArguments();
+        return this.zzaRK.getArguments();
     }
 
     public int getId() {
-        return this.zzaQn.getId();
+        return this.zzaRK.getId();
     }
 
     public boolean getRetainInstance() {
-        return this.zzaQn.getRetainInstance();
+        return this.zzaRK.getRetainInstance();
     }
 
     public String getTag() {
-        return this.zzaQn.getTag();
+        return this.zzaRK.getTag();
     }
 
     public int getTargetRequestCode() {
-        return this.zzaQn.getTargetRequestCode();
+        return this.zzaRK.getTargetRequestCode();
     }
 
     public boolean getUserVisibleHint() {
-        return this.zzaQn.getUserVisibleHint();
+        return this.zzaRK.getUserVisibleHint();
     }
 
-    public zzd getView() {
-        return zze.zzA(this.zzaQn.getView());
+    public IObjectWrapper getView() {
+        return zzd.zzA(this.zzaRK.getView());
     }
 
     public boolean isAdded() {
-        return this.zzaQn.isAdded();
+        return this.zzaRK.isAdded();
     }
 
     public boolean isDetached() {
-        return this.zzaQn.isDetached();
+        return this.zzaRK.isDetached();
     }
 
     public boolean isHidden() {
-        return this.zzaQn.isHidden();
+        return this.zzaRK.isHidden();
     }
 
     public boolean isInLayout() {
-        return this.zzaQn.isInLayout();
+        return this.zzaRK.isInLayout();
     }
 
     public boolean isRemoving() {
-        return this.zzaQn.isRemoving();
+        return this.zzaRK.isRemoving();
     }
 
     public boolean isResumed() {
-        return this.zzaQn.isResumed();
+        return this.zzaRK.isResumed();
     }
 
     public boolean isVisible() {
-        return this.zzaQn.isVisible();
+        return this.zzaRK.isVisible();
     }
 
     public void setHasOptionsMenu(boolean z) {
-        this.zzaQn.setHasOptionsMenu(z);
+        this.zzaRK.setHasOptionsMenu(z);
     }
 
     public void setMenuVisibility(boolean z) {
-        this.zzaQn.setMenuVisibility(z);
+        this.zzaRK.setMenuVisibility(z);
     }
 
     public void setRetainInstance(boolean z) {
-        this.zzaQn.setRetainInstance(z);
+        this.zzaRK.setRetainInstance(z);
     }
 
     public void setUserVisibleHint(boolean z) {
-        this.zzaQn.setUserVisibleHint(z);
+        this.zzaRK.setUserVisibleHint(z);
     }
 
     public void startActivity(Intent intent) {
-        this.zzaQn.startActivity(intent);
+        this.zzaRK.startActivity(intent);
     }
 
     public void startActivityForResult(Intent intent, int i) {
-        this.zzaQn.startActivityForResult(intent, i);
+        this.zzaRK.startActivityForResult(intent, i);
     }
 
-    public zzd zzAZ() {
-        return zze.zzA(this.zzaQn.getActivity());
+    public IObjectWrapper zzBN() {
+        return zzd.zzA(this.zzaRK.getActivity());
     }
 
-    public zzc zzBa() {
-        return zza(this.zzaQn.getParentFragment());
+    public zzc zzBO() {
+        return zza(this.zzaRK.getParentFragment());
     }
 
-    public zzd zzBb() {
-        return zze.zzA(this.zzaQn.getResources());
+    public IObjectWrapper zzBP() {
+        return zzd.zzA(this.zzaRK.getResources());
     }
 
-    public zzc zzBc() {
-        return zza(this.zzaQn.getTargetFragment());
+    public zzc zzBQ() {
+        return zza(this.zzaRK.getTargetFragment());
     }
 
-    public void zzC(zzd com_google_android_gms_dynamic_zzd) {
-        this.zzaQn.registerForContextMenu((View) zze.zzE(com_google_android_gms_dynamic_zzd));
+    public void zzD(IObjectWrapper iObjectWrapper) {
+        this.zzaRK.registerForContextMenu((View) zzd.zzF(iObjectWrapper));
     }
 
-    public void zzD(zzd com_google_android_gms_dynamic_zzd) {
-        this.zzaQn.unregisterForContextMenu((View) zze.zzE(com_google_android_gms_dynamic_zzd));
+    public void zzE(IObjectWrapper iObjectWrapper) {
+        this.zzaRK.unregisterForContextMenu((View) zzd.zzF(iObjectWrapper));
     }
 }

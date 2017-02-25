@@ -2,6 +2,7 @@ package com.google.android.gms.gcm;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
@@ -21,51 +22,53 @@ public abstract class GcmTaskService extends Service {
     public static final String SERVICE_ACTION_EXECUTE_TASK = "com.google.android.gms.gcm.ACTION_TASK_READY";
     public static final String SERVICE_ACTION_INITIALIZE = "com.google.android.gms.gcm.SERVICE_ACTION_INITIALIZE";
     public static final String SERVICE_PERMISSION = "com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE";
-    private final Set<String> zzbfR = new HashSet();
-    private int zzbfS;
-    private ExecutorService zzqt;
+    private final Set<String> zzbgv = new HashSet();
+    private int zzbgw;
+    private ExecutorService zzqp;
 
     private class zza implements Runnable {
         private final Bundle mExtras;
         private final String mTag;
-        private final zzb zzbfU;
-        final /* synthetic */ GcmTaskService zzbfV;
+        final /* synthetic */ GcmTaskService zzbgA;
+        private final zzb zzbgy;
+        private final List<Uri> zzbgz;
 
-        zza(GcmTaskService gcmTaskService, String str, IBinder iBinder, Bundle bundle) {
-            this.zzbfV = gcmTaskService;
+        zza(GcmTaskService gcmTaskService, String str, IBinder iBinder, Bundle bundle, List<Uri> list) {
+            this.zzbgA = gcmTaskService;
             this.mTag = str;
-            this.zzbfU = com.google.android.gms.gcm.zzb.zza.zzcV(iBinder);
+            this.zzbgy = com.google.android.gms.gcm.zzb.zza.zzcV(iBinder);
             this.mExtras = bundle;
+            this.zzbgz = list;
         }
 
         public void run() {
             try {
-                this.zzbfU.zzjt(this.zzbfV.onRunTask(new TaskParams(this.mTag, this.mExtras)));
+                this.zzbgy.zzjC(this.zzbgA.onRunTask(new TaskParams(this.mTag, this.mExtras, this.zzbgz)));
             } catch (RemoteException e) {
                 String str = "GcmTaskService";
                 String str2 = "Error reporting result of operation to scheduler for ";
                 String valueOf = String.valueOf(this.mTag);
                 Log.e(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
             } finally {
-                this.zzbfV.zzeH(this.mTag);
+                this.zzbgA.zzeD(this.mTag);
             }
         }
     }
 
-    private void zzeH(String str) {
-        synchronized (this.zzbfR) {
-            this.zzbfR.remove(str);
-            if (this.zzbfR.size() == 0) {
-                stopSelf(this.zzbfS);
+    private void zzeD(String str) {
+        synchronized (this.zzbgv) {
+            this.zzbgv.remove(str);
+            if (this.zzbgv.size() == 0) {
+                stopSelf(this.zzbgw);
             }
         }
     }
 
-    private void zzjs(int i) {
-        synchronized (this.zzbfR) {
-            this.zzbfS = i;
-            if (this.zzbfR.size() == 0) {
-                stopSelf(this.zzbfS);
+    private void zzjB(int i) {
+        synchronized (this.zzbgv) {
+            this.zzbgw = i;
+            if (this.zzbgv.size() == 0) {
+                stopSelf(this.zzbgw);
             }
         }
     }
@@ -77,13 +80,13 @@ public abstract class GcmTaskService extends Service {
     @CallSuper
     public void onCreate() {
         super.onCreate();
-        this.zzqt = zzGd();
+        this.zzqp = zzGQ();
     }
 
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
-        List shutdownNow = this.zzqt.shutdownNow();
+        List shutdownNow = this.zzqp.shutdownNow();
         if (!shutdownNow.isEmpty()) {
             Log.e("GcmTaskService", "Shutting down, but not all tasks are finished executing. Remaining: " + shutdownNow.size());
         }
@@ -97,7 +100,7 @@ public abstract class GcmTaskService extends Service {
     @CallSuper
     public int onStartCommand(Intent intent, int i, int i2) {
         if (intent == null) {
-            zzjs(i2);
+            zzjB(i2);
         } else {
             try {
                 intent.setExtrasClassLoader(PendingCallback.class.getClassLoader());
@@ -106,18 +109,18 @@ public abstract class GcmTaskService extends Service {
                     String stringExtra = intent.getStringExtra("tag");
                     Parcelable parcelableExtra = intent.getParcelableExtra("callback");
                     Bundle bundle = (Bundle) intent.getParcelableExtra("extras");
-                    String valueOf;
+                    List parcelableArrayListExtra = intent.getParcelableArrayListExtra("triggered_uris");
                     if (parcelableExtra == null || !(parcelableExtra instanceof PendingCallback)) {
-                        valueOf = String.valueOf(getPackageName());
+                        String valueOf = String.valueOf(getPackageName());
                         Log.e("GcmTaskService", new StringBuilder((String.valueOf(valueOf).length() + 47) + String.valueOf(stringExtra).length()).append(valueOf).append(" ").append(stringExtra).append(": Could not process request, invalid callback.").toString());
                     } else {
-                        synchronized (this.zzbfR) {
-                            if (this.zzbfR.add(stringExtra)) {
-                                this.zzqt.execute(new zza(this, stringExtra, ((PendingCallback) parcelableExtra).getIBinder(), bundle));
+                        synchronized (this.zzbgv) {
+                            if (this.zzbgv.add(stringExtra)) {
+                                this.zzqp.execute(new zza(this, stringExtra, ((PendingCallback) parcelableExtra).getIBinder(), bundle, parcelableArrayListExtra));
                             } else {
-                                valueOf = String.valueOf(getPackageName());
-                                Log.w("GcmTaskService", new StringBuilder((String.valueOf(valueOf).length() + 44) + String.valueOf(stringExtra).length()).append(valueOf).append(" ").append(stringExtra).append(": Task already running, won't start another").toString());
-                                zzjs(i2);
+                                String valueOf2 = String.valueOf(getPackageName());
+                                Log.w("GcmTaskService", new StringBuilder((String.valueOf(valueOf2).length() + 44) + String.valueOf(stringExtra).length()).append(valueOf2).append(" ").append(stringExtra).append(": Task already running, won't start another").toString());
+                                zzjB(i2);
                             }
                         }
                     }
@@ -126,20 +129,20 @@ public abstract class GcmTaskService extends Service {
                 } else {
                     Log.e("GcmTaskService", new StringBuilder(String.valueOf(action).length() + 37).append("Unknown action received ").append(action).append(", terminating").toString());
                 }
-                zzjs(i2);
+                zzjB(i2);
             } finally {
-                zzjs(i2);
+                zzjB(i2);
             }
         }
         return 2;
     }
 
-    protected ExecutorService zzGd() {
+    protected ExecutorService zzGQ() {
         return Executors.newFixedThreadPool(2, new ThreadFactory(this) {
-            private final AtomicInteger zzbfT = new AtomicInteger(1);
+            private final AtomicInteger zzbgx = new AtomicInteger(1);
 
             public Thread newThread(@NonNull Runnable runnable) {
-                Thread thread = new Thread(runnable, "gcm-task#" + this.zzbfT.getAndIncrement());
+                Thread thread = new Thread(runnable, "gcm-task#" + this.zzbgx.getAndIncrement());
                 thread.setPriority(4);
                 return thread;
             }

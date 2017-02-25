@@ -1,15 +1,18 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 import java.util.List;
 
 public final class Polyline {
-    private final IPolylineDelegate zzbpn;
+    private final IPolylineDelegate zzbpT;
 
     public Polyline(IPolylineDelegate iPolylineDelegate) {
-        this.zzbpn = (IPolylineDelegate) zzac.zzw(iPolylineDelegate);
+        this.zzbpT = (IPolylineDelegate) zzac.zzw(iPolylineDelegate);
     }
 
     public boolean equals(Object obj) {
@@ -17,7 +20,7 @@ public final class Polyline {
             return false;
         }
         try {
-            return this.zzbpn.equalsRemote(((Polyline) obj).zzbpn);
+            return this.zzbpT.equalsRemote(((Polyline) obj).zzbpT);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -25,7 +28,16 @@ public final class Polyline {
 
     public int getColor() {
         try {
-            return this.zzbpn.getColor();
+            return this.zzbpT.getColor();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @NonNull
+    public Cap getEndCap() {
+        try {
+            return this.zzbpT.getEndCap().zzJI();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -33,7 +45,24 @@ public final class Polyline {
 
     public String getId() {
         try {
-            return this.zzbpn.getId();
+            return this.zzbpT.getId();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public int getJointType() {
+        try {
+            return this.zzbpT.getJointType();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @Nullable
+    public List<PatternItem> getPattern() {
+        try {
+            return PatternItem.zzI(this.zzbpT.getPattern());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -41,7 +70,25 @@ public final class Polyline {
 
     public List<LatLng> getPoints() {
         try {
-            return this.zzbpn.getPoints();
+            return this.zzbpT.getPoints();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @NonNull
+    public Cap getStartCap() {
+        try {
+            return this.zzbpT.getStartCap().zzJI();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @Nullable
+    public Object getTag() {
+        try {
+            return zzd.zzF(this.zzbpT.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -49,7 +96,7 @@ public final class Polyline {
 
     public float getWidth() {
         try {
-            return this.zzbpn.getWidth();
+            return this.zzbpT.getWidth();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -57,7 +104,7 @@ public final class Polyline {
 
     public float getZIndex() {
         try {
-            return this.zzbpn.getZIndex();
+            return this.zzbpT.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -65,7 +112,7 @@ public final class Polyline {
 
     public int hashCode() {
         try {
-            return this.zzbpn.hashCodeRemote();
+            return this.zzbpT.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -73,7 +120,7 @@ public final class Polyline {
 
     public boolean isClickable() {
         try {
-            return this.zzbpn.isClickable();
+            return this.zzbpT.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -81,7 +128,7 @@ public final class Polyline {
 
     public boolean isGeodesic() {
         try {
-            return this.zzbpn.isGeodesic();
+            return this.zzbpT.isGeodesic();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -89,7 +136,7 @@ public final class Polyline {
 
     public boolean isVisible() {
         try {
-            return this.zzbpn.isVisible();
+            return this.zzbpT.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -97,7 +144,7 @@ public final class Polyline {
 
     public void remove() {
         try {
-            this.zzbpn.remove();
+            this.zzbpT.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -105,7 +152,7 @@ public final class Polyline {
 
     public void setClickable(boolean z) {
         try {
-            this.zzbpn.setClickable(z);
+            this.zzbpT.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -113,7 +160,16 @@ public final class Polyline {
 
     public void setColor(int i) {
         try {
-            this.zzbpn.setColor(i);
+            this.zzbpT.setColor(i);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setEndCap(@NonNull Cap cap) {
+        zzac.zzb((Object) cap, (Object) "endCap must not be null");
+        try {
+            this.zzbpT.setEndCap(cap);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -121,7 +177,23 @@ public final class Polyline {
 
     public void setGeodesic(boolean z) {
         try {
-            this.zzbpn.setGeodesic(z);
+            this.zzbpT.setGeodesic(z);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setJointType(int i) {
+        try {
+            this.zzbpT.setJointType(i);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setPattern(@Nullable List<PatternItem> list) {
+        try {
+            this.zzbpT.setPattern(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -129,7 +201,24 @@ public final class Polyline {
 
     public void setPoints(List<LatLng> list) {
         try {
-            this.zzbpn.setPoints(list);
+            this.zzbpT.setPoints(list);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setStartCap(@NonNull Cap cap) {
+        zzac.zzb((Object) cap, (Object) "startCap must not be null");
+        try {
+            this.zzbpT.setStartCap(cap);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setTag(@Nullable Object obj) {
+        try {
+            this.zzbpT.setTag(zzd.zzA(obj));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -137,7 +226,7 @@ public final class Polyline {
 
     public void setVisible(boolean z) {
         try {
-            this.zzbpn.setVisible(z);
+            this.zzbpT.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -145,7 +234,7 @@ public final class Polyline {
 
     public void setWidth(float f) {
         try {
-            this.zzbpn.setWidth(f);
+            this.zzbpT.setWidth(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -153,7 +242,7 @@ public final class Polyline {
 
     public void setZIndex(float f) {
         try {
-            this.zzbpn.setZIndex(f);
+            this.zzbpT.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

@@ -4,55 +4,50 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.internal.zzaco.zza;
+import com.google.android.gms.internal.zzacp.zza;
 import java.util.ArrayList;
 
-public class zzacq implements Creator<zza> {
-    static void zza(zza com_google_android_gms_internal_zzaco_zza, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzaco_zza.versionCode);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzaco_zza.className, false);
-        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzaco_zza.zzaFN, false);
-        zzc.zzJ(parcel, zzaV);
+public class zzacq implements Creator<zzacp> {
+    static void zza(zzacp com_google_android_gms_internal_zzacp, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzacp.zzaiI);
+        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzacp.zzyq(), false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzbd(parcel);
+        return zzbc(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzdf(i);
+        return zzdg(i);
     }
 
-    public zza zzbd(Parcel parcel) {
-        ArrayList arrayList = null;
-        int zzaU = zzb.zzaU(parcel);
+    public zzacp zzbc(Parcel parcel) {
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
-        String str = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        ArrayList arrayList = null;
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaT);
-                    break;
-                case 3:
-                    arrayList = zzb.zzc(parcel, zzaT, zzaco.zzb.CREATOR);
+                    arrayList = zzb.zzc(parcel, zzaX, zza.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new zza(i, str, arrayList);
+        if (parcel.dataPosition() == zzaY) {
+            return new zzacp(i, arrayList);
         }
-        throw new zzb.zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zzb.zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public zza[] zzdf(int i) {
-        return new zza[i];
+    public zzacp[] zzdg(int i) {
+        return new zzacp[i];
     }
 }

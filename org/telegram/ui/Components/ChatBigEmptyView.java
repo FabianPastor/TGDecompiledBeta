@@ -1,6 +1,8 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ChatBigEmptyView extends LinearLayout {
+    private ArrayList<ImageView> imageViews = new ArrayList();
     private TextView secretViewStatusTextView;
     private ArrayList<TextView> textViews = new ArrayList();
 
@@ -54,7 +57,9 @@ public class ChatBigEmptyView extends LinearLayout {
             linearLayout.setOrientation(0);
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
             imageView = new ImageView(context);
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), Mode.MULTIPLY));
             imageView.setImageResource(secretChat ? R.drawable.ic_lock_white : R.drawable.list_circle);
+            this.imageViews.add(imageView);
             textView = new TextView(context);
             textView.setTextSize(1, 15.0f);
             textView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
@@ -114,8 +119,12 @@ public class ChatBigEmptyView extends LinearLayout {
     }
 
     public void setTextColor(int color) {
-        for (int a = 0; a < this.textViews.size(); a++) {
+        int a;
+        for (a = 0; a < this.textViews.size(); a++) {
             ((TextView) this.textViews.get(a)).setTextColor(color);
+        }
+        for (a = 0; a < this.imageViews.size(); a++) {
+            ((ImageView) this.imageViews.get(a)).setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), Mode.MULTIPLY));
         }
     }
 

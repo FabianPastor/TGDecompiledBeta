@@ -7,31 +7,31 @@ import android.os.Parcelable.Creator;
 public class OneoffTask extends Task {
     public static final Creator<OneoffTask> CREATOR = new Creator<OneoffTask>() {
         public /* synthetic */ Object createFromParcel(Parcel parcel) {
-            return zzgh(parcel);
+            return zzgm(parcel);
         }
 
         public /* synthetic */ Object[] newArray(int i) {
-            return zzju(i);
+            return zzjD(i);
         }
 
-        public OneoffTask zzgh(Parcel parcel) {
+        public OneoffTask zzgm(Parcel parcel) {
             return new OneoffTask(parcel);
         }
 
-        public OneoffTask[] zzju(int i) {
+        public OneoffTask[] zzjD(int i) {
             return new OneoffTask[i];
         }
     };
-    private final long zzbgg;
-    private final long zzbgh;
+    private final long zzbgL;
+    private final long zzbgM;
 
     public static class Builder extends com.google.android.gms.gcm.Task.Builder {
-        private long zzbgi;
-        private long zzbgj;
+        private long zzbgN;
+        private long zzbgO;
 
         public Builder() {
-            this.zzbgi = -1;
-            this.zzbgj = -1;
+            this.zzbgN = -1;
+            this.zzbgO = -1;
             this.isPersisted = false;
         }
 
@@ -42,16 +42,16 @@ public class OneoffTask extends Task {
 
         protected void checkConditions() {
             super.checkConditions();
-            if (this.zzbgi == -1 || this.zzbgj == -1) {
+            if (this.zzbgN == -1 || this.zzbgO == -1) {
                 throw new IllegalArgumentException("Must specify an execution window using setExecutionWindow.");
-            } else if (this.zzbgi >= this.zzbgj) {
+            } else if (this.zzbgN >= this.zzbgO) {
                 throw new IllegalArgumentException("Window start must be shorter than window end.");
             }
         }
 
         public Builder setExecutionWindow(long j, long j2) {
-            this.zzbgi = j;
-            this.zzbgj = j2;
+            this.zzbgN = j;
+            this.zzbgO = j2;
             return this;
         }
 
@@ -94,28 +94,28 @@ public class OneoffTask extends Task {
     @Deprecated
     private OneoffTask(Parcel parcel) {
         super(parcel);
-        this.zzbgg = parcel.readLong();
-        this.zzbgh = parcel.readLong();
+        this.zzbgL = parcel.readLong();
+        this.zzbgM = parcel.readLong();
     }
 
     private OneoffTask(Builder builder) {
         super((com.google.android.gms.gcm.Task.Builder) builder);
-        this.zzbgg = builder.zzbgi;
-        this.zzbgh = builder.zzbgj;
+        this.zzbgL = builder.zzbgN;
+        this.zzbgM = builder.zzbgO;
     }
 
     public long getWindowEnd() {
-        return this.zzbgh;
+        return this.zzbgM;
     }
 
     public long getWindowStart() {
-        return this.zzbgg;
+        return this.zzbgL;
     }
 
     public void toBundle(Bundle bundle) {
         super.toBundle(bundle);
-        bundle.putLong("window_start", this.zzbgg);
-        bundle.putLong("window_end", this.zzbgh);
+        bundle.putLong("window_start", this.zzbgL);
+        bundle.putLong("window_end", this.zzbgM);
     }
 
     public String toString() {
@@ -126,7 +126,7 @@ public class OneoffTask extends Task {
 
     public void writeToParcel(Parcel parcel, int i) {
         super.writeToParcel(parcel, i);
-        parcel.writeLong(this.zzbgg);
-        parcel.writeLong(this.zzbgh);
+        parcel.writeLong(this.zzbgL);
+        parcel.writeLong(this.zzbgM);
     }
 }

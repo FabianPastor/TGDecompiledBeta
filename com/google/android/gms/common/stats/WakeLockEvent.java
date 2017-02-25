@@ -6,38 +6,38 @@ import android.text.TextUtils;
 import java.util.List;
 
 public final class WakeLockEvent extends StatsEvent {
-    public static final Creator<WakeLockEvent> CREATOR = new zzf();
+    public static final Creator<WakeLockEvent> CREATOR = new zzd();
     private final long mTimeout;
-    final int mVersionCode;
-    private final List<String> zzaGA;
-    private final String zzaGB;
-    private final long zzaGC;
-    private int zzaGD;
-    private final String zzaGE;
-    private final float zzaGF;
-    private long zzaGG;
-    private final long zzaGu;
-    private int zzaGv;
-    private final String zzaGw;
-    private final String zzaGx;
-    private final String zzaGy;
-    private final int zzaGz;
+    private final long zzaHD;
+    private int zzaHE;
+    private final String zzaHF;
+    private final String zzaHG;
+    private final String zzaHH;
+    private final int zzaHI;
+    private final List<String> zzaHJ;
+    private final String zzaHK;
+    private final long zzaHL;
+    private int zzaHM;
+    private final String zzaHN;
+    private final float zzaHO;
+    private long zzaHP;
+    final int zzaiI;
 
     WakeLockEvent(int i, long j, int i2, String str, int i3, List<String> list, String str2, long j2, int i4, String str3, String str4, float f, long j3, String str5) {
-        this.mVersionCode = i;
-        this.zzaGu = j;
-        this.zzaGv = i2;
-        this.zzaGw = str;
-        this.zzaGx = str3;
-        this.zzaGy = str5;
-        this.zzaGz = i3;
-        this.zzaGG = -1;
-        this.zzaGA = list;
-        this.zzaGB = str2;
-        this.zzaGC = j2;
-        this.zzaGD = i4;
-        this.zzaGE = str4;
-        this.zzaGF = f;
+        this.zzaiI = i;
+        this.zzaHD = j;
+        this.zzaHE = i2;
+        this.zzaHF = str;
+        this.zzaHG = str3;
+        this.zzaHH = str5;
+        this.zzaHI = i3;
+        this.zzaHP = -1;
+        this.zzaHJ = list;
+        this.zzaHK = str2;
+        this.zzaHL = j2;
+        this.zzaHM = i4;
+        this.zzaHN = str4;
+        this.zzaHO = f;
         this.mTimeout = j3;
     }
 
@@ -46,82 +46,82 @@ public final class WakeLockEvent extends StatsEvent {
     }
 
     public int getEventType() {
-        return this.zzaGv;
+        return this.zzaHE;
     }
 
     public long getTimeMillis() {
-        return this.zzaGu;
+        return this.zzaHD;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzf.zza(this, parcel, i);
+        zzd.zza(this, parcel, i);
     }
 
-    public long zzye() {
-        return this.zzaGG;
+    public long zzyK() {
+        return this.zzaHP;
     }
 
-    public String zzyf() {
+    public String zzyL() {
         String valueOf = String.valueOf("\t");
-        String valueOf2 = String.valueOf(zzyg());
+        String valueOf2 = String.valueOf(zzyM());
         String valueOf3 = String.valueOf("\t");
-        int zzyj = zzyj();
+        int zzyP = zzyP();
         String valueOf4 = String.valueOf("\t");
-        String join = zzyk() == null ? "" : TextUtils.join(",", zzyk());
+        String join = zzyQ() == null ? "" : TextUtils.join(",", zzyQ());
         String valueOf5 = String.valueOf("\t");
-        int zzyn = zzyn();
+        int zzyT = zzyT();
         String valueOf6 = String.valueOf("\t");
-        String zzyh = zzyh() == null ? "" : zzyh();
+        String zzyN = zzyN() == null ? "" : zzyN();
         String valueOf7 = String.valueOf("\t");
-        String zzyo = zzyo() == null ? "" : zzyo();
+        String zzyU = zzyU() == null ? "" : zzyU();
         String valueOf8 = String.valueOf("\t");
-        float zzyp = zzyp();
+        float zzyV = zzyV();
         String valueOf9 = String.valueOf("\t");
-        String zzyi = zzyi() == null ? "" : zzyi();
-        return new StringBuilder(((((((((((((String.valueOf(valueOf).length() + 37) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()) + String.valueOf(join).length()) + String.valueOf(valueOf5).length()) + String.valueOf(valueOf6).length()) + String.valueOf(zzyh).length()) + String.valueOf(valueOf7).length()) + String.valueOf(zzyo).length()) + String.valueOf(valueOf8).length()) + String.valueOf(valueOf9).length()) + String.valueOf(zzyi).length()).append(valueOf).append(valueOf2).append(valueOf3).append(zzyj).append(valueOf4).append(join).append(valueOf5).append(zzyn).append(valueOf6).append(zzyh).append(valueOf7).append(zzyo).append(valueOf8).append(zzyp).append(valueOf9).append(zzyi).toString();
+        String zzyO = zzyO() == null ? "" : zzyO();
+        return new StringBuilder(((((((((((((String.valueOf(valueOf).length() + 37) + String.valueOf(valueOf2).length()) + String.valueOf(valueOf3).length()) + String.valueOf(valueOf4).length()) + String.valueOf(join).length()) + String.valueOf(valueOf5).length()) + String.valueOf(valueOf6).length()) + String.valueOf(zzyN).length()) + String.valueOf(valueOf7).length()) + String.valueOf(zzyU).length()) + String.valueOf(valueOf8).length()) + String.valueOf(valueOf9).length()) + String.valueOf(zzyO).length()).append(valueOf).append(valueOf2).append(valueOf3).append(zzyP).append(valueOf4).append(join).append(valueOf5).append(zzyT).append(valueOf6).append(zzyN).append(valueOf7).append(zzyU).append(valueOf8).append(zzyV).append(valueOf9).append(zzyO).toString();
     }
 
-    public String zzyg() {
-        return this.zzaGw;
+    public String zzyM() {
+        return this.zzaHF;
     }
 
-    public String zzyh() {
-        return this.zzaGx;
+    public String zzyN() {
+        return this.zzaHG;
     }
 
-    public String zzyi() {
-        return this.zzaGy;
+    public String zzyO() {
+        return this.zzaHH;
     }
 
-    public int zzyj() {
-        return this.zzaGz;
+    public int zzyP() {
+        return this.zzaHI;
     }
 
-    public List<String> zzyk() {
-        return this.zzaGA;
+    public List<String> zzyQ() {
+        return this.zzaHJ;
     }
 
-    public String zzyl() {
-        return this.zzaGB;
+    public String zzyR() {
+        return this.zzaHK;
     }
 
-    public long zzym() {
-        return this.zzaGC;
+    public long zzyS() {
+        return this.zzaHL;
     }
 
-    public int zzyn() {
-        return this.zzaGD;
+    public int zzyT() {
+        return this.zzaHM;
     }
 
-    public String zzyo() {
-        return this.zzaGE;
+    public String zzyU() {
+        return this.zzaHN;
     }
 
-    public float zzyp() {
-        return this.zzaGF;
+    public float zzyV() {
+        return this.zzaHO;
     }
 
-    public long zzyq() {
+    public long zzyW() {
         return this.mTimeout;
     }
 }

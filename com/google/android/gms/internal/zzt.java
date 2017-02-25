@@ -1,172 +1,104 @@
 package com.google.android.gms.internal;
 
 import android.os.SystemClock;
-import com.coremedia.iso.boxes.AuthorBox;
-import com.google.android.gms.internal.zzb.zza;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketTimeoutException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.impl.cookie.DateUtils;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
+import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class zzt implements zzf {
-    protected static final boolean DEBUG = zzs.DEBUG;
-    private static int zzam = 3000;
-    private static int zzan = 4096;
-    protected final zzy zzao;
-    protected final zzu zzap;
+public class zzt {
+    public static boolean DEBUG = Log.isLoggable(TAG, 2);
+    public static String TAG = "Volley";
 
-    public zzt(zzy com_google_android_gms_internal_zzy) {
-        this(com_google_android_gms_internal_zzy, new zzu(zzan));
-    }
+    static class zza {
+        public static final boolean zzaj = zzt.DEBUG;
+        private final List<zza> zzak = new ArrayList();
+        private boolean zzal = false;
 
-    public zzt(zzy com_google_android_gms_internal_zzy, zzu com_google_android_gms_internal_zzu) {
-        this.zzao = com_google_android_gms_internal_zzy;
-        this.zzap = com_google_android_gms_internal_zzu;
-    }
+        private static class zza {
+            public final String name;
+            public final long time;
+            public final long zzam;
 
-    protected static Map<String, String> zza(Header[] headerArr) {
-        Map<String, String> treeMap = new TreeMap(String.CASE_INSENSITIVE_ORDER);
-        for (int i = 0; i < headerArr.length; i++) {
-            treeMap.put(headerArr[i].getName(), headerArr[i].getValue());
-        }
-        return treeMap;
-    }
-
-    private void zza(long j, zzk<?> com_google_android_gms_internal_zzk_, byte[] bArr, StatusLine statusLine) {
-        if (DEBUG || j > ((long) zzam)) {
-            String str = "HTTP response for request=<%s> [lifetime=%d], [size=%s], [rc=%d], [retryCount=%s]";
-            Object[] objArr = new Object[5];
-            objArr[0] = com_google_android_gms_internal_zzk_;
-            objArr[1] = Long.valueOf(j);
-            objArr[2] = bArr != null ? Integer.valueOf(bArr.length) : "null";
-            objArr[3] = Integer.valueOf(statusLine.getStatusCode());
-            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzk_.zzq().zzd());
-            zzs.zzb(str, objArr);
-        }
-    }
-
-    private static void zza(String str, zzk<?> com_google_android_gms_internal_zzk_, zzr com_google_android_gms_internal_zzr) throws zzr {
-        zzo zzq = com_google_android_gms_internal_zzk_.zzq();
-        int zzp = com_google_android_gms_internal_zzk_.zzp();
-        try {
-            zzq.zza(com_google_android_gms_internal_zzr);
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
-        } catch (zzr e) {
-            com_google_android_gms_internal_zzk_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
-            throw e;
-        }
-    }
-
-    private void zza(Map<String, String> map, zza com_google_android_gms_internal_zzb_zza) {
-        if (com_google_android_gms_internal_zzb_zza != null) {
-            if (com_google_android_gms_internal_zzb_zza.zza != null) {
-                map.put("If-None-Match", com_google_android_gms_internal_zzb_zza.zza);
-            }
-            if (com_google_android_gms_internal_zzb_zza.zzc > 0) {
-                map.put("If-Modified-Since", DateUtils.formatDate(new Date(com_google_android_gms_internal_zzb_zza.zzc)));
+            public zza(String str, long j, long j2) {
+                this.name = str;
+                this.zzam = j;
+                this.time = j2;
             }
         }
-    }
 
-    private byte[] zza(HttpEntity httpEntity) throws IOException, zzp {
-        zzaa com_google_android_gms_internal_zzaa = new zzaa(this.zzap, (int) httpEntity.getContentLength());
-        byte[] bArr = null;
-        try {
-            InputStream content = httpEntity.getContent();
-            if (content == null) {
-                throw new zzp();
+        zza() {
+        }
+
+        private long getTotalDuration() {
+            if (this.zzak.size() == 0) {
+                return 0;
             }
-            bArr = this.zzap.zzb(1024);
-            while (true) {
-                int read = content.read(bArr);
-                if (read == -1) {
-                    break;
+            return ((zza) this.zzak.get(this.zzak.size() - 1)).time - ((zza) this.zzak.get(0)).time;
+        }
+
+        protected void finalize() throws Throwable {
+            if (!this.zzal) {
+                zzd("Request on the loose");
+                zzt.zzc("Marker log finalized without finish() - uncaught exit point for request", new Object[0]);
+            }
+        }
+
+        public synchronized void zza(String str, long j) {
+            if (this.zzal) {
+                throw new IllegalStateException("Marker added to finished log");
+            }
+            this.zzak.add(new zza(str, j, SystemClock.elapsedRealtime()));
+        }
+
+        public synchronized void zzd(String str) {
+            this.zzal = true;
+            if (getTotalDuration() > 0) {
+                long j = ((zza) this.zzak.get(0)).time;
+                zzt.zzb("(%-4d ms) %s", Long.valueOf(r2), str);
+                long j2 = j;
+                for (zza com_google_android_gms_internal_zzt_zza_zza : this.zzak) {
+                    zzt.zzb("(+%-4d) [%2d] %s", Long.valueOf(com_google_android_gms_internal_zzt_zza_zza.time - j2), Long.valueOf(com_google_android_gms_internal_zzt_zza_zza.zzam), com_google_android_gms_internal_zzt_zza_zza.name);
+                    j2 = com_google_android_gms_internal_zzt_zza_zza.time;
                 }
-                com_google_android_gms_internal_zzaa.write(bArr, 0, read);
             }
-            byte[] toByteArray = com_google_android_gms_internal_zzaa.toByteArray();
-            return toByteArray;
-        } finally {
-            try {
-                httpEntity.consumeContent();
-            } catch (IOException e) {
-                zzs.zza("Error occured when calling consumingContent", new Object[0]);
-            }
-            this.zzap.zza(bArr);
-            com_google_android_gms_internal_zzaa.close();
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public zzi zza(zzk<?> com_google_android_gms_internal_zzk_) throws zzr {
-        HttpResponse zza;
-        int statusCode;
-        Throwable e;
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        while (true) {
-            HttpResponse httpResponse = null;
-            Map emptyMap = Collections.emptyMap();
-            try {
-                Map hashMap = new HashMap();
-                zza(hashMap, com_google_android_gms_internal_zzk_.zzh());
-                zza = this.zzao.zza(com_google_android_gms_internal_zzk_, hashMap);
-                StatusLine statusLine = zza.getStatusLine();
-                statusCode = statusLine.getStatusCode();
-                emptyMap = zza(zza.getAllHeaders());
-                if (statusCode == 304) {
-                    break;
-                }
-                byte[] zza2 = zza.getEntity() != null ? zza(zza.getEntity()) : new byte[0];
-                zza(SystemClock.elapsedRealtime() - elapsedRealtime, com_google_android_gms_internal_zzk_, zza2, statusLine);
-                if (statusCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION && statusCode <= 299) {
-                    return new zzi(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
-                }
-            } catch (SocketTimeoutException e2) {
-                zza("socket", com_google_android_gms_internal_zzk_, new zzq());
-            } catch (ConnectTimeoutException e3) {
-                zza("connection", com_google_android_gms_internal_zzk_, new zzq());
-            } catch (Throwable e4) {
-                Throwable th = e4;
-                String str = "Bad URL ";
-                String valueOf = String.valueOf(com_google_android_gms_internal_zzk_.getUrl());
-                throw new RuntimeException(valueOf.length() != 0 ? str.concat(valueOf) : new String(str), th);
-            } catch (IOException e5) {
-                e4 = e5;
-                r5 = null;
-                httpResponse = zza;
-                if (httpResponse != null) {
-                    statusCode = httpResponse.getStatusLine().getStatusCode();
-                    zzs.zzc("Unexpected response code %d for %s", Integer.valueOf(statusCode), com_google_android_gms_internal_zzk_.getUrl());
-                    byte[] bArr;
-                    if (bArr != null) {
-                        zzi com_google_android_gms_internal_zzi = new zzi(statusCode, bArr, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
-                        if (statusCode != 401) {
-                        }
-                        zza(AuthorBox.TYPE, com_google_android_gms_internal_zzk_, new zza(com_google_android_gms_internal_zzi));
-                    } else {
-                        throw new zzh(null);
-                    }
-                }
-                throw new zzj(e4);
+    public static void zza(String str, Object... objArr) {
+        if (DEBUG) {
+            Log.v(TAG, zzd(str, objArr));
+        }
+    }
+
+    public static void zza(Throwable th, String str, Object... objArr) {
+        Log.e(TAG, zzd(str, objArr), th);
+    }
+
+    public static void zzb(String str, Object... objArr) {
+        Log.d(TAG, zzd(str, objArr));
+    }
+
+    public static void zzc(String str, Object... objArr) {
+        Log.e(TAG, zzd(str, objArr));
+    }
+
+    private static String zzd(String str, Object... objArr) {
+        String str2;
+        if (objArr != null) {
+            str = String.format(Locale.US, str, objArr);
+        }
+        StackTraceElement[] stackTrace = new Throwable().fillInStackTrace().getStackTrace();
+        String str3 = "<unknown>";
+        for (int i = 2; i < stackTrace.length; i++) {
+            if (!stackTrace[i].getClass().equals(zzt.class)) {
+                str3 = stackTrace[i].getClassName();
+                str3 = str3.substring(str3.lastIndexOf(46) + 1);
+                str2 = str3.substring(str3.lastIndexOf(36) + 1) + "." + stackTrace[i].getMethodName();
+                break;
             }
         }
-        zza zzh = com_google_android_gms_internal_zzk_.zzh();
-        if (zzh == null) {
-            return new zzi(304, null, emptyMap, true, SystemClock.elapsedRealtime() - elapsedRealtime);
-        }
-        zzh.zzf.putAll(emptyMap);
-        return new zzi(304, zzh.data, zzh.zzf, true, SystemClock.elapsedRealtime() - elapsedRealtime);
+        str2 = str3;
+        return String.format(Locale.US, "[%d] %s: %s", new Object[]{Long.valueOf(Thread.currentThread().getId()), str2, str});
     }
 }

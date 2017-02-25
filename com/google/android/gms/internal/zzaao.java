@@ -1,12 +1,26 @@
 package com.google.android.gms.internal;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.google.android.gms.common.api.Releasable;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.DataHolder;
 
-public abstract class zzaao {
-    private static final ExecutorService zzaAN = Executors.newFixedThreadPool(2, new zzacu("GAC_Executor"));
+public abstract class zzaao implements Releasable, Result {
+    protected final DataHolder zzaBi;
+    protected final Status zzair;
 
-    public static ExecutorService zzvR() {
-        return zzaAN;
+    protected zzaao(DataHolder dataHolder, Status status) {
+        this.zzair = status;
+        this.zzaBi = dataHolder;
+    }
+
+    public Status getStatus() {
+        return this.zzair;
+    }
+
+    public void release() {
+        if (this.zzaBi != null) {
+            this.zzaBi.close();
+        }
     }
 }

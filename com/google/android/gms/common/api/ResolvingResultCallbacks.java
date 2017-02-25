@@ -7,17 +7,17 @@ import com.google.android.gms.common.internal.zzac;
 
 public abstract class ResolvingResultCallbacks<R extends Result> extends ResultCallbacks<R> {
     private final Activity mActivity;
-    private final int zzaye;
+    private final int zzazu;
 
     protected ResolvingResultCallbacks(@NonNull Activity activity, int i) {
         this.mActivity = (Activity) zzac.zzb((Object) activity, (Object) "Activity must not be null");
-        this.zzaye = i;
+        this.zzazu = i;
     }
 
     public final void onFailure(@NonNull Status status) {
         if (status.hasResolution()) {
             try {
-                status.startResolutionForResult(this.mActivity, this.zzaye);
+                status.startResolutionForResult(this.mActivity, this.zzazu);
                 return;
             } catch (Throwable e) {
                 Log.e("ResolvingResultCallback", "Failed to start resolution", e);

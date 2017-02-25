@@ -12,14 +12,14 @@ public interface zzb extends IInterface {
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public void send(Message message) throws RemoteException {
@@ -32,7 +32,7 @@ public interface zzb extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(1, obtain, null, 1);
+                    this.zzrk.transact(1, obtain, null, 1);
                 } finally {
                     obtain.recycle();
                 }

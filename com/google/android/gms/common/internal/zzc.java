@@ -10,13 +10,13 @@ public final class zzc {
         }
     }
 
-    public static void zzar(boolean z) {
+    public static void zzaw(boolean z) {
         if (!z) {
             throw new IllegalStateException();
         }
     }
 
-    public static void zzdn(String str) {
+    public static void zzdj(String str) {
         if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
             String valueOf = String.valueOf(Thread.currentThread());
             String valueOf2 = String.valueOf(Looper.getMainLooper().getThread());
@@ -25,7 +25,7 @@ public final class zzc {
         }
     }
 
-    public static void zzdo(String str) {
+    public static void zzdk(String str) {
         if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
             String valueOf = String.valueOf(Thread.currentThread());
             String valueOf2 = String.valueOf(Looper.getMainLooper().getThread());

@@ -302,7 +302,12 @@ class NotificationCompatJellybean {
     }
 
     private static Action getActionFromBundle(Bundle bundle, Factory actionFactory, RemoteInput.Factory remoteInputFactory) {
-        return actionFactory.build(bundle.getInt(KEY_ICON), bundle.getCharSequence(KEY_TITLE), (PendingIntent) bundle.getParcelable(KEY_ACTION_INTENT), bundle.getBundle(KEY_EXTRAS), RemoteInputCompatJellybean.fromBundleArray(BundleUtil.getBundleArrayFromBundle(bundle, KEY_REMOTE_INPUTS), remoteInputFactory), bundle.getBoolean(KEY_ALLOW_GENERATED_REPLIES));
+        Bundle extras = bundle.getBundle(KEY_EXTRAS);
+        boolean allowGeneratedReplies = false;
+        if (extras != null) {
+            allowGeneratedReplies = extras.getBoolean(EXTRA_ALLOW_GENERATED_REPLIES, false);
+        }
+        return actionFactory.build(bundle.getInt(KEY_ICON), bundle.getCharSequence(KEY_TITLE), (PendingIntent) bundle.getParcelable(KEY_ACTION_INTENT), bundle.getBundle(KEY_EXTRAS), RemoteInputCompatJellybean.fromBundleArray(BundleUtil.getBundleArrayFromBundle(bundle, KEY_REMOTE_INPUTS), remoteInputFactory), allowGeneratedReplies);
     }
 
     public static ArrayList<Parcelable> getParcelableArrayListForActions(Action[] actions) {
@@ -317,11 +322,18 @@ class NotificationCompatJellybean {
     }
 
     private static Bundle getBundleForAction(Action action) {
+        Bundle actionExtras;
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_ICON, action.getIcon());
         bundle.putCharSequence(KEY_TITLE, action.getTitle());
         bundle.putParcelable(KEY_ACTION_INTENT, action.getActionIntent());
-        bundle.putBundle(KEY_EXTRAS, action.getExtras());
+        if (action.getExtras() != null) {
+            actionExtras = new Bundle(action.getExtras());
+        } else {
+            actionExtras = new Bundle();
+        }
+        actionExtras.putBoolean(EXTRA_ALLOW_GENERATED_REPLIES, action.getAllowGeneratedReplies());
+        bundle.putBundle(KEY_EXTRAS, actionExtras);
         bundle.putParcelableArray(KEY_REMOTE_INPUTS, RemoteInputCompatJellybean.toBundleArray(action.getRemoteInputs()));
         return bundle;
     }

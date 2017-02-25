@@ -8,45 +8,45 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzg implements Creator<Scope> {
     static void zza(Scope scope, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, scope.mVersionCode);
-        zzc.zza(parcel, 2, scope.zzuS(), false);
-        zzc.zzJ(parcel, zzaV);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, scope.zzaiI);
+        zzc.zza(parcel, 2, scope.zzvt(), false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaH(parcel);
+        return zzaL(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcs(i);
+        return zzcy(i);
     }
 
-    public Scope zzaH(Parcel parcel) {
-        int zzaU = zzb.zzaU(parcel);
+    public Scope zzaL(Parcel parcel) {
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         String str = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new Scope(i, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Scope[] zzcs(int i) {
+    public Scope[] zzcy(int i) {
         return new Scope[i];
     }
 }

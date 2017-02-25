@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class IndoorBuilding {
-    private final zzd zzboU;
+    private final zzd zzbpy;
 
     public IndoorBuilding(zzd com_google_android_gms_maps_model_internal_zzd) {
-        this.zzboU = (zzd) zzac.zzw(com_google_android_gms_maps_model_internal_zzd);
+        this.zzbpy = (zzd) zzac.zzw(com_google_android_gms_maps_model_internal_zzd);
     }
 
     public boolean equals(Object obj) {
@@ -20,7 +20,7 @@ public final class IndoorBuilding {
             return false;
         }
         try {
-            return this.zzboU.zzb(((IndoorBuilding) obj).zzboU);
+            return this.zzbpy.zzb(((IndoorBuilding) obj).zzbpy);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -28,7 +28,7 @@ public final class IndoorBuilding {
 
     public int getActiveLevelIndex() {
         try {
-            return this.zzboU.getActiveLevelIndex();
+            return this.zzbpy.getActiveLevelIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -36,7 +36,7 @@ public final class IndoorBuilding {
 
     public int getDefaultLevelIndex() {
         try {
-            return this.zzboU.getActiveLevelIndex();
+            return this.zzbpy.getActiveLevelIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -44,10 +44,10 @@ public final class IndoorBuilding {
 
     public List<IndoorLevel> getLevels() {
         try {
-            List<IBinder> levels = this.zzboU.getLevels();
+            List<IBinder> levels = this.zzbpy.getLevels();
             List<IndoorLevel> arrayList = new ArrayList(levels.size());
-            for (IBinder zzel : levels) {
-                arrayList.add(new IndoorLevel(zza.zzel(zzel)));
+            for (IBinder zzem : levels) {
+                arrayList.add(new IndoorLevel(zza.zzem(zzem)));
             }
             return arrayList;
         } catch (RemoteException e) {
@@ -57,7 +57,7 @@ public final class IndoorBuilding {
 
     public int hashCode() {
         try {
-            return this.zzboU.hashCodeRemote();
+            return this.zzbpy.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -65,7 +65,7 @@ public final class IndoorBuilding {
 
     public boolean isUnderground() {
         try {
-            return this.zzboU.isUnderground();
+            return this.zzbpy.isUnderground();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

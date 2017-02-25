@@ -8,19 +8,19 @@ import java.util.List;
 public final class zzaa {
 
     public static final class zza {
-        private final Object zzXN;
-        private final List<String> zzaEY;
+        private final Object zzYG;
+        private final List<String> zzaGv;
 
         private zza(Object obj) {
-            this.zzXN = zzac.zzw(obj);
-            this.zzaEY = new ArrayList();
+            this.zzYG = zzac.zzw(obj);
+            this.zzaGv = new ArrayList();
         }
 
         public String toString() {
-            StringBuilder append = new StringBuilder(100).append(this.zzXN.getClass().getSimpleName()).append('{');
-            int size = this.zzaEY.size();
+            StringBuilder append = new StringBuilder(100).append(this.zzYG.getClass().getSimpleName()).append('{');
+            int size = this.zzaGv.size();
             for (int i = 0; i < size; i++) {
-                append.append((String) this.zzaEY.get(i));
+                append.append((String) this.zzaGv.get(i));
                 if (i < size - 1) {
                     append.append(", ");
                 }
@@ -29,7 +29,7 @@ public final class zzaa {
         }
 
         public zza zzg(String str, Object obj) {
-            List list = this.zzaEY;
+            List list = this.zzaGv;
             String str2 = (String) zzac.zzw(str);
             String valueOf = String.valueOf(String.valueOf(obj));
             list.add(new StringBuilder((String.valueOf(str2).length() + 1) + String.valueOf(valueOf).length()).append(str2).append("=").append(valueOf).toString());

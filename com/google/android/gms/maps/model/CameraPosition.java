@@ -14,54 +14,52 @@ import com.google.android.gms.common.internal.zzac;
 public final class CameraPosition extends zza implements ReflectedParcelable {
     public static final Creator<CameraPosition> CREATOR = new zza();
     public final float bearing;
-    private final int mVersionCode;
     public final LatLng target;
     public final float tilt;
     public final float zoom;
 
     public static final class Builder {
-        private LatLng zzboC;
-        private float zzboD;
-        private float zzboE;
-        private float zzboF;
+        private LatLng zzbpe;
+        private float zzbpf;
+        private float zzbpg;
+        private float zzbph;
 
         public Builder(CameraPosition cameraPosition) {
-            this.zzboC = cameraPosition.target;
-            this.zzboD = cameraPosition.zoom;
-            this.zzboE = cameraPosition.tilt;
-            this.zzboF = cameraPosition.bearing;
+            this.zzbpe = cameraPosition.target;
+            this.zzbpf = cameraPosition.zoom;
+            this.zzbpg = cameraPosition.tilt;
+            this.zzbph = cameraPosition.bearing;
         }
 
         public Builder bearing(float f) {
-            this.zzboF = f;
+            this.zzbph = f;
             return this;
         }
 
         public CameraPosition build() {
-            return new CameraPosition(this.zzboC, this.zzboD, this.zzboE, this.zzboF);
+            return new CameraPosition(this.zzbpe, this.zzbpf, this.zzbpg, this.zzbph);
         }
 
         public Builder target(LatLng latLng) {
-            this.zzboC = latLng;
+            this.zzbpe = latLng;
             return this;
         }
 
         public Builder tilt(float f) {
-            this.zzboE = f;
+            this.zzbpg = f;
             return this;
         }
 
         public Builder zoom(float f) {
-            this.zzboD = f;
+            this.zzbpf = f;
             return this;
         }
     }
 
-    CameraPosition(int i, LatLng latLng, float f, float f2, float f3) {
+    public CameraPosition(LatLng latLng, float f, float f2, float f3) {
         zzac.zzb((Object) latLng, (Object) "null camera target");
         boolean z = 0.0f <= f2 && f2 <= 90.0f;
         zzac.zzb(z, "Tilt needs to be between 0 and 90 inclusive: %s", Float.valueOf(f2));
-        this.mVersionCode = i;
         this.target = latLng;
         this.zoom = f;
         this.tilt = f2 + 0.0f;
@@ -69,10 +67,6 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
             f3 = (f3 % 360.0f) + 360.0f;
         }
         this.bearing = f3 % 360.0f;
-    }
-
-    public CameraPosition(LatLng latLng, float f, float f2, float f3) {
-        this(1, latLng, f, f2, f3);
     }
 
     public static Builder builder() {
@@ -116,10 +110,6 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
         }
         CameraPosition cameraPosition = (CameraPosition) obj;
         return this.target.equals(cameraPosition.target) && Float.floatToIntBits(this.zoom) == Float.floatToIntBits(cameraPosition.zoom) && Float.floatToIntBits(this.tilt) == Float.floatToIntBits(cameraPosition.tilt) && Float.floatToIntBits(this.bearing) == Float.floatToIntBits(cameraPosition.bearing);
-    }
-
-    int getVersionCode() {
-        return this.mVersionCode;
     }
 
     public int hashCode() {

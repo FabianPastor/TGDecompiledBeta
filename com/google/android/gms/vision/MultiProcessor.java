@@ -7,29 +7,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MultiProcessor<T> implements Processor<T> {
-    private Factory<T> zzbMG;
-    private SparseArray<zza> zzbMH;
-    private int zzbMu;
+    private Factory<T> zzbOF;
+    private SparseArray<zza> zzbOG;
+    private int zzbOt;
 
     public static class Builder<T> {
-        private MultiProcessor<T> zzbMI = new MultiProcessor();
+        private MultiProcessor<T> zzbOH = new MultiProcessor();
 
         public Builder(Factory<T> factory) {
             if (factory == null) {
                 throw new IllegalArgumentException("No factory supplied.");
             }
-            this.zzbMI.zzbMG = factory;
+            this.zzbOH.zzbOF = factory;
         }
 
         public MultiProcessor<T> build() {
-            return this.zzbMI;
+            return this.zzbOH;
         }
 
         public Builder<T> setMaxGapFrames(int i) {
             if (i < 0) {
                 throw new IllegalArgumentException("Invalid max gap: " + i);
             }
-            this.zzbMI.zzbMu = i;
+            this.zzbOH.zzbOt = i;
             return this;
         }
     }
@@ -39,17 +39,17 @@ public class MultiProcessor<T> implements Processor<T> {
     }
 
     private class zza {
-        private Tracker<T> zzbMt;
-        private int zzbMx;
+        private Tracker<T> zzbOs;
+        private int zzbOw;
 
         private zza(MultiProcessor multiProcessor) {
-            this.zzbMx = 0;
+            this.zzbOw = 0;
         }
     }
 
     private MultiProcessor() {
-        this.zzbMH = new SparseArray();
-        this.zzbMu = 3;
+        this.zzbOG = new SparseArray();
+        this.zzbOt = 3;
     }
 
     private void zza(Detections<T> detections) {
@@ -57,11 +57,11 @@ public class MultiProcessor<T> implements Processor<T> {
         for (int i = 0; i < detectedItems.size(); i++) {
             int keyAt = detectedItems.keyAt(i);
             Object valueAt = detectedItems.valueAt(i);
-            if (this.zzbMH.get(keyAt) == null) {
+            if (this.zzbOG.get(keyAt) == null) {
                 zza com_google_android_gms_vision_MultiProcessor_zza = new zza();
-                com_google_android_gms_vision_MultiProcessor_zza.zzbMt = this.zzbMG.create(valueAt);
-                com_google_android_gms_vision_MultiProcessor_zza.zzbMt.onNewItem(keyAt, valueAt);
-                this.zzbMH.append(keyAt, com_google_android_gms_vision_MultiProcessor_zza);
+                com_google_android_gms_vision_MultiProcessor_zza.zzbOs = this.zzbOF.create(valueAt);
+                com_google_android_gms_vision_MultiProcessor_zza.zzbOs.onNewItem(keyAt, valueAt);
+                this.zzbOG.append(keyAt, com_google_android_gms_vision_MultiProcessor_zza);
             }
         }
     }
@@ -69,21 +69,21 @@ public class MultiProcessor<T> implements Processor<T> {
     private void zzb(Detections<T> detections) {
         SparseArray detectedItems = detections.getDetectedItems();
         Set<Integer> hashSet = new HashSet();
-        for (int i = 0; i < this.zzbMH.size(); i++) {
-            int keyAt = this.zzbMH.keyAt(i);
+        for (int i = 0; i < this.zzbOG.size(); i++) {
+            int keyAt = this.zzbOG.keyAt(i);
             if (detectedItems.get(keyAt) == null) {
-                zza com_google_android_gms_vision_MultiProcessor_zza = (zza) this.zzbMH.valueAt(i);
-                com_google_android_gms_vision_MultiProcessor_zza.zzbMx = com_google_android_gms_vision_MultiProcessor_zza.zzbMx + 1;
-                if (com_google_android_gms_vision_MultiProcessor_zza.zzbMx >= this.zzbMu) {
-                    com_google_android_gms_vision_MultiProcessor_zza.zzbMt.onDone();
+                zza com_google_android_gms_vision_MultiProcessor_zza = (zza) this.zzbOG.valueAt(i);
+                com_google_android_gms_vision_MultiProcessor_zza.zzbOw = com_google_android_gms_vision_MultiProcessor_zza.zzbOw + 1;
+                if (com_google_android_gms_vision_MultiProcessor_zza.zzbOw >= this.zzbOt) {
+                    com_google_android_gms_vision_MultiProcessor_zza.zzbOs.onDone();
                     hashSet.add(Integer.valueOf(keyAt));
                 } else {
-                    com_google_android_gms_vision_MultiProcessor_zza.zzbMt.onMissing(detections);
+                    com_google_android_gms_vision_MultiProcessor_zza.zzbOs.onMissing(detections);
                 }
             }
         }
         for (Integer intValue : hashSet) {
-            this.zzbMH.delete(intValue.intValue());
+            this.zzbOG.delete(intValue.intValue());
         }
     }
 
@@ -92,9 +92,9 @@ public class MultiProcessor<T> implements Processor<T> {
         for (int i = 0; i < detectedItems.size(); i++) {
             int keyAt = detectedItems.keyAt(i);
             Object valueAt = detectedItems.valueAt(i);
-            zza com_google_android_gms_vision_MultiProcessor_zza = (zza) this.zzbMH.get(keyAt);
-            com_google_android_gms_vision_MultiProcessor_zza.zzbMx = 0;
-            com_google_android_gms_vision_MultiProcessor_zza.zzbMt.onUpdate(detections, valueAt);
+            zza com_google_android_gms_vision_MultiProcessor_zza = (zza) this.zzbOG.get(keyAt);
+            com_google_android_gms_vision_MultiProcessor_zza.zzbOw = 0;
+            com_google_android_gms_vision_MultiProcessor_zza.zzbOs.onUpdate(detections, valueAt);
         }
     }
 
@@ -105,9 +105,9 @@ public class MultiProcessor<T> implements Processor<T> {
     }
 
     public void release() {
-        for (int i = 0; i < this.zzbMH.size(); i++) {
-            ((zza) this.zzbMH.valueAt(i)).zzbMt.onDone();
+        for (int i = 0; i < this.zzbOG.size(); i++) {
+            ((zza) this.zzbOG.valueAt(i)).zzbOs.onDone();
         }
-        this.zzbMH.clear();
+        this.zzbOG.clear();
     }
 }

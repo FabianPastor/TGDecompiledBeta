@@ -1,106 +1,104 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.internal.zzb.zza;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
-import org.apache.http.impl.cookie.DateParseException;
-import org.apache.http.impl.cookie.DateUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpOptions;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpTrace;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.telegram.messenger.exoplayer2.DefaultLoadControl;
 
-public class zzx {
-    public static String zza(Map<String, String> map) {
-        return zza(map, "ISO-8859-1");
+public class zzx implements zzz {
+    protected final HttpClient zzaD;
+
+    public static final class zza extends HttpEntityEnclosingRequestBase {
+        public zza(String str) {
+            setURI(URI.create(str));
+        }
+
+        public String getMethod() {
+            return "PATCH";
+        }
     }
 
-    public static String zza(Map<String, String> map, String str) {
-        String str2 = (String) map.get("Content-Type");
-        if (str2 == null) {
-            return str;
-        }
-        String[] split = str2.split(";");
-        for (int i = 1; i < split.length; i++) {
-            String[] split2 = split[i].trim().split("=");
-            if (split2.length == 2 && split2[0].equals("charset")) {
-                return split2[1];
-            }
-        }
-        return str;
+    public zzx(HttpClient httpClient) {
+        this.zzaD = httpClient;
     }
 
-    public static zza zzb(zzi com_google_android_gms_internal_zzi) {
-        Object obj;
-        long j;
-        Object obj2;
-        long currentTimeMillis = System.currentTimeMillis();
-        Map map = com_google_android_gms_internal_zzi.zzy;
-        long j2 = 0;
-        long j3 = 0;
-        long j4 = 0;
-        String str = (String) map.get("Date");
-        if (str != null) {
-            j2 = zzg(str);
+    private static void zza(HttpEntityEnclosingRequestBase httpEntityEnclosingRequestBase, zzl<?> com_google_android_gms_internal_zzl_) throws zza {
+        byte[] zzm = com_google_android_gms_internal_zzl_.zzm();
+        if (zzm != null) {
+            httpEntityEnclosingRequestBase.setEntity(new ByteArrayEntity(zzm));
         }
-        str = (String) map.get("Cache-Control");
-        if (str != null) {
-            String[] split = str.split(",");
-            obj = null;
-            j = 0;
-            j4 = 0;
-            for (String trim : split) {
-                String trim2 = trim2.trim();
-                if (trim2.equals("no-cache") || trim2.equals("no-store")) {
-                    return null;
+    }
+
+    private static void zza(HttpUriRequest httpUriRequest, Map<String, String> map) {
+        for (String str : map.keySet()) {
+            httpUriRequest.setHeader(str, (String) map.get(str));
+        }
+    }
+
+    static HttpUriRequest zzb(zzl<?> com_google_android_gms_internal_zzl_, Map<String, String> map) throws zza {
+        HttpEntityEnclosingRequestBase httpPost;
+        switch (com_google_android_gms_internal_zzl_.getMethod()) {
+            case -1:
+                byte[] zzj = com_google_android_gms_internal_zzl_.zzj();
+                if (zzj == null) {
+                    return new HttpGet(com_google_android_gms_internal_zzl_.getUrl());
                 }
-                if (trim2.startsWith("max-age=")) {
-                    try {
-                        j4 = Long.parseLong(trim2.substring(8));
-                    } catch (Exception e) {
-                    }
-                } else if (trim2.startsWith("stale-while-revalidate=")) {
-                    try {
-                        j = Long.parseLong(trim2.substring(23));
-                    } catch (Exception e2) {
-                    }
-                } else if (trim2.equals("must-revalidate") || trim2.equals("proxy-revalidate")) {
-                    obj = 1;
-                }
-            }
-            j3 = j4;
-            j4 = j;
-            obj2 = 1;
-        } else {
-            obj = null;
-            obj2 = null;
+                HttpUriRequest httpPost2 = new HttpPost(com_google_android_gms_internal_zzl_.getUrl());
+                httpPost2.addHeader("Content-Type", com_google_android_gms_internal_zzl_.zzi());
+                httpPost2.setEntity(new ByteArrayEntity(zzj));
+                return httpPost2;
+            case 0:
+                return new HttpGet(com_google_android_gms_internal_zzl_.getUrl());
+            case 1:
+                httpPost = new HttpPost(com_google_android_gms_internal_zzl_.getUrl());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzl_.zzl());
+                zza(httpPost, (zzl) com_google_android_gms_internal_zzl_);
+                return httpPost;
+            case 2:
+                httpPost = new HttpPut(com_google_android_gms_internal_zzl_.getUrl());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzl_.zzl());
+                zza(httpPost, (zzl) com_google_android_gms_internal_zzl_);
+                return httpPost;
+            case 3:
+                return new HttpDelete(com_google_android_gms_internal_zzl_.getUrl());
+            case 4:
+                return new HttpHead(com_google_android_gms_internal_zzl_.getUrl());
+            case 5:
+                return new HttpOptions(com_google_android_gms_internal_zzl_.getUrl());
+            case 6:
+                return new HttpTrace(com_google_android_gms_internal_zzl_.getUrl());
+            case 7:
+                httpPost = new zza(com_google_android_gms_internal_zzl_.getUrl());
+                httpPost.addHeader("Content-Type", com_google_android_gms_internal_zzl_.zzl());
+                zza(httpPost, (zzl) com_google_android_gms_internal_zzl_);
+                return httpPost;
+            default:
+                throw new IllegalStateException("Unknown request method.");
         }
-        str = (String) map.get("Expires");
-        long zzg = str != null ? zzg(str) : 0;
-        str = (String) map.get("Last-Modified");
-        long zzg2 = str != null ? zzg(str) : 0;
-        str = (String) map.get("ETag");
-        if (obj2 != null) {
-            j3 = currentTimeMillis + (1000 * j3);
-            j = obj != null ? j3 : (1000 * j4) + j3;
-        } else if (j2 <= 0 || zzg < j2) {
-            j = 0;
-            j3 = 0;
-        } else {
-            j = (zzg - j2) + currentTimeMillis;
-            j3 = j;
-        }
-        zza com_google_android_gms_internal_zzb_zza = new zza();
-        com_google_android_gms_internal_zzb_zza.data = com_google_android_gms_internal_zzi.data;
-        com_google_android_gms_internal_zzb_zza.zza = str;
-        com_google_android_gms_internal_zzb_zza.zze = j3;
-        com_google_android_gms_internal_zzb_zza.zzd = j;
-        com_google_android_gms_internal_zzb_zza.zzb = j2;
-        com_google_android_gms_internal_zzb_zza.zzc = zzg2;
-        com_google_android_gms_internal_zzb_zza.zzf = map;
-        return com_google_android_gms_internal_zzb_zza;
     }
 
-    public static long zzg(String str) {
-        try {
-            return DateUtils.parseDate(str).getTime();
-        } catch (DateParseException e) {
-            return 0;
-        }
+    public HttpResponse zza(zzl<?> com_google_android_gms_internal_zzl_, Map<String, String> map) throws IOException, zza {
+        HttpUriRequest zzb = zzb(com_google_android_gms_internal_zzl_, map);
+        zza(zzb, (Map) map);
+        zza(zzb, com_google_android_gms_internal_zzl_.getHeaders());
+        HttpParams params = zzb.getParams();
+        int zzp = com_google_android_gms_internal_zzl_.zzp();
+        HttpConnectionParams.setConnectionTimeout(params, DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS);
+        HttpConnectionParams.setSoTimeout(params, zzp);
+        return this.zzaD.execute(zzb);
     }
 }

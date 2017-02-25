@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 
@@ -14,24 +14,24 @@ public interface IProjectionDelegate extends IInterface {
     public static abstract class zza extends Binder implements IProjectionDelegate {
 
         private static class zza implements IProjectionDelegate {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public LatLng fromScreenLocation(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public LatLng fromScreenLocation(IObjectWrapper iObjectWrapper) throws RemoteException {
                 LatLng latLng = null;
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IProjectionDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         latLng = (LatLng) LatLng.CREATOR.createFromParcel(obtain2);
@@ -50,7 +50,7 @@ public interface IProjectionDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IProjectionDelegate");
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                     VisibleRegion visibleRegion = obtain2.readInt() != 0 ? (VisibleRegion) VisibleRegion.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -62,7 +62,7 @@ public interface IProjectionDelegate extends IInterface {
                 }
             }
 
-            public zzd toScreenLocation(LatLng latLng) throws RemoteException {
+            public IObjectWrapper toScreenLocation(LatLng latLng) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -73,9 +73,9 @@ public interface IProjectionDelegate extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -97,7 +97,7 @@ public interface IProjectionDelegate extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IProjectionDelegate");
-                    LatLng fromScreenLocation = fromScreenLocation(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    LatLng fromScreenLocation = fromScreenLocation(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (fromScreenLocation != null) {
                         parcel2.writeInt(1);
@@ -108,7 +108,7 @@ public interface IProjectionDelegate extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IProjectionDelegate");
-                    zzd toScreenLocation = toScreenLocation(parcel.readInt() != 0 ? (LatLng) LatLng.CREATOR.createFromParcel(parcel) : null);
+                    IObjectWrapper toScreenLocation = toScreenLocation(parcel.readInt() != 0 ? (LatLng) LatLng.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
                     if (toScreenLocation != null) {
                         iBinder = toScreenLocation.asBinder();
@@ -135,9 +135,9 @@ public interface IProjectionDelegate extends IInterface {
         }
     }
 
-    LatLng fromScreenLocation(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    LatLng fromScreenLocation(IObjectWrapper iObjectWrapper) throws RemoteException;
 
     VisibleRegion getVisibleRegion() throws RemoteException;
 
-    zzd toScreenLocation(LatLng latLng) throws RemoteException;
+    IObjectWrapper toScreenLocation(LatLng latLng) throws RemoteException;
 }

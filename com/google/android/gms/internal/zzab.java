@@ -1,32 +1,42 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.internal.zzm.zza;
-import com.google.android.gms.internal.zzm.zzb;
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-public class zzab extends zzk<String> {
-    private final zzb<String> zzaF;
+public class zzab extends ByteArrayOutputStream {
+    private final zzv zzaq;
 
-    public zzab(int i, String str, zzb<String> com_google_android_gms_internal_zzm_zzb_java_lang_String, zza com_google_android_gms_internal_zzm_zza) {
-        super(i, str, com_google_android_gms_internal_zzm_zza);
-        this.zzaF = com_google_android_gms_internal_zzm_zzb_java_lang_String;
+    public zzab(zzv com_google_android_gms_internal_zzv, int i) {
+        this.zzaq = com_google_android_gms_internal_zzv;
+        this.buf = this.zzaq.zzb(Math.max(i, 256));
     }
 
-    protected zzm<String> zza(zzi com_google_android_gms_internal_zzi) {
-        Object str;
-        try {
-            str = new String(com_google_android_gms_internal_zzi.data, zzx.zza(com_google_android_gms_internal_zzi.zzy));
-        } catch (UnsupportedEncodingException e) {
-            str = new String(com_google_android_gms_internal_zzi.data);
+    private void zzd(int i) {
+        if (this.count + i > this.buf.length) {
+            Object zzb = this.zzaq.zzb((this.count + i) * 2);
+            System.arraycopy(this.buf, 0, zzb, 0, this.count);
+            this.zzaq.zza(this.buf);
+            this.buf = zzb;
         }
-        return zzm.zza(str, zzx.zzb(com_google_android_gms_internal_zzi));
     }
 
-    protected /* synthetic */ void zza(Object obj) {
-        zzi((String) obj);
+    public void close() throws IOException {
+        this.zzaq.zza(this.buf);
+        this.buf = null;
+        super.close();
     }
 
-    protected void zzi(String str) {
-        this.zzaF.zzb(str);
+    public void finalize() {
+        this.zzaq.zza(this.buf);
+    }
+
+    public synchronized void write(int i) {
+        zzd(1);
+        super.write(i);
+    }
+
+    public synchronized void write(byte[] bArr, int i, int i2) {
+        zzd(i2);
+        super.write(bArr, i, i2);
     }
 }

@@ -3,31 +3,31 @@ package com.google.android.gms.vision;
 import android.util.SparseArray;
 
 public class zza {
-    private static int zzbMB = 0;
-    private static final Object zztU = new Object();
-    private SparseArray<Integer> zzbMC = new SparseArray();
-    private SparseArray<Integer> zzbMD = new SparseArray();
+    private static int zzbOA = 0;
+    private static final Object zztX = new Object();
+    private SparseArray<Integer> zzbOB = new SparseArray();
+    private SparseArray<Integer> zzbOC = new SparseArray();
 
-    public int zzng(int i) {
+    public int zznR(int i) {
         int intValue;
-        synchronized (zztU) {
-            Integer num = (Integer) this.zzbMC.get(i);
+        synchronized (zztX) {
+            Integer num = (Integer) this.zzbOB.get(i);
             if (num != null) {
                 intValue = num.intValue();
             } else {
-                intValue = zzbMB;
-                zzbMB++;
-                this.zzbMC.append(i, Integer.valueOf(intValue));
-                this.zzbMD.append(intValue, Integer.valueOf(i));
+                intValue = zzbOA;
+                zzbOA++;
+                this.zzbOB.append(i, Integer.valueOf(intValue));
+                this.zzbOC.append(intValue, Integer.valueOf(i));
             }
         }
         return intValue;
     }
 
-    public int zznh(int i) {
+    public int zznS(int i) {
         int intValue;
-        synchronized (zztU) {
-            intValue = ((Integer) this.zzbMD.get(i)).intValue();
+        synchronized (zztX) {
+            intValue = ((Integer) this.zzbOC.get(i)).intValue();
         }
         return intValue;
     }

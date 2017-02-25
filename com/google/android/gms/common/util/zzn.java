@@ -1,50 +1,63 @@
 package com.google.android.gms.common.util;
 
-import java.net.URI;
-import java.net.URLDecoder;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
-public class zzn {
-    private static final Pattern zzaGU = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-    private static final Pattern zzaGV = Pattern.compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
-    private static final Pattern zzaGW = Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
-
-    private static String decode(String str, String str2) {
-        if (str2 == null) {
-            str2 = "ISO-8859-1";
+public final class zzn {
+    public static String zza(byte[] bArr, int i, int i2, boolean z) {
+        if (bArr == null || bArr.length == 0 || i < 0 || i2 <= 0 || i + i2 > bArr.length) {
+            return null;
         }
-        try {
-            return URLDecoder.decode(str, str2);
-        } catch (Throwable e) {
-            throw new IllegalArgumentException(e);
+        int i3 = 57;
+        if (z) {
+            i3 = 75;
         }
-    }
-
-    public static Map<String, String> zza(URI uri, String str) {
-        Map<String, String> emptyMap = Collections.emptyMap();
-        String rawQuery = uri.getRawQuery();
-        if (rawQuery == null || rawQuery.length() <= 0) {
-            return emptyMap;
-        }
-        Map<String, String> hashMap = new HashMap();
-        Scanner scanner = new Scanner(rawQuery);
-        scanner.useDelimiter("&");
-        while (scanner.hasNext()) {
-            String[] split = scanner.next().split("=");
-            if (split.length == 0 || split.length > 2) {
-                throw new IllegalArgumentException("bad parameter");
+        StringBuilder stringBuilder = new StringBuilder(i3 * (((i2 + 16) - 1) / 16));
+        int i4 = i;
+        int i5 = i2;
+        i3 = 0;
+        int i6 = 0;
+        while (i5 > 0) {
+            if (i6 == 0) {
+                if (i2 < 65536) {
+                    stringBuilder.append(String.format("%04X:", new Object[]{Integer.valueOf(i4)}));
+                    i3 = i4;
+                } else {
+                    stringBuilder.append(String.format("%08X:", new Object[]{Integer.valueOf(i4)}));
+                    i3 = i4;
+                }
+            } else if (i6 == 8) {
+                stringBuilder.append(" -");
             }
-            String decode = decode(split[0], str);
-            Object obj = null;
-            if (split.length == 2) {
-                obj = decode(split[1], str);
+            stringBuilder.append(String.format(" %02X", new Object[]{Integer.valueOf(bArr[i4] & 255)}));
+            int i7 = i5 - 1;
+            i6++;
+            if (z && (i6 == 16 || i7 == 0)) {
+                int i8 = 16 - i6;
+                if (i8 > 0) {
+                    for (i5 = 0; i5 < i8; i5++) {
+                        stringBuilder.append("   ");
+                    }
+                }
+                if (i8 >= 8) {
+                    stringBuilder.append("  ");
+                }
+                stringBuilder.append("  ");
+                for (i8 = 0; i8 < i6; i8++) {
+                    char c = (char) bArr[i3 + i8];
+                    if (c < ' ' || c > '~') {
+                        c = '.';
+                    }
+                    stringBuilder.append(c);
+                }
             }
-            hashMap.put(decode, obj);
+            if (i6 == 16 || i7 == 0) {
+                stringBuilder.append('\n');
+                i5 = 0;
+            } else {
+                i5 = i6;
+            }
+            i4++;
+            i6 = i5;
+            i5 = i7;
         }
-        return hashMap;
+        return stringBuilder.toString();
     }
 }

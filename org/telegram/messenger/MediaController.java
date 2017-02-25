@@ -46,6 +46,7 @@ import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Video;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -3043,7 +3044,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
 
     public static String getFileName(Uri uri) {
         String result = null;
-        if (uri.getScheme().equals("content")) {
+        if (uri.getScheme().equals(Param.CONTENT)) {
             Cursor cursor = null;
             try {
                 cursor = ApplicationLoader.applicationContext.getContentResolver().query(uri, new String[]{"_display_name"}, null, null, null);
@@ -3296,6 +3297,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     public static void loadGalleryPhotosAlbums(final int guid) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
+                Throwable e;
                 int imageIdColumn;
                 int bucketIdColumn;
                 int bucketNameColumn;
@@ -3318,8 +3320,7 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
                 String cameraFolder = null;
                 try {
                     cameraFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/";
-                } catch (Throwable e) {
-                    Throwable e2;
+                } catch (Throwable e2) {
                     FileLog.e(e2);
                 }
                 Integer num = null;

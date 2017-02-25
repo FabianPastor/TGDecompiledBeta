@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
+import com.google.android.gms.wallet.WalletConstants;
 import java.util.Calendar;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -84,7 +85,7 @@ public class AlertsCreator {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static Dialog processError(TL_error error, BaseFragment fragment, TLObject request, Object... args) {
         boolean z = false;
-        if (error.code == 406 || error.text == null) {
+        if (error.code == WalletConstants.ERROR_CODE_SPENDING_LIMIT_EXCEEDED || error.text == null) {
             return null;
         }
         if (!(request instanceof TL_channels_joinChannel) && !(request instanceof TL_channels_editAdmin) && !(request instanceof TL_channels_inviteToChannel) && !(request instanceof TL_messages_addChatUser) && !(request instanceof TL_messages_startBot)) {

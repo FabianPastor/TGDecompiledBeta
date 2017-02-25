@@ -1,57 +1,61 @@
 package com.google.android.gms.common.util;
 
-import android.os.Process;
-import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.FileReader;
-import java.io.IOException;
+import android.os.Build.VERSION;
 
-public class zzt {
-    private static String zzaGZ = null;
-    private static final int zzaHa = Process.myPid();
-
-    static String zzdk(int i) {
-        Throwable th;
-        String str = null;
-        if (i > 0) {
-            ThreadPolicy allowThreadDiskReads;
-            Closeable bufferedReader;
-            try {
-                allowThreadDiskReads = StrictMode.allowThreadDiskReads();
-                bufferedReader = new BufferedReader(new FileReader("/proc/" + i + "/cmdline"));
-                try {
-                    StrictMode.setThreadPolicy(allowThreadDiskReads);
-                    str = bufferedReader.readLine().trim();
-                    zzo.zzb(bufferedReader);
-                } catch (IOException e) {
-                    zzo.zzb(bufferedReader);
-                    return str;
-                } catch (Throwable th2) {
-                    th = th2;
-                    zzo.zzb(bufferedReader);
-                    throw th;
-                }
-            } catch (IOException e2) {
-                bufferedReader = str;
-                zzo.zzb(bufferedReader);
-                return str;
-            } catch (Throwable th3) {
-                Throwable th4 = th3;
-                bufferedReader = str;
-                th = th4;
-                zzo.zzb(bufferedReader);
-                throw th;
-            }
-        }
-        return str;
+public final class zzt {
+    public static boolean isAtLeastN() {
+        return VERSION.SDK_INT >= 24;
     }
 
-    public static String zzyK() {
-        if (zzaGZ == null) {
-            zzaGZ = zzdk(zzaHa);
-        }
-        return zzaGZ;
+    public static boolean zzze() {
+        int i = VERSION.SDK_INT;
+        return true;
+    }
+
+    public static boolean zzzf() {
+        int i = VERSION.SDK_INT;
+        return true;
+    }
+
+    public static boolean zzzg() {
+        int i = VERSION.SDK_INT;
+        return true;
+    }
+
+    public static boolean zzzh() {
+        return VERSION.SDK_INT >= 15;
+    }
+
+    public static boolean zzzi() {
+        return VERSION.SDK_INT >= 16;
+    }
+
+    public static boolean zzzj() {
+        return VERSION.SDK_INT >= 17;
+    }
+
+    public static boolean zzzk() {
+        return VERSION.SDK_INT >= 18;
+    }
+
+    public static boolean zzzl() {
+        return VERSION.SDK_INT >= 19;
+    }
+
+    public static boolean zzzm() {
+        return VERSION.SDK_INT >= 20;
+    }
+
+    @Deprecated
+    public static boolean zzzn() {
+        return zzzo();
+    }
+
+    public static boolean zzzo() {
+        return VERSION.SDK_INT >= 21;
+    }
+
+    public static boolean zzzp() {
+        return VERSION.SDK_INT >= 23;
     }
 }

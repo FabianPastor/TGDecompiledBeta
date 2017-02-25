@@ -1,10 +1,9 @@
 package com.google.android.gms.internal;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.util.LruCache;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Api.zzb;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
-public final class zzabv extends LruCache<Object, Drawable> {
-    public zzabv() {
-        super(10);
-    }
+public abstract class zzabv<A extends zzb, TResult> {
+    protected abstract void zza(A a, TaskCompletionSource<TResult> taskCompletionSource) throws RemoteException;
 }

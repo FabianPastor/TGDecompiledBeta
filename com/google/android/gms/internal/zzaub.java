@@ -1,80 +1,75 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zza;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.MainThread;
 import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.measurement.AppMeasurement;
 
-public class zzaub extends zza {
-    public static final Creator<zzaub> CREATOR = new zzauc();
-    public final String name;
-    public final int versionCode;
-    public final String zzaFy;
-    public final String zzbqQ;
-    public final long zzbuZ;
-    public final Long zzbva;
-    public final Float zzbvb;
-    public final Double zzbvc;
+public final class zzaub {
+    private final zza zzbtC;
 
-    zzaub(int i, String str, long j, Long l, Float f, String str2, String str3, Double d) {
-        Double d2 = null;
-        this.versionCode = i;
-        this.name = str;
-        this.zzbuZ = j;
-        this.zzbva = l;
-        this.zzbvb = null;
-        if (i == 1) {
-            if (f != null) {
-                d2 = Double.valueOf(f.doubleValue());
+    public interface zza {
+        void doStartService(Context context, Intent intent);
+    }
+
+    public zzaub(zza com_google_android_gms_internal_zzaub_zza) {
+        zzac.zzw(com_google_android_gms_internal_zzaub_zza);
+        this.zzbtC = com_google_android_gms_internal_zzaub_zza;
+    }
+
+    public static boolean zzi(Context context, boolean z) {
+        zzac.zzw(context);
+        return zzaut.zza(context, z ? "com.google.android.gms.measurement.PackageMeasurementReceiver" : "com.google.android.gms.measurement.AppMeasurementReceiver", false);
+    }
+
+    @MainThread
+    public void onReceive(Context context, Intent intent) {
+        final zzaue zzbM = zzaue.zzbM(context);
+        final zzatx zzKk = zzbM.zzKk();
+        if (intent == null) {
+            zzKk.zzLZ().log("Receiver called with null intent");
+            return;
+        }
+        zzbM.zzKm().zzLf();
+        String action = intent.getAction();
+        zzKk.zzMd().zzj("Local receiver got", action);
+        if ("com.google.android.gms.measurement.UPLOAD".equals(action)) {
+            zzaum.zzj(context, false);
+            Intent className = new Intent().setClassName(context, "com.google.android.gms.measurement.AppMeasurementService");
+            className.setAction("com.google.android.gms.measurement.UPLOAD");
+            this.zzbtC.doStartService(context, className);
+        } else if ("com.android.vending.INSTALL_REFERRER".equals(action)) {
+            action = intent.getStringExtra("referrer");
+            if (action == null) {
+                zzKk.zzMd().log("Install referrer extras are null");
+                return;
             }
-            this.zzbvc = d2;
-        } else {
-            this.zzbvc = d;
+            final Bundle zzu = zzbM.zzKg().zzu(Uri.parse(action));
+            if (zzu == null) {
+                zzKk.zzMd().log("No campaign defined in install referrer broadcast");
+                return;
+            }
+            final long longExtra = 1000 * intent.getLongExtra("referrer_timestamp_seconds", 0);
+            if (longExtra == 0) {
+                zzKk.zzLZ().log("Install referrer is missing timestamp");
+            }
+            final Context context2 = context;
+            zzbM.zzKj().zzm(new Runnable(this) {
+                public void run() {
+                    zzaus zzS = zzbM.zzKf().zzS(zzbM.zzKa().zzke(), "_fot");
+                    long longValue = (zzS == null || !(zzS.mValue instanceof Long)) ? 0 : ((Long) zzS.mValue).longValue();
+                    long j = longExtra;
+                    longValue = (longValue <= 0 || (j < longValue && j > 0)) ? j : longValue - 1;
+                    if (longValue > 0) {
+                        zzu.putLong("click_timestamp", longValue);
+                    }
+                    AppMeasurement.getInstance(context2).logEventInternal("auto", "_cmp", zzu);
+                    zzKk.zzMd().log("Install campaign recorded");
+                }
+            });
         }
-        this.zzaFy = str2;
-        this.zzbqQ = str3;
-    }
-
-    zzaub(zzaud com_google_android_gms_internal_zzaud) {
-        this(com_google_android_gms_internal_zzaud.mName, com_google_android_gms_internal_zzaud.zzbvd, com_google_android_gms_internal_zzaud.zzYe, com_google_android_gms_internal_zzaud.zzVQ);
-    }
-
-    zzaub(String str, long j, Object obj, String str2) {
-        zzac.zzdv(str);
-        this.versionCode = 2;
-        this.name = str;
-        this.zzbuZ = j;
-        this.zzbqQ = str2;
-        if (obj == null) {
-            this.zzbva = null;
-            this.zzbvb = null;
-            this.zzbvc = null;
-            this.zzaFy = null;
-        } else if (obj instanceof Long) {
-            this.zzbva = (Long) obj;
-            this.zzbvb = null;
-            this.zzbvc = null;
-            this.zzaFy = null;
-        } else if (obj instanceof String) {
-            this.zzbva = null;
-            this.zzbvb = null;
-            this.zzbvc = null;
-            this.zzaFy = (String) obj;
-        } else if (obj instanceof Double) {
-            this.zzbva = null;
-            this.zzbvb = null;
-            this.zzbvc = (Double) obj;
-            this.zzaFy = null;
-        } else {
-            throw new IllegalArgumentException("User attribute given of un-supported type");
-        }
-    }
-
-    public Object getValue() {
-        return this.zzbva != null ? this.zzbva : this.zzbvc != null ? this.zzbvc : this.zzaFy != null ? this.zzaFy : null;
-    }
-
-    public void writeToParcel(Parcel parcel, int i) {
-        zzauc.zza(this, parcel, i);
     }
 }

@@ -1,7 +1,6 @@
 package com.google.android.gms.common.util;
 
 import android.support.v4.util.ArrayMap;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,9 +51,9 @@ public final class zzf {
         int length = kArr.length;
         switch (length) {
             case 0:
-                return zzyu();
+                return zzza();
             case 1:
-                return zze(kArr[0], vArr[0]);
+                return zzd(kArr[0], vArr[0]);
             default:
                 Map arrayMap = length <= 32 ? new ArrayMap(length) : new HashMap(length, 1.0f);
                 while (i < length) {
@@ -65,21 +64,21 @@ public final class zzf {
         }
     }
 
-    public static <T> List<T> zzc(T t, T t2) {
-        List arrayList = new ArrayList(2);
-        arrayList.add(t);
-        arrayList.add(t2);
-        return Collections.unmodifiableList(arrayList);
+    public static <T> Set<T> zzc(T t, T t2) {
+        Set com_google_android_gms_common_util_zza = new zza(2);
+        com_google_android_gms_common_util_zza.add(t);
+        com_google_android_gms_common_util_zza.add(t2);
+        return Collections.unmodifiableSet(com_google_android_gms_common_util_zza);
     }
 
     public static <T> Set<T> zzc(T... tArr) {
         switch (tArr.length) {
             case 0:
-                return zzyt();
+                return zzyZ();
             case 1:
                 return zzy(tArr[0]);
             case 2:
-                return zzd(tArr[0], tArr[1]);
+                return zzc(tArr[0], tArr[1]);
             case 3:
                 return zza(tArr[0], tArr[1], tArr[2]);
             case 4:
@@ -89,14 +88,7 @@ public final class zzf {
         }
     }
 
-    public static <T> Set<T> zzd(T t, T t2) {
-        Set com_google_android_gms_common_util_zza = new zza(2);
-        com_google_android_gms_common_util_zza.add(t);
-        com_google_android_gms_common_util_zza.add(t2);
-        return Collections.unmodifiableSet(com_google_android_gms_common_util_zza);
-    }
-
-    public static <K, V> Map<K, V> zze(K k, V v) {
+    public static <K, V> Map<K, V> zzd(K k, V v) {
         return Collections.singletonMap(k, v);
     }
 
@@ -108,11 +100,11 @@ public final class zzf {
         return Collections.singleton(t);
     }
 
-    public static <T> Set<T> zzyt() {
+    public static <T> Set<T> zzyZ() {
         return Collections.emptySet();
     }
 
-    public static <K, V> Map<K, V> zzyu() {
+    public static <K, V> Map<K, V> zzza() {
         return Collections.emptyMap();
     }
 }

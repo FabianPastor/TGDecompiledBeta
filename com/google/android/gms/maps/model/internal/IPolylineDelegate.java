@@ -5,7 +5,11 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.util.List;
 
 public interface IPolylineDelegate extends IInterface {
@@ -13,14 +17,14 @@ public interface IPolylineDelegate extends IInterface {
     public static abstract class zza extends Binder implements IPolylineDelegate {
 
         private static class zza implements IPolylineDelegate {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public boolean equalsRemote(IPolylineDelegate iPolylineDelegate) throws RemoteException {
@@ -30,7 +34,7 @@ public interface IPolylineDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     obtain.writeStrongBinder(iPolylineDelegate != null ? iPolylineDelegate.asBinder() : null);
-                    this.zzrp.transact(15, obtain, obtain2, 0);
+                    this.zzrk.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -49,11 +53,28 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
                 } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public Cap getEndCap() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    this.zzrk.transact(22, obtain, obtain2, 0);
+                    obtain2.readException();
+                    Cap cap = obtain2.readInt() != 0 ? (Cap) Cap.CREATOR.createFromParcel(obtain2) : null;
+                    obtain2.recycle();
+                    obtain.recycle();
+                    return cap;
+                } catch (Throwable th) {
                     obtain2.recycle();
                     obtain.recycle();
                 }
@@ -64,10 +85,40 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     String readString = obtain2.readString();
                     return readString;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public int getJointType() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    this.zzrk.transact(24, obtain, obtain2, 0);
+                    obtain2.readException();
+                    int readInt = obtain2.readInt();
+                    return readInt;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public List<PatternItem> getPattern() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    this.zzrk.transact(26, obtain, obtain2, 0);
+                    obtain2.readException();
+                    List<PatternItem> createTypedArrayList = obtain2.createTypedArrayList(PatternItem.CREATOR);
+                    return createTypedArrayList;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -79,10 +130,42 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                     List<LatLng> createTypedArrayList = obtain2.createTypedArrayList(LatLng.CREATOR);
                     return createTypedArrayList;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public Cap getStartCap() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    this.zzrk.transact(20, obtain, obtain2, 0);
+                    obtain2.readException();
+                    Cap cap = obtain2.readInt() != 0 ? (Cap) Cap.CREATOR.createFromParcel(obtain2) : null;
+                    obtain2.recycle();
+                    obtain.recycle();
+                    return cap;
+                } catch (Throwable th) {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public IObjectWrapper getTag() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    this.zzrk.transact(28, obtain, obtain2, 0);
+                    obtain2.readException();
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
+                    return zzcd;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -94,7 +177,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -109,7 +192,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -124,7 +207,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(16, obtain, obtain2, 0);
+                    this.zzrk.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
@@ -140,7 +223,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(18, obtain, obtain2, 0);
+                    this.zzrk.transact(18, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -160,7 +243,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(14, obtain, obtain2, 0);
+                    this.zzrk.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -180,7 +263,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(12, obtain, obtain2, 0);
+                    this.zzrk.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -199,7 +282,7 @@ public interface IPolylineDelegate extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -217,7 +300,7 @@ public interface IPolylineDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(17, obtain, obtain2, 0);
+                    this.zzrk.transact(17, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -231,7 +314,26 @@ public interface IPolylineDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     obtain.writeInt(i);
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setEndCap(Cap cap) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    if (cap != null) {
+                        obtain.writeInt(1);
+                        cap.writeToParcel(obtain, 0);
+                    } else {
+                        obtain.writeInt(0);
+                    }
+                    this.zzrk.transact(21, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -249,7 +351,35 @@ public interface IPolylineDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(13, obtain, obtain2, 0);
+                    this.zzrk.transact(13, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setJointType(int i) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    obtain.writeInt(i);
+                    this.zzrk.transact(23, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setPattern(List<PatternItem> list) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    obtain.writeTypedList(list);
+                    this.zzrk.transact(25, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -263,7 +393,40 @@ public interface IPolylineDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     obtain.writeTypedList(list);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setStartCap(Cap cap) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    if (cap != null) {
+                        obtain.writeInt(1);
+                        cap.writeToParcel(obtain, 0);
+                    } else {
+                        obtain.writeInt(0);
+                    }
+                    this.zzrk.transact(19, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setTag(IObjectWrapper iObjectWrapper) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(27, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -281,7 +444,7 @@ public interface IPolylineDelegate extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -295,7 +458,7 @@ public interface IPolylineDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -309,7 +472,7 @@ public interface IPolylineDelegate extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -318,7 +481,7 @@ public interface IPolylineDelegate extends IInterface {
             }
         }
 
-        public static IPolylineDelegate zzeo(IBinder iBinder) {
+        public static IPolylineDelegate zzep(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -327,10 +490,13 @@ public interface IPolylineDelegate extends IInterface {
         }
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+            IBinder iBinder = null;
             int i3 = 0;
+            List points;
             float width;
             boolean z;
             boolean isVisible;
+            Cap startCap;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
@@ -350,7 +516,7 @@ public interface IPolylineDelegate extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    List points = getPoints();
+                    points = getPoints();
                     parcel2.writeNoException();
                     parcel2.writeTypedList(points);
                     return true;
@@ -423,7 +589,7 @@ public interface IPolylineDelegate extends IInterface {
                     return true;
                 case 15:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
-                    isVisible = equalsRemote(zzeo(parcel.readStrongBinder()));
+                    isVisible = equalsRemote(zzep(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (isVisible) {
                         i3 = 1;
@@ -453,6 +619,74 @@ public interface IPolylineDelegate extends IInterface {
                     }
                     parcel2.writeInt(i3);
                     return true;
+                case 19:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    setStartCap(parcel.readInt() != 0 ? (Cap) Cap.CREATOR.createFromParcel(parcel) : null);
+                    parcel2.writeNoException();
+                    return true;
+                case 20:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    startCap = getStartCap();
+                    parcel2.writeNoException();
+                    if (startCap != null) {
+                        parcel2.writeInt(1);
+                        startCap.writeToParcel(parcel2, 1);
+                        return true;
+                    }
+                    parcel2.writeInt(0);
+                    return true;
+                case 21:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    setEndCap(parcel.readInt() != 0 ? (Cap) Cap.CREATOR.createFromParcel(parcel) : null);
+                    parcel2.writeNoException();
+                    return true;
+                case 22:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    startCap = getEndCap();
+                    parcel2.writeNoException();
+                    if (startCap != null) {
+                        parcel2.writeInt(1);
+                        startCap.writeToParcel(parcel2, 1);
+                        return true;
+                    }
+                    parcel2.writeInt(0);
+                    return true;
+                case 23:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    setJointType(parcel.readInt());
+                    parcel2.writeNoException();
+                    return true;
+                case 24:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    i3 = getJointType();
+                    parcel2.writeNoException();
+                    parcel2.writeInt(i3);
+                    return true;
+                case 25:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    setPattern(parcel.createTypedArrayList(PatternItem.CREATOR));
+                    parcel2.writeNoException();
+                    return true;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    points = getPattern();
+                    parcel2.writeNoException();
+                    parcel2.writeTypedList(points);
+                    return true;
+                case 27:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    setTag(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    return true;
+                case 28:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolylineDelegate");
+                    IObjectWrapper tag = getTag();
+                    parcel2.writeNoException();
+                    if (tag != null) {
+                        iBinder = tag.asBinder();
+                    }
+                    parcel2.writeStrongBinder(iBinder);
+                    return true;
                 case 1598968902:
                     parcel2.writeString("com.google.android.gms.maps.model.internal.IPolylineDelegate");
                     return true;
@@ -466,9 +700,19 @@ public interface IPolylineDelegate extends IInterface {
 
     int getColor() throws RemoteException;
 
+    Cap getEndCap() throws RemoteException;
+
     String getId() throws RemoteException;
 
+    int getJointType() throws RemoteException;
+
+    List<PatternItem> getPattern() throws RemoteException;
+
     List<LatLng> getPoints() throws RemoteException;
+
+    Cap getStartCap() throws RemoteException;
+
+    IObjectWrapper getTag() throws RemoteException;
 
     float getWidth() throws RemoteException;
 
@@ -488,9 +732,19 @@ public interface IPolylineDelegate extends IInterface {
 
     void setColor(int i) throws RemoteException;
 
+    void setEndCap(Cap cap) throws RemoteException;
+
     void setGeodesic(boolean z) throws RemoteException;
 
+    void setJointType(int i) throws RemoteException;
+
+    void setPattern(List<PatternItem> list) throws RemoteException;
+
     void setPoints(List<LatLng> list) throws RemoteException;
+
+    void setStartCap(Cap cap) throws RemoteException;
+
+    void setTag(IObjectWrapper iObjectWrapper) throws RemoteException;
 
     void setVisible(boolean z) throws RemoteException;
 

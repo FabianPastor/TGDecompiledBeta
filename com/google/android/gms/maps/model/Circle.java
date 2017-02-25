@@ -1,14 +1,17 @@
 package com.google.android.gms.maps.model;
 
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.model.internal.zzb;
+import java.util.List;
 
 public final class Circle {
-    private final zzb zzboG;
+    private final zzb zzbpj;
 
     public Circle(zzb com_google_android_gms_maps_model_internal_zzb) {
-        this.zzboG = (zzb) zzac.zzw(com_google_android_gms_maps_model_internal_zzb);
+        this.zzbpj = (zzb) zzac.zzw(com_google_android_gms_maps_model_internal_zzb);
     }
 
     public boolean equals(Object obj) {
@@ -16,7 +19,7 @@ public final class Circle {
             return false;
         }
         try {
-            return this.zzboG.zzb(((Circle) obj).zzboG);
+            return this.zzbpj.zzb(((Circle) obj).zzbpj);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -24,7 +27,7 @@ public final class Circle {
 
     public LatLng getCenter() {
         try {
-            return this.zzboG.getCenter();
+            return this.zzbpj.getCenter();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -32,7 +35,7 @@ public final class Circle {
 
     public int getFillColor() {
         try {
-            return this.zzboG.getFillColor();
+            return this.zzbpj.getFillColor();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -40,7 +43,7 @@ public final class Circle {
 
     public String getId() {
         try {
-            return this.zzboG.getId();
+            return this.zzbpj.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -48,7 +51,7 @@ public final class Circle {
 
     public double getRadius() {
         try {
-            return this.zzboG.getRadius();
+            return this.zzbpj.getRadius();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -56,7 +59,16 @@ public final class Circle {
 
     public int getStrokeColor() {
         try {
-            return this.zzboG.getStrokeColor();
+            return this.zzbpj.getStrokeColor();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @Nullable
+    public List<PatternItem> getStrokePattern() {
+        try {
+            return PatternItem.zzI(this.zzbpj.getStrokePattern());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -64,7 +76,16 @@ public final class Circle {
 
     public float getStrokeWidth() {
         try {
-            return this.zzboG.getStrokeWidth();
+            return this.zzbpj.getStrokeWidth();
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    @Nullable
+    public Object getTag() {
+        try {
+            return zzd.zzF(this.zzbpj.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -72,7 +93,7 @@ public final class Circle {
 
     public float getZIndex() {
         try {
-            return this.zzboG.getZIndex();
+            return this.zzbpj.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -80,7 +101,7 @@ public final class Circle {
 
     public int hashCode() {
         try {
-            return this.zzboG.hashCodeRemote();
+            return this.zzbpj.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -88,7 +109,7 @@ public final class Circle {
 
     public boolean isClickable() {
         try {
-            return this.zzboG.isClickable();
+            return this.zzbpj.isClickable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -96,7 +117,7 @@ public final class Circle {
 
     public boolean isVisible() {
         try {
-            return this.zzboG.isVisible();
+            return this.zzbpj.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -104,7 +125,7 @@ public final class Circle {
 
     public void remove() {
         try {
-            this.zzboG.remove();
+            this.zzbpj.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -112,7 +133,7 @@ public final class Circle {
 
     public void setCenter(LatLng latLng) {
         try {
-            this.zzboG.setCenter(latLng);
+            this.zzbpj.setCenter(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -120,7 +141,7 @@ public final class Circle {
 
     public void setClickable(boolean z) {
         try {
-            this.zzboG.setClickable(z);
+            this.zzbpj.setClickable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -128,7 +149,7 @@ public final class Circle {
 
     public void setFillColor(int i) {
         try {
-            this.zzboG.setFillColor(i);
+            this.zzbpj.setFillColor(i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -136,7 +157,7 @@ public final class Circle {
 
     public void setRadius(double d) {
         try {
-            this.zzboG.setRadius(d);
+            this.zzbpj.setRadius(d);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -144,7 +165,15 @@ public final class Circle {
 
     public void setStrokeColor(int i) {
         try {
-            this.zzboG.setStrokeColor(i);
+            this.zzbpj.setStrokeColor(i);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setStrokePattern(@Nullable List<PatternItem> list) {
+        try {
+            this.zzbpj.setStrokePattern(list);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -152,7 +181,15 @@ public final class Circle {
 
     public void setStrokeWidth(float f) {
         try {
-            this.zzboG.setStrokeWidth(f);
+            this.zzbpj.setStrokeWidth(f);
+        } catch (RemoteException e) {
+            throw new RuntimeRemoteException(e);
+        }
+    }
+
+    public void setTag(@Nullable Object obj) {
+        try {
+            this.zzbpj.setTag(zzd.zzA(obj));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -160,7 +197,7 @@ public final class Circle {
 
     public void setVisible(boolean z) {
         try {
-            this.zzboG.setVisible(z);
+            this.zzbpj.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -168,7 +205,7 @@ public final class Circle {
 
     public void setZIndex(float f) {
         try {
-            this.zzboG.setZIndex(f);
+            this.zzbpj.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

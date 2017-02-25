@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Opna í símanum</string>
     <string name="common_signin_button_text">Skrá inn</string>
     <string name="common_signin_button_text_long">Skrá inn með Google</string>
+    <string name="wallet_buy_button_place_holder">Kaupa með Google</string>
 </resources>

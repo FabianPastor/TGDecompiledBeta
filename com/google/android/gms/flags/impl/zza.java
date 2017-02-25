@@ -1,7 +1,7 @@
 package com.google.android.gms.flags.impl;
 
 import android.content.SharedPreferences;
-import com.google.android.gms.internal.zzaps;
+import com.google.android.gms.internal.zzaqf;
 import java.util.concurrent.Callable;
 
 public abstract class zza<T> {
@@ -9,108 +9,108 @@ public abstract class zza<T> {
     public static class zza extends zza<Boolean> {
 
         class AnonymousClass1 implements Callable<Boolean> {
-            final /* synthetic */ SharedPreferences zzaWM;
-            final /* synthetic */ String zzaWN;
-            final /* synthetic */ Boolean zzaWO;
+            final /* synthetic */ SharedPreferences zzaXo;
+            final /* synthetic */ String zzaXp;
+            final /* synthetic */ Boolean zzaXq;
 
             AnonymousClass1(SharedPreferences sharedPreferences, String str, Boolean bool) {
-                this.zzaWM = sharedPreferences;
-                this.zzaWN = str;
-                this.zzaWO = bool;
+                this.zzaXo = sharedPreferences;
+                this.zzaXp = str;
+                this.zzaXq = bool;
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzkt();
+                return zzbX();
             }
 
-            public Boolean zzkt() {
-                return Boolean.valueOf(this.zzaWM.getBoolean(this.zzaWN, this.zzaWO.booleanValue()));
+            public Boolean zzbX() {
+                return Boolean.valueOf(this.zzaXo.getBoolean(this.zzaXp, this.zzaXq.booleanValue()));
             }
         }
 
         public static Boolean zza(SharedPreferences sharedPreferences, String str, Boolean bool) {
-            return (Boolean) zzaps.zzb(new AnonymousClass1(sharedPreferences, str, bool));
+            return (Boolean) zzaqf.zzb(new AnonymousClass1(sharedPreferences, str, bool));
         }
     }
 
     public static class zzb extends zza<Integer> {
 
         class AnonymousClass1 implements Callable<Integer> {
-            final /* synthetic */ SharedPreferences zzaWM;
-            final /* synthetic */ String zzaWN;
-            final /* synthetic */ Integer zzaWP;
+            final /* synthetic */ SharedPreferences zzaXo;
+            final /* synthetic */ String zzaXp;
+            final /* synthetic */ Integer zzaXr;
 
             AnonymousClass1(SharedPreferences sharedPreferences, String str, Integer num) {
-                this.zzaWM = sharedPreferences;
-                this.zzaWN = str;
-                this.zzaWP = num;
+                this.zzaXo = sharedPreferences;
+                this.zzaXp = str;
+                this.zzaXr = num;
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzCS();
+                return zzDF();
             }
 
-            public Integer zzCS() {
-                return Integer.valueOf(this.zzaWM.getInt(this.zzaWN, this.zzaWP.intValue()));
+            public Integer zzDF() {
+                return Integer.valueOf(this.zzaXo.getInt(this.zzaXp, this.zzaXr.intValue()));
             }
         }
 
         public static Integer zza(SharedPreferences sharedPreferences, String str, Integer num) {
-            return (Integer) zzaps.zzb(new AnonymousClass1(sharedPreferences, str, num));
+            return (Integer) zzaqf.zzb(new AnonymousClass1(sharedPreferences, str, num));
         }
     }
 
     public static class zzc extends zza<Long> {
 
         class AnonymousClass1 implements Callable<Long> {
-            final /* synthetic */ SharedPreferences zzaWM;
-            final /* synthetic */ String zzaWN;
-            final /* synthetic */ Long zzaWQ;
+            final /* synthetic */ SharedPreferences zzaXo;
+            final /* synthetic */ String zzaXp;
+            final /* synthetic */ Long zzaXs;
 
             AnonymousClass1(SharedPreferences sharedPreferences, String str, Long l) {
-                this.zzaWM = sharedPreferences;
-                this.zzaWN = str;
-                this.zzaWQ = l;
+                this.zzaXo = sharedPreferences;
+                this.zzaXp = str;
+                this.zzaXs = l;
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzCT();
+                return zzDG();
             }
 
-            public Long zzCT() {
-                return Long.valueOf(this.zzaWM.getLong(this.zzaWN, this.zzaWQ.longValue()));
+            public Long zzDG() {
+                return Long.valueOf(this.zzaXo.getLong(this.zzaXp, this.zzaXs.longValue()));
             }
         }
 
         public static Long zza(SharedPreferences sharedPreferences, String str, Long l) {
-            return (Long) zzaps.zzb(new AnonymousClass1(sharedPreferences, str, l));
+            return (Long) zzaqf.zzb(new AnonymousClass1(sharedPreferences, str, l));
         }
     }
 
     public static class zzd extends zza<String> {
 
         class AnonymousClass1 implements Callable<String> {
-            final /* synthetic */ SharedPreferences zzaWM;
-            final /* synthetic */ String zzaWN;
-            final /* synthetic */ String zzaWR;
+            final /* synthetic */ SharedPreferences zzaXo;
+            final /* synthetic */ String zzaXp;
+            final /* synthetic */ String zzaXt;
 
             AnonymousClass1(SharedPreferences sharedPreferences, String str, String str2) {
-                this.zzaWM = sharedPreferences;
-                this.zzaWN = str;
-                this.zzaWR = str2;
+                this.zzaXo = sharedPreferences;
+                this.zzaXp = str;
+                this.zzaXt = str2;
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzou();
+                return zzbY();
             }
 
-            public String zzou() {
-                return this.zzaWM.getString(this.zzaWN, this.zzaWR);
+            public String zzbY() {
+                return this.zzaXo.getString(this.zzaXp, this.zzaXt);
             }
         }
 
         public static String zza(SharedPreferences sharedPreferences, String str, String str2) {
-            return (String) zzaps.zzb(new AnonymousClass1(sharedPreferences, str, str2));
+            return (String) zzaqf.zzb(new AnonymousClass1(sharedPreferences, str, str2));
         }
     }
 }

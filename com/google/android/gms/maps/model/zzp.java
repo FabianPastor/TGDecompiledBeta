@@ -1,73 +1,52 @@
 package com.google.android.gms.maps.model;
 
-import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzp implements Creator<TileOverlayOptions> {
-    static void zza(TileOverlayOptions tileOverlayOptions, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, tileOverlayOptions.getVersionCode());
-        zzc.zza(parcel, 2, tileOverlayOptions.zzIX(), false);
-        zzc.zza(parcel, 3, tileOverlayOptions.isVisible());
-        zzc.zza(parcel, 4, tileOverlayOptions.getZIndex());
-        zzc.zza(parcel, 5, tileOverlayOptions.getFadeIn());
-        zzc.zza(parcel, 6, tileOverlayOptions.getTransparency());
-        zzc.zzJ(parcel, zzaV);
+public class zzp implements Creator<StreetViewPanoramaOrientation> {
+    static void zza(StreetViewPanoramaOrientation streetViewPanoramaOrientation, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, streetViewPanoramaOrientation.tilt);
+        zzc.zza(parcel, 3, streetViewPanoramaOrientation.bearing);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhI(parcel);
+        return zzhM(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzlm(i);
+        return zzlu(i);
     }
 
-    public TileOverlayOptions zzhI(Parcel parcel) {
-        boolean z = false;
+    public StreetViewPanoramaOrientation zzhM(Parcel parcel) {
         float f = 0.0f;
-        int zzaU = zzb.zzaU(parcel);
-        IBinder iBinder = null;
-        boolean z2 = true;
+        int zzaY = zzb.zzaY(parcel);
         float f2 = 0.0f;
-        int i = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    iBinder = zzb.zzr(parcel, zzaT);
+                    f2 = zzb.zzl(parcel, zzaX);
                     break;
                 case 3:
-                    z = zzb.zzc(parcel, zzaT);
-                    break;
-                case 4:
-                    f2 = zzb.zzl(parcel, zzaT);
-                    break;
-                case 5:
-                    z2 = zzb.zzc(parcel, zzaT);
-                    break;
-                case 6:
-                    f = zzb.zzl(parcel, zzaT);
+                    f = zzb.zzl(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new TileOverlayOptions(i, iBinder, z, f2, z2, f);
+        if (parcel.dataPosition() == zzaY) {
+            return new StreetViewPanoramaOrientation(f2, f);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public TileOverlayOptions[] zzlm(int i) {
-        return new TileOverlayOptions[i];
+    public StreetViewPanoramaOrientation[] zzlu(int i) {
+        return new StreetViewPanoramaOrientation[i];
     }
 }

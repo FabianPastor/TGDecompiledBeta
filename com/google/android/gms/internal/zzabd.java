@@ -1,15 +1,26 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.zzc;
+import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
+import com.google.android.gms.common.internal.zzac;
 
 public class zzabd {
-    public final zzzq zzaBD;
-    public final int zzaBE;
-    public final zzc<?> zzaBF;
+    private final Object zzaCQ;
 
-    public zzabd(zzzq com_google_android_gms_internal_zzzq, int i, zzc<?> com_google_android_gms_common_api_zzc_) {
-        this.zzaBD = com_google_android_gms_internal_zzzq;
-        this.zzaBE = i;
-        this.zzaBF = com_google_android_gms_common_api_zzc_;
+    public zzabd(Activity activity) {
+        zzac.zzb((Object) activity, (Object) "Activity must not be null");
+        this.zzaCQ = activity;
+    }
+
+    public boolean zzwS() {
+        return this.zzaCQ instanceof FragmentActivity;
+    }
+
+    public Activity zzwT() {
+        return (Activity) this.zzaCQ;
+    }
+
+    public FragmentActivity zzwU() {
+        return (FragmentActivity) this.zzaCQ;
     }
 }

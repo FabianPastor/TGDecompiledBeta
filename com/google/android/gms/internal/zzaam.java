@@ -1,26 +1,56 @@
 package com.google.android.gms.internal;
 
-import android.os.Bundle;
+import android.app.Activity;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.Api.zzb;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.internal.zzzv.zza;
+import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.common.util.zza;
 
-public interface zzaam {
-    void begin();
+public class zzaam extends zzaae {
+    private final zza<zzzz<?>> zzaBh = new zza();
+    private zzaax zzayX;
 
-    void connect();
+    private zzaam(zzabf com_google_android_gms_internal_zzabf) {
+        super(com_google_android_gms_internal_zzabf);
+        this.zzaCR.zza("ConnectionlessLifecycleHelper", (zzabe) this);
+    }
 
-    boolean disconnect();
+    public static void zza(Activity activity, zzaax com_google_android_gms_internal_zzaax, zzzz<?> com_google_android_gms_internal_zzzz_) {
+        zzabf zzs = zzabe.zzs(activity);
+        zzaam com_google_android_gms_internal_zzaam = (zzaam) zzs.zza("ConnectionlessLifecycleHelper", zzaam.class);
+        if (com_google_android_gms_internal_zzaam == null) {
+            com_google_android_gms_internal_zzaam = new zzaam(zzs);
+        }
+        com_google_android_gms_internal_zzaam.zzayX = com_google_android_gms_internal_zzaax;
+        com_google_android_gms_internal_zzaam.zza(com_google_android_gms_internal_zzzz_);
+        com_google_android_gms_internal_zzaax.zza(com_google_android_gms_internal_zzaam);
+    }
 
-    void onConnected(Bundle bundle);
+    private void zza(zzzz<?> com_google_android_gms_internal_zzzz_) {
+        zzac.zzb((Object) com_google_android_gms_internal_zzzz_, (Object) "ApiKey cannot be null");
+        this.zzaBh.add(com_google_android_gms_internal_zzzz_);
+    }
 
-    void onConnectionSuspended(int i);
+    public void onStart() {
+        super.onStart();
+        if (!this.zzaBh.isEmpty()) {
+            this.zzayX.zza(this);
+        }
+    }
 
-    <A extends zzb, R extends Result, T extends zza<R, A>> T zza(T t);
+    public void onStop() {
+        super.onStop();
+        this.zzayX.zzb(this);
+    }
 
-    void zza(ConnectionResult connectionResult, Api<?> api, int i);
+    protected void zza(ConnectionResult connectionResult, int i) {
+        this.zzayX.zza(connectionResult, i);
+    }
 
-    <A extends zzb, T extends zza<? extends Result, A>> T zzb(T t);
+    protected void zzvx() {
+        this.zzayX.zzvx();
+    }
+
+    zza<zzzz<?>> zzwb() {
+        return this.zzaBh;
+    }
 }

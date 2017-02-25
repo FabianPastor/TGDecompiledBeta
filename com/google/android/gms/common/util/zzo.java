@@ -1,67 +1,50 @@
 package com.google.android.gms.common.util;
 
-import android.os.ParcelFileDescriptor;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
-public final class zzo {
-    public static long zza(InputStream inputStream, OutputStream outputStream) throws IOException {
-        return zza(inputStream, outputStream, false);
-    }
+public class zzo {
+    private static final Pattern zzaIi = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+    private static final Pattern zzaIj = Pattern.compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
+    private static final Pattern zzaIk = Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
 
-    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z) throws IOException {
-        return zza(inputStream, outputStream, z, 1024);
-    }
-
-    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z, int i) throws IOException {
-        byte[] bArr = new byte[i];
-        long j = 0;
-        while (true) {
-            try {
-                int read = inputStream.read(bArr, 0, i);
-                if (read == -1) {
-                    break;
-                }
-                j += (long) read;
-                outputStream.write(bArr, 0, read);
-            } finally {
-                if (z) {
-                    zzb(inputStream);
-                    zzb(outputStream);
-                }
-            }
+    private static String decode(String str, String str2) {
+        if (str2 == null) {
+            str2 = "ISO-8859-1";
         }
-        return j;
-    }
-
-    public static void zza(ParcelFileDescriptor parcelFileDescriptor) {
-        if (parcelFileDescriptor != null) {
-            try {
-                parcelFileDescriptor.close();
-            } catch (IOException e) {
-            }
+        try {
+            return URLDecoder.decode(str, str2);
+        } catch (Throwable e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
-    public static byte[] zza(InputStream inputStream, boolean z) throws IOException {
-        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        zza(inputStream, byteArrayOutputStream, z);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public static void zzb(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-            }
+    public static Map<String, String> zza(URI uri, String str) {
+        Map<String, String> emptyMap = Collections.emptyMap();
+        String rawQuery = uri.getRawQuery();
+        if (rawQuery == null || rawQuery.length() <= 0) {
+            return emptyMap;
         }
-    }
-
-    public static byte[] zzk(InputStream inputStream) throws IOException {
-        return zza(inputStream, true);
+        Map<String, String> hashMap = new HashMap();
+        Scanner scanner = new Scanner(rawQuery);
+        scanner.useDelimiter("&");
+        while (scanner.hasNext()) {
+            String[] split = scanner.next().split("=");
+            if (split.length == 0 || split.length > 2) {
+                throw new IllegalArgumentException("bad parameter");
+            }
+            String decode = decode(split[0], str);
+            Object obj = null;
+            if (split.length == 2) {
+                obj = decode(split[1], str);
+            }
+            hashMap.put(decode, obj);
+        }
+        return hashMap;
     }
 }

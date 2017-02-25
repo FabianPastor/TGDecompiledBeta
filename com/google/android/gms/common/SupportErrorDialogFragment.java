@@ -10,7 +10,7 @@ import com.google.android.gms.common.internal.zzac;
 
 public class SupportErrorDialogFragment extends DialogFragment {
     private Dialog mDialog = null;
-    private OnCancelListener zzawZ = null;
+    private OnCancelListener zzayl = null;
 
     public static SupportErrorDialogFragment newInstance(Dialog dialog) {
         return newInstance(dialog, null);
@@ -23,14 +23,14 @@ public class SupportErrorDialogFragment extends DialogFragment {
         dialog2.setOnDismissListener(null);
         supportErrorDialogFragment.mDialog = dialog2;
         if (onCancelListener != null) {
-            supportErrorDialogFragment.zzawZ = onCancelListener;
+            supportErrorDialogFragment.zzayl = onCancelListener;
         }
         return supportErrorDialogFragment;
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        if (this.zzawZ != null) {
-            this.zzawZ.onCancel(dialogInterface);
+        if (this.zzayl != null) {
+            this.zzayl.onCancel(dialogInterface);
         }
     }
 

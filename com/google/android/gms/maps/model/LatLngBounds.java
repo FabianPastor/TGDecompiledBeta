@@ -12,23 +12,22 @@ import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.internal.zzac;
 
 public final class LatLngBounds extends zza implements ReflectedParcelable {
-    public static final Creator<LatLngBounds> CREATOR = new zzd();
-    private final int mVersionCode;
+    public static final Creator<LatLngBounds> CREATOR = new zze();
     public final LatLng northeast;
     public final LatLng southwest;
 
     public static final class Builder {
-        private double zzboW = Double.POSITIVE_INFINITY;
-        private double zzboX = Double.NEGATIVE_INFINITY;
-        private double zzboY = Double.NaN;
-        private double zzboZ = Double.NaN;
+        private double zzbpA = Double.POSITIVE_INFINITY;
+        private double zzbpB = Double.NEGATIVE_INFINITY;
+        private double zzbpC = Double.NaN;
+        private double zzbpD = Double.NaN;
 
         private boolean zzi(double d) {
             boolean z = false;
-            if (this.zzboY <= this.zzboZ) {
-                return this.zzboY <= d && d <= this.zzboZ;
+            if (this.zzbpC <= this.zzbpD) {
+                return this.zzbpC <= d && d <= this.zzbpD;
             } else {
-                if (this.zzboY <= d || d <= this.zzboZ) {
+                if (this.zzbpC <= d || d <= this.zzbpD) {
                     z = true;
                 }
                 return z;
@@ -36,39 +35,34 @@ public final class LatLngBounds extends zza implements ReflectedParcelable {
         }
 
         public LatLngBounds build() {
-            zzac.zza(!Double.isNaN(this.zzboY), (Object) "no included points");
-            return new LatLngBounds(new LatLng(this.zzboW, this.zzboY), new LatLng(this.zzboX, this.zzboZ));
+            zzac.zza(!Double.isNaN(this.zzbpC), (Object) "no included points");
+            return new LatLngBounds(new LatLng(this.zzbpA, this.zzbpC), new LatLng(this.zzbpB, this.zzbpD));
         }
 
         public Builder include(LatLng latLng) {
-            this.zzboW = Math.min(this.zzboW, latLng.latitude);
-            this.zzboX = Math.max(this.zzboX, latLng.latitude);
+            this.zzbpA = Math.min(this.zzbpA, latLng.latitude);
+            this.zzbpB = Math.max(this.zzbpB, latLng.latitude);
             double d = latLng.longitude;
-            if (Double.isNaN(this.zzboY)) {
-                this.zzboY = d;
-                this.zzboZ = d;
+            if (Double.isNaN(this.zzbpC)) {
+                this.zzbpC = d;
+                this.zzbpD = d;
             } else if (!zzi(d)) {
-                if (LatLngBounds.zzb(this.zzboY, d) < LatLngBounds.zzc(this.zzboZ, d)) {
-                    this.zzboY = d;
+                if (LatLngBounds.zzb(this.zzbpC, d) < LatLngBounds.zzc(this.zzbpD, d)) {
+                    this.zzbpC = d;
                 } else {
-                    this.zzboZ = d;
+                    this.zzbpD = d;
                 }
             }
             return this;
         }
     }
 
-    LatLngBounds(int i, LatLng latLng, LatLng latLng2) {
+    public LatLngBounds(LatLng latLng, LatLng latLng2) {
         zzac.zzb((Object) latLng, (Object) "null southwest");
         zzac.zzb((Object) latLng2, (Object) "null northeast");
         zzac.zzb(latLng2.latitude >= latLng.latitude, "southern latitude exceeds northern latitude (%s > %s)", Double.valueOf(latLng.latitude), Double.valueOf(latLng2.latitude));
-        this.mVersionCode = i;
         this.southwest = latLng;
         this.northeast = latLng2;
-    }
-
-    public LatLngBounds(LatLng latLng, LatLng latLng2) {
-        this(1, latLng, latLng2);
     }
 
     public static Builder builder() {
@@ -133,10 +127,6 @@ public final class LatLngBounds extends zza implements ReflectedParcelable {
         return new LatLng(d, d3 <= d2 ? (d2 + d3) / 2.0d : ((d2 + 360.0d) + d3) / 2.0d);
     }
 
-    int getVersionCode() {
-        return this.mVersionCode;
-    }
-
     public int hashCode() {
         return zzaa.hashCode(this.southwest, this.northeast);
     }
@@ -165,6 +155,6 @@ public final class LatLngBounds extends zza implements ReflectedParcelable {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzd.zza(this, parcel, i);
+        zze.zza(this, parcel, i);
     }
 }

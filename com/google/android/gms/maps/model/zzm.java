@@ -6,85 +6,52 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zzm implements Creator<StreetViewPanoramaLocation> {
-    static void zza(StreetViewPanoramaLocation streetViewPanoramaLocation, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, streetViewPanoramaLocation.getVersionCode());
-        zzc.zza(parcel, 2, streetViewPanoramaLocation.links, i, false);
-        zzc.zza(parcel, 3, streetViewPanoramaLocation.position, i, false);
-        zzc.zza(parcel, 4, streetViewPanoramaLocation.panoId, false);
-        zzc.zzJ(parcel, zzaV);
+public class zzm implements Creator<StreetViewPanoramaCamera> {
+    static void zza(StreetViewPanoramaCamera streetViewPanoramaCamera, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, streetViewPanoramaCamera.zoom);
+        zzc.zza(parcel, 3, streetViewPanoramaCamera.tilt);
+        zzc.zza(parcel, 4, streetViewPanoramaCamera.bearing);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhF(parcel);
+        return zzhJ(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzlj(i);
+        return zzlr(i);
     }
 
-    public StreetViewPanoramaLocation zzhF(Parcel parcel) {
-        String str = null;
-        int zzaU = zzb.zzaU(parcel);
-        int i = 0;
-        LatLng latLng = null;
-        StreetViewPanoramaLink[] streetViewPanoramaLinkArr = null;
-        while (parcel.dataPosition() < zzaU) {
-            LatLng latLng2;
-            StreetViewPanoramaLink[] streetViewPanoramaLinkArr2;
-            int zzg;
-            String str2;
-            int zzaT = zzb.zzaT(parcel);
-            String str3;
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    str3 = str;
-                    latLng2 = latLng;
-                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
-                    zzg = zzb.zzg(parcel, zzaT);
-                    str2 = str3;
-                    break;
+    public StreetViewPanoramaCamera zzhJ(Parcel parcel) {
+        float f = 0.0f;
+        int zzaY = zzb.zzaY(parcel);
+        float f2 = 0.0f;
+        float f3 = 0.0f;
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    zzg = i;
-                    LatLng latLng3 = latLng;
-                    streetViewPanoramaLinkArr2 = (StreetViewPanoramaLink[]) zzb.zzb(parcel, zzaT, StreetViewPanoramaLink.CREATOR);
-                    str2 = str;
-                    latLng2 = latLng3;
+                    f3 = zzb.zzl(parcel, zzaX);
                     break;
                 case 3:
-                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
-                    zzg = i;
-                    str3 = str;
-                    latLng2 = (LatLng) zzb.zza(parcel, zzaT, LatLng.CREATOR);
-                    str2 = str3;
+                    f2 = zzb.zzl(parcel, zzaX);
                     break;
                 case 4:
-                    str2 = zzb.zzq(parcel, zzaT);
-                    latLng2 = latLng;
-                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
-                    zzg = i;
+                    f = zzb.zzl(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
-                    str2 = str;
-                    latLng2 = latLng;
-                    streetViewPanoramaLinkArr2 = streetViewPanoramaLinkArr;
-                    zzg = i;
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
-            i = zzg;
-            streetViewPanoramaLinkArr = streetViewPanoramaLinkArr2;
-            latLng = latLng2;
-            str = str2;
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new StreetViewPanoramaLocation(i, streetViewPanoramaLinkArr, latLng, str);
+        if (parcel.dataPosition() == zzaY) {
+            return new StreetViewPanoramaCamera(f3, f2, f);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public StreetViewPanoramaLocation[] zzlj(int i) {
-        return new StreetViewPanoramaLocation[i];
+    public StreetViewPanoramaCamera[] zzlr(int i) {
+        return new StreetViewPanoramaCamera[i];
     }
 }

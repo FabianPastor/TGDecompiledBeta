@@ -4009,7 +4009,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
-                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -4058,6 +4057,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
+                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;

@@ -7,7 +7,7 @@
     <string name="common_google_play_services_install_text">%1$s не може да се покрене без Google Play услуга, које нису инсталиране на уређају.</string>
     <string name="common_google_play_services_install_title">Преузмите Google Play услуге</string>
     <string name="common_google_play_services_notification_ticker">Грешка Google Play услуга</string>
-    <string name="common_google_play_services_unknown_issue">%1$s има проблема са Google Play услугама. Покушајте поново.</string>
+    <string name="common_google_play_services_unknown_issue">%1$s има проблема са Google Play услугама. Пробајте поново.</string>
     <string name="common_google_play_services_unsupported_text">%1$s не може да се покрене без Google Play услуга, које уређај не подржава.</string>
     <string name="common_google_play_services_update_button">Ажурирај</string>
     <string name="common_google_play_services_update_text">%1$s не може да се покрене ако не ажурирате Google Play услуге.</string>
@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Отвори на телефону</string>
     <string name="common_signin_button_text">Пријави ме</string>
     <string name="common_signin_button_text_long">Пријави ме на Google</string>
+    <string name="wallet_buy_button_place_holder">Купи помоћу Google-а</string>
 </resources>

@@ -9,7 +9,7 @@ import com.google.android.gms.vision.barcode.Barcode.PersonName;
 
 public class zzi implements Creator<PersonName> {
     static void zza(PersonName personName, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, personName.versionCode);
         zzc.zza(parcel, 2, personName.formattedName, false);
         zzc.zza(parcel, 3, personName.pronunciation, false);
@@ -18,20 +18,20 @@ public class zzi implements Creator<PersonName> {
         zzc.zza(parcel, 6, personName.middle, false);
         zzc.zza(parcel, 7, personName.last, false);
         zzc.zza(parcel, 8, personName.suffix, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjb(parcel);
+        return zzjH(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zznq(i);
+        return zzob(i);
     }
 
-    public PersonName zzjb(Parcel parcel) {
+    public PersonName zzjH(Parcel parcel) {
         String str = null;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         String str2 = null;
         String str3 = null;
@@ -39,45 +39,45 @@ public class zzi implements Creator<PersonName> {
         String str5 = null;
         String str6 = null;
         String str7 = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str7 = zzb.zzq(parcel, zzaT);
+                    str7 = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    str6 = zzb.zzq(parcel, zzaT);
+                    str6 = zzb.zzq(parcel, zzaX);
                     break;
                 case 4:
-                    str5 = zzb.zzq(parcel, zzaT);
+                    str5 = zzb.zzq(parcel, zzaX);
                     break;
                 case 5:
-                    str4 = zzb.zzq(parcel, zzaT);
+                    str4 = zzb.zzq(parcel, zzaX);
                     break;
                 case 6:
-                    str3 = zzb.zzq(parcel, zzaT);
+                    str3 = zzb.zzq(parcel, zzaX);
                     break;
                 case 7:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 8:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new PersonName(i, str7, str6, str5, str4, str3, str2, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public PersonName[] zznq(int i) {
+    public PersonName[] zzob(int i) {
         return new PersonName[i];
     }
 }

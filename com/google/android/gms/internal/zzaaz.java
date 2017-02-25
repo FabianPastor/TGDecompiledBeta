@@ -1,96 +1,42 @@
 package com.google.android.gms.internal;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import com.google.android.gms.common.internal.zzac;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 
-public final class zzaaz<L> {
-    private volatile L mListener;
-    private final zza zzaBy;
-    private final zzb<L> zzaBz;
+public final class zzaaz extends BroadcastReceiver {
+    protected Context mContext;
+    private final zza zzaCL;
 
-    private final class zza extends Handler {
-        final /* synthetic */ zzaaz zzaBA;
-
-        public zza(zzaaz com_google_android_gms_internal_zzaaz, Looper looper) {
-            this.zzaBA = com_google_android_gms_internal_zzaaz;
-            super(looper);
-        }
-
-        public void handleMessage(Message message) {
-            boolean z = true;
-            if (message.what != 1) {
-                z = false;
-            }
-            zzac.zzas(z);
-            this.zzaBA.zzb((zzc) message.obj);
-        }
+    public static abstract class zza {
+        public abstract void zzvE();
     }
 
-    public static final class zzb<L> {
-        private final L mListener;
-        private final String zzaBB;
+    public zzaaz(zza com_google_android_gms_internal_zzaaz_zza) {
+        this.zzaCL = com_google_android_gms_internal_zzaaz_zza;
+    }
 
-        zzb(L l, String str) {
-            this.mListener = l;
-            this.zzaBB = str;
+    public void onReceive(Context context, Intent intent) {
+        Uri data = intent.getData();
+        Object obj = null;
+        if (data != null) {
+            obj = data.getSchemeSpecificPart();
         }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof zzb)) {
-                return false;
-            }
-            zzb com_google_android_gms_internal_zzaaz_zzb = (zzb) obj;
-            return this.mListener == com_google_android_gms_internal_zzaaz_zzb.mListener && this.zzaBB.equals(com_google_android_gms_internal_zzaaz_zzb.zzaBB);
-        }
-
-        public int hashCode() {
-            return (System.identityHashCode(this.mListener) * 31) + this.zzaBB.hashCode();
+        if ("com.google.android.gms".equals(obj)) {
+            this.zzaCL.zzvE();
+            unregister();
         }
     }
 
-    public interface zzc<L> {
-        void zzs(L l);
-
-        void zzvy();
+    public void setContext(Context context) {
+        this.mContext = context;
     }
 
-    zzaaz(@NonNull Looper looper, @NonNull L l, @NonNull String str) {
-        this.zzaBy = new zza(this, looper);
-        this.mListener = zzac.zzb((Object) l, (Object) "Listener must not be null");
-        this.zzaBz = new zzb(l, zzac.zzdv(str));
-    }
-
-    public void clear() {
-        this.mListener = null;
-    }
-
-    public void zza(zzc<? super L> com_google_android_gms_internal_zzaaz_zzc__super_L) {
-        zzac.zzb((Object) com_google_android_gms_internal_zzaaz_zzc__super_L, (Object) "Notifier must not be null");
-        this.zzaBy.sendMessage(this.zzaBy.obtainMessage(1, com_google_android_gms_internal_zzaaz_zzc__super_L));
-    }
-
-    void zzb(zzc<? super L> com_google_android_gms_internal_zzaaz_zzc__super_L) {
-        Object obj = this.mListener;
-        if (obj == null) {
-            com_google_android_gms_internal_zzaaz_zzc__super_L.zzvy();
-            return;
+    public synchronized void unregister() {
+        if (this.mContext != null) {
+            this.mContext.unregisterReceiver(this);
         }
-        try {
-            com_google_android_gms_internal_zzaaz_zzc__super_L.zzs(obj);
-        } catch (RuntimeException e) {
-            com_google_android_gms_internal_zzaaz_zzc__super_L.zzvy();
-            throw e;
-        }
-    }
-
-    @NonNull
-    public zzb<L> zzwp() {
-        return this.zzaBz;
+        this.mContext = null;
     }
 }

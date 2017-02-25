@@ -12,7 +12,7 @@ import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.common.util.zze;
-import com.google.android.gms.common.util.zzh;
+import com.google.android.gms.common.util.zzi;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,53 +26,53 @@ import org.json.JSONObject;
 
 public class GoogleSignInAccount extends zza implements ReflectedParcelable {
     public static final Creator<GoogleSignInAccount> CREATOR = new zza();
-    public static zze zzaiV = zzh.zzyv();
-    private static Comparator<Scope> zzajc = new Comparator<Scope>() {
+    public static zze zzajZ = zzi.zzzc();
+    private static Comparator<Scope> zzakg = new Comparator<Scope>() {
         public /* synthetic */ int compare(Object obj, Object obj2) {
             return zza((Scope) obj, (Scope) obj2);
         }
 
         public int zza(Scope scope, Scope scope2) {
-            return scope.zzuS().compareTo(scope2.zzuS());
+            return scope.zzvt().compareTo(scope2.zzvt());
         }
     };
     final int versionCode;
-    private String zzGu;
-    List<Scope> zzahM;
-    private String zzaiW;
-    private String zzaiX;
-    private Uri zzaiY;
-    private String zzaiZ;
-    private String zzaik;
-    private String zzail;
-    private String zzaix;
-    private long zzaja;
-    private String zzajb;
+    private String zzGV;
+    List<Scope> zzaiN;
+    private String zzajB;
+    private String zzajl;
+    private String zzajm;
+    private String zzaka;
+    private String zzakb;
+    private Uri zzakc;
+    private String zzakd;
+    private long zzake;
+    private String zzakf;
 
     GoogleSignInAccount(int i, String str, String str2, String str3, String str4, Uri uri, String str5, long j, String str6, List<Scope> list, String str7, String str8) {
         this.versionCode = i;
-        this.zzGu = str;
-        this.zzaix = str2;
-        this.zzaiW = str3;
-        this.zzaiX = str4;
-        this.zzaiY = uri;
-        this.zzaiZ = str5;
-        this.zzaja = j;
-        this.zzajb = str6;
-        this.zzahM = list;
-        this.zzaik = str7;
-        this.zzail = str8;
+        this.zzGV = str;
+        this.zzajB = str2;
+        this.zzaka = str3;
+        this.zzakb = str4;
+        this.zzakc = uri;
+        this.zzakd = str5;
+        this.zzake = j;
+        this.zzakf = str6;
+        this.zzaiN = list;
+        this.zzajl = str7;
+        this.zzajm = str8;
     }
 
     public static GoogleSignInAccount zza(@Nullable String str, @Nullable String str2, @Nullable String str3, @Nullable String str4, @Nullable String str5, @Nullable String str6, @Nullable Uri uri, @Nullable Long l, @NonNull String str7, @NonNull Set<Scope> set) {
         if (l == null) {
-            l = Long.valueOf(zzaiV.currentTimeMillis() / 1000);
+            l = Long.valueOf(zzajZ.currentTimeMillis() / 1000);
         }
-        return new GoogleSignInAccount(3, str, str2, str3, str4, uri, null, l.longValue(), zzac.zzdv(str7), new ArrayList((Collection) zzac.zzw(set)), str5, str6);
+        return new GoogleSignInAccount(3, str, str2, str3, str4, uri, null, l.longValue(), zzac.zzdr(str7), new ArrayList((Collection) zzac.zzw(set)), str5, str6);
     }
 
     @Nullable
-    public static GoogleSignInAccount zzcu(@Nullable String str) throws JSONException {
+    public static GoogleSignInAccount zzcv(@Nullable String str) throws JSONException {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
@@ -86,10 +86,10 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
         for (int i = 0; i < length; i++) {
             hashSet.add(new Scope(jSONArray.getString(i)));
         }
-        return zza(jSONObject.optString(TtmlNode.ATTR_ID), jSONObject.optString("tokenId", null), jSONObject.optString("email", null), jSONObject.optString("displayName", null), jSONObject.optString("givenName", null), jSONObject.optString("familyName", null), parse, Long.valueOf(parseLong), jSONObject.getString("obfuscatedIdentifier"), hashSet).zzcv(jSONObject.optString("serverAuthCode", null));
+        return zza(jSONObject.optString(TtmlNode.ATTR_ID), jSONObject.optString("tokenId", null), jSONObject.optString("email", null), jSONObject.optString("displayName", null), jSONObject.optString("givenName", null), jSONObject.optString("familyName", null), parse, Long.valueOf(parseLong), jSONObject.getString("obfuscatedIdentifier"), hashSet).zzcw(jSONObject.optString("serverAuthCode", null));
     }
 
-    private JSONObject zzqI() {
+    private JSONObject zzri() {
         JSONObject jSONObject = new JSONObject();
         try {
             if (getId() != null) {
@@ -116,12 +116,12 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
             if (getServerAuthCode() != null) {
                 jSONObject.put("serverAuthCode", getServerAuthCode());
             }
-            jSONObject.put("expirationTime", this.zzaja);
-            jSONObject.put("obfuscatedIdentifier", zzqF());
+            jSONObject.put("expirationTime", this.zzake);
+            jSONObject.put("obfuscatedIdentifier", zzrf());
             JSONArray jSONArray = new JSONArray();
-            Collections.sort(this.zzahM, zzajc);
-            for (Scope zzuS : this.zzahM) {
-                jSONArray.put(zzuS.zzuS());
+            Collections.sort(this.zzaiN, zzakg);
+            for (Scope zzvt : this.zzaiN) {
+                jSONArray.put(zzvt.zzvt());
             }
             jSONObject.put("grantedScopes", jSONArray);
             return jSONObject;
@@ -131,61 +131,61 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
     }
 
     public boolean equals(Object obj) {
-        return !(obj instanceof GoogleSignInAccount) ? false : ((GoogleSignInAccount) obj).zzqG().equals(zzqG());
+        return !(obj instanceof GoogleSignInAccount) ? false : ((GoogleSignInAccount) obj).zzrg().equals(zzrg());
     }
 
     @Nullable
     public Account getAccount() {
-        return this.zzaiW == null ? null : new Account(this.zzaiW, "com.google");
+        return this.zzaka == null ? null : new Account(this.zzaka, "com.google");
     }
 
     @Nullable
     public String getDisplayName() {
-        return this.zzaiX;
+        return this.zzakb;
     }
 
     @Nullable
     public String getEmail() {
-        return this.zzaiW;
+        return this.zzaka;
     }
 
     @Nullable
     public String getFamilyName() {
-        return this.zzail;
+        return this.zzajm;
     }
 
     @Nullable
     public String getGivenName() {
-        return this.zzaik;
+        return this.zzajl;
     }
 
     @NonNull
     public Set<Scope> getGrantedScopes() {
-        return new HashSet(this.zzahM);
+        return new HashSet(this.zzaiN);
     }
 
     @Nullable
     public String getId() {
-        return this.zzGu;
+        return this.zzGV;
     }
 
     @Nullable
     public String getIdToken() {
-        return this.zzaix;
+        return this.zzajB;
     }
 
     @Nullable
     public Uri getPhotoUrl() {
-        return this.zzaiY;
+        return this.zzakc;
     }
 
     @Nullable
     public String getServerAuthCode() {
-        return this.zzaiZ;
+        return this.zzakd;
     }
 
     public int hashCode() {
-        return zzqG().hashCode();
+        return zzrg().hashCode();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
@@ -193,30 +193,30 @@ public class GoogleSignInAccount extends zza implements ReflectedParcelable {
     }
 
     public boolean zza() {
-        return zzaiV.currentTimeMillis() / 1000 >= this.zzaja - 300;
+        return zzajZ.currentTimeMillis() / 1000 >= this.zzake - 300;
     }
 
-    public GoogleSignInAccount zzcv(String str) {
-        this.zzaiZ = str;
+    public GoogleSignInAccount zzcw(String str) {
+        this.zzakd = str;
         return this;
     }
 
-    public long zzqE() {
-        return this.zzaja;
+    public long zzre() {
+        return this.zzake;
     }
 
     @NonNull
-    public String zzqF() {
-        return this.zzajb;
+    public String zzrf() {
+        return this.zzakf;
     }
 
-    public String zzqG() {
-        return zzqI().toString();
+    public String zzrg() {
+        return zzri().toString();
     }
 
-    public String zzqH() {
-        JSONObject zzqI = zzqI();
-        zzqI.remove("serverAuthCode");
-        return zzqI.toString();
+    public String zzrh() {
+        JSONObject zzri = zzri();
+        zzri.remove("serverAuthCode");
+        return zzri.toString();
     }
 }

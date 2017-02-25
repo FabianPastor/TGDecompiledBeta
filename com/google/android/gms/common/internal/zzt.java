@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface zzt extends IInterface {
 
@@ -22,15 +22,15 @@ public interface zzt extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.common.internal.ICertData");
-                    zzd zzuB = zzuB();
+                    IObjectWrapper zzva = zzva();
                     parcel2.writeNoException();
-                    parcel2.writeStrongBinder(zzuB != null ? zzuB.asBinder() : null);
+                    parcel2.writeStrongBinder(zzva != null ? zzva.asBinder() : null);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.common.internal.ICertData");
-                    int zzuC = zzuC();
+                    int zzvb = zzvb();
                     parcel2.writeNoException();
-                    parcel2.writeInt(zzuC);
+                    parcel2.writeInt(zzvb);
                     return true;
                 case 1598968902:
                     parcel2.writeString("com.google.android.gms.common.internal.ICertData");
@@ -41,7 +41,7 @@ public interface zzt extends IInterface {
         }
     }
 
-    zzd zzuB() throws RemoteException;
+    IObjectWrapper zzva() throws RemoteException;
 
-    int zzuC() throws RemoteException;
+    int zzvb() throws RemoteException;
 }

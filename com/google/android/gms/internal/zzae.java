@@ -1,113 +1,42 @@
 package com.google.android.gms.internal;
 
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
-import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 
 public interface zzae {
 
-    public static final class zza extends zzbun<zza> {
-        public String stackTrace;
-        public String zzaR;
-        public Long zzaS;
-        public String zzaT;
-        public String zzaU;
-        public Long zzaV;
-        public Long zzaW;
-        public String zzaX;
-        public Long zzaY;
-        public String zzaZ;
+    public static final class zza extends zzbxn<zza> {
+        public zzb zzaK;
+        public zzc zzaL;
 
         public zza() {
-            this.zzaR = null;
-            this.zzaS = null;
-            this.stackTrace = null;
-            this.zzaT = null;
-            this.zzaU = null;
-            this.zzaV = null;
-            this.zzaW = null;
-            this.zzaX = null;
-            this.zzaY = null;
-            this.zzaZ = null;
-            this.zzcsg = -1;
+            this.zzcuJ = -1;
         }
 
-        public void zza(zzbum com_google_android_gms_internal_zzbum) throws IOException {
-            if (this.zzaR != null) {
-                com_google_android_gms_internal_zzbum.zzq(1, this.zzaR);
-            }
-            if (this.zzaS != null) {
-                com_google_android_gms_internal_zzbum.zzb(2, this.zzaS.longValue());
-            }
-            if (this.stackTrace != null) {
-                com_google_android_gms_internal_zzbum.zzq(3, this.stackTrace);
-            }
-            if (this.zzaT != null) {
-                com_google_android_gms_internal_zzbum.zzq(4, this.zzaT);
-            }
-            if (this.zzaU != null) {
-                com_google_android_gms_internal_zzbum.zzq(5, this.zzaU);
-            }
-            if (this.zzaV != null) {
-                com_google_android_gms_internal_zzbum.zzb(6, this.zzaV.longValue());
-            }
-            if (this.zzaW != null) {
-                com_google_android_gms_internal_zzbum.zzb(7, this.zzaW.longValue());
-            }
-            if (this.zzaX != null) {
-                com_google_android_gms_internal_zzbum.zzq(8, this.zzaX);
-            }
-            if (this.zzaY != null) {
-                com_google_android_gms_internal_zzbum.zzb(9, this.zzaY.longValue());
-            }
-            if (this.zzaZ != null) {
-                com_google_android_gms_internal_zzbum.zzq(10, this.zzaZ);
-            }
-            super.zza(com_google_android_gms_internal_zzbum);
+        public static zza zzc(byte[] bArr) throws zzbxs {
+            return (zza) zzbxt.zza(new zza(), bArr);
         }
 
-        public /* synthetic */ zzbut zzb(zzbul com_google_android_gms_internal_zzbul) throws IOException {
-            return zze(com_google_android_gms_internal_zzbul);
-        }
-
-        public zza zze(zzbul com_google_android_gms_internal_zzbul) throws IOException {
+        public zza zza(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
             while (true) {
-                int zzacu = com_google_android_gms_internal_zzbul.zzacu();
-                switch (zzacu) {
+                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
+                switch (zzaen) {
                     case 0:
                         break;
                     case 10:
-                        this.zzaR = com_google_android_gms_internal_zzbul.readString();
+                        if (this.zzaK == null) {
+                            this.zzaK = new zzb();
+                        }
+                        com_google_android_gms_internal_zzbxl.zza(this.zzaK);
                         continue;
-                    case 16:
-                        this.zzaS = Long.valueOf(com_google_android_gms_internal_zzbul.zzacx());
-                        continue;
-                    case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
-                        this.stackTrace = com_google_android_gms_internal_zzbul.readString();
-                        continue;
-                    case 34:
-                        this.zzaT = com_google_android_gms_internal_zzbul.readString();
-                        continue;
-                    case 42:
-                        this.zzaU = com_google_android_gms_internal_zzbul.readString();
-                        continue;
-                    case 48:
-                        this.zzaV = Long.valueOf(com_google_android_gms_internal_zzbul.zzacx());
-                        continue;
-                    case 56:
-                        this.zzaW = Long.valueOf(com_google_android_gms_internal_zzbul.zzacx());
-                        continue;
-                    case 66:
-                        this.zzaX = com_google_android_gms_internal_zzbul.readString();
-                        continue;
-                    case XtraBox.MP4_XTRA_BT_GUID /*72*/:
-                        this.zzaY = Long.valueOf(com_google_android_gms_internal_zzbul.zzacx());
-                        continue;
-                    case 82:
-                        this.zzaZ = com_google_android_gms_internal_zzbul.readString();
+                    case 18:
+                        if (this.zzaL == null) {
+                            this.zzaL = new zzc();
+                        }
+                        com_google_android_gms_internal_zzbxl.zza(this.zzaL);
                         continue;
                     default:
-                        if (!super.zza(com_google_android_gms_internal_zzbul, zzacu)) {
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
                             break;
                         }
                         continue;
@@ -116,36 +45,168 @@ public interface zzae {
             }
         }
 
-        protected int zzv() {
-            int zzv = super.zzv();
+        public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
+            if (this.zzaK != null) {
+                com_google_android_gms_internal_zzbxm.zza(1, this.zzaK);
+            }
+            if (this.zzaL != null) {
+                com_google_android_gms_internal_zzbxm.zza(2, this.zzaL);
+            }
+            super.zza(com_google_android_gms_internal_zzbxm);
+        }
+
+        public /* synthetic */ zzbxt zzb(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
+            return zza(com_google_android_gms_internal_zzbxl);
+        }
+
+        protected int zzu() {
+            int zzu = super.zzu();
+            if (this.zzaK != null) {
+                zzu += zzbxm.zzc(1, this.zzaK);
+            }
+            return this.zzaL != null ? zzu + zzbxm.zzc(2, this.zzaL) : zzu;
+        }
+    }
+
+    public static final class zzb extends zzbxn<zzb> {
+        public Integer zzaM;
+
+        public zzb() {
+            this.zzaM = null;
+            this.zzcuJ = -1;
+        }
+
+        public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
+            if (this.zzaM != null) {
+                com_google_android_gms_internal_zzbxm.zzJ(27, this.zzaM.intValue());
+            }
+            super.zza(com_google_android_gms_internal_zzbxm);
+        }
+
+        public /* synthetic */ zzbxt zzb(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
+            return zzc(com_google_android_gms_internal_zzbxl);
+        }
+
+        public zzb zzc(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
+            while (true) {
+                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
+                switch (zzaen) {
+                    case 0:
+                        break;
+                    case 216:
+                        zzaen = com_google_android_gms_internal_zzbxl.zzaer();
+                        switch (zzaen) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                this.zzaM = Integer.valueOf(zzaen);
+                                break;
+                            default:
+                                continue;
+                        }
+                    default:
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                            break;
+                        }
+                        continue;
+                }
+                return this;
+            }
+        }
+
+        protected int zzu() {
+            int zzu = super.zzu();
+            return this.zzaM != null ? zzu + zzbxm.zzL(27, this.zzaM.intValue()) : zzu;
+        }
+    }
+
+    public static final class zzc extends zzbxn<zzc> {
+        public String zzaN;
+        public String zzaO;
+        public String zzaP;
+        public String zzaQ;
+        public String zzaR;
+
+        public zzc() {
+            this.zzaN = null;
+            this.zzaO = null;
+            this.zzaP = null;
+            this.zzaQ = null;
+            this.zzaR = null;
+            this.zzcuJ = -1;
+        }
+
+        public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
+            if (this.zzaN != null) {
+                com_google_android_gms_internal_zzbxm.zzq(1, this.zzaN);
+            }
+            if (this.zzaO != null) {
+                com_google_android_gms_internal_zzbxm.zzq(2, this.zzaO);
+            }
+            if (this.zzaP != null) {
+                com_google_android_gms_internal_zzbxm.zzq(3, this.zzaP);
+            }
+            if (this.zzaQ != null) {
+                com_google_android_gms_internal_zzbxm.zzq(4, this.zzaQ);
+            }
             if (this.zzaR != null) {
-                zzv += zzbum.zzr(1, this.zzaR);
+                com_google_android_gms_internal_zzbxm.zzq(5, this.zzaR);
             }
-            if (this.zzaS != null) {
-                zzv += zzbum.zzf(2, this.zzaS.longValue());
+            super.zza(com_google_android_gms_internal_zzbxm);
+        }
+
+        public /* synthetic */ zzbxt zzb(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
+            return zzd(com_google_android_gms_internal_zzbxl);
+        }
+
+        public zzc zzd(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
+            while (true) {
+                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
+                switch (zzaen) {
+                    case 0:
+                        break;
+                    case 10:
+                        this.zzaN = com_google_android_gms_internal_zzbxl.readString();
+                        continue;
+                    case 18:
+                        this.zzaO = com_google_android_gms_internal_zzbxl.readString();
+                        continue;
+                    case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                        this.zzaP = com_google_android_gms_internal_zzbxl.readString();
+                        continue;
+                    case 34:
+                        this.zzaQ = com_google_android_gms_internal_zzbxl.readString();
+                        continue;
+                    case 42:
+                        this.zzaR = com_google_android_gms_internal_zzbxl.readString();
+                        continue;
+                    default:
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                            break;
+                        }
+                        continue;
+                }
+                return this;
             }
-            if (this.stackTrace != null) {
-                zzv += zzbum.zzr(3, this.stackTrace);
+        }
+
+        protected int zzu() {
+            int zzu = super.zzu();
+            if (this.zzaN != null) {
+                zzu += zzbxm.zzr(1, this.zzaN);
             }
-            if (this.zzaT != null) {
-                zzv += zzbum.zzr(4, this.zzaT);
+            if (this.zzaO != null) {
+                zzu += zzbxm.zzr(2, this.zzaO);
             }
-            if (this.zzaU != null) {
-                zzv += zzbum.zzr(5, this.zzaU);
+            if (this.zzaP != null) {
+                zzu += zzbxm.zzr(3, this.zzaP);
             }
-            if (this.zzaV != null) {
-                zzv += zzbum.zzf(6, this.zzaV.longValue());
+            if (this.zzaQ != null) {
+                zzu += zzbxm.zzr(4, this.zzaQ);
             }
-            if (this.zzaW != null) {
-                zzv += zzbum.zzf(7, this.zzaW.longValue());
-            }
-            if (this.zzaX != null) {
-                zzv += zzbum.zzr(8, this.zzaX);
-            }
-            if (this.zzaY != null) {
-                zzv += zzbum.zzf(9, this.zzaY.longValue());
-            }
-            return this.zzaZ != null ? zzv + zzbum.zzr(10, this.zzaZ) : zzv;
+            return this.zzaR != null ? zzu + zzbxm.zzr(5, this.zzaR) : zzu;
         }
     }
 }

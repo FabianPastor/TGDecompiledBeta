@@ -510,6 +510,7 @@ public class Theme {
     public static final String key_chat_sentErrorIcon = "chat_sentErrorIcon";
     public static final String key_chat_serviceBackground = "chat_serviceBackground";
     public static final String key_chat_serviceBackgroundSelected = "chat_serviceBackgroundSelected";
+    public static final String key_chat_serviceIcon = "chat_serviceIcon";
     public static final String key_chat_serviceLink = "chat_serviceLink";
     public static final String key_chat_serviceText = "chat_serviceText";
     public static final String key_chat_stickerNameText = "chat_stickerNameText";
@@ -971,6 +972,7 @@ public class Theme {
         defaultColors.put(key_chat_messageLinkOut, Integer.valueOf(-14255946));
         defaultColors.put(key_chat_serviceText, Integer.valueOf(-1));
         defaultColors.put(key_chat_serviceLink, Integer.valueOf(-1));
+        defaultColors.put(key_chat_serviceIcon, Integer.valueOf(-1));
         defaultColors.put(key_chat_outSentCheck, Integer.valueOf(-10637232));
         defaultColors.put(key_chat_outSentCheckSelected, Integer.valueOf(-10637232));
         defaultColors.put(key_chat_outSentClock, Integer.valueOf(-9061026));
@@ -2330,6 +2332,9 @@ public class Theme {
             setDrawableColorByKey(chat_msgMediaCheckDrawable, key_chat_mediaSentCheck);
             setDrawableColorByKey(chat_msgMediaHalfCheckDrawable, key_chat_mediaSentCheck);
             setDrawableColorByKey(chat_msgMediaClockDrawable, key_chat_mediaSentClock);
+            setDrawableColorByKey(chat_shareIconDrawable, key_chat_serviceIcon);
+            setDrawableColorByKey(chat_botInlineDrawable, key_chat_serviceIcon);
+            setDrawableColorByKey(chat_botLinkDrawalbe, key_chat_serviceIcon);
             setDrawableColorByKey(chat_msgInViewsDrawable, key_chat_inViews);
             setDrawableColorByKey(chat_msgInViewsSelectedDrawable, key_chat_inViewsSelected);
             setDrawableColorByKey(chat_msgOutViewsDrawable, key_chat_outViews);
@@ -2617,10 +2622,10 @@ public class Theme {
                     Throwable e;
                     int i;
                     SharedPreferences preferences;
-                    int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        File toFile;
+                        int selectedBackground;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

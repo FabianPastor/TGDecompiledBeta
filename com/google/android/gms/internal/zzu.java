@@ -1,65 +1,170 @@
 package com.google.android.gms.internal;
 
-import java.util.ArrayList;
+import android.os.SystemClock;
+import com.coremedia.iso.boxes.AuthorBox;
+import com.google.android.gms.internal.zzb.zza;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.impl.cookie.DateUtils;
+import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
-public class zzu {
-    protected static final Comparator<byte[]> zzau = new Comparator<byte[]>() {
-        public /* synthetic */ int compare(Object obj, Object obj2) {
-            return zza((byte[]) obj, (byte[]) obj2);
-        }
+public class zzu implements zzg {
+    protected static final boolean DEBUG = zzt.DEBUG;
+    private static int zzan = 3000;
+    private static int zzao = 4096;
+    protected final zzz zzap;
+    protected final zzv zzaq;
 
-        public int zza(byte[] bArr, byte[] bArr2) {
-            return bArr.length - bArr2.length;
-        }
-    };
-    private List<byte[]> zzaq = new LinkedList();
-    private List<byte[]> zzar = new ArrayList(64);
-    private int zzas = 0;
-    private final int zzat;
-
-    public zzu(int i) {
-        this.zzat = i;
+    public zzu(zzz com_google_android_gms_internal_zzz) {
+        this(com_google_android_gms_internal_zzz, new zzv(zzao));
     }
 
-    private synchronized void zzt() {
-        while (this.zzas > this.zzat) {
-            byte[] bArr = (byte[]) this.zzaq.remove(0);
-            this.zzar.remove(bArr);
-            this.zzas -= bArr.length;
+    public zzu(zzz com_google_android_gms_internal_zzz, zzv com_google_android_gms_internal_zzv) {
+        this.zzap = com_google_android_gms_internal_zzz;
+        this.zzaq = com_google_android_gms_internal_zzv;
+    }
+
+    protected static Map<String, String> zza(Header[] headerArr) {
+        Map<String, String> treeMap = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+        for (int i = 0; i < headerArr.length; i++) {
+            treeMap.put(headerArr[i].getName(), headerArr[i].getValue());
+        }
+        return treeMap;
+    }
+
+    private void zza(long j, zzl<?> com_google_android_gms_internal_zzl_, byte[] bArr, StatusLine statusLine) {
+        if (DEBUG || j > ((long) zzan)) {
+            String str = "HTTP response for request=<%s> [lifetime=%d], [size=%s], [rc=%d], [retryCount=%s]";
+            Object[] objArr = new Object[5];
+            objArr[0] = com_google_android_gms_internal_zzl_;
+            objArr[1] = Long.valueOf(j);
+            objArr[2] = bArr != null ? Integer.valueOf(bArr.length) : "null";
+            objArr[3] = Integer.valueOf(statusLine.getStatusCode());
+            objArr[4] = Integer.valueOf(com_google_android_gms_internal_zzl_.zzq().zzd());
+            zzt.zzb(str, objArr);
         }
     }
 
-    public synchronized void zza(byte[] bArr) {
-        if (bArr != null) {
-            if (bArr.length <= this.zzat) {
-                this.zzaq.add(bArr);
-                int binarySearch = Collections.binarySearch(this.zzar, bArr, zzau);
-                if (binarySearch < 0) {
-                    binarySearch = (-binarySearch) - 1;
+    private static void zza(String str, zzl<?> com_google_android_gms_internal_zzl_, zzs com_google_android_gms_internal_zzs) throws zzs {
+        zzp zzq = com_google_android_gms_internal_zzl_.zzq();
+        int zzp = com_google_android_gms_internal_zzl_.zzp();
+        try {
+            zzq.zza(com_google_android_gms_internal_zzs);
+            com_google_android_gms_internal_zzl_.zzc(String.format("%s-retry [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
+        } catch (zzs e) {
+            com_google_android_gms_internal_zzl_.zzc(String.format("%s-timeout-giveup [timeout=%s]", new Object[]{str, Integer.valueOf(zzp)}));
+            throw e;
+        }
+    }
+
+    private void zza(Map<String, String> map, zza com_google_android_gms_internal_zzb_zza) {
+        if (com_google_android_gms_internal_zzb_zza != null) {
+            if (com_google_android_gms_internal_zzb_zza.zza != null) {
+                map.put("If-None-Match", com_google_android_gms_internal_zzb_zza.zza);
+            }
+            if (com_google_android_gms_internal_zzb_zza.zzc > 0) {
+                map.put("If-Modified-Since", DateUtils.formatDate(new Date(com_google_android_gms_internal_zzb_zza.zzc)));
+            }
+        }
+    }
+
+    private byte[] zza(HttpEntity httpEntity) throws IOException, zzq {
+        zzab com_google_android_gms_internal_zzab = new zzab(this.zzaq, (int) httpEntity.getContentLength());
+        byte[] bArr = null;
+        try {
+            InputStream content = httpEntity.getContent();
+            if (content == null) {
+                throw new zzq();
+            }
+            bArr = this.zzaq.zzb(1024);
+            while (true) {
+                int read = content.read(bArr);
+                if (read == -1) {
+                    break;
                 }
-                this.zzar.add(binarySearch, bArr);
-                this.zzas += bArr.length;
-                zzt();
+                com_google_android_gms_internal_zzab.write(bArr, 0, read);
             }
+            byte[] toByteArray = com_google_android_gms_internal_zzab.toByteArray();
+            return toByteArray;
+        } finally {
+            try {
+                httpEntity.consumeContent();
+            } catch (IOException e) {
+                zzt.zza("Error occured when calling consumingContent", new Object[0]);
+            }
+            this.zzaq.zza(bArr);
+            com_google_android_gms_internal_zzab.close();
         }
     }
 
-    public synchronized byte[] zzb(int i) {
-        byte[] bArr;
-        for (int i2 = 0; i2 < this.zzar.size(); i2++) {
-            bArr = (byte[]) this.zzar.get(i2);
-            if (bArr.length >= i) {
-                this.zzas -= bArr.length;
-                this.zzar.remove(i2);
-                this.zzaq.remove(bArr);
-                break;
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public zzj zza(zzl<?> com_google_android_gms_internal_zzl_) throws zzs {
+        HttpResponse zza;
+        Throwable e;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        while (true) {
+            HttpResponse httpResponse = null;
+            Map emptyMap = Collections.emptyMap();
+            int statusCode;
+            try {
+                Map hashMap = new HashMap();
+                zza(hashMap, com_google_android_gms_internal_zzl_.zzh());
+                zza = this.zzap.zza(com_google_android_gms_internal_zzl_, hashMap);
+                StatusLine statusLine = zza.getStatusLine();
+                statusCode = statusLine.getStatusCode();
+                emptyMap = zza(zza.getAllHeaders());
+                if (statusCode == 304) {
+                    break;
+                }
+                byte[] zza2 = zza.getEntity() != null ? zza(zza.getEntity()) : new byte[0];
+                zza(SystemClock.elapsedRealtime() - elapsedRealtime, com_google_android_gms_internal_zzl_, zza2, statusLine);
+                if (statusCode >= Callback.DEFAULT_DRAG_ANIMATION_DURATION && statusCode <= 299) {
+                    return new zzj(statusCode, zza2, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
+                }
+            } catch (SocketTimeoutException e2) {
+                zza("socket", com_google_android_gms_internal_zzl_, new zzr());
+            } catch (ConnectTimeoutException e3) {
+                zza("connection", com_google_android_gms_internal_zzl_, new zzr());
+            } catch (Throwable e4) {
+                throw new RuntimeException("Bad URL " + com_google_android_gms_internal_zzl_.getUrl(), e4);
+            } catch (IOException e5) {
+                e4 = e5;
+                r5 = null;
+                httpResponse = zza;
+                if (httpResponse != null) {
+                    statusCode = httpResponse.getStatusLine().getStatusCode();
+                    zzt.zzc("Unexpected response code %d for %s", Integer.valueOf(statusCode), com_google_android_gms_internal_zzl_.getUrl());
+                    byte[] bArr;
+                    if (bArr != null) {
+                        zzj com_google_android_gms_internal_zzj = new zzj(statusCode, bArr, emptyMap, false, SystemClock.elapsedRealtime() - elapsedRealtime);
+                        if (statusCode != 401) {
+                        }
+                        zza(AuthorBox.TYPE, com_google_android_gms_internal_zzl_, new zza(com_google_android_gms_internal_zzj));
+                    } else {
+                        zza("network", com_google_android_gms_internal_zzl_, new zzi());
+                    }
+                } else {
+                    throw new zzk(e4);
+                }
             }
         }
-        bArr = new byte[i];
-        return bArr;
+        zza zzh = com_google_android_gms_internal_zzl_.zzh();
+        if (zzh == null) {
+            return new zzj(304, null, emptyMap, true, SystemClock.elapsedRealtime() - elapsedRealtime);
+        }
+        zzh.zzf.putAll(emptyMap);
+        return new zzj(304, zzh.data, zzh.zzf, true, SystemClock.elapsedRealtime() - elapsedRealtime);
     }
 }

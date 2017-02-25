@@ -10,13 +10,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import com.google.android.gms.common.internal.zzac;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.util.List;
 
 public class GcmNetworkManager {
     public static final int RESULT_FAILURE = 2;
     public static final int RESULT_RESCHEDULE = 1;
     public static final int RESULT_SUCCESS = 0;
-    private static GcmNetworkManager zzbfL;
+    private static GcmNetworkManager zzbgp;
     private Context mContext;
     private final PendingIntent mPendingIntent = PendingIntent.getBroadcast(this.mContext, 0, new Intent().setPackage("com.google.example.invalidpackage"), 0);
 
@@ -27,53 +28,55 @@ public class GcmNetworkManager {
     public static GcmNetworkManager getInstance(Context context) {
         GcmNetworkManager gcmNetworkManager;
         synchronized (GcmNetworkManager.class) {
-            if (zzbfL == null) {
-                zzbfL = new GcmNetworkManager(context.getApplicationContext());
+            if (zzbgp == null) {
+                zzbgp = new GcmNetworkManager(context.getApplicationContext());
             }
-            gcmNetworkManager = zzbfL;
+            gcmNetworkManager = zzbgp;
         }
         return gcmNetworkManager;
     }
 
-    private Intent zzGb() {
-        String zzbd = GoogleCloudMessaging.zzbd(this.mContext);
+    private Intent zzGO() {
+        String zzbv = GoogleCloudMessaging.zzbv(this.mContext);
         int i = -1;
-        if (zzbd != null) {
-            i = GoogleCloudMessaging.zzbe(this.mContext);
+        if (zzbv != null) {
+            i = GoogleCloudMessaging.zzbw(this.mContext);
         }
-        if (zzbd == null || i < GoogleCloudMessaging.zzbfW) {
+        if (zzbv == null || i < GoogleCloudMessaging.zzbgB) {
             Log.e("GcmNetworkManager", "Google Play Services is not available, dropping GcmNetworkManager request. code=" + i);
             return null;
         }
         Intent intent = new Intent("com.google.android.gms.gcm.ACTION_SCHEDULE");
-        intent.setPackage(zzbd);
+        intent.setPackage(zzbv);
         intent.putExtra("app", this.mPendingIntent);
+        intent.putExtra(Param.SOURCE, 4);
+        intent.putExtra("source_version", 10298000);
         return intent;
     }
 
     private void zza(ComponentName componentName) {
-        zzeD(componentName.getClassName());
-        Intent zzGb = zzGb();
-        if (zzGb != null) {
-            zzGb.putExtra("scheduler_action", "CANCEL_ALL");
-            zzGb.putExtra("component", componentName);
-            this.mContext.sendBroadcast(zzGb);
+        zzez(componentName.getClassName());
+        Intent zzGO = zzGO();
+        if (zzGO != null) {
+            zzGO.putExtra("scheduler_action", "CANCEL_ALL");
+            zzGO.putExtra("component", componentName);
+            this.mContext.sendBroadcast(zzGO);
         }
     }
 
     private void zza(String str, ComponentName componentName) {
-        zzeC(str);
-        zzeD(componentName.getClassName());
-        Intent zzGb = zzGb();
-        if (zzGb != null) {
-            zzGb.putExtra("scheduler_action", "CANCEL_TASK");
-            zzGb.putExtra("tag", str);
-            zzGb.putExtra("component", componentName);
-            this.mContext.sendBroadcast(zzGb);
+        zzey(str);
+        zzez(componentName.getClassName());
+        Intent zzGO = zzGO();
+        if (zzGO != null) {
+            zzGO.putExtra("scheduler_action", "CANCEL_TASK");
+            zzGO.putExtra("tag", str);
+            zzGO.putExtra("component", componentName);
+            this.mContext.sendBroadcast(zzGO);
         }
     }
 
-    static void zzeC(String str) {
+    static void zzey(String str) {
         if (TextUtils.isEmpty(str)) {
             throw new IllegalArgumentException("Must provide a valid tag.");
         } else if (100 < str.length()) {
@@ -81,7 +84,7 @@ public class GcmNetworkManager {
         }
     }
 
-    private void zzeD(String str) {
+    private void zzez(String str) {
         boolean z = true;
         zzac.zzb((Object) str, (Object) "GcmTaskService must not be null.");
         Intent intent = new Intent(GcmTaskService.SERVICE_ACTION_EXECUTE_TASK);
@@ -107,14 +110,14 @@ public class GcmNetworkManager {
     }
 
     public void schedule(Task task) {
-        zzeD(task.getServiceName());
-        Intent zzGb = zzGb();
-        if (zzGb != null) {
-            Bundle extras = zzGb.getExtras();
+        zzez(task.getServiceName());
+        Intent zzGO = zzGO();
+        if (zzGO != null) {
+            Bundle extras = zzGO.getExtras();
             extras.putString("scheduler_action", "SCHEDULE_TASK");
             task.toBundle(extras);
-            zzGb.putExtras(extras);
-            this.mContext.sendBroadcast(zzGb);
+            zzGO.putExtras(extras);
+            this.mContext.sendBroadcast(zzGO);
         }
     }
 

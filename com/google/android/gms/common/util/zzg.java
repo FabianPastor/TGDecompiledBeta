@@ -1,17 +1,38 @@
 package com.google.android.gms.common.util;
 
-import android.database.CharArrayBuffer;
-import android.text.TextUtils;
+import android.content.Context;
+import android.os.DropBoxManager;
+import android.util.Log;
+import com.google.android.gms.common.internal.zzac;
 
 public final class zzg {
-    public static void zzb(String str, CharArrayBuffer charArrayBuffer) {
-        if (TextUtils.isEmpty(str)) {
-            charArrayBuffer.sizeCopied = 0;
-        } else if (charArrayBuffer.data == null || charArrayBuffer.data.length < str.length()) {
-            charArrayBuffer.data = str.toCharArray();
-        } else {
-            str.getChars(0, str.length(), charArrayBuffer.data, 0);
+    private static final String[] zzaHT = new String[]{"android.", "com.android.", "dalvik.", "java.", "javax."};
+    private static DropBoxManager zzaHU = null;
+    private static boolean zzaHV = false;
+    private static int zzaHW = -1;
+    private static int zzaHX = 0;
+
+    public static boolean zza(Context context, Throwable th) {
+        boolean zzzb;
+        try {
+            zzac.zzw(context);
+            zzac.zzw(th);
+        } catch (Throwable e) {
+            try {
+                zzzb = zzzb();
+            } catch (Throwable e2) {
+                Log.e("CrashUtils", "Error determining which process we're running in!", e2);
+                zzzb = false;
+            }
+            if (zzzb) {
+                throw e;
+            }
+            Log.e("CrashUtils", "Error adding exception to DropBox!", e);
         }
-        charArrayBuffer.sizeCopied = str.length();
+        return false;
+    }
+
+    private static boolean zzzb() {
+        return false;
     }
 }

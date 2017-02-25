@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -1267,6 +1269,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.dropDown.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
         this.dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
+        this.dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), Mode.MULTIPLY));
         this.dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, this.dropDownDrawable, null);
         this.dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
         this.dropDown.setPadding(0, 0, AndroidUtilities.dp(10.0f), 0);

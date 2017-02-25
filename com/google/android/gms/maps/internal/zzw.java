@@ -11,14 +11,14 @@ public interface zzw extends IInterface {
     public static abstract class zza extends Binder implements zzw {
 
         private static class zza implements zzw {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public boolean onMyLocationButtonClick() throws RemoteException {
@@ -27,7 +27,7 @@ public interface zzw extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IOnMyLocationButtonClickListener");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() == 0) {
                         z = false;

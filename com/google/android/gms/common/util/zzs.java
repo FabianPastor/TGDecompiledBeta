@@ -1,62 +1,30 @@
 package com.google.android.gms.common.util;
 
-import android.os.Build.VERSION;
-
-public final class zzs {
-    public static boolean isAtLeastN() {
-        return VERSION.SDK_INT >= 24;
-    }
-
-    public static boolean zzyA() {
-        return VERSION.SDK_INT >= 14;
-    }
-
-    public static boolean zzyB() {
-        return VERSION.SDK_INT >= 15;
-    }
-
-    public static boolean zzyC() {
-        return VERSION.SDK_INT >= 16;
-    }
-
-    public static boolean zzyD() {
-        return VERSION.SDK_INT >= 17;
-    }
-
-    public static boolean zzyE() {
-        return VERSION.SDK_INT >= 18;
-    }
-
-    public static boolean zzyF() {
-        return VERSION.SDK_INT >= 19;
-    }
-
-    public static boolean zzyG() {
-        return VERSION.SDK_INT >= 20;
-    }
-
-    @Deprecated
-    public static boolean zzyH() {
-        return zzyI();
-    }
-
-    public static boolean zzyI() {
-        return VERSION.SDK_INT >= 21;
-    }
-
-    public static boolean zzyJ() {
-        return VERSION.SDK_INT >= 23;
-    }
-
-    public static boolean zzyx() {
-        return VERSION.SDK_INT >= 11;
-    }
-
-    public static boolean zzyy() {
-        return VERSION.SDK_INT >= 12;
-    }
-
-    public static boolean zzyz() {
-        return VERSION.SDK_INT >= 13;
+public class zzs {
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static int zza(byte[] bArr, int i, int i2, int i3) {
+        int i4;
+        int i5 = i + (i2 & -4);
+        int i6 = i3;
+        while (i < i5) {
+            i4 = ((((bArr[i] & 255) | ((bArr[i + 1] & 255) << 8)) | ((bArr[i + 2] & 255) << 16)) | (bArr[i + 3] << 24)) * -862048943;
+            i4 = (((i4 >>> 17) | (i4 << 15)) * 461845907) ^ i6;
+            i6 = -430675100 + (((i4 >>> 19) | (i4 << 13)) * 5);
+            i += 4;
+        }
+        i4 = 0;
+        switch (i2 & 3) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                i4 = (bArr[i5 + 2] & 255) << 16;
+                break;
+            default:
+                i4 = i6;
+                break;
+        }
     }
 }

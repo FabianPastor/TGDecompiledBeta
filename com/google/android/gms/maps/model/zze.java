@@ -6,52 +6,55 @@ import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
 import com.google.android.gms.common.internal.safeparcel.zzc;
 
-public class zze implements Creator<LatLng> {
-    static void zza(LatLng latLng, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, latLng.getVersionCode());
-        zzc.zza(parcel, 2, latLng.latitude);
-        zzc.zza(parcel, 3, latLng.longitude);
-        zzc.zzJ(parcel, zzaV);
+public class zze implements Creator<LatLngBounds> {
+    static void zza(LatLngBounds latLngBounds, Parcel parcel, int i) {
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zza(parcel, 2, latLngBounds.southwest, i, false);
+        zzc.zza(parcel, 3, latLngBounds.northeast, i, false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhx(parcel);
+        return zzhB(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzlb(i);
+        return zzlj(i);
     }
 
-    public LatLng zzhx(Parcel parcel) {
-        double d = 0.0d;
-        int zzaU = zzb.zzaU(parcel);
-        int i = 0;
-        double d2 = 0.0d;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
+    public LatLngBounds zzhB(Parcel parcel) {
+        LatLng latLng = null;
+        int zzaY = zzb.zzaY(parcel);
+        LatLng latLng2 = null;
+        while (parcel.dataPosition() < zzaY) {
+            LatLng latLng3;
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    d2 = zzb.zzn(parcel, zzaT);
+                    LatLng latLng4 = latLng;
+                    latLng = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
+                    latLng3 = latLng4;
                     break;
                 case 3:
-                    d = zzb.zzn(parcel, zzaT);
+                    latLng3 = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
+                    latLng = latLng2;
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
+                    latLng3 = latLng;
+                    latLng = latLng2;
                     break;
             }
+            latLng2 = latLng;
+            latLng = latLng3;
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new LatLng(i, d2, d);
+        if (parcel.dataPosition() == zzaY) {
+            return new LatLngBounds(latLng2, latLng);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public LatLng[] zzlb(int i) {
-        return new LatLng[i];
+    public LatLngBounds[] zzlj(int i) {
+        return new LatLngBounds[i];
     }
 }

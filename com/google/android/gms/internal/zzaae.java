@@ -1,56 +1,155 @@
 package com.google.android.gms.internal;
 
-import android.app.Activity;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.MainThread;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.util.zza;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiActivity;
 
-public class zzaae extends zzzw {
-    private zzaap zzaxK;
-    private final zza<zzzs<?>> zzazH = new zza();
+public abstract class zzaae extends zzabe implements OnCancelListener {
+    protected boolean mStarted;
+    private ConnectionResult zzaAa;
+    private int zzaAb;
+    private final Handler zzaAc;
+    protected boolean zzazZ;
+    protected final GoogleApiAvailability zzazn;
 
-    private zzaae(zzaax com_google_android_gms_internal_zzaax) {
-        super(com_google_android_gms_internal_zzaax);
-        this.zzaBs.zza("ConnectionlessLifecycleHelper", (zzaaw) this);
-    }
+    private class zza implements Runnable {
+        final /* synthetic */ zzaae zzaAd;
 
-    public static void zza(Activity activity, zzaap com_google_android_gms_internal_zzaap, zzzs<?> com_google_android_gms_internal_zzzs_) {
-        zzaax zzs = zzaaw.zzs(activity);
-        zzaae com_google_android_gms_internal_zzaae = (zzaae) zzs.zza("ConnectionlessLifecycleHelper", zzaae.class);
-        if (com_google_android_gms_internal_zzaae == null) {
-            com_google_android_gms_internal_zzaae = new zzaae(zzs);
+        private zza(zzaae com_google_android_gms_internal_zzaae) {
+            this.zzaAd = com_google_android_gms_internal_zzaae;
         }
-        com_google_android_gms_internal_zzaae.zzaxK = com_google_android_gms_internal_zzaap;
-        com_google_android_gms_internal_zzaae.zza(com_google_android_gms_internal_zzzs_);
-        com_google_android_gms_internal_zzaap.zza(com_google_android_gms_internal_zzaae);
+
+        @MainThread
+        public void run() {
+            if (!this.zzaAd.mStarted) {
+                return;
+            }
+            if (this.zzaAd.zzaAa.hasResolution()) {
+                this.zzaAd.zzaCR.startActivityForResult(GoogleApiActivity.zzb(this.zzaAd.getActivity(), this.zzaAd.zzaAa.getResolution(), this.zzaAd.zzaAb, false), 1);
+            } else if (this.zzaAd.zzazn.isUserResolvableError(this.zzaAd.zzaAa.getErrorCode())) {
+                this.zzaAd.zzazn.zza(this.zzaAd.getActivity(), this.zzaAd.zzaCR, this.zzaAd.zzaAa.getErrorCode(), 2, this.zzaAd);
+            } else if (this.zzaAd.zzaAa.getErrorCode() == 18) {
+                final Dialog zza = this.zzaAd.zzazn.zza(this.zzaAd.getActivity(), this.zzaAd);
+                this.zzaAd.zzazn.zza(this.zzaAd.getActivity().getApplicationContext(), new com.google.android.gms.internal.zzaaz.zza(this) {
+                    final /* synthetic */ zza zzaAf;
+
+                    public void zzvE() {
+                        this.zzaAf.zzaAd.zzvD();
+                        if (zza.isShowing()) {
+                            zza.dismiss();
+                        }
+                    }
+                });
+            } else {
+                this.zzaAd.zza(this.zzaAd.zzaAa, this.zzaAd.zzaAb);
+            }
+        }
     }
 
-    private void zza(zzzs<?> com_google_android_gms_internal_zzzs_) {
-        zzac.zzb((Object) com_google_android_gms_internal_zzzs_, (Object) "ApiKey cannot be null");
-        this.zzazH.add(com_google_android_gms_internal_zzzs_);
+    protected zzaae(zzabf com_google_android_gms_internal_zzabf) {
+        this(com_google_android_gms_internal_zzabf, GoogleApiAvailability.getInstance());
+    }
+
+    zzaae(zzabf com_google_android_gms_internal_zzabf, GoogleApiAvailability googleApiAvailability) {
+        super(com_google_android_gms_internal_zzabf);
+        this.zzaAb = -1;
+        this.zzaAc = new Handler(Looper.getMainLooper());
+        this.zzazn = googleApiAvailability;
+    }
+
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onActivityResult(int i, int i2, Intent intent) {
+        Object obj = 1;
+        switch (i) {
+            case 1:
+                if (i2 != -1) {
+                    if (i2 == 0) {
+                        this.zzaAa = new ConnectionResult(intent != null ? intent.getIntExtra("<<ResolutionFailureErrorDetail>>", 13) : 13, null);
+                    }
+                }
+                break;
+            case 2:
+                int isGooglePlayServicesAvailable = this.zzazn.isGooglePlayServicesAvailable(getActivity());
+                if (isGooglePlayServicesAvailable != 0) {
+                    obj = null;
+                }
+                if (this.zzaAa.getErrorCode() == 18 && isGooglePlayServicesAvailable == 18) {
+                    return;
+                }
+            default:
+                obj = null;
+                break;
+        }
+        if (obj != null) {
+            zzvD();
+        } else {
+            zza(this.zzaAa, this.zzaAb);
+        }
+    }
+
+    public void onCancel(DialogInterface dialogInterface) {
+        zza(new ConnectionResult(13, null), this.zzaAb);
+        zzvD();
+    }
+
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        if (bundle != null) {
+            this.zzazZ = bundle.getBoolean("resolving_error", false);
+            if (this.zzazZ) {
+                this.zzaAb = bundle.getInt("failed_client_id", -1);
+                this.zzaAa = new ConnectionResult(bundle.getInt("failed_status"), (PendingIntent) bundle.getParcelable("failed_resolution"));
+            }
+        }
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putBoolean("resolving_error", this.zzazZ);
+        if (this.zzazZ) {
+            bundle.putInt("failed_client_id", this.zzaAb);
+            bundle.putInt("failed_status", this.zzaAa.getErrorCode());
+            bundle.putParcelable("failed_resolution", this.zzaAa.getResolution());
+        }
     }
 
     public void onStart() {
         super.onStart();
-        if (!this.zzazH.isEmpty()) {
-            this.zzaxK.zza(this);
-        }
+        this.mStarted = true;
     }
 
     public void onStop() {
         super.onStop();
-        this.zzaxK.zzb(this);
+        this.mStarted = false;
     }
 
-    protected void zza(ConnectionResult connectionResult, int i) {
-        this.zzaxK.zza(connectionResult, i);
+    protected abstract void zza(ConnectionResult connectionResult, int i);
+
+    public void zzb(ConnectionResult connectionResult, int i) {
+        if (!this.zzazZ) {
+            this.zzazZ = true;
+            this.zzaAb = i;
+            this.zzaAa = connectionResult;
+            this.zzaAc.post(new zza());
+        }
     }
 
-    protected void zzuW() {
-        this.zzaxK.zzuW();
+    protected void zzvD() {
+        this.zzaAb = -1;
+        this.zzazZ = false;
+        this.zzaAa = null;
+        zzvx();
     }
 
-    zza<zzzs<?>> zzvx() {
-        return this.zzazH;
-    }
+    protected abstract void zzvx();
 }

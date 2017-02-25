@@ -17,6 +17,7 @@
     <string name="common_open_on_phone">Apri sul telefono</string>
     <string name="common_signin_button_text">Accedi</string>
     <string name="common_signin_button_text_long">Accedi con Google</string>
+    <string name="wallet_buy_button_place_holder">Acquista con Google</string>
     <string name="ALongTimeAgo">ultimo accesso molto tempo fa</string>
     <string name="AbortPassword">Annulla configurazione della verifica in due passaggi</string>
     <string name="AccessError">Errore durante l\'accesso</string>

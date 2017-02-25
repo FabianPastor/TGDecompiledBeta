@@ -7,12 +7,12 @@ import com.google.android.gms.common.data.DataHolder.zza;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 public class zzd<T extends SafeParcelable> extends AbstractDataBuffer<T> {
-    private static final String[] zzaCo = new String[]{"data"};
-    private final Creator<T> zzaCp;
+    private static final String[] zzaDN = new String[]{"data"};
+    private final Creator<T> zzaDO;
 
     public zzd(DataHolder dataHolder, Creator<T> creator) {
         super(dataHolder);
-        this.zzaCp = creator;
+        this.zzaDO = creator;
     }
 
     public static <T extends SafeParcelable> void zza(zza com_google_android_gms_common_data_DataHolder_zza, T t) {
@@ -24,20 +24,20 @@ public class zzd<T extends SafeParcelable> extends AbstractDataBuffer<T> {
         obtain.recycle();
     }
 
-    public static zza zzwC() {
-        return DataHolder.zzc(zzaCo);
+    public static zza zzxj() {
+        return DataHolder.zzc(zzaDN);
     }
 
     public /* synthetic */ Object get(int i) {
-        return zzcB(i);
+        return zzcH(i);
     }
 
-    public T zzcB(int i) {
-        byte[] zzg = this.zzazI.zzg("data", i, this.zzazI.zzcC(i));
+    public T zzcH(int i) {
+        byte[] zzg = this.zzaBi.zzg("data", i, this.zzaBi.zzcI(i));
         Parcel obtain = Parcel.obtain();
         obtain.unmarshall(zzg, 0, zzg.length);
         obtain.setDataPosition(0);
-        SafeParcelable safeParcelable = (SafeParcelable) this.zzaCp.createFromParcel(obtain);
+        SafeParcelable safeParcelable = (SafeParcelable) this.zzaDO.createFromParcel(obtain);
         obtain.recycle();
         return safeParcelable;
     }

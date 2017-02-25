@@ -3,24 +3,24 @@ package com.google.android.gms.common.internal;
 import com.google.android.gms.common.internal.safeparcel.zza;
 
 public abstract class DowngradeableSafeParcel extends zza implements ReflectedParcelable {
-    private static final Object zzaEi = new Object();
-    private static ClassLoader zzaEj = null;
-    private static Integer zzaEk = null;
-    private boolean zzaEl = false;
+    private static final Object zzaFG = new Object();
+    private static ClassLoader zzaFH = null;
+    private static Integer zzaFI = null;
+    private boolean zzaFJ = false;
 
-    protected static boolean zzdp(String str) {
-        zzxn();
+    protected static boolean zzdl(String str) {
+        zzxU();
         return true;
     }
 
-    protected static ClassLoader zzxn() {
-        synchronized (zzaEi) {
+    protected static ClassLoader zzxU() {
+        synchronized (zzaFG) {
         }
         return null;
     }
 
-    protected static Integer zzxo() {
-        synchronized (zzaEi) {
+    protected static Integer zzxV() {
+        synchronized (zzaFG) {
         }
         return null;
     }

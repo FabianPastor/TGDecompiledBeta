@@ -8,44 +8,45 @@ import android.os.Parcelable.Creator;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.zzc;
+import com.google.android.gms.common.zze;
 import java.util.Collection;
 
 public class zzj extends zza {
     public static final Creator<zzj> CREATOR = new zzk();
     final int version;
-    final int zzaEm;
-    int zzaEn;
-    String zzaEo;
-    IBinder zzaEp;
-    Scope[] zzaEq;
-    Bundle zzaEr;
-    Account zzaEs;
-    long zzaEt;
+    final int zzaFK;
+    int zzaFL;
+    String zzaFM;
+    IBinder zzaFN;
+    Scope[] zzaFO;
+    Bundle zzaFP;
+    Account zzaFQ;
+    zzc[] zzaFR;
 
     public zzj(int i) {
         this.version = 3;
-        this.zzaEn = zzc.GOOGLE_PLAY_SERVICES_VERSION_CODE;
-        this.zzaEm = i;
+        this.zzaFL = zze.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+        this.zzaFK = i;
     }
 
-    zzj(int i, int i2, int i3, String str, IBinder iBinder, Scope[] scopeArr, Bundle bundle, Account account, long j) {
+    zzj(int i, int i2, int i3, String str, IBinder iBinder, Scope[] scopeArr, Bundle bundle, Account account, zzc[] com_google_android_gms_common_zzcArr) {
         this.version = i;
-        this.zzaEm = i2;
-        this.zzaEn = i3;
+        this.zzaFK = i2;
+        this.zzaFL = i3;
         if ("com.google.android.gms".equals(str)) {
-            this.zzaEo = "com.google.android.gms";
+            this.zzaFM = "com.google.android.gms";
         } else {
-            this.zzaEo = str;
+            this.zzaFM = str;
         }
         if (i < 2) {
-            this.zzaEs = zzbq(iBinder);
+            this.zzaFQ = zzbq(iBinder);
         } else {
-            this.zzaEp = iBinder;
-            this.zzaEs = account;
+            this.zzaFN = iBinder;
+            this.zzaFQ = account;
         }
-        this.zzaEq = scopeArr;
-        this.zzaEr = bundle;
-        this.zzaEt = j;
+        this.zzaFO = scopeArr;
+        this.zzaFP = bundle;
+        this.zzaFR = com_google_android_gms_common_zzcArr;
     }
 
     private Account zzbq(IBinder iBinder) {
@@ -56,30 +57,35 @@ public class zzj extends zza {
         zzk.zza(this, parcel, i);
     }
 
+    public zzj zza(zzc[] com_google_android_gms_common_zzcArr) {
+        this.zzaFR = com_google_android_gms_common_zzcArr;
+        return this;
+    }
+
     public zzj zzb(zzr com_google_android_gms_common_internal_zzr) {
         if (com_google_android_gms_common_internal_zzr != null) {
-            this.zzaEp = com_google_android_gms_common_internal_zzr.asBinder();
+            this.zzaFN = com_google_android_gms_common_internal_zzr.asBinder();
         }
         return this;
     }
 
-    public zzj zzdq(String str) {
-        this.zzaEo = str;
+    public zzj zzdm(String str) {
+        this.zzaFM = str;
         return this;
     }
 
-    public zzj zze(Account account) {
-        this.zzaEs = account;
+    public zzj zzf(Account account) {
+        this.zzaFQ = account;
         return this;
     }
 
     public zzj zzf(Collection<Scope> collection) {
-        this.zzaEq = (Scope[]) collection.toArray(new Scope[collection.size()]);
+        this.zzaFO = (Scope[]) collection.toArray(new Scope[collection.size()]);
         return this;
     }
 
     public zzj zzp(Bundle bundle) {
-        this.zzaEr = bundle;
+        this.zzaFP = bundle;
         return this;
     }
 }

@@ -15,6 +15,7 @@ public final class Scopes {
     public static final String FITNESS_NUTRITION_READ = "https://www.googleapis.com/auth/fitness.nutrition.read";
     public static final String FITNESS_NUTRITION_READ_WRITE = "https://www.googleapis.com/auth/fitness.nutrition.write";
     public static final String GAMES = "https://www.googleapis.com/auth/games";
+    @Deprecated
     public static final String PLUS_LOGIN = "https://www.googleapis.com/auth/plus.login";
     public static final String PLUS_ME = "https://www.googleapis.com/auth/plus.me";
     public static final String PROFILE = "profile";

@@ -2,70 +2,77 @@ package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
+import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class PolygonOptions extends zza {
-    public static final Creator<PolygonOptions> CREATOR = new zzi();
+    public static final Creator<PolygonOptions> CREATOR = new zzk();
     private int mFillColor;
     private int mStrokeColor;
     private float mStrokeWidth;
-    private final int mVersionCode;
-    private float zzboJ;
-    private boolean zzboK;
-    private boolean zzboL;
-    private final List<LatLng> zzbpk;
-    private final List<List<LatLng>> zzbpl;
-    private boolean zzbpm;
+    private final List<LatLng> zzbpP;
+    private final List<List<LatLng>> zzbpQ;
+    private boolean zzbpR;
+    private int zzbpS;
+    private float zzbpm;
+    private boolean zzbpn;
+    private boolean zzbpo;
+    @Nullable
+    private List<PatternItem> zzbpp;
 
     public PolygonOptions() {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.zzboJ = 0.0f;
-        this.zzboK = true;
-        this.zzbpm = false;
-        this.zzboL = false;
-        this.mVersionCode = 1;
-        this.zzbpk = new ArrayList();
-        this.zzbpl = new ArrayList();
+        this.zzbpm = 0.0f;
+        this.zzbpn = true;
+        this.zzbpR = false;
+        this.zzbpo = false;
+        this.zzbpS = 0;
+        this.zzbpp = null;
+        this.zzbpP = new ArrayList();
+        this.zzbpQ = new ArrayList();
     }
 
-    PolygonOptions(int i, List<LatLng> list, List list2, float f, int i2, int i3, float f2, boolean z, boolean z2, boolean z3) {
+    PolygonOptions(List<LatLng> list, List list2, float f, int i, int i2, float f2, boolean z, boolean z2, boolean z3, int i3, @Nullable List<PatternItem> list3) {
         this.mStrokeWidth = 10.0f;
         this.mStrokeColor = -16777216;
         this.mFillColor = 0;
-        this.zzboJ = 0.0f;
-        this.zzboK = true;
-        this.zzbpm = false;
-        this.zzboL = false;
-        this.mVersionCode = i;
-        this.zzbpk = list;
-        this.zzbpl = list2;
+        this.zzbpm = 0.0f;
+        this.zzbpn = true;
+        this.zzbpR = false;
+        this.zzbpo = false;
+        this.zzbpS = 0;
+        this.zzbpp = null;
+        this.zzbpP = list;
+        this.zzbpQ = list2;
         this.mStrokeWidth = f;
-        this.mStrokeColor = i2;
-        this.mFillColor = i3;
-        this.zzboJ = f2;
-        this.zzboK = z;
-        this.zzbpm = z2;
-        this.zzboL = z3;
+        this.mStrokeColor = i;
+        this.mFillColor = i2;
+        this.zzbpm = f2;
+        this.zzbpn = z;
+        this.zzbpR = z2;
+        this.zzbpo = z3;
+        this.zzbpS = i3;
+        this.zzbpp = list3;
     }
 
     public PolygonOptions add(LatLng latLng) {
-        this.zzbpk.add(latLng);
+        this.zzbpP.add(latLng);
         return this;
     }
 
     public PolygonOptions add(LatLng... latLngArr) {
-        this.zzbpk.addAll(Arrays.asList(latLngArr));
+        this.zzbpP.addAll(Arrays.asList(latLngArr));
         return this;
     }
 
     public PolygonOptions addAll(Iterable<LatLng> iterable) {
         for (LatLng add : iterable) {
-            this.zzbpk.add(add);
+            this.zzbpP.add(add);
         }
         return this;
     }
@@ -75,12 +82,12 @@ public final class PolygonOptions extends zza {
         for (LatLng add : iterable) {
             arrayList.add(add);
         }
-        this.zzbpl.add(arrayList);
+        this.zzbpQ.add(arrayList);
         return this;
     }
 
     public PolygonOptions clickable(boolean z) {
-        this.zzboL = z;
+        this.zzbpo = z;
         return this;
     }
 
@@ -90,7 +97,7 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions geodesic(boolean z) {
-        this.zzbpm = z;
+        this.zzbpR = z;
         return this;
     }
 
@@ -99,43 +106,58 @@ public final class PolygonOptions extends zza {
     }
 
     public List<List<LatLng>> getHoles() {
-        return this.zzbpl;
+        return this.zzbpQ;
     }
 
     public List<LatLng> getPoints() {
-        return this.zzbpk;
+        return this.zzbpP;
     }
 
     public int getStrokeColor() {
         return this.mStrokeColor;
     }
 
+    public int getStrokeJointType() {
+        return this.zzbpS;
+    }
+
+    @Nullable
+    public List<PatternItem> getStrokePattern() {
+        return this.zzbpp;
+    }
+
     public float getStrokeWidth() {
         return this.mStrokeWidth;
     }
 
-    int getVersionCode() {
-        return this.mVersionCode;
-    }
-
     public float getZIndex() {
-        return this.zzboJ;
-    }
-
-    public boolean isClickable() {
-        return this.zzboL;
-    }
-
-    public boolean isGeodesic() {
         return this.zzbpm;
     }
 
+    public boolean isClickable() {
+        return this.zzbpo;
+    }
+
+    public boolean isGeodesic() {
+        return this.zzbpR;
+    }
+
     public boolean isVisible() {
-        return this.zzboK;
+        return this.zzbpn;
     }
 
     public PolygonOptions strokeColor(int i) {
         this.mStrokeColor = i;
+        return this;
+    }
+
+    public PolygonOptions strokeJointType(int i) {
+        this.zzbpS = i;
+        return this;
+    }
+
+    public PolygonOptions strokePattern(@Nullable List<PatternItem> list) {
+        this.zzbpp = list;
         return this;
     }
 
@@ -145,20 +167,20 @@ public final class PolygonOptions extends zza {
     }
 
     public PolygonOptions visible(boolean z) {
-        this.zzboK = z;
+        this.zzbpn = z;
         return this;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzi.zza(this, parcel, i);
+        zzk.zza(this, parcel, i);
     }
 
     public PolygonOptions zIndex(float f) {
-        this.zzboJ = f;
+        this.zzbpm = f;
         return this;
     }
 
-    List zzIW() {
-        return this.zzbpl;
+    List zzJO() {
+        return this.zzbpQ;
     }
 }

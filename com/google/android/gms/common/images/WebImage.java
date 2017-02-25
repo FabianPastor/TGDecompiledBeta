@@ -11,16 +11,16 @@ import org.json.JSONObject;
 
 public final class WebImage extends zza {
     public static final Creator<WebImage> CREATOR = new zzb();
-    final int mVersionCode;
-    private final Uri zzarW;
-    private final int zzrG;
-    private final int zzrH;
+    final int zzaiI;
+    private final Uri zzata;
+    private final int zzrC;
+    private final int zzrD;
 
     WebImage(int i, Uri uri, int i2, int i3) {
-        this.mVersionCode = i;
-        this.zzarW = uri;
-        this.zzrG = i2;
-        this.zzrH = i3;
+        this.zzaiI = i;
+        this.zzata = uri;
+        this.zzrC = i2;
+        this.zzrD = i3;
     }
 
     public WebImage(Uri uri) throws IllegalArgumentException {
@@ -59,38 +59,38 @@ public final class WebImage extends zza {
             return false;
         }
         WebImage webImage = (WebImage) obj;
-        return zzaa.equal(this.zzarW, webImage.zzarW) && this.zzrG == webImage.zzrG && this.zzrH == webImage.zzrH;
+        return zzaa.equal(this.zzata, webImage.zzata) && this.zzrC == webImage.zzrC && this.zzrD == webImage.zzrD;
     }
 
     public int getHeight() {
-        return this.zzrH;
+        return this.zzrD;
     }
 
     public Uri getUrl() {
-        return this.zzarW;
+        return this.zzata;
     }
 
     public int getWidth() {
-        return this.zzrG;
+        return this.zzrC;
     }
 
     public int hashCode() {
-        return zzaa.hashCode(this.zzarW, Integer.valueOf(this.zzrG), Integer.valueOf(this.zzrH));
+        return zzaa.hashCode(this.zzata, Integer.valueOf(this.zzrC), Integer.valueOf(this.zzrD));
     }
 
     public JSONObject toJson() {
         JSONObject jSONObject = new JSONObject();
         try {
-            jSONObject.put("url", this.zzarW.toString());
-            jSONObject.put("width", this.zzrG);
-            jSONObject.put("height", this.zzrH);
+            jSONObject.put("url", this.zzata.toString());
+            jSONObject.put("width", this.zzrC);
+            jSONObject.put("height", this.zzrD);
         } catch (JSONException e) {
         }
         return jSONObject;
     }
 
     public String toString() {
-        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzrG), Integer.valueOf(this.zzrH), this.zzarW.toString()});
+        return String.format(Locale.US, "Image %dx%d %s", new Object[]{Integer.valueOf(this.zzrC), Integer.valueOf(this.zzrD), this.zzata.toString()});
     }
 
     public void writeToParcel(Parcel parcel, int i) {

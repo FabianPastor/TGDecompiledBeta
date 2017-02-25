@@ -1,107 +1,87 @@
 package com.google.android.gms.maps.model;
 
-import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import com.google.android.gms.common.internal.safeparcel.zzb;
 import com.google.android.gms.common.internal.safeparcel.zzb.zza;
+import java.util.List;
 
-public class zzc implements Creator<GroundOverlayOptions> {
-    static void zza(GroundOverlayOptions groundOverlayOptions, Parcel parcel, int i) {
-        int zzaV = com.google.android.gms.common.internal.safeparcel.zzc.zzaV(parcel);
-        com.google.android.gms.common.internal.safeparcel.zzc.zzc(parcel, 1, groundOverlayOptions.getVersionCode());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 2, groundOverlayOptions.zzIT(), false);
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 3, groundOverlayOptions.getLocation(), i, false);
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 4, groundOverlayOptions.getWidth());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 5, groundOverlayOptions.getHeight());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 6, groundOverlayOptions.getBounds(), i, false);
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 7, groundOverlayOptions.getBearing());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 8, groundOverlayOptions.getZIndex());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 9, groundOverlayOptions.isVisible());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 10, groundOverlayOptions.getTransparency());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 11, groundOverlayOptions.getAnchorU());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 12, groundOverlayOptions.getAnchorV());
-        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 13, groundOverlayOptions.isClickable());
-        com.google.android.gms.common.internal.safeparcel.zzc.zzJ(parcel, zzaV);
+public class zzc implements Creator<CircleOptions> {
+    static void zza(CircleOptions circleOptions, Parcel parcel, int i) {
+        int zzaZ = com.google.android.gms.common.internal.safeparcel.zzc.zzaZ(parcel);
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 2, circleOptions.getCenter(), i, false);
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 3, circleOptions.getRadius());
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 4, circleOptions.getStrokeWidth());
+        com.google.android.gms.common.internal.safeparcel.zzc.zzc(parcel, 5, circleOptions.getStrokeColor());
+        com.google.android.gms.common.internal.safeparcel.zzc.zzc(parcel, 6, circleOptions.getFillColor());
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 7, circleOptions.getZIndex());
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 8, circleOptions.isVisible());
+        com.google.android.gms.common.internal.safeparcel.zzc.zza(parcel, 9, circleOptions.isClickable());
+        com.google.android.gms.common.internal.safeparcel.zzc.zzc(parcel, 10, circleOptions.getStrokePattern(), false);
+        com.google.android.gms.common.internal.safeparcel.zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzhv(parcel);
+        return zzhz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzkZ(i);
+        return zzlh(i);
     }
 
-    public GroundOverlayOptions zzhv(Parcel parcel) {
-        int zzaU = zzb.zzaU(parcel);
-        int i = 0;
-        IBinder iBinder = null;
-        LatLng latLng = null;
+    public CircleOptions zzhz(Parcel parcel) {
+        List list = null;
         float f = 0.0f;
-        float f2 = 0.0f;
-        LatLngBounds latLngBounds = null;
-        float f3 = 0.0f;
-        float f4 = 0.0f;
         boolean z = false;
-        float f5 = 0.0f;
-        float f6 = 0.0f;
-        float f7 = 0.0f;
+        int zzaY = zzb.zzaY(parcel);
+        double d = 0.0d;
         boolean z2 = false;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
+        int i = 0;
+        int i2 = 0;
+        float f2 = 0.0f;
+        LatLng latLng = null;
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 2:
-                    iBinder = zzb.zzr(parcel, zzaT);
+                    latLng = (LatLng) zzb.zza(parcel, zzaX, LatLng.CREATOR);
                     break;
                 case 3:
-                    latLng = (LatLng) zzb.zza(parcel, zzaT, LatLng.CREATOR);
+                    d = zzb.zzn(parcel, zzaX);
                     break;
                 case 4:
-                    f = zzb.zzl(parcel, zzaT);
+                    f2 = zzb.zzl(parcel, zzaX);
                     break;
                 case 5:
-                    f2 = zzb.zzl(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 case 6:
-                    latLngBounds = (LatLngBounds) zzb.zza(parcel, zzaT, LatLngBounds.CREATOR);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 7:
-                    f3 = zzb.zzl(parcel, zzaT);
+                    f = zzb.zzl(parcel, zzaX);
                     break;
                 case 8:
-                    f4 = zzb.zzl(parcel, zzaT);
+                    z2 = zzb.zzc(parcel, zzaX);
                     break;
                 case 9:
-                    z = zzb.zzc(parcel, zzaT);
+                    z = zzb.zzc(parcel, zzaX);
                     break;
                 case 10:
-                    f5 = zzb.zzl(parcel, zzaT);
-                    break;
-                case 11:
-                    f6 = zzb.zzl(parcel, zzaT);
-                    break;
-                case 12:
-                    f7 = zzb.zzl(parcel, zzaT);
-                    break;
-                case 13:
-                    z2 = zzb.zzc(parcel, zzaT);
+                    list = zzb.zzc(parcel, zzaX, PatternItem.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new GroundOverlayOptions(i, iBinder, latLng, f, f2, latLngBounds, f3, f4, z, f5, f6, f7, z2);
+        if (parcel.dataPosition() == zzaY) {
+            return new CircleOptions(latLng, d, f2, i2, i, f, z2, z, list);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public GroundOverlayOptions[] zzkZ(int i) {
-        return new GroundOverlayOptions[i];
+    public CircleOptions[] zzlh(int i) {
+        return new CircleOptions[i];
     }
 }

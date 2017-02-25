@@ -12,7 +12,7 @@ public final class zza {
         }
     }
 
-    public static byte zze(Boolean bool) {
+    public static byte zzd(Boolean bool) {
         return bool != null ? bool.booleanValue() ? (byte) 1 : (byte) 0 : (byte) -1;
     }
 }

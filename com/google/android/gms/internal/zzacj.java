@@ -1,57 +1,33 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.internal.zzach.zza;
+import android.content.Context;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Looper;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.internal.zzg;
+import com.google.android.gms.common.internal.zzl;
+import com.google.android.gms.internal.zzacl.zza;
 
-public class zzacj implements Creator<zza> {
-    static void zza(zza com_google_android_gms_internal_zzach_zza, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzach_zza.versionCode);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzach_zza.zzaFy, false);
-        zzc.zzc(parcel, 3, com_google_android_gms_internal_zzach_zza.zzaFz);
-        zzc.zzJ(parcel, zzaV);
+public class zzacj extends zzl<zzacl> {
+    public zzacj(Context context, Looper looper, zzg com_google_android_gms_common_internal_zzg, ConnectionCallbacks connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
+        super(context, looper, 39, com_google_android_gms_common_internal_zzg, connectionCallbacks, onConnectionFailedListener);
     }
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaZ(parcel);
+    protected zzacl zzbz(IBinder iBinder) {
+        return zza.zzbB(iBinder);
     }
 
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzdb(i);
+    protected String zzeA() {
+        return "com.google.android.gms.common.internal.service.ICommonService";
     }
 
-    public zza zzaZ(Parcel parcel) {
-        int i = 0;
-        int zzaU = zzb.zzaU(parcel);
-        String str = null;
-        int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
-                    break;
-                case 2:
-                    str = zzb.zzq(parcel, zzaT);
-                    break;
-                case 3:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaT);
-                    break;
-            }
-        }
-        if (parcel.dataPosition() == zzaU) {
-            return new zza(i2, str, i);
-        }
-        throw new zzb.zza("Overread allowed size end=" + zzaU, parcel);
+    public String zzez() {
+        return "com.google.android.gms.common.service.START";
     }
 
-    public zza[] zzdb(int i) {
-        return new zza[i];
+    protected /* synthetic */ IInterface zzh(IBinder iBinder) {
+        return zzbz(iBinder);
     }
 }

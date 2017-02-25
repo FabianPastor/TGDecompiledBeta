@@ -5,6 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.internal.zzf;
 
 public interface zzd extends IInterface {
@@ -12,25 +13,25 @@ public interface zzd extends IInterface {
     public static abstract class zza extends Binder implements zzd {
 
         private static class zza implements zzd {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public com.google.android.gms.dynamic.zzd zzh(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException {
+            public IObjectWrapper zzh(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IInfoWindowAdapter");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzf != null ? com_google_android_gms_maps_model_internal_zzf.asBinder() : null);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    com.google.android.gms.dynamic.zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -38,15 +39,15 @@ public interface zzd extends IInterface {
                 }
             }
 
-            public com.google.android.gms.dynamic.zzd zzi(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException {
+            public IObjectWrapper zzi(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.IInfoWindowAdapter");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzf != null ? com_google_android_gms_maps_model_internal_zzf.asBinder() : null);
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
-                    com.google.android.gms.dynamic.zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -73,11 +74,11 @@ public interface zzd extends IInterface {
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             IBinder iBinder = null;
-            com.google.android.gms.dynamic.zzd zzh;
+            IObjectWrapper zzh;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IInfoWindowAdapter");
-                    zzh = zzh(com.google.android.gms.maps.model.internal.zzf.zza.zzem(parcel.readStrongBinder()));
+                    zzh = zzh(com.google.android.gms.maps.model.internal.zzf.zza.zzen(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (zzh != null) {
                         iBinder = zzh.asBinder();
@@ -86,7 +87,7 @@ public interface zzd extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.IInfoWindowAdapter");
-                    zzh = zzi(com.google.android.gms.maps.model.internal.zzf.zza.zzem(parcel.readStrongBinder()));
+                    zzh = zzi(com.google.android.gms.maps.model.internal.zzf.zza.zzen(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (zzh != null) {
                         iBinder = zzh.asBinder();
@@ -102,7 +103,7 @@ public interface zzd extends IInterface {
         }
     }
 
-    com.google.android.gms.dynamic.zzd zzh(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException;
+    IObjectWrapper zzh(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException;
 
-    com.google.android.gms.dynamic.zzd zzi(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException;
+    IObjectWrapper zzi(zzf com_google_android_gms_maps_model_internal_zzf) throws RemoteException;
 }

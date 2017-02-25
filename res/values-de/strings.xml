@@ -17,6 +17,7 @@
     <string name="common_open_on_phone">Auf Smartphone öffnen</string>
     <string name="common_signin_button_text">Anmelden</string>
     <string name="common_signin_button_text_long">Über Google anmelden</string>
+    <string name="wallet_buy_button_place_holder">Über Google kaufen</string>
     <string name="ALongTimeAgo">vor langer Zeit gesehen</string>
     <string name="AbortPassword">Einrichten abbrechen</string>
     <string name="AccessError">Zugriffsfehler</string>

@@ -6,39 +6,39 @@ import com.google.android.gms.vision.Detector.Detections;
 import com.google.android.gms.vision.Detector.Processor;
 
 public abstract class FocusingProcessor<T> implements Processor<T> {
-    private Detector<T> zzbMd;
-    private Tracker<T> zzbMt;
-    private int zzbMu = 3;
-    private boolean zzbMv = false;
-    private int zzbMw;
-    private int zzbMx = 0;
+    private Detector<T> zzbOd;
+    private Tracker<T> zzbOs;
+    private int zzbOt = 3;
+    private boolean zzbOu = false;
+    private int zzbOv;
+    private int zzbOw = 0;
 
     public FocusingProcessor(Detector<T> detector, Tracker<T> tracker) {
-        this.zzbMd = detector;
-        this.zzbMt = tracker;
+        this.zzbOd = detector;
+        this.zzbOs = tracker;
     }
 
     public void receiveDetections(Detections<T> detections) {
         SparseArray detectedItems = detections.getDetectedItems();
         if (detectedItems.size() == 0) {
-            if (this.zzbMx == this.zzbMu) {
-                this.zzbMt.onDone();
-                this.zzbMv = false;
+            if (this.zzbOw == this.zzbOt) {
+                this.zzbOs.onDone();
+                this.zzbOu = false;
             } else {
-                this.zzbMt.onMissing(detections);
+                this.zzbOs.onMissing(detections);
             }
-            this.zzbMx++;
+            this.zzbOw++;
             return;
         }
-        this.zzbMx = 0;
-        if (this.zzbMv) {
-            Object obj = detectedItems.get(this.zzbMw);
+        this.zzbOw = 0;
+        if (this.zzbOu) {
+            Object obj = detectedItems.get(this.zzbOv);
             if (obj != null) {
-                this.zzbMt.onUpdate(detections, obj);
+                this.zzbOs.onUpdate(detections, obj);
                 return;
             } else {
-                this.zzbMt.onDone();
-                this.zzbMv = false;
+                this.zzbOs.onDone();
+                this.zzbOu = false;
             }
         }
         int selectFocus = selectFocus(detections);
@@ -47,23 +47,23 @@ public abstract class FocusingProcessor<T> implements Processor<T> {
             Log.w("FocusingProcessor", "Invalid focus selected: " + selectFocus);
             return;
         }
-        this.zzbMv = true;
-        this.zzbMw = selectFocus;
-        this.zzbMd.setFocus(this.zzbMw);
-        this.zzbMt.onNewItem(this.zzbMw, obj2);
-        this.zzbMt.onUpdate(detections, obj2);
+        this.zzbOu = true;
+        this.zzbOv = selectFocus;
+        this.zzbOd.setFocus(this.zzbOv);
+        this.zzbOs.onNewItem(this.zzbOv, obj2);
+        this.zzbOs.onUpdate(detections, obj2);
     }
 
     public void release() {
-        this.zzbMt.onDone();
+        this.zzbOs.onDone();
     }
 
     public abstract int selectFocus(Detections<T> detections);
 
-    protected void zznf(int i) {
+    protected void zznQ(int i) {
         if (i < 0) {
             throw new IllegalArgumentException("Invalid max gap: " + i);
         }
-        this.zzbMu = i;
+        this.zzbOt = i;
     }
 }

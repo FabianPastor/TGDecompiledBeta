@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Բացել հեռախոսով</string>
     <string name="common_signin_button_text">Մուտք գործել</string>
     <string name="common_signin_button_text_long">Մուտք գործել Google-ով</string>
+    <string name="wallet_buy_button_place_holder">Գնել Google-ի միջոցով</string>
 </resources>

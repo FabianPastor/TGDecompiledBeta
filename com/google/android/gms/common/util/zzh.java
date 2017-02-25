@@ -1,26 +1,17 @@
 package com.google.android.gms.common.util;
 
-import android.os.SystemClock;
+import android.database.CharArrayBuffer;
+import android.text.TextUtils;
 
-public class zzh implements zze {
-    private static zzh zzaGK = new zzh();
-
-    private zzh() {
-    }
-
-    public static zze zzyv() {
-        return zzaGK;
-    }
-
-    public long currentTimeMillis() {
-        return System.currentTimeMillis();
-    }
-
-    public long elapsedRealtime() {
-        return SystemClock.elapsedRealtime();
-    }
-
-    public long nanoTime() {
-        return System.nanoTime();
+public final class zzh {
+    public static void zzb(String str, CharArrayBuffer charArrayBuffer) {
+        if (TextUtils.isEmpty(str)) {
+            charArrayBuffer.sizeCopied = 0;
+        } else if (charArrayBuffer.data == null || charArrayBuffer.data.length < str.length()) {
+            charArrayBuffer.data = str.toCharArray();
+        } else {
+            str.getChars(0, str.length(), charArrayBuffer.data, 0);
+        }
+        charArrayBuffer.sizeCopied = str.length();
     }
 }

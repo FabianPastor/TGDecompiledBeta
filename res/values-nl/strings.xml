@@ -17,6 +17,7 @@
     <string name="common_open_on_phone">Openen op telefoon</string>
     <string name="common_signin_button_text">Inloggen</string>
     <string name="common_signin_button_text_long">Inloggen met Google</string>
+    <string name="wallet_buy_button_place_holder">Kopen met Google</string>
     <string name="ALongTimeAgo">lang geleden gezien</string>
     <string name="AbortPassword">Twee-staps-verificatie annuleren</string>
     <string name="AccessError">Toegangsfout</string>

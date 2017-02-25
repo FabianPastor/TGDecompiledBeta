@@ -8,18 +8,18 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 
 public class zzaf extends zza {
     public static final Creator<zzaf> CREATOR = new zzag();
-    final int mVersionCode;
-    IBinder zzaDx;
-    private ConnectionResult zzaFh;
-    private boolean zzaFi;
-    private boolean zzazX;
+    private boolean zzaBx;
+    IBinder zzaEW;
+    private ConnectionResult zzaGE;
+    private boolean zzaGF;
+    final int zzaiI;
 
     zzaf(int i, IBinder iBinder, ConnectionResult connectionResult, boolean z, boolean z2) {
-        this.mVersionCode = i;
-        this.zzaDx = iBinder;
-        this.zzaFh = connectionResult;
-        this.zzazX = z;
-        this.zzaFi = z2;
+        this.zzaiI = i;
+        this.zzaEW = iBinder;
+        this.zzaGE = connectionResult;
+        this.zzaBx = z;
+        this.zzaGF = z2;
     }
 
     public boolean equals(Object obj) {
@@ -30,26 +30,26 @@ public class zzaf extends zza {
             return false;
         }
         zzaf com_google_android_gms_common_internal_zzaf = (zzaf) obj;
-        return this.zzaFh.equals(com_google_android_gms_common_internal_zzaf.zzaFh) && zzxz().equals(com_google_android_gms_common_internal_zzaf.zzxz());
+        return this.zzaGE.equals(com_google_android_gms_common_internal_zzaf.zzaGE) && zzyg().equals(com_google_android_gms_common_internal_zzaf.zzyg());
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzag.zza(this, parcel, i);
     }
 
-    public ConnectionResult zzxA() {
-        return this.zzaFh;
+    public zzr zzyg() {
+        return zzr.zza.zzbr(this.zzaEW);
     }
 
-    public boolean zzxB() {
-        return this.zzazX;
+    public ConnectionResult zzyh() {
+        return this.zzaGE;
     }
 
-    public boolean zzxC() {
-        return this.zzaFi;
+    public boolean zzyi() {
+        return this.zzaBx;
     }
 
-    public zzr zzxz() {
-        return zzr.zza.zzbr(this.zzaDx);
+    public boolean zzyj() {
+        return this.zzaGF;
     }
 }

@@ -3,16 +3,16 @@ package com.google.android.gms.gcm;
 import android.os.Bundle;
 
 public class zzc {
-    public static final zzc zzbgm = new zzc(0, 30, 3600);
-    public static final zzc zzbgn = new zzc(1, 30, 3600);
-    private final int zzbgo;
-    private final int zzbgp;
-    private final int zzbgq;
+    public static final zzc zzbgR = new zzc(0, 30, 3600);
+    public static final zzc zzbgS = new zzc(1, 30, 3600);
+    private final int zzbgT;
+    private final int zzbgU;
+    private final int zzbgV;
 
     private zzc(int i, int i2, int i3) {
-        this.zzbgo = i;
-        this.zzbgp = i2;
-        this.zzbgq = i3;
+        this.zzbgT = i;
+        this.zzbgU = i2;
+        this.zzbgV = i3;
     }
 
     public boolean equals(Object obj) {
@@ -23,35 +23,35 @@ public class zzc {
             return false;
         }
         zzc com_google_android_gms_gcm_zzc = (zzc) obj;
-        return com_google_android_gms_gcm_zzc.zzbgo == this.zzbgo && com_google_android_gms_gcm_zzc.zzbgp == this.zzbgp && com_google_android_gms_gcm_zzc.zzbgq == this.zzbgq;
+        return com_google_android_gms_gcm_zzc.zzbgT == this.zzbgT && com_google_android_gms_gcm_zzc.zzbgU == this.zzbgU && com_google_android_gms_gcm_zzc.zzbgV == this.zzbgV;
     }
 
     public int hashCode() {
-        return (((((this.zzbgo + 1) ^ 1000003) * 1000003) ^ this.zzbgp) * 1000003) ^ this.zzbgq;
+        return (((((this.zzbgT + 1) ^ 1000003) * 1000003) ^ this.zzbgU) * 1000003) ^ this.zzbgV;
     }
 
     public String toString() {
-        int i = this.zzbgo;
-        int i2 = this.zzbgp;
-        return "policy=" + i + " initial_backoff=" + i2 + " maximum_backoff=" + this.zzbgq;
+        int i = this.zzbgT;
+        int i2 = this.zzbgU;
+        return "policy=" + i + " initial_backoff=" + i2 + " maximum_backoff=" + this.zzbgV;
     }
 
-    public int zzGg() {
-        return this.zzbgo;
+    public int zzGT() {
+        return this.zzbgT;
     }
 
-    public int zzGh() {
-        return this.zzbgp;
+    public int zzGU() {
+        return this.zzbgU;
     }
 
-    public int zzGi() {
-        return this.zzbgq;
+    public int zzGV() {
+        return this.zzbgV;
     }
 
     public Bundle zzK(Bundle bundle) {
-        bundle.putInt("retry_policy", this.zzbgo);
-        bundle.putInt("initial_backoff_seconds", this.zzbgp);
-        bundle.putInt("maximum_backoff_seconds", this.zzbgq);
+        bundle.putInt("retry_policy", this.zzbgT);
+        bundle.putInt("initial_backoff_seconds", this.zzbgU);
+        bundle.putInt("maximum_backoff_seconds", this.zzbgV);
         return bundle;
     }
 }

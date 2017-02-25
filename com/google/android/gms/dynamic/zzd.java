@@ -1,50 +1,52 @@
 package com.google.android.gms.dynamic;
 
-import android.os.Binder;
 import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper.zza;
+import java.lang.reflect.Field;
 
-public interface zzd extends IInterface {
+public final class zzd<T> extends zza {
+    private final T mWrappedObject;
 
-    public static abstract class zza extends Binder implements zzd {
+    private zzd(T t) {
+        this.mWrappedObject = t;
+    }
 
-        private static class zza implements zzd {
-            private IBinder zzrp;
+    public static <T> IObjectWrapper zzA(T t) {
+        return new zzd(t);
+    }
 
-            zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+    public static <T> T zzF(IObjectWrapper iObjectWrapper) {
+        int i = 0;
+        if (iObjectWrapper instanceof zzd) {
+            return ((zzd) iObjectWrapper).mWrappedObject;
+        }
+        IBinder asBinder = iObjectWrapper.asBinder();
+        Field[] declaredFields = asBinder.getClass().getDeclaredFields();
+        Field field = null;
+        int length = declaredFields.length;
+        int i2 = 0;
+        while (i2 < length) {
+            Field field2 = declaredFields[i2];
+            if (field2.isSynthetic()) {
+                field2 = field;
+            } else {
+                i++;
             }
-
-            public IBinder asBinder() {
-                return this.zzrp;
-            }
+            i2++;
+            field = field2;
         }
-
-        public zza() {
-            attachInterface(this, "com.google.android.gms.dynamic.IObjectWrapper");
-        }
-
-        public static zzd zzcd(IBinder iBinder) {
-            if (iBinder == null) {
-                return null;
-            }
-            IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.dynamic.IObjectWrapper");
-            return (queryLocalInterface == null || !(queryLocalInterface instanceof zzd)) ? new zza(iBinder) : (zzd) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
-        }
-
-        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            switch (i) {
-                case 1598968902:
-                    parcel2.writeString("com.google.android.gms.dynamic.IObjectWrapper");
-                    return true;
-                default:
-                    return super.onTransact(i, parcel, parcel2, i2);
+        if (i != 1) {
+            throw new IllegalArgumentException("Unexpected number of IObjectWrapper declared fields: " + declaredFields.length);
+        } else if (field.isAccessible()) {
+            throw new IllegalArgumentException("IObjectWrapper declared field not private!");
+        } else {
+            field.setAccessible(true);
+            try {
+                return field.get(asBinder);
+            } catch (Throwable e) {
+                throw new IllegalArgumentException("Binder object is null.", e);
+            } catch (Throwable e2) {
+                throw new IllegalArgumentException("Could not access the field in remoteBinder.", e2);
             }
         }
     }

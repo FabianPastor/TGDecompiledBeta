@@ -9,12 +9,12 @@ import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import com.google.android.gms.common.internal.zzi;
 
-public final class GooglePlayServicesUtil extends zze {
+public final class GooglePlayServicesUtil extends zzg {
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
     @Deprecated
     public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
     @Deprecated
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zze.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = zzg.GOOGLE_PLAY_SERVICES_VERSION_CODE;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
 
     private GooglePlayServicesUtil() {
@@ -35,35 +35,35 @@ public final class GooglePlayServicesUtil extends zze {
 
     @Deprecated
     public static PendingIntent getErrorPendingIntent(int i, Context context, int i2) {
-        return zze.getErrorPendingIntent(i, context, i2);
+        return zzg.getErrorPendingIntent(i, context, i2);
     }
 
     @Deprecated
     public static String getErrorString(int i) {
-        return zze.getErrorString(i);
+        return zzg.getErrorString(i);
     }
 
     @Deprecated
     public static String getOpenSourceSoftwareLicenseInfo(Context context) {
-        return zze.getOpenSourceSoftwareLicenseInfo(context);
+        return zzg.getOpenSourceSoftwareLicenseInfo(context);
     }
 
     public static Context getRemoteContext(Context context) {
-        return zze.getRemoteContext(context);
+        return zzg.getRemoteContext(context);
     }
 
     public static Resources getRemoteResource(Context context) {
-        return zze.getRemoteResource(context);
+        return zzg.getRemoteResource(context);
     }
 
     @Deprecated
     public static int isGooglePlayServicesAvailable(Context context) {
-        return zze.isGooglePlayServicesAvailable(context);
+        return zzg.isGooglePlayServicesAvailable(context);
     }
 
     @Deprecated
     public static boolean isUserRecoverableError(int i) {
-        return zze.isUserRecoverableError(i);
+        return zzg.isUserRecoverableError(i);
     }
 
     @Deprecated
@@ -96,7 +96,7 @@ public final class GooglePlayServicesUtil extends zze {
     public static void showErrorNotification(int i, Context context) {
         GoogleApiAvailability instance = GoogleApiAvailability.getInstance();
         if (zzd(context, i) || zze(context, i)) {
-            instance.zzal(context);
+            instance.zzaD(context);
         } else {
             instance.showErrorNotification(context, i);
         }
@@ -104,11 +104,11 @@ public final class GooglePlayServicesUtil extends zze {
 
     @Deprecated
     public static boolean zzd(Context context, int i) {
-        return zze.zzd(context, i);
+        return zzg.zzd(context, i);
     }
 
     @Deprecated
     public static boolean zze(Context context, int i) {
-        return zze.zze(context, i);
+        return zzg.zze(context, i);
     }
 }

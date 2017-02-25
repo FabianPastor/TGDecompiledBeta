@@ -9,50 +9,50 @@ import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
 
 public class zzl implements Creator<UrlBookmark> {
     static void zza(UrlBookmark urlBookmark, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, urlBookmark.versionCode);
         zzc.zza(parcel, 2, urlBookmark.title, false);
         zzc.zza(parcel, 3, urlBookmark.url, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzje(parcel);
+        return zzjK(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zznt(i);
+        return zzoe(i);
     }
 
-    public UrlBookmark zzje(Parcel parcel) {
+    public UrlBookmark zzjK(Parcel parcel) {
         String str = null;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         String str2 = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new UrlBookmark(i, str2, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public UrlBookmark[] zznt(int i) {
+    public UrlBookmark[] zzoe(int i) {
         return new UrlBookmark[i];
     }
 }

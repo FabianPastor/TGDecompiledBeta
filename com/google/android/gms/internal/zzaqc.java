@@ -1,63 +1,44 @@
 package com.google.android.gms.internal;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Collection;
+import android.content.Context;
+import android.os.RemoteException;
+import android.util.Log;
+import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamite.DynamiteModule;
+import com.google.android.gms.dynamite.descriptors.com.google.android.gms.flags.ModuleDescriptor;
+import com.google.android.gms.internal.zzaqd.zza;
 
-public final class zzaqc implements zzapl {
-    private final zzaps bod;
+public class zzaqc {
+    private zzaqd zzaXk = null;
+    private boolean zztZ = false;
 
-    private static final class zza<E> extends zzapk<Collection<E>> {
-        private final zzapk<E> bpJ;
-        private final zzapx<? extends Collection<E>> bpK;
-
-        public zza(zzaos com_google_android_gms_internal_zzaos, Type type, zzapk<E> com_google_android_gms_internal_zzapk_E, zzapx<? extends Collection<E>> com_google_android_gms_internal_zzapx__extends_java_util_Collection_E) {
-            this.bpJ = new zzaqm(com_google_android_gms_internal_zzaos, com_google_android_gms_internal_zzapk_E, type);
-            this.bpK = com_google_android_gms_internal_zzapx__extends_java_util_Collection_E;
-        }
-
-        public void zza(zzaqr com_google_android_gms_internal_zzaqr, Collection<E> collection) throws IOException {
-            if (collection == null) {
-                com_google_android_gms_internal_zzaqr.bA();
+    public void initialize(Context context) {
+        Throwable e;
+        synchronized (this) {
+            if (this.zztZ) {
                 return;
             }
-            com_google_android_gms_internal_zzaqr.bw();
-            for (E zza : collection) {
-                this.bpJ.zza(com_google_android_gms_internal_zzaqr, zza);
+            try {
+                this.zzaXk = zza.asInterface(DynamiteModule.zza(context, DynamiteModule.zzaRY, ModuleDescriptor.MODULE_ID).zzdT("com.google.android.gms.flags.impl.FlagProviderImpl"));
+                this.zzaXk.init(zzd.zzA(context));
+                this.zztZ = true;
+            } catch (DynamiteModule.zza e2) {
+                e = e2;
+                Log.w("FlagValueProvider", "Failed to initialize flags module.", e);
+            } catch (RemoteException e3) {
+                e = e3;
+                Log.w("FlagValueProvider", "Failed to initialize flags module.", e);
             }
-            com_google_android_gms_internal_zzaqr.bx();
-        }
-
-        public /* synthetic */ Object zzb(zzaqp com_google_android_gms_internal_zzaqp) throws IOException {
-            return zzj(com_google_android_gms_internal_zzaqp);
-        }
-
-        public Collection<E> zzj(zzaqp com_google_android_gms_internal_zzaqp) throws IOException {
-            if (com_google_android_gms_internal_zzaqp.bq() == zzaqq.NULL) {
-                com_google_android_gms_internal_zzaqp.nextNull();
-                return null;
-            }
-            Collection<E> collection = (Collection) this.bpK.bj();
-            com_google_android_gms_internal_zzaqp.beginArray();
-            while (com_google_android_gms_internal_zzaqp.hasNext()) {
-                collection.add(this.bpJ.zzb(com_google_android_gms_internal_zzaqp));
-            }
-            com_google_android_gms_internal_zzaqp.endArray();
-            return collection;
         }
     }
 
-    public zzaqc(zzaps com_google_android_gms_internal_zzaps) {
-        this.bod = com_google_android_gms_internal_zzaps;
-    }
-
-    public <T> zzapk<T> zza(zzaos com_google_android_gms_internal_zzaos, zzaqo<T> com_google_android_gms_internal_zzaqo_T) {
-        Type bC = com_google_android_gms_internal_zzaqo_T.bC();
-        Class bB = com_google_android_gms_internal_zzaqo_T.bB();
-        if (!Collection.class.isAssignableFrom(bB)) {
-            return null;
+    public <T> T zzb(zzaqa<T> com_google_android_gms_internal_zzaqa_T) {
+        synchronized (this) {
+            if (this.zztZ) {
+                return com_google_android_gms_internal_zzaqa_T.zza(this.zzaXk);
+            }
+            T zzfr = com_google_android_gms_internal_zzaqa_T.zzfr();
+            return zzfr;
         }
-        Type zza = zzapr.zza(bC, bB);
-        return new zza(com_google_android_gms_internal_zzaos, zza, com_google_android_gms_internal_zzaos.zza(zzaqo.zzl(zza)), this.bod.zzb(com_google_android_gms_internal_zzaqo_T));
     }
 }

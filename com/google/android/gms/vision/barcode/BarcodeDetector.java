@@ -2,29 +2,29 @@ package com.google.android.gms.vision.barcode;
 
 import android.content.Context;
 import android.util.SparseArray;
-import com.google.android.gms.internal.zzbgo;
-import com.google.android.gms.internal.zzbgq;
-import com.google.android.gms.internal.zzbhd;
+import com.google.android.gms.internal.zzbjl;
+import com.google.android.gms.internal.zzbjn;
+import com.google.android.gms.internal.zzbka;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 
 public final class BarcodeDetector extends Detector<Barcode> {
-    private final zzbgq zzbMJ;
+    private final zzbjn zzbOI;
 
     public static class Builder {
         private Context mContext;
-        private zzbgo zzbMK = new zzbgo();
+        private zzbjl zzbOJ = new zzbjl();
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public BarcodeDetector build() {
-            return new BarcodeDetector(new zzbgq(this.mContext, this.zzbMK));
+            return new BarcodeDetector(new zzbjn(this.mContext, this.zzbOJ));
         }
 
         public Builder setBarcodeFormats(int i) {
-            this.zzbMK.zzbML = i;
+            this.zzbOJ.zzbOK = i;
             return this;
         }
     }
@@ -33,8 +33,8 @@ public final class BarcodeDetector extends Detector<Barcode> {
         throw new IllegalStateException("Default constructor called");
     }
 
-    private BarcodeDetector(zzbgq com_google_android_gms_internal_zzbgq) {
-        this.zzbMJ = com_google_android_gms_internal_zzbgq;
+    private BarcodeDetector(zzbjn com_google_android_gms_internal_zzbjn) {
+        this.zzbOI = com_google_android_gms_internal_zzbjn;
     }
 
     public SparseArray<Barcode> detect(Frame frame) {
@@ -42,14 +42,14 @@ public final class BarcodeDetector extends Detector<Barcode> {
             throw new IllegalArgumentException("No frame supplied.");
         }
         Barcode[] zza;
-        zzbhd zzc = zzbhd.zzc(frame);
+        zzbka zzc = zzbka.zzc(frame);
         if (frame.getBitmap() != null) {
-            zza = this.zzbMJ.zza(frame.getBitmap(), zzc);
+            zza = this.zzbOI.zza(frame.getBitmap(), zzc);
             if (zza == null) {
                 throw new IllegalArgumentException("Internal barcode detector error; check logcat output.");
             }
         }
-        zza = this.zzbMJ.zza(frame.getGrayscaleImageData(), zzc);
+        zza = this.zzbOI.zza(frame.getGrayscaleImageData(), zzc);
         SparseArray<Barcode> sparseArray = new SparseArray(zza.length);
         for (Barcode barcode : zza) {
             sparseArray.append(barcode.rawValue.hashCode(), barcode);
@@ -58,11 +58,11 @@ public final class BarcodeDetector extends Detector<Barcode> {
     }
 
     public boolean isOperational() {
-        return this.zzbMJ.isOperational();
+        return this.zzbOI.isOperational();
     }
 
     public void release() {
         super.release();
-        this.zzbMJ.zzSp();
+        this.zzbOI.zzTQ();
     }
 }

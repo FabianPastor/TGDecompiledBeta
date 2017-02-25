@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class MapsInitializer {
-    private static boolean zzpW = false;
+    private static boolean zzpT = false;
 
     private MapsInitializer() {
     }
@@ -19,10 +19,10 @@ public final class MapsInitializer {
         int i = 0;
         synchronized (MapsInitializer.class) {
             zzac.zzb((Object) context, (Object) "Context is null");
-            if (!zzpW) {
+            if (!zzpT) {
                 try {
-                    zza(zzai.zzbq(context));
-                    zzpW = true;
+                    zza(zzai.zzbI(context));
+                    zzpT = true;
                 } catch (GooglePlayServicesNotAvailableException e) {
                     i = e.errorCode;
                 }
@@ -33,8 +33,8 @@ public final class MapsInitializer {
 
     public static void zza(zzc com_google_android_gms_maps_internal_zzc) {
         try {
-            CameraUpdateFactory.zza(com_google_android_gms_maps_internal_zzc.zzIQ());
-            BitmapDescriptorFactory.zza(com_google_android_gms_maps_internal_zzc.zzIR());
+            CameraUpdateFactory.zza(com_google_android_gms_maps_internal_zzc.zzJD());
+            BitmapDescriptorFactory.zza(com_google_android_gms_maps_internal_zzc.zzJE());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

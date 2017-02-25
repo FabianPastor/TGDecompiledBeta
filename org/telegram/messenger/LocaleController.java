@@ -1153,6 +1153,238 @@ public class LocaleController {
         return (discount ? "-" : "") + String.format(type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
     }
 
+    public String formatCurrencyDecimalString(long amount, String type) {
+        String customFormat;
+        double doubleAmount;
+        type = type.toUpperCase();
+        amount = Math.abs(amount);
+        int i = -1;
+        switch (type.hashCode()) {
+            case 65726:
+                if (type.equals("BHD")) {
+                    i = 1;
+                    break;
+                }
+                break;
+            case 65759:
+                if (type.equals("BIF")) {
+                    i = 8;
+                    break;
+                }
+                break;
+            case 66267:
+                if (type.equals("BYR")) {
+                    i = 9;
+                    break;
+                }
+                break;
+            case 66813:
+                if (type.equals("CLF")) {
+                    i = 0;
+                    break;
+                }
+                break;
+            case 66823:
+                if (type.equals("CLP")) {
+                    i = 10;
+                    break;
+                }
+                break;
+            case 67122:
+                if (type.equals("CVE")) {
+                    i = 11;
+                    break;
+                }
+                break;
+            case 67712:
+                if (type.equals("DJF")) {
+                    i = 12;
+                    break;
+                }
+                break;
+            case 70719:
+                if (type.equals("GNF")) {
+                    i = 13;
+                    break;
+                }
+                break;
+            case 72732:
+                if (type.equals("IQD")) {
+                    i = 2;
+                    break;
+                }
+                break;
+            case 72801:
+                if (type.equals("ISK")) {
+                    i = 14;
+                    break;
+                }
+                break;
+            case 73631:
+                if (type.equals("JOD")) {
+                    i = 3;
+                    break;
+                }
+                break;
+            case 73683:
+                if (type.equals("JPY")) {
+                    i = 15;
+                    break;
+                }
+                break;
+            case 74532:
+                if (type.equals("KMF")) {
+                    i = 16;
+                    break;
+                }
+                break;
+            case 74704:
+                if (type.equals("KRW")) {
+                    i = 17;
+                    break;
+                }
+                break;
+            case 74840:
+                if (type.equals("KWD")) {
+                    i = 4;
+                    break;
+                }
+                break;
+            case 75863:
+                if (type.equals("LYD")) {
+                    i = 5;
+                    break;
+                }
+                break;
+            case 76263:
+                if (type.equals("MGA")) {
+                    i = 18;
+                    break;
+                }
+                break;
+            case 76618:
+                if (type.equals("MRO")) {
+                    i = 28;
+                    break;
+                }
+                break;
+            case 78388:
+                if (type.equals("OMR")) {
+                    i = 6;
+                    break;
+                }
+                break;
+            case 79710:
+                if (type.equals("PYG")) {
+                    i = 19;
+                    break;
+                }
+                break;
+            case 81569:
+                if (type.equals("RWF")) {
+                    i = 20;
+                    break;
+                }
+                break;
+            case 83210:
+                if (type.equals("TND")) {
+                    i = 7;
+                    break;
+                }
+                break;
+            case 83974:
+                if (type.equals("UGX")) {
+                    i = 21;
+                    break;
+                }
+                break;
+            case 84517:
+                if (type.equals("UYI")) {
+                    i = 22;
+                    break;
+                }
+                break;
+            case 85132:
+                if (type.equals("VND")) {
+                    i = 23;
+                    break;
+                }
+                break;
+            case 85367:
+                if (type.equals("VUV")) {
+                    i = 24;
+                    break;
+                }
+                break;
+            case 86653:
+                if (type.equals("XAF")) {
+                    i = 25;
+                    break;
+                }
+                break;
+            case 87087:
+                if (type.equals("XOF")) {
+                    i = 26;
+                    break;
+                }
+                break;
+            case 87118:
+                if (type.equals("XPF")) {
+                    i = 27;
+                    break;
+                }
+                break;
+        }
+        switch (i) {
+            case 0:
+                customFormat = " %.4f";
+                doubleAmount = (double) (amount / 10000);
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                customFormat = " %.3f";
+                doubleAmount = (double) (amount / 1000);
+                break;
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 27:
+                customFormat = " %.0f";
+                doubleAmount = (double) amount;
+                break;
+            case 28:
+                customFormat = " %.1f";
+                doubleAmount = (double) (amount / 10);
+                break;
+            default:
+                customFormat = " %.2f";
+                doubleAmount = (double) (amount / 100);
+                break;
+        }
+        return String.format(type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
+    }
+
     public static String formatStringSimple(String string, Object... args) {
         try {
             if (getInstance().currentLocale != null) {

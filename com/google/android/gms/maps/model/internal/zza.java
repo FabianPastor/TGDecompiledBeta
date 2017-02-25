@@ -6,31 +6,31 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface zza extends IInterface {
 
     public static abstract class zza extends Binder implements zza {
 
         private static class zza implements zza {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public zzd zzIY() throws RemoteException {
+            public IObjectWrapper zzJQ() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -38,7 +38,7 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zze(Bitmap bitmap) throws RemoteException {
+            public IObjectWrapper zze(Bitmap bitmap) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -49,9 +49,9 @@ public interface zza extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -59,15 +59,15 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zzfe(String str) throws RemoteException {
+            public IObjectWrapper zzfa(String str) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
                     obtain.writeString(str);
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -75,15 +75,15 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zzff(String str) throws RemoteException {
+            public IObjectWrapper zzfb(String str) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
                     obtain.writeString(str);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -91,15 +91,15 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zzfg(String str) throws RemoteException {
+            public IObjectWrapper zzfc(String str) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
                     obtain.writeString(str);
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -107,15 +107,15 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zzi(float f) throws RemoteException {
+            public IObjectWrapper zzi(float f) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -123,15 +123,15 @@ public interface zza extends IInterface {
                 }
             }
 
-            public zzd zzlo(int i) throws RemoteException {
+            public IObjectWrapper zzly(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
                     obtain.writeInt(i);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -140,7 +140,7 @@ public interface zza extends IInterface {
             }
         }
 
-        public static zza zzeh(IBinder iBinder) {
+        public static zza zzei(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -150,65 +150,65 @@ public interface zza extends IInterface {
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
             IBinder iBinder = null;
-            zzd zzlo;
+            IObjectWrapper zzly;
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzlo(parcel.readInt());
+                    zzly = zzly(parcel.readInt());
                     parcel2.writeNoException();
-                    parcel2.writeStrongBinder(zzlo != null ? zzlo.asBinder() : null);
+                    parcel2.writeStrongBinder(zzly != null ? zzly.asBinder() : null);
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzfe(parcel.readString());
+                    zzly = zzfa(parcel.readString());
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzff(parcel.readString());
+                    zzly = zzfb(parcel.readString());
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzIY();
+                    zzly = zzJQ();
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 5:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzi(parcel.readFloat());
+                    zzly = zzi(parcel.readFloat());
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 6:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zze(parcel.readInt() != 0 ? (Bitmap) Bitmap.CREATOR.createFromParcel(parcel) : null);
+                    zzly = zze(parcel.readInt() != 0 ? (Bitmap) Bitmap.CREATOR.createFromParcel(parcel) : null);
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
                 case 7:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzlo = zzfg(parcel.readString());
+                    zzly = zzfc(parcel.readString());
                     parcel2.writeNoException();
-                    if (zzlo != null) {
-                        iBinder = zzlo.asBinder();
+                    if (zzly != null) {
+                        iBinder = zzly.asBinder();
                     }
                     parcel2.writeStrongBinder(iBinder);
                     return true;
@@ -221,17 +221,17 @@ public interface zza extends IInterface {
         }
     }
 
-    zzd zzIY() throws RemoteException;
+    IObjectWrapper zzJQ() throws RemoteException;
 
-    zzd zze(Bitmap bitmap) throws RemoteException;
+    IObjectWrapper zze(Bitmap bitmap) throws RemoteException;
 
-    zzd zzfe(String str) throws RemoteException;
+    IObjectWrapper zzfa(String str) throws RemoteException;
 
-    zzd zzff(String str) throws RemoteException;
+    IObjectWrapper zzfb(String str) throws RemoteException;
 
-    zzd zzfg(String str) throws RemoteException;
+    IObjectWrapper zzfc(String str) throws RemoteException;
 
-    zzd zzi(float f) throws RemoteException;
+    IObjectWrapper zzi(float f) throws RemoteException;
 
-    zzd zzlo(int i) throws RemoteException;
+    IObjectWrapper zzly(int i) throws RemoteException;
 }

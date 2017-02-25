@@ -12,14 +12,14 @@ public interface zzi extends IInterface {
     public static abstract class zza extends Binder implements zzi {
 
         private static class zza implements zzi {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public Tile getTile(int i, int i2, int i3) throws RemoteException {
@@ -30,7 +30,7 @@ public interface zzi extends IInterface {
                     obtain.writeInt(i);
                     obtain.writeInt(i2);
                     obtain.writeInt(i3);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                     Tile tile = obtain2.readInt() != 0 ? (Tile) Tile.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -47,7 +47,7 @@ public interface zzi extends IInterface {
             attachInterface(this, "com.google.android.gms.maps.model.internal.ITileProviderDelegate");
         }
 
-        public static zzi zzeq(IBinder iBinder) {
+        public static zzi zzer(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }

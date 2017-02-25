@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Buka pada telefon</string>
     <string name="common_signin_button_text">Log masuk</string>
     <string name="common_signin_button_text_long">Log masuk dengan Google</string>
+    <string name="wallet_buy_button_place_holder">Beli dengan Google</string>
 </resources>

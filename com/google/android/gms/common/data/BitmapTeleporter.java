@@ -20,27 +20,27 @@ import java.nio.ByteBuffer;
 
 public class BitmapTeleporter extends zza implements ReflectedParcelable {
     public static final Creator<BitmapTeleporter> CREATOR = new zza();
-    final int mVersionCode;
-    ParcelFileDescriptor zzSn;
-    private Bitmap zzaCg;
-    private boolean zzaCh;
-    private File zzaCi;
-    final int zzanR;
+    ParcelFileDescriptor zzSQ;
+    private Bitmap zzaDF;
+    private boolean zzaDG;
+    private File zzaDH;
+    final int zzaiI;
+    final int zzakD;
 
     BitmapTeleporter(int i, ParcelFileDescriptor parcelFileDescriptor, int i2) {
-        this.mVersionCode = i;
-        this.zzSn = parcelFileDescriptor;
-        this.zzanR = i2;
-        this.zzaCg = null;
-        this.zzaCh = false;
+        this.zzaiI = i;
+        this.zzSQ = parcelFileDescriptor;
+        this.zzakD = i2;
+        this.zzaDF = null;
+        this.zzaDG = false;
     }
 
     public BitmapTeleporter(Bitmap bitmap) {
-        this.mVersionCode = 1;
-        this.zzSn = null;
-        this.zzanR = 0;
-        this.zzaCg = bitmap;
-        this.zzaCh = true;
+        this.zzaiI = 1;
+        this.zzSQ = null;
+        this.zzakD = 0;
+        this.zzaDF = bitmap;
+        this.zzaDG = true;
     }
 
     private void zza(Closeable closeable) {
@@ -51,15 +51,15 @@ public class BitmapTeleporter extends zza implements ReflectedParcelable {
         }
     }
 
-    private FileOutputStream zzwA() {
-        if (this.zzaCi == null) {
+    private FileOutputStream zzxh() {
+        if (this.zzaDH == null) {
             throw new IllegalStateException("setTempDir() must be called before writing this object to a parcel");
         }
         try {
-            File createTempFile = File.createTempFile("teleporter", ".tmp", this.zzaCi);
+            File createTempFile = File.createTempFile("teleporter", ".tmp", this.zzaDH);
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(createTempFile);
-                this.zzSn = ParcelFileDescriptor.open(createTempFile, 268435456);
+                this.zzSQ = ParcelFileDescriptor.open(createTempFile, 268435456);
                 createTempFile.delete();
                 return fileOutputStream;
             } catch (FileNotFoundException e) {
@@ -71,9 +71,9 @@ public class BitmapTeleporter extends zza implements ReflectedParcelable {
     }
 
     public void release() {
-        if (!this.zzaCh) {
+        if (!this.zzaDG) {
             try {
-                this.zzSn.close();
+                this.zzSQ.close();
             } catch (Throwable e) {
                 Log.w("BitmapTeleporter", "Could not close PFD", e);
             }
@@ -81,12 +81,12 @@ public class BitmapTeleporter extends zza implements ReflectedParcelable {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        if (this.zzSn == null) {
-            Bitmap bitmap = this.zzaCg;
+        if (this.zzSQ == null) {
+            Bitmap bitmap = this.zzaDF;
             Buffer allocate = ByteBuffer.allocate(bitmap.getRowBytes() * bitmap.getHeight());
             bitmap.copyPixelsToBuffer(allocate);
             byte[] array = allocate.array();
-            Closeable dataOutputStream = new DataOutputStream(zzwA());
+            Closeable dataOutputStream = new DataOutputStream(zzxh());
             try {
                 dataOutputStream.writeInt(array.length);
                 dataOutputStream.writeInt(bitmap.getWidth());
@@ -101,19 +101,19 @@ public class BitmapTeleporter extends zza implements ReflectedParcelable {
             }
         }
         zza.zza(this, parcel, i | 1);
-        this.zzSn = null;
+        this.zzSQ = null;
     }
 
     public void zzd(File file) {
         if (file == null) {
             throw new NullPointerException("Cannot set null temp directory");
         }
-        this.zzaCi = file;
+        this.zzaDH = file;
     }
 
-    public Bitmap zzwz() {
-        if (!this.zzaCh) {
-            Closeable dataInputStream = new DataInputStream(new AutoCloseInputStream(this.zzSn));
+    public Bitmap zzxg() {
+        if (!this.zzaDG) {
+            Closeable dataInputStream = new DataInputStream(new AutoCloseInputStream(this.zzSQ));
             try {
                 byte[] bArr = new byte[dataInputStream.readInt()];
                 int readInt = dataInputStream.readInt();
@@ -124,14 +124,14 @@ public class BitmapTeleporter extends zza implements ReflectedParcelable {
                 Buffer wrap = ByteBuffer.wrap(bArr);
                 Bitmap createBitmap = Bitmap.createBitmap(readInt, readInt2, valueOf);
                 createBitmap.copyPixelsFromBuffer(wrap);
-                this.zzaCg = createBitmap;
-                this.zzaCh = true;
+                this.zzaDF = createBitmap;
+                this.zzaDG = true;
             } catch (Throwable e) {
                 throw new IllegalStateException("Could not read from parcel file descriptor", e);
             } catch (Throwable th) {
                 zza(dataInputStream);
             }
         }
-        return this.zzaCg;
+        return this.zzaDF;
     }
 }

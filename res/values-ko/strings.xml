@@ -17,6 +17,7 @@
     <string name="common_open_on_phone">스마트폰에서 열기</string>
     <string name="common_signin_button_text">로그인</string>
     <string name="common_signin_button_text_long">Google 계정으로 로그인</string>
+    <string name="wallet_buy_button_place_holder">Google로 구매</string>
     <string name="ALongTimeAgo">마지막으로 접속한 지 오래됨</string>
     <string name="AbortPassword">2단계 인증 설정 끝내기</string>
     <string name="AccessError">접근 오류</string>

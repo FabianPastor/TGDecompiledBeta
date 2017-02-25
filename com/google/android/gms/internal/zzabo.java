@@ -1,15 +1,14 @@
 package com.google.android.gms.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.zza;
-import com.google.android.gms.tasks.TaskCompletionSource;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class zzabo {
-    public static <TResult> void zza(Status status, TResult tResult, TaskCompletionSource<TResult> taskCompletionSource) {
-        if (status.isSuccess()) {
-            taskCompletionSource.setResult(tResult);
-        } else {
-            taskCompletionSource.setException(new zza(status));
-        }
+public abstract class zzabo {
+    private static final ExecutorService zzaCm = new ThreadPoolExecutor(0, 4, 60, TimeUnit.SECONDS, new LinkedBlockingQueue(), new zzadc("GAC_Transform"));
+
+    public static ExecutorService zzwv() {
+        return zzaCm;
     }
 }

@@ -11,7 +11,7 @@ public final class FirebaseInstanceIdInternalReceiver extends WakefulBroadcastRe
         if (intent != null) {
             Parcelable parcelableExtra = intent.getParcelableExtra("wrapped_intent");
             if (parcelableExtra instanceof Intent) {
-                zzg.zzaaj().zzb(context, intent.getAction(), (Intent) parcelableExtra);
+                zzg.zzabT().zzb(context, intent.getAction(), (Intent) parcelableExtra);
             } else {
                 Log.w("FirebaseInstanceId", "Missing or invalid wrapped intent");
             }

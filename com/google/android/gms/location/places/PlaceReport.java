@@ -6,26 +6,27 @@ import com.google.android.gms.common.internal.ReflectedParcelable;
 import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
 import com.google.android.gms.common.internal.zzac;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
 
 public class PlaceReport extends zza implements ReflectedParcelable {
     public static final Creator<PlaceReport> CREATOR = new zzl();
     private final String mTag;
-    final int mVersionCode;
-    private final String zzabN;
-    private final String zzblg;
+    private final String zzacO;
+    final int zzaiI;
+    private final String zzblI;
 
     PlaceReport(int i, String str, String str2, String str3) {
-        this.mVersionCode = i;
-        this.zzblg = str;
+        this.zzaiI = i;
+        this.zzblI = str;
         this.mTag = str2;
-        this.zzabN = str3;
+        this.zzacO = str3;
     }
 
     public static PlaceReport create(String str, String str2) {
         return zzj(str, str2, "unknown");
     }
 
-    private static boolean zzeY(String str) {
+    private static boolean zzeU(String str) {
         boolean z = true;
         switch (str.hashCode()) {
             case -1436706272:
@@ -80,9 +81,9 @@ public class PlaceReport extends zza implements ReflectedParcelable {
 
     public static PlaceReport zzj(String str, String str2, String str3) {
         zzac.zzw(str);
-        zzac.zzdv(str2);
-        zzac.zzdv(str3);
-        zzac.zzb(zzeY(str3), (Object) "Invalid source");
+        zzac.zzdr(str2);
+        zzac.zzdr(str3);
+        zzac.zzb(zzeU(str3), (Object) "Invalid source");
         return new PlaceReport(1, str, str2, str3);
     }
 
@@ -91,15 +92,15 @@ public class PlaceReport extends zza implements ReflectedParcelable {
             return false;
         }
         PlaceReport placeReport = (PlaceReport) obj;
-        return zzaa.equal(this.zzblg, placeReport.zzblg) && zzaa.equal(this.mTag, placeReport.mTag) && zzaa.equal(this.zzabN, placeReport.zzabN);
+        return zzaa.equal(this.zzblI, placeReport.zzblI) && zzaa.equal(this.mTag, placeReport.mTag) && zzaa.equal(this.zzacO, placeReport.zzacO);
     }
 
     public String getPlaceId() {
-        return this.zzblg;
+        return this.zzblI;
     }
 
     public String getSource() {
-        return this.zzabN;
+        return this.zzacO;
     }
 
     public String getTag() {
@@ -107,15 +108,15 @@ public class PlaceReport extends zza implements ReflectedParcelable {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(this.zzblg, this.mTag, this.zzabN);
+        return zzaa.hashCode(this.zzblI, this.mTag, this.zzacO);
     }
 
     public String toString() {
         zzaa.zza zzv = zzaa.zzv(this);
-        zzv.zzg("placeId", this.zzblg);
+        zzv.zzg("placeId", this.zzblI);
         zzv.zzg("tag", this.mTag);
-        if (!"unknown".equals(this.zzabN)) {
-            zzv.zzg("source", this.zzabN);
+        if (!"unknown".equals(this.zzacO)) {
+            zzv.zzg(Param.SOURCE, this.zzacO);
         }
         return zzv.toString();
     }

@@ -10,47 +10,47 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzae implements Creator<zzad> {
     static void zza(zzad com_google_android_gms_common_internal_zzad, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzad.mVersionCode);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzad.zzaiI);
         zzc.zza(parcel, 2, com_google_android_gms_common_internal_zzad.getAccount(), i, false);
         zzc.zzc(parcel, 3, com_google_android_gms_common_internal_zzad.getSessionId());
-        zzc.zza(parcel, 4, com_google_android_gms_common_internal_zzad.zzxy(), i, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zza(parcel, 4, com_google_android_gms_common_internal_zzad.zzyf(), i, false);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaP(parcel);
+        return zzaT(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcS(i);
+        return zzcY(i);
     }
 
-    public zzad zzaP(Parcel parcel) {
+    public zzad zzaT(Parcel parcel) {
         GoogleSignInAccount googleSignInAccount = null;
         int i = 0;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         Account account = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
+        while (parcel.dataPosition() < zzaY) {
             int i3;
             Account account2;
             int zzg;
             GoogleSignInAccount googleSignInAccount2;
-            int zzaT = zzb.zzaT(parcel);
+            int zzaX = zzb.zzaX(parcel);
             GoogleSignInAccount googleSignInAccount3;
-            switch (zzb.zzcW(zzaT)) {
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
                     googleSignInAccount3 = googleSignInAccount;
                     i3 = i;
                     account2 = account;
-                    zzg = zzb.zzg(parcel, zzaT);
+                    zzg = zzb.zzg(parcel, zzaX);
                     googleSignInAccount2 = googleSignInAccount3;
                     break;
                 case 2:
                     zzg = i2;
                     int i4 = i;
-                    account2 = (Account) zzb.zza(parcel, zzaT, Account.CREATOR);
+                    account2 = (Account) zzb.zza(parcel, zzaX, Account.CREATOR);
                     googleSignInAccount2 = googleSignInAccount;
                     i3 = i4;
                     break;
@@ -58,17 +58,17 @@ public class zzae implements Creator<zzad> {
                     account2 = account;
                     zzg = i2;
                     googleSignInAccount3 = googleSignInAccount;
-                    i3 = zzb.zzg(parcel, zzaT);
+                    i3 = zzb.zzg(parcel, zzaX);
                     googleSignInAccount2 = googleSignInAccount3;
                     break;
                 case 4:
-                    googleSignInAccount2 = (GoogleSignInAccount) zzb.zza(parcel, zzaT, GoogleSignInAccount.CREATOR);
+                    googleSignInAccount2 = (GoogleSignInAccount) zzb.zza(parcel, zzaX, GoogleSignInAccount.CREATOR);
                     i3 = i;
                     account2 = account;
                     zzg = i2;
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     googleSignInAccount2 = googleSignInAccount;
                     i3 = i;
                     account2 = account;
@@ -80,13 +80,13 @@ public class zzae implements Creator<zzad> {
             i = i3;
             googleSignInAccount = googleSignInAccount2;
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new zzad(i2, account, i, googleSignInAccount);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public zzad[] zzcS(int i) {
+    public zzad[] zzcY(int i) {
         return new zzad[i];
     }
 }

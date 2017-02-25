@@ -1,6 +1,5 @@
 package com.google.android.gms.common.images;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
@@ -20,8 +19,7 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.widget.ImageView;
 import com.google.android.gms.common.annotation.KeepName;
-import com.google.android.gms.common.util.zzs;
-import com.google.android.gms.internal.zzabv;
+import com.google.android.gms.internal.zzacd;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,51 +29,51 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class ImageManager {
-    private static final Object zzaCG = new Object();
-    private static HashSet<Uri> zzaCH = new HashSet();
-    private static ImageManager zzaCI;
-    private static ImageManager zzaCJ;
+    private static final Object zzaEf = new Object();
+    private static HashSet<Uri> zzaEg = new HashSet();
+    private static ImageManager zzaEh;
+    private static ImageManager zzaEi;
     private final Context mContext;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
-    private final ExecutorService zzaCK = Executors.newFixedThreadPool(4);
-    private final zzb zzaCL;
-    private final zzabv zzaCM;
-    private final Map<zza, ImageReceiver> zzaCN;
-    private final Map<Uri, ImageReceiver> zzaCO;
-    private final Map<Uri, Long> zzaCP;
+    private final ExecutorService zzaEj = Executors.newFixedThreadPool(4);
+    private final zza zzaEk;
+    private final zzacd zzaEl;
+    private final Map<zza, ImageReceiver> zzaEm;
+    private final Map<Uri, ImageReceiver> zzaEn;
+    private final Map<Uri, Long> zzaEo;
 
     @KeepName
     private final class ImageReceiver extends ResultReceiver {
         private final Uri mUri;
-        private final ArrayList<zza> zzaCQ = new ArrayList();
-        final /* synthetic */ ImageManager zzaCR;
+        private final ArrayList<zza> zzaEp = new ArrayList();
+        final /* synthetic */ ImageManager zzaEq;
 
         ImageReceiver(ImageManager imageManager, Uri uri) {
-            this.zzaCR = imageManager;
+            this.zzaEq = imageManager;
             super(new Handler(Looper.getMainLooper()));
             this.mUri = uri;
         }
 
         public void onReceiveResult(int i, Bundle bundle) {
-            this.zzaCR.zzaCK.execute(new zzc(this.zzaCR, this.mUri, (ParcelFileDescriptor) bundle.getParcelable("com.google.android.gms.extra.fileDescriptor")));
+            this.zzaEq.zzaEj.execute(new zzb(this.zzaEq, this.mUri, (ParcelFileDescriptor) bundle.getParcelable("com.google.android.gms.extra.fileDescriptor")));
         }
 
         public void zzb(zza com_google_android_gms_common_images_zza) {
-            com.google.android.gms.common.internal.zzc.zzdn("ImageReceiver.addImageRequest() must be called in the main thread");
-            this.zzaCQ.add(com_google_android_gms_common_images_zza);
+            com.google.android.gms.common.internal.zzc.zzdj("ImageReceiver.addImageRequest() must be called in the main thread");
+            this.zzaEp.add(com_google_android_gms_common_images_zza);
         }
 
         public void zzc(zza com_google_android_gms_common_images_zza) {
-            com.google.android.gms.common.internal.zzc.zzdn("ImageReceiver.removeImageRequest() must be called in the main thread");
-            this.zzaCQ.remove(com_google_android_gms_common_images_zza);
+            com.google.android.gms.common.internal.zzc.zzdj("ImageReceiver.removeImageRequest() must be called in the main thread");
+            this.zzaEp.remove(com_google_android_gms_common_images_zza);
         }
 
-        public void zzwL() {
+        public void zzxr() {
             Intent intent = new Intent("com.google.android.gms.common.images.LOAD_IMAGE");
             intent.putExtra("com.google.android.gms.extras.uri", this.mUri);
             intent.putExtra("com.google.android.gms.extras.resultReceiver", this);
             intent.putExtra("com.google.android.gms.extras.priority", 3);
-            this.zzaCR.mContext.sendBroadcast(intent);
+            this.zzaEq.mContext.sendBroadcast(intent);
         }
     }
 
@@ -83,44 +81,37 @@ public final class ImageManager {
         void onImageLoaded(Uri uri, Drawable drawable, boolean z);
     }
 
-    @TargetApi(11)
-    private static final class zza {
-        static int zza(ActivityManager activityManager) {
-            return activityManager.getLargeMemoryClass();
-        }
-    }
-
-    private final class zzc implements Runnable {
+    private final class zzb implements Runnable {
         private final Uri mUri;
-        final /* synthetic */ ImageManager zzaCR;
-        private final ParcelFileDescriptor zzaCS;
+        final /* synthetic */ ImageManager zzaEq;
+        private final ParcelFileDescriptor zzaEr;
 
-        public zzc(ImageManager imageManager, Uri uri, ParcelFileDescriptor parcelFileDescriptor) {
-            this.zzaCR = imageManager;
+        public zzb(ImageManager imageManager, Uri uri, ParcelFileDescriptor parcelFileDescriptor) {
+            this.zzaEq = imageManager;
             this.mUri = uri;
-            this.zzaCS = parcelFileDescriptor;
+            this.zzaEr = parcelFileDescriptor;
         }
 
         public void run() {
-            com.google.android.gms.common.internal.zzc.zzdo("LoadBitmapFromDiskRunnable can't be executed in the main thread");
+            com.google.android.gms.common.internal.zzc.zzdk("LoadBitmapFromDiskRunnable can't be executed in the main thread");
             boolean z = false;
             Bitmap bitmap = null;
-            if (this.zzaCS != null) {
+            if (this.zzaEr != null) {
                 try {
-                    bitmap = BitmapFactory.decodeFileDescriptor(this.zzaCS.getFileDescriptor());
+                    bitmap = BitmapFactory.decodeFileDescriptor(this.zzaEr.getFileDescriptor());
                 } catch (Throwable e) {
                     String valueOf = String.valueOf(this.mUri);
                     Log.e("ImageManager", new StringBuilder(String.valueOf(valueOf).length() + 34).append("OOM while loading bitmap for uri: ").append(valueOf).toString(), e);
                     z = true;
                 }
                 try {
-                    this.zzaCS.close();
+                    this.zzaEr.close();
                 } catch (Throwable e2) {
                     Log.e("ImageManager", "closed failed", e2);
                 }
             }
             CountDownLatch countDownLatch = new CountDownLatch(1);
-            this.zzaCR.mHandler.post(new zzf(this.zzaCR, this.mUri, bitmap, z, countDownLatch));
+            this.zzaEq.mHandler.post(new zze(this.zzaEq, this.mUri, bitmap, z, countDownLatch));
             try {
                 countDownLatch.await();
             } catch (InterruptedException e3) {
@@ -130,150 +121,147 @@ public final class ImageManager {
         }
     }
 
-    private final class zzd implements Runnable {
-        final /* synthetic */ ImageManager zzaCR;
-        private final zza zzaCT;
+    private final class zzc implements Runnable {
+        final /* synthetic */ ImageManager zzaEq;
+        private final zza zzaEs;
 
-        public zzd(ImageManager imageManager, zza com_google_android_gms_common_images_zza) {
-            this.zzaCR = imageManager;
-            this.zzaCT = com_google_android_gms_common_images_zza;
+        public zzc(ImageManager imageManager, zza com_google_android_gms_common_images_zza) {
+            this.zzaEq = imageManager;
+            this.zzaEs = com_google_android_gms_common_images_zza;
         }
 
         public void run() {
-            com.google.android.gms.common.internal.zzc.zzdn("LoadImageRunnable must be executed on the main thread");
-            ImageReceiver imageReceiver = (ImageReceiver) this.zzaCR.zzaCN.get(this.zzaCT);
+            com.google.android.gms.common.internal.zzc.zzdj("LoadImageRunnable must be executed on the main thread");
+            ImageReceiver imageReceiver = (ImageReceiver) this.zzaEq.zzaEm.get(this.zzaEs);
             if (imageReceiver != null) {
-                this.zzaCR.zzaCN.remove(this.zzaCT);
-                imageReceiver.zzc(this.zzaCT);
+                this.zzaEq.zzaEm.remove(this.zzaEs);
+                imageReceiver.zzc(this.zzaEs);
             }
-            zza com_google_android_gms_common_images_zza_zza = this.zzaCT.zzaCV;
+            zza com_google_android_gms_common_images_zza_zza = this.zzaEs.zzaEu;
             if (com_google_android_gms_common_images_zza_zza.uri == null) {
-                this.zzaCT.zza(this.zzaCR.mContext, this.zzaCR.zzaCM, true);
+                this.zzaEs.zza(this.zzaEq.mContext, this.zzaEq.zzaEl, true);
                 return;
             }
-            Bitmap zza = this.zzaCR.zza(com_google_android_gms_common_images_zza_zza);
+            Bitmap zza = this.zzaEq.zza(com_google_android_gms_common_images_zza_zza);
             if (zza != null) {
-                this.zzaCT.zza(this.zzaCR.mContext, zza, true);
+                this.zzaEs.zza(this.zzaEq.mContext, zza, true);
                 return;
             }
-            Long l = (Long) this.zzaCR.zzaCP.get(com_google_android_gms_common_images_zza_zza.uri);
+            Long l = (Long) this.zzaEq.zzaEo.get(com_google_android_gms_common_images_zza_zza.uri);
             if (l != null) {
                 if (SystemClock.elapsedRealtime() - l.longValue() < 3600000) {
-                    this.zzaCT.zza(this.zzaCR.mContext, this.zzaCR.zzaCM, true);
+                    this.zzaEs.zza(this.zzaEq.mContext, this.zzaEq.zzaEl, true);
                     return;
                 }
-                this.zzaCR.zzaCP.remove(com_google_android_gms_common_images_zza_zza.uri);
+                this.zzaEq.zzaEo.remove(com_google_android_gms_common_images_zza_zza.uri);
             }
-            this.zzaCT.zza(this.zzaCR.mContext, this.zzaCR.zzaCM);
-            imageReceiver = (ImageReceiver) this.zzaCR.zzaCO.get(com_google_android_gms_common_images_zza_zza.uri);
+            this.zzaEs.zza(this.zzaEq.mContext, this.zzaEq.zzaEl);
+            imageReceiver = (ImageReceiver) this.zzaEq.zzaEn.get(com_google_android_gms_common_images_zza_zza.uri);
             if (imageReceiver == null) {
-                imageReceiver = new ImageReceiver(this.zzaCR, com_google_android_gms_common_images_zza_zza.uri);
-                this.zzaCR.zzaCO.put(com_google_android_gms_common_images_zza_zza.uri, imageReceiver);
+                imageReceiver = new ImageReceiver(this.zzaEq, com_google_android_gms_common_images_zza_zza.uri);
+                this.zzaEq.zzaEn.put(com_google_android_gms_common_images_zza_zza.uri, imageReceiver);
             }
-            imageReceiver.zzb(this.zzaCT);
-            if (!(this.zzaCT instanceof com.google.android.gms.common.images.zza.zzc)) {
-                this.zzaCR.zzaCN.put(this.zzaCT, imageReceiver);
+            imageReceiver.zzb(this.zzaEs);
+            if (!(this.zzaEs instanceof com.google.android.gms.common.images.zza.zzc)) {
+                this.zzaEq.zzaEm.put(this.zzaEs, imageReceiver);
             }
-            synchronized (ImageManager.zzaCG) {
-                if (!ImageManager.zzaCH.contains(com_google_android_gms_common_images_zza_zza.uri)) {
-                    ImageManager.zzaCH.add(com_google_android_gms_common_images_zza_zza.uri);
-                    imageReceiver.zzwL();
+            synchronized (ImageManager.zzaEf) {
+                if (!ImageManager.zzaEg.contains(com_google_android_gms_common_images_zza_zza.uri)) {
+                    ImageManager.zzaEg.add(com_google_android_gms_common_images_zza_zza.uri);
+                    imageReceiver.zzxr();
                 }
             }
         }
     }
 
-    @TargetApi(14)
-    private static final class zze implements ComponentCallbacks2 {
-        private final zzb zzaCL;
+    private static final class zzd implements ComponentCallbacks2 {
+        private final zza zzaEk;
 
-        public zze(zzb com_google_android_gms_common_images_ImageManager_zzb) {
-            this.zzaCL = com_google_android_gms_common_images_ImageManager_zzb;
+        public zzd(zza com_google_android_gms_common_images_ImageManager_zza) {
+            this.zzaEk = com_google_android_gms_common_images_ImageManager_zza;
         }
 
         public void onConfigurationChanged(Configuration configuration) {
         }
 
         public void onLowMemory() {
-            this.zzaCL.evictAll();
+            this.zzaEk.evictAll();
         }
 
         public void onTrimMemory(int i) {
             if (i >= 60) {
-                this.zzaCL.evictAll();
+                this.zzaEk.evictAll();
             } else if (i >= 20) {
-                this.zzaCL.trimToSize(this.zzaCL.size() / 2);
+                this.zzaEk.trimToSize(this.zzaEk.size() / 2);
             }
         }
     }
 
-    private final class zzf implements Runnable {
+    private final class zze implements Runnable {
         private final Bitmap mBitmap;
         private final Uri mUri;
-        final /* synthetic */ ImageManager zzaCR;
-        private boolean zzaCU;
-        private final CountDownLatch zzth;
+        final /* synthetic */ ImageManager zzaEq;
+        private boolean zzaEt;
+        private final CountDownLatch zztj;
 
-        public zzf(ImageManager imageManager, Uri uri, Bitmap bitmap, boolean z, CountDownLatch countDownLatch) {
-            this.zzaCR = imageManager;
+        public zze(ImageManager imageManager, Uri uri, Bitmap bitmap, boolean z, CountDownLatch countDownLatch) {
+            this.zzaEq = imageManager;
             this.mUri = uri;
             this.mBitmap = bitmap;
-            this.zzaCU = z;
-            this.zzth = countDownLatch;
+            this.zzaEt = z;
+            this.zztj = countDownLatch;
         }
 
         private void zza(ImageReceiver imageReceiver, boolean z) {
-            ArrayList zza = imageReceiver.zzaCQ;
+            ArrayList zza = imageReceiver.zzaEp;
             int size = zza.size();
             for (int i = 0; i < size; i++) {
                 zza com_google_android_gms_common_images_zza = (zza) zza.get(i);
                 if (z) {
-                    com_google_android_gms_common_images_zza.zza(this.zzaCR.mContext, this.mBitmap, false);
+                    com_google_android_gms_common_images_zza.zza(this.zzaEq.mContext, this.mBitmap, false);
                 } else {
-                    this.zzaCR.zzaCP.put(this.mUri, Long.valueOf(SystemClock.elapsedRealtime()));
-                    com_google_android_gms_common_images_zza.zza(this.zzaCR.mContext, this.zzaCR.zzaCM, false);
+                    this.zzaEq.zzaEo.put(this.mUri, Long.valueOf(SystemClock.elapsedRealtime()));
+                    com_google_android_gms_common_images_zza.zza(this.zzaEq.mContext, this.zzaEq.zzaEl, false);
                 }
                 if (!(com_google_android_gms_common_images_zza instanceof com.google.android.gms.common.images.zza.zzc)) {
-                    this.zzaCR.zzaCN.remove(com_google_android_gms_common_images_zza);
+                    this.zzaEq.zzaEm.remove(com_google_android_gms_common_images_zza);
                 }
             }
         }
 
         public void run() {
-            com.google.android.gms.common.internal.zzc.zzdn("OnBitmapLoadedRunnable must be executed in the main thread");
+            com.google.android.gms.common.internal.zzc.zzdj("OnBitmapLoadedRunnable must be executed in the main thread");
             boolean z = this.mBitmap != null;
-            if (this.zzaCR.zzaCL != null) {
-                if (this.zzaCU) {
-                    this.zzaCR.zzaCL.evictAll();
+            if (this.zzaEq.zzaEk != null) {
+                if (this.zzaEt) {
+                    this.zzaEq.zzaEk.evictAll();
                     System.gc();
-                    this.zzaCU = false;
-                    this.zzaCR.mHandler.post(this);
+                    this.zzaEt = false;
+                    this.zzaEq.mHandler.post(this);
                     return;
                 } else if (z) {
-                    this.zzaCR.zzaCL.put(new zza(this.mUri), this.mBitmap);
+                    this.zzaEq.zzaEk.put(new zza(this.mUri), this.mBitmap);
                 }
             }
-            ImageReceiver imageReceiver = (ImageReceiver) this.zzaCR.zzaCO.remove(this.mUri);
+            ImageReceiver imageReceiver = (ImageReceiver) this.zzaEq.zzaEn.remove(this.mUri);
             if (imageReceiver != null) {
                 zza(imageReceiver, z);
             }
-            this.zzth.countDown();
-            synchronized (ImageManager.zzaCG) {
-                ImageManager.zzaCH.remove(this.mUri);
+            this.zztj.countDown();
+            synchronized (ImageManager.zzaEf) {
+                ImageManager.zzaEg.remove(this.mUri);
             }
         }
     }
 
-    private static final class zzb extends LruCache<zza, Bitmap> {
-        public zzb(Context context) {
-            super(zzaz(context));
+    private static final class zza extends LruCache<zza, Bitmap> {
+        public zza(Context context) {
+            super(zzaR(context));
         }
 
-        @TargetApi(11)
-        private static int zzaz(Context context) {
+        private static int zzaR(Context context) {
             ActivityManager activityManager = (ActivityManager) context.getSystemService("activity");
-            int memoryClass = (((context.getApplicationInfo().flags & 1048576) != 0 ? 1 : null) == null || !zzs.zzyx()) ? activityManager.getMemoryClass() : zza.zza(activityManager);
-            return (int) (((float) (memoryClass * 1048576)) * 0.33f);
+            return (int) (((float) ((((context.getApplicationInfo().flags & 1048576) != 0 ? 1 : null) != null ? activityManager.getLargeMemoryClass() : activityManager.getMemoryClass()) * 1048576)) * 0.33f);
         }
 
         protected /* synthetic */ void entryRemoved(boolean z, Object obj, Object obj2, Object obj3) {
@@ -296,17 +284,15 @@ public final class ImageManager {
     private ImageManager(Context context, boolean z) {
         this.mContext = context.getApplicationContext();
         if (z) {
-            this.zzaCL = new zzb(this.mContext);
-            if (zzs.zzyA()) {
-                zzwJ();
-            }
+            this.zzaEk = new zza(this.mContext);
+            this.mContext.registerComponentCallbacks(new zzd(this.zzaEk));
         } else {
-            this.zzaCL = null;
+            this.zzaEk = null;
         }
-        this.zzaCM = new zzabv();
-        this.zzaCN = new HashMap();
-        this.zzaCO = new HashMap();
-        this.zzaCP = new HashMap();
+        this.zzaEl = new zzacd();
+        this.zzaEm = new HashMap();
+        this.zzaEn = new HashMap();
+        this.zzaEo = new HashMap();
     }
 
     public static ImageManager create(Context context) {
@@ -314,25 +300,20 @@ public final class ImageManager {
     }
 
     private Bitmap zza(zza com_google_android_gms_common_images_zza_zza) {
-        return this.zzaCL == null ? null : (Bitmap) this.zzaCL.get(com_google_android_gms_common_images_zza_zza);
+        return this.zzaEk == null ? null : (Bitmap) this.zzaEk.get(com_google_android_gms_common_images_zza_zza);
     }
 
     public static ImageManager zzg(Context context, boolean z) {
         if (z) {
-            if (zzaCJ == null) {
-                zzaCJ = new ImageManager(context, true);
+            if (zzaEi == null) {
+                zzaEi = new ImageManager(context, true);
             }
-            return zzaCJ;
+            return zzaEi;
         }
-        if (zzaCI == null) {
-            zzaCI = new ImageManager(context, false);
+        if (zzaEh == null) {
+            zzaEh = new ImageManager(context, false);
         }
-        return zzaCI;
-    }
-
-    @TargetApi(14)
-    private void zzwJ() {
-        this.mContext.registerComponentCallbacks(new zze(this.zzaCL));
+        return zzaEh;
     }
 
     public void loadImage(ImageView imageView, int i) {
@@ -345,7 +326,7 @@ public final class ImageManager {
 
     public void loadImage(ImageView imageView, Uri uri, int i) {
         zza com_google_android_gms_common_images_zza_zzb = new com.google.android.gms.common.images.zza.zzb(imageView, uri);
-        com_google_android_gms_common_images_zza_zzb.zzcI(i);
+        com_google_android_gms_common_images_zza_zzb.zzcO(i);
         zza(com_google_android_gms_common_images_zza_zzb);
     }
 
@@ -355,12 +336,12 @@ public final class ImageManager {
 
     public void loadImage(OnImageLoadedListener onImageLoadedListener, Uri uri, int i) {
         zza com_google_android_gms_common_images_zza_zzc = new com.google.android.gms.common.images.zza.zzc(onImageLoadedListener, uri);
-        com_google_android_gms_common_images_zza_zzc.zzcI(i);
+        com_google_android_gms_common_images_zza_zzc.zzcO(i);
         zza(com_google_android_gms_common_images_zza_zzc);
     }
 
     public void zza(zza com_google_android_gms_common_images_zza) {
-        com.google.android.gms.common.internal.zzc.zzdn("ImageManager.loadImage() must be called in the main thread");
-        new zzd(this, com_google_android_gms_common_images_zza).run();
+        com.google.android.gms.common.internal.zzc.zzdj("ImageManager.loadImage() must be called in the main thread");
+        new zzc(this, com_google_android_gms_common_images_zza).run();
     }
 }

@@ -4,10 +4,10 @@ import android.accounts.Account;
 import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
-import com.google.android.gms.common.zze;
+import com.google.android.gms.common.zzg;
 
 public class zza extends com.google.android.gms.common.internal.zzr.zza {
-    int zzaDw;
+    int zzaEV;
 
     public static Account zza(zzr com_google_android_gms_common_internal_zzr) {
         Account account = null;
@@ -31,9 +31,9 @@ public class zza extends com.google.android.gms.common.internal.zzr.zza {
 
     public Account getAccount() {
         int callingUid = Binder.getCallingUid();
-        if (callingUid != this.zzaDw) {
-            if (zze.zzf(null, callingUid)) {
-                this.zzaDw = callingUid;
+        if (callingUid != this.zzaEV) {
+            if (zzg.zzf(null, callingUid)) {
+                this.zzaEV = callingUid;
             } else {
                 throw new SecurityException("Caller is not GooglePlayServices");
             }

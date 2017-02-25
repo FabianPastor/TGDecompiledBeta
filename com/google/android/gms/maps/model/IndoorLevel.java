@@ -5,15 +5,15 @@ import com.google.android.gms.common.internal.zzac;
 import com.google.android.gms.maps.model.internal.zze;
 
 public final class IndoorLevel {
-    private final zze zzboV;
+    private final zze zzbpz;
 
     public IndoorLevel(zze com_google_android_gms_maps_model_internal_zze) {
-        this.zzboV = (zze) zzac.zzw(com_google_android_gms_maps_model_internal_zze);
+        this.zzbpz = (zze) zzac.zzw(com_google_android_gms_maps_model_internal_zze);
     }
 
     public void activate() {
         try {
-            this.zzboV.activate();
+            this.zzbpz.activate();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -24,7 +24,7 @@ public final class IndoorLevel {
             return false;
         }
         try {
-            return this.zzboV.zza(((IndoorLevel) obj).zzboV);
+            return this.zzbpz.zza(((IndoorLevel) obj).zzbpz);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -32,7 +32,7 @@ public final class IndoorLevel {
 
     public String getName() {
         try {
-            return this.zzboV.getName();
+            return this.zzbpz.getName();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -40,7 +40,7 @@ public final class IndoorLevel {
 
     public String getShortName() {
         try {
-            return this.zzboV.getShortName();
+            return this.zzbpz.getShortName();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -48,7 +48,7 @@ public final class IndoorLevel {
 
     public int hashCode() {
         try {
-            return this.zzboV.hashCodeRemote();
+            return this.zzbpz.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

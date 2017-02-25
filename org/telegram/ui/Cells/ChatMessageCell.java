@@ -1717,29 +1717,28 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        int maxWidth;
         int i;
         int dp;
-        int linkPreviewMaxWidth;
+        String description;
+        Photo photo;
         TLObject document;
-        boolean smallImage;
+        String type;
+        int duration;
+        int additinalWidth;
         int height;
         Throwable e;
-        int restLinesCount;
         int a;
-        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
         ArrayList arrayList;
-        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
-        float scale;
         String fileName;
+        int seconds;
         String str;
         CharSequence str2;
         String price;
@@ -1836,7 +1835,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
+            int maxWidth;
             boolean z;
+            DocumentAttribute attribute;
+            float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -1894,17 +1896,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
                     String author;
-                    String description;
-                    Photo photo;
                     TLObject webDocument;
-                    String type;
-                    int duration;
-                    int additinalWidth;
+                    boolean smallImage;
                     int restLines;
-                    int seconds;
+                    int restLinesCount;
+                    int lineLeft;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);

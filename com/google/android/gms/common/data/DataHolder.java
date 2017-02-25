@@ -22,48 +22,48 @@ import java.util.Map.Entry;
 @KeepName
 public final class DataHolder extends com.google.android.gms.common.internal.safeparcel.zza implements Closeable {
     public static final Creator<DataHolder> CREATOR = new zze();
-    private static final zza zzaCx = new AnonymousClass1(new String[0], null);
+    private static final zza zzaDW = new AnonymousClass1(new String[0], null);
     boolean mClosed;
-    final int mVersionCode;
-    private final String[] zzaCq;
-    Bundle zzaCr;
-    private final CursorWindow[] zzaCs;
-    private final Bundle zzaCt;
-    int[] zzaCu;
-    int zzaCv;
-    private boolean zzaCw;
-    private final int zzauz;
+    private final String[] zzaDP;
+    Bundle zzaDQ;
+    private final CursorWindow[] zzaDR;
+    private final Bundle zzaDS;
+    int[] zzaDT;
+    int zzaDU;
+    private boolean zzaDV;
+    final int zzaiI;
+    private final int zzavD;
 
     public static class zza {
-        private final HashMap<Object, Integer> zzaCA;
-        private boolean zzaCB;
-        private String zzaCC;
-        private final String[] zzaCq;
-        private final ArrayList<HashMap<String, Object>> zzaCy;
-        private final String zzaCz;
+        private final String[] zzaDP;
+        private final ArrayList<HashMap<String, Object>> zzaDX;
+        private final String zzaDY;
+        private final HashMap<Object, Integer> zzaDZ;
+        private boolean zzaEa;
+        private String zzaEb;
 
         private zza(String[] strArr, String str) {
-            this.zzaCq = (String[]) zzac.zzw(strArr);
-            this.zzaCy = new ArrayList();
-            this.zzaCz = str;
-            this.zzaCA = new HashMap();
-            this.zzaCB = false;
-            this.zzaCC = null;
+            this.zzaDP = (String[]) zzac.zzw(strArr);
+            this.zzaDX = new ArrayList();
+            this.zzaDY = str;
+            this.zzaDZ = new HashMap();
+            this.zzaEa = false;
+            this.zzaEb = null;
         }
 
-        private int zzc(HashMap<String, Object> hashMap) {
-            if (this.zzaCz == null) {
+        private int zzb(HashMap<String, Object> hashMap) {
+            if (this.zzaDY == null) {
                 return -1;
             }
-            Object obj = hashMap.get(this.zzaCz);
+            Object obj = hashMap.get(this.zzaDY);
             if (obj == null) {
                 return -1;
             }
-            Integer num = (Integer) this.zzaCA.get(obj);
+            Integer num = (Integer) this.zzaDZ.get(obj);
             if (num != null) {
                 return num.intValue();
             }
-            this.zzaCA.put(obj, Integer.valueOf(this.zzaCy.size()));
+            this.zzaDZ.put(obj, Integer.valueOf(this.zzaDX.size()));
             return -1;
         }
 
@@ -73,23 +73,23 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
             for (Entry entry : contentValues.valueSet()) {
                 hashMap.put((String) entry.getKey(), entry.getValue());
             }
-            return zzb(hashMap);
+            return zza(hashMap);
         }
 
-        public zza zzb(HashMap<String, Object> hashMap) {
+        public zza zza(HashMap<String, Object> hashMap) {
             zzc.zzt(hashMap);
-            int zzc = zzc(hashMap);
-            if (zzc == -1) {
-                this.zzaCy.add(hashMap);
+            int zzb = zzb((HashMap) hashMap);
+            if (zzb == -1) {
+                this.zzaDX.add(hashMap);
             } else {
-                this.zzaCy.remove(zzc);
-                this.zzaCy.add(zzc, hashMap);
+                this.zzaDX.remove(zzb);
+                this.zzaDX.add(zzb, hashMap);
             }
-            this.zzaCB = false;
+            this.zzaEa = false;
             return this;
         }
 
-        public DataHolder zzcE(int i) {
+        public DataHolder zzcK(int i) {
             return new DataHolder(this, i, null);
         }
     }
@@ -109,52 +109,52 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
             throw new UnsupportedOperationException("Cannot add data to empty builder");
         }
 
-        public zza zzb(HashMap<String, Object> hashMap) {
+        public zza zza(HashMap<String, Object> hashMap) {
             throw new UnsupportedOperationException("Cannot add data to empty builder");
         }
     }
 
     DataHolder(int i, String[] strArr, CursorWindow[] cursorWindowArr, int i2, Bundle bundle) {
         this.mClosed = false;
-        this.zzaCw = true;
-        this.mVersionCode = i;
-        this.zzaCq = strArr;
-        this.zzaCs = cursorWindowArr;
-        this.zzauz = i2;
-        this.zzaCt = bundle;
+        this.zzaDV = true;
+        this.zzaiI = i;
+        this.zzaDP = strArr;
+        this.zzaDR = cursorWindowArr;
+        this.zzavD = i2;
+        this.zzaDS = bundle;
     }
 
     private DataHolder(zza com_google_android_gms_common_data_DataHolder_zza, int i, Bundle bundle) {
-        this(com_google_android_gms_common_data_DataHolder_zza.zzaCq, zza(com_google_android_gms_common_data_DataHolder_zza, -1), i, bundle);
+        this(com_google_android_gms_common_data_DataHolder_zza.zzaDP, zza(com_google_android_gms_common_data_DataHolder_zza, -1), i, bundle);
     }
 
     public DataHolder(String[] strArr, CursorWindow[] cursorWindowArr, int i, Bundle bundle) {
         this.mClosed = false;
-        this.zzaCw = true;
-        this.mVersionCode = 1;
-        this.zzaCq = (String[]) zzac.zzw(strArr);
-        this.zzaCs = (CursorWindow[]) zzac.zzw(cursorWindowArr);
-        this.zzauz = i;
-        this.zzaCt = bundle;
-        zzwD();
+        this.zzaDV = true;
+        this.zzaiI = 1;
+        this.zzaDP = (String[]) zzac.zzw(strArr);
+        this.zzaDR = (CursorWindow[]) zzac.zzw(cursorWindowArr);
+        this.zzavD = i;
+        this.zzaDS = bundle;
+        zzxk();
     }
 
     public static DataHolder zza(int i, Bundle bundle) {
-        return new DataHolder(zzaCx, i, bundle);
+        return new DataHolder(zzaDW, i, bundle);
     }
 
     private static CursorWindow[] zza(zza com_google_android_gms_common_data_DataHolder_zza, int i) {
         int size;
         int i2 = 0;
-        if (com_google_android_gms_common_data_DataHolder_zza.zzaCq.length == 0) {
+        if (com_google_android_gms_common_data_DataHolder_zza.zzaDP.length == 0) {
             return new CursorWindow[0];
         }
-        List zzb = (i < 0 || i >= com_google_android_gms_common_data_DataHolder_zza.zzaCy.size()) ? com_google_android_gms_common_data_DataHolder_zza.zzaCy : com_google_android_gms_common_data_DataHolder_zza.zzaCy.subList(0, i);
+        List zzb = (i < 0 || i >= com_google_android_gms_common_data_DataHolder_zza.zzaDX.size()) ? com_google_android_gms_common_data_DataHolder_zza.zzaDX : com_google_android_gms_common_data_DataHolder_zza.zzaDX.subList(0, i);
         int size2 = zzb.size();
         CursorWindow cursorWindow = new CursorWindow(false);
         ArrayList arrayList = new ArrayList();
         arrayList.add(cursorWindow);
-        cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
+        cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaDP.length);
         int i3 = 0;
         int i4 = 0;
         while (i3 < size2) {
@@ -162,7 +162,7 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
                 Log.d("DataHolder", "Allocating additional cursor window for large data set (row " + i3 + ")");
                 cursorWindow = new CursorWindow(false);
                 cursorWindow.setStartPosition(i3);
-                cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
+                cursorWindow.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaDP.length);
                 arrayList.add(cursorWindow);
                 if (!cursorWindow.allocRow()) {
                     Log.e("DataHolder", "Unable to allocate row to hold data.");
@@ -176,8 +176,8 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
                 CursorWindow cursorWindow2;
                 Map map = (Map) zzb.get(i3);
                 boolean z = true;
-                for (int i7 = 0; i7 < com_google_android_gms_common_data_DataHolder_zza.zzaCq.length && z; i7++) {
-                    String str = com_google_android_gms_common_data_DataHolder_zza.zzaCq[i7];
+                for (int i7 = 0; i7 < com_google_android_gms_common_data_DataHolder_zza.zzaDP.length && z; i7++) {
+                    String str = com_google_android_gms_common_data_DataHolder_zza.zzaDP[i7];
                     Object obj = map.get(str);
                     if (obj == null) {
                         z = cursorWindow.putNull(i3, i7);
@@ -211,7 +211,7 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
                     cursorWindow.freeLastRow();
                     CursorWindow cursorWindow3 = new CursorWindow(false);
                     cursorWindow3.setStartPosition(i3);
-                    cursorWindow3.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaCq.length);
+                    cursorWindow3.setNumColumns(com_google_android_gms_common_data_DataHolder_zza.zzaDP.length);
                     arrayList.add(cursorWindow3);
                     i5 = i3 - 1;
                     cursorWindow2 = cursorWindow3;
@@ -237,19 +237,19 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
         return new zza(strArr, null);
     }
 
-    public static DataHolder zzcD(int i) {
+    public static DataHolder zzcJ(int i) {
         return zza(i, null);
     }
 
     private void zzi(String str, int i) {
-        if (this.zzaCr == null || !this.zzaCr.containsKey(str)) {
+        if (this.zzaDQ == null || !this.zzaDQ.containsKey(str)) {
             String str2 = "No such column: ";
             String valueOf = String.valueOf(str);
             throw new IllegalArgumentException(valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
         } else if (isClosed()) {
             throw new IllegalArgumentException("Buffer is closed.");
-        } else if (i < 0 || i >= this.zzaCv) {
-            throw new CursorIndexOutOfBoundsException(i, this.zzaCv);
+        } else if (i < 0 || i >= this.zzaDU) {
+            throw new CursorIndexOutOfBoundsException(i, this.zzaDU);
         }
     }
 
@@ -257,7 +257,7 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
         synchronized (this) {
             if (!this.mClosed) {
                 this.mClosed = true;
-                for (CursorWindow close : this.zzaCs) {
+                for (CursorWindow close : this.zzaDR) {
                     close.close();
                 }
             }
@@ -266,7 +266,7 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
 
     protected void finalize() throws Throwable {
         try {
-            if (this.zzaCw && this.zzaCs.length > 0 && !isClosed()) {
+            if (this.zzaDV && this.zzaDR.length > 0 && !isClosed()) {
                 close();
                 String valueOf = String.valueOf(toString());
                 Log.e("DataBuffer", new StringBuilder(String.valueOf(valueOf).length() + 178).append("Internal data leak within a DataBuffer object detected!  Be sure to explicitly call release() on all DataBuffer extending objects when you are done with them. (internal object: ").append(valueOf).append(")").toString());
@@ -278,11 +278,11 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
     }
 
     public int getCount() {
-        return this.zzaCv;
+        return this.zzaDU;
     }
 
     public int getStatusCode() {
-        return this.zzauz;
+        return this.zzavD;
     }
 
     public boolean isClosed() {
@@ -299,55 +299,55 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
 
     public void zza(String str, int i, int i2, CharArrayBuffer charArrayBuffer) {
         zzi(str, i);
-        this.zzaCs[i2].copyStringToBuffer(i, this.zzaCr.getInt(str), charArrayBuffer);
+        this.zzaDR[i2].copyStringToBuffer(i, this.zzaDQ.getInt(str), charArrayBuffer);
     }
 
     public long zzb(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].getLong(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].getLong(i, this.zzaDQ.getInt(str));
     }
 
     public int zzc(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].getInt(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].getInt(i, this.zzaDQ.getInt(str));
     }
 
-    public int zzcC(int i) {
+    public int zzcI(int i) {
         int i2 = 0;
-        boolean z = i >= 0 && i < this.zzaCv;
-        zzac.zzar(z);
-        while (i2 < this.zzaCu.length) {
-            if (i < this.zzaCu[i2]) {
+        boolean z = i >= 0 && i < this.zzaDU;
+        zzac.zzaw(z);
+        while (i2 < this.zzaDT.length) {
+            if (i < this.zzaDT[i2]) {
                 i2--;
                 break;
             }
             i2++;
         }
-        return i2 == this.zzaCu.length ? i2 - 1 : i2;
+        return i2 == this.zzaDT.length ? i2 - 1 : i2;
     }
 
     public String zzd(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].getString(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].getString(i, this.zzaDQ.getInt(str));
     }
 
-    public boolean zzdj(String str) {
-        return this.zzaCr.containsKey(str);
+    public boolean zzdf(String str) {
+        return this.zzaDQ.containsKey(str);
     }
 
     public boolean zze(String str, int i, int i2) {
         zzi(str, i);
-        return Long.valueOf(this.zzaCs[i2].getLong(i, this.zzaCr.getInt(str))).longValue() == 1;
+        return Long.valueOf(this.zzaDR[i2].getLong(i, this.zzaDQ.getInt(str))).longValue() == 1;
     }
 
     public float zzf(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].getFloat(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].getFloat(i, this.zzaDQ.getInt(str));
     }
 
     public byte[] zzg(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].getBlob(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].getBlob(i, this.zzaDQ.getInt(str));
     }
 
     public Uri zzh(String str, int i, int i2) {
@@ -357,35 +357,35 @@ public final class DataHolder extends com.google.android.gms.common.internal.saf
 
     public boolean zzi(String str, int i, int i2) {
         zzi(str, i);
-        return this.zzaCs[i2].isNull(i, this.zzaCr.getInt(str));
+        return this.zzaDR[i2].isNull(i, this.zzaDQ.getInt(str));
     }
 
-    public void zzwD() {
+    public Bundle zzxf() {
+        return this.zzaDS;
+    }
+
+    public void zzxk() {
         int i;
         int i2 = 0;
-        this.zzaCr = new Bundle();
-        for (i = 0; i < this.zzaCq.length; i++) {
-            this.zzaCr.putInt(this.zzaCq[i], i);
+        this.zzaDQ = new Bundle();
+        for (i = 0; i < this.zzaDP.length; i++) {
+            this.zzaDQ.putInt(this.zzaDP[i], i);
         }
-        this.zzaCu = new int[this.zzaCs.length];
+        this.zzaDT = new int[this.zzaDR.length];
         i = 0;
-        while (i2 < this.zzaCs.length) {
-            this.zzaCu[i2] = i;
-            i += this.zzaCs[i2].getNumRows() - (i - this.zzaCs[i2].getStartPosition());
+        while (i2 < this.zzaDR.length) {
+            this.zzaDT[i2] = i;
+            i += this.zzaDR[i2].getNumRows() - (i - this.zzaDR[i2].getStartPosition());
             i2++;
         }
-        this.zzaCv = i;
+        this.zzaDU = i;
     }
 
-    String[] zzwE() {
-        return this.zzaCq;
+    String[] zzxl() {
+        return this.zzaDP;
     }
 
-    CursorWindow[] zzwF() {
-        return this.zzaCs;
-    }
-
-    public Bundle zzwy() {
-        return this.zzaCt;
+    CursorWindow[] zzxm() {
+        return this.zzaDR;
     }
 }

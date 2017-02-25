@@ -1,18 +1,17 @@
 package com.google.android.gms.internal;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-import java.util.concurrent.Executor;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
-public class zzact implements Executor {
-    private final Handler mHandler;
-
-    public zzact(Looper looper) {
-        this.mHandler = new Handler(looper);
+public abstract class zzact extends zzacs implements SafeParcelable {
+    public final int describeContents() {
+        return 0;
     }
 
-    public void execute(@NonNull Runnable runnable) {
-        this.mHandler.post(runnable);
+    public Object zzds(String str) {
+        return null;
+    }
+
+    public boolean zzdt(String str) {
+        return false;
     }
 }

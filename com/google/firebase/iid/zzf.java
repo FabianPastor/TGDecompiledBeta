@@ -18,6 +18,7 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.support.v4.util.SimpleArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
 import com.google.android.gms.iid.InstanceID;
@@ -27,46 +28,71 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class zzf {
-    static String zzbhq = null;
-    static int zzbhr = 0;
-    static int zzbhs = 0;
-    static int zzbht = 0;
-    PendingIntent zzbga;
-    Messenger zzbge;
-    int zzbhA;
-    long zzbhB;
-    Map<String, Object> zzbhu = new HashMap();
-    Messenger zzbhv;
-    MessengerCompat zzbhw;
-    long zzbhx;
-    long zzbhy;
-    int zzbhz;
-    Context zzqr;
+    static String zzbhW = null;
+    static int zzbhX = 0;
+    static int zzbhY = 0;
+    static int zzbhZ = 0;
+    PendingIntent zzbgF;
+    Messenger zzbgJ;
+    Messenger zzbib;
+    MessengerCompat zzbic;
+    long zzbid;
+    long zzbie;
+    int zzbif;
+    int zzbig;
+    long zzbih;
+    private final SimpleArrayMap<String, zzb> zzclo = new SimpleArrayMap();
+    Context zzqn;
 
-    public zzf(Context context) {
-        this.zzqr = context;
+    private interface zzb {
+        void onError(String str);
+
+        void zzK(Intent intent);
     }
 
-    private void zzG(Object obj) {
-        synchronized (getClass()) {
-            for (String str : this.zzbhu.keySet()) {
-                Object obj2 = this.zzbhu.get(str);
-                this.zzbhu.put(str, obj);
-                zzh(obj2, obj);
+    private static class zza implements zzb {
+        private Intent intent;
+        private final ConditionVariable zzclq;
+        private String zzclr;
+
+        private zza() {
+            this.zzclq = new ConditionVariable();
+        }
+
+        public void onError(String str) {
+            this.zzclr = str;
+            this.zzclq.open();
+        }
+
+        public void zzK(Intent intent) {
+            this.intent = intent;
+            this.zzclq.open();
+        }
+
+        public Intent zzabS() throws IOException {
+            if (!this.zzclq.block(30000)) {
+                Log.w("InstanceID/Rpc", "No response");
+                throw new IOException(InstanceID.ERROR_TIMEOUT);
+            } else if (this.zzclr == null) {
+                return this.intent;
+            } else {
+                throw new IOException(this.zzclr);
             }
         }
     }
 
-    public static synchronized String zzGz() {
+    public zzf(Context context) {
+        this.zzqn = context;
+    }
+
+    public static synchronized String zzHm() {
         String num;
         synchronized (zzf.class) {
-            int i = zzbht;
-            zzbht = i + 1;
+            int i = zzbhZ;
+            zzbhZ = i + 1;
             num = Integer.toString(i);
         }
         return num;
@@ -91,45 +117,77 @@ public class zzf {
         return str;
     }
 
-    private Intent zzb(Bundle bundle, KeyPair keyPair) throws IOException {
-        Intent intent;
-        ConditionVariable conditionVariable = new ConditionVariable();
-        String zzGz = zzGz();
-        synchronized (getClass()) {
-            this.zzbhu.put(zzGz, conditionVariable);
-        }
-        zza(bundle, keyPair, zzGz);
-        conditionVariable.block(30000);
-        synchronized (getClass()) {
-            Object remove = this.zzbhu.remove(zzGz);
-            if (remove instanceof Intent) {
-                intent = (Intent) remove;
-            } else if (remove instanceof String) {
-                throw new IOException((String) remove);
+    /* JADX WARNING: inconsistent code. */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void zzay(String str, String str2) {
+        synchronized (this.zzclo) {
+            if (str == null) {
+                for (int i = 0; i < this.zzclo.size(); i++) {
+                    ((zzb) this.zzclo.valueAt(i)).onError(str2);
+                }
+                this.zzclo.clear();
             } else {
-                String valueOf = String.valueOf(remove);
-                Log.w("InstanceID/Rpc", new StringBuilder(String.valueOf(valueOf).length() + 12).append("No response ").append(valueOf).toString());
-                throw new IOException(InstanceID.ERROR_TIMEOUT);
+                zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzclo.remove(str);
+                if (com_google_firebase_iid_zzf_zzb == null) {
+                    String str3 = "InstanceID/Rpc";
+                    String str4 = "Missing callback for ";
+                    String valueOf = String.valueOf(str);
+                    Log.w(str3, valueOf.length() != 0 ? str4.concat(valueOf) : new String(str4));
+                    return;
+                }
+                com_google_firebase_iid_zzf_zzb.onError(str2);
             }
         }
-        return intent;
     }
 
-    public static String zzbi(Context context) {
-        ApplicationInfo applicationInfo;
-        if (zzbhq != null) {
-            return zzbhq;
+    private Intent zzb(Bundle bundle, KeyPair keyPair) throws IOException {
+        String zzHm = zzHm();
+        zza com_google_firebase_iid_zzf_zza = new zza();
+        synchronized (this.zzclo) {
+            this.zzclo.put(zzHm, com_google_firebase_iid_zzf_zza);
         }
-        zzbhr = Process.myUid();
+        zza(bundle, keyPair, zzHm);
+        try {
+            Intent zzabS = com_google_firebase_iid_zzf_zza.zzabS();
+            synchronized (this.zzclo) {
+                this.zzclo.remove(zzHm);
+            }
+            return zzabS;
+        } catch (Throwable th) {
+            synchronized (this.zzclo) {
+                this.zzclo.remove(zzHm);
+            }
+        }
+    }
+
+    private void zzb(String str, Intent intent) {
+        synchronized (this.zzclo) {
+            zzb com_google_firebase_iid_zzf_zzb = (zzb) this.zzclo.remove(str);
+            if (com_google_firebase_iid_zzf_zzb == null) {
+                String str2 = "InstanceID/Rpc";
+                String str3 = "Missing callback for ";
+                String valueOf = String.valueOf(str);
+                Log.w(str2, valueOf.length() != 0 ? str3.concat(valueOf) : new String(str3));
+                return;
+            }
+            com_google_firebase_iid_zzf_zzb.zzK(intent);
+        }
+    }
+
+    public static String zzbA(Context context) {
+        if (zzbhW != null) {
+            return zzbhW;
+        }
+        zzbhX = Process.myUid();
         PackageManager packageManager = context.getPackageManager();
         for (ResolveInfo resolveInfo : packageManager.queryIntentServices(new Intent("com.google.android.c2dm.intent.REGISTER"), 0)) {
             if (packageManager.checkPermission("com.google.android.c2dm.permission.RECEIVE", resolveInfo.serviceInfo.packageName) == 0) {
                 try {
-                    ApplicationInfo applicationInfo2 = packageManager.getApplicationInfo(resolveInfo.serviceInfo.packageName, 0);
-                    Log.w("InstanceID/Rpc", "Found " + applicationInfo2.uid);
-                    zzbhs = applicationInfo2.uid;
-                    zzbhq = resolveInfo.serviceInfo.packageName;
-                    return zzbhq;
+                    ApplicationInfo applicationInfo = packageManager.getApplicationInfo(resolveInfo.serviceInfo.packageName, 0);
+                    Log.w("InstanceID/Rpc", "Found " + applicationInfo.uid);
+                    zzbhY = applicationInfo.uid;
+                    zzbhW = resolveInfo.serviceInfo.packageName;
+                    return zzbhW;
                 } catch (NameNotFoundException e) {
                 }
             } else {
@@ -139,17 +197,18 @@ public class zzf {
             }
         }
         Log.w("InstanceID/Rpc", "Failed to resolve REGISTER intent, falling back");
+        ApplicationInfo applicationInfo2;
         try {
-            applicationInfo = packageManager.getApplicationInfo("com.google.android.gms", 0);
-            zzbhq = applicationInfo.packageName;
-            zzbhs = applicationInfo.uid;
-            return zzbhq;
+            applicationInfo2 = packageManager.getApplicationInfo("com.google.android.gms", 0);
+            zzbhW = applicationInfo2.packageName;
+            zzbhY = applicationInfo2.uid;
+            return zzbhW;
         } catch (NameNotFoundException e2) {
             try {
-                applicationInfo = packageManager.getApplicationInfo("com.google.android.gsf", 0);
-                zzbhq = applicationInfo.packageName;
-                zzbhs = applicationInfo.uid;
-                return zzbhq;
+                applicationInfo2 = packageManager.getApplicationInfo("com.google.android.gsf", 0);
+                zzbhW = applicationInfo2.packageName;
+                zzbhY = applicationInfo2.uid;
+                return zzbhW;
             } catch (NameNotFoundException e3) {
                 Log.w("InstanceID/Rpc", "Both Google Play Services and legacy GSF package are missing");
                 return null;
@@ -157,53 +216,28 @@ public class zzf {
         }
     }
 
-    private void zzeJ(String str) {
-        if ("com.google.android.gsf".equals(zzbhq)) {
-            this.zzbhz++;
-            if (this.zzbhz >= 3) {
-                if (this.zzbhz == 3) {
-                    this.zzbhA = new Random().nextInt(1000) + 1000;
+    private void zzeF(String str) {
+        if ("com.google.android.gsf".equals(zzbhW)) {
+            this.zzbif++;
+            if (this.zzbif >= 3) {
+                if (this.zzbif == 3) {
+                    this.zzbig = new Random().nextInt(1000) + 1000;
                 }
-                this.zzbhA *= 2;
-                this.zzbhB = SystemClock.elapsedRealtime() + ((long) this.zzbhA);
-                Log.w("InstanceID/Rpc", new StringBuilder(String.valueOf(str).length() + 31).append("Backoff due to ").append(str).append(" for ").append(this.zzbhA).toString());
+                this.zzbig *= 2;
+                this.zzbih = SystemClock.elapsedRealtime() + ((long) this.zzbig);
+                Log.w("InstanceID/Rpc", new StringBuilder(String.valueOf(str).length() + 31).append("Backoff due to ").append(str).append(" for ").append(this.zzbig).toString());
             }
         }
     }
 
-    private void zzh(Object obj, Object obj2) {
-        if (obj instanceof ConditionVariable) {
-            ((ConditionVariable) obj).open();
-        }
-        if (obj instanceof Messenger) {
-            Messenger messenger = (Messenger) obj;
-            Message obtain = Message.obtain();
-            obtain.obj = obj2;
-            try {
-                messenger.send(obtain);
-            } catch (RemoteException e) {
-                String valueOf = String.valueOf(e);
-                Log.w("InstanceID/Rpc", new StringBuilder(String.valueOf(valueOf).length() + 24).append("Failed to send response ").append(valueOf).toString());
-            }
-        }
-    }
-
-    private void zzi(String str, Object obj) {
-        synchronized (getClass()) {
-            Object obj2 = this.zzbhu.get(str);
-            this.zzbhu.put(str, obj);
-            zzh(obj2, obj);
-        }
-    }
-
-    void zzGy() {
-        if (this.zzbge == null) {
-            zzbi(this.zzqr);
-            this.zzbge = new Messenger(new Handler(this, Looper.getMainLooper()) {
-                final /* synthetic */ zzf zzcjd;
+    void zzHl() {
+        if (this.zzbgJ == null) {
+            zzbA(this.zzqn);
+            this.zzbgJ = new Messenger(new Handler(this, Looper.getMainLooper()) {
+                final /* synthetic */ zzf zzclp;
 
                 public void handleMessage(Message message) {
-                    this.zzcjd.zze(message);
+                    this.zzclp.zze(message);
                 }
             });
         }
@@ -220,59 +254,59 @@ public class zzf {
 
     public void zza(Bundle bundle, KeyPair keyPair, String str) throws IOException {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        if (this.zzbhB == 0 || elapsedRealtime > this.zzbhB) {
-            zzGy();
-            if (zzbhq == null) {
+        if (this.zzbih == 0 || elapsedRealtime > this.zzbih) {
+            zzHl();
+            if (zzbhW == null) {
                 throw new IOException(InstanceID.ERROR_MISSING_INSTANCEID_SERVICE);
             }
-            this.zzbhx = SystemClock.elapsedRealtime();
+            this.zzbid = SystemClock.elapsedRealtime();
             Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");
-            intent.setPackage(zzbhq);
-            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzK(this.zzqr, zzbi(this.zzqr))));
+            intent.setPackage(zzbhW);
+            bundle.putString("gmsv", Integer.toString(FirebaseInstanceId.zzQ(this.zzqn, zzbA(this.zzqn))));
             bundle.putString("osv", Integer.toString(VERSION.SDK_INT));
-            bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzbU(this.zzqr)));
-            bundle.putString("app_ver_name", FirebaseInstanceId.zzbg(this.zzqr));
-            bundle.putString("cliv", "fiid-10084000");
+            bundle.putString("app_ver", Integer.toString(FirebaseInstanceId.zzcs(this.zzqn)));
+            bundle.putString("app_ver_name", FirebaseInstanceId.zzby(this.zzqn));
+            bundle.putString("cliv", "fiid-10298000");
             bundle.putString("appid", FirebaseInstanceId.zza(keyPair));
-            String zzbT = FirebaseInstanceId.zzbT(this.zzqr);
-            if (zzbT != null) {
-                bundle.putString("gmp_app_id", zzbT);
+            String zzcr = FirebaseInstanceId.zzcr(this.zzqn);
+            if (zzcr != null) {
+                bundle.putString("gmp_app_id", zzcr);
             }
             bundle.putString("pub2", FirebaseInstanceId.zzv(keyPair.getPublic().getEncoded()));
-            bundle.putString("sig", zza(keyPair, this.zzqr.getPackageName(), zzbT));
+            bundle.putString("sig", zza(keyPair, this.zzqn.getPackageName(), zzcr));
             intent.putExtras(bundle);
             zzs(intent);
             zzb(intent, str);
             return;
         }
-        elapsedRealtime = this.zzbhB - elapsedRealtime;
-        Log.w("InstanceID/Rpc", "Backoff mode, next request attempt: " + elapsedRealtime + " interval: " + this.zzbhA);
+        elapsedRealtime = this.zzbih - elapsedRealtime;
+        Log.w("InstanceID/Rpc", "Backoff mode, next request attempt: " + elapsedRealtime + " interval: " + this.zzbig);
         throw new IOException(InstanceID.ERROR_BACKOFF);
     }
 
     protected void zzb(Intent intent, String str) {
-        this.zzbhx = SystemClock.elapsedRealtime();
+        this.zzbid = SystemClock.elapsedRealtime();
         intent.putExtra("kid", new StringBuilder(String.valueOf(str).length() + 5).append("|ID|").append(str).append("|").toString());
         intent.putExtra("X-kid", new StringBuilder(String.valueOf(str).length() + 5).append("|ID|").append(str).append("|").toString());
-        boolean equals = "com.google.android.gsf".equals(zzbhq);
+        boolean equals = "com.google.android.gsf".equals(zzbhW);
         if (Log.isLoggable("InstanceID/Rpc", 3)) {
             String valueOf = String.valueOf(intent.getExtras());
             Log.d("InstanceID/Rpc", new StringBuilder(String.valueOf(valueOf).length() + 8).append("Sending ").append(valueOf).toString());
         }
         if (equals) {
-            this.zzqr.startService(intent);
+            this.zzqn.startService(intent);
             return;
         }
-        intent.putExtra("google.messenger", this.zzbge);
-        if (!(this.zzbhv == null && this.zzbhw == null)) {
+        intent.putExtra("google.messenger", this.zzbgJ);
+        if (!(this.zzbib == null && this.zzbic == null)) {
             Message obtain = Message.obtain();
             obtain.obj = intent;
             try {
-                if (this.zzbhv != null) {
-                    this.zzbhv.send(obtain);
+                if (this.zzbib != null) {
+                    this.zzbib.send(obtain);
                     return;
                 } else {
-                    this.zzbhw.send(obtain);
+                    this.zzbic.send(obtain);
                     return;
                 }
             } catch (RemoteException e) {
@@ -281,7 +315,7 @@ public class zzf {
                 }
             }
         }
-        this.zzqr.startService(intent);
+        this.zzqn.startService(intent);
     }
 
     public void zze(Message message) {
@@ -292,10 +326,10 @@ public class zzf {
                 if (intent.hasExtra("google.messenger")) {
                     Parcelable parcelableExtra = intent.getParcelableExtra("google.messenger");
                     if (parcelableExtra instanceof MessengerCompat) {
-                        this.zzbhw = (MessengerCompat) parcelableExtra;
+                        this.zzbic = (MessengerCompat) parcelableExtra;
                     }
                     if (parcelableExtra instanceof Messenger) {
-                        this.zzbhv = (Messenger) parcelableExtra;
+                        this.zzbib = (Messenger) parcelableExtra;
                     }
                 }
                 zzv((Intent) message.obj);
@@ -306,12 +340,12 @@ public class zzf {
     }
 
     synchronized void zzs(Intent intent) {
-        if (this.zzbga == null) {
+        if (this.zzbgF == null) {
             Intent intent2 = new Intent();
             intent2.setPackage("com.google.example.invalidpackage");
-            this.zzbga = PendingIntent.getBroadcast(this.zzqr, 0, intent2, 0);
+            this.zzbgF = PendingIntent.getBroadcast(this.zzqn, 0, intent2, 0);
         }
-        intent.putExtra("app", this.zzbga);
+        intent.putExtra("app", this.zzbgF);
     }
 
     String zzt(Intent intent) throws IOException {
@@ -341,10 +375,11 @@ public class zzf {
             Log.w("InstanceID/Rpc", new StringBuilder(String.valueOf(valueOf).length() + 49).append("Unexpected response, no error or registration id ").append(valueOf).toString());
             return;
         }
+        String valueOf2;
         if (Log.isLoggable("InstanceID/Rpc", 3)) {
             valueOf = "InstanceID/Rpc";
             String str = "Received InstanceID error ";
-            String valueOf2 = String.valueOf(stringExtra);
+            valueOf2 = String.valueOf(stringExtra);
             Log.d(valueOf, valueOf2.length() != 0 ? str.concat(valueOf2) : new String(str));
         }
         if (stringExtra.startsWith("|")) {
@@ -370,19 +405,15 @@ public class zzf {
             valueOf2 = null;
             valueOf = stringExtra;
         }
-        if (valueOf2 == null) {
-            zzG(valueOf);
-        } else {
-            zzi(valueOf2, valueOf);
-        }
+        zzay(valueOf2, valueOf);
         long longExtra = intent.getLongExtra("Retry-After", 0);
         if (longExtra > 0) {
-            this.zzbhy = SystemClock.elapsedRealtime();
-            this.zzbhA = ((int) longExtra) * 1000;
-            this.zzbhB = SystemClock.elapsedRealtime() + ((long) this.zzbhA);
-            Log.w("InstanceID/Rpc", "Explicit request from server to backoff: " + this.zzbhA);
+            this.zzbie = SystemClock.elapsedRealtime();
+            this.zzbig = ((int) longExtra) * 1000;
+            this.zzbih = SystemClock.elapsedRealtime() + ((long) this.zzbig);
+            Log.w("InstanceID/Rpc", "Explicit request from server to backoff: " + this.zzbig);
         } else if ("SERVICE_NOT_AVAILABLE".equals(valueOf) || "AUTHENTICATION_FAILED".equals(valueOf)) {
-            zzeJ(valueOf);
+            zzeF(valueOf);
         }
     }
 
@@ -399,10 +430,10 @@ public class zzf {
                     zzu(intent);
                     return;
                 }
-                this.zzbhx = SystemClock.elapsedRealtime();
-                this.zzbhB = 0;
-                this.zzbhz = 0;
-                this.zzbhA = 0;
+                this.zzbid = SystemClock.elapsedRealtime();
+                this.zzbih = 0;
+                this.zzbif = 0;
+                this.zzbig = 0;
                 if (stringExtra.startsWith("|")) {
                     String[] split = stringExtra.split("\\|");
                     if (!"ID".equals(split[1])) {
@@ -414,11 +445,11 @@ public class zzf {
                     str = split[2];
                     if (split.length > 4) {
                         if ("SYNC".equals(split[3])) {
-                            FirebaseInstanceId.zzbh(this.zzqr);
+                            FirebaseInstanceId.zzbz(this.zzqn);
                         } else if ("RST".equals(split[3])) {
-                            FirebaseInstanceId.zza(this.zzqr, zzd.zzb(this.zzqr, null).zzaag());
+                            FirebaseInstanceId.zza(this.zzqn, zzd.zzb(this.zzqn, null).zzabP());
                             intent.removeExtra("registration_id");
-                            zzi(str, intent);
+                            zzb(str, intent);
                             return;
                         }
                     }
@@ -432,7 +463,7 @@ public class zzf {
                     stringExtra = null;
                 }
                 if (stringExtra != null) {
-                    zzi(stringExtra, intent);
+                    zzb(stringExtra, intent);
                 } else if (Log.isLoggable("InstanceID/Rpc", 3)) {
                     Log.d("InstanceID/Rpc", "Ignoring response without a request ID");
                 }

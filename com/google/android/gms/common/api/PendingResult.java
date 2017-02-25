@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class PendingResult<R extends Result> {
 
     public interface zza {
-        void zzx(Status status);
+        void zzy(Status status);
     }
 
     @NonNull
@@ -34,7 +34,7 @@ public abstract class PendingResult<R extends Result> {
     }
 
     @Nullable
-    public Integer zzuR() {
+    public Integer zzvr() {
         throw new UnsupportedOperationException();
     }
 }

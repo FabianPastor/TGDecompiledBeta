@@ -1,29 +1,32 @@
 package com.google.android.gms.internal;
 
-import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.http.AndroidHttpClient;
-import android.os.Build.VERSION;
-import java.io.File;
+import com.google.android.gms.internal.zzn.zza;
+import com.google.android.gms.internal.zzn.zzb;
+import java.io.UnsupportedEncodingException;
 
-public class zzac {
-    public static zzl zza(Context context) {
-        return zza(context, null);
+public class zzac extends zzl<String> {
+    private final zzb<String> zzaG;
+
+    public zzac(int i, String str, zzb<String> com_google_android_gms_internal_zzn_zzb_java_lang_String, zza com_google_android_gms_internal_zzn_zza) {
+        super(i, str, com_google_android_gms_internal_zzn_zza);
+        this.zzaG = com_google_android_gms_internal_zzn_zzb_java_lang_String;
     }
 
-    public static zzl zza(Context context, zzy com_google_android_gms_internal_zzy) {
-        File file = new File(context.getCacheDir(), "volley");
-        String str = "volley/0";
+    protected zzn<String> zza(zzj com_google_android_gms_internal_zzj) {
+        Object str;
         try {
-            String packageName = context.getPackageName();
-            str = new StringBuilder(String.valueOf(packageName).length() + 12).append(packageName).append("/").append(context.getPackageManager().getPackageInfo(packageName, 0).versionCode).toString();
-        } catch (NameNotFoundException e) {
+            str = new String(com_google_android_gms_internal_zzj.data, zzy.zza(com_google_android_gms_internal_zzj.zzz));
+        } catch (UnsupportedEncodingException e) {
+            str = new String(com_google_android_gms_internal_zzj.data);
         }
-        if (com_google_android_gms_internal_zzy == null) {
-            com_google_android_gms_internal_zzy = VERSION.SDK_INT >= 9 ? new zzz() : new zzw(AndroidHttpClient.newInstance(str));
-        }
-        zzl com_google_android_gms_internal_zzl = new zzl(new zzv(file), new zzt(com_google_android_gms_internal_zzy));
-        com_google_android_gms_internal_zzl.start();
-        return com_google_android_gms_internal_zzl;
+        return zzn.zza(str, zzy.zzb(com_google_android_gms_internal_zzj));
+    }
+
+    protected /* synthetic */ void zza(Object obj) {
+        zzi((String) obj);
+    }
+
+    protected void zzi(String str) {
+        this.zzaG.zzb(str);
     }
 }

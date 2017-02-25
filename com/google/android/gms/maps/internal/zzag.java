@@ -6,21 +6,21 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface zzag extends IInterface {
 
     public static abstract class zza extends Binder implements zzag {
 
         private static class zza implements zzag {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public void onSnapshotReady(Bitmap bitmap) throws RemoteException {
@@ -34,7 +34,7 @@ public interface zzag extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -42,13 +42,13 @@ public interface zzag extends IInterface {
                 }
             }
 
-            public void zzG(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public void zzH(IObjectWrapper iObjectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.internal.ISnapshotReadyCallback");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -82,7 +82,7 @@ public interface zzag extends IInterface {
                     return true;
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.maps.internal.ISnapshotReadyCallback");
-                    zzG(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    zzH(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -96,5 +96,5 @@ public interface zzag extends IInterface {
 
     void onSnapshotReady(Bitmap bitmap) throws RemoteException;
 
-    void zzG(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    void zzH(IObjectWrapper iObjectWrapper) throws RemoteException;
 }

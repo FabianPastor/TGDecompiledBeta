@@ -24,11 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 class zza {
-    static zza zzbfM;
+    static zza zzbgq;
     private final Context mContext;
-
-    private class zza extends IllegalArgumentException {
-    }
 
     private zza(Context context) {
         this.mContext = context.getApplicationContext();
@@ -65,18 +62,18 @@ class zza {
         }
     }
 
-    private int zzGc() {
+    private int zzGP() {
         return (int) SystemClock.uptimeMillis();
     }
 
     private Notification zzH(Bundle bundle) {
         CharSequence zzg = zzg(bundle, "gcm.n.title");
         CharSequence zzg2 = zzg(bundle, "gcm.n.body");
-        int zzeF = zzeF(zzf(bundle, "gcm.n.icon"));
+        int zzeB = zzeB(zzf(bundle, "gcm.n.icon"));
         Object zzf = zzf(bundle, "gcm.n.color");
-        Uri zzeG = zzeG(zzf(bundle, "gcm.n.sound2"));
+        Uri zzeC = zzeC(zzf(bundle, "gcm.n.sound2"));
         PendingIntent zzI = zzI(bundle);
-        Builder smallIcon = new Builder(this.mContext).setAutoCancel(true).setSmallIcon(zzeF);
+        Builder smallIcon = new Builder(this.mContext).setAutoCancel(true).setSmallIcon(zzeB);
         if (TextUtils.isEmpty(zzg)) {
             smallIcon.setContentTitle(this.mContext.getApplicationInfo().loadLabel(this.mContext.getPackageManager()));
         } else {
@@ -88,8 +85,8 @@ class zza {
         if (!TextUtils.isEmpty(zzf)) {
             smallIcon.setColor(Color.parseColor(zzf));
         }
-        if (zzeG != null) {
-            smallIcon.setSound(zzeG);
+        if (zzeC != null) {
+            smallIcon.setSound(zzeC);
         }
         if (zzI != null) {
             smallIcon.setContentIntent(zzI);
@@ -122,7 +119,7 @@ class zza {
                 intent.removeExtra(str);
             }
         }
-        return PendingIntent.getActivity(this.mContext, zzGc(), intent, NUM);
+        return PendingIntent.getActivity(this.mContext, zzGP(), intent, NUM);
     }
 
     private void zza(String str, Notification notification) {
@@ -136,18 +133,18 @@ class zza {
         notificationManager.notify(str, 0, notification);
     }
 
-    static synchronized zza zzbb(Context context) {
+    static synchronized zza zzbt(Context context) {
         zza com_google_android_gms_gcm_zza;
         synchronized (zza.class) {
-            if (zzbfM == null) {
-                zzbfM = new zza(context);
+            if (zzbgq == null) {
+                zzbgq = new zza(context);
             }
-            com_google_android_gms_gcm_zza = zzbfM;
+            com_google_android_gms_gcm_zza = zzbgq;
         }
         return com_google_android_gms_gcm_zza;
     }
 
-    static boolean zzbc(Context context) {
+    static boolean zzbu(Context context) {
         if (((KeyguardManager) context.getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
             return false;
         }
@@ -164,11 +161,11 @@ class zza {
         return false;
     }
 
-    private String zzeE(String str) {
+    private String zzeA(String str) {
         return str.substring("gcm.n.".length());
     }
 
-    private int zzeF(String str) {
+    private int zzeB(String str) {
         int identifier;
         if (!TextUtils.isEmpty(str)) {
             Resources resources = this.mContext.getResources();
@@ -186,7 +183,7 @@ class zza {
         return identifier == 0 ? 17301651 : identifier;
     }
 
-    private Uri zzeG(String str) {
+    private Uri zzeC(String str) {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
@@ -220,7 +217,7 @@ class zza {
             String str2 = "GcmNotification";
             String valueOf3 = String.valueOf(str);
             valueOf2 = String.valueOf("_loc_key");
-            valueOf2 = String.valueOf(zzeE(valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3)));
+            valueOf2 = String.valueOf(zzeA(valueOf2.length() != 0 ? valueOf3.concat(valueOf2) : new String(valueOf3)));
             Log.w(str2, new StringBuilder((String.valueOf(valueOf2).length() + 49) + String.valueOf(valueOf).length()).append(valueOf2).append(" resource not found: ").append(valueOf).append(" Default value will be used.").toString());
             return null;
         }
@@ -241,7 +238,7 @@ class zza {
             valueOf = "GcmNotification";
             str2 = String.valueOf(str);
             valueOf2 = String.valueOf("_loc_args");
-            valueOf2 = String.valueOf(zzeE(valueOf2.length() != 0 ? str2.concat(valueOf2) : new String(str2)));
+            valueOf2 = String.valueOf(zzeA(valueOf2.length() != 0 ? str2.concat(valueOf2) : new String(str2)));
             Log.w(valueOf, new StringBuilder((String.valueOf(valueOf2).length() + 41) + String.valueOf(valueOf4).length()).append("Malformed ").append(valueOf2).append(": ").append(valueOf4).append("  Default value will be used.").toString());
             return null;
         } catch (Throwable e2) {
@@ -251,15 +248,7 @@ class zza {
     }
 
     boolean zzG(Bundle bundle) {
-        try {
-            zza(zzf(bundle, "gcm.n.tag"), zzH(bundle));
-            return true;
-        } catch (zza e) {
-            String str = "GcmNotification";
-            String str2 = "Failed to show notification: ";
-            String valueOf = String.valueOf(e.getMessage());
-            Log.e(str, valueOf.length() != 0 ? str2.concat(valueOf) : new String(str2));
-            return false;
-        }
+        zza(zzf(bundle, "gcm.n.tag"), zzH(bundle));
+        return true;
     }
 }

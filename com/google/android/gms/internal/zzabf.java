@@ -1,14 +1,15 @@
 package com.google.android.gms.internal;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import com.google.android.gms.common.api.Api.zzb;
 
-public final class zzabf {
-    public final zzabe<zzb, ?> zzayq;
-    public final zzabr<zzb, ?> zzayr;
+public interface zzabf {
+    void startActivityForResult(Intent intent, int i);
 
-    public zzabf(@NonNull zzabe<zzb, ?> com_google_android_gms_internal_zzabe_com_google_android_gms_common_api_Api_zzb__, @NonNull zzabr<zzb, ?> com_google_android_gms_internal_zzabr_com_google_android_gms_common_api_Api_zzb__) {
-        this.zzayq = com_google_android_gms_internal_zzabe_com_google_android_gms_common_api_Api_zzb__;
-        this.zzayr = com_google_android_gms_internal_zzabr_com_google_android_gms_common_api_Api_zzb__;
-    }
+    <T extends zzabe> T zza(String str, Class<T> cls);
+
+    void zza(String str, @NonNull zzabe com_google_android_gms_internal_zzabe);
+
+    Activity zzwV();
 }

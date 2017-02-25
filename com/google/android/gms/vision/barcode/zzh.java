@@ -9,50 +9,50 @@ import com.google.android.gms.vision.barcode.Barcode.GeoPoint;
 
 public class zzh implements Creator<GeoPoint> {
     static void zza(GeoPoint geoPoint, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, geoPoint.versionCode);
         zzc.zza(parcel, 2, geoPoint.lat);
         zzc.zza(parcel, 3, geoPoint.lng);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzja(parcel);
+        return zzjG(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zznp(i);
+        return zzoa(i);
     }
 
-    public GeoPoint zzja(Parcel parcel) {
+    public GeoPoint zzjG(Parcel parcel) {
         double d = 0.0d;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         double d2 = 0.0d;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    d2 = zzb.zzn(parcel, zzaT);
+                    d2 = zzb.zzn(parcel, zzaX);
                     break;
                 case 3:
-                    d = zzb.zzn(parcel, zzaT);
+                    d = zzb.zzn(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new GeoPoint(i, d2, d);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public GeoPoint[] zznp(int i) {
+    public GeoPoint[] zzoa(int i) {
         return new GeoPoint[i];
     }
 }

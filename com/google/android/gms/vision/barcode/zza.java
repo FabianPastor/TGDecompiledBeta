@@ -8,50 +8,50 @@ import com.google.android.gms.vision.barcode.Barcode.Address;
 
 public class zza implements Creator<Address> {
     static void zza(Address address, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, address.versionCode);
         zzc.zzc(parcel, 2, address.type);
         zzc.zza(parcel, 3, address.addressLines, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zziT(parcel);
+        return zzjz(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzni(i);
+        return zznT(i);
     }
 
-    public Address zziT(Parcel parcel) {
+    public Address zzjz(Parcel parcel) {
         int i = 0;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         String[] strArr = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 3:
-                    strArr = zzb.zzC(parcel, zzaT);
+                    strArr = zzb.zzC(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new Address(i2, i, strArr);
         }
-        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaU, parcel);
+        throw new com.google.android.gms.common.internal.safeparcel.zzb.zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Address[] zzni(int i) {
+    public Address[] zznT(int i) {
         return new Address[i];
     }
 }

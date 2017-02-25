@@ -12,7 +12,7 @@ import com.google.android.gms.R;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.zzaj;
 import com.google.android.gms.common.internal.zzak;
-import com.google.android.gms.dynamic.zzg.zza;
+import com.google.android.gms.dynamic.zzf.zza;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -25,8 +25,8 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public static final int SIZE_WIDE = 1;
     private int mColor;
     private int mSize;
-    private View zzaxs;
-    private OnClickListener zzaxt;
+    private View zzayF;
+    private OnClickListener zzayG;
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface ButtonSize {
@@ -46,24 +46,24 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public SignInButton(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.zzaxt = null;
+        this.zzayG = null;
         zzb(context, attributeSet);
         setStyle(this.mSize, this.mColor);
     }
 
-    private void zzaw(Context context) {
-        if (this.zzaxs != null) {
-            removeView(this.zzaxs);
+    private void zzaO(Context context) {
+        if (this.zzayF != null) {
+            removeView(this.zzayF);
         }
         try {
-            this.zzaxs = zzaj.zzd(context, this.mSize, this.mColor);
+            this.zzayF = zzaj.zzd(context, this.mSize, this.mColor);
         } catch (zza e) {
             Log.w("SignInButton", "Sign in button not found, using placeholder instead");
-            this.zzaxs = zzc(context, this.mSize, this.mColor);
+            this.zzayF = zzc(context, this.mSize, this.mColor);
         }
-        addView(this.zzaxs);
-        this.zzaxs.setEnabled(isEnabled());
-        this.zzaxs.setOnClickListener(this);
+        addView(this.zzayF);
+        this.zzayF.setEnabled(isEnabled());
+        this.zzayF.setOnClickListener(this);
     }
 
     private void zzb(Context context, AttributeSet attributeSet) {
@@ -83,8 +83,8 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     }
 
     public void onClick(View view) {
-        if (this.zzaxt != null && view == this.zzaxs) {
-            this.zzaxt.onClick(this);
+        if (this.zzayG != null && view == this.zzayF) {
+            this.zzayG.onClick(this);
         }
     }
 
@@ -94,13 +94,13 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
 
     public void setEnabled(boolean z) {
         super.setEnabled(z);
-        this.zzaxs.setEnabled(z);
+        this.zzayF.setEnabled(z);
     }
 
     public void setOnClickListener(OnClickListener onClickListener) {
-        this.zzaxt = onClickListener;
-        if (this.zzaxs != null) {
-            this.zzaxs.setOnClickListener(this);
+        this.zzayG = onClickListener;
+        if (this.zzayF != null) {
+            this.zzayF.setOnClickListener(this);
         }
     }
 
@@ -116,7 +116,7 @@ public final class SignInButton extends FrameLayout implements OnClickListener {
     public void setStyle(int i, int i2) {
         this.mSize = i;
         this.mColor = i2;
-        zzaw(getContext());
+        zzaO(getContext());
     }
 
     @Deprecated

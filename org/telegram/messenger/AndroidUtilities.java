@@ -62,6 +62,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -1069,7 +1070,7 @@ public class AndroidUtilities {
                     String selection = "_id=?";
                     return getDataColumn(ApplicationLoader.applicationContext, contentUri, "_id=?", new String[]{split[1]});
                 }
-            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            } else if (Param.CONTENT.equalsIgnoreCase(uri.getScheme())) {
                 return getDataColumn(ApplicationLoader.applicationContext, uri, null, null);
             } else {
                 if ("file".equalsIgnoreCase(uri.getScheme())) {

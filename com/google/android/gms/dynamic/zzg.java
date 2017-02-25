@@ -1,47 +1,123 @@
 package com.google.android.gms.dynamic;
 
-import android.content.Context;
-import android.os.IBinder;
-import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.common.zze;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import com.google.android.gms.dynamic.zzc.zza;
 
-public abstract class zzg<T> {
-    private final String zzaQo;
-    private T zzaQp;
+public final class zzg extends zza {
+    private Fragment zzaRN;
 
-    public static class zza extends Exception {
-        public zza(String str) {
-            super(str);
-        }
-
-        public zza(String str, Throwable th) {
-            super(str, th);
-        }
+    private zzg(Fragment fragment) {
+        this.zzaRN = fragment;
     }
 
-    protected zzg(String str) {
-        this.zzaQo = str;
+    public static zzg zza(Fragment fragment) {
+        return fragment != null ? new zzg(fragment) : null;
     }
 
-    protected final T zzaT(Context context) throws zza {
-        if (this.zzaQp == null) {
-            zzac.zzw(context);
-            Context remoteContext = zze.getRemoteContext(context);
-            if (remoteContext == null) {
-                throw new zza("Could not get remote context.");
-            }
-            try {
-                this.zzaQp = zzc((IBinder) remoteContext.getClassLoader().loadClass(this.zzaQo).newInstance());
-            } catch (Throwable e) {
-                throw new zza("Could not load creator class.", e);
-            } catch (Throwable e2) {
-                throw new zza("Could not instantiate creator.", e2);
-            } catch (Throwable e22) {
-                throw new zza("Could not access creator.", e22);
-            }
-        }
-        return this.zzaQp;
+    public Bundle getArguments() {
+        return this.zzaRN.getArguments();
     }
 
-    protected abstract T zzc(IBinder iBinder);
+    public int getId() {
+        return this.zzaRN.getId();
+    }
+
+    public boolean getRetainInstance() {
+        return this.zzaRN.getRetainInstance();
+    }
+
+    public String getTag() {
+        return this.zzaRN.getTag();
+    }
+
+    public int getTargetRequestCode() {
+        return this.zzaRN.getTargetRequestCode();
+    }
+
+    public boolean getUserVisibleHint() {
+        return this.zzaRN.getUserVisibleHint();
+    }
+
+    public IObjectWrapper getView() {
+        return zzd.zzA(this.zzaRN.getView());
+    }
+
+    public boolean isAdded() {
+        return this.zzaRN.isAdded();
+    }
+
+    public boolean isDetached() {
+        return this.zzaRN.isDetached();
+    }
+
+    public boolean isHidden() {
+        return this.zzaRN.isHidden();
+    }
+
+    public boolean isInLayout() {
+        return this.zzaRN.isInLayout();
+    }
+
+    public boolean isRemoving() {
+        return this.zzaRN.isRemoving();
+    }
+
+    public boolean isResumed() {
+        return this.zzaRN.isResumed();
+    }
+
+    public boolean isVisible() {
+        return this.zzaRN.isVisible();
+    }
+
+    public void setHasOptionsMenu(boolean z) {
+        this.zzaRN.setHasOptionsMenu(z);
+    }
+
+    public void setMenuVisibility(boolean z) {
+        this.zzaRN.setMenuVisibility(z);
+    }
+
+    public void setRetainInstance(boolean z) {
+        this.zzaRN.setRetainInstance(z);
+    }
+
+    public void setUserVisibleHint(boolean z) {
+        this.zzaRN.setUserVisibleHint(z);
+    }
+
+    public void startActivity(Intent intent) {
+        this.zzaRN.startActivity(intent);
+    }
+
+    public void startActivityForResult(Intent intent, int i) {
+        this.zzaRN.startActivityForResult(intent, i);
+    }
+
+    public IObjectWrapper zzBN() {
+        return zzd.zzA(this.zzaRN.getActivity());
+    }
+
+    public zzc zzBO() {
+        return zza(this.zzaRN.getParentFragment());
+    }
+
+    public IObjectWrapper zzBP() {
+        return zzd.zzA(this.zzaRN.getResources());
+    }
+
+    public zzc zzBQ() {
+        return zza(this.zzaRN.getTargetFragment());
+    }
+
+    public void zzD(IObjectWrapper iObjectWrapper) {
+        this.zzaRN.registerForContextMenu((View) zzd.zzF(iObjectWrapper));
+    }
+
+    public void zzE(IObjectWrapper iObjectWrapper) {
+        this.zzaRN.unregisterForContextMenu((View) zzd.zzF(iObjectWrapper));
+    }
 }

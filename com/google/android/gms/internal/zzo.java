@@ -1,9 +1,9 @@
 package com.google.android.gms.internal;
 
 public interface zzo {
-    void zza(zzr com_google_android_gms_internal_zzr) throws zzr;
+    void zza(zzl<?> com_google_android_gms_internal_zzl_, zzn<?> com_google_android_gms_internal_zzn_);
 
-    int zzc();
+    void zza(zzl<?> com_google_android_gms_internal_zzl_, zzn<?> com_google_android_gms_internal_zzn_, Runnable runnable);
 
-    int zzd();
+    void zza(zzl<?> com_google_android_gms_internal_zzl_, zzs com_google_android_gms_internal_zzs);
 }

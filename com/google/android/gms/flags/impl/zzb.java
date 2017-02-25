@@ -2,35 +2,35 @@ package com.google.android.gms.flags.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.google.android.gms.internal.zzaps;
+import com.google.android.gms.internal.zzaqf;
 import java.util.concurrent.Callable;
 
 public class zzb {
-    private static SharedPreferences zzaWS = null;
+    private static SharedPreferences zzaXu = null;
 
     class AnonymousClass1 implements Callable<SharedPreferences> {
-        final /* synthetic */ Context zztd;
+        final /* synthetic */ Context zztf;
 
         AnonymousClass1(Context context) {
-            this.zztd = context;
+            this.zztf = context;
         }
 
         public /* synthetic */ Object call() throws Exception {
-            return zzCU();
+            return zzDH();
         }
 
-        public SharedPreferences zzCU() {
-            return this.zztd.getSharedPreferences("google_sdk_flags", 1);
+        public SharedPreferences zzDH() {
+            return this.zztf.getSharedPreferences("google_sdk_flags", 1);
         }
     }
 
-    public static SharedPreferences zzm(Context context) {
+    public static SharedPreferences zzn(Context context) {
         SharedPreferences sharedPreferences;
         synchronized (SharedPreferences.class) {
-            if (zzaWS == null) {
-                zzaWS = (SharedPreferences) zzaps.zzb(new AnonymousClass1(context));
+            if (zzaXu == null) {
+                zzaXu = (SharedPreferences) zzaqf.zzb(new AnonymousClass1(context));
             }
-            sharedPreferences = zzaWS;
+            sharedPreferences = zzaXu;
         }
         return sharedPreferences;
     }

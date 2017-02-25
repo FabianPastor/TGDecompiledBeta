@@ -3,9 +3,9 @@ package com.google.android.gms.vision.face;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
-import com.google.android.gms.internal.zzbgt;
-import com.google.android.gms.internal.zzbgw;
-import com.google.android.gms.internal.zzbhd;
+import com.google.android.gms.internal.zzbjq;
+import com.google.android.gms.internal.zzbjt;
+import com.google.android.gms.internal.zzbka;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.zza;
@@ -20,38 +20,38 @@ public final class FaceDetector extends Detector<Face> {
     public static final int FAST_MODE = 0;
     public static final int NO_CLASSIFICATIONS = 0;
     public static final int NO_LANDMARKS = 0;
-    private final zza zzbMT;
-    private final zzbgt zzbMU;
-    private boolean zzbMV;
-    private final Object zzrN;
+    private final zza zzbOS;
+    private final zzbjq zzbOT;
+    private boolean zzbOU;
+    private final Object zzrJ;
 
     public static class Builder {
         private final Context mContext;
-        private int zzaJi = 0;
-        private int zzbMW = 0;
-        private boolean zzbMX = false;
-        private int zzbMY = 0;
-        private boolean zzbMZ = true;
-        private float zzbNa = -1.0f;
+        private int zzaKF = 0;
+        private int zzbOV = 0;
+        private boolean zzbOW = false;
+        private int zzbOX = 0;
+        private boolean zzbOY = true;
+        private float zzbOZ = -1.0f;
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public FaceDetector build() {
-            zzbgw com_google_android_gms_internal_zzbgw = new zzbgw();
-            com_google_android_gms_internal_zzbgw.mode = this.zzaJi;
-            com_google_android_gms_internal_zzbgw.zzbNj = this.zzbMW;
-            com_google_android_gms_internal_zzbgw.zzbNk = this.zzbMY;
-            com_google_android_gms_internal_zzbgw.zzbNl = this.zzbMX;
-            com_google_android_gms_internal_zzbgw.zzbNm = this.zzbMZ;
-            com_google_android_gms_internal_zzbgw.zzbNn = this.zzbNa;
-            return new FaceDetector(new zzbgt(this.mContext, com_google_android_gms_internal_zzbgw));
+            zzbjt com_google_android_gms_internal_zzbjt = new zzbjt();
+            com_google_android_gms_internal_zzbjt.mode = this.zzaKF;
+            com_google_android_gms_internal_zzbjt.zzbPi = this.zzbOV;
+            com_google_android_gms_internal_zzbjt.zzbPj = this.zzbOX;
+            com_google_android_gms_internal_zzbjt.zzbPk = this.zzbOW;
+            com_google_android_gms_internal_zzbjt.zzbPl = this.zzbOY;
+            com_google_android_gms_internal_zzbjt.zzbPm = this.zzbOZ;
+            return new FaceDetector(new zzbjq(this.mContext, com_google_android_gms_internal_zzbjt));
         }
 
         public Builder setClassificationType(int i) {
             if (i == 0 || i == 1) {
-                this.zzbMY = i;
+                this.zzbOX = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid classification type: " + i);
@@ -59,7 +59,7 @@ public final class FaceDetector extends Detector<Face> {
 
         public Builder setLandmarkType(int i) {
             if (i == 0 || i == 1) {
-                this.zzbMW = i;
+                this.zzbOV = i;
                 return this;
             }
             throw new IllegalArgumentException("Invalid landmark type: " + i);
@@ -69,7 +69,7 @@ public final class FaceDetector extends Detector<Face> {
             if (f < 0.0f || f > 1.0f) {
                 throw new IllegalArgumentException("Invalid proportional face size: " + f);
             }
-            this.zzbNa = f;
+            this.zzbOZ = f;
             return this;
         }
 
@@ -77,7 +77,7 @@ public final class FaceDetector extends Detector<Face> {
             switch (i) {
                 case 0:
                 case 1:
-                    this.zzaJi = i;
+                    this.zzaKF = i;
                     return this;
                 default:
                     throw new IllegalArgumentException("Invalid mode: " + i);
@@ -85,28 +85,28 @@ public final class FaceDetector extends Detector<Face> {
         }
 
         public Builder setProminentFaceOnly(boolean z) {
-            this.zzbMX = z;
+            this.zzbOW = z;
             return this;
         }
 
         public Builder setTrackingEnabled(boolean z) {
-            this.zzbMZ = z;
+            this.zzbOY = z;
             return this;
         }
     }
 
     private FaceDetector() {
-        this.zzbMT = new zza();
-        this.zzrN = new Object();
-        this.zzbMV = true;
+        this.zzbOS = new zza();
+        this.zzrJ = new Object();
+        this.zzbOU = true;
         throw new IllegalStateException("Default constructor called");
     }
 
-    private FaceDetector(zzbgt com_google_android_gms_internal_zzbgt) {
-        this.zzbMT = new zza();
-        this.zzrN = new Object();
-        this.zzbMV = true;
-        this.zzbMU = com_google_android_gms_internal_zzbgt;
+    private FaceDetector(zzbjq com_google_android_gms_internal_zzbjq) {
+        this.zzbOS = new zza();
+        this.zzrJ = new Object();
+        this.zzbOU = true;
+        this.zzbOT = com_google_android_gms_internal_zzbjq;
     }
 
     public SparseArray<Face> detect(Frame frame) {
@@ -115,9 +115,9 @@ public final class FaceDetector extends Detector<Face> {
         }
         Face[] zzb;
         ByteBuffer grayscaleImageData = frame.getGrayscaleImageData();
-        synchronized (this.zzrN) {
-            if (this.zzbMV) {
-                zzb = this.zzbMU.zzb(grayscaleImageData, zzbhd.zzc(frame));
+        synchronized (this.zzrJ) {
+            if (this.zzbOU) {
+                zzb = this.zzbOT.zzb(grayscaleImageData, zzbka.zzc(frame));
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }
@@ -133,15 +133,15 @@ public final class FaceDetector extends Detector<Face> {
                 i = id;
             }
             hashSet.add(Integer.valueOf(id));
-            sparseArray.append(this.zzbMT.zzng(id), face);
+            sparseArray.append(this.zzbOS.zznR(id), face);
         }
         return sparseArray;
     }
 
     protected void finalize() throws Throwable {
         try {
-            synchronized (this.zzrN) {
-                if (this.zzbMV) {
+            synchronized (this.zzrJ) {
+                if (this.zzbOU) {
                     Log.w("FaceDetector", "FaceDetector was not released with FaceDetector.release()");
                     release();
                 }
@@ -152,30 +152,30 @@ public final class FaceDetector extends Detector<Face> {
     }
 
     public boolean isOperational() {
-        return this.zzbMU.isOperational();
+        return this.zzbOT.isOperational();
     }
 
     public void release() {
         super.release();
-        synchronized (this.zzrN) {
-            if (this.zzbMV) {
-                this.zzbMU.zzSp();
-                this.zzbMV = false;
+        synchronized (this.zzrJ) {
+            if (this.zzbOU) {
+                this.zzbOT.zzTQ();
+                this.zzbOU = false;
                 return;
             }
         }
     }
 
     public boolean setFocus(int i) {
-        boolean zznw;
-        int zznh = this.zzbMT.zznh(i);
-        synchronized (this.zzrN) {
-            if (this.zzbMV) {
-                zznw = this.zzbMU.zznw(zznh);
+        boolean zzoh;
+        int zznS = this.zzbOS.zznS(i);
+        synchronized (this.zzrJ) {
+            if (this.zzbOU) {
+                zzoh = this.zzbOT.zzoh(zznS);
             } else {
                 throw new RuntimeException("Cannot use detector after release()");
             }
         }
-        return zznw;
+        return zzoh;
     }
 }

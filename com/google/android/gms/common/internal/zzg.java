@@ -6,119 +6,117 @@ import android.view.View;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.internal.zzaxo;
+import com.google.android.gms.internal.zzbaj;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public final class zzg {
-    private final Set<Scope> zzaEb;
-    private final Map<Api<?>, zza> zzaEc;
-    private final zzaxo zzaEd;
-    private Integer zzaEe;
-    private final Account zzagg;
-    private final String zzahp;
-    private final Set<Scope> zzaxN;
-    private final int zzaxP;
-    private final View zzaxQ;
-    private final String zzaxR;
+    private final Set<Scope> zzaFA;
+    private final Map<Api<?>, zza> zzaFB;
+    private final zzbaj zzaFC;
+    private Integer zzaFD;
+    private final Account zzahh;
+    private final String zzaiq;
+    private final Set<Scope> zzazd;
+    private final int zzazf;
+    private final View zzazg;
+    private final String zzazh;
 
     public static final class zza {
-        public final boolean zzaEf;
-        public final Set<Scope> zzajm;
+        public final Set<Scope> zzakq;
 
-        public zza(Set<Scope> set, boolean z) {
+        public zza(Set<Scope> set) {
             zzac.zzw(set);
-            this.zzajm = Collections.unmodifiableSet(set);
-            this.zzaEf = z;
+            this.zzakq = Collections.unmodifiableSet(set);
         }
     }
 
-    public zzg(Account account, Set<Scope> set, Map<Api<?>, zza> map, int i, View view, String str, String str2, zzaxo com_google_android_gms_internal_zzaxo) {
+    public zzg(Account account, Set<Scope> set, Map<Api<?>, zza> map, int i, View view, String str, String str2, zzbaj com_google_android_gms_internal_zzbaj) {
         Map map2;
-        this.zzagg = account;
-        this.zzaxN = set == null ? Collections.EMPTY_SET : Collections.unmodifiableSet(set);
+        this.zzahh = account;
+        this.zzazd = set == null ? Collections.EMPTY_SET : Collections.unmodifiableSet(set);
         if (map == null) {
             map2 = Collections.EMPTY_MAP;
         }
-        this.zzaEc = map2;
-        this.zzaxQ = view;
-        this.zzaxP = i;
-        this.zzahp = str;
-        this.zzaxR = str2;
-        this.zzaEd = com_google_android_gms_internal_zzaxo;
-        Set hashSet = new HashSet(this.zzaxN);
-        for (zza com_google_android_gms_common_internal_zzg_zza : this.zzaEc.values()) {
-            hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzajm);
+        this.zzaFB = map2;
+        this.zzazg = view;
+        this.zzazf = i;
+        this.zzaiq = str;
+        this.zzazh = str2;
+        this.zzaFC = com_google_android_gms_internal_zzbaj;
+        Set hashSet = new HashSet(this.zzazd);
+        for (zza com_google_android_gms_common_internal_zzg_zza : this.zzaFB.values()) {
+            hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzakq);
         }
-        this.zzaEb = Collections.unmodifiableSet(hashSet);
+        this.zzaFA = Collections.unmodifiableSet(hashSet);
     }
 
-    public static zzg zzaA(Context context) {
-        return new Builder(context).zzuP();
+    public static zzg zzaS(Context context) {
+        return new Builder(context).zzvp();
     }
 
     public Account getAccount() {
-        return this.zzagg;
+        return this.zzahh;
     }
 
     @Deprecated
     public String getAccountName() {
-        return this.zzagg != null ? this.zzagg.name : null;
+        return this.zzahh != null ? this.zzahh.name : null;
     }
 
     public Set<Scope> zzc(Api<?> api) {
-        zza com_google_android_gms_common_internal_zzg_zza = (zza) this.zzaEc.get(api);
-        if (com_google_android_gms_common_internal_zzg_zza == null || com_google_android_gms_common_internal_zzg_zza.zzajm.isEmpty()) {
-            return this.zzaxN;
+        zza com_google_android_gms_common_internal_zzg_zza = (zza) this.zzaFB.get(api);
+        if (com_google_android_gms_common_internal_zzg_zza == null || com_google_android_gms_common_internal_zzg_zza.zzakq.isEmpty()) {
+            return this.zzazd;
         }
-        Set<Scope> hashSet = new HashSet(this.zzaxN);
-        hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzajm);
+        Set<Scope> hashSet = new HashSet(this.zzazd);
+        hashSet.addAll(com_google_android_gms_common_internal_zzg_zza.zzakq);
         return hashSet;
     }
 
     public void zzc(Integer num) {
-        this.zzaEe = num;
+        this.zzaFD = num;
     }
 
-    public Account zzwU() {
-        return this.zzagg != null ? this.zzagg : new Account("<<default account>>", "com.google");
+    public Account zzxB() {
+        return this.zzahh != null ? this.zzahh : new Account("<<default account>>", "com.google");
     }
 
-    public int zzxd() {
-        return this.zzaxP;
+    public int zzxK() {
+        return this.zzazf;
     }
 
-    public Set<Scope> zzxe() {
-        return this.zzaxN;
+    public Set<Scope> zzxL() {
+        return this.zzazd;
     }
 
-    public Set<Scope> zzxf() {
-        return this.zzaEb;
+    public Set<Scope> zzxM() {
+        return this.zzaFA;
     }
 
-    public Map<Api<?>, zza> zzxg() {
-        return this.zzaEc;
+    public Map<Api<?>, zza> zzxN() {
+        return this.zzaFB;
     }
 
-    public String zzxh() {
-        return this.zzahp;
+    public String zzxO() {
+        return this.zzaiq;
     }
 
-    public String zzxi() {
-        return this.zzaxR;
+    public String zzxP() {
+        return this.zzazh;
     }
 
-    public View zzxj() {
-        return this.zzaxQ;
+    public View zzxQ() {
+        return this.zzazg;
     }
 
-    public zzaxo zzxk() {
-        return this.zzaEd;
+    public zzbaj zzxR() {
+        return this.zzaFC;
     }
 
-    public Integer zzxl() {
-        return this.zzaEe;
+    public Integer zzxS() {
+        return this.zzaFD;
     }
 }

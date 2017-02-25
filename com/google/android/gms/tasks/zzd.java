@@ -4,34 +4,34 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 
 class zzd<TResult> implements zzf<TResult> {
-    private final Executor zzbDK;
-    private OnFailureListener zzbLz;
-    private final Object zzrN = new Object();
+    private final Executor zzbFQ;
+    private OnFailureListener zzbNA;
+    private final Object zzrJ = new Object();
 
     public zzd(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-        this.zzbDK = executor;
-        this.zzbLz = onFailureListener;
+        this.zzbFQ = executor;
+        this.zzbNA = onFailureListener;
     }
 
     public void cancel() {
-        synchronized (this.zzrN) {
-            this.zzbLz = null;
+        synchronized (this.zzrJ) {
+            this.zzbNA = null;
         }
     }
 
     public void onComplete(@NonNull final Task<TResult> task) {
         if (!task.isSuccessful()) {
-            synchronized (this.zzrN) {
-                if (this.zzbLz == null) {
+            synchronized (this.zzrJ) {
+                if (this.zzbNA == null) {
                     return;
                 }
-                this.zzbDK.execute(new Runnable(this) {
-                    final /* synthetic */ zzd zzbLA;
+                this.zzbFQ.execute(new Runnable(this) {
+                    final /* synthetic */ zzd zzbNB;
 
                     public void run() {
-                        synchronized (this.zzbLA.zzrN) {
-                            if (this.zzbLA.zzbLz != null) {
-                                this.zzbLA.zzbLz.onFailure(task.getException());
+                        synchronized (this.zzbNB.zzrJ) {
+                            if (this.zzbNB.zzbNA != null) {
+                                this.zzbNB.zzbNA.onFailure(task.getException());
                             }
                         }
                     }

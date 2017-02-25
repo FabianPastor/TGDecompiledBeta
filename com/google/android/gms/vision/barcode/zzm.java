@@ -9,55 +9,55 @@ import com.google.android.gms.vision.barcode.Barcode.WiFi;
 
 public class zzm implements Creator<WiFi> {
     static void zza(WiFi wiFi, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, wiFi.versionCode);
         zzc.zza(parcel, 2, wiFi.ssid, false);
         zzc.zza(parcel, 3, wiFi.password, false);
         zzc.zzc(parcel, 4, wiFi.encryptionType);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjf(parcel);
+        return zzjL(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zznu(i);
+        return zzof(i);
     }
 
-    public WiFi zzjf(Parcel parcel) {
+    public WiFi zzjL(Parcel parcel) {
         String str = null;
         int i = 0;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         String str2 = null;
         int i2 = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i2 = zzb.zzg(parcel, zzaT);
+                    i2 = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 case 4:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new WiFi(i2, str2, str, i);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public WiFi[] zznu(int i) {
+    public WiFi[] zzof(int i) {
         return new WiFi[i];
     }
 }

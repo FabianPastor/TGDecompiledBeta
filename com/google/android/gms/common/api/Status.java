@@ -12,26 +12,26 @@ import com.google.android.gms.common.internal.zzaa;
 
 public final class Status extends zza implements Result, ReflectedParcelable {
     public static final Creator<Status> CREATOR = new zzh();
-    public static final Status zzayh = new Status(0);
-    public static final Status zzayi = new Status(14);
-    public static final Status zzayj = new Status(8);
-    public static final Status zzayk = new Status(15);
-    public static final Status zzayl = new Status(16);
-    public static final Status zzaym = new Status(17);
-    public static final Status zzayn = new Status(18);
+    public static final Status zzazA = new Status(15);
+    public static final Status zzazB = new Status(16);
+    public static final Status zzazC = new Status(17);
+    public static final Status zzazD = new Status(18);
+    public static final Status zzazx = new Status(0);
+    public static final Status zzazy = new Status(14);
+    public static final Status zzazz = new Status(8);
     private final PendingIntent mPendingIntent;
-    final int mVersionCode;
-    private final int zzauz;
-    private final String zzawY;
+    final int zzaiI;
+    private final int zzavD;
+    private final String zzayk;
 
     public Status(int i) {
         this(i, null);
     }
 
     Status(int i, int i2, String str, PendingIntent pendingIntent) {
-        this.mVersionCode = i;
-        this.zzauz = i2;
-        this.zzawY = str;
+        this.zzaiI = i;
+        this.zzavD = i2;
+        this.zzayk = str;
         this.mPendingIntent = pendingIntent;
     }
 
@@ -48,7 +48,7 @@ public final class Status extends zza implements Result, ReflectedParcelable {
             return false;
         }
         Status status = (Status) obj;
-        return this.mVersionCode == status.mVersionCode && this.zzauz == status.zzauz && zzaa.equal(this.zzawY, status.zzawY) && zzaa.equal(this.mPendingIntent, status.mPendingIntent);
+        return this.zzaiI == status.zzaiI && this.zzavD == status.zzavD && zzaa.equal(this.zzayk, status.zzayk) && zzaa.equal(this.mPendingIntent, status.mPendingIntent);
     }
 
     public PendingIntent getResolution() {
@@ -60,12 +60,12 @@ public final class Status extends zza implements Result, ReflectedParcelable {
     }
 
     public int getStatusCode() {
-        return this.zzauz;
+        return this.zzavD;
     }
 
     @Nullable
     public String getStatusMessage() {
-        return this.zzawY;
+        return this.zzayk;
     }
 
     public boolean hasResolution() {
@@ -73,19 +73,19 @@ public final class Status extends zza implements Result, ReflectedParcelable {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.mVersionCode), Integer.valueOf(this.zzauz), this.zzawY, this.mPendingIntent);
+        return zzaa.hashCode(Integer.valueOf(this.zzaiI), Integer.valueOf(this.zzavD), this.zzayk, this.mPendingIntent);
     }
 
     public boolean isCanceled() {
-        return this.zzauz == 16;
+        return this.zzavD == 16;
     }
 
     public boolean isInterrupted() {
-        return this.zzauz == 14;
+        return this.zzavD == 14;
     }
 
     public boolean isSuccess() {
-        return this.zzauz <= 0;
+        return this.zzavD <= 0;
     }
 
     public void startResolutionForResult(Activity activity, int i) throws SendIntentException {
@@ -95,18 +95,18 @@ public final class Status extends zza implements Result, ReflectedParcelable {
     }
 
     public String toString() {
-        return zzaa.zzv(this).zzg("statusCode", zzuU()).zzg("resolution", this.mPendingIntent).toString();
+        return zzaa.zzv(this).zzg("statusCode", zzvv()).zzg("resolution", this.mPendingIntent).toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzh.zza(this, parcel, i);
     }
 
-    PendingIntent zzuT() {
+    PendingIntent zzvu() {
         return this.mPendingIntent;
     }
 
-    public String zzuU() {
-        return this.zzawY != null ? this.zzawY : CommonStatusCodes.getStatusCodeString(this.zzauz);
+    public String zzvv() {
+        return this.zzayk != null ? this.zzayk : CommonStatusCodes.getStatusCodeString(this.zzavD);
     }
 }

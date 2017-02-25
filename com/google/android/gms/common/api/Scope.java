@@ -8,13 +8,13 @@ import com.google.android.gms.common.internal.zzac;
 
 public final class Scope extends zza implements ReflectedParcelable {
     public static final Creator<Scope> CREATOR = new zzg();
-    final int mVersionCode;
-    private final String zzayg;
+    final int zzaiI;
+    private final String zzazw;
 
     Scope(int i, String str) {
         zzac.zzh(str, "scopeUri must not be null or empty");
-        this.mVersionCode = i;
-        this.zzayg = str;
+        this.zzaiI = i;
+        this.zzazw = str;
     }
 
     public Scope(String str) {
@@ -22,22 +22,22 @@ public final class Scope extends zza implements ReflectedParcelable {
     }
 
     public boolean equals(Object obj) {
-        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzayg.equals(((Scope) obj).zzayg);
+        return this == obj ? true : !(obj instanceof Scope) ? false : this.zzazw.equals(((Scope) obj).zzazw);
     }
 
     public int hashCode() {
-        return this.zzayg.hashCode();
+        return this.zzazw.hashCode();
     }
 
     public String toString() {
-        return this.zzayg;
+        return this.zzazw;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzg.zza(this, parcel, i);
     }
 
-    public String zzuS() {
-        return this.zzayg;
+    public String zzvt() {
+        return this.zzazw;
     }
 }

@@ -5,7 +5,7 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -14,14 +14,14 @@ public interface zzc extends IInterface {
     public static abstract class zza extends Binder implements zzc {
 
         private static class zza implements zzc {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public float getBearing() throws RemoteException {
@@ -29,7 +29,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(12, obtain, obtain2, 0);
+                    this.zzrk.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -44,7 +44,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     LatLngBounds latLngBounds = obtain2.readInt() != 0 ? (LatLngBounds) LatLngBounds.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -61,7 +61,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -76,7 +76,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     String readString = obtain2.readString();
                     return readString;
@@ -91,7 +91,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                     LatLng latLng = obtain2.readInt() != 0 ? (LatLng) LatLng.CREATOR.createFromParcel(obtain2) : null;
                     obtain2.recycle();
@@ -103,12 +103,27 @@ public interface zzc extends IInterface {
                 }
             }
 
+            public IObjectWrapper getTag() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
+                    this.zzrk.transact(25, obtain, obtain2, 0);
+                    obtain2.readException();
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
+                    return zzcd;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
             public float getTransparency() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(18, obtain, obtain2, 0);
+                    this.zzrk.transact(18, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -123,7 +138,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -138,7 +153,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(14, obtain, obtain2, 0);
+                    this.zzrk.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -153,7 +168,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(20, obtain, obtain2, 0);
+                    this.zzrk.transact(20, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
@@ -169,7 +184,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(23, obtain, obtain2, 0);
+                    this.zzrk.transact(23, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -189,7 +204,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(16, obtain, obtain2, 0);
+                    this.zzrk.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -208,7 +223,7 @@ public interface zzc extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -222,7 +237,7 @@ public interface zzc extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -240,7 +255,7 @@ public interface zzc extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(22, obtain, obtain2, 0);
+                    this.zzrk.transact(22, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -254,7 +269,7 @@ public interface zzc extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -273,7 +288,7 @@ public interface zzc extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -292,7 +307,21 @@ public interface zzc extends IInterface {
                     } else {
                         obtain.writeInt(0);
                     }
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setTag(IObjectWrapper iObjectWrapper) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(24, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -306,7 +335,7 @@ public interface zzc extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(17, obtain, obtain2, 0);
+                    this.zzrk.transact(17, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -324,7 +353,7 @@ public interface zzc extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(15, obtain, obtain2, 0);
+                    this.zzrk.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -338,7 +367,7 @@ public interface zzc extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(13, obtain, obtain2, 0);
+                    this.zzrk.transact(13, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -346,13 +375,13 @@ public interface zzc extends IInterface {
                 }
             }
 
-            public void zzK(zzd com_google_android_gms_dynamic_zzd) throws RemoteException {
+            public void zzL(IObjectWrapper iObjectWrapper) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
-                    this.zzrp.transact(21, obtain, obtain2, 0);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(21, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -367,7 +396,7 @@ public interface zzc extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzc != null ? com_google_android_gms_maps_model_internal_zzc.asBinder() : null);
-                    this.zzrp.transact(19, obtain, obtain2, 0);
+                    this.zzrk.transact(19, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -388,7 +417,7 @@ public interface zzc extends IInterface {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     obtain.writeFloat(f);
                     obtain.writeFloat(f2);
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -397,7 +426,7 @@ public interface zzc extends IInterface {
             }
         }
 
-        public static zzc zzej(IBinder iBinder) {
+        public static zzc zzek(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -406,10 +435,11 @@ public interface zzc extends IInterface {
         }
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
-            LatLngBounds latLngBounds = null;
+            IBinder iBinder = null;
             int i3 = 0;
             LatLng latLng;
             float width;
+            LatLngBounds latLngBounds;
             boolean isVisible;
             switch (i) {
                 case 1:
@@ -532,7 +562,7 @@ public interface zzc extends IInterface {
                     return true;
                 case 19:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    isVisible = zzb(zzej(parcel.readStrongBinder()));
+                    isVisible = zzb(zzek(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (isVisible) {
                         i3 = 1;
@@ -547,7 +577,7 @@ public interface zzc extends IInterface {
                     return true;
                 case 21:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
-                    zzK(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()));
+                    zzL(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     return true;
                 case 22:
@@ -568,6 +598,20 @@ public interface zzc extends IInterface {
                     }
                     parcel2.writeInt(i3);
                     return true;
+                case 24:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
+                    setTag(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    return true;
+                case 25:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
+                    IObjectWrapper tag = getTag();
+                    parcel2.writeNoException();
+                    if (tag != null) {
+                        iBinder = tag.asBinder();
+                    }
+                    parcel2.writeStrongBinder(iBinder);
+                    return true;
                 case 1598968902:
                     parcel2.writeString("com.google.android.gms.maps.model.internal.IGroundOverlayDelegate");
                     return true;
@@ -586,6 +630,8 @@ public interface zzc extends IInterface {
     String getId() throws RemoteException;
 
     LatLng getPosition() throws RemoteException;
+
+    IObjectWrapper getTag() throws RemoteException;
 
     float getTransparency() throws RemoteException;
 
@@ -611,13 +657,15 @@ public interface zzc extends IInterface {
 
     void setPositionFromBounds(LatLngBounds latLngBounds) throws RemoteException;
 
+    void setTag(IObjectWrapper iObjectWrapper) throws RemoteException;
+
     void setTransparency(float f) throws RemoteException;
 
     void setVisible(boolean z) throws RemoteException;
 
     void setZIndex(float f) throws RemoteException;
 
-    void zzK(zzd com_google_android_gms_dynamic_zzd) throws RemoteException;
+    void zzL(IObjectWrapper iObjectWrapper) throws RemoteException;
 
     boolean zzb(zzc com_google_android_gms_maps_model_internal_zzc) throws RemoteException;
 

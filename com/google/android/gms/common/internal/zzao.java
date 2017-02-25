@@ -8,40 +8,40 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzao implements Creator<zzan> {
     static void zza(zzan com_google_android_gms_common_internal_zzan, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzan.mVersionCode);
-        zzc.zzJ(parcel, zzaV);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, com_google_android_gms_common_internal_zzan.zzaiI);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaS(parcel);
+        return zzaW(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcV(i);
+        return zzdb(i);
     }
 
-    public zzan zzaS(Parcel parcel) {
-        int zzaU = zzb.zzaU(parcel);
+    public zzan zzaW(Parcel parcel) {
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new zzan(i);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public zzan[] zzcV(int i) {
+    public zzan[] zzdb(int i) {
         return new zzan[i];
     }
 }

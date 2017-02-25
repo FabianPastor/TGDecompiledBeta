@@ -5,25 +5,25 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class zzb<T> implements Iterator<T> {
-    protected final DataBuffer<T> zzaCj;
-    protected int zzaCk = -1;
+    protected final DataBuffer<T> zzaDI;
+    protected int zzaDJ = -1;
 
     public zzb(DataBuffer<T> dataBuffer) {
-        this.zzaCj = (DataBuffer) zzac.zzw(dataBuffer);
+        this.zzaDI = (DataBuffer) zzac.zzw(dataBuffer);
     }
 
     public boolean hasNext() {
-        return this.zzaCk < this.zzaCj.getCount() + -1;
+        return this.zzaDJ < this.zzaDI.getCount() + -1;
     }
 
     public T next() {
         if (hasNext()) {
-            DataBuffer dataBuffer = this.zzaCj;
-            int i = this.zzaCk + 1;
-            this.zzaCk = i;
+            DataBuffer dataBuffer = this.zzaDI;
+            int i = this.zzaDJ + 1;
+            this.zzaDJ = i;
             return dataBuffer.get(i);
         }
-        throw new NoSuchElementException("Cannot advance the iterator beyond " + this.zzaCk);
+        throw new NoSuchElementException("Cannot advance the iterator beyond " + this.zzaDJ);
     }
 
     public void remove() {

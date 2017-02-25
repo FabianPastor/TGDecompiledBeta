@@ -11,21 +11,21 @@ public interface zzs extends IInterface {
     public static abstract class zza extends Binder implements zzs {
 
         private static class zza implements zzs {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public void cancel() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.common.internal.ICancelToken");
-                    this.zzrp.transact(2, obtain, null, 1);
+                    this.zzrk.transact(2, obtain, null, 1);
                 } finally {
                     obtain.recycle();
                 }

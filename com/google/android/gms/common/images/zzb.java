@@ -8,64 +8,64 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 
 public class zzb implements Creator<WebImage> {
     static void zza(WebImage webImage, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, webImage.mVersionCode);
+        int zzaZ = zzc.zzaZ(parcel);
+        zzc.zzc(parcel, 1, webImage.zzaiI);
         zzc.zza(parcel, 2, webImage.getUrl(), i, false);
         zzc.zzc(parcel, 3, webImage.getWidth());
         zzc.zzc(parcel, 4, webImage.getHeight());
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaL(parcel);
+        return zzaP(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzcJ(i);
+        return zzcP(i);
     }
 
-    public WebImage zzaL(Parcel parcel) {
+    public WebImage zzaP(Parcel parcel) {
         int i = 0;
-        int zzaU = com.google.android.gms.common.internal.safeparcel.zzb.zzaU(parcel);
+        int zzaY = com.google.android.gms.common.internal.safeparcel.zzb.zzaY(parcel);
         Uri uri = null;
         int i2 = 0;
         int i3 = 0;
-        while (parcel.dataPosition() < zzaU) {
+        while (parcel.dataPosition() < zzaY) {
             Uri uri2;
             int zzg;
-            int zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzaT(parcel);
+            int zzaX = com.google.android.gms.common.internal.safeparcel.zzb.zzaX(parcel);
             int i4;
-            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzcW(zzaT)) {
+            switch (com.google.android.gms.common.internal.safeparcel.zzb.zzdc(zzaX)) {
                 case 1:
                     i4 = i;
                     i = i2;
                     uri2 = uri;
-                    zzg = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
-                    zzaT = i4;
+                    zzg = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
+                    zzaX = i4;
                     break;
                 case 2:
                     zzg = i3;
                     i4 = i2;
-                    uri2 = (Uri) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaT, Uri.CREATOR);
-                    zzaT = i;
+                    uri2 = (Uri) com.google.android.gms.common.internal.safeparcel.zzb.zza(parcel, zzaX, Uri.CREATOR);
+                    zzaX = i;
                     i = i4;
                     break;
                 case 3:
                     uri2 = uri;
                     zzg = i3;
                     i4 = i;
-                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
-                    zzaT = i4;
+                    i = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
+                    zzaX = i4;
                     break;
                 case 4:
-                    zzaT = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaT);
+                    zzaX = com.google.android.gms.common.internal.safeparcel.zzb.zzg(parcel, zzaX);
                     i = i2;
                     uri2 = uri;
                     zzg = i3;
                     break;
                 default:
-                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaT);
-                    zzaT = i;
+                    com.google.android.gms.common.internal.safeparcel.zzb.zzb(parcel, zzaX);
+                    zzaX = i;
                     i = i2;
                     uri2 = uri;
                     zzg = i3;
@@ -74,15 +74,15 @@ public class zzb implements Creator<WebImage> {
             i3 = zzg;
             uri = uri2;
             i2 = i;
-            i = zzaT;
+            i = zzaX;
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new WebImage(i3, uri, i2, i);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public WebImage[] zzcJ(int i) {
+    public WebImage[] zzcP(int i) {
         return new WebImage[i];
     }
 }

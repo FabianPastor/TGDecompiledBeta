@@ -1,112 +1,67 @@
 package com.google.android.gms.common.util;
 
-import android.support.v4.view.MotionEventCompat;
-import android.text.TextUtils;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.ParcelFileDescriptor;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public final class zzp {
-    private static final Pattern zzaGX = Pattern.compile("\\\\.");
-    private static final Pattern zzaGY = Pattern.compile("[\\\\\"/\b\f\n\r\t]");
-
-    public static String zzdC(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        Matcher matcher = zzaGY.matcher(str);
-        StringBuffer stringBuffer = null;
-        while (matcher.find()) {
-            if (stringBuffer == null) {
-                stringBuffer = new StringBuffer();
-            }
-            switch (matcher.group().charAt(0)) {
-                case '\b':
-                    matcher.appendReplacement(stringBuffer, "\\\\b");
-                    break;
-                case '\t':
-                    matcher.appendReplacement(stringBuffer, "\\\\t");
-                    break;
-                case '\n':
-                    matcher.appendReplacement(stringBuffer, "\\\\n");
-                    break;
-                case '\f':
-                    matcher.appendReplacement(stringBuffer, "\\\\f");
-                    break;
-                case '\r':
-                    matcher.appendReplacement(stringBuffer, "\\\\r");
-                    break;
-                case '\"':
-                    matcher.appendReplacement(stringBuffer, "\\\\\\\"");
-                    break;
-                case MotionEventCompat.AXIS_GENERIC_16 /*47*/:
-                    matcher.appendReplacement(stringBuffer, "\\\\/");
-                    break;
-                case '\\':
-                    matcher.appendReplacement(stringBuffer, "\\\\\\\\");
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (stringBuffer == null) {
-            return str;
-        }
-        matcher.appendTail(stringBuffer);
-        return stringBuffer.toString();
+    public static long zza(InputStream inputStream, OutputStream outputStream) throws IOException {
+        return zza(inputStream, outputStream, false);
     }
 
-    public static boolean zzf(Object obj, Object obj2) {
-        if (obj == null && obj2 == null) {
-            return true;
-        }
-        if (obj == null || obj2 == null) {
-            return false;
-        }
-        if ((obj instanceof JSONObject) && (obj2 instanceof JSONObject)) {
-            JSONObject jSONObject = (JSONObject) obj;
-            JSONObject jSONObject2 = (JSONObject) obj2;
-            if (jSONObject.length() != jSONObject2.length()) {
-                return false;
-            }
-            Iterator keys = jSONObject.keys();
-            while (keys.hasNext()) {
-                String str = (String) keys.next();
-                if (!jSONObject2.has(str)) {
-                    return false;
+    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z) throws IOException {
+        return zza(inputStream, outputStream, z, 1024);
+    }
+
+    public static long zza(InputStream inputStream, OutputStream outputStream, boolean z, int i) throws IOException {
+        byte[] bArr = new byte[i];
+        long j = 0;
+        while (true) {
+            try {
+                int read = inputStream.read(bArr, 0, i);
+                if (read == -1) {
+                    break;
                 }
-                try {
-                    if (!zzf(jSONObject.get(str), jSONObject2.get(str))) {
-                        return false;
-                    }
-                } catch (JSONException e) {
-                    return false;
+                j += (long) read;
+                outputStream.write(bArr, 0, read);
+            } finally {
+                if (z) {
+                    zzb(inputStream);
+                    zzb(outputStream);
                 }
             }
-            return true;
-        } else if (!(obj instanceof JSONArray) || !(obj2 instanceof JSONArray)) {
-            return obj.equals(obj2);
-        } else {
-            JSONArray jSONArray = (JSONArray) obj;
-            JSONArray jSONArray2 = (JSONArray) obj2;
-            if (jSONArray.length() != jSONArray2.length()) {
-                return false;
-            }
-            int i = 0;
-            while (i < jSONArray.length()) {
-                try {
-                    if (!zzf(jSONArray.get(i), jSONArray2.get(i))) {
-                        return false;
-                    }
-                    i++;
-                } catch (JSONException e2) {
-                    return false;
-                }
-            }
-            return true;
         }
+        return j;
+    }
+
+    public static void zza(ParcelFileDescriptor parcelFileDescriptor) {
+        if (parcelFileDescriptor != null) {
+            try {
+                parcelFileDescriptor.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    public static byte[] zza(InputStream inputStream, boolean z) throws IOException {
+        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        zza(inputStream, byteArrayOutputStream, z);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public static void zzb(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    public static byte[] zzj(InputStream inputStream) throws IOException {
+        return zza(inputStream, true);
     }
 }

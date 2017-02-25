@@ -13,7 +13,7 @@ import com.google.android.gms.vision.barcode.Barcode.Phone;
 
 public class zze implements Creator<ContactInfo> {
     static void zza(ContactInfo contactInfo, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, contactInfo.versionCode);
         zzc.zza(parcel, 2, contactInfo.name, i, false);
         zzc.zza(parcel, 3, contactInfo.organization, false);
@@ -22,20 +22,20 @@ public class zze implements Creator<ContactInfo> {
         zzc.zza(parcel, 6, contactInfo.emails, i, false);
         zzc.zza(parcel, 7, contactInfo.urls, false);
         zzc.zza(parcel, 8, contactInfo.addresses, i, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zziX(parcel);
+        return zzjD(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zznm(i);
+        return zznX(i);
     }
 
-    public ContactInfo zziX(Parcel parcel) {
+    public ContactInfo zzjD(Parcel parcel) {
         Address[] addressArr = null;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         String[] strArr = null;
         Email[] emailArr = null;
@@ -43,45 +43,45 @@ public class zze implements Creator<ContactInfo> {
         String str = null;
         String str2 = null;
         PersonName personName = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    personName = (PersonName) zzb.zza(parcel, zzaT, PersonName.CREATOR);
+                    personName = (PersonName) zzb.zza(parcel, zzaX, PersonName.CREATOR);
                     break;
                 case 3:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 4:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 case 5:
-                    phoneArr = (Phone[]) zzb.zzb(parcel, zzaT, Phone.CREATOR);
+                    phoneArr = (Phone[]) zzb.zzb(parcel, zzaX, Phone.CREATOR);
                     break;
                 case 6:
-                    emailArr = (Email[]) zzb.zzb(parcel, zzaT, Email.CREATOR);
+                    emailArr = (Email[]) zzb.zzb(parcel, zzaX, Email.CREATOR);
                     break;
                 case 7:
-                    strArr = zzb.zzC(parcel, zzaT);
+                    strArr = zzb.zzC(parcel, zzaX);
                     break;
                 case 8:
-                    addressArr = (Address[]) zzb.zzb(parcel, zzaT, Address.CREATOR);
+                    addressArr = (Address[]) zzb.zzb(parcel, zzaX, Address.CREATOR);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new ContactInfo(i, personName, str2, str, phoneArr, emailArr, strArr, addressArr);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public ContactInfo[] zznm(int i) {
+    public ContactInfo[] zznX(int i) {
         return new ContactInfo[i];
     }
 }

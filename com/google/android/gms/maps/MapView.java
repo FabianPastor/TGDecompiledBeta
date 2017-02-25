@@ -11,63 +11,64 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.dynamic.zze;
-import com.google.android.gms.dynamic.zzf;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.internal.IMapViewDelegate;
 import com.google.android.gms.maps.internal.MapLifecycleDelegate;
+import com.google.android.gms.maps.internal.zzah;
 import com.google.android.gms.maps.internal.zzai;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapView extends FrameLayout {
-    private final zzb zzbnV;
+    private final zzb zzbox;
 
     static class zzb extends com.google.android.gms.dynamic.zza<zza> {
         private final Context mContext;
-        protected zzf<zza> zzbnT;
-        private final List<OnMapReadyCallback> zzbnU = new ArrayList();
-        private final ViewGroup zzbnZ;
-        private final GoogleMapOptions zzboa;
+        private final ViewGroup zzboB;
+        private final GoogleMapOptions zzboC;
+        protected zze<zza> zzbov;
+        private final List<OnMapReadyCallback> zzbow = new ArrayList();
 
         zzb(ViewGroup viewGroup, Context context, GoogleMapOptions googleMapOptions) {
-            this.zzbnZ = viewGroup;
+            this.zzboB = viewGroup;
             this.mContext = context;
-            this.zzboa = googleMapOptions;
+            this.zzboC = googleMapOptions;
         }
 
         public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
-            if (zzAY() != null) {
-                ((zza) zzAY()).getMapAsync(onMapReadyCallback);
+            if (zzBM() != null) {
+                ((zza) zzBM()).getMapAsync(onMapReadyCallback);
             } else {
-                this.zzbnU.add(onMapReadyCallback);
+                this.zzbow.add(onMapReadyCallback);
             }
         }
 
         public void onEnterAmbient(Bundle bundle) {
-            if (zzAY() != null) {
-                ((zza) zzAY()).onEnterAmbient(bundle);
+            if (zzBM() != null) {
+                ((zza) zzBM()).onEnterAmbient(bundle);
             }
         }
 
         public void onExitAmbient() {
-            if (zzAY() != null) {
-                ((zza) zzAY()).onExitAmbient();
+            if (zzBM() != null) {
+                ((zza) zzBM()).onExitAmbient();
             }
         }
 
-        public void zzIL() {
-            if (this.zzbnT != null && zzAY() == null) {
+        public void zzJy() {
+            if (this.zzbov != null && zzBM() == null) {
                 try {
                     MapsInitializer.initialize(this.mContext);
-                    IMapViewDelegate zza = zzai.zzbq(this.mContext).zza(zze.zzA(this.mContext), this.zzboa);
+                    IMapViewDelegate zza = zzai.zzbI(this.mContext).zza(zzd.zzA(this.mContext), this.zzboC);
                     if (zza != null) {
-                        this.zzbnT.zza(new zza(this.zzbnZ, zza));
-                        for (OnMapReadyCallback mapAsync : this.zzbnU) {
-                            ((zza) zzAY()).getMapAsync(mapAsync);
+                        this.zzbov.zza(new zza(this.zzboB, zza));
+                        for (OnMapReadyCallback mapAsync : this.zzbow) {
+                            ((zza) zzBM()).getMapAsync(mapAsync);
                         }
-                        this.zzbnU.clear();
+                        this.zzbow.clear();
                     }
                 } catch (RemoteException e) {
                     throw new RuntimeRemoteException(e);
@@ -76,25 +77,25 @@ public class MapView extends FrameLayout {
             }
         }
 
-        protected void zza(zzf<zza> com_google_android_gms_dynamic_zzf_com_google_android_gms_maps_MapView_zza) {
-            this.zzbnT = com_google_android_gms_dynamic_zzf_com_google_android_gms_maps_MapView_zza;
-            zzIL();
+        protected void zza(zze<zza> com_google_android_gms_dynamic_zze_com_google_android_gms_maps_MapView_zza) {
+            this.zzbov = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_MapView_zza;
+            zzJy();
         }
     }
 
     static class zza implements MapLifecycleDelegate {
-        private final ViewGroup zzbnW;
-        private final IMapViewDelegate zzbnX;
-        private View zzbnY;
+        private View zzboA;
+        private final ViewGroup zzboy;
+        private final IMapViewDelegate zzboz;
 
         public zza(ViewGroup viewGroup, IMapViewDelegate iMapViewDelegate) {
-            this.zzbnX = (IMapViewDelegate) zzac.zzw(iMapViewDelegate);
-            this.zzbnW = (ViewGroup) zzac.zzw(viewGroup);
+            this.zzboz = (IMapViewDelegate) zzac.zzw(iMapViewDelegate);
+            this.zzboy = (ViewGroup) zzac.zzw(viewGroup);
         }
 
         public void getMapAsync(final OnMapReadyCallback onMapReadyCallback) {
             try {
-                this.zzbnX.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
+                this.zzboz.getMapAsync(new com.google.android.gms.maps.internal.zzt.zza(this) {
                     public void zza(IGoogleMapDelegate iGoogleMapDelegate) throws RemoteException {
                         onMapReadyCallback.onMapReady(new GoogleMap(iGoogleMapDelegate));
                     }
@@ -106,10 +107,13 @@ public class MapView extends FrameLayout {
 
         public void onCreate(Bundle bundle) {
             try {
-                this.zzbnX.onCreate(bundle);
-                this.zzbnY = (View) zze.zzE(this.zzbnX.getView());
-                this.zzbnW.removeAllViews();
-                this.zzbnW.addView(this.zzbnY);
+                Bundle bundle2 = new Bundle();
+                zzah.zzd(bundle, bundle2);
+                this.zzboz.onCreate(bundle2);
+                zzah.zzd(bundle2, bundle);
+                this.zzboA = (View) zzd.zzF(this.zzboz.getView());
+                this.zzboy.removeAllViews();
+                this.zzboy.addView(this.zzboA);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -121,7 +125,7 @@ public class MapView extends FrameLayout {
 
         public void onDestroy() {
             try {
-                this.zzbnX.onDestroy();
+                this.zzboz.onDestroy();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -133,7 +137,10 @@ public class MapView extends FrameLayout {
 
         public void onEnterAmbient(Bundle bundle) {
             try {
-                this.zzbnX.onEnterAmbient(bundle);
+                Bundle bundle2 = new Bundle();
+                zzah.zzd(bundle, bundle2);
+                this.zzboz.onEnterAmbient(bundle2);
+                zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -141,7 +148,7 @@ public class MapView extends FrameLayout {
 
         public void onExitAmbient() {
             try {
-                this.zzbnX.onExitAmbient();
+                this.zzboz.onExitAmbient();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -153,7 +160,7 @@ public class MapView extends FrameLayout {
 
         public void onLowMemory() {
             try {
-                this.zzbnX.onLowMemory();
+                this.zzboz.onLowMemory();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -161,7 +168,7 @@ public class MapView extends FrameLayout {
 
         public void onPause() {
             try {
-                this.zzbnX.onPause();
+                this.zzboz.onPause();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -169,7 +176,7 @@ public class MapView extends FrameLayout {
 
         public void onResume() {
             try {
-                this.zzbnX.onResume();
+                this.zzboz.onResume();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -177,7 +184,10 @@ public class MapView extends FrameLayout {
 
         public void onSaveInstanceState(Bundle bundle) {
             try {
-                this.zzbnX.onSaveInstanceState(bundle);
+                Bundle bundle2 = new Bundle();
+                zzah.zzd(bundle, bundle2);
+                this.zzboz.onSaveInstanceState(bundle2);
+                zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -185,7 +195,7 @@ public class MapView extends FrameLayout {
 
         public void onStart() {
             try {
-                this.zzbnX.onStart();
+                this.zzboz.onStart();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -193,7 +203,7 @@ public class MapView extends FrameLayout {
 
         public void onStop() {
             try {
-                this.zzbnX.onStop();
+                this.zzboz.onStop();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -202,79 +212,79 @@ public class MapView extends FrameLayout {
 
     public MapView(Context context) {
         super(context);
-        this.zzbnV = new zzb(this, context, null);
-        zzIM();
+        this.zzbox = new zzb(this, context, null);
+        zzJz();
     }
 
     public MapView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        this.zzbnV = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
-        zzIM();
+        this.zzbox = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
+        zzJz();
     }
 
     public MapView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.zzbnV = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
-        zzIM();
+        this.zzbox = new zzb(this, context, GoogleMapOptions.createFromAttributes(context, attributeSet));
+        zzJz();
     }
 
     public MapView(Context context, GoogleMapOptions googleMapOptions) {
         super(context);
-        this.zzbnV = new zzb(this, context, googleMapOptions);
-        zzIM();
+        this.zzbox = new zzb(this, context, googleMapOptions);
+        zzJz();
     }
 
-    private void zzIM() {
+    private void zzJz() {
         setClickable(true);
     }
 
     public void getMapAsync(OnMapReadyCallback onMapReadyCallback) {
-        zzac.zzdn("getMapAsync() must be called on the main thread");
-        this.zzbnV.getMapAsync(onMapReadyCallback);
+        zzac.zzdj("getMapAsync() must be called on the main thread");
+        this.zzbox.getMapAsync(onMapReadyCallback);
     }
 
     public final void onCreate(Bundle bundle) {
-        this.zzbnV.onCreate(bundle);
-        if (this.zzbnV.zzAY() == null) {
+        this.zzbox.onCreate(bundle);
+        if (this.zzbox.zzBM() == null) {
             com.google.android.gms.dynamic.zza.zzb((FrameLayout) this);
         }
     }
 
     public final void onDestroy() {
-        this.zzbnV.onDestroy();
+        this.zzbox.onDestroy();
     }
 
     public final void onEnterAmbient(Bundle bundle) {
-        zzac.zzdn("onEnterAmbient() must be called on the main thread");
-        this.zzbnV.onEnterAmbient(bundle);
+        zzac.zzdj("onEnterAmbient() must be called on the main thread");
+        this.zzbox.onEnterAmbient(bundle);
     }
 
     public final void onExitAmbient() {
-        zzac.zzdn("onExitAmbient() must be called on the main thread");
-        this.zzbnV.onExitAmbient();
+        zzac.zzdj("onExitAmbient() must be called on the main thread");
+        this.zzbox.onExitAmbient();
     }
 
     public final void onLowMemory() {
-        this.zzbnV.onLowMemory();
+        this.zzbox.onLowMemory();
     }
 
     public final void onPause() {
-        this.zzbnV.onPause();
+        this.zzbox.onPause();
     }
 
     public final void onResume() {
-        this.zzbnV.onResume();
+        this.zzbox.onResume();
     }
 
     public final void onSaveInstanceState(Bundle bundle) {
-        this.zzbnV.onSaveInstanceState(bundle);
+        this.zzbox.onSaveInstanceState(bundle);
     }
 
     public final void onStart() {
-        this.zzbnV.onStart();
+        this.zzbox.onStart();
     }
 
     public final void onStop() {
-        this.zzbnV.onStop();
+        this.zzbox.onStop();
     }
 }

@@ -6,12 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.util.SparseArray;
-import com.google.android.gms.internal.zzbhd;
-import com.google.android.gms.internal.zzbhf;
-import com.google.android.gms.internal.zzbhk;
-import com.google.android.gms.internal.zzbhm;
-import com.google.android.gms.internal.zzbhq;
-import com.google.android.gms.internal.zzbhr;
+import com.google.android.gms.internal.zzbka;
+import com.google.android.gms.internal.zzbkc;
+import com.google.android.gms.internal.zzbkh;
+import com.google.android.gms.internal.zzbkj;
+import com.google.android.gms.internal.zzbkn;
+import com.google.android.gms.internal.zzbko;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 import java.io.ByteArrayOutputStream;
@@ -19,18 +19,18 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public final class TextRecognizer extends Detector<TextBlock> {
-    private final zzbhq zzbNy;
+    private final zzbkn zzbPx;
 
     public static class Builder {
         private Context mContext;
-        private zzbhr zzbNz = new zzbhr();
+        private zzbko zzbPy = new zzbko();
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public TextRecognizer build() {
-            return new TextRecognizer(new zzbhq(this.mContext, this.zzbNz));
+            return new TextRecognizer(new zzbkn(this.mContext, this.zzbPy));
         }
     }
 
@@ -38,8 +38,8 @@ public final class TextRecognizer extends Detector<TextBlock> {
         throw new IllegalStateException("Default constructor called");
     }
 
-    private TextRecognizer(zzbhq com_google_android_gms_internal_zzbhq) {
-        this.zzbNy = com_google_android_gms_internal_zzbhq;
+    private TextRecognizer(zzbkn com_google_android_gms_internal_zzbkn) {
+        this.zzbPx = com_google_android_gms_internal_zzbkn;
     }
 
     private Bitmap zza(ByteBuffer byteBuffer, int i, int i2, int i3) {
@@ -56,8 +56,8 @@ public final class TextRecognizer extends Detector<TextBlock> {
         return BitmapFactory.decodeByteArray(toByteArray, 0, toByteArray.length);
     }
 
-    private Rect zza(Rect rect, int i, int i2, zzbhd com_google_android_gms_internal_zzbhd) {
-        switch (com_google_android_gms_internal_zzbhd.rotation) {
+    private Rect zza(Rect rect, int i, int i2, zzbka com_google_android_gms_internal_zzbka) {
+        switch (com_google_android_gms_internal_zzbka.rotation) {
             case 1:
                 return new Rect(i2 - rect.bottom, rect.left, i2 - rect.top, rect.right);
             case 2:
@@ -69,16 +69,16 @@ public final class TextRecognizer extends Detector<TextBlock> {
         }
     }
 
-    private SparseArray<TextBlock> zza(zzbhk[] com_google_android_gms_internal_zzbhkArr) {
+    private SparseArray<TextBlock> zza(zzbkh[] com_google_android_gms_internal_zzbkhArr) {
         int i = 0;
         SparseArray sparseArray = new SparseArray();
-        for (zzbhk com_google_android_gms_internal_zzbhk : com_google_android_gms_internal_zzbhkArr) {
-            SparseArray sparseArray2 = (SparseArray) sparseArray.get(com_google_android_gms_internal_zzbhk.zzbNJ);
+        for (zzbkh com_google_android_gms_internal_zzbkh : com_google_android_gms_internal_zzbkhArr) {
+            SparseArray sparseArray2 = (SparseArray) sparseArray.get(com_google_android_gms_internal_zzbkh.zzbPI);
             if (sparseArray2 == null) {
                 sparseArray2 = new SparseArray();
-                sparseArray.append(com_google_android_gms_internal_zzbhk.zzbNJ, sparseArray2);
+                sparseArray.append(com_google_android_gms_internal_zzbkh.zzbPI, sparseArray2);
             }
-            sparseArray2.append(com_google_android_gms_internal_zzbhk.zzbNK, com_google_android_gms_internal_zzbhk);
+            sparseArray2.append(com_google_android_gms_internal_zzbkh.zzbPJ, com_google_android_gms_internal_zzbkh);
         }
         SparseArray<TextBlock> sparseArray3 = new SparseArray(sparseArray.size());
         while (i < sparseArray.size()) {
@@ -89,34 +89,34 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     public SparseArray<TextBlock> detect(Frame frame) {
-        return zza(frame, new zzbhm(1, new Rect()));
+        return zza(frame, new zzbkj(1, new Rect()));
     }
 
     public boolean isOperational() {
-        return this.zzbNy.isOperational();
+        return this.zzbPx.isOperational();
     }
 
     public void release() {
         super.release();
-        this.zzbNy.zzSp();
+        this.zzbPx.zzTQ();
     }
 
-    public SparseArray<TextBlock> zza(Frame frame, zzbhm com_google_android_gms_internal_zzbhm) {
+    public SparseArray<TextBlock> zza(Frame frame, zzbkj com_google_android_gms_internal_zzbkj) {
         if (frame == null) {
             throw new IllegalArgumentException("No frame supplied.");
         }
         Bitmap bitmap;
-        zzbhd zzc = zzbhd.zzc(frame);
+        zzbka zzc = zzbka.zzc(frame);
         if (frame.getBitmap() != null) {
             bitmap = frame.getBitmap();
         } else {
             bitmap = zza(frame.getGrayscaleImageData(), frame.getMetadata().getFormat(), zzc.width, zzc.height);
         }
-        bitmap = zzbhf.zzb(bitmap, zzc);
-        if (!com_google_android_gms_internal_zzbhm.zzbNL.isEmpty()) {
-            com_google_android_gms_internal_zzbhm.zzbNL.set(zza(com_google_android_gms_internal_zzbhm.zzbNL, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
+        bitmap = zzbkc.zzb(bitmap, zzc);
+        if (!com_google_android_gms_internal_zzbkj.zzbPK.isEmpty()) {
+            com_google_android_gms_internal_zzbkj.zzbPK.set(zza(com_google_android_gms_internal_zzbkj.zzbPK, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
         }
         zzc.rotation = 0;
-        return zza(this.zzbNy.zza(bitmap, zzc, com_google_android_gms_internal_zzbhm));
+        return zza(this.zzbPx.zza(bitmap, zzc, com_google_android_gms_internal_zzbkj));
     }
 }

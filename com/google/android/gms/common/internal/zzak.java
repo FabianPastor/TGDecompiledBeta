@@ -3,7 +3,10 @@ package com.google.android.gms.common.internal;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
 import android.widget.Button;
 import com.google.android.gms.R;
@@ -26,7 +29,10 @@ public final class zzak extends Button {
     }
 
     private void zzb(Resources resources, int i, int i2) {
-        setBackgroundDrawable(resources.getDrawable(zze(i, zzg(i2, R.drawable.common_google_signin_btn_icon_dark, R.drawable.common_google_signin_btn_icon_light, R.drawable.common_google_signin_btn_icon_light), zzg(i2, R.drawable.common_google_signin_btn_text_dark, R.drawable.common_google_signin_btn_text_light, R.drawable.common_google_signin_btn_text_light))));
+        Drawable wrap = DrawableCompat.wrap(resources.getDrawable(zze(i, zzg(i2, R.drawable.common_google_signin_btn_icon_dark, R.drawable.common_google_signin_btn_icon_light, R.drawable.common_google_signin_btn_icon_light), zzg(i2, R.drawable.common_google_signin_btn_text_dark, R.drawable.common_google_signin_btn_text_light, R.drawable.common_google_signin_btn_text_light))));
+        DrawableCompat.setTintList(wrap, resources.getColorStateList(R.color.common_google_signin_btn_tint));
+        DrawableCompat.setTintMode(wrap, Mode.SRC_ATOP);
+        setBackgroundDrawable(wrap);
     }
 
     private void zzc(Resources resources, int i, int i2) {

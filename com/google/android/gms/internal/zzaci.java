@@ -1,53 +1,26 @@
 package com.google.android.gms.internal;
 
-import android.os.Parcel;
-import android.os.Parcelable.Creator;
-import com.google.android.gms.common.internal.safeparcel.zzb;
-import com.google.android.gms.common.internal.safeparcel.zzc;
-import com.google.android.gms.internal.zzach.zza;
-import java.util.ArrayList;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
 
-public class zzaci implements Creator<zzach> {
-    static void zza(zzach com_google_android_gms_internal_zzach, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
-        zzc.zzc(parcel, 1, com_google_android_gms_internal_zzach.mVersionCode);
-        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzach.zzxJ(), false);
-        zzc.zzJ(parcel, zzaV);
-    }
+abstract class zzaci<R extends Result> extends com.google.android.gms.internal.zzaad.zza<R, zzacj> {
 
-    public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzaY(parcel);
-    }
-
-    public /* synthetic */ Object[] newArray(int i) {
-        return zzda(i);
-    }
-
-    public zzach zzaY(Parcel parcel) {
-        int zzaU = zzb.zzaU(parcel);
-        int i = 0;
-        ArrayList arrayList = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
-                case 1:
-                    i = zzb.zzg(parcel, zzaT);
-                    break;
-                case 2:
-                    arrayList = zzb.zzc(parcel, zzaT, zza.CREATOR);
-                    break;
-                default:
-                    zzb.zzb(parcel, zzaT);
-                    break;
-            }
+    static abstract class zza extends zzaci<Status> {
+        public zza(GoogleApiClient googleApiClient) {
+            super(googleApiClient);
         }
-        if (parcel.dataPosition() == zzaU) {
-            return new zzach(i, arrayList);
+
+        public Status zzb(Status status) {
+            return status;
         }
-        throw new zzb.zza("Overread allowed size end=" + zzaU, parcel);
+
+        public /* synthetic */ Result zzc(Status status) {
+            return zzb(status);
+        }
     }
 
-    public zzach[] zzda(int i) {
-        return new zzach[i];
+    public zzaci(GoogleApiClient googleApiClient) {
+        super(zzacf.API, googleApiClient);
     }
 }

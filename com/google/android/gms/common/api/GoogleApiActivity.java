@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.internal.zzaap;
+import com.google.android.gms.internal.zzaax;
 
 public class GoogleApiActivity extends Activity implements OnCancelListener {
-    protected int zzaxL = 0;
+    protected int zzazb = 0;
 
     public static PendingIntent zza(Context context, PendingIntent pendingIntent, int i) {
         return zza(context, pendingIntent, i, true);
@@ -23,13 +23,13 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
         return PendingIntent.getActivity(context, 0, zzb(context, pendingIntent, i, z), 134217728);
     }
 
-    private void zza(int i, zzaap com_google_android_gms_internal_zzaap) {
+    private void zza(int i, zzaax com_google_android_gms_internal_zzaax) {
         switch (i) {
             case -1:
-                com_google_android_gms_internal_zzaap.zzuW();
+                com_google_android_gms_internal_zzaax.zzvx();
                 return;
             case 0:
-                com_google_android_gms_internal_zzaap.zza(new ConnectionResult(13, null), getIntent().getIntExtra("failing_client_id", -1));
+                com_google_android_gms_internal_zzaax.zza(new ConnectionResult(13, null), getIntent().getIntExtra("failing_client_id", -1));
                 return;
             default:
                 return;
@@ -44,7 +44,7 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
         return intent;
     }
 
-    private void zzuL() {
+    private void zzvl() {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             Log.e("GoogleApiActivity", "Activity started without extras");
@@ -59,14 +59,14 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
         } else if (pendingIntent != null) {
             try {
                 startIntentSenderForResult(pendingIntent.getIntentSender(), 1, null, 0, 0, 0);
-                this.zzaxL = 1;
+                this.zzazb = 1;
             } catch (Throwable e) {
                 Log.e("GoogleApiActivity", "Failed to launch pendingIntent", e);
                 finish();
             }
         } else {
             GoogleApiAvailability.getInstance().showErrorDialogFragment(this, num.intValue(), 2, this);
-            this.zzaxL = 1;
+            this.zzazb = 1;
         }
     }
 
@@ -74,20 +74,20 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
         super.onActivityResult(i, i2, intent);
         if (i == 1) {
             boolean booleanExtra = getIntent().getBooleanExtra("notify_manager", true);
-            this.zzaxL = 0;
+            this.zzazb = 0;
             setResultCode(i2);
             if (booleanExtra) {
-                zza(i2, zzaap.zzax(this));
+                zza(i2, zzaax.zzaP(this));
             }
         } else if (i == 2) {
-            this.zzaxL = 0;
+            this.zzazb = 0;
             setResultCode(i2);
         }
         finish();
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        this.zzaxL = 0;
+        this.zzazb = 0;
         setResult(0);
         finish();
     }
@@ -95,15 +95,15 @@ public class GoogleApiActivity extends Activity implements OnCancelListener {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (bundle != null) {
-            this.zzaxL = bundle.getInt("resolution");
+            this.zzazb = bundle.getInt("resolution");
         }
-        if (this.zzaxL != 1) {
-            zzuL();
+        if (this.zzazb != 1) {
+            zzvl();
         }
     }
 
     protected void onSaveInstanceState(Bundle bundle) {
-        bundle.putInt("resolution", this.zzaxL);
+        bundle.putInt("resolution", this.zzazb);
         super.onSaveInstanceState(bundle);
     }
 

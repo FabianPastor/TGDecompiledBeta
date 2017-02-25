@@ -5,7 +5,10 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.util.List;
 
 public interface zzg extends IInterface {
@@ -13,14 +16,14 @@ public interface zzg extends IInterface {
     public static abstract class zza extends Binder implements zzg {
 
         private static class zza implements zzg {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
             public int getFillColor() throws RemoteException {
@@ -28,7 +31,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(12, obtain, obtain2, 0);
+                    this.zzrk.transact(12, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
@@ -43,7 +46,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(6, obtain, obtain2, 0);
+                    this.zzrk.transact(6, obtain, obtain2, 0);
                     obtain2.readException();
                     List readArrayList = obtain2.readArrayList(getClass().getClassLoader());
                     return readArrayList;
@@ -58,7 +61,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(2, obtain, obtain2, 0);
+                    this.zzrk.transact(2, obtain, obtain2, 0);
                     obtain2.readException();
                     String readString = obtain2.readString();
                     return readString;
@@ -73,7 +76,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(4, obtain, obtain2, 0);
+                    this.zzrk.transact(4, obtain, obtain2, 0);
                     obtain2.readException();
                     List<LatLng> createTypedArrayList = obtain2.createTypedArrayList(LatLng.CREATOR);
                     return createTypedArrayList;
@@ -88,10 +91,40 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(10, obtain, obtain2, 0);
+                    this.zzrk.transact(10, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public int getStrokeJointType() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    this.zzrk.transact(24, obtain, obtain2, 0);
+                    obtain2.readException();
+                    int readInt = obtain2.readInt();
+                    return readInt;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public List<PatternItem> getStrokePattern() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    this.zzrk.transact(26, obtain, obtain2, 0);
+                    obtain2.readException();
+                    List<PatternItem> createTypedArrayList = obtain2.createTypedArrayList(PatternItem.CREATOR);
+                    return createTypedArrayList;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -103,10 +136,25 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(8, obtain, obtain2, 0);
+                    this.zzrk.transact(8, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public IObjectWrapper getTag() throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    this.zzrk.transact(28, obtain, obtain2, 0);
+                    obtain2.readException();
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
+                    return zzcd;
                 } finally {
                     obtain2.recycle();
                     obtain.recycle();
@@ -118,7 +166,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(14, obtain, obtain2, 0);
+                    this.zzrk.transact(14, obtain, obtain2, 0);
                     obtain2.readException();
                     float readFloat = obtain2.readFloat();
                     return readFloat;
@@ -133,7 +181,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(20, obtain, obtain2, 0);
+                    this.zzrk.transact(20, obtain, obtain2, 0);
                     obtain2.readException();
                     int readInt = obtain2.readInt();
                     return readInt;
@@ -149,7 +197,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(22, obtain, obtain2, 0);
+                    this.zzrk.transact(22, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -169,7 +217,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(18, obtain, obtain2, 0);
+                    this.zzrk.transact(18, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -189,7 +237,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(16, obtain, obtain2, 0);
+                    this.zzrk.transact(16, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -208,7 +256,7 @@ public interface zzg extends IInterface {
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -226,7 +274,7 @@ public interface zzg extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(21, obtain, obtain2, 0);
+                    this.zzrk.transact(21, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -240,7 +288,7 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeInt(i);
-                    this.zzrp.transact(11, obtain, obtain2, 0);
+                    this.zzrk.transact(11, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -258,7 +306,7 @@ public interface zzg extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(17, obtain, obtain2, 0);
+                    this.zzrk.transact(17, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -272,7 +320,7 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeList(list);
-                    this.zzrp.transact(5, obtain, obtain2, 0);
+                    this.zzrk.transact(5, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -286,7 +334,7 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeTypedList(list);
-                    this.zzrp.transact(3, obtain, obtain2, 0);
+                    this.zzrk.transact(3, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -300,7 +348,35 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeInt(i);
-                    this.zzrp.transact(9, obtain, obtain2, 0);
+                    this.zzrk.transact(9, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setStrokeJointType(int i) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    obtain.writeInt(i);
+                    this.zzrk.transact(23, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setStrokePattern(List<PatternItem> list) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    obtain.writeTypedList(list);
+                    this.zzrk.transact(25, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -314,7 +390,21 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(7, obtain, obtain2, 0);
+                    this.zzrk.transact(7, obtain, obtain2, 0);
+                    obtain2.readException();
+                } finally {
+                    obtain2.recycle();
+                    obtain.recycle();
+                }
+            }
+
+            public void setTag(IObjectWrapper iObjectWrapper) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
+                try {
+                    obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
+                    this.zzrk.transact(27, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -332,7 +422,7 @@ public interface zzg extends IInterface {
                         i = 1;
                     }
                     obtain.writeInt(i);
-                    this.zzrp.transact(15, obtain, obtain2, 0);
+                    this.zzrk.transact(15, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -346,7 +436,7 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeFloat(f);
-                    this.zzrp.transact(13, obtain, obtain2, 0);
+                    this.zzrk.transact(13, obtain, obtain2, 0);
                     obtain2.readException();
                 } finally {
                     obtain2.recycle();
@@ -361,7 +451,7 @@ public interface zzg extends IInterface {
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     obtain.writeStrongBinder(com_google_android_gms_maps_model_internal_zzg != null ? com_google_android_gms_maps_model_internal_zzg.asBinder() : null);
-                    this.zzrp.transact(19, obtain, obtain2, 0);
+                    this.zzrk.transact(19, obtain, obtain2, 0);
                     obtain2.readException();
                     if (obtain2.readInt() != 0) {
                         z = true;
@@ -376,7 +466,7 @@ public interface zzg extends IInterface {
             }
         }
 
-        public static zzg zzen(IBinder iBinder) {
+        public static zzg zzeo(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
@@ -504,7 +594,7 @@ public interface zzg extends IInterface {
                     return true;
                 case 19:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
-                    isVisible = zzb(zzen(parcel.readStrongBinder()));
+                    isVisible = zzb(zzeo(parcel.readStrongBinder()));
                     parcel2.writeNoException();
                     if (isVisible) {
                         i3 = 1;
@@ -534,6 +624,39 @@ public interface zzg extends IInterface {
                     }
                     parcel2.writeInt(i3);
                     return true;
+                case 23:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    setStrokeJointType(parcel.readInt());
+                    parcel2.writeNoException();
+                    return true;
+                case 24:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    i3 = getStrokeJointType();
+                    parcel2.writeNoException();
+                    parcel2.writeInt(i3);
+                    return true;
+                case 25:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    setStrokePattern(parcel.createTypedArrayList(PatternItem.CREATOR));
+                    parcel2.writeNoException();
+                    return true;
+                case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    points = getStrokePattern();
+                    parcel2.writeNoException();
+                    parcel2.writeTypedList(points);
+                    return true;
+                case 27:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    setTag(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()));
+                    parcel2.writeNoException();
+                    return true;
+                case 28:
+                    parcel.enforceInterface("com.google.android.gms.maps.model.internal.IPolygonDelegate");
+                    IObjectWrapper tag = getTag();
+                    parcel2.writeNoException();
+                    parcel2.writeStrongBinder(tag != null ? tag.asBinder() : null);
+                    return true;
                 case 1598968902:
                     parcel2.writeString("com.google.android.gms.maps.model.internal.IPolygonDelegate");
                     return true;
@@ -553,7 +676,13 @@ public interface zzg extends IInterface {
 
     int getStrokeColor() throws RemoteException;
 
+    int getStrokeJointType() throws RemoteException;
+
+    List<PatternItem> getStrokePattern() throws RemoteException;
+
     float getStrokeWidth() throws RemoteException;
+
+    IObjectWrapper getTag() throws RemoteException;
 
     float getZIndex() throws RemoteException;
 
@@ -579,7 +708,13 @@ public interface zzg extends IInterface {
 
     void setStrokeColor(int i) throws RemoteException;
 
+    void setStrokeJointType(int i) throws RemoteException;
+
+    void setStrokePattern(List<PatternItem> list) throws RemoteException;
+
     void setStrokeWidth(float f) throws RemoteException;
+
+    void setTag(IObjectWrapper iObjectWrapper) throws RemoteException;
 
     void setVisible(boolean z) throws RemoteException;
 

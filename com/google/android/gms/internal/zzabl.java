@@ -1,25 +1,15 @@
 package com.google.android.gms.internal;
 
-import android.os.Looper;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.zzc;
 
-public class zzabl extends zzzx<Status> {
-    @Deprecated
-    public zzabl(Looper looper) {
-        super(looper);
-    }
+public class zzabl {
+    public final zzzx zzaDc;
+    public final int zzaDd;
+    public final zzc<?> zzaDe;
 
-    public zzabl(GoogleApiClient googleApiClient) {
-        super(googleApiClient);
-    }
-
-    protected Status zzb(Status status) {
-        return status;
-    }
-
-    protected /* synthetic */ Result zzc(Status status) {
-        return zzb(status);
+    public zzabl(zzzx com_google_android_gms_internal_zzzx, int i, zzc<?> com_google_android_gms_common_api_zzc_) {
+        this.zzaDc = com_google_android_gms_internal_zzzx;
+        this.zzaDd = i;
+        this.zzaDe = com_google_android_gms_common_api_zzc_;
     }
 }

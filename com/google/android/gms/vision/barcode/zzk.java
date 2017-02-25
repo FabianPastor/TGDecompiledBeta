@@ -9,50 +9,50 @@ import com.google.android.gms.vision.barcode.Barcode.Sms;
 
 public class zzk implements Creator<Sms> {
     static void zza(Sms sms, Parcel parcel, int i) {
-        int zzaV = zzc.zzaV(parcel);
+        int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, sms.versionCode);
         zzc.zza(parcel, 2, sms.message, false);
         zzc.zza(parcel, 3, sms.phoneNumber, false);
-        zzc.zzJ(parcel, zzaV);
+        zzc.zzJ(parcel, zzaZ);
     }
 
     public /* synthetic */ Object createFromParcel(Parcel parcel) {
-        return zzjd(parcel);
+        return zzjJ(parcel);
     }
 
     public /* synthetic */ Object[] newArray(int i) {
-        return zzns(i);
+        return zzod(i);
     }
 
-    public Sms zzjd(Parcel parcel) {
+    public Sms zzjJ(Parcel parcel) {
         String str = null;
-        int zzaU = zzb.zzaU(parcel);
+        int zzaY = zzb.zzaY(parcel);
         int i = 0;
         String str2 = null;
-        while (parcel.dataPosition() < zzaU) {
-            int zzaT = zzb.zzaT(parcel);
-            switch (zzb.zzcW(zzaT)) {
+        while (parcel.dataPosition() < zzaY) {
+            int zzaX = zzb.zzaX(parcel);
+            switch (zzb.zzdc(zzaX)) {
                 case 1:
-                    i = zzb.zzg(parcel, zzaT);
+                    i = zzb.zzg(parcel, zzaX);
                     break;
                 case 2:
-                    str2 = zzb.zzq(parcel, zzaT);
+                    str2 = zzb.zzq(parcel, zzaX);
                     break;
                 case 3:
-                    str = zzb.zzq(parcel, zzaT);
+                    str = zzb.zzq(parcel, zzaX);
                     break;
                 default:
-                    zzb.zzb(parcel, zzaT);
+                    zzb.zzb(parcel, zzaX);
                     break;
             }
         }
-        if (parcel.dataPosition() == zzaU) {
+        if (parcel.dataPosition() == zzaY) {
             return new Sms(i, str2, str);
         }
-        throw new zza("Overread allowed size end=" + zzaU, parcel);
+        throw new zza("Overread allowed size end=" + zzaY, parcel);
     }
 
-    public Sms[] zzns(int i) {
+    public Sms[] zzod(int i) {
         return new Sms[i];
     }
 }

@@ -4,14 +4,14 @@ import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.zze;
+import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.model.internal.zzf;
 
 public final class Marker {
-    private final zzf zzbpb;
+    private final zzf zzbpF;
 
     public Marker(zzf com_google_android_gms_maps_model_internal_zzf) {
-        this.zzbpb = (zzf) zzac.zzw(com_google_android_gms_maps_model_internal_zzf);
+        this.zzbpF = (zzf) zzac.zzw(com_google_android_gms_maps_model_internal_zzf);
     }
 
     public boolean equals(Object obj) {
@@ -19,7 +19,7 @@ public final class Marker {
             return false;
         }
         try {
-            return this.zzbpb.zzj(((Marker) obj).zzbpb);
+            return this.zzbpF.zzj(((Marker) obj).zzbpF);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -27,7 +27,7 @@ public final class Marker {
 
     public float getAlpha() {
         try {
-            return this.zzbpb.getAlpha();
+            return this.zzbpF.getAlpha();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -35,7 +35,7 @@ public final class Marker {
 
     public String getId() {
         try {
-            return this.zzbpb.getId();
+            return this.zzbpF.getId();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -43,7 +43,7 @@ public final class Marker {
 
     public LatLng getPosition() {
         try {
-            return this.zzbpb.getPosition();
+            return this.zzbpF.getPosition();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -51,7 +51,7 @@ public final class Marker {
 
     public float getRotation() {
         try {
-            return this.zzbpb.getRotation();
+            return this.zzbpF.getRotation();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -59,15 +59,16 @@ public final class Marker {
 
     public String getSnippet() {
         try {
-            return this.zzbpb.getSnippet();
+            return this.zzbpF.getSnippet();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
+    @Nullable
     public Object getTag() {
         try {
-            return zze.zzE(this.zzbpb.zzIZ());
+            return zzd.zzF(this.zzbpF.getTag());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -75,7 +76,7 @@ public final class Marker {
 
     public String getTitle() {
         try {
-            return this.zzbpb.getTitle();
+            return this.zzbpF.getTitle();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -83,7 +84,7 @@ public final class Marker {
 
     public float getZIndex() {
         try {
-            return this.zzbpb.getZIndex();
+            return this.zzbpF.getZIndex();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -91,7 +92,7 @@ public final class Marker {
 
     public int hashCode() {
         try {
-            return this.zzbpb.hashCodeRemote();
+            return this.zzbpF.hashCodeRemote();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -99,7 +100,7 @@ public final class Marker {
 
     public void hideInfoWindow() {
         try {
-            this.zzbpb.hideInfoWindow();
+            this.zzbpF.hideInfoWindow();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -107,7 +108,7 @@ public final class Marker {
 
     public boolean isDraggable() {
         try {
-            return this.zzbpb.isDraggable();
+            return this.zzbpF.isDraggable();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -115,7 +116,7 @@ public final class Marker {
 
     public boolean isFlat() {
         try {
-            return this.zzbpb.isFlat();
+            return this.zzbpF.isFlat();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -123,7 +124,7 @@ public final class Marker {
 
     public boolean isInfoWindowShown() {
         try {
-            return this.zzbpb.isInfoWindowShown();
+            return this.zzbpF.isInfoWindowShown();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -131,7 +132,7 @@ public final class Marker {
 
     public boolean isVisible() {
         try {
-            return this.zzbpb.isVisible();
+            return this.zzbpF.isVisible();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -139,7 +140,7 @@ public final class Marker {
 
     public void remove() {
         try {
-            this.zzbpb.remove();
+            this.zzbpF.remove();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -147,7 +148,7 @@ public final class Marker {
 
     public void setAlpha(float f) {
         try {
-            this.zzbpb.setAlpha(f);
+            this.zzbpF.setAlpha(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -155,7 +156,7 @@ public final class Marker {
 
     public void setAnchor(float f, float f2) {
         try {
-            this.zzbpb.setAnchor(f, f2);
+            this.zzbpF.setAnchor(f, f2);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -163,7 +164,7 @@ public final class Marker {
 
     public void setDraggable(boolean z) {
         try {
-            this.zzbpb.setDraggable(z);
+            this.zzbpF.setDraggable(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -171,7 +172,7 @@ public final class Marker {
 
     public void setFlat(boolean z) {
         try {
-            this.zzbpb.setFlat(z);
+            this.zzbpF.setFlat(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -180,18 +181,18 @@ public final class Marker {
     public void setIcon(@Nullable BitmapDescriptor bitmapDescriptor) {
         if (bitmapDescriptor == null) {
             try {
-                this.zzbpb.zzL(null);
+                this.zzbpF.zzM(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzbpb.zzL(bitmapDescriptor.zzIy());
+        this.zzbpF.zzM(bitmapDescriptor.zzJl());
     }
 
     public void setInfoWindowAnchor(float f, float f2) {
         try {
-            this.zzbpb.setInfoWindowAnchor(f, f2);
+            this.zzbpF.setInfoWindowAnchor(f, f2);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -202,7 +203,7 @@ public final class Marker {
             throw new IllegalArgumentException("latlng cannot be null - a position is required.");
         }
         try {
-            this.zzbpb.setPosition(latLng);
+            this.zzbpF.setPosition(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -210,7 +211,7 @@ public final class Marker {
 
     public void setRotation(float f) {
         try {
-            this.zzbpb.setRotation(f);
+            this.zzbpF.setRotation(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -218,15 +219,15 @@ public final class Marker {
 
     public void setSnippet(@Nullable String str) {
         try {
-            this.zzbpb.setSnippet(str);
+            this.zzbpF.setSnippet(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    public void setTag(Object obj) {
+    public void setTag(@Nullable Object obj) {
         try {
-            this.zzbpb.zzM(zze.zzA(obj));
+            this.zzbpF.setTag(zzd.zzA(obj));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -234,7 +235,7 @@ public final class Marker {
 
     public void setTitle(@Nullable String str) {
         try {
-            this.zzbpb.setTitle(str);
+            this.zzbpF.setTitle(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -242,7 +243,7 @@ public final class Marker {
 
     public void setVisible(boolean z) {
         try {
-            this.zzbpb.setVisible(z);
+            this.zzbpF.setVisible(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -250,7 +251,7 @@ public final class Marker {
 
     public void setZIndex(float f) {
         try {
-            this.zzbpb.setZIndex(f);
+            this.zzbpF.setZIndex(f);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -258,7 +259,7 @@ public final class Marker {
 
     public void showInfoWindow() {
         try {
-            this.zzbpb.showInfoWindow();
+            this.zzbpF.showInfoWindow();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

@@ -36,16 +36,16 @@ public class GoogleCloudMessaging {
     public static final String MESSAGE_TYPE_SEND_ERROR = "send_error";
     @Deprecated
     public static final String MESSAGE_TYPE_SEND_EVENT = "send_event";
-    public static int zzbfW = 5000000;
-    public static int zzbfX = 6500000;
-    public static int zzbfY = 7000000;
-    static GoogleCloudMessaging zzbfZ;
-    private static final AtomicInteger zzbgc = new AtomicInteger(1);
-    private PendingIntent zzbga;
-    private Map<String, Handler> zzbgb = Collections.synchronizedMap(new HashMap());
-    private final BlockingQueue<Intent> zzbgd = new LinkedBlockingQueue();
-    final Messenger zzbge = new Messenger(new Handler(this, Looper.getMainLooper()) {
-        final /* synthetic */ GoogleCloudMessaging zzbgf;
+    public static int zzbgB = 5000000;
+    public static int zzbgC = 6500000;
+    public static int zzbgD = 7000000;
+    static GoogleCloudMessaging zzbgE;
+    private static final AtomicInteger zzbgH = new AtomicInteger(1);
+    private PendingIntent zzbgF;
+    private Map<String, Handler> zzbgG = Collections.synchronizedMap(new HashMap());
+    private final BlockingQueue<Intent> zzbgI = new LinkedBlockingQueue();
+    final Messenger zzbgJ = new Messenger(new Handler(this, Looper.getMainLooper()) {
+        final /* synthetic */ GoogleCloudMessaging zzbgK;
 
         public void handleMessage(Message message) {
             if (message == null || !(message.obj instanceof Intent)) {
@@ -53,30 +53,30 @@ public class GoogleCloudMessaging {
             }
             Intent intent = (Intent) message.obj;
             if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction())) {
-                this.zzbgf.zzbgd.add(intent);
-            } else if (!this.zzbgf.zzq(intent)) {
-                intent.setPackage(this.zzbgf.zzqr.getPackageName());
-                this.zzbgf.zzqr.sendBroadcast(intent);
+                this.zzbgK.zzbgI.add(intent);
+            } else if (!this.zzbgK.zzq(intent)) {
+                intent.setPackage(this.zzbgK.zzqn.getPackageName());
+                this.zzbgK.zzqn.sendBroadcast(intent);
             }
         }
     });
-    private Context zzqr;
+    private Context zzqn;
 
     public static synchronized GoogleCloudMessaging getInstance(Context context) {
         GoogleCloudMessaging googleCloudMessaging;
         synchronized (GoogleCloudMessaging.class) {
-            if (zzbfZ == null) {
-                zzbfZ = new GoogleCloudMessaging();
-                zzbfZ.zzqr = context.getApplicationContext();
+            if (zzbgE == null) {
+                zzbgE = new GoogleCloudMessaging();
+                zzbgE.zzqn = context.getApplicationContext();
             }
-            googleCloudMessaging = zzbfZ;
+            googleCloudMessaging = zzbgE;
         }
         return googleCloudMessaging;
     }
 
-    private String zzGe() {
+    private String zzGR() {
         String valueOf = String.valueOf("google.rpc");
-        String valueOf2 = String.valueOf(String.valueOf(zzbgc.getAndIncrement()));
+        String valueOf2 = String.valueOf(String.valueOf(zzbgH.getAndIncrement()));
         return valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf);
     }
 
@@ -99,8 +99,8 @@ public class GoogleCloudMessaging {
         if (str == null) {
             throw new IllegalArgumentException("Missing 'to'");
         }
-        String zzbd = zzbd(this.zzqr);
-        if (zzbd == null) {
+        String zzbv = zzbv(this.zzqn);
+        if (zzbv == null) {
             throw new IOException("SERVICE_NOT_AVAILABLE");
         }
         Intent intent = new Intent("com.google.android.gcm.intent.SEND");
@@ -108,40 +108,40 @@ public class GoogleCloudMessaging {
             intent.putExtras(bundle);
         }
         zzr(intent);
-        intent.setPackage(zzbd);
+        intent.setPackage(zzbv);
         intent.putExtra("google.to", str);
         intent.putExtra("google.message_id", str2);
         intent.putExtra("google.ttl", Long.toString(j));
         intent.putExtra("google.delay", Integer.toString(i));
-        intent.putExtra("google.from", zzeI(str));
-        if (zzbd.contains(".gsf")) {
+        intent.putExtra("google.from", zzeE(str));
+        if (zzbv.contains(".gsf")) {
             Bundle bundle2 = new Bundle();
-            for (String zzbd2 : bundle.keySet()) {
-                Object obj = bundle.get(zzbd2);
+            for (String zzbv2 : bundle.keySet()) {
+                Object obj = bundle.get(zzbv2);
                 if (obj instanceof String) {
                     String str3 = "gcm.";
-                    zzbd2 = String.valueOf(zzbd2);
-                    bundle2.putString(zzbd2.length() != 0 ? str3.concat(zzbd2) : new String(str3), (String) obj);
+                    zzbv2 = String.valueOf(zzbv2);
+                    bundle2.putString(zzbv2.length() != 0 ? str3.concat(zzbv2) : new String(str3), (String) obj);
                 }
             }
             bundle2.putString("google.to", str);
             bundle2.putString("google.message_id", str2);
-            InstanceID.getInstance(this.zzqr).zzc(INSTANCE_ID_SCOPE, "upstream", bundle2);
+            InstanceID.getInstance(this.zzqn).zzc(INSTANCE_ID_SCOPE, "upstream", bundle2);
             return;
         }
-        this.zzqr.sendOrderedBroadcast(intent, "com.google.android.gtalkservice.permission.GTALK_SERVICE");
+        this.zzqn.sendOrderedBroadcast(intent, "com.google.android.gtalkservice.permission.GTALK_SERVICE");
     }
 
-    public static String zzbd(Context context) {
-        return zzc.zzbi(context);
+    public static String zzbv(Context context) {
+        return zzc.zzbA(context);
     }
 
-    public static int zzbe(Context context) {
+    public static int zzbw(Context context) {
         PackageManager packageManager = context.getPackageManager();
-        String zzbd = zzbd(context);
-        if (zzbd != null) {
+        String zzbv = zzbv(context);
+        if (zzbv != null) {
             try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(zzbd, 0);
+                PackageInfo packageInfo = packageManager.getPackageInfo(zzbv, 0);
                 if (packageInfo != null) {
                     return packageInfo.versionCode;
                 }
@@ -151,12 +151,12 @@ public class GoogleCloudMessaging {
         return -1;
     }
 
-    private String zzeI(String str) {
+    private String zzeE(String str) {
         int indexOf = str.indexOf(64);
         if (indexOf > 0) {
             str = str.substring(0, indexOf);
         }
-        return InstanceID.getInstance(this.zzqr).zzGv().zzh("", str, INSTANCE_ID_SCOPE);
+        return InstanceID.getInstance(this.zzqn).zzHi().zzh("", str, INSTANCE_ID_SCOPE);
     }
 
     private boolean zzq(Intent intent) {
@@ -165,7 +165,7 @@ public class GoogleCloudMessaging {
             stringExtra = intent.getStringExtra("google.message_id");
         }
         if (stringExtra != null) {
-            Handler handler = (Handler) this.zzbgb.remove(stringExtra);
+            Handler handler = (Handler) this.zzbgG.remove(stringExtra);
             if (handler != null) {
                 Message obtain = Message.obtain();
                 obtain.obj = intent;
@@ -176,9 +176,9 @@ public class GoogleCloudMessaging {
     }
 
     public void close() {
-        zzbfZ = null;
-        zza.zzbfM = null;
-        zzGf();
+        zzbgE = null;
+        zza.zzbgq = null;
+        zzGS();
     }
 
     public String getMessageType(Intent intent) {
@@ -192,21 +192,21 @@ public class GoogleCloudMessaging {
     @RequiresPermission("com.google.android.c2dm.permission.RECEIVE")
     @Deprecated
     public synchronized String register(String... strArr) throws IOException {
-        String zzbd;
-        zzbd = zzbd(this.zzqr);
-        if (zzbd == null) {
+        String zzbv;
+        zzbv = zzbv(this.zzqn);
+        if (zzbv == null) {
             throw new IOException("SERVICE_NOT_AVAILABLE");
         }
         String zzf = zzf(strArr);
         Bundle bundle = new Bundle();
-        if (zzbd.contains(".gsf")) {
+        if (zzbv.contains(".gsf")) {
             bundle.putString("legacy.sender", zzf);
-            zzbd = InstanceID.getInstance(this.zzqr).getToken(zzf, INSTANCE_ID_SCOPE, bundle);
+            zzbv = InstanceID.getInstance(this.zzqn).getToken(zzf, INSTANCE_ID_SCOPE, bundle);
         } else {
             bundle.putString("sender", zzf);
-            zzbd = zza(zzJ(bundle), "registration_id");
+            zzbv = zza(zzJ(bundle), "registration_id");
         }
-        return zzbd;
+        return zzbv;
     }
 
     @RequiresPermission("com.google.android.c2dm.permission.RECEIVE")
@@ -225,13 +225,13 @@ public class GoogleCloudMessaging {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
         }
-        InstanceID.getInstance(this.zzqr).deleteInstanceID();
+        InstanceID.getInstance(this.zzqn).deleteInstanceID();
     }
 
-    synchronized void zzGf() {
-        if (this.zzbga != null) {
-            this.zzbga.cancel();
-            this.zzbga = null;
+    synchronized void zzGS() {
+        if (this.zzbgF != null) {
+            this.zzbgF.cancel();
+            this.zzbgF = null;
         }
     }
 
@@ -239,21 +239,21 @@ public class GoogleCloudMessaging {
     Intent zzJ(Bundle bundle) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
-        } else if (zzbe(this.zzqr) < 0) {
+        } else if (zzbw(this.zzqn) < 0) {
             throw new IOException("Google Play Services missing");
         } else {
             if (bundle == null) {
                 bundle = new Bundle();
             }
             Intent intent = new Intent("com.google.android.c2dm.intent.REGISTER");
-            intent.setPackage(zzbd(this.zzqr));
+            intent.setPackage(zzbv(this.zzqn));
             zzr(intent);
-            intent.putExtra("google.message_id", zzGe());
+            intent.putExtra("google.message_id", zzGR());
             intent.putExtras(bundle);
-            intent.putExtra("google.messenger", this.zzbge);
-            this.zzqr.startService(intent);
+            intent.putExtra("google.messenger", this.zzbgJ);
+            this.zzqn.startService(intent);
             try {
-                return (Intent) this.zzbgd.poll(30000, TimeUnit.MILLISECONDS);
+                return (Intent) this.zzbgI.poll(30000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 throw new IOException(e.getMessage());
             }
@@ -272,11 +272,11 @@ public class GoogleCloudMessaging {
     }
 
     synchronized void zzr(Intent intent) {
-        if (this.zzbga == null) {
+        if (this.zzbgF == null) {
             Intent intent2 = new Intent();
             intent2.setPackage("com.google.example.invalidpackage");
-            this.zzbga = PendingIntent.getBroadcast(this.zzqr, 0, intent2, 0);
+            this.zzbgF = PendingIntent.getBroadcast(this.zzqn, 0, intent2, 0);
         }
-        intent.putExtra("app", this.zzbga);
+        intent.putExtra("app", this.zzbgF);
     }
 }

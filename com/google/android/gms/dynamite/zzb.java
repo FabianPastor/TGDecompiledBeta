@@ -5,34 +5,34 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.zzd;
+import com.google.android.gms.dynamic.IObjectWrapper;
 
 public interface zzb extends IInterface {
 
     public static abstract class zza extends Binder implements zzb {
 
         private static class zza implements zzb {
-            private IBinder zzrp;
+            private IBinder zzrk;
 
             zza(IBinder iBinder) {
-                this.zzrp = iBinder;
+                this.zzrk = iBinder;
             }
 
             public IBinder asBinder() {
-                return this.zzrp;
+                return this.zzrk;
             }
 
-            public zzd zza(zzd com_google_android_gms_dynamic_zzd, String str, byte[] bArr) throws RemoteException {
+            public IObjectWrapper zza(IObjectWrapper iObjectWrapper, String str, byte[] bArr) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
                     obtain.writeInterfaceToken("com.google.android.gms.dynamite.IDynamiteLoaderV2");
-                    obtain.writeStrongBinder(com_google_android_gms_dynamic_zzd != null ? com_google_android_gms_dynamic_zzd.asBinder() : null);
+                    obtain.writeStrongBinder(iObjectWrapper != null ? iObjectWrapper.asBinder() : null);
                     obtain.writeString(str);
                     obtain.writeByteArray(bArr);
-                    this.zzrp.transact(1, obtain, obtain2, 0);
+                    this.zzrk.transact(1, obtain, obtain2, 0);
                     obtain2.readException();
-                    zzd zzcd = com.google.android.gms.dynamic.zzd.zza.zzcd(obtain2.readStrongBinder());
+                    IObjectWrapper zzcd = com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(obtain2.readStrongBinder());
                     return zzcd;
                 } finally {
                     obtain2.recycle();
@@ -53,7 +53,7 @@ public interface zzb extends IInterface {
             switch (i) {
                 case 1:
                     parcel.enforceInterface("com.google.android.gms.dynamite.IDynamiteLoaderV2");
-                    zzd zza = zza(com.google.android.gms.dynamic.zzd.zza.zzcd(parcel.readStrongBinder()), parcel.readString(), parcel.createByteArray());
+                    IObjectWrapper zza = zza(com.google.android.gms.dynamic.IObjectWrapper.zza.zzcd(parcel.readStrongBinder()), parcel.readString(), parcel.createByteArray());
                     parcel2.writeNoException();
                     parcel2.writeStrongBinder(zza != null ? zza.asBinder() : null);
                     return true;
@@ -66,5 +66,5 @@ public interface zzb extends IInterface {
         }
     }
 
-    zzd zza(zzd com_google_android_gms_dynamic_zzd, String str, byte[] bArr) throws RemoteException;
+    IObjectWrapper zza(IObjectWrapper iObjectWrapper, String str, byte[] bArr) throws RemoteException;
 }

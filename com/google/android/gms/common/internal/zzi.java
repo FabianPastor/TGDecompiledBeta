@@ -1,6 +1,5 @@
 package com.google.android.gms.common.internal;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -8,7 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import com.google.android.gms.internal.zzaax;
+import com.google.android.gms.internal.zzabf;
 
 public abstract class zzi implements OnClickListener {
 
@@ -23,7 +22,7 @@ public abstract class zzi implements OnClickListener {
             this.val$requestCode = i;
         }
 
-        public void zzxm() {
+        public void zzxT() {
             if (this.val$intent != null) {
                 this.val$activity.startActivityForResult(this.val$intent, this.val$requestCode);
             }
@@ -41,7 +40,7 @@ public abstract class zzi implements OnClickListener {
             this.val$requestCode = i;
         }
 
-        public void zzxm() {
+        public void zzxT() {
             if (this.val$intent != null) {
                 this.val$fragment.startActivityForResult(this.val$intent, this.val$requestCode);
             }
@@ -51,18 +50,17 @@ public abstract class zzi implements OnClickListener {
     class AnonymousClass3 extends zzi {
         final /* synthetic */ Intent val$intent;
         final /* synthetic */ int val$requestCode;
-        final /* synthetic */ zzaax zzaEh;
+        final /* synthetic */ zzabf zzaFF;
 
-        AnonymousClass3(Intent intent, zzaax com_google_android_gms_internal_zzaax, int i) {
+        AnonymousClass3(Intent intent, zzabf com_google_android_gms_internal_zzabf, int i) {
             this.val$intent = intent;
-            this.zzaEh = com_google_android_gms_internal_zzaax;
+            this.zzaFF = com_google_android_gms_internal_zzabf;
             this.val$requestCode = i;
         }
 
-        @TargetApi(11)
-        public void zzxm() {
+        public void zzxT() {
             if (this.val$intent != null) {
-                this.zzaEh.startActivityForResult(this.val$intent, this.val$requestCode);
+                this.zzaFF.startActivityForResult(this.val$intent, this.val$requestCode);
             }
         }
     }
@@ -75,13 +73,13 @@ public abstract class zzi implements OnClickListener {
         return new AnonymousClass2(intent, fragment, i);
     }
 
-    public static zzi zza(@NonNull zzaax com_google_android_gms_internal_zzaax, Intent intent, int i) {
-        return new AnonymousClass3(intent, com_google_android_gms_internal_zzaax, i);
+    public static zzi zza(@NonNull zzabf com_google_android_gms_internal_zzabf, Intent intent, int i) {
+        return new AnonymousClass3(intent, com_google_android_gms_internal_zzabf, i);
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
         try {
-            zzxm();
+            zzxT();
         } catch (Throwable e) {
             Log.e("DialogRedirect", "Failed to start resolution intent", e);
         } finally {
@@ -89,5 +87,5 @@ public abstract class zzi implements OnClickListener {
         }
     }
 
-    protected abstract void zzxm();
+    protected abstract void zzxT();
 }

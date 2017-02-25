@@ -88,7 +88,15 @@ class NotificationCompatApi20 {
     }
 
     private static Notification.Action getActionFromActionCompat(Action actionCompat) {
-        android.app.Notification.Action.Builder actionBuilder = new android.app.Notification.Action.Builder(actionCompat.getIcon(), actionCompat.getTitle(), actionCompat.getActionIntent()).addExtras(actionCompat.getExtras());
+        Bundle actionExtras;
+        android.app.Notification.Action.Builder actionBuilder = new android.app.Notification.Action.Builder(actionCompat.getIcon(), actionCompat.getTitle(), actionCompat.getActionIntent());
+        if (actionCompat.getExtras() != null) {
+            actionExtras = new Bundle(actionCompat.getExtras());
+        } else {
+            actionExtras = new Bundle();
+        }
+        actionExtras.putBoolean("android.support.allowGeneratedReplies", actionCompat.getAllowGeneratedReplies());
+        actionBuilder.addExtras(actionExtras);
         RemoteInputCompatBase.RemoteInput[] remoteInputCompats = actionCompat.getRemoteInputs();
         if (remoteInputCompats != null) {
             for (RemoteInput remoteInput : RemoteInputCompatApi20.fromCompat(remoteInputCompats)) {

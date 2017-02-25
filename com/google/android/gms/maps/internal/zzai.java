@@ -7,19 +7,19 @@ import android.util.Log;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.dynamic.zze;
+import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.internal.zzc.zza;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public class zzai {
-    private static zzc zzboA;
-    private static Context zzboz;
+    private static Context zzbpb;
+    private static zzc zzbpc;
 
     private static Context getRemoteContext(Context context) {
-        if (zzboz == null) {
-            zzboz = GooglePlayServicesUtil.getRemoteContext(context);
+        if (zzbpb == null) {
+            zzbpb = GooglePlayServicesUtil.getRemoteContext(context);
         }
-        return zzboz;
+        return zzbpb;
     }
 
     private static <T> T zza(ClassLoader classLoader, String str) {
@@ -32,22 +32,22 @@ public class zzai {
         }
     }
 
-    public static zzc zzbq(Context context) throws GooglePlayServicesNotAvailableException {
+    public static zzc zzbI(Context context) throws GooglePlayServicesNotAvailableException {
         zzac.zzw(context);
-        if (zzboA != null) {
-            return zzboA;
+        if (zzbpc != null) {
+            return zzbpc;
         }
-        zzbr(context);
-        zzboA = zzbs(context);
+        zzbJ(context);
+        zzbpc = zzbK(context);
         try {
-            zzboA.zzh(zze.zzA(getRemoteContext(context).getResources()), GooglePlayServicesUtil.GOOGLE_PLAY_SERVICES_VERSION_CODE);
-            return zzboA;
+            zzbpc.zzi(zzd.zzA(getRemoteContext(context).getResources()), GooglePlayServicesUtil.GOOGLE_PLAY_SERVICES_VERSION_CODE);
+            return zzbpc;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    private static void zzbr(Context context) throws GooglePlayServicesNotAvailableException {
+    private static void zzbJ(Context context) throws GooglePlayServicesNotAvailableException {
         int isGooglePlayServicesAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         switch (isGooglePlayServicesAvailable) {
             case 0:
@@ -57,7 +57,7 @@ public class zzai {
         }
     }
 
-    private static zzc zzbs(Context context) {
+    private static zzc zzbK(Context context) {
         Log.i(zzai.class.getSimpleName(), "Making Creator dynamically");
         return zza.zzdt((IBinder) zza(getRemoteContext(context).getClassLoader(), "com.google.android.gms.maps.internal.CreatorImpl"));
     }

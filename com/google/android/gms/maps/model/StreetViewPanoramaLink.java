@@ -6,13 +6,11 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 import com.google.android.gms.common.internal.zzaa;
 
 public class StreetViewPanoramaLink extends zza {
-    public static final Creator<StreetViewPanoramaLink> CREATOR = new zzl();
+    public static final Creator<StreetViewPanoramaLink> CREATOR = new zzn();
     public final float bearing;
-    private final int mVersionCode;
     public final String panoId;
 
-    StreetViewPanoramaLink(int i, String str, float f) {
-        this.mVersionCode = i;
+    public StreetViewPanoramaLink(String str, float f) {
         this.panoId = str;
         if (((double) f) <= 0.0d) {
             f = (f % 360.0f) + 360.0f;
@@ -31,10 +29,6 @@ public class StreetViewPanoramaLink extends zza {
         return this.panoId.equals(streetViewPanoramaLink.panoId) && Float.floatToIntBits(this.bearing) == Float.floatToIntBits(streetViewPanoramaLink.bearing);
     }
 
-    int getVersionCode() {
-        return this.mVersionCode;
-    }
-
     public int hashCode() {
         return zzaa.hashCode(this.panoId, Float.valueOf(this.bearing));
     }
@@ -44,6 +38,6 @@ public class StreetViewPanoramaLink extends zza {
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        zzl.zza(this, parcel, i);
+        zzn.zza(this, parcel, i);
     }
 }

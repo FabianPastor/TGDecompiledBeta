@@ -17,4 +17,5 @@
     <string name="common_open_on_phone">Άνοιγμα σε τηλέφωνο</string>
     <string name="common_signin_button_text">Σύνδεση</string>
     <string name="common_signin_button_text_long">Συνδεθείτε με το Google</string>
+    <string name="wallet_buy_button_place_holder">Αγορά μέσω Google</string>
 </resources>

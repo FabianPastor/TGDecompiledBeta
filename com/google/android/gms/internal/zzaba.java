@@ -1,44 +1,79 @@
 package com.google.android.gms.internal;
 
-import android.os.Looper;
-import android.support.annotation.NonNull;
+import android.content.Context;
+import android.content.res.Resources;
+import android.text.TextUtils;
+import com.google.android.gms.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.internal.zzac;
-import com.google.android.gms.internal.zzaaz.zzb;
-import java.util.Collections;
-import java.util.Set;
-import java.util.WeakHashMap;
+import com.google.android.gms.common.internal.zzam;
+import com.google.android.gms.common.internal.zzz;
 
-public class zzaba {
-    private final Set<zzaaz<?>> zzarH = Collections.newSetFromMap(new WeakHashMap());
+@Deprecated
+public final class zzaba {
+    private static zzaba zzaCM;
+    private static final Object zztX = new Object();
+    private final String mAppId;
+    private final Status zzaCN;
+    private final boolean zzaCO;
+    private final boolean zzaCP;
 
-    public static <L> zzb<L> zza(@NonNull L l, @NonNull String str) {
-        zzac.zzb((Object) l, (Object) "Listener must not be null");
-        zzac.zzb((Object) str, (Object) "Listener type must not be null");
-        zzac.zzh(str, "Listener type must not be empty");
-        return new zzb(l, str);
-    }
-
-    public static <L> zzaaz<L> zzb(@NonNull L l, @NonNull Looper looper, @NonNull String str) {
-        zzac.zzb((Object) l, (Object) "Listener must not be null");
-        zzac.zzb((Object) looper, (Object) "Looper must not be null");
-        zzac.zzb((Object) str, (Object) "Listener type must not be null");
-        return new zzaaz(looper, l, str);
-    }
-
-    public void release() {
-        for (zzaaz clear : this.zzarH) {
-            clear.clear();
+    zzaba(Context context) {
+        boolean z = true;
+        Resources resources = context.getResources();
+        int identifier = resources.getIdentifier("google_app_measurement_enable", "integer", resources.getResourcePackageName(R.string.common_google_play_services_unknown_issue));
+        if (identifier != 0) {
+            boolean z2 = resources.getInteger(identifier) != 0;
+            if (z2) {
+                z = false;
+            }
+            this.zzaCP = z;
+            z = z2;
+        } else {
+            this.zzaCP = false;
         }
-        this.zzarH.clear();
+        this.zzaCO = z;
+        Object zzaV = zzz.zzaV(context);
+        if (zzaV == null) {
+            zzaV = new zzam(context).getString("google_app_id");
+        }
+        if (TextUtils.isEmpty(zzaV)) {
+            this.zzaCN = new Status(10, "Missing google app id value from from string resources with name google_app_id.");
+            this.mAppId = null;
+            return;
+        }
+        this.mAppId = zzaV;
+        this.zzaCN = Status.zzazx;
     }
 
-    public <L> zzaaz<L> zza(@NonNull L l, @NonNull Looper looper, @NonNull String str) {
-        zzaaz<L> zzb = zzb(l, looper, str);
-        this.zzarH.add(zzb);
-        return zzb;
+    public static Status zzaQ(Context context) {
+        Status status;
+        zzac.zzb((Object) context, (Object) "Context must not be null.");
+        synchronized (zztX) {
+            if (zzaCM == null) {
+                zzaCM = new zzaba(context);
+            }
+            status = zzaCM.zzaCN;
+        }
+        return status;
     }
 
-    public <L> zzaaz<L> zzb(@NonNull L l, Looper looper) {
-        return zza(l, looper, "NO_TYPE");
+    private static zzaba zzde(String str) {
+        zzaba com_google_android_gms_internal_zzaba;
+        synchronized (zztX) {
+            if (zzaCM == null) {
+                throw new IllegalStateException(new StringBuilder(String.valueOf(str).length() + 34).append("Initialize must be called before ").append(str).append(".").toString());
+            }
+            com_google_android_gms_internal_zzaba = zzaCM;
+        }
+        return com_google_android_gms_internal_zzaba;
+    }
+
+    public static String zzwQ() {
+        return zzde("getGoogleAppId").mAppId;
+    }
+
+    public static boolean zzwR() {
+        return zzde("isMeasurementExplicitlyDisabled").zzaCP;
     }
 }
