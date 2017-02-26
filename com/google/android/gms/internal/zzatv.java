@@ -298,6 +298,7 @@ public class zzatv extends zzauh {
     public List<com.google.android.gms.common.internal.safeparcel.zza> zzlD(int i) {
         Object obj;
         Throwable th;
+        Object obj2;
         Parcel obtain;
         zzmR();
         zzJV();
@@ -343,7 +344,6 @@ public class zzatv extends zzauh {
                         long j2 = query.getLong(0);
                         int i5 = query.getInt(1);
                         byte[] blob = query.getBlob(2);
-                        Object obj2;
                         if (i5 == 0) {
                             Parcel obtain2 = Parcel.obtain();
                             try {

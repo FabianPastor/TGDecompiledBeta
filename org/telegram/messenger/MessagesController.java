@@ -2038,10 +2038,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        long newTaskId;
-        NativeByteBuffer data;
         Throwable e;
-        final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
             ArrayList<Integer> toSend = null;
             if (taskId == 0) {
@@ -2067,9 +2064,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            long newTaskId;
+            NativeByteBuffer data;
             NativeByteBuffer data2;
             if (channelId != 0) {
                 TL_channels_deleteMessages req;
+                final int i;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -6635,6 +6635,7 @@ public class MessagesController implements NotificationCenterDelegate {
         AbstractMap usersDict;
         int a;
         AbstractMap chatsDict;
+        Iterator it;
         long currentTime = System.currentTimeMillis();
         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap();
         HashMap<Long, WebPage> webPages = new HashMap();
@@ -6688,7 +6689,6 @@ public class MessagesController implements NotificationCenterDelegate {
         }
         int interfaceUpdateMask = 0;
         for (int c = 0; c < updates.size(); c++) {
-            Iterator it;
             Update update = (Update) updates.get(c);
             FileLog.d("process update " + update);
             Message message;

@@ -171,6 +171,10 @@ public class Theme {
     public static Drawable chat_msgOutShadowDrawable = null;
     public static Drawable chat_msgOutViewsDrawable = null;
     public static Drawable chat_msgOutViewsSelectedDrawable = null;
+    public static Drawable chat_msgStickerCheckDrawable = null;
+    public static Drawable chat_msgStickerClockDrawable = null;
+    public static Drawable chat_msgStickerHalfCheckDrawable = null;
+    public static Drawable chat_msgStickerViewsDrawable = null;
     public static TextPaint chat_msgTextPaint = null;
     public static TextPaint chat_msgTextPaintOneEmoji = null;
     public static TextPaint chat_msgTextPaintThreeEmoji = null;
@@ -2137,19 +2141,23 @@ public class Theme {
             chat_msgOutCheckDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
             chat_msgOutCheckSelectedDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
             chat_msgMediaCheckDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
+            chat_msgStickerCheckDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
             chat_msgOutHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
             chat_msgOutHalfCheckSelectedDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
             chat_msgMediaHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
+            chat_msgStickerHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
             chat_msgOutClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
             chat_msgOutSelectedClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
             chat_msgInClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
             chat_msgInSelectedClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
             chat_msgMediaClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
+            chat_msgStickerClockDrawable = resources.getDrawable(R.drawable.msg_clock).mutate();
             chat_msgInViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgInViewsSelectedDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgOutViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgOutViewsSelectedDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgMediaViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
+            chat_msgStickerViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
             chat_msgInMenuDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
             chat_msgInMenuSelectedDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
             chat_msgOutMenuDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
@@ -2332,6 +2340,10 @@ public class Theme {
             setDrawableColorByKey(chat_msgMediaCheckDrawable, key_chat_mediaSentCheck);
             setDrawableColorByKey(chat_msgMediaHalfCheckDrawable, key_chat_mediaSentCheck);
             setDrawableColorByKey(chat_msgMediaClockDrawable, key_chat_mediaSentClock);
+            setDrawableColorByKey(chat_msgStickerCheckDrawable, key_chat_serviceText);
+            setDrawableColorByKey(chat_msgStickerHalfCheckDrawable, key_chat_serviceText);
+            setDrawableColorByKey(chat_msgStickerClockDrawable, key_chat_serviceText);
+            setDrawableColorByKey(chat_msgStickerViewsDrawable, key_chat_serviceText);
             setDrawableColorByKey(chat_shareIconDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botInlineDrawable, key_chat_serviceIcon);
             setDrawableColorByKey(chat_botLinkDrawalbe, key_chat_serviceIcon);
@@ -2620,12 +2632,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
+                    int i;
                     SharedPreferences preferences;
-                    int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int i;
+                        int selectedBackground;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {
