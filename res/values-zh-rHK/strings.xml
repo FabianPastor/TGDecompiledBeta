@@ -17,5 +17,4 @@
     <string name="common_open_on_phone">在手機開啟</string>
     <string name="common_signin_button_text">登入</string>
     <string name="common_signin_button_text_long">透過 Google 登入</string>
-    <string name="wallet_buy_button_place_holder">透過 Google 購物</string>
 </resources>

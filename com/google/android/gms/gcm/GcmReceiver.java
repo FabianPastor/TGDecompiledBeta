@@ -9,7 +9,6 @@ import android.os.Build.VERSION;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Base64;
 import android.util.Log;
-import com.google.android.gms.wallet.WalletConstants;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
     private static String zzbgu = "gcm.googleapis.com/refresh";
@@ -30,7 +29,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
             if (startWakefulService == null) {
                 Log.e("GcmReceiver", "Error while delivering the message: ServiceIntent not found.");
                 if (isOrderedBroadcast()) {
-                    setResultCode(WalletConstants.ERROR_CODE_INVALID_PARAMETERS);
+                    setResultCode(404);
                 }
             } else if (isOrderedBroadcast()) {
                 setResultCode(-1);

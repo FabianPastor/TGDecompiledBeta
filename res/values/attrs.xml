@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="windowTransitionStyle">
-        <item>65536</item>
-        <item>2</item>
-        <item>1</item>
-    </attr>
-    <attr name="toolbarTextColorStyle">
-        <item>65536</item>
-        <item>2</item>
-        <item>1</item>
-    </attr>
     <attr name="imageAspectRatioAdjust">
         <item>65536</item>
-        <item>0</item>
         <item>2</item>
         <item>1</item>
+        <item>0</item>
     </attr>
     <attr name="imageAspectRatio">
         <item>32</item>
@@ -104,89 +94,11 @@
     </attr>
     <attr name="colorScheme">
         <item>65537</item>
+        <item>2</item>
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </attr>
     <attr name="scopeUris">
-        <item>3</item>
-    </attr>
-    <attr name="appTheme">
-        <item>65536</item>
-        <item>0</item>
-        <item>1</item>
-    </attr>
-    <attr name="environment">
-        <item>65536</item>
-        <item>1</item>
-        <item>0</item>
-        <item>2</item>
-        <item>3</item>
-    </attr>
-    <attr name="fragmentStyle">
-        <item>1</item>
-    </attr>
-    <attr name="fragmentMode">
-        <item>65536</item>
-        <item>1</item>
-        <item>2</item>
-    </attr>
-    <attr name="buyButtonHeight">
-        <item>65600</item>
-        <item>-1</item>
-        <item>-2</item>
-    </attr>
-    <attr name="buyButtonWidth">
-        <item>65600</item>
-        <item>-1</item>
-        <item>-2</item>
-    </attr>
-    <attr name="buyButtonText">
-        <item>65536</item>
-        <item>3</item>
-        <item>2</item>
-        <item>5</item>
-        <item>1</item>
-        <item>7</item>
-        <item>4</item>
-        <item>6</item>
-    </attr>
-    <attr name="buyButtonAppearance">
-        <item>65536</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>1</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>2</item>
-        <item>3</item>
-    </attr>
-    <attr name="maskedWalletDetailsTextAppearance">
-        <item>1</item>
-    </attr>
-    <attr name="maskedWalletDetailsHeaderTextAppearance">
-        <item>1</item>
-    </attr>
-    <attr name="maskedWalletDetailsBackground">
-        <item>17</item>
-    </attr>
-    <attr name="maskedWalletDetailsButtonTextAppearance">
-        <item>1</item>
-    </attr>
-    <attr name="maskedWalletDetailsButtonBackground">
-        <item>17</item>
-    </attr>
-    <attr name="maskedWalletDetailsLogoTextColor">
-        <item>16</item>
-    </attr>
-    <attr name="maskedWalletDetailsLogoImageType">
-        <item>65536</item>
-        <item>1</item>
-        <item>1</item>
-        <item>2</item>
-        <item>2</item>
         <item>3</item>
     </attr>
 </resources>

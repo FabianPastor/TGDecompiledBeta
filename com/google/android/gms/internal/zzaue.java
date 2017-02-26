@@ -22,7 +22,6 @@ import com.google.android.gms.internal.zzauw.zzc;
 import com.google.android.gms.internal.zzauw.zzd;
 import com.google.android.gms.internal.zzauw.zzg;
 import com.google.android.gms.measurement.AppMeasurement;
-import com.google.android.gms.wallet.WalletConstants;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.analytics.FirebaseAnalytics.Event;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
@@ -1674,10 +1673,10 @@ public class zzaue {
             int i3 = ((i == Callback.DEFAULT_DRAG_ANIMATION_DURATION || i == 204 || i == 304) && th == null) ? 1 : 0;
             if (zzfu == null) {
                 zzKk().zzLZ().zzj("App does not exist in onConfigFetched. appId", zzatx.zzfE(str));
-            } else if (i3 != 0 || i == WalletConstants.ERROR_CODE_INVALID_PARAMETERS) {
+            } else if (i3 != 0 || i == 404) {
                 List list = map != null ? (List) map.get("Last-Modified") : null;
                 String str2 = (list == null || list.size() <= 0) ? null : (String) list.get(0);
-                if (i == WalletConstants.ERROR_CODE_INVALID_PARAMETERS || i == 304) {
+                if (i == 404 || i == 304) {
                     if (zzKh().zzfL(str) == null && !zzKh().zzb(str, null, null)) {
                         zzKf().endTransaction();
                         return;
@@ -1688,7 +1687,7 @@ public class zzaue {
                 }
                 zzfu.zzae(zznR().currentTimeMillis());
                 zzKf().zza(zzfu);
-                if (i == WalletConstants.ERROR_CODE_INVALID_PARAMETERS) {
+                if (i == 404) {
                     zzKk().zzMa().zzj("Config not found. Using empty config. appId", str);
                 } else {
                     zzKk().zzMd().zze("Successfully fetched config. Got network response. code, size", Integer.valueOf(i), Integer.valueOf(bArr.length));

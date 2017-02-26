@@ -10,7 +10,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
-import com.google.android.gms.wallet.WalletConstants;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -110,7 +109,7 @@ public class zzg {
                 return -1;
             }
             Log.e("FirebaseInstanceId", "Error while delivering the message: ServiceIntent not found.");
-            return WalletConstants.ERROR_CODE_INVALID_PARAMETERS;
+            return 404;
         } catch (Throwable e) {
             Log.e("FirebaseInstanceId", "Error while delivering the message to the serviceIntent", e);
             return 401;

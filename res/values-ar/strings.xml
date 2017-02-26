@@ -17,7 +17,6 @@
     <string name="common_open_on_phone">فتح على الهاتف</string>
     <string name="common_signin_button_text">تسجل الدخول</string>
     <string name="common_signin_button_text_long">‏تسجيل الدخول عبر Google</string>
-    <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
     <string name="ALongTimeAgo">آخر ظهور خلال فترة طويلة</string>
     <string name="AbortPassword">إنهاء عملية إعداد التحقق بخطوتين</string>
     <string name="AccessError">خطأ في الوصول</string>

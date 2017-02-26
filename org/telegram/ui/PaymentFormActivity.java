@@ -5,8 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
@@ -14,7 +13,6 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -49,27 +47,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.BooleanResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.Builder;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wallet.MaskedWalletRequest;
-import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
-import com.google.android.gms.wallet.Wallet;
-import com.google.android.gms.wallet.Wallet.WalletOptions;
-import com.google.android.gms.wallet.fragment.WalletFragment;
-import com.google.android.gms.wallet.fragment.WalletFragmentInitParams;
-import com.google.android.gms.wallet.fragment.WalletFragmentOptions;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.exception.APIConnectionException;
 import com.stripe.android.exception.APIException;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
-import com.stripe.android.net.StripeApiHandler;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -181,7 +164,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
     private boolean donePressed;
-    private GoogleApiClient googleApiClient;
     private HeaderCell[] headerCell;
     private boolean ignoreOnCardChange;
     private boolean ignoreOnPhoneChange;
@@ -210,7 +192,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private String stripeApiKey;
     private TextView textView;
     private TL_payments_validateRequestedInfo validateRequest;
-    private WalletFragment walletFragment;
     private WebView webView;
     private boolean webviewLoading;
 
@@ -397,15 +378,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 FileLog.e(e);
             }
         }
-        if (this.googleApiClient != null) {
-            this.googleApiClient.connect();
-        }
     }
 
     public void onPause() {
-        if (this.googleApiClient != null) {
-            this.googleApiClient.disconnect();
-        }
     }
 
     /* JADX WARNING: inconsistent code. */
@@ -925,23 +900,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } catch (Throwable e22) {
                     FileLog.e("tmessages", e22);
                 }
-                this.googleApiClient = new Builder(context).addConnectionCallbacks(new ConnectionCallbacks() {
-                    public void onConnected(Bundle bundle) {
-                    }
-
-                    public void onConnectionSuspended(int i) {
-                    }
-                }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
-                    public void onConnectionFailed(ConnectionResult connectionResult) {
-                    }
-                }).addApi(Wallet.API, new WalletOptions.Builder().setEnvironment(3).setTheme(1).build()).build();
-                Wallet.Payments.isReadyToPay(this.googleApiClient).setResultCallback(new ResultCallback<BooleanResult>() {
-                    public void onResult(BooleanResult booleanResult) {
-                        if (booleanResult.getStatus().isSuccess() && booleanResult.getValue()) {
-                            PaymentFormActivity.this.showAndroidPay(false);
-                        }
-                    }
-                });
                 this.inputFields = new EditText[7];
                 a = 0;
                 while (a < 7) {
@@ -1017,7 +975,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         boolean isMonth = a == 1;
                         editText = this.inputFields[a];
                         final boolean z = isMonth;
-                        OnTouchListener anonymousClass15 = new OnTouchListener() {
+                        OnTouchListener anonymousClass12 = new OnTouchListener() {
                             public boolean onTouch(View v, MotionEvent event) {
                                 if (PaymentFormActivity.this.getParentActivity() == null) {
                                     return false;
@@ -1052,7 +1010,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 return true;
                             }
                         };
-                        editText.setOnTouchListener(anonymousClass15);
+                        editText.setOnTouchListener(anonymousClass12);
                     } else {
                         this.inputFields[a].setInputType(16385);
                     }
@@ -1297,16 +1255,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     this.headerCell[1].setVisibility(8);
                     this.sectionCell[0].setVisibility(8);
                 }
-                this.settingsCell1 = new TextSettingsCell(context);
-                this.settingsCell1.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-                this.settingsCell1.setText("Android Pay", false);
-                this.settingsCell1.setVisibility(8);
-                this.linearLayout2.addView(this.settingsCell1, LayoutHelper.createLinear(-1, -2));
-                this.settingsCell1.setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        PaymentFormActivity.this.showAndroidPay(true);
-                    }
-                });
             } else {
                 this.webviewLoading = true;
                 showEditDoneProgress(true);
@@ -1568,7 +1516,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 final String str = totalPrice;
                 this.bottomLayout.setOnClickListener(new OnClickListener() {
                     public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentFormActivity.this.getParentActivity());
+                        Builder builder = new Builder(PaymentFormActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("PaymentTransactionReview", R.string.PaymentTransactionReview));
                         builder.setMessage(LocaleController.formatString("PaymentTransactionMessage", R.string.PaymentTransactionMessage, str, PaymentFormActivity.this.currentBotName, PaymentFormActivity.this.currentItemName));
                         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogInterface.OnClickListener() {
@@ -1680,33 +1628,6 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             updateSavePaymentField();
         } else if (id == NotificationCenter.paymentFinished) {
             removeSelfFromStack();
-        }
-    }
-
-    private void showAndroidPay(boolean show) {
-        if (!show) {
-            WalletFragmentOptions.Builder optionsBuilder = WalletFragmentOptions.newBuilder();
-            optionsBuilder.setEnvironment(3);
-            optionsBuilder.setMode(1);
-            this.walletFragment = WalletFragment.newInstance(optionsBuilder.build());
-            ArrayList<TL_labeledPrice> arrayList = new ArrayList();
-            arrayList.addAll(this.paymentForm.invoice.prices);
-            if (this.shippingOption != null) {
-                arrayList.addAll(this.shippingOption.prices);
-            }
-            this.walletFragment.initialize(WalletFragmentInitParams.newBuilder().setMaskedWalletRequest(MaskedWalletRequest.newBuilder().setPaymentMethodTokenizationParameters(PaymentMethodTokenizationParameters.newBuilder().setPaymentMethodTokenizationType(1).addParameter("gateway", "stripe").addParameter("stripe:publishableKey", this.stripeApiKey).addParameter("stripe:version", StripeApiHandler.VERSION).build()).setEstimatedTotalPrice(getTotalPriceDecimalString(arrayList)).setCurrencyCode(this.paymentForm.invoice.currency).build()).setMaskedWalletRequestCode(91).build());
-            this.settingsCell1.setVisibility(0);
-        } else if (getParentActivity() != null) {
-            Activity parentActivity = getParentActivity();
-            AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-            FrameLayout frameLayout = new FrameLayout(parentActivity);
-            this.walletFragment.onCreate(null);
-            this.walletFragment.onCreateView(parentActivity.getLayoutInflater(), frameLayout, null);
-            this.walletFragment.onStart();
-            this.walletFragment.onResume();
-            builder.setView(frameLayout);
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            showDialog(builder.create());
         }
     }
 

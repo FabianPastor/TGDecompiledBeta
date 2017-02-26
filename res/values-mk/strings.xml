@@ -17,5 +17,4 @@
     <string name="common_open_on_phone">Отвори на телефонот</string>
     <string name="common_signin_button_text">Најави се</string>
     <string name="common_signin_button_text_long">Најави се со Google</string>
-    <string name="wallet_buy_button_place_holder">Купувај со Google</string>
 </resources>

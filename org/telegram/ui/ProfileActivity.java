@@ -1313,6 +1313,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.nameTextView[a].setLeftDrawableTopPadding(-AndroidUtilities.dp(1.3f));
                 this.nameTextView[a].setPivotX(0.0f);
                 this.nameTextView[a].setPivotY(0.0f);
+                this.nameTextView[a].setAlpha(a == 0 ? 0.0f : 1.0f);
                 frameLayout.addView(this.nameTextView[a], LayoutHelper.createFrame(-2, -2.0f, 51, 118.0f, 0.0f, a == 0 ? 48.0f : 0.0f, 0.0f));
                 this.onlineTextView[a] = new SimpleTextView(context);
                 SimpleTextView simpleTextView = this.onlineTextView[a];
@@ -1320,6 +1321,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 simpleTextView.setTextColor(AvatarDrawable.getProfileTextColorForId(i));
                 this.onlineTextView[a].setTextSize(14);
                 this.onlineTextView[a].setGravity(3);
+                this.onlineTextView[a].setAlpha(a == 0 ? 0.0f : 1.0f);
                 View view = this.onlineTextView[a];
                 if (a == 0) {
                     f = 48.0f;

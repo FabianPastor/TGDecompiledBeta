@@ -1398,7 +1398,7 @@ public class MessageObject {
                     } else {
                         if (lastLeft > 0.0f) {
                             this.textXOffset = Math.min(this.textXOffset, lastLeft);
-                            this.hasRtl = true;
+                            this.hasRtl = blocksCount != 1;
                             block.directionFlags = (byte) (block.directionFlags | 1);
                         } else {
                             block.directionFlags = (byte) (block.directionFlags | 2);

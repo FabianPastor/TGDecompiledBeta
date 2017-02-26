@@ -17,5 +17,4 @@
     <string name="common_open_on_phone">スマートフォンで開く</string>
     <string name="common_signin_button_text">ログイン</string>
     <string name="common_signin_button_text_long">Googleにログイン</string>
-    <string name="wallet_buy_button_place_holder">Googleで購入</string>
 </resources>

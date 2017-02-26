@@ -16,12 +16,7 @@ public final class R {
 
     public static final class attr {
         public static final int ambientEnabled = NUM;
-        public static final int appTheme = NUM;
         public static final int buttonSize = NUM;
-        public static final int buyButtonAppearance = NUM;
-        public static final int buyButtonHeight = NUM;
-        public static final int buyButtonText = NUM;
-        public static final int buyButtonWidth = NUM;
         public static final int cameraBearing = NUM;
         public static final int cameraMaxZoomPreference = NUM;
         public static final int cameraMinZoomPreference = NUM;
@@ -31,9 +26,6 @@ public final class R {
         public static final int cameraZoom = NUM;
         public static final int circleCrop = NUM;
         public static final int colorScheme = NUM;
-        public static final int environment = NUM;
-        public static final int fragmentMode = NUM;
-        public static final int fragmentStyle = NUM;
         public static final int imageAspectRatio = NUM;
         public static final int imageAspectRatioAdjust = NUM;
         public static final int latLngBoundsNorthEastLatitude = NUM;
@@ -42,15 +34,7 @@ public final class R {
         public static final int latLngBoundsSouthWestLongitude = NUM;
         public static final int liteMode = NUM;
         public static final int mapType = NUM;
-        public static final int maskedWalletDetailsBackground = NUM;
-        public static final int maskedWalletDetailsButtonBackground = NUM;
-        public static final int maskedWalletDetailsButtonTextAppearance = NUM;
-        public static final int maskedWalletDetailsHeaderTextAppearance = NUM;
-        public static final int maskedWalletDetailsLogoImageType = NUM;
-        public static final int maskedWalletDetailsLogoTextColor = NUM;
-        public static final int maskedWalletDetailsTextAppearance = NUM;
         public static final int scopeUris = NUM;
-        public static final int toolbarTextColorStyle = NUM;
         public static final int uiCompass = NUM;
         public static final int uiMapToolbar = NUM;
         public static final int uiRotateGestures = NUM;
@@ -59,7 +43,6 @@ public final class R {
         public static final int uiZoomControls = NUM;
         public static final int uiZoomGestures = NUM;
         public static final int useViewLifecycle = NUM;
-        public static final int windowTransitionStyle = NUM;
         public static final int zOrderOnTop = NUM;
     }
 
@@ -91,19 +74,6 @@ public final class R {
         public static final int hockeyapp_text_light = NUM;
         public static final int hockeyapp_text_normal = NUM;
         public static final int hockeyapp_text_white = NUM;
-        public static final int wallet_bright_foreground_disabled_holo_light = NUM;
-        public static final int wallet_bright_foreground_holo_dark = NUM;
-        public static final int wallet_bright_foreground_holo_light = NUM;
-        public static final int wallet_dim_foreground_disabled_holo_dark = NUM;
-        public static final int wallet_dim_foreground_holo_dark = NUM;
-        public static final int wallet_highlighted_text_holo_dark = NUM;
-        public static final int wallet_highlighted_text_holo_light = NUM;
-        public static final int wallet_hint_foreground_holo_dark = NUM;
-        public static final int wallet_hint_foreground_holo_light = NUM;
-        public static final int wallet_holo_blue_light = NUM;
-        public static final int wallet_link_text_light = NUM;
-        public static final int wallet_primary_text_holo_light = NUM;
-        public static final int wallet_secondary_text_holo_dark = NUM;
     }
 
     public static final class drawable {
@@ -574,13 +544,8 @@ public final class R {
     public static final class id {
         public static final int adjust_height = NUM;
         public static final int adjust_width = NUM;
-        public static final int android_pay = NUM;
-        public static final int android_pay_dark = NUM;
-        public static final int android_pay_light = NUM;
-        public static final int android_pay_light_with_border = NUM;
         public static final int auto = NUM;
         public static final int background_image_intro = NUM;
-        public static final int book_now = NUM;
         public static final int bottom_pages = NUM;
         public static final int button_add_response = NUM;
         public static final int button_attachment = NUM;
@@ -588,21 +553,8 @@ public final class R {
         public static final int button_refresh = NUM;
         public static final int button_send = NUM;
         public static final int button_update = NUM;
-        public static final int buyButton = NUM;
-        public static final int buy_now = NUM;
-        public static final int buy_with = NUM;
-        public static final int buy_with_google = NUM;
-        public static final int classic = NUM;
         public static final int dark = NUM;
-        public static final int donate_with = NUM;
-        public static final int donate_with_google = NUM;
-        public static final int google_wallet_classic = NUM;
-        public static final int google_wallet_grayscale = NUM;
-        public static final int google_wallet_monochrome = NUM;
-        public static final int grayscale = NUM;
         public static final int header_text = NUM;
-        public static final int holo_dark = NUM;
-        public static final int holo_light = NUM;
         public static final int hybrid = NUM;
         public static final int icon_image1 = NUM;
         public static final int icon_image2 = NUM;
@@ -623,14 +575,11 @@ public final class R {
         public static final int light = NUM;
         public static final int list_attachments = NUM;
         public static final int list_feedback_messages = NUM;
-        public static final int logo_only = NUM;
-        public static final int match_parent = NUM;
         public static final int menu_bold = NUM;
         public static final int menu_groupbolditalic = NUM;
         public static final int menu_italic = NUM;
         public static final int menu_regular = NUM;
         public static final int message_text = NUM;
-        public static final int monochrome = NUM;
         public static final int none = NUM;
         public static final int normal = NUM;
         public static final int player_album_art = NUM;
@@ -642,21 +591,14 @@ public final class R {
         public static final int player_previous = NUM;
         public static final int player_progress_bar = NUM;
         public static final int player_song_name = NUM;
-        public static final int production = NUM;
-        public static final int sandbox = NUM;
         public static final int satellite = NUM;
-        public static final int selectionDetails = NUM;
-        public static final int slide = NUM;
         public static final int standard = NUM;
         public static final int start_messaging_button = NUM;
-        public static final int strict_sandbox = NUM;
         public static final int terrain = NUM;
-        public static final int test = NUM;
         public static final int text_headline = NUM;
         public static final int view_header = NUM;
         public static final int web_update_details = NUM;
         public static final int wide = NUM;
-        public static final int wrap_content = NUM;
         public static final int wrapper_attachments = NUM;
         public static final int wrapper_feedback = NUM;
         public static final int wrapper_feedback_scroll = NUM;
@@ -2244,7 +2186,6 @@ public final class R {
         public static final int messages_other = NUM;
         public static final int messages_two = NUM;
         public static final int messages_zero = NUM;
-        public static final int wallet_buy_button_place_holder = NUM;
     }
 
     public static final class style {
@@ -2267,16 +2208,9 @@ public final class R {
         public static final int Theme_TMessages_Transparent = NUM;
         public static final int Theme_TMessages_TransparentWithAlerts = NUM;
         public static final int TransparentDialog = NUM;
-        public static final int WalletFragmentDefaultButtonTextAppearance = NUM;
-        public static final int WalletFragmentDefaultDetailsHeaderTextAppearance = NUM;
-        public static final int WalletFragmentDefaultDetailsTextAppearance = NUM;
-        public static final int WalletFragmentDefaultStyle = NUM;
     }
 
     public static final class styleable {
-        public static final int[] CustomWalletTheme = new int[]{org.telegram.messenger.beta.R.attr.windowTransitionStyle, org.telegram.messenger.beta.R.attr.toolbarTextColorStyle};
-        public static final int CustomWalletTheme_toolbarTextColorStyle = 1;
-        public static final int CustomWalletTheme_windowTransitionStyle = 0;
         public static final int[] LoadingImageView = new int[]{org.telegram.messenger.beta.R.attr.imageAspectRatioAdjust, org.telegram.messenger.beta.R.attr.imageAspectRatio, org.telegram.messenger.beta.R.attr.circleCrop};
         public static final int LoadingImageView_circleCrop = 2;
         public static final int LoadingImageView_imageAspectRatio = 1;
@@ -2309,23 +2243,6 @@ public final class R {
         public static final int SignInButton_buttonSize = 0;
         public static final int SignInButton_colorScheme = 1;
         public static final int SignInButton_scopeUris = 2;
-        public static final int[] WalletFragmentOptions = new int[]{org.telegram.messenger.beta.R.attr.appTheme, org.telegram.messenger.beta.R.attr.environment, org.telegram.messenger.beta.R.attr.fragmentStyle, org.telegram.messenger.beta.R.attr.fragmentMode};
-        public static final int WalletFragmentOptions_appTheme = 0;
-        public static final int WalletFragmentOptions_environment = 1;
-        public static final int WalletFragmentOptions_fragmentMode = 3;
-        public static final int WalletFragmentOptions_fragmentStyle = 2;
-        public static final int[] WalletFragmentStyle = new int[]{org.telegram.messenger.beta.R.attr.buyButtonHeight, org.telegram.messenger.beta.R.attr.buyButtonWidth, org.telegram.messenger.beta.R.attr.buyButtonText, org.telegram.messenger.beta.R.attr.buyButtonAppearance, org.telegram.messenger.beta.R.attr.maskedWalletDetailsTextAppearance, org.telegram.messenger.beta.R.attr.maskedWalletDetailsHeaderTextAppearance, org.telegram.messenger.beta.R.attr.maskedWalletDetailsBackground, org.telegram.messenger.beta.R.attr.maskedWalletDetailsButtonTextAppearance, org.telegram.messenger.beta.R.attr.maskedWalletDetailsButtonBackground, org.telegram.messenger.beta.R.attr.maskedWalletDetailsLogoTextColor, org.telegram.messenger.beta.R.attr.maskedWalletDetailsLogoImageType};
-        public static final int WalletFragmentStyle_buyButtonAppearance = 3;
-        public static final int WalletFragmentStyle_buyButtonHeight = 0;
-        public static final int WalletFragmentStyle_buyButtonText = 2;
-        public static final int WalletFragmentStyle_buyButtonWidth = 1;
-        public static final int WalletFragmentStyle_maskedWalletDetailsBackground = 6;
-        public static final int WalletFragmentStyle_maskedWalletDetailsButtonBackground = 8;
-        public static final int WalletFragmentStyle_maskedWalletDetailsButtonTextAppearance = 7;
-        public static final int WalletFragmentStyle_maskedWalletDetailsHeaderTextAppearance = 5;
-        public static final int WalletFragmentStyle_maskedWalletDetailsLogoImageType = 10;
-        public static final int WalletFragmentStyle_maskedWalletDetailsLogoTextColor = 9;
-        public static final int WalletFragmentStyle_maskedWalletDetailsTextAppearance = 4;
     }
 
     public static final class xml {

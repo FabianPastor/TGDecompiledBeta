@@ -8737,11 +8737,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             } else if (type == 5) {
                                 items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
                                 options.add(Integer.valueOf(5));
+                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                options.add(Integer.valueOf(10));
                                 items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (type == 10) {
                                 items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
                                 options.add(Integer.valueOf(5));
+                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                options.add(Integer.valueOf(10));
                                 items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(Integer.valueOf(6));
                             } else if (type == 6) {

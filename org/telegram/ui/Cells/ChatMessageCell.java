@@ -1719,30 +1719,27 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int i;
         int dp;
+        String author;
         String description;
         Photo photo;
+        TLObject webDocument;
         TLObject document;
-        String type;
-        int duration;
+        boolean smallImage;
         int additinalWidth;
-        int height;
+        int width;
         Throwable e;
         int a;
-        boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
         int maxPhotoWidth;
-        ArrayList arrayList;
+        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp2;
         int durationWidth;
+        float scale;
         String fileName;
-        int seconds;
         String str;
-        CharSequence str2;
-        String price;
-        SpannableStringBuilder stringBuilder;
         int mWidth;
         int timeWidthTotal;
         int rows;
@@ -1766,7 +1763,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int width;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1837,8 +1833,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             }
             int maxWidth;
             boolean z;
-            DocumentAttribute attribute;
-            float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -1899,12 +1893,18 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    String author;
-                    TLObject webDocument;
-                    boolean smallImage;
+                    String type;
+                    int duration;
+                    int height;
                     int restLines;
                     int restLinesCount;
                     int lineLeft;
+                    boolean authorIsRTL;
+                    ArrayList arrayList;
+                    int seconds;
+                    CharSequence str2;
+                    String price;
+                    SpannableStringBuilder stringBuilder;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -7307,7 +7307,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                 }
                 if (this.mediaBackground) {
-                    Theme.chat_timePaint.setColor(Theme.getColor(Theme.key_chat_mediaTimeText));
+                    if (this.currentMessageObject.type == 13) {
+                        Theme.chat_timePaint.setColor(Theme.getColor(Theme.key_chat_serviceText));
+                    } else {
+                        Theme.chat_timePaint.setColor(Theme.getColor(Theme.key_chat_mediaTimeText));
+                    }
                 } else if (this.currentMessageObject.isOutOwner()) {
                     Theme.chat_timePaint.setColor(Theme.getColor(isDrawSelectedBackground() ? Theme.key_chat_outTimeSelectedText : Theme.key_chat_outTimeText));
                 } else {

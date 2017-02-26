@@ -2620,12 +2620,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
+                    int selectedBackground;
                     File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int selectedBackground;
+                        int i;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

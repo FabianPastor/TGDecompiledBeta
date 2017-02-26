@@ -1,7 +1,6 @@
 package com.google.android.gms.internal;
 
 import android.support.v4.view.MotionEventCompat;
-import com.google.android.gms.wallet.WalletConstants;
 import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
@@ -778,7 +777,7 @@ public interface zzag {
                             default:
                                 continue;
                         }
-                    case WalletConstants.ERROR_CODE_SERVICE_UNAVAILABLE /*402*/:
+                    case 402:
                         if (this.zzbS == null) {
                             this.zzbS = new zza();
                         }

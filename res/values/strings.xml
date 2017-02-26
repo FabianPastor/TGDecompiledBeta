@@ -17,7 +17,6 @@
     <string name="common_open_on_phone">Open on phone</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
-    <string name="wallet_buy_button_place_holder">Buy with Google</string>
     <string name="ALongTimeAgo">last seen a long time ago</string>
     <string name="AbortPassword">Abort two-step verification setup</string>
     <string name="AccessError">Access error</string>

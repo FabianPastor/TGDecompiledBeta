@@ -39,6 +39,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.view.InputDeviceCompat;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -1215,6 +1216,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public boolean hasEarpiece() {
+        if (((TelephonyManager) getSystemService("phone")).getPhoneType() != 0) {
+            return true;
+        }
         if (this.mHasEarpiece != null) {
             return this.mHasEarpiece.booleanValue();
         }

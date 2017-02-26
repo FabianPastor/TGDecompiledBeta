@@ -2783,6 +2783,7 @@ public class TLRPC {
 
     public static class RichText extends TLObject {
         public String email;
+        public RichText parentRichText;
         public ArrayList<RichText> texts = new ArrayList();
         public String url;
         public long webpage_id;

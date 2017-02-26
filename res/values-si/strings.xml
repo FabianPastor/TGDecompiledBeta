@@ -17,5 +17,4 @@
     <string name="common_open_on_phone">දුරකථනය තුළ විවෘත කරන්න</string>
     <string name="common_signin_button_text">පුරන්න</string>
     <string name="common_signin_button_text_long">Google සමගින් පුරන්න</string>
-    <string name="wallet_buy_button_place_holder">Google සමඟ මිලදී ගන්න</string>
 </resources>

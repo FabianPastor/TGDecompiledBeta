@@ -1786,7 +1786,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
         protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
             this.innerListView.layout(0, AndroidUtilities.dp(8.0f), this.innerListView.getMeasuredWidth(), AndroidUtilities.dp(8.0f) + this.innerListView.getMeasuredHeight());
-            int y = (bottom - top) - AndroidUtilities.dp(23.0f);
+            int y = this.innerListView.getBottom() - AndroidUtilities.dp(23.0f);
             int x = ((right - left) - this.dotsContainer.getMeasuredWidth()) / 2;
             this.dotsContainer.layout(x, y, this.dotsContainer.getMeasuredWidth() + x, this.dotsContainer.getMeasuredHeight() + y);
         }
@@ -2992,6 +2992,32 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         return localInstance;
     }
 
+    private void setRichTextParents(RichText parentRichText, RichText richText) {
+        if (richText != null) {
+            richText.parentRichText = parentRichText;
+            if (richText instanceof TL_textFixed) {
+                setRichTextParents(richText, ((TL_textFixed) richText).text);
+            } else if (richText instanceof TL_textItalic) {
+                setRichTextParents(richText, ((TL_textItalic) richText).text);
+            } else if (richText instanceof TL_textBold) {
+                setRichTextParents(richText, ((TL_textBold) richText).text);
+            } else if (richText instanceof TL_textUnderline) {
+                setRichTextParents(richText, ((TL_textUnderline) richText).text);
+            } else if (richText instanceof TL_textStrike) {
+                setRichTextParents(parentRichText, ((TL_textStrike) richText).text);
+            } else if (richText instanceof TL_textEmail) {
+                setRichTextParents(richText, ((TL_textEmail) richText).text);
+            } else if (richText instanceof TL_textUrl) {
+                setRichTextParents(richText, ((TL_textUrl) richText).text);
+            } else if (richText instanceof TL_textConcat) {
+                int count = richText.texts.size();
+                for (int a = 0; a < count; a++) {
+                    setRichTextParents(richText, (RichText) richText.texts.get(a));
+                }
+            }
+        }
+    }
+
     private void updateInterfaceForCurrentPage(boolean back) {
         if (this.currentPage != null && this.currentPage.cached_page != null) {
             this.blocks.clear();
@@ -3002,6 +3028,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     if (block instanceof TL_pageBlockAnchor) {
                         this.anchors.put(block.name, Integer.valueOf(this.blocks.size()));
                     } else {
+                        setRichTextParents(null, block.text);
+                        setRichTextParents(null, block.caption);
+                        if (block instanceof TL_pageBlockAuthorDate) {
+                            setRichTextParents(null, ((TL_pageBlockAuthorDate) block).author);
+                        } else if (block instanceof TL_pageBlockCollage) {
+                            TL_pageBlockCollage innerBlock = (TL_pageBlockCollage) block;
+                            for (i = 0; i < innerBlock.items.size(); i++) {
+                                setRichTextParents(null, ((PageBlock) innerBlock.items.get(i)).text);
+                                setRichTextParents(null, ((PageBlock) innerBlock.items.get(i)).caption);
+                            }
+                        } else if (block instanceof TL_pageBlockList) {
+                            TL_pageBlockList innerBlock2 = (TL_pageBlockList) block;
+                            for (i = 0; i < innerBlock2.items.size(); i++) {
+                                setRichTextParents(null, (RichText) innerBlock2.items.get(i));
+                            }
+                        } else if (block instanceof TL_pageBlockSlideshow) {
+                            TL_pageBlockSlideshow innerBlock3 = (TL_pageBlockSlideshow) block;
+                            for (i = 0; i < innerBlock3.items.size(); i++) {
+                                setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i)).text);
+                                setRichTextParents(null, ((PageBlock) innerBlock3.items.get(i)).caption);
+                            }
+                        }
                         if (a == 0) {
                             block.first = true;
                         }
@@ -3011,17 +3059,17 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                             if (!block.blocks.isEmpty()) {
                                 block.level = -1;
                                 for (int b = 0; b < block.blocks.size(); b++) {
-                                    PageBlock innerBlock = (PageBlock) block.blocks.get(b);
-                                    if (!(innerBlock instanceof TL_pageBlockUnsupported)) {
-                                        if (innerBlock instanceof TL_pageBlockAnchor) {
-                                            this.anchors.put(innerBlock.name, Integer.valueOf(this.blocks.size()));
+                                    PageBlock innerBlock4 = (PageBlock) block.blocks.get(b);
+                                    if (!(innerBlock4 instanceof TL_pageBlockUnsupported)) {
+                                        if (innerBlock4 instanceof TL_pageBlockAnchor) {
+                                            this.anchors.put(innerBlock4.name, Integer.valueOf(this.blocks.size()));
                                         } else {
-                                            innerBlock.level = 1;
+                                            innerBlock4.level = 1;
                                             if (b == block.blocks.size() - 1) {
-                                                innerBlock.bottom = true;
+                                                innerBlock4.bottom = true;
                                             }
-                                            this.blocks.add(innerBlock);
-                                            addAllMediaFromBlock(innerBlock);
+                                            this.blocks.add(innerBlock4);
+                                            addAllMediaFromBlock(innerBlock4);
                                         }
                                     }
                                 }
@@ -3101,25 +3149,28 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
 
     private int getTextFlags(RichText richText) {
         if (richText instanceof TL_textFixed) {
-            return getTextFlags(((TL_textFixed) richText).text) | 4;
+            return getTextFlags(richText.parentRichText) | 4;
         }
         if (richText instanceof TL_textItalic) {
-            return getTextFlags(((TL_textItalic) richText).text) | 2;
+            return getTextFlags(richText.parentRichText) | 2;
         }
         if (richText instanceof TL_textBold) {
-            return getTextFlags(((TL_textBold) richText).text) | 1;
+            return getTextFlags(richText.parentRichText) | 1;
         }
         if (richText instanceof TL_textUnderline) {
-            return getTextFlags(((TL_textUnderline) richText).text) | 16;
+            return getTextFlags(richText.parentRichText) | 16;
         }
         if (richText instanceof TL_textStrike) {
-            return getTextFlags(((TL_textStrike) richText).text) | 32;
+            return getTextFlags(richText.parentRichText) | 32;
         }
         if (richText instanceof TL_textEmail) {
-            return getTextFlags(((TL_textEmail) richText).text) | 8;
+            return getTextFlags(richText.parentRichText) | 8;
         }
         if (richText instanceof TL_textUrl) {
-            return getTextFlags(((TL_textUrl) richText).text) | 8;
+            return getTextFlags(richText.parentRichText) | 8;
+        }
+        if (richText != null) {
+            return getTextFlags(richText.parentRichText);
         }
         return 0;
     }
@@ -3169,10 +3220,10 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             for (int a = 0; a < count; a++) {
                 RichText innerRichText = (RichText) richText.texts.get(a);
                 CharSequence innerText = getText(parentRichText, innerRichText, parentBlock);
-                int flags = getTextFlags(innerRichText) | getTextFlags(parentRichText);
+                int flags = getTextFlags(innerRichText);
                 int startLength = spannableStringBuilder.length();
                 spannableStringBuilder.append(innerText);
-                if (flags != 0) {
+                if (!(flags == 0 || (innerText instanceof SpannableStringBuilder))) {
                     if ((flags & 8) != 0) {
                         String url = getUrl(innerRichText);
                         if (url == null) {
@@ -3214,7 +3265,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
     }
 
     private TextPaint getTextPaint(RichText parentRichText, RichText richText, PageBlock parentBlock) {
-        int flags = getTextFlags(richText) | getTextFlags(parentRichText);
+        int flags = getTextFlags(richText);
         HashMap<Integer, TextPaint> currentMap = null;
         int textSize = AndroidUtilities.dp(14.0f);
         int textColor = SupportMenu.CATEGORY_MASK;
@@ -3774,6 +3825,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.actionBar = new ActionBar(activity);
             this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
             this.actionBar.setOccupyStatusBar(false);
+            this.actionBar.setTitleColor(-1);
             this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
             this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
             this.actionBar.setTitle(LocaleController.formatString("Of", R.string.Of, Integer.valueOf(1), Integer.valueOf(1)));
@@ -4030,6 +4082,8 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
+        WindowManager wm;
+        LayoutParams layoutParams;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4088,8 +4142,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
-            WindowManager wm;
-            LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
                 try {

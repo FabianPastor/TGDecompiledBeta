@@ -2078,8 +2078,15 @@ public class LoginActivity extends BaseFragment {
                     if (req.allow_flashcall) {
                         try {
                             String number = tm.getLine1Number();
-                            z = (number == null || number.length() == 0 || (!phone.contains(number) && !number.contains(phone))) ? false : true;
-                            req.current_number = z;
+                            if (TextUtils.isEmpty(number)) {
+                                req.current_number = false;
+                            } else {
+                                z = phone.contains(number) || number.contains(phone);
+                                req.current_number = z;
+                                if (!req.current_number) {
+                                    req.allow_flashcall = false;
+                                }
+                            }
                         } catch (Throwable e) {
                             req.allow_flashcall = false;
                             FileLog.e(e);

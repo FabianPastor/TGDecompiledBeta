@@ -1,7 +1,6 @@
 package org.telegram.messenger.exoplayer2.source.dash;
 
 import android.os.SystemClock;
-import com.google.android.gms.wallet.WalletConstants;
 import java.io.IOException;
 import java.util.List;
 import org.telegram.messenger.exoplayer2.C;
@@ -277,7 +276,7 @@ public class DefaultDashChunkSource implements DashChunkSource {
         if (!cancelable) {
             return false;
         }
-        if (this.manifest.dynamic || !(chunk instanceof MediaChunk) || !(e instanceof InvalidResponseCodeException) || ((InvalidResponseCodeException) e).responseCode != WalletConstants.ERROR_CODE_INVALID_PARAMETERS || ((MediaChunk) chunk).getNextChunkIndex() <= this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)].getLastSegmentNum()) {
+        if (this.manifest.dynamic || !(chunk instanceof MediaChunk) || !(e instanceof InvalidResponseCodeException) || ((InvalidResponseCodeException) e).responseCode != 404 || ((MediaChunk) chunk).getNextChunkIndex() <= this.representationHolders[this.trackSelection.indexOf(chunk.trackFormat)].getLastSegmentNum()) {
             return ChunkedTrackBlacklistUtil.maybeBlacklistTrack(this.trackSelection, this.trackSelection.indexOf(chunk.trackFormat), e);
         }
         this.missingLastSegment = true;

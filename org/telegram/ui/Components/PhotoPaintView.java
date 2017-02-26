@@ -292,6 +292,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
         this.actionBar = new ActionBar(context);
         this.actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
+        this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
         this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         this.actionBar.setTitle(LocaleController.getString("PaintDraw", R.string.PaintDraw));

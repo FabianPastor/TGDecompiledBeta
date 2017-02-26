@@ -18,6 +18,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -566,8 +567,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
-            final TL_account_sendConfirmPhoneCode req;
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
+                final TL_account_sendConfirmPhoneCode req;
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 boolean simcardAvailable;
                 if (tm.getSimState() == 1 || tm.getPhoneType() == 0) {
@@ -586,14 +587,21 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
                 if (req.allow_flashcall) {
                     try {
-                        boolean z;
                         String number = tm.getLine1Number();
-                        if (number == null || number.length() == 0 || !(CancelAccountDeletionActivity.this.phone.contains(number) || number.contains(CancelAccountDeletionActivity.this.phone))) {
-                            z = false;
+                        if (TextUtils.isEmpty(number)) {
+                            req.current_number = false;
                         } else {
-                            z = true;
+                            boolean z;
+                            if (CancelAccountDeletionActivity.this.phone.contains(number) || number.contains(CancelAccountDeletionActivity.this.phone)) {
+                                z = true;
+                            } else {
+                                z = false;
+                            }
+                            req.current_number = z;
+                            if (!req.current_number) {
+                                req.allow_flashcall = false;
+                            }
                         }
-                        req.current_number = z;
                     } catch (Throwable e) {
                         req.allow_flashcall = false;
                         FileLog.e(e);
