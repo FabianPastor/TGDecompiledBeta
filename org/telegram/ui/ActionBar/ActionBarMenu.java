@@ -94,6 +94,26 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
+    protected void setPopupItemsColor(int color) {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).setPopupItemsColor(color);
+            }
+        }
+    }
+
+    protected void redrawPopup() {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) view).redrawPopup();
+            }
+        }
+    }
+
     public void onItemClick(int id) {
         if (this.parentActionBar.actionBarMenuOnItemClick != null) {
             this.parentActionBar.actionBarMenuOnItemClick.onItemClick(id);

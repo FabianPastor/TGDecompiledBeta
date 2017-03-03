@@ -46,7 +46,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLoader;
@@ -67,6 +67,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.PhoneCall;
+import org.telegram.tgnet.TLRPC.TL_dataJSON;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messages_dhConfig;
@@ -81,6 +82,7 @@ import org.telegram.tgnet.TLRPC.TL_phoneCallProtocol;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 import org.telegram.tgnet.TLRPC.TL_phone_acceptCall;
 import org.telegram.tgnet.TLRPC.TL_phone_discardCall;
+import org.telegram.tgnet.TLRPC.TL_phone_getCallConfig;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_receivedCall;
 import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
@@ -93,8 +95,8 @@ import org.telegram.ui.VoIPPermissionActivity;
 
 public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener {
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
-    private static final int CALL_MAX_LAYER = 64;
-    private static final int CALL_MIN_LAYER = 64;
+    private static final int CALL_MAX_LAYER = 65;
+    private static final int CALL_MIN_LAYER = 65;
     public static final int DISCARD_REASON_DISCONNECT = 2;
     public static final int DISCARD_REASON_HANGUP = 1;
     public static final int DISCARD_REASON_LINE_BUSY = 4;
@@ -240,10 +242,23 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         } else {
             VoIPController.setNativeBufferSize(AudioTrack.getMinBufferSize(48000, 4, 2) / 2);
         }
+        final SharedPreferences preferences = getSharedPreferences("mainconfig", 0);
+        VoIPServerConfig.setConfig(preferences.getString("voip_server_config", "{}"));
+        if (System.currentTimeMillis() - preferences.getLong("voip_server_config_updated", 0) > 86400000) {
+            ConnectionsManager.getInstance().sendRequest(new TL_phone_getCallConfig(), new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (error == null) {
+                        String data = ((TL_dataJSON) response).data;
+                        VoIPServerConfig.setConfig(data);
+                        preferences.edit().putString("voip_server_config", data).putLong("voip_server_config_updated", BuildConfig.DEBUG ? 0 : System.currentTimeMillis()).apply();
+                    }
+                }
+            });
+        }
         try {
             this.controller = new VoIPController();
             this.controller.setConnectionStateListener(this);
-            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("VoipDataSaving", 0), 60);
+            this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, preferences.getInt("VoipDataSaving", 0));
             this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
             this.cpuWakelock.acquire();
             IntentFilter filter = new IntentFilter();
@@ -391,8 +406,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     TL_phoneCallProtocol tL_phoneCallProtocol = reqCall.protocol;
                     reqCall.protocol.udp_reflector = true;
                     tL_phoneCallProtocol.udp_p2p = true;
-                    reqCall.protocol.min_layer = 64;
-                    reqCall.protocol.max_layer = 64;
+                    reqCall.protocol.min_layer = 65;
+                    reqCall.protocol.max_layer = 65;
                     reqCall.g_a = g_a;
                     reqCall.random_id = Utilities.random.nextInt();
                     ConnectionsManager.getInstance().sendRequest(reqCall, new RequestDelegate() {
@@ -590,8 +605,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
                         req.protocol.udp_reflector = true;
                         tL_phoneCallProtocol.udp_p2p = true;
-                        req.protocol.min_layer = 64;
-                        req.protocol.max_layer = 64;
+                        req.protocol.min_layer = 65;
+                        req.protocol.max_layer = 65;
                         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                             public void run(TLObject response, TL_error error) {
                                 if (error == null) {

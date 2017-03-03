@@ -212,16 +212,11 @@ public class ThemeEditorView {
                     });
                     this.colorEditText[a].setOnEditorActionListener(new OnEditorActionListener(EditorAlert.this) {
                         public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                            if (i == 5 && num < 3) {
-                                ColorPicker.this.colorEditText[num + 1].requestLayout();
-                                ColorPicker.this.colorEditText[num + 1].setSelection(ColorPicker.this.colorEditText[num + 1].length());
-                                return true;
-                            } else if (i != 6) {
+                            if (i != 6) {
                                 return false;
-                            } else {
-                                AndroidUtilities.hideKeyboard(textView);
-                                return true;
                             }
+                            AndroidUtilities.hideKeyboard(textView);
+                            return true;
                         }
                     });
                     a++;

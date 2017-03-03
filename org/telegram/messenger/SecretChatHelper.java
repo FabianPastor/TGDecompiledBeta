@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -107,6 +106,7 @@ import org.telegram.tgnet.TLRPC.Update;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 import org.telegram.tgnet.TLRPC.messages_SentEncryptedMessage;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class SecretChatHelper {
     public static final int CURRENT_SECRET_CHAT_LAYER = 46;

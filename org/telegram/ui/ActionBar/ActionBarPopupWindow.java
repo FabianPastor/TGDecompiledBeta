@@ -6,6 +6,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.view.KeyEvent;
@@ -45,7 +47,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
         private int lastStartedChild = 0;
-        private LinearLayout linearLayout;
+        protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
         private HashMap<View, Integer> positions = new HashMap();
         private ScrollView scrollView;
@@ -55,6 +57,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             super(context);
             if (backgroundDrawable == null) {
                 backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed);
+                backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Mode.MULTIPLY));
             }
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);

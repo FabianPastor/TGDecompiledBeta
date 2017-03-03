@@ -1,15 +1,12 @@
 package org.telegram.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +21,8 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
 import org.telegram.tgnet.TLRPC.TL_updates;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
 import org.telegram.ui.Components.LayoutHelper;
@@ -81,19 +80,12 @@ public class VoIPFeedbackActivity extends Activity {
                 VoIPFeedbackActivity.this.finish();
             }
         });
-        final Button btn = alert.getButton(-1);
+        final View btn = alert.getButton(-1);
         btn.setEnabled(false);
         bar.setOnRatingChangeListener(new OnRatingChangeListener() {
             public void onRatingChanged(int rating) {
-                boolean z;
                 int i;
-                Button button = btn;
-                if (rating > 0) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                button.setEnabled(z);
+                btn.setEnabled(rating > 0);
                 EditText editText = commentBox;
                 if (rating >= 5 || rating <= 0) {
                     i = 8;

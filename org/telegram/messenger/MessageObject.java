@@ -1351,8 +1351,7 @@ public class MessageObject {
                         boolean hasNonRTL = false;
                         float textRealMaxWidth = 0.0f;
                         float textRealMaxWidthWithLeft = 0.0f;
-                        int n = 0;
-                        while (n < currentBlockLinesCount) {
+                        for (int n = 0; n < currentBlockLinesCount; n++) {
                             float lineWidth;
                             float lineLeft;
                             try {
@@ -1377,14 +1376,19 @@ public class MessageObject {
                             } else {
                                 block.directionFlags = (byte) (block.directionFlags | 2);
                             }
-                            if (!hasNonRTL && lineLeft == 0.0f && block.textLayout.getParagraphDirection(n) == 1) {
-                                hasNonRTL = true;
+                            if (!hasNonRTL && lineLeft == 0.0f) {
+                                try {
+                                    if (block.textLayout.getParagraphDirection(n) == 1) {
+                                        hasNonRTL = true;
+                                    }
+                                } catch (Exception e3) {
+                                    hasNonRTL = true;
+                                }
                             }
                             textRealMaxWidth = Math.max(textRealMaxWidth, lineWidth);
                             textRealMaxWidthWithLeft = Math.max(textRealMaxWidthWithLeft, lineWidth + lineLeft);
                             linesMaxWidth = Math.max(linesMaxWidth, (int) Math.ceil((double) lineWidth));
                             linesMaxWidthWithLeft = Math.max(linesMaxWidthWithLeft, (int) Math.ceil((double) (lineWidth + lineLeft)));
-                            n++;
                         }
                         if (hasNonRTL) {
                             textRealMaxWidth = textRealMaxWidthWithLeft;

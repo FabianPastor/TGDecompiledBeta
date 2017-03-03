@@ -34,7 +34,7 @@ public class DrawerProfileCell extends FrameLayout {
     private BackupImageView avatarImageView;
     private Drawable cloudDrawable;
     private CloudView cloudView;
-    private int currentColor;
+    private Integer currentColor;
     private Rect destRect = new Rect();
     private TextView nameTextView;
     private Paint paint = new Paint();
@@ -116,8 +116,8 @@ public class DrawerProfileCell extends FrameLayout {
         } else {
             color = Theme.getServiceMessageColor() | -16777216;
         }
-        if (this.currentColor != color) {
-            this.currentColor = color;
+        if (this.currentColor == null || this.currentColor.intValue() != color) {
+            this.currentColor = Integer.valueOf(color);
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_chats_menuName));

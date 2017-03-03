@@ -79,7 +79,6 @@ public final class R {
     public static final class drawable {
         public static final int ab_progress = NUM;
         public static final int abc_ic_menu_share_mtrl_alpha = NUM;
-        public static final int abc_popup_background_mtrl_mult = NUM;
         public static final int add = NUM;
         public static final int admin_star = NUM;
         public static final int attach_audio = NUM;
@@ -311,7 +310,6 @@ public final class R {
         public static final int intro5 = NUM;
         public static final int intro6 = NUM;
         public static final int intro7 = NUM;
-        public static final int item_background_holo_light = NUM;
         public static final int knob_shadow = NUM;
         public static final int layer_shadow = NUM;
         public static final int list_bot = NUM;
@@ -321,13 +319,9 @@ public final class R {
         public static final int list_focused_holo = NUM;
         public static final int list_group = NUM;
         public static final int list_halfcheck = NUM;
-        public static final int list_longpressed_holo_light = NUM;
         public static final int list_mute = NUM;
         public static final int list_pin = NUM;
-        public static final int list_pressed_holo_light = NUM;
         public static final int list_secret = NUM;
-        public static final int list_selector_background_transition_holo_light = NUM;
-        public static final int list_selector_disabled_holo_light = NUM;
         public static final int list_selector_ex = NUM;
         public static final int list_warning_sign = NUM;
         public static final int load_big = NUM;
@@ -405,7 +399,6 @@ public final class R {
         public static final int notifications_s_on = NUM;
         public static final int notify_members_off = NUM;
         public static final int notify_members_on = NUM;
-        public static final int numberpicker_selection_divider = NUM;
         public static final int pagedown = NUM;
         public static final int pagedown_shadow = NUM;
         public static final int paint_elliptical_brush = NUM;
@@ -1616,6 +1609,7 @@ public final class R {
         public static final int PasswordReset = NUM;
         public static final int PaymentBillingAddress = NUM;
         public static final int PaymentCardCvv = NUM;
+        public static final int PaymentCardExpireDate = NUM;
         public static final int PaymentCardExpireDateMonth = NUM;
         public static final int PaymentCardExpireDateYear = NUM;
         public static final int PaymentCardInfo = NUM;

@@ -262,6 +262,22 @@ public class ActionBarMenuItem extends FrameLayout {
         return textView;
     }
 
+    protected void redrawPopup() {
+        this.popupLayout.invalidate();
+    }
+
+    public void setPopupItemsColor(int color) {
+        if (this.popupLayout != null) {
+            int count = this.popupLayout.linearLayout.getChildCount();
+            for (int a = 0; a < count; a++) {
+                View child = this.popupLayout.linearLayout.getChildAt(a);
+                if (child instanceof TextView) {
+                    ((TextView) child).setTextColor(color);
+                }
+            }
+        }
+    }
+
     public boolean hasSubMenu() {
         return this.popupLayout != null;
     }

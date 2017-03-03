@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -20,6 +19,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class WallpaperUpdater {
     private String currentPicturePath;

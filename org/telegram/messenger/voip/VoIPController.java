@@ -67,7 +67,7 @@ public class VoIPController {
 
     private native void nativeRelease(long j);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i, int i2, boolean z, boolean z2, boolean z3);
+    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr);
 
@@ -169,12 +169,12 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, mute);
     }
 
-    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption, int frameSize) {
+    public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
         ensureNativeInstance();
         long j = this.nativeInst;
         boolean z = VERSION.SDK_INT < 16 || !AcousticEchoCanceler.isAvailable();
         boolean z2 = VERSION.SDK_INT < 16 || !NoiseSuppressor.isAvailable();
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, frameSize, z, z2, true);
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true);
     }
 
     public void debugCtl(int request, int param) {

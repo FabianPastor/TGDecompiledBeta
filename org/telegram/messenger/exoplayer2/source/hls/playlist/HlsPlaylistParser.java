@@ -229,18 +229,23 @@ public final class HlsPlaylistParser implements Parser<HlsPlaylist> {
 
     private static int parseSelectionFlags(String line) {
         int i;
-        int i2 = 0;
-        int i3 = parseBooleanAttribute(line, REGEX_DEFAULT, false) ? 1 : 0;
-        if (parseBooleanAttribute(line, REGEX_FORCED, false)) {
-            i = 2;
+        int i2;
+        int i3 = 0;
+        if (parseBooleanAttribute(line, REGEX_DEFAULT, false)) {
+            i = 1;
         } else {
             i = 0;
         }
-        i3 |= i;
-        if (parseBooleanAttribute(line, REGEX_AUTOSELECT, false)) {
-            i2 = 4;
+        if (parseBooleanAttribute(line, REGEX_FORCED, false)) {
+            i2 = 2;
+        } else {
+            i2 = 0;
         }
-        return i3 | i2;
+        i |= i2;
+        if (parseBooleanAttribute(line, REGEX_AUTOSELECT, false)) {
+            i3 = 4;
+        }
+        return i | i3;
     }
 
     private static HlsMediaPlaylist parseMediaPlaylist(LineIterator iterator, String baseUri) throws IOException {

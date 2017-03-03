@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.beta.R;
+import org.telegram.ui.ActionBar.Theme;
 
 public class BetterRatingView extends View {
     private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
@@ -33,7 +34,7 @@ public class BetterRatingView extends View {
     protected void onDraw(Canvas canvas) {
         int i = 0;
         while (i < this.numStars) {
-            this.paint.setColor(i < this.selectedRating ? -11888682 : Integer.MIN_VALUE);
+            this.paint.setColor(Theme.getColor(i < this.selectedRating ? Theme.key_calls_ratingStarSelected : Theme.key_calls_ratingStar));
             canvas.drawBitmap(i < this.selectedRating ? this.filledStar : this.hollowStar, (float) (AndroidUtilities.dp(48.0f) * i), 0.0f, this.paint);
             i++;
         }

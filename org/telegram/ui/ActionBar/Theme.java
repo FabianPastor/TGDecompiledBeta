@@ -302,6 +302,8 @@ public class Theme {
     public static final String key_avatar_text = "avatar_text";
     public static final String key_calls_callReceivedGreenIcon = "calls_callReceivedGreenIcon";
     public static final String key_calls_callReceivedRedIcon = "calls_callReceivedRedIcon";
+    public static final String key_calls_ratingStar = "calls_ratingStar";
+    public static final String key_calls_ratingStarSelected = "calls_ratingStarSelected";
     public static final String key_changephoneinfo_image = "changephoneinfo_image";
     public static final String key_chat_addContact = "chat_addContact";
     public static final String key_chat_botButtonText = "chat_botButtonText";
@@ -581,6 +583,8 @@ public class Theme {
     public static final String key_contextProgressOuter2 = "contextProgressOuter2";
     public static final String key_contextProgressOuter3 = "contextProgressOuter3";
     public static final String key_dialogBackground = "dialogBackground";
+    public static final String key_dialogButton = "dialogButton";
+    public static final String key_dialogButtonSelector = "dialogButtonSelector";
     public static final String key_dialogCheckboxSquareBackground = "dialogCheckboxSquareBackground";
     public static final String key_dialogCheckboxSquareCheck = "dialogCheckboxSquareCheck";
     public static final String key_dialogCheckboxSquareDisabled = "dialogCheckboxSquareDisabled";
@@ -589,11 +593,13 @@ public class Theme {
     public static final String key_dialogInputField = "dialogInputField";
     public static final String key_dialogInputFieldActivated = "dialogInputFieldActivated";
     public static final String key_dialogLinkSelection = "dialogLinkSelection";
+    public static final String key_dialogProgressCircle = "dialogProgressCircle";
     public static final String key_dialogRadioBackground = "dialogRadioBackground";
     public static final String key_dialogRadioBackgroundChecked = "dialogRadioBackgroundChecked";
     public static final String key_dialogTextBlack = "dialogTextBlack";
     public static final String key_dialogTextBlue = "dialogTextBlue";
     public static final String key_dialogTextGray = "dialogTextGray";
+    public static final String key_dialogTextGray2 = "dialogTextGray2";
     public static final String key_dialogTextLink = "dialogTextLink";
     public static final String key_divider = "divider";
     public static final String key_emptyListPlaceholder = "emptyListPlaceholder";
@@ -787,13 +793,13 @@ public class Theme {
     }
 
     static {
-        defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_dialogBackground, Integer.valueOf(-1));
         defaultColors.put(key_dialogTextBlack, Integer.valueOf(-14606047));
         defaultColors.put(key_dialogTextLink, Integer.valueOf(-14255946));
         defaultColors.put(key_dialogLinkSelection, Integer.valueOf(862104035));
         defaultColors.put(key_dialogTextBlue, Integer.valueOf(-13660983));
         defaultColors.put(key_dialogTextGray, Integer.valueOf(-13333567));
+        defaultColors.put(key_dialogTextGray2, Integer.valueOf(ATTACH_SHEET_TEXT_COLOR));
         defaultColors.put(key_dialogIcon, Integer.valueOf(-7697782));
         defaultColors.put(key_dialogInputField, Integer.valueOf(-2368549));
         defaultColors.put(key_dialogInputFieldActivated, Integer.valueOf(-13129232));
@@ -803,6 +809,10 @@ public class Theme {
         defaultColors.put(key_dialogCheckboxSquareDisabled, Integer.valueOf(-5197648));
         defaultColors.put(key_dialogRadioBackground, Integer.valueOf(SHARE_SHEET_SEND_DISABLED_TEXT_COLOR));
         defaultColors.put(key_dialogRadioBackgroundChecked, Integer.valueOf(-13129232));
+        defaultColors.put(key_dialogProgressCircle, Integer.valueOf(-11371101));
+        defaultColors.put(key_dialogButton, Integer.valueOf(-11955764));
+        defaultColors.put(key_dialogButtonSelector, Integer.valueOf(251658240));
+        defaultColors.put(key_windowBackgroundWhite, Integer.valueOf(-1));
         defaultColors.put(key_progressCircle, Integer.valueOf(-11371101));
         defaultColors.put(key_windowBackgroundWhiteGrayIcon, Integer.valueOf(-9211021));
         defaultColors.put(key_windowBackgroundWhiteBlueText, Integer.valueOf(-12876608));
@@ -1261,6 +1271,8 @@ public class Theme {
         defaultColors.put(key_picker_badge, Integer.valueOf(-14043401));
         defaultColors.put(key_picker_badgeText, Integer.valueOf(-1));
         defaultColors.put(key_chat_botSwitchToInlineText, Integer.valueOf(-12348980));
+        defaultColors.put(key_calls_ratingStar, Integer.valueOf(Integer.MIN_VALUE));
+        defaultColors.put(key_calls_ratingStarSelected, Integer.valueOf(-11888682));
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = LocaleController.getString("Default", R.string.Default);
         ArrayList arrayList = themes;
@@ -1518,6 +1530,17 @@ public class Theme {
         stateListDrawable.addState(new int[]{16842919}, pressedDrawable);
         stateListDrawable.addState(new int[]{16842913}, pressedDrawable);
         stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
+        return stateListDrawable;
+    }
+
+    public static Drawable getRoundRectSelectorDrawable() {
+        if (VERSION.SDK_INT >= 21) {
+            return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{getColor(key_dialogButtonSelector)}), null, createRoundRectDrawable(AndroidUtilities.dp(3.0f), -1));
+        }
+        Drawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{16842919}, createRoundRectDrawable(AndroidUtilities.dp(3.0f), getColor(key_dialogButtonSelector)));
+        stateListDrawable.addState(new int[]{16842913}, createRoundRectDrawable(AndroidUtilities.dp(3.0f), getColor(key_dialogButtonSelector)));
+        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0));
         return stateListDrawable;
     }
 
@@ -2632,12 +2655,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
-                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
+                        int i;
                         int selectedBackground;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

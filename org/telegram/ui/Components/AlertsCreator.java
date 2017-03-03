@@ -1,8 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,8 +13,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
-import java.util.Calendar;
-import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -66,6 +62,7 @@ import org.telegram.tgnet.TLRPC.TL_payments_sendPaymentForm;
 import org.telegram.tgnet.TLRPC.TL_payments_validateRequestedInfo;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_updateUserName;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -572,7 +569,6 @@ public class AlertsCreator {
         }
         View scrollView = new ScrollView(parentActivity);
         View linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         String[] descriptions = new String[]{LocaleController.getString("ColorRed", R.string.ColorRed), LocaleController.getString("ColorOrange", R.string.ColorOrange), LocaleController.getString("ColorYellow", R.string.ColorYellow), LocaleController.getString("ColorGreen", R.string.ColorGreen), LocaleController.getString("ColorCyan", R.string.ColorCyan), LocaleController.getString("ColorBlue", R.string.ColorBlue), LocaleController.getString("ColorViolet", R.string.ColorViolet), LocaleController.getString("ColorPink", R.string.ColorPink), LocaleController.getString("ColorWhite", R.string.ColorWhite)};
@@ -697,7 +693,6 @@ public class AlertsCreator {
         }
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
@@ -777,7 +772,6 @@ public class AlertsCreator {
         }
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
@@ -836,7 +830,6 @@ public class AlertsCreator {
         String[] descriptions = new String[]{LocaleController.getString("NoPopup", R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", R.string.AlwaysShowPopup)};
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
@@ -874,7 +867,6 @@ public class AlertsCreator {
     public static Dialog createSingleChoiceDialog(Activity parentActivity, final BaseFragment parentFragment, String[] options, String title, int selected, final OnClickListener listener) {
         ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
         linearLayout.setOrientation(1);
         scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
@@ -975,40 +967,5 @@ public class AlertsCreator {
             }
         });
         return builder;
-    }
-
-    public static AlertDialog createExpireDateAlert(Context context, final boolean month, int[] result, Runnable callback) {
-        int currentYear;
-        Builder builder = new Builder(context);
-        builder.setTitle(month ? LocaleController.getString("PaymentCardExpireDateMonth", R.string.PaymentCardExpireDateMonth) : LocaleController.getString("PaymentCardExpireDateYear", R.string.PaymentCardExpireDateYear));
-        final NumberPicker numberPicker = new NumberPicker(context);
-        if (month) {
-            numberPicker.setMinValue(1);
-            numberPicker.setMaxValue(12);
-            currentYear = 0;
-        } else {
-            currentYear = Calendar.getInstance().get(1);
-            numberPicker.setMinValue(0);
-            numberPicker.setMaxValue(30);
-        }
-        numberPicker.setFormatter(new Formatter() {
-            public String format(int value) {
-                if (month) {
-                    return String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(value)});
-                }
-                return String.format(Locale.US, "%02d", new Object[]{Integer.valueOf(currentYear + value)});
-            }
-        });
-        builder.setView(numberPicker);
-        final int[] iArr = result;
-        final boolean z = month;
-        final Runnable runnable = callback;
-        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                iArr[0] = z ? numberPicker.getValue() : (numberPicker.getValue() + currentYear) % 100;
-                runnable.run();
-            }
-        });
-        return builder.create();
     }
 }

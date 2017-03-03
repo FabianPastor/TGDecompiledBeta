@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBar extends FrameLayout {
@@ -171,6 +172,19 @@ public class ActionBar extends FrameLayout {
             createSubtitleTextView();
         }
         this.subtitleTextView.setTextColor(color);
+    }
+
+    public void setPopupItemsColor(int color) {
+        if (this.menu != null) {
+            this.menu.setPopupItemsColor(color);
+        }
+    }
+
+    public void setPopupBackgroundColor(int color) {
+        ActionBarPopupWindowLayout.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+        if (this.menu != null) {
+            this.menu.redrawPopup();
+        }
     }
 
     public SimpleTextView getSubtitleTextView() {

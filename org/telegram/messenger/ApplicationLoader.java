@@ -148,7 +148,7 @@ public class ApplicationLoader extends Application {
             }
             boolean enablePushConnection = applicationContext.getSharedPreferences("Notifications", 0).getBoolean("pushConnection", true);
             MessagesController.getInstance();
-            ConnectionsManager.getInstance().init(BuildVars.BUILD_VERSION, 64, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
+            ConnectionsManager.getInstance().init(BuildVars.BUILD_VERSION, 65, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getClientUserId(), enablePushConnection);
             if (UserConfig.getCurrentUser() != null) {
                 MessagesController.getInstance().putUser(UserConfig.getCurrentUser(), true);
                 ConnectionsManager.getInstance().applyCountryPortNumber(UserConfig.getCurrentUser().phone);

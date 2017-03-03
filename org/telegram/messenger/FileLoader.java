@@ -700,7 +700,7 @@ public class FileLoader {
                     }
                 }
             } else if (message.media instanceof TL_messageMediaInvoice) {
-                return getPathToAttach(((TL_messageMediaInvoice) message.media).photo);
+                return getPathToAttach(((TL_messageMediaInvoice) message.media).photo, true);
             }
         }
         return new File("");

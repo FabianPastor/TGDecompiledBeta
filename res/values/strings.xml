@@ -998,8 +998,6 @@
     <string name="PasswordReset">Password deactivated</string>
     <string name="PaymentBillingAddress">Billing address</string>
     <string name="PaymentCardCvv">Security Code (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">Month</string>
-    <string name="PaymentCardExpireDateYear">Year</string>
     <string name="PaymentCardInfo">Payment info</string>
     <string name="PaymentCardName">Name Surname</string>
     <string name="PaymentCardNameTitle">Card holder</string>
@@ -1543,6 +1541,7 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
+    <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="default_web_client_id">760348033671-jiv412evc1r36rl4k7vhl1ba83atdmot.apps.googleusercontent.com</string>
     <string name="firebase_database_url">https://tmessages2.firebaseio.com</string>
     <string name="gcm_defaultSenderId">760348033671</string>

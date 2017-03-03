@@ -50,6 +50,8 @@ public class ThemeDescription {
     public static int FLAG_AB_SEARCH = 134217728;
     public static int FLAG_AB_SEARCHPLACEHOLDER = ConnectionsManager.FileTypeFile;
     public static int FLAG_AB_SELECTORCOLOR = 256;
+    public static int FLAG_AB_SUBMENUBACKGROUND = Integer.MIN_VALUE;
+    public static int FLAG_AB_SUBMENUITEM = NUM;
     public static int FLAG_AB_SUBTITLECOLOR = 1024;
     public static int FLAG_AB_TITLECOLOR = 128;
     public static int FLAG_BACKGROUND = 1;
@@ -211,6 +213,12 @@ public class ThemeDescription {
             }
             if ((this.changeFlags & FLAG_AB_SEARCH) != 0) {
                 ((ActionBar) this.viewToInvalidate).setSearchTextColor(color, false);
+            }
+            if ((this.changeFlags & FLAG_AB_SUBMENUITEM) != 0) {
+                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(color);
+            }
+            if ((this.changeFlags & FLAG_AB_SUBMENUBACKGROUND) != 0) {
+                ((ActionBar) this.viewToInvalidate).setPopupBackgroundColor(color);
             }
         }
         if (this.viewToInvalidate instanceof EmptyTextProgressView) {
