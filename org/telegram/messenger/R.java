@@ -215,8 +215,7 @@ public final class R {
         public static final int greydivider = NUM;
         public static final int greydivider_bottom = NUM;
         public static final int greydivider_top = NUM;
-        public static final int hd_off = NUM;
-        public static final int hd_on = NUM;
+        public static final int hd = NUM;
         public static final int header_shadow = NUM;
         public static final int header_shadow_reverse = NUM;
         public static final int hockeyapp_btn_background = NUM;
@@ -486,7 +485,6 @@ public final class R {
         public static final int spinner_states = NUM;
         public static final int sticker_added = NUM;
         public static final int sticker_badge = NUM;
-        public static final int stickercounter = NUM;
         public static final int stickers_back_all = NUM;
         public static final int stickers_back_arrow = NUM;
         public static final int stickers_back_center = NUM;
@@ -825,6 +823,7 @@ public final class R {
         public static final int CallMessageOutgoingMissed = NUM;
         public static final int CallMessageWithDuration = NUM;
         public static final int CallText = NUM;
+        public static final int CallViaTelegram = NUM;
         public static final int Calling = NUM;
         public static final int Calls = NUM;
         public static final int CallsDataUsage = NUM;

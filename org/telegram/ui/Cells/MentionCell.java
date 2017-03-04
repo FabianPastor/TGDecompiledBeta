@@ -96,7 +96,7 @@ public class MentionCell extends LinearLayout {
     public void setIsDarkTheme(boolean isDarkTheme) {
         if (isDarkTheme) {
             this.nameTextView.setTextColor(-1);
-            this.usernameTextView.setTextColor(Theme.JOIN_SHEET_COUNT_TEXT_COLOR);
+            this.usernameTextView.setTextColor(-6710887);
             return;
         }
         this.nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));

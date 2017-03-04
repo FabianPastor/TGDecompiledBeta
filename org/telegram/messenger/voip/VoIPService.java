@@ -707,47 +707,49 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void onCallUpdated(PhoneCall call) {
-        if (call.id == this.call.id) {
-            this.call = call;
-            if (call instanceof TL_phoneCallDiscarded) {
-                FileLog.d("call discarded, stopping service");
-                if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
-                    dispatchStateChanged(12);
-                    this.playingSound = true;
-                    this.soundPool.play(this.spBusyId, 1.0f, 1.0f, 0, -1, 1.0f);
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public void run() {
-                            VoIPService.this.soundPool.release();
-                        }
-                    }, 2500);
-                    stopSelf();
-                } else {
-                    callEnded();
-                }
-                if (call.need_rating) {
-                    startRatingActivity();
-                }
-            } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
-                processAcceptedCall();
-            } else if (this.currentState == 8 && call.receive_date != 0) {
-                dispatchStateChanged(11);
-                FileLog.d("!!!!!! CALL RECEIVED");
-                if (this.spPlayID != 0) {
-                    this.soundPool.stop(this.spPlayID);
-                }
-                this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
-                if (this.timeoutRunnable != null) {
-                    AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
-                }
-                this.timeoutRunnable = new Runnable() {
-                    public void run() {
-                        VoIPService.this.declineIncomingCall(3, null);
+        if (this.call != null && call != null) {
+            if (call.id == this.call.id) {
+                this.call = call;
+                if (call instanceof TL_phoneCallDiscarded) {
+                    FileLog.d("call discarded, stopping service");
+                    if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
+                        dispatchStateChanged(12);
+                        this.playingSound = true;
+                        this.soundPool.play(this.spBusyId, 1.0f, 1.0f, 0, -1, 1.0f);
+                        AndroidUtilities.runOnUIThread(new Runnable() {
+                            public void run() {
+                                VoIPService.this.soundPool.release();
+                            }
+                        }, 2500);
+                        stopSelf();
+                    } else {
+                        callEnded();
                     }
-                };
-                AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance().callRingTimeout);
+                    if (call.need_rating) {
+                        startRatingActivity();
+                    }
+                } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
+                    processAcceptedCall();
+                } else if (this.currentState == 8 && call.receive_date != 0) {
+                    dispatchStateChanged(11);
+                    FileLog.d("!!!!!! CALL RECEIVED");
+                    if (this.spPlayID != 0) {
+                        this.soundPool.stop(this.spPlayID);
+                    }
+                    this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
+                    if (this.timeoutRunnable != null) {
+                        AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
+                    }
+                    this.timeoutRunnable = new Runnable() {
+                        public void run() {
+                            VoIPService.this.declineIncomingCall(3, null);
+                        }
+                    };
+                    AndroidUtilities.runOnUIThread(this.timeoutRunnable, (long) MessagesController.getInstance().callRingTimeout);
+                }
+            } else if (BuildVars.DEBUG_VERSION) {
+                FileLog.w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
             }
-        } else if (BuildVars.DEBUG_VERSION) {
-            FileLog.w("onCallUpdated called with wrong call id (got " + call.id + ", expected " + this.call.id + ")");
         }
     }
 

@@ -131,7 +131,7 @@ public class JoinGroupAlert extends BottomSheet {
         View textView = new TextView(context);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 17.0f);
-        textView.setTextColor(-14606047);
+        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         textView.setText(title);
         textView.setSingleLine(true);
         textView.setEllipsize(TruncateAt.END);
@@ -139,7 +139,7 @@ public class JoinGroupAlert extends BottomSheet {
         if (participants_count > 0) {
             textView = new TextView(context);
             textView.setTextSize(1, 14.0f);
-            textView.setTextColor(Theme.JOIN_SHEET_COUNT_TEXT_COLOR);
+            textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
             textView.setSingleLine(true);
             textView.setEllipsize(TruncateAt.END);
             textView.setText(LocaleController.formatPluralString("Members", participants_count));
@@ -154,7 +154,7 @@ public class JoinGroupAlert extends BottomSheet {
             listView.setHorizontalScrollBarEnabled(false);
             listView.setVerticalScrollBarEnabled(false);
             listView.setAdapter(new UsersAdapter(context));
-            listView.setGlowColor(33554431);
+            listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
         textView = new View(context);
@@ -163,7 +163,7 @@ public class JoinGroupAlert extends BottomSheet {
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.cancelButton.setTextColor(-12940081);
+        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -173,7 +173,7 @@ public class JoinGroupAlert extends BottomSheet {
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
-        pickerBottomLayout.doneButtonTextView.setTextColor(-12940081);
+        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", R.string.JoinGroup));
         pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

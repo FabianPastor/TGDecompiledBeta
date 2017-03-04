@@ -174,7 +174,7 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
                 if (decoderInfo == null && drmSessionRequiresSecureDecoder) {
                     decoderInfo = getDecoderInfo(this.mediaCodecSelector, this.format, false);
                     if (decoderInfo != null) {
-                        Log.w(TAG, "Drm session requires secure decoder for " + mimeType + ", but " + "no secure decoder available. Trying to proceed with " + decoderInfo.name + ".");
+                        Log.w(TAG, "Drm session requires secure decoder for " + mimeType + ", but no secure decoder available. Trying to proceed with " + decoderInfo.name + ".");
                     }
                 }
             } catch (Throwable e) {

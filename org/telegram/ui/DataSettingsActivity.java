@@ -368,7 +368,7 @@ public class DataSettingsActivity extends BaseFragment {
                         BottomSheetCell cell = new BottomSheetCell(DataSettingsActivity.this.getParentActivity(), 1);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         cell.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
-                        cell.setTextColor(-12940081);
+                        cell.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
                         zArr = maskValues;
                         i = position;
                         cell.setOnClickListener(new OnClickListener() {

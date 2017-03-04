@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -38,6 +37,7 @@ import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_chatPhoto;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -77,7 +77,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
     private LinearLayout linearLayout2;
     private LinearLayout linearLayout3;
     private EditText nameTextView;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private ShadowSectionCell sectionCell;
     private ShadowSectionCell sectionCell2;
     private boolean signMessages;
@@ -166,7 +166,7 @@ public class ChannelEditActivity extends BaseFragment implements AvatarUpdaterDe
                     ChannelEditActivity.this.donePressed = true;
                     if (ChannelEditActivity.this.avatarUpdater.uploadingAvatar != null) {
                         ChannelEditActivity.this.createAfterUpload = true;
-                        ChannelEditActivity.this.progressDialog = new ProgressDialog(ChannelEditActivity.this.getParentActivity());
+                        ChannelEditActivity.this.progressDialog = new AlertDialog(ChannelEditActivity.this.getParentActivity(), 1);
                         ChannelEditActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                         ChannelEditActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                         ChannelEditActivity.this.progressDialog.setCancelable(false);

@@ -1,7 +1,6 @@
 package org.telegram.ui;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
@@ -51,6 +50,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.account_Password;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -89,7 +89,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private boolean passwordEntered = true;
     private int passwordSetState;
     private int passwordSetupDetailRow;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private int rowCount;
     private ScrollView scrollView;
     private int setPasswordDetailRow;
@@ -685,7 +685,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     private void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(getParentActivity());
+            this.progressDialog = new AlertDialog(getParentActivity(), 1);
             this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);

@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -33,6 +32,7 @@ import org.telegram.tgnet.TLRPC.TL_privacyValueAllowUsers;
 import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowAll;
 import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowUsers;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -357,7 +357,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                 } else if (which == 3) {
                                     value = 365;
                                 }
-                                final ProgressDialog progressDialog = new ProgressDialog(PrivacySettingsActivity.this.getParentActivity());
+                                final AlertDialog progressDialog = new AlertDialog(PrivacySettingsActivity.this.getParentActivity(), 1);
                                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                                 progressDialog.setCanceledOnTouchOutside(false);
                                 progressDialog.setCancelable(false);

@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
-import org.telegram.ui.ActionBar.Theme;
 
 public class CloseProgressDrawable extends Drawable {
     private int currentAnimationTime;
@@ -18,7 +17,7 @@ public class CloseProgressDrawable extends Drawable {
     private Paint paint = new Paint(1);
 
     public CloseProgressDrawable() {
-        this.paint.setColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+        this.paint.setColor(-9079435);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setStrokeCap(Cap.ROUND);
     }

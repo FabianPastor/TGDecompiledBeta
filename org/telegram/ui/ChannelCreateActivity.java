@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -50,6 +49,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_chats;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -103,7 +103,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private EditText nameTextView;
     private String nameToSet;
     private TextBlockCell privateContainer;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private LinearLayout publicContainer;
     private RadioButtonCell radioButtonCell1;
     private RadioButtonCell radioButtonCell2;
@@ -198,7 +198,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             ChannelCreateActivity.this.donePressed = true;
                             if (ChannelCreateActivity.this.avatarUpdater.uploadingAvatar != null) {
                                 ChannelCreateActivity.this.createAfterUpload = true;
-                                ChannelCreateActivity.this.progressDialog = new ProgressDialog(ChannelCreateActivity.this.getParentActivity());
+                                ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 1);
                                 ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                                 ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                                 ChannelCreateActivity.this.progressDialog.setCancelable(false);
@@ -218,7 +218,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 return;
                             }
                             final int reqId = MessagesController.getInstance().createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, ChannelCreateActivity.this);
-                            ChannelCreateActivity.this.progressDialog = new ProgressDialog(ChannelCreateActivity.this.getParentActivity());
+                            ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 1);
                             ChannelCreateActivity.this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                             ChannelCreateActivity.this.progressDialog.setCanceledOnTouchOutside(false);
                             ChannelCreateActivity.this.progressDialog.setCancelable(false);

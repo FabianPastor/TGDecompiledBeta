@@ -481,39 +481,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             }
         } else if (id == NotificationCenter.FilePreparingStarted) {
             messageObject = args[0];
-            finalPath = args[1];
-            arr = (ArrayList) this.delayedMessages.get(messageObject.messageOwner.attachPath);
-            if (arr != null) {
-                for (a = 0; a < arr.size(); a++) {
-                    message = (DelayedMessage) arr.get(a);
-                    if (message.obj == messageObject) {
-                        message.videoEditedInfo = null;
-                        performSendDelayedMessage(message);
-                        arr.remove(a);
-                        break;
-                    }
-                }
-                if (arr.isEmpty()) {
-                    this.delayedMessages.remove(messageObject.messageOwner.attachPath);
-                }
-            }
-        } else if (id == NotificationCenter.FileNewChunkAvailable) {
-            messageObject = (MessageObject) args[0];
-            finalPath = (String) args[1];
-            long finalSize = ((Long) args[2]).longValue();
-            FileLoader.getInstance().checkUploadNewDataAvailable(finalPath, ((int) messageObject.getDialogId()) == 0, finalSize);
-            if (finalSize != 0) {
+            if (messageObject.getId() != 0) {
+                finalPath = args[1];
                 arr = (ArrayList) this.delayedMessages.get(messageObject.messageOwner.attachPath);
                 if (arr != null) {
                     for (a = 0; a < arr.size(); a++) {
                         message = (DelayedMessage) arr.get(a);
                         if (message.obj == messageObject) {
-                            message.obj.videoEditedInfo = null;
-                            message.obj.messageOwner.message = "-1";
-                            message.obj.messageOwner.media.document.size = (int) finalSize;
-                            ArrayList messages = new ArrayList();
-                            messages.add(message.obj.messageOwner);
-                            MessagesStorage.getInstance().putMessages(messages, false, true, false, 0);
+                            message.videoEditedInfo = null;
+                            performSendDelayedMessage(message);
+                            arr.remove(a);
                             break;
                         }
                     }
@@ -522,27 +499,56 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                 }
             }
+        } else if (id == NotificationCenter.FileNewChunkAvailable) {
+            messageObject = (MessageObject) args[0];
+            if (messageObject.getId() != 0) {
+                finalPath = (String) args[1];
+                long finalSize = ((Long) args[2]).longValue();
+                FileLoader.getInstance().checkUploadNewDataAvailable(finalPath, ((int) messageObject.getDialogId()) == 0, finalSize);
+                if (finalSize != 0) {
+                    arr = (ArrayList) this.delayedMessages.get(messageObject.messageOwner.attachPath);
+                    if (arr != null) {
+                        for (a = 0; a < arr.size(); a++) {
+                            message = (DelayedMessage) arr.get(a);
+                            if (message.obj == messageObject) {
+                                message.obj.videoEditedInfo = null;
+                                message.obj.messageOwner.message = "-1";
+                                message.obj.messageOwner.media.document.size = (int) finalSize;
+                                ArrayList messages = new ArrayList();
+                                messages.add(message.obj.messageOwner);
+                                MessagesStorage.getInstance().putMessages(messages, false, true, false, 0);
+                                break;
+                            }
+                        }
+                        if (arr.isEmpty()) {
+                            this.delayedMessages.remove(messageObject.messageOwner.attachPath);
+                        }
+                    }
+                }
+            }
         } else if (id == NotificationCenter.FilePreparingFailed) {
             messageObject = (MessageObject) args[0];
-            finalPath = (String) args[1];
-            stopVideoService(messageObject.messageOwner.attachPath);
-            arr = (ArrayList) this.delayedMessages.get(finalPath);
-            if (arr != null) {
-                a = 0;
-                while (a < arr.size()) {
-                    message = (DelayedMessage) arr.get(a);
-                    if (message.obj == messageObject) {
-                        MessagesStorage.getInstance().markMessageAsSendError(message.obj.messageOwner);
-                        message.obj.messageOwner.send_state = 2;
-                        arr.remove(a);
-                        a--;
-                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(message.obj.getId()));
-                        processSentMessage(message.obj.getId());
+            if (messageObject.getId() != 0) {
+                finalPath = (String) args[1];
+                stopVideoService(messageObject.messageOwner.attachPath);
+                arr = (ArrayList) this.delayedMessages.get(finalPath);
+                if (arr != null) {
+                    a = 0;
+                    while (a < arr.size()) {
+                        message = (DelayedMessage) arr.get(a);
+                        if (message.obj == messageObject) {
+                            MessagesStorage.getInstance().markMessageAsSendError(message.obj.messageOwner);
+                            message.obj.messageOwner.send_state = 2;
+                            arr.remove(a);
+                            a--;
+                            NotificationCenter.getInstance().postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(message.obj.getId()));
+                            processSentMessage(message.obj.getId());
+                        }
+                        a++;
                     }
-                    a++;
-                }
-                if (arr.isEmpty()) {
-                    this.delayedMessages.remove(finalPath);
+                    if (arr.isEmpty()) {
+                        this.delayedMessages.remove(finalPath);
+                    }
                 }
             }
         } else if (id == NotificationCenter.httpFileDidLoaded) {

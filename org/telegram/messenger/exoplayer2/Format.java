@@ -250,7 +250,7 @@ public final class Format implements Parcelable {
     }
 
     public String toString() {
-        return "Format(" + this.id + ", " + this.containerMimeType + ", " + this.sampleMimeType + ", " + this.bitrate + ", " + ", " + this.language + ", [" + this.width + ", " + this.height + ", " + this.frameRate + "]" + ", [" + this.channelCount + ", " + this.sampleRate + "])";
+        return "Format(" + this.id + ", " + this.containerMimeType + ", " + this.sampleMimeType + ", " + this.bitrate + ", , " + this.language + ", [" + this.width + ", " + this.height + ", " + this.frameRate + "], [" + this.channelCount + ", " + this.sampleRate + "])";
     }
 
     public int hashCode() {

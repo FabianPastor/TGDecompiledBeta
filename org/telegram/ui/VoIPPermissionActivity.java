@@ -23,7 +23,9 @@ public class VoIPPermissionActivity extends Activity {
         } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
             finish();
         } else {
-            VoIPService.getSharedInstance().declineIncomingCall();
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().declineIncomingCall();
+            }
             VoIPHelper.permissionDenied(this, new Runnable() {
                 public void run() {
                     VoIPPermissionActivity.this.finish();

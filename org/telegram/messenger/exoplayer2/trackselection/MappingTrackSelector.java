@@ -98,7 +98,10 @@ public abstract class MappingTrackSelector extends TrackSelector {
                 i++;
                 handledTrackCount = handledTrackCount2;
             }
-            return multipleMimeTypes ? Math.min(adaptiveSupport, this.mixedMimeTypeAdaptiveSupport[rendererIndex]) : adaptiveSupport;
+            if (multipleMimeTypes) {
+                return Math.min(adaptiveSupport, this.mixedMimeTypeAdaptiveSupport[rendererIndex]);
+            }
+            return adaptiveSupport;
         }
 
         public TrackGroupArray getUnassociatedTrackGroups() {

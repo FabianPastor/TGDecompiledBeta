@@ -202,7 +202,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.imageView.setRoundRadius(AndroidUtilities.dp(27.0f));
             addView(this.imageView, LayoutHelper.createFrame(54, 54.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
             this.nameTextView = new TextView(context);
-            this.nameTextView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             this.nameTextView.setTextSize(1, 12.0f);
             this.nameTextView.setMaxLines(2);
             this.nameTextView.setGravity(49);
@@ -311,7 +311,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TruncateAt.END);
-            this.textView.setTextColor(Theme.ATTACH_SHEET_TEXT_COLOR);
+            this.textView.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             this.textView.setTextSize(1, 12.0f);
             addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 64.0f, 0.0f, 0.0f));
         }
@@ -539,7 +539,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         int a;
         super(context, false);
         this.baseFragment = parentFragment;
-        this.ciclePaint.setColor(-1);
+        this.ciclePaint.setColor(Theme.getColor(Theme.key_dialogBackground));
         setDelegate(this);
         setUseRevealAnimation(true);
         checkCamera(false);
@@ -676,7 +676,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         recyclerListView.setAdapter(listAdapter);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setEnabled(true);
-        this.listView.setGlowColor(-657673);
+        this.listView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.listView.addItemDecoration(new ItemDecoration() {
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
                 outRect.left = 0;
@@ -790,7 +790,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         };
         this.lineView = anonymousClass8;
         viewArr[10] = anonymousClass8;
-        this.lineView.setBackgroundColor(-2960686);
+        this.lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine));
         this.attachView.addView(this.lineView, new FrameLayout.LayoutParams(-1, 1, 51));
         CharSequence[] items = new CharSequence[]{LocaleController.getString("ChatCamera", R.string.ChatCamera), LocaleController.getString("ChatGallery", R.string.ChatGallery), LocaleController.getString("ChatVideo", R.string.ChatVideo), LocaleController.getString("AttachMusic", R.string.AttachMusic), LocaleController.getString("ChatDocument", R.string.ChatDocument), LocaleController.getString("AttachContact", R.string.AttachContact), LocaleController.getString("ChatLocation", R.string.ChatLocation), ""};
         for (a = 0; a < 8; a++) {

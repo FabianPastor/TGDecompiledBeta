@@ -418,7 +418,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.titleTextView = new TextView(context);
         this.titleTextView.setLines(1);
         this.titleTextView.setSingleLine(true);
-        this.titleTextView.setTextColor(-14606047);
+        this.titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.titleTextView.setTextSize(1, 20.0f);
         this.titleTextView.setEllipsize(TruncateAt.MIDDLE);
         this.titleTextView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
@@ -480,7 +480,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.gridView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
         this.gridView.setClipToPadding(false);
         this.gridView.setEnabled(true);
-        this.gridView.setGlowColor(-657673);
+        this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.gridView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return StickerPreviewViewer.getInstance().onTouch(event, StickersAlert.this.gridView, 0, StickersAlert.this.stickersOnItemClickListener, null);
@@ -567,7 +567,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.containerView.addView(this.pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         this.pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.pickerBottomLayout.cancelButton.setTextColor(-12940081);
+        this.pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         this.pickerBottomLayout.cancelButton.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         this.pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -575,9 +575,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             }
         });
         this.pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.pickerBottomLayout.doneButtonBadgeTextView.setBackgroundResource(R.drawable.stickercounter);
+        this.pickerBottomLayout.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
         this.stickerPreviewLayout = new FrameLayout(context);
-        this.stickerPreviewLayout.setBackgroundColor(-536870913);
+        this.stickerPreviewLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground) & -536870913);
         this.stickerPreviewLayout.setVisibility(8);
         this.stickerPreviewLayout.setSoundEffectsEnabled(false);
         this.containerView.addView(this.stickerPreviewLayout, LayoutHelper.createFrame(-1, -1.0f));
@@ -588,7 +588,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         });
         ImageView closeButton = new ImageView(context);
         closeButton.setImageResource(R.drawable.msg_panel_clear);
-        closeButton.setColorFilter(new PorterDuffColorFilter(-5723992, Mode.MULTIPLY));
+        closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray3), Mode.MULTIPLY));
         closeButton.setScaleType(ScaleType.CENTER);
         this.stickerPreviewLayout.addView(closeButton, LayoutHelper.createFrame(48, 48, 53));
         closeButton.setOnClickListener(new OnClickListener() {
@@ -605,9 +605,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.stickerPreviewLayout.addView(this.stickerEmojiTextView);
         this.previewSendButton = new TextView(context);
         this.previewSendButton.setTextSize(1, 14.0f);
-        this.previewSendButton.setTextColor(-12940081);
+        this.previewSendButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         this.previewSendButton.setGravity(17);
-        this.previewSendButton.setBackgroundColor(-1);
+        this.previewSendButton.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.previewSendButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
         this.previewSendButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.stickerPreviewLayout.addView(this.previewSendButton, LayoutHelper.createFrame(-1, 48, 83));
@@ -702,7 +702,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                         }
                     };
                     String string = (this.stickerSet == null || !this.stickerSet.set.masks) ? LocaleController.getString("AddStickers", R.string.AddStickers) : LocaleController.getString("AddMasks", R.string.AddMasks);
-                    setRightButton(anonymousClass17, string, -12940081, true);
+                    setRightButton(anonymousClass17, string, Theme.getColor(Theme.key_dialogTextBlue2), true);
                 } else if (this.stickerSet.set.official) {
                     setRightButton(new OnClickListener() {
                         public void onClick(View v) {
@@ -712,7 +712,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             StickersAlert.this.dismiss();
                             StickersQuery.removeStickersSet(StickersAlert.this.getContext(), StickersAlert.this.stickerSet.set, 1, StickersAlert.this.parentFragment, true);
                         }
-                    }, LocaleController.getString("StickersRemove", R.string.StickersHide), Theme.STICKERS_SHEET_REMOVE_TEXT_COLOR, false);
+                    }, LocaleController.getString("StickersRemove", R.string.StickersHide), Theme.getColor(Theme.key_dialogTextRed), false);
                 } else {
                     setRightButton(new OnClickListener() {
                         public void onClick(View v) {
@@ -722,12 +722,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                             StickersAlert.this.dismiss();
                             StickersQuery.removeStickersSet(StickersAlert.this.getContext(), StickersAlert.this.stickerSet.set, 0, StickersAlert.this.parentFragment, true);
                         }
-                    }, LocaleController.getString("StickersRemove", R.string.StickersRemove), Theme.STICKERS_SHEET_REMOVE_TEXT_COLOR, false);
+                    }, LocaleController.getString("StickersRemove", R.string.StickersRemove), Theme.getColor(Theme.key_dialogTextRed), false);
                 }
                 this.adapter.notifyDataSetChanged();
                 return;
             }
-            setRightButton(null, null, Theme.STICKERS_SHEET_REMOVE_TEXT_COLOR, false);
+            setRightButton(null, null, Theme.getColor(Theme.key_dialogTextRed), false);
         }
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
-import android.graphics.Paint.Style;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -27,7 +26,6 @@ public class LineProgressView extends View {
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
             progressPaint = new Paint(1);
-            progressPaint.setStyle(Style.STROKE);
             progressPaint.setStrokeCap(Cap.ROUND);
             progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         }

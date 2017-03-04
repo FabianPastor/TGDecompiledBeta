@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -47,6 +46,7 @@ import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowAll;
 import org.telegram.tgnet.TLRPC.TL_privacyValueDisallowUsers;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -497,15 +497,15 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         } else if (this.currentType == 2) {
             req.rules.add(new TL_inputPrivacyValueAllowContacts());
         }
-        ProgressDialog progressDialog = null;
+        AlertDialog progressDialog = null;
         if (getParentActivity() != null) {
-            progressDialog = new ProgressDialog(getParentActivity());
+            progressDialog = new AlertDialog(getParentActivity(), 1);
             progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
-        final ProgressDialog progressDialogFinal = progressDialog;
+        final AlertDialog progressDialogFinal = progressDialog;
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(final TLObject response, final TL_error error) {
                 AndroidUtilities.runOnUIThread(new Runnable() {

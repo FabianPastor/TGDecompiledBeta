@@ -473,7 +473,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (this.hasDescription) {
             textView = new TextView(context);
             textView.setTextSize(1, 16.0f);
-            textView.setTextColor(-14540254);
+            textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
             textView.setText(description);
             textView.setSingleLine(true);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -490,17 +490,17 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         containerLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 0.0f, 0.0f, 57.0f));
         View lineView = new View(context);
-        lineView.setBackgroundColor(-2368549);
+        lineView.setBackgroundColor(Theme.getColor(Theme.key_dialogGrayLine));
         containerLayout.addView(lineView, new LayoutParams(-1, 1, 83));
         ((LayoutParams) lineView.getLayoutParams()).bottomMargin = AndroidUtilities.dp(48.0f);
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(-1);
+        frameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         containerLayout.addView(frameLayout, LayoutHelper.createFrame(-1, 48, 83));
         textView = new TextView(context);
         textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-15095832);
+        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue4));
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -515,9 +515,9 @@ public class EmbedBottomSheet extends BottomSheet {
         frameLayout.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 53));
         textView = new TextView(context);
         textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-15095832);
+        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue4));
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -535,9 +535,9 @@ public class EmbedBottomSheet extends BottomSheet {
         });
         textView = new TextView(context);
         textView.setTextSize(1, 14.0f);
-        textView.setTextColor(-15095832);
+        textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue4));
         textView.setGravity(17);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         textView.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

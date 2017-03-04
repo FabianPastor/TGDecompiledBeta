@@ -84,7 +84,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
     private TL_exportedMessageLink exportedMessageLink;
     private FrameLayout frameLayout;
     private RecyclerListView gridView;
-    private boolean isFullscreen;
     private boolean isPublicChannel;
     private GridLayoutManager layoutManager;
     private String linkToCopy;
@@ -511,7 +510,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.searchAdapter = new ShareSearchAdapter(context);
         this.isPublicChannel = publicChannel;
         this.sendingText = text;
-        this.isFullscreen = fullScreen;
         if (publicChannel) {
             this.loadingLink = true;
             TL_channels_exportMessageLink req = new TL_channels_exportMessageLink();
@@ -582,7 +580,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.containerView.setWillNotDraw(false);
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.frameLayout = new FrameLayout(context);
-        this.frameLayout.setBackgroundColor(-1);
+        this.frameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         this.frameLayout.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
@@ -590,7 +588,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         });
         this.doneButton = new LinearLayout(context);
         this.doneButton.setOrientation(0);
-        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
+        this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 0));
         this.doneButton.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
         this.frameLayout.addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButton.setOnClickListener(new OnClickListener() {
@@ -622,9 +620,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButtonBadgeTextView = new TextView(context);
         this.doneButtonBadgeTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
-        this.doneButtonBadgeTextView.setTextColor(-1);
+        this.doneButtonBadgeTextView.setTextColor(Theme.getColor(Theme.key_dialogBadgeText));
         this.doneButtonBadgeTextView.setGravity(17);
-        this.doneButtonBadgeTextView.setBackgroundResource(R.drawable.bluecounter);
+        this.doneButtonBadgeTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(12.5f), Theme.getColor(Theme.key_dialogBadgeBackground)));
         this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
         this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
         this.doneButton.addView(this.doneButtonBadgeTextView, LayoutHelper.createLinear(-2, 23, 16, 0, 0, 10, 0));
@@ -636,7 +634,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButton.addView(this.doneButtonTextView, LayoutHelper.createLinear(-2, -2, 16));
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.ic_ab_search);
-        imageView.setColorFilter(new PorterDuffColorFilter(-6381922, Mode.MULTIPLY));
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 19));
@@ -647,11 +645,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.nameTextView.setGravity(19);
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setBackgroundDrawable(null);
-        this.nameTextView.setHintTextColor(Theme.SHARE_SHEET_EDIT_PLACEHOLDER_TEXT_COLOR);
+        this.nameTextView.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         this.nameTextView.setImeOptions(268435456);
         this.nameTextView.setInputType(16385);
         AndroidUtilities.clearCursorDrawable(this.nameTextView);
-        this.nameTextView.setTextColor(-14606047);
+        this.nameTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         this.frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 48.0f, 2.0f, 96.0f, 0.0f));
         this.nameTextView.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -717,7 +715,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         Adapter shareDialogsAdapter = new ShareDialogsAdapter(context);
         this.listAdapter = shareDialogsAdapter;
         recyclerListView.setAdapter(shareDialogsAdapter);
-        this.gridView.setGlowColor(-657673);
+        this.gridView.setGlowColor(Theme.getColor(Theme.key_dialogScrollGlow));
         this.gridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(View view, int position) {
                 if (position >= 0) {
@@ -764,8 +762,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         }
         if (this.listAdapter.dialogs.isEmpty()) {
             NotificationCenter.getInstance().addObserver(this, NotificationCenter.dialogsNeedReload);
-        }
-        if (this.isFullscreen && VERSION.SDK_INT < 16) {
         }
     }
 
@@ -835,12 +831,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         if (this.selectedDialogs.isEmpty()) {
             this.doneButtonBadgeTextView.setVisibility(8);
             if (this.isPublicChannel || this.linkToCopy != null) {
-                this.doneButtonTextView.setTextColor(-12940081);
+                this.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
                 this.doneButton.setEnabled(true);
                 this.doneButtonTextView.setText(LocaleController.getString("CopyLink", R.string.CopyLink).toUpperCase());
                 return;
             }
-            this.doneButtonTextView.setTextColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR);
+            this.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextGray4));
             this.doneButton.setEnabled(false);
             this.doneButtonTextView.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
             return;
@@ -848,7 +844,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.doneButtonTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         this.doneButtonBadgeTextView.setVisibility(0);
         this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(this.selectedDialogs.size())}));
-        this.doneButtonTextView.setTextColor(Theme.SHARE_SHEET_SEND_TEXT_COLOR);
+        this.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue3));
         this.doneButton.setEnabled(true);
         this.doneButtonTextView.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
     }

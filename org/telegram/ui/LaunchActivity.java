@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -1560,7 +1559,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     private void runLinkRequest(String username, String group, String sticker, String botUser, String botChat, String message, boolean hasUrl, Integer messageId, String game, int state) {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        final AlertDialog progressDialog = new AlertDialog(this, 1);
         progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);

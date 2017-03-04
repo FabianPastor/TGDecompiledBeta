@@ -377,7 +377,7 @@ public final class Util {
         } catch (NameNotFoundException e) {
             versionName = "?";
         }
-        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") " + "ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
+        return applicationName + "/" + versionName + " (Linux;Android " + VERSION.RELEASE + ") ExoPlayerLib/" + ExoPlayerLibraryInfo.VERSION;
     }
 
     public static int getPcmEncoding(int bitDepth) {

@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -106,6 +105,7 @@ import org.telegram.tgnet.TLRPC.Update;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
 import org.telegram.tgnet.TLRPC.messages_SentEncryptedMessage;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 public class SecretChatHelper {
@@ -1766,7 +1766,7 @@ public class SecretChatHelper {
     public void startSecretChat(final Context context, final User user) {
         if (user != null && context != null) {
             this.startingSecretChat = true;
-            final ProgressDialog progressDialog = new ProgressDialog(context);
+            final AlertDialog progressDialog = new AlertDialog(context, 1);
             progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);

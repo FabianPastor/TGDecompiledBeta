@@ -703,7 +703,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 int selected = view2.getCurrentItem();
                 int a = 0;
                 while (a < 2) {
-                    this.paint.setColor(a == selected ? Theme.JOIN_SHEET_COUNT_TEXT_COLOR : -3355444);
+                    this.paint.setColor(a == selected ? -6710887 : -3355444);
                     canvas.drawCircle((float) AndroidUtilities.dp((float) ((a * 15) + 3)), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
                     a++;
                 }

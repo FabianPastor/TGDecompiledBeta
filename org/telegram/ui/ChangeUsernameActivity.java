@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -43,6 +42,7 @@ import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -341,7 +341,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                     finishFragment();
                     return;
                 }
-                final ProgressDialog progressDialog = new ProgressDialog(getParentActivity());
+                final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.setCancelable(false);

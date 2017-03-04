@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -97,6 +96,7 @@ import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -117,7 +117,7 @@ public class LoginActivity extends BaseFragment {
     private ArrayList<String> permissionsItems = new ArrayList();
     private Dialog permissionsShowDialog;
     private ArrayList<String> permissionsShowItems = new ArrayList();
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private SlideView[] views = new SlideView[9];
 
     private class ProgressView extends View {
@@ -2504,7 +2504,7 @@ public class LoginActivity extends BaseFragment {
 
     private void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(getParentActivity());
+            this.progressDialog = new AlertDialog(getParentActivity(), 1);
             this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);

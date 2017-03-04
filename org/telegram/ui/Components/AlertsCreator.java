@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -65,7 +64,6 @@ import org.telegram.tgnet.TLRPC.TL_updateUserName;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.Components.NumberPicker.Formatter;
@@ -567,10 +565,8 @@ public class AlertsCreator {
                 currentColor = preferences.getInt("MessagesLed", -16776961);
             }
         }
-        View scrollView = new ScrollView(parentActivity);
         View linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         String[] descriptions = new String[]{LocaleController.getString("ColorRed", R.string.ColorRed), LocaleController.getString("ColorOrange", R.string.ColorOrange), LocaleController.getString("ColorYellow", R.string.ColorYellow), LocaleController.getString("ColorGreen", R.string.ColorGreen), LocaleController.getString("ColorCyan", R.string.ColorCyan), LocaleController.getString("ColorBlue", R.string.ColorBlue), LocaleController.getString("ColorViolet", R.string.ColorViolet), LocaleController.getString("ColorPink", R.string.ColorPink), LocaleController.getString("ColorWhite", R.string.ColorWhite)};
         final int[] selectedColor = new int[]{currentColor};
         for (int a = 0; a < 9; a++) {
@@ -600,7 +596,7 @@ public class AlertsCreator {
         }
         Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
-        builder.setView(scrollView);
+        builder.setView(linearLayout);
         final boolean z = globalAll;
         final boolean z2 = globalGroup;
         final long j = dialog_id;
@@ -691,16 +687,14 @@ public class AlertsCreator {
             }
             descriptions = new String[]{LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), LocaleController.getString("Short", R.string.Short), LocaleController.getString("Long", R.string.Long), LocaleController.getString("OnlyIfSilent", R.string.OnlyIfSilent)};
         }
-        ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+            cell.setCheckColor(-5000269, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             final long j = dialog_id;
@@ -745,7 +739,7 @@ public class AlertsCreator {
         }
         Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
-        builder.setView(scrollView);
+        builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
@@ -770,16 +764,14 @@ public class AlertsCreator {
             }
             descriptions = new String[]{LocaleController.getString("NotificationsPriorityDefault", R.string.NotificationsPriorityDefault), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), LocaleController.getString("NotificationsPriorityMax", R.string.NotificationsPriorityMax)};
         }
-        ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+            cell.setCheckColor(-5000269, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             final long j = dialog_id;
@@ -814,12 +806,12 @@ public class AlertsCreator {
         }
         Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("NotificationsPriority", R.string.NotificationsPriority));
-        builder.setView(scrollView);
+        builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
 
-    public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, boolean globalAll, Runnable onSelect) {
+    public static Dialog createPopupSelectDialog(Activity parentActivity, final BaseFragment parentFragment, final boolean globalGroup, boolean globalAll, final Runnable onSelect) {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
         final int[] selected = new int[1];
         if (globalAll) {
@@ -828,19 +820,16 @@ public class AlertsCreator {
             selected[0] = preferences.getInt("popupGroup", 0);
         }
         String[] descriptions = new String[]{LocaleController.getString("NoPopup", R.string.NoPopup), LocaleController.getString("OnlyWhenScreenOn", R.string.OnlyWhenScreenOn), LocaleController.getString("OnlyWhenScreenOff", R.string.OnlyWhenScreenOff), LocaleController.getString("AlwaysShowPopup", R.string.AlwaysShowPopup)};
-        ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
         int a = 0;
         while (a < descriptions.length) {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setTag(Integer.valueOf(a));
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
-            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
+            cell.setCheckColor(-5000269, -13129232);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
-            final Runnable runnable = onSelect;
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     selected[0] = ((Integer) v.getTag()).intValue();
@@ -850,8 +839,8 @@ public class AlertsCreator {
                     if (parentFragment != null) {
                         parentFragment.dismissCurrentDialig();
                     }
-                    if (runnable != null) {
-                        runnable.run();
+                    if (onSelect != null) {
+                        onSelect.run();
                     }
                 }
             });
@@ -859,23 +848,27 @@ public class AlertsCreator {
         }
         Builder builder = new Builder(parentActivity);
         builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
-        builder.setView(scrollView);
+        builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
 
     public static Dialog createSingleChoiceDialog(Activity parentActivity, final BaseFragment parentFragment, String[] options, String title, int selected, final OnClickListener listener) {
-        ScrollView scrollView = new ScrollView(parentActivity);
         LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(1);
-        scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-        int a = 0;
-        while (a < options.length) {
+        for (int a = 0; a < options.length; a++) {
+            boolean z;
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
             cell.setTag(Integer.valueOf(a));
-            cell.setCheckColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR, -13129232);
-            cell.setTextAndValue(options[a], selected == a);
+            cell.setCheckColor(-5000269, -13129232);
+            String str = options[a];
+            if (selected == a) {
+                z = true;
+            } else {
+                z = false;
+            }
+            cell.setTextAndValue(str, z);
             linearLayout.addView(cell);
             cell.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -886,11 +879,10 @@ public class AlertsCreator {
                     listener.onClick(null, sel);
                 }
             });
-            a++;
         }
         Builder builder = new Builder(parentActivity);
         builder.setTitle(title);
-        builder.setView(scrollView);
+        builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }

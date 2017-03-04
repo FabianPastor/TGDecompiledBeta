@@ -1081,6 +1081,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                         builder.setLength(maxLength);
                                     }
                                     if (hint != null) {
+                                        if (maxLength != 0 && builder.length() == maxLength) {
+                                            PaymentFormActivity.this.inputFields[1].requestFocus();
+                                        }
                                         phoneField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                                         a = 0;
                                         while (a < builder.length()) {
@@ -1098,12 +1101,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                                 if (!(start != a + 1 || this.characterAction == 2 || this.characterAction == 3)) {
                                                     start++;
                                                 }
-                                                if (maxLength != 0 && builder.length() == maxLength) {
-                                                    PaymentFormActivity.this.inputFields[1].requestFocus();
-                                                }
                                             }
                                         }
-                                        PaymentFormActivity.this.inputFields[1].requestFocus();
                                     } else {
                                         phoneField.setTextColor(builder.length() > 0 ? Theme.getColor(Theme.key_windowBackgroundWhiteRedText4) : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                                     }

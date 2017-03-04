@@ -56,7 +56,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         if (count == 0) {
             this.doneButtonBadgeTextView.setVisibility(8);
             if (disable) {
-                this.doneButton.setTextColor(Theme.JOIN_SHEET_COUNT_TEXT_COLOR);
+                this.doneButton.setTextColor(-6710887);
                 this.doneButton.setEnabled(false);
                 return;
             }

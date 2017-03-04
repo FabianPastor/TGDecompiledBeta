@@ -2,7 +2,6 @@ package org.telegram.ui;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -260,7 +259,7 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     private void cleanupFolders() {
-        final ProgressDialog progressDialog = new ProgressDialog(getParentActivity());
+        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 1);
         progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
@@ -405,7 +404,7 @@ public class CacheControlActivity extends BaseFragment {
                         builder2.setMessage(LocaleController.getString("LocalDatabaseClear", R.string.LocalDatabaseClear));
                         builder2.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), new OnClickListener() {
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                final ProgressDialog progressDialog = new ProgressDialog(CacheControlActivity.this.getParentActivity());
+                                final AlertDialog progressDialog = new AlertDialog(CacheControlActivity.this.getParentActivity(), 1);
                                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                                 progressDialog.setCanceledOnTouchOutside(false);
                                 progressDialog.setCancelable(false);

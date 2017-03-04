@@ -137,20 +137,20 @@ public class AvatarDrawable extends Drawable {
             this.stringBuilder.append(custom);
         } else {
             if (firstName != null && firstName.length() > 0) {
-                this.stringBuilder.append(firstName.substring(0, 1));
+                this.stringBuilder.appendCodePoint(firstName.codePointAt(0));
             }
             int a;
             if (lastName != null && lastName.length() > 0) {
-                String lastch = null;
+                Integer lastch = null;
                 a = lastName.length() - 1;
                 while (a >= 0 && (lastch == null || lastName.charAt(a) != ' ')) {
-                    lastch = lastName.substring(a, a + 1);
+                    lastch = Integer.valueOf(lastName.codePointAt(a));
                     a--;
                 }
                 if (VERSION.SDK_INT >= 16) {
                     this.stringBuilder.append("‌");
                 }
-                this.stringBuilder.append(lastch);
+                this.stringBuilder.appendCodePoint(lastch.intValue());
             } else if (firstName != null && firstName.length() > 0) {
                 a = firstName.length() - 1;
                 while (a >= 0) {
@@ -160,7 +160,7 @@ public class AvatarDrawable extends Drawable {
                         if (VERSION.SDK_INT >= 16) {
                             this.stringBuilder.append("‌");
                         }
-                        this.stringBuilder.append(firstName.substring(a + 1, a + 2));
+                        this.stringBuilder.appendCodePoint(firstName.codePointAt(a + 1));
                     }
                 }
             }

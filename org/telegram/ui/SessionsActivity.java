@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -39,6 +38,7 @@ import org.telegram.tgnet.TLRPC.TL_boolTrue;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -311,7 +311,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int option) {
                             if (SessionsActivity.this.getParentActivity() != null) {
-                                final ProgressDialog progressDialog = new ProgressDialog(SessionsActivity.this.getParentActivity());
+                                final AlertDialog progressDialog = new AlertDialog(SessionsActivity.this.getParentActivity(), 1);
                                 progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
                                 progressDialog.setCanceledOnTouchOutside(false);
                                 progressDialog.setCancelable(false);

@@ -6312,13 +6312,15 @@ public class TLRPC {
 
     public static class TL_help_getAppChangelog extends TLObject {
         public static int constructor = -NUM;
+        public String prev_app_version;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return help_AppChangelog.TLdeserialize(stream, constructor, exception);
+            return Updates.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+            stream.writeString(this.prev_app_version);
         }
     }
 
@@ -11989,31 +11991,6 @@ public class TLRPC {
         }
     }
 
-    public static class help_AppChangelog extends TLObject {
-        public ArrayList<MessageEntity> entities = new ArrayList();
-        public MessageMedia media;
-        public String message;
-
-        public static help_AppChangelog TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
-            help_AppChangelog result = null;
-            switch (constructor) {
-                case -1350696044:
-                    result = new TL_help_appChangelogEmpty();
-                    break;
-                case 705920636:
-                    result = new TL_help_appChangelog();
-                    break;
-            }
-            if (result == null && exception) {
-                throw new RuntimeException(String.format("can't parse magic %x in help_AppChangelog", new Object[]{Integer.valueOf(constructor)}));
-            }
-            if (result != null) {
-                result.readParams(stream, exception);
-            }
-            return result;
-        }
-    }
-
     public static class help_AppUpdate extends TLObject {
         public boolean critical;
         public int id;
@@ -15490,50 +15467,6 @@ public class TLRPC {
             for (a = 0; a < count; a++) {
                 ((User) this.users.get(a)).serializeToStream(stream);
             }
-        }
-    }
-
-    public static class TL_help_appChangelog extends help_AppChangelog {
-        public static int constructor = 705920636;
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.message = stream.readString(exception);
-            this.media = MessageMedia.TLdeserialize(stream, stream.readInt32(exception), exception);
-            if (stream.readInt32(exception) == 481674261) {
-                int count = stream.readInt32(exception);
-                int a = 0;
-                while (a < count) {
-                    MessageEntity object = MessageEntity.TLdeserialize(stream, stream.readInt32(exception), exception);
-                    if (object != null) {
-                        this.entities.add(object);
-                        a++;
-                    } else {
-                        return;
-                    }
-                }
-            } else if (exception) {
-                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(magic)}));
-            }
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            stream.writeString(this.message);
-            this.media.serializeToStream(stream);
-            stream.writeInt32(481674261);
-            int count = this.entities.size();
-            stream.writeInt32(count);
-            for (int a = 0; a < count; a++) {
-                ((MessageEntity) this.entities.get(a)).serializeToStream(stream);
-            }
-        }
-    }
-
-    public static class TL_help_appChangelogEmpty extends help_AppChangelog {
-        public static int constructor = -NUM;
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
         }
     }
 

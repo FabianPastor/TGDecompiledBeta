@@ -589,34 +589,36 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void updateKeyView() {
-        IdenticonDrawable img = new IdenticonDrawable();
-        EncryptedChat encryptedChat = new EncryptedChat();
-        encryptedChat.auth_key = VoIPService.getSharedInstance().getEncryptionKey();
-        byte[] sha256 = Utilities.computeSHA256(encryptedChat.auth_key, 0, encryptedChat.auth_key.length);
-        byte[] key_hash = new byte[36];
-        System.arraycopy(AndroidUtilities.calcAuthKeyHash(encryptedChat.auth_key), 0, key_hash, 0, 16);
-        System.arraycopy(sha256, 0, key_hash, 16, 20);
-        encryptedChat.key_hash = key_hash;
-        img.setEncryptedChat(encryptedChat);
-        this.keyImage.setImageDrawable(img);
-        SpannableStringBuilder hash = new SpannableStringBuilder();
-        if (encryptedChat.key_hash.length > 16) {
-            String hex = Utilities.bytesToHex(encryptedChat.key_hash);
-            for (int a = 0; a < 32; a++) {
-                if (a != 0) {
-                    if (a % 8 == 0) {
-                        hash.append('\n');
-                    } else if (a % 4 == 0) {
-                        hash.append(' ');
+        if (VoIPService.getSharedInstance() != null) {
+            IdenticonDrawable img = new IdenticonDrawable();
+            EncryptedChat encryptedChat = new EncryptedChat();
+            encryptedChat.auth_key = VoIPService.getSharedInstance().getEncryptionKey();
+            byte[] sha256 = Utilities.computeSHA256(encryptedChat.auth_key, 0, encryptedChat.auth_key.length);
+            byte[] key_hash = new byte[36];
+            System.arraycopy(AndroidUtilities.calcAuthKeyHash(encryptedChat.auth_key), 0, key_hash, 0, 16);
+            System.arraycopy(sha256, 0, key_hash, 16, 20);
+            encryptedChat.key_hash = key_hash;
+            img.setEncryptedChat(encryptedChat);
+            this.keyImage.setImageDrawable(img);
+            SpannableStringBuilder hash = new SpannableStringBuilder();
+            if (encryptedChat.key_hash.length > 16) {
+                String hex = Utilities.bytesToHex(encryptedChat.key_hash);
+                for (int a = 0; a < 32; a++) {
+                    if (a != 0) {
+                        if (a % 8 == 0) {
+                            hash.append('\n');
+                        } else if (a % 4 == 0) {
+                            hash.append(' ');
+                        }
                     }
+                    hash.append(hex.substring(a * 2, (a * 2) + 2));
+                    hash.append(' ');
                 }
-                hash.append(hex.substring(a * 2, (a * 2) + 2));
-                hash.append(' ');
+                hash.append("\n\n");
             }
-            hash.append("\n\n");
+            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
+            this.keyText.setText(hash);
         }
-        hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
-        this.keyText.setText(hash);
     }
 
     private void showDebugAlert() {

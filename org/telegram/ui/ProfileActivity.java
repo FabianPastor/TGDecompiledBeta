@@ -42,7 +42,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.ArrayList;
@@ -151,6 +150,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.ContactsActivity.ContactsActivityDelegate;
 import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 import org.telegram.ui.PhotoViewer.PhotoViewerProvider;
@@ -1022,28 +1022,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         descriptions[4] = LocaleController.getString("NotificationsTurnOff", R.string.NotificationsTurnOff);
                         int i = 5;
                         int[] icons = new int[]{R.drawable.notifications_s_on, R.drawable.notifications_s_1h, R.drawable.notifications_s_2d, R.drawable.notifications_s_custom, R.drawable.notifications_s_off};
-                        View scrollView = new ScrollView(ProfileActivity.this.getParentActivity());
-                        scrollView = new LinearLayout(ProfileActivity.this.getParentActivity());
-                        scrollView.setOrientation(1);
-                        scrollView.addView(scrollView, LayoutHelper.createScroll(-1, -2, 51));
+                        View linearLayout = new LinearLayout(ProfileActivity.this.getParentActivity());
+                        linearLayout.setOrientation(1);
                         for (int a = 0; a < descriptions.length; a++) {
-                            scrollView = new TextView(ProfileActivity.this.getParentActivity());
-                            scrollView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                            scrollView.setTextSize(1, 16.0f);
-                            scrollView.setLines(1);
-                            scrollView.setMaxLines(1);
+                            linearLayout = new TextView(ProfileActivity.this.getParentActivity());
+                            linearLayout.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                            linearLayout.setTextSize(1, 16.0f);
+                            linearLayout.setLines(1);
+                            linearLayout.setMaxLines(1);
                             Drawable drawable = ProfileActivity.this.getParentActivity().getResources().getDrawable(icons[a]);
                             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogIcon), Mode.MULTIPLY));
-                            scrollView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-                            scrollView.setTag(Integer.valueOf(a));
-                            scrollView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            scrollView.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
-                            scrollView.setSingleLine(true);
-                            scrollView.setGravity(19);
-                            scrollView.setCompoundDrawablePadding(AndroidUtilities.dp(26.0f));
-                            scrollView.setText(descriptions[a]);
-                            scrollView.addView(scrollView, LayoutHelper.createLinear(-1, 48, 51));
-                            scrollView.setOnClickListener(new View.OnClickListener() {
+                            linearLayout.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                            linearLayout.setTag(Integer.valueOf(a));
+                            linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                            linearLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
+                            linearLayout.setSingleLine(true);
+                            linearLayout.setGravity(19);
+                            linearLayout.setCompoundDrawablePadding(AndroidUtilities.dp(26.0f));
+                            linearLayout.setText(descriptions[a]);
+                            linearLayout.addView(linearLayout, LayoutHelper.createLinear(-1, 48, 51));
+                            linearLayout.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
                                     int i = ((Integer) v.getTag()).intValue();
                                     Editor editor;
@@ -1098,7 +1096,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         }
                         builder = new Builder(ProfileActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications));
-                        builder.setView(scrollView);
+                        builder.setView(linearLayout);
                         ProfileActivity.this.showDialog(builder.create());
                     } else if (position == ProfileActivity.this.startSecretChatRow) {
                         builder = new Builder(ProfileActivity.this.getParentActivity());
@@ -1472,8 +1470,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 return false;
             }
             builder = new Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Call", R.string.Call), LocaleController.getString("Copy", R.string.Copy)}, new OnClickListener() {
+            ArrayList<CharSequence> items = new ArrayList();
+            final ArrayList<Integer> actions = new ArrayList();
+            TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
+            items.add(LocaleController.getString("Call", R.string.Call));
+            actions.add(Integer.valueOf(0));
+            if (MessagesController.getInstance().callsEnabled && userFull != null && userFull.phone_calls_available) {
+                items.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
+                actions.add(Integer.valueOf(2));
+            }
+            items.add(LocaleController.getString("Copy", R.string.Copy));
+            actions.add(Integer.valueOf(1));
+            builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), new OnClickListener() {
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    i = ((Integer) actions.get(i)).intValue();
                     if (i == 0) {
                         try {
                             Intent intent = new Intent("android.intent.action.DIAL", Uri.parse("tel:+" + user.phone));
@@ -1488,6 +1498,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } catch (Throwable e2) {
                             FileLog.e(e2);
                         }
+                    } else if (i == 2) {
+                        VoIPHelper.startCall(user, ProfileActivity.this.getParentActivity());
                     }
                 }
             });
@@ -2855,6 +2867,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 presentFragment(new ChatActivity(args), true);
                 removeSelfFromStack();
                 SendMessagesHelper.getInstance().sendMessage(MessagesController.getInstance().getUser(Integer.valueOf(this.user_id)), dialog_id, null, null, null);
+            }
+        }
+    }
+
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 101) {
+            User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
+            if (user != null) {
+                if (grantResults[0] == 0) {
+                    VoIPHelper.startCall(user, getParentActivity());
+                } else {
+                    VoIPHelper.permissionDenied(getParentActivity(), null);
+                }
             }
         }
     }

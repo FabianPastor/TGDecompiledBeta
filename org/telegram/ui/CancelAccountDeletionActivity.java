@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -61,6 +60,7 @@ import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeFlashCall;
 import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeSms;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -79,7 +79,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     private Dialog permissionsDialog;
     private ArrayList<String> permissionsItems = new ArrayList();
     private String phone;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private SlideView[] views = new SlideView[5];
 
     private class ProgressView extends View {
@@ -735,7 +735,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
     public void needShowProgress() {
         if (getParentActivity() != null && !getParentActivity().isFinishing() && this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(getParentActivity());
+            this.progressDialog = new AlertDialog(getParentActivity(), 1);
             this.progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             this.progressDialog.setCanceledOnTouchOutside(false);
             this.progressDialog.setCancelable(false);

@@ -80,7 +80,7 @@ public class PickerBottomLayout extends FrameLayout {
                     obj = Theme.key_picker_disabledButton;
                 }
                 textView.setTag(obj);
-                this.doneButtonTextView.setTextColor(this.isDarkTheme ? Theme.JOIN_SHEET_COUNT_TEXT_COLOR : Theme.getColor(Theme.key_picker_disabledButton));
+                this.doneButtonTextView.setTextColor(this.isDarkTheme ? -6710887 : Theme.getColor(Theme.key_picker_disabledButton));
                 this.doneButton.setEnabled(false);
                 return;
             }

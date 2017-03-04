@@ -23,7 +23,7 @@ public class BackDrawable extends Drawable {
     private Paint paint = new Paint(1);
     private boolean reverseAngle = false;
     private boolean rotated = true;
-    private int rotatedColor = Theme.ATTACH_SHEET_TEXT_COLOR;
+    private int rotatedColor = -9079435;
 
     public BackDrawable(boolean close) {
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));

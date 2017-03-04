@@ -3774,7 +3774,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
             this.backButton.setScaleType(ScaleType.CENTER);
             this.backDrawable = new BackDrawable(false);
             this.backDrawable.setAnimationTime(200.0f);
-            this.backDrawable.setColor(Theme.SHARE_SHEET_SEND_DISABLED_TEXT_COLOR);
+            this.backDrawable.setColor(-5000269);
             this.backDrawable.setRotated(false);
             this.backButton.setImageDrawable(this.backDrawable);
             this.backButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
@@ -4082,7 +4082,6 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         if (this.parentActivity == null || ((this.isVisible && !this.collapsed) || messageObject == null)) {
             return false;
         }
-        WindowManager wm;
         final AnimatorSet animatorSet;
         Animator[] animatorArr;
         float[] fArr;
@@ -4141,6 +4140,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
         String webPageUrl = webPage.url.toLowerCase();
         String anchor = null;
         for (int a = 0; a < messageObject.messageOwner.entities.size(); a++) {
+            WindowManager wm;
             LayoutParams layoutParams;
             MessageEntity entity = (MessageEntity) messageObject.messageOwner.entities.get(a);
             if (entity instanceof TL_messageEntityUrl) {
