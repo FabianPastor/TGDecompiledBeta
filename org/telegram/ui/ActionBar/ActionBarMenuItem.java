@@ -263,7 +263,9 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     protected void redrawPopup() {
-        this.popupLayout.invalidate();
+        if (this.popupLayout != null) {
+            this.popupLayout.invalidate();
+        }
     }
 
     public void setPopupItemsColor(int color) {

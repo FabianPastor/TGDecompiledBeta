@@ -683,12 +683,16 @@ public class AlertDialog extends Dialog implements Callback {
         super.setCanceledOnTouchOutside(cancel);
     }
 
-    public void setMessage(CharSequence message) {
-        if (TextUtils.isEmpty(message)) {
+    public void setMessage(CharSequence text) {
+        this.message = text;
+        if (this.messageTextView == null) {
+            return;
+        }
+        if (TextUtils.isEmpty(this.message)) {
             this.messageTextView.setVisibility(8);
             return;
         }
-        this.messageTextView.setText(message);
+        this.messageTextView.setText(this.message);
         this.messageTextView.setVisibility(0);
     }
 

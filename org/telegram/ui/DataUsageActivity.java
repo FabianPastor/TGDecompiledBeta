@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.StatsController;
@@ -55,10 +54,10 @@ public class DataUsageActivity extends BaseFragment {
     private RecyclerListView listView;
     private int messagesBytesReceivedRow;
     private int messagesBytesSentRow;
-    private int messagesReceivedRow;
+    private int messagesReceivedRow = -1;
     private int messagesSection2Row;
     private int messagesSectionRow;
-    private int messagesSentRow;
+    private int messagesSentRow = -1;
     private int photosBytesReceivedRow;
     private int photosBytesSentRow;
     private int photosReceivedRow;
@@ -349,14 +348,6 @@ public class DataUsageActivity extends BaseFragment {
         i = this.rowCount;
         this.rowCount = i + 1;
         this.messagesSectionRow = i;
-        if (BuildVars.DEBUG_VERSION) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.messagesSentRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.messagesReceivedRow = i;
-        }
         i = this.rowCount;
         this.rowCount = i + 1;
         this.messagesBytesSentRow = i;
