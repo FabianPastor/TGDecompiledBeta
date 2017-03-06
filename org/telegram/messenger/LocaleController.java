@@ -1100,7 +1100,7 @@ public class LocaleController {
         switch (i) {
             case 0:
                 customFormat = " %.4f";
-                doubleAmount = (double) (amount / 10000);
+                doubleAmount = ((double) amount) / 10000.0d;
                 break;
             case 1:
             case 2:
@@ -1110,7 +1110,7 @@ public class LocaleController {
             case 6:
             case 7:
                 customFormat = " %.3f";
-                doubleAmount = (double) (amount / 1000);
+                doubleAmount = ((double) amount) / 1000.0d;
                 break;
             case 8:
             case 9:
@@ -1137,11 +1137,11 @@ public class LocaleController {
                 break;
             case 28:
                 customFormat = " %.1f";
-                doubleAmount = (double) (amount / 10);
+                doubleAmount = ((double) amount) / 10.0d;
                 break;
             default:
                 customFormat = " %.2f";
-                doubleAmount = (double) (amount / 100);
+                doubleAmount = ((double) amount) / 100.0d;
                 break;
         }
         Currency сurrency = Currency.getInstance(type);
@@ -1338,7 +1338,7 @@ public class LocaleController {
         switch (i) {
             case 0:
                 customFormat = " %.4f";
-                doubleAmount = (double) (amount / 10000);
+                doubleAmount = ((double) amount) / 10000.0d;
                 break;
             case 1:
             case 2:
@@ -1348,7 +1348,7 @@ public class LocaleController {
             case 6:
             case 7:
                 customFormat = " %.3f";
-                doubleAmount = (double) (amount / 1000);
+                doubleAmount = ((double) amount) / 1000.0d;
                 break;
             case 8:
             case 9:
@@ -1375,11 +1375,11 @@ public class LocaleController {
                 break;
             case 28:
                 customFormat = " %.1f";
-                doubleAmount = (double) (amount / 10);
+                doubleAmount = ((double) amount) / 10.0d;
                 break;
             default:
                 customFormat = " %.2f";
-                doubleAmount = (double) (amount / 100);
+                doubleAmount = ((double) amount) / 100.0d;
                 break;
         }
         return String.format(type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
@@ -1395,6 +1395,16 @@ public class LocaleController {
             FileLog.e(e);
             return "LOC_ERR: " + string;
         }
+    }
+
+    public static String formatCallDuration(int duration) {
+        if (duration > 3600) {
+            return formatPluralString("Hours", duration / 3600) + ", " + formatPluralString("Minutes", (duration % 3600) / 60);
+        }
+        if (duration > 60) {
+            return formatPluralString("Minutes", duration / 60);
+        }
+        return formatPluralString("Seconds", duration);
     }
 
     public void onDeviceConfigurationChange(Configuration newConfig) {

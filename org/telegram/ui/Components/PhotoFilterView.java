@@ -1820,7 +1820,7 @@ public class PhotoFilterView extends FrameLayout {
             float bitmapW;
             float bitmapH;
             viewWidth -= AndroidUtilities.dp(28.0f);
-            viewHeight -= AndroidUtilities.dp(154.0f) + AndroidUtilities.statusBarHeight;
+            viewHeight -= (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(154.0f);
             if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                 bitmapW = (float) this.bitmapToEdit.getHeight();
                 bitmapH = (float) this.bitmapToEdit.getWidth();
@@ -1838,7 +1838,7 @@ public class PhotoFilterView extends FrameLayout {
                 bitmapH = (float) ((int) Math.ceil((double) (bitmapH * scaleX)));
             }
             int bitmapX = (int) Math.ceil((double) (((((float) viewWidth) - bitmapW) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))));
-            int bitmapY = (int) Math.ceil((double) ((((((float) viewHeight) - bitmapH) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))) + ((float) AndroidUtilities.statusBarHeight)));
+            int bitmapY = (int) Math.ceil((double) (((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) + (((float) AndroidUtilities.dp(14.0f)) + ((((float) viewHeight) - bitmapH) / 2.0f))));
             LayoutParams layoutParams = (LayoutParams) this.textureView.getLayoutParams();
             layoutParams.leftMargin = bitmapX;
             layoutParams.topMargin = bitmapY;

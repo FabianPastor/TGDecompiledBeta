@@ -1021,7 +1021,6 @@
     <string name="PaymentNoShippingMethod">Sorry, it is not possible to deliver to your address.</string>
     <string name="PaymentPrecheckoutFailed">Sorry, the payment was cancelled by the bot.</string>
     <string name="PaymentReceipt">Receipt</string>
-    <string name="PaymentShipment">SHIPMENT</string>
     <string name="PaymentShippingAddress">Shipping address</string>
     <string name="PaymentShippingAddress1Placeholder">Address 1 (Street)</string>
     <string name="PaymentShippingAddress2Placeholder">Address 2 (Street)</string>
@@ -1040,7 +1039,6 @@
     <string name="PaymentSuccessfullyPaid">You have just successfully transferred %1$s to %2$s for %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">You have just successfully transferred %1$s to %2$s</string>
     <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
     <string name="PaymentTransactionMessage">Do you really want to transfer %1$s to the %2$s bot for %3$s?</string>
     <string name="PaymentTransactionReview">Transaction Review</string>
     <string name="PaymentTransactionTotal">Total</string>

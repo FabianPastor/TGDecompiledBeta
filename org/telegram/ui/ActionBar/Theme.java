@@ -113,9 +113,15 @@ public class Theme {
     public static TextPaint chat_msgBotButtonPaint = null;
     public static Drawable chat_msgBroadcastDrawable = null;
     public static Drawable chat_msgBroadcastMediaDrawable = null;
+    public static Drawable chat_msgCallDownGreenDrawable = null;
+    public static Drawable chat_msgCallDownRedDrawable = null;
+    public static Drawable chat_msgCallUpGreenDrawable = null;
+    public static Drawable chat_msgCallUpRedDrawable = null;
     public static Drawable chat_msgErrorDrawable = null;
     public static Paint chat_msgErrorPaint = null;
     public static TextPaint chat_msgGameTextPaint = null;
+    public static Drawable chat_msgInCallDrawable = null;
+    public static Drawable chat_msgInCallSelectedDrawable = null;
     public static Drawable chat_msgInClockDrawable = null;
     public static Drawable chat_msgInDrawable = null;
     public static Drawable chat_msgInInstantDrawable = null;
@@ -137,6 +143,8 @@ public class Theme {
     public static Drawable chat_msgMediaMenuDrawable = null;
     public static Drawable chat_msgMediaViewsDrawable = null;
     public static Drawable chat_msgOutBroadcastDrawable = null;
+    public static Drawable chat_msgOutCallDrawable = null;
+    public static Drawable chat_msgOutCallSelectedDrawable = null;
     public static Drawable chat_msgOutCheckDrawable = null;
     public static Drawable chat_msgOutCheckSelectedDrawable = null;
     public static Drawable chat_msgOutClockDrawable = null;
@@ -2210,6 +2218,14 @@ public class Theme {
             chat_lockIconDrawable = resources.getDrawable(R.drawable.ic_lock_header);
             chat_msgBroadcastDrawable = resources.getDrawable(R.drawable.broadcast3).mutate();
             chat_msgBroadcastMediaDrawable = resources.getDrawable(R.drawable.broadcast3).mutate();
+            chat_msgInCallDrawable = resources.getDrawable(R.drawable.ic_call_white_24dp).mutate();
+            chat_msgInCallSelectedDrawable = resources.getDrawable(R.drawable.ic_call_white_24dp).mutate();
+            chat_msgOutCallDrawable = resources.getDrawable(R.drawable.ic_call_white_24dp).mutate();
+            chat_msgOutCallSelectedDrawable = resources.getDrawable(R.drawable.ic_call_white_24dp).mutate();
+            chat_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+            chat_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+            chat_msgCallDownRedDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+            chat_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
             chat_inlineResultFile = resources.getDrawable(R.drawable.bot_file);
             chat_inlineResultAudio = resources.getDrawable(R.drawable.bot_music);
             chat_inlineResultLocation = resources.getDrawable(R.drawable.bot_location);
@@ -2407,6 +2423,14 @@ public class Theme {
             setDrawableColorByKey(chat_inlineResultFile, key_chat_inlineResultIcon);
             setDrawableColorByKey(chat_inlineResultAudio, key_chat_inlineResultIcon);
             setDrawableColorByKey(chat_inlineResultLocation, key_chat_inlineResultIcon);
+            setDrawableColorByKey(chat_msgInCallDrawable, key_chat_inInstant);
+            setDrawableColorByKey(chat_msgInCallSelectedDrawable, key_chat_inInstantSelected);
+            setDrawableColorByKey(chat_msgOutCallDrawable, key_chat_outInstant);
+            setDrawableColorByKey(chat_msgOutCallSelectedDrawable, key_chat_outInstantSelected);
+            setDrawableColorByKey(chat_msgCallUpRedDrawable, key_calls_callReceivedRedIcon);
+            setDrawableColorByKey(chat_msgCallUpGreenDrawable, key_calls_callReceivedGreenIcon);
+            setDrawableColorByKey(chat_msgCallDownRedDrawable, key_calls_callReceivedRedIcon);
+            setDrawableColorByKey(chat_msgCallDownGreenDrawable, key_calls_callReceivedGreenIcon);
             for (a = 0; a < 5; a++) {
                 setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outLoader), false);
                 setCombinedDrawableColor(chat_fileStatesDrawable[a][0], getColor(key_chat_outBubble), true);

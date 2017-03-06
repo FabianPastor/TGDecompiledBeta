@@ -16,6 +16,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
 public class CameraSession {
+    public static final int ORIENTATION_HYSTERESIS = 5;
     private AutoFocusCallback autoFocusCallback = new AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
             if (!success) {
@@ -27,12 +28,15 @@ public class CameraSession {
     private int currentOrientation;
     private boolean initied;
     private boolean isVideo;
+    private int jpegOrientation;
+    private int lastDisplayOrientation = -1;
     private int lastOrientation = -1;
     private boolean meteringAreaSupported;
     private OrientationEventListener orientationEventListener;
     private final int pictureFormat;
     private final Size pictureSize;
     private final Size previewSize;
+    private boolean sameTakePictureOrientation;
 
     public CameraSession(CameraInfo info, Size preview, Size picture, int format) {
         this.previewSize = preview;
@@ -42,13 +46,15 @@ public class CameraSession {
         this.currentFlashMode = ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).getString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", "off");
         this.orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
             public void onOrientationChanged(int orientation) {
-                if (CameraSession.this.orientationEventListener != null && CameraSession.this.initied) {
+                if (CameraSession.this.orientationEventListener != null && CameraSession.this.initied && orientation != -1) {
+                    CameraSession.this.jpegOrientation = CameraSession.this.roundOrientation(orientation, CameraSession.this.jpegOrientation);
                     int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
-                    if (CameraSession.this.lastOrientation != rotation) {
+                    if (CameraSession.this.lastOrientation != CameraSession.this.jpegOrientation || rotation != CameraSession.this.lastDisplayOrientation) {
                         if (!CameraSession.this.isVideo) {
                             CameraSession.this.configurePhotoCamera();
                         }
-                        CameraSession.this.lastOrientation = rotation;
+                        CameraSession.this.lastDisplayOrientation = rotation;
+                        CameraSession.this.lastOrientation = CameraSession.this.jpegOrientation;
                     }
                 }
             }
@@ -59,6 +65,20 @@ public class CameraSession {
         }
         this.orientationEventListener.disable();
         this.orientationEventListener = null;
+    }
+
+    private int roundOrientation(int orientation, int orientationHistory) {
+        boolean changeOrientation;
+        if (orientationHistory == -1) {
+            changeOrientation = true;
+        } else {
+            int dist = Math.abs(orientation - orientationHistory);
+            changeOrientation = Math.min(dist, 360 - dist) >= 50;
+        }
+        if (changeOrientation) {
+            return (((orientation + 45) / 90) * 90) % 360;
+        }
+        return orientationHistory;
     }
 
     public void checkFlashMode(String mode) {
@@ -106,7 +126,12 @@ public class CameraSession {
         return this.currentOrientation;
     }
 
+    public boolean isSameTakePictureOrientation() {
+        return this.sameTakePictureOrientation;
+    }
+
     protected void configurePhotoCamera() {
+        boolean z = true;
         Camera camera = this.cameraInfo.camera;
         if (camera != null) {
             int cameraDisplayOrientation;
@@ -154,7 +179,6 @@ public class CameraSession {
             this.currentOrientation = cameraDisplayOrientation;
             camera.setDisplayOrientation(cameraDisplayOrientation);
             if (params != null) {
-                int outputOrientation;
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
@@ -162,13 +186,27 @@ public class CameraSession {
                 if (params.getSupportedFocusModes().contains(desiredMode)) {
                     params.setFocusMode(desiredMode);
                 }
-                if (info.facing == 1) {
-                    outputOrientation = (360 - displayOrientation) % 360;
-                } else {
-                    outputOrientation = displayOrientation;
+                int outputOrientation = 0;
+                if (this.jpegOrientation != -1) {
+                    if (info.facing == 1) {
+                        outputOrientation = ((info.orientation - this.jpegOrientation) + 360) % 360;
+                    } else {
+                        outputOrientation = (info.orientation + this.jpegOrientation) % 360;
+                    }
                 }
                 try {
                     params.setRotation(outputOrientation);
+                    if (info.facing == 1) {
+                        if ((360 - displayOrientation) % 360 != outputOrientation) {
+                            z = false;
+                        }
+                        this.sameTakePictureOrientation = z;
+                    } else {
+                        if (displayOrientation != outputOrientation) {
+                            z = false;
+                        }
+                        this.sameTakePictureOrientation = z;
+                    }
                 } catch (Exception e3) {
                 }
                 params.setFlashMode(this.currentFlashMode);

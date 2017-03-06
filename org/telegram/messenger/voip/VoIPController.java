@@ -4,6 +4,11 @@ import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
+import java.io.File;
+import java.util.Calendar;
+import java.util.Locale;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 
 public class VoIPController {
@@ -67,7 +72,7 @@ public class VoIPController {
 
     private native void nativeRelease(long j);
 
-    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3);
+    private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str);
 
     private native void nativeSetEncryptionKey(long j, byte[] bArr);
 
@@ -174,7 +179,7 @@ public class VoIPController {
         long j = this.nativeInst;
         boolean z = VERSION.SDK_INT < 16 || !AcousticEchoCanceler.isAvailable();
         boolean z2 = VERSION.SDK_INT < 16 || !NoiseSuppressor.isAvailable();
-        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true);
+        nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, BuildConfig.DEBUG ? getLogFilePath() : null);
     }
 
     public void debugCtl(int request, int param) {
@@ -202,5 +207,10 @@ public class VoIPController {
 
     public static String getVersion() {
         return nativeGetVersion();
+    }
+
+    private String getLogFilePath() {
+        Calendar c = Calendar.getInstance();
+        return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_voip.txt", new Object[]{Integer.valueOf(c.get(5)), Integer.valueOf(c.get(2) + 1), Integer.valueOf(c.get(1)), Integer.valueOf(c.get(11)), Integer.valueOf(c.get(12)), Integer.valueOf(c.get(13))})).getAbsolutePath();
     }
 }

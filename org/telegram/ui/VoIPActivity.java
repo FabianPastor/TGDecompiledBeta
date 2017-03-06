@@ -622,17 +622,19 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void showDebugAlert() {
-        final AlertDialog dlg = new Builder(this).setTitle("libtgvoip v" + VoIPController.getVersion() + " debug").setMessage(VoIPService.getSharedInstance().getDebugString()).setPositiveButton("Close", null).create();
-        Runnable r = new Runnable() {
-            public void run() {
-                if (dlg.isShowing() && !VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
-                    dlg.setMessage(VoIPService.getSharedInstance().getDebugString());
-                    dlg.getWindow().getDecorView().postDelayed(this, 500);
+        if (VoIPService.getSharedInstance() != null) {
+            final AlertDialog dlg = new Builder(this).setTitle("libtgvoip v" + VoIPController.getVersion() + " debug").setMessage(VoIPService.getSharedInstance().getDebugString()).setPositiveButton("Close", null).create();
+            Runnable r = new Runnable() {
+                public void run() {
+                    if (dlg.isShowing() && !VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
+                        dlg.setMessage(VoIPService.getSharedInstance().getDebugString());
+                        dlg.getWindow().getDecorView().postDelayed(this, 500);
+                    }
                 }
-            }
-        };
-        dlg.show();
-        dlg.getWindow().getDecorView().postDelayed(r, 500);
+            };
+            dlg.show();
+            dlg.getWindow().getDecorView().postDelayed(r, 500);
+        }
     }
 
     private void showDebugCtlAlert() {

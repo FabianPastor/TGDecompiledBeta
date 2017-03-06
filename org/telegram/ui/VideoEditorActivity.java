@@ -385,6 +385,9 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 z = true;
             }
             this.inPreview = z;
+            if (this.textureView == null) {
+                return true;
+            }
             try {
                 this.videoPlayer.setSurface(new Surface(this.textureView.getSurfaceTexture()));
                 return true;

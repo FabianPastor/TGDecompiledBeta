@@ -382,7 +382,7 @@ public class MessageObject {
                         this.messageText = LocaleController.getString("CallMessageIncoming", R.string.CallMessageIncoming);
                     }
                     if (call.duration > 0) {
-                        String duration = formatDuration(call.duration);
+                        String duration = LocaleController.formatCallDuration(call.duration);
                         this.messageText = LocaleController.formatString("CallMessageWithDuration", R.string.CallMessageWithDuration, this.messageText, duration);
                         String _messageText = this.messageText.toString();
                         int start = _messageText.indexOf(duration);
@@ -563,16 +563,6 @@ public class MessageObject {
             return;
         }
         this.messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString(this.messageOwner.action.total_amount, this.messageOwner.action.currency), name, this.replyMessageObject.messageOwner.media.title);
-    }
-
-    private String formatDuration(int duration) {
-        if (duration > 3600) {
-            return LocaleController.formatPluralString("Hours", duration / 3600) + ", " + LocaleController.formatPluralString("Minutes", (duration % 3600) / 60);
-        }
-        if (duration > 60) {
-            return LocaleController.formatPluralString("Minutes", duration / 60);
-        }
-        return LocaleController.formatPluralString("Seconds", duration);
     }
 
     public void generatePinMessageText(User fromUser, Chat chat) {
@@ -767,6 +757,8 @@ public class MessageObject {
             } else if (this.messageOwner.action instanceof TL_messageActionHistoryClear) {
                 this.contentType = -1;
                 this.type = -1;
+            } else if (this.messageOwner.action instanceof TL_messageActionPhoneCall) {
+                this.type = 16;
             } else {
                 this.contentType = 1;
                 this.type = 10;

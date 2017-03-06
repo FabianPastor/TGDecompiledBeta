@@ -14,9 +14,11 @@ public class VoIPServerConfig {
             String[] keys = new String[obj.length()];
             String[] values = new String[obj.length()];
             Iterator<String> itrtr = obj.keys();
+            int i = 0;
             while (itrtr.hasNext()) {
-                keys[0] = (String) itrtr.next();
-                values[0] = obj.getString(keys[0]);
+                keys[i] = (String) itrtr.next();
+                values[i] = obj.getString(keys[i]);
+                i++;
             }
             nativeSetConfig(keys, values);
         } catch (JSONException x) {

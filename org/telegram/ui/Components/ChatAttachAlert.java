@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.os.Build.VERSION;
+import android.provider.Settings.System;
 import android.text.TextUtils.TruncateAt;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -968,6 +969,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             return;
                         }
                         ChatAttachAlert.this.cameraFile = AndroidUtilities.generatePicturePath();
+                        final boolean sameTakePictureOrientation = ChatAttachAlert.this.cameraView.getCameraSession().isSameTakePictureOrientation();
                         ChatAttachAlert.this.takingPhoto = CameraController.getInstance().takePicture(ChatAttachAlert.this.cameraFile, ChatAttachAlert.this.cameraView.getCameraSession(), new Runnable() {
                             public void run() {
                                 ChatAttachAlert.this.takingPhoto = false;
@@ -1021,7 +1023,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                         }
 
                                         public boolean scaleToFill() {
-                                            return true;
+                                            int locked = System.getInt(ChatAttachAlert.this.baseFragment.getParentActivity().getContentResolver(), "accelerometer_rotation", 0);
+                                            if (sameTakePictureOrientation || locked == 1) {
+                                                return true;
+                                            }
+                                            return false;
                                         }
 
                                         public void willHidePhotoViewer() {
