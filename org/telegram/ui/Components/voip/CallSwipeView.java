@@ -121,6 +121,9 @@ public class CallSwipeView extends View {
 
     public boolean onTouchEvent(MotionEvent ev) {
         float f = 0.0f;
+        if (!isEnabled()) {
+            return false;
+        }
         if (ev.getAction() == 0) {
             if ((!this.dragFromRight && ev.getX() < ((float) getDraggedViewWidth())) || (this.dragFromRight && ev.getX() > ((float) (getWidth() - getDraggedViewWidth())))) {
                 this.dragging = true;

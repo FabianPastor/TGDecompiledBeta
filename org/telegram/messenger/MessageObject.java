@@ -1175,9 +1175,9 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
+        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && this.messageText != null && this.messageText.length() != 0) {
             boolean hasEntities;
-            int a;
             TextPaint paint;
             generateLinkDescription();
             this.textLayoutBlocks = new ArrayList();

@@ -70,16 +70,16 @@ public class zzaty extends zzauh {
         }
 
         public void run() {
-            HttpURLConnection zzc;
             OutputStream outputStream;
             Throwable e;
             Map map;
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
-            Map map2;
             this.zzbsY.zzJW();
             int i2 = 0;
+            HttpURLConnection zzc;
+            Map map2;
             try {
                 zzc = this.zzbsY.zzc(this.zzIe);
                 try {

@@ -7,6 +7,7 @@ import android.app.Notification.Builder;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -38,6 +39,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.InputDeviceCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -46,6 +48,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
@@ -121,6 +124,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private static VoIPService sharedInstance;
     private byte[] a_or_b;
     private byte[] authKey;
+    private BluetoothAdapter btAdapter;
     private PhoneCall call;
     private int callReqId;
     private VoIPController controller;
@@ -129,6 +133,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private int currentState = 0;
     private int endHash;
     private boolean haveAudioFocus;
+    private boolean isBtHeadsetConnected;
     private boolean isHeadsetPlugged;
     private boolean isOutgoing;
     private boolean isProximityNear;
@@ -146,8 +151,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             boolean z = true;
+            VoIPService voIPService;
             if (VoIPService.ACTION_HEADSET_PLUG.equals(intent.getAction())) {
-                VoIPService voIPService = VoIPService.this;
+                voIPService = VoIPService.this;
                 if (intent.getIntExtra("state", 0) != 1) {
                     z = false;
                 }
@@ -163,22 +169,35 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     VoIPService.this.stopForeground(true);
                     VoIPService.this.hangUp();
                 }
-            } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction()) && intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
-                VoIPService.this.showNotification();
-                if (VERSION.SDK_INT < 23 || VoIPService.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-                    VoIPService.this.acceptIncomingCall();
+            } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction())) {
+                if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                    VoIPService.this.showNotification();
+                    if (VERSION.SDK_INT < 23 || VoIPService.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                        VoIPService.this.acceptIncomingCall();
+                        try {
+                            PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
+                            return;
+                        } catch (Exception x) {
+                            FileLog.e("Error starting incall activity", x);
+                            return;
+                        }
+                    }
                     try {
-                        PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPActivity.class).addFlags(805306368), 0).send();
-                        return;
-                    } catch (Exception x) {
-                        FileLog.e("Error starting incall activity", x);
-                        return;
+                        PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPPermissionActivity.class).addFlags(268435456), 0).send();
+                    } catch (Exception x2) {
+                        FileLog.e("Error starting permission activity", x2);
                     }
                 }
-                try {
-                    PendingIntent.getActivity(VoIPService.this, 0, new Intent(VoIPService.this, VoIPPermissionActivity.class).addFlags(268435456), 0).send();
-                } catch (Exception x2) {
-                    FileLog.e("Error starting permission activity", x2);
+            } else if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction())) {
+                voIPService = VoIPService.this;
+                if (intent.getIntExtra("android.bluetooth.profile.extra.STATE", 0) != 2) {
+                    z = false;
+                }
+                voIPService.updateBluetoothHeadsetState(z);
+            } else if ("android.media.ACTION_SCO_AUDIO_STATE_UPDATED".equals(intent.getAction())) {
+                Iterator it = VoIPService.this.stateListeners.iterator();
+                while (it.hasNext()) {
+                    ((StateListener) it.next()).onAudioSettingsChanged();
                 }
             }
         }
@@ -261,9 +280,15 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, preferences.getInt("VoipDataSaving", 0));
             this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
             this.cpuWakelock.acquire();
+            am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            this.btAdapter = am.isBluetoothScoAvailableOffCall() ? BluetoothAdapter.getDefaultAdapter() : null;
             IntentFilter filter = new IntentFilter();
             filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
             filter.addAction(ACTION_HEADSET_PLUG);
+            if (this.btAdapter != null) {
+                filter.addAction("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED");
+                filter.addAction("android.media.ACTION_SCO_AUDIO_STATE_UPDATED");
+            }
             filter.addAction(getPackageName() + ".END_CALL");
             filter.addAction(getPackageName() + ".ANSWER_CALL");
             registerReceiver(this.receiver, filter);
@@ -274,8 +299,19 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.spFailedID = this.soundPool.load(this, R.raw.voip_failed, 1);
             this.spEndId = this.soundPool.load(this, R.raw.voip_end, 1);
             this.spBusyId = this.soundPool.load(this, R.raw.voip_busy, 1);
-            ((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
-        } catch (Exception x) {
+            am.registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
+            if (this.btAdapter != null && this.btAdapter.isEnabled()) {
+                int headsetState = this.btAdapter.getProfileConnectionState(1);
+                updateBluetoothHeadsetState(headsetState == 2);
+                if (headsetState == 2) {
+                    am.setBluetoothScoOn(true);
+                }
+                Iterator it = this.stateListeners.iterator();
+                while (it.hasNext()) {
+                    ((StateListener) it.next()).onAudioSettingsChanged();
+                }
+            }
+        } catch (Throwable x) {
             FileLog.e("error initializing voip controller", x);
             callFailed();
         }
@@ -304,6 +340,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         }
         this.cpuWakelock.release();
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+        if (this.isBtHeadsetConnected && !this.playingSound) {
+            am.stopBluetoothSco();
+        }
         am.setMode(0);
         am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         if (this.haveAudioFocus) {
@@ -516,7 +555,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             }
             this.vibrator.vibrate(new long[]{0, duration, 500}, 0);
         }
-        if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
+        if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
             FileLog.d("Starting incall activity for incoming call");
             try {
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
@@ -719,6 +758,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 VoIPService.this.soundPool.release();
+                                if (VoIPService.this.isBtHeadsetConnected) {
+                                    ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+                                }
                             }
                         }, 2500);
                         stopSelf();
@@ -1000,6 +1042,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     VoIPService.this.soundPool.release();
+                    if (VoIPService.this.isBtHeadsetConnected) {
+                        ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+                    }
                 }
             }, 1000);
             stopSelf();
@@ -1015,6 +1060,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
                     VoIPService.this.soundPool.release();
+                    if (VoIPService.this.isBtHeadsetConnected) {
+                        ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+                    }
                 }
             }, 1000);
         }
@@ -1115,6 +1163,26 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (this.controller != null) {
             this.controller.setNetworkType(type);
         }
+    }
+
+    private void updateBluetoothHeadsetState(boolean connected) {
+        if (connected != this.isBtHeadsetConnected) {
+            this.isBtHeadsetConnected = connected;
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            if (connected) {
+                am.startBluetoothSco();
+            } else {
+                am.stopBluetoothSco();
+            }
+            Iterator it = this.stateListeners.iterator();
+            while (it.hasNext()) {
+                ((StateListener) it.next()).onAudioSettingsChanged();
+            }
+        }
+    }
+
+    public boolean isBluetoothHeadsetConnected() {
+        return this.isBtHeadsetConnected;
     }
 
     private void configureDeviceForCall() {

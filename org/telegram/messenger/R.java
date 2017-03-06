@@ -237,6 +237,7 @@ public final class R {
         public static final int ic_again = NUM;
         public static final int ic_againinline = NUM;
         public static final int ic_arrow_drop_down = NUM;
+        public static final int ic_bluetooth_white_24dp = NUM;
         public static final int ic_call_end_white_24dp = NUM;
         public static final int ic_call_end_white_36dp = NUM;
         public static final int ic_call_made_green_18dp = NUM;
@@ -273,6 +274,7 @@ public final class R {
         public static final int ic_outinline = NUM;
         public static final int ic_pause = NUM;
         public static final int ic_pauseinline = NUM;
+        public static final int ic_phone_in_talk_white_24dp = NUM;
         public static final int ic_play = NUM;
         public static final int ic_player = NUM;
         public static final int ic_playinline = NUM;
@@ -1978,6 +1980,9 @@ public final class R {
         public static final int ViewPackPreview = NUM;
         public static final int Vignette = NUM;
         public static final int VoipAnswerCall = NUM;
+        public static final int VoipAudioRoutingBluetooth = NUM;
+        public static final int VoipAudioRoutingEarpiece = NUM;
+        public static final int VoipAudioRoutingSpeaker = NUM;
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
         public static final int VoipConnecting = NUM;

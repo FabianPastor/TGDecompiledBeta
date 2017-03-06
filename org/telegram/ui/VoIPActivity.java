@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -56,7 +57,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.IdenticonDrawable;
@@ -168,10 +169,44 @@ public class VoIPActivity extends Activity implements StateListener {
         });
         this.spkToggle.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (VoIPService.getSharedInstance() != null) {
-                    boolean checked = !VoIPActivity.this.spkToggle.isChecked();
+                boolean checked = true;
+                VoIPService svc = VoIPService.getSharedInstance();
+                if (svc != null) {
+                    if (svc.isBluetoothHeadsetConnected() && svc.hasEarpiece()) {
+                        new Builder(VoIPActivity.this).setItems(new CharSequence[]{LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece), LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker)}, new int[]{R.drawable.ic_bluetooth_white_24dp, R.drawable.ic_phone_in_talk_white_24dp, R.drawable.ic_volume_up_white_24dp}, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                AudioManager am = (AudioManager) VoIPActivity.this.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+                                if (VoIPService.getSharedInstance() != null) {
+                                    switch (which) {
+                                        case 0:
+                                            am.setBluetoothScoOn(true);
+                                            am.setSpeakerphoneOn(false);
+                                            break;
+                                        case 1:
+                                            am.setBluetoothScoOn(false);
+                                            am.setSpeakerphoneOn(false);
+                                            break;
+                                        case 2:
+                                            am.setBluetoothScoOn(false);
+                                            am.setSpeakerphoneOn(true);
+                                            break;
+                                    }
+                                    VoIPActivity.this.onAudioSettingsChanged();
+                                }
+                            }
+                        }).show();
+                        return;
+                    }
+                    if (VoIPActivity.this.spkToggle.isChecked()) {
+                        checked = false;
+                    }
                     VoIPActivity.this.spkToggle.setChecked(checked);
-                    ((AudioManager) VoIPActivity.this.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).setSpeakerphoneOn(checked);
+                    AudioManager am = (AudioManager) VoIPActivity.this.getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+                    if (svc.hasEarpiece()) {
+                        am.setSpeakerphoneOn(checked);
+                    } else {
+                        am.setBluetoothScoOn(checked);
+                    }
                 }
             }
         });
@@ -196,20 +231,22 @@ public class VoIPActivity extends Activity implements StateListener {
         });
         this.spkToggle.setChecked(((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn());
         this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
-        if (!VoIPService.getSharedInstance().hasEarpiece()) {
-            this.spkToggle.setVisibility(4);
-        }
+        onAudioSettingsChanged();
         this.nameText.setText(ContactsController.formatName(this.user.first_name, this.user.last_name));
         VoIPService.getSharedInstance().registerStateListener(this);
         this.acceptSwipe.setListener(new Listener() {
             public void onDragComplete() {
-                VoIPActivity.this.didAcceptFromHere = true;
-                if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-                    VoIPService.getSharedInstance().acceptIncomingCall();
-                    VoIPActivity.this.callAccepted();
-                    return;
+                VoIPActivity.this.acceptSwipe.setEnabled(false);
+                VoIPActivity.this.declineSwipe.setEnabled(false);
+                if (VoIPService.getSharedInstance() != null) {
+                    VoIPActivity.this.didAcceptFromHere = true;
+                    if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                        VoIPService.getSharedInstance().acceptIncomingCall();
+                        VoIPActivity.this.callAccepted();
+                        return;
+                    }
+                    VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
                 }
-                VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
             }
 
             public void onDragStart() {
@@ -256,7 +293,11 @@ public class VoIPActivity extends Activity implements StateListener {
         });
         this.declineSwipe.setListener(new Listener() {
             public void onDragComplete() {
-                VoIPService.getSharedInstance().declineIncomingCall();
+                VoIPActivity.this.acceptSwipe.setEnabled(false);
+                VoIPActivity.this.declineSwipe.setEnabled(false);
+                if (VoIPService.getSharedInstance() != null) {
+                    VoIPService.getSharedInstance().declineIncomingCall();
+                }
             }
 
             public void onDragStart() {
@@ -516,6 +557,7 @@ public class VoIPActivity extends Activity implements StateListener {
         return frameLayout;
     }
 
+    @SuppressLint({"ObjectAnimatorBinding"})
     private ObjectAnimator createAlphaAnimator(Object target, int startVal, int endVal, int startDelay, int duration) {
         ObjectAnimator a = ObjectAnimator.ofInt(target, "alpha", new int[]{startVal, endVal});
         a.setDuration((long) duration);
@@ -623,7 +665,7 @@ public class VoIPActivity extends Activity implements StateListener {
 
     private void showDebugAlert() {
         if (VoIPService.getSharedInstance() != null) {
-            final AlertDialog dlg = new Builder(this).setTitle("libtgvoip v" + VoIPController.getVersion() + " debug").setMessage(VoIPService.getSharedInstance().getDebugString()).setPositiveButton("Close", null).create();
+            final AlertDialog dlg = new AlertDialog.Builder(this).setTitle("libtgvoip v" + VoIPController.getVersion() + " debug").setMessage(VoIPService.getSharedInstance().getDebugString()).setPositiveButton("Close", null).create();
             Runnable r = new Runnable() {
                 public void run() {
                     if (dlg.isShowing() && !VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null) {
@@ -638,7 +680,7 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     private void showDebugCtlAlert() {
-        new Builder(this).setItems(new String[]{"Set audio bitrate", "Set expect packet loss %", "Disable p2p", "Enable p2p", "Disable AEC", "Enable AEC"}, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setItems(new String[]{"Set audio bitrate", "Set expect packet loss %", "Disable p2p", "Enable p2p", "Disable AEC", "Enable AEC"}, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -682,7 +724,7 @@ public class VoIPActivity extends Activity implements StateListener {
         picker.setMaxValue(max);
         picker.setValue(value);
         picker.setOnValueChangedListener(listener);
-        new Builder(this).setTitle(title).setView(picker).setPositiveButton("Done", null).show();
+        new AlertDialog.Builder(this).setTitle(title).setView(picker).setPositiveButton("Done", null).show();
     }
 
     private void startUpdatingCallDuration() {
@@ -853,7 +895,7 @@ public class VoIPActivity extends Activity implements StateListener {
                     }
                     AlertDialog dlg;
                     if (lastError == 1) {
-                        dlg = new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+                        dlg = new AlertDialog.Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
                         dlg.setCanceledOnTouchOutside(true);
                         dlg.setOnDismissListener(new OnDismissListener() {
                             public void onDismiss(DialogInterface dialog) {
@@ -861,7 +903,7 @@ public class VoIPActivity extends Activity implements StateListener {
                             }
                         });
                     } else if (lastError == -1) {
-                        dlg = new Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+                        dlg = new AlertDialog.Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
                         dlg.setCanceledOnTouchOutside(true);
                         dlg.setOnDismissListener(new OnDismissListener() {
                             public void onDismiss(DialogInterface dialog) {
@@ -881,7 +923,33 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     public void onAudioSettingsChanged() {
-        this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
+        if (VoIPService.getSharedInstance() != null) {
+            this.micToggle.setChecked(VoIPService.getSharedInstance().isMicMute());
+            if (VoIPService.getSharedInstance().hasEarpiece() || VoIPService.getSharedInstance().isBluetoothHeadsetConnected()) {
+                this.spkToggle.setVisibility(0);
+                AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+                if (!VoIPService.getSharedInstance().hasEarpiece()) {
+                    this.spkToggle.setImageResource(R.drawable.ic_bluetooth_white_24dp);
+                    this.spkToggle.setChecked(am.isBluetoothScoOn());
+                    return;
+                } else if (VoIPService.getSharedInstance().isBluetoothHeadsetConnected()) {
+                    if (am.isBluetoothScoOn()) {
+                        this.spkToggle.setImageResource(R.drawable.ic_bluetooth_white_24dp);
+                    } else if (am.isSpeakerphoneOn()) {
+                        this.spkToggle.setImageResource(R.drawable.ic_volume_up_white_24dp);
+                    } else {
+                        this.spkToggle.setImageResource(R.drawable.ic_phone_in_talk_white_24dp);
+                    }
+                    this.spkToggle.setChecked(false);
+                    return;
+                } else {
+                    this.spkToggle.setImageResource(R.drawable.ic_volume_up_white_24dp);
+                    this.spkToggle.setChecked(am.isSpeakerphoneOn());
+                    return;
+                }
+            }
+            this.spkToggle.setVisibility(4);
+        }
     }
 
     private void setStateTextAnimated(String _newText, boolean ellipsis) {

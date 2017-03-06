@@ -37,14 +37,18 @@ public class AudioTrackJNI {
 
     public void release() {
         this.running = false;
-        try {
-            this.thread.join();
-        } catch (Throwable e) {
-            FileLog.e(e);
+        if (this.thread != null) {
+            try {
+                this.thread.join();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+            this.thread = null;
         }
-        this.thread = null;
-        this.audioTrack.release();
-        this.audioTrack = null;
+        if (this.audioTrack != null) {
+            this.audioTrack.release();
+            this.audioTrack = null;
+        }
     }
 
     public void start() {

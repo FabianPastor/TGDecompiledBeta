@@ -537,6 +537,10 @@
     <drawable name="ic_arrow_drop_down">res/drawable-hdpi-v4/ic_arrow_drop_down.png</drawable>
     <drawable name="ic_arrow_drop_down">res/drawable-xhdpi-v4/ic_arrow_drop_down.png</drawable>
     <drawable name="ic_arrow_drop_down">res/drawable-xxhdpi-v4/ic_arrow_drop_down.png</drawable>
+    <drawable name="ic_bluetooth_white_24dp">res/drawable-mdpi-v4/ic_bluetooth_white_24dp.png</drawable>
+    <drawable name="ic_bluetooth_white_24dp">res/drawable-hdpi-v4/ic_bluetooth_white_24dp.png</drawable>
+    <drawable name="ic_bluetooth_white_24dp">res/drawable-xhdpi-v4/ic_bluetooth_white_24dp.png</drawable>
+    <drawable name="ic_bluetooth_white_24dp">res/drawable-xxhdpi-v4/ic_bluetooth_white_24dp.png</drawable>
     <drawable name="ic_call_end_white_24dp">res/drawable-mdpi-v4/ic_call_end_white_24dp.png</drawable>
     <drawable name="ic_call_end_white_24dp">res/drawable-hdpi-v4/ic_call_end_white_24dp.png</drawable>
     <drawable name="ic_call_end_white_24dp">res/drawable-xhdpi-v4/ic_call_end_white_24dp.png</drawable>
@@ -674,6 +678,9 @@
     <drawable name="ic_pauseinline">res/drawable-hdpi-v4/ic_pauseinline.png</drawable>
     <drawable name="ic_pauseinline">res/drawable-xhdpi-v4/ic_pauseinline.png</drawable>
     <drawable name="ic_pauseinline">res/drawable-xxhdpi-v4/ic_pauseinline.png</drawable>
+    <drawable name="ic_phone_in_talk_white_24dp">res/drawable-mdpi-v4/ic_phone_in_talk_white_24dp.png</drawable>
+    <drawable name="ic_phone_in_talk_white_24dp">res/drawable-xhdpi-v4/ic_phone_in_talk_white_24dp.png</drawable>
+    <drawable name="ic_phone_in_talk_white_24dp">res/drawable-xxhdpi-v4/ic_phone_in_talk_white_24dp.png</drawable>
     <drawable name="ic_play">res/drawable-mdpi-v4/ic_play.png</drawable>
     <drawable name="ic_play">res/drawable-hdpi-v4/ic_play.png</drawable>
     <drawable name="ic_play">res/drawable-xhdpi-v4/ic_play.png</drawable>
