@@ -105,6 +105,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
     private boolean firstCaptionLayout;
     private boolean inPreview;
     private float lastProgress;
+    private boolean loadInitialVideo;
     private LinearLayoutManager mentionLayoutManager;
     private AnimatorSet mentionListAnimation;
     private RecyclerListView mentionListView;
@@ -345,21 +346,28 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.videoPath = args.getString("videoPath");
     }
 
+    private void destroyPlayer() {
+        if (this.videoPlayer != null) {
+            try {
+                if (this.videoPlayer != null) {
+                    this.videoPlayer.stop();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (this.videoPlayer != null) {
+                    this.videoPlayer.release();
+                }
+            } catch (Exception e2) {
+            }
+            this.videoPlayer = null;
+        }
+    }
+
     private boolean reinitPlayer(String path) {
         boolean z = false;
         float volume = 0.0f;
-        try {
-            if (this.videoPlayer != null) {
-                this.videoPlayer.stop();
-            }
-        } catch (Exception e) {
-        }
-        try {
-            if (this.videoPlayer != null) {
-                this.videoPlayer.release();
-            }
-        } catch (Exception e2) {
-        }
+        destroyPlayer();
         if (this.playButton != null) {
             this.playButton.setImageResource(R.drawable.video_edit_play);
         }
@@ -397,12 +405,12 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             try {
                 this.videoPlayer.setSurface(new Surface(this.textureView.getSurfaceTexture()));
                 return true;
-            } catch (Throwable e3) {
-                FileLog.e(e3);
+            } catch (Throwable e) {
+                FileLog.e(e);
                 return true;
             }
-        } catch (Throwable e32) {
-            FileLog.e(e32);
+        } catch (Throwable e2) {
+            FileLog.e(e2);
             return false;
         }
     }
@@ -829,7 +837,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         this.playButton.setImageResource(R.drawable.video_edit_play);
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (VideoEditorActivity.this.videoPlayer != null && VideoEditorActivity.this.playerPrepared && !VideoEditorActivity.this.requestingPreview) {
+                if (VideoEditorActivity.this.videoPlayer != null && VideoEditorActivity.this.playerPrepared && !VideoEditorActivity.this.requestingPreview && !VideoEditorActivity.this.loadInitialVideo) {
                     if (VideoEditorActivity.this.videoPlayer.isPlaying()) {
                         VideoEditorActivity.this.videoPlayer.pause();
                         VideoEditorActivity.this.playButton.setImageResource(R.drawable.video_edit_play);
@@ -1009,10 +1017,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
                 if (VideoEditorActivity.this.allowMentions) {
                     VideoEditorActivity.this.mentionListAnimation = new AnimatorSet();
-                    AnimatorSet access$5000 = VideoEditorActivity.this.mentionListAnimation;
+                    AnimatorSet access$5100 = VideoEditorActivity.this.mentionListAnimation;
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f});
-                    access$5000.playTogether(animatorArr);
+                    access$5100.playTogether(animatorArr);
                     VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {
                             if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
@@ -1218,7 +1226,9 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         if (this.videoPreviewMessageObject != null) {
             MediaController.getInstance().cancelVideoConvert(this.videoPreviewMessageObject);
         }
+        boolean wasRequestingPreview = this.requestingPreview && !this.tryStartRequestPreviewOnFinish;
         this.requestingPreview = false;
+        this.loadInitialVideo = false;
         this.progressView.setVisibility(4);
         if (request != 1) {
             this.tryStartRequestPreviewOnFinish = false;
@@ -1226,15 +1236,16 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 reinitPlayer(this.videoPath);
             }
         } else if (this.selectedCompression == this.compressionsCount - 1) {
+            this.tryStartRequestPreviewOnFinish = false;
+            if (wasRequestingPreview) {
+                this.playButton.setImageDrawable(null);
+                this.progressView.setVisibility(0);
+                this.loadInitialVideo = true;
+                return;
+            }
             reinitPlayer(this.videoPath);
         } else {
-            try {
-                if (this.videoPlayer != null) {
-                    this.videoPlayer.pause();
-                }
-            } catch (Exception e) {
-                FileLog.e("tmessages", e);
-            }
+            destroyPlayer();
             if (this.videoPreviewMessageObject == null) {
                 TL_message message = new TL_message();
                 message.id = 0;
@@ -1267,13 +1278,14 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.videoPreviewMessageObject.videoEditedInfo.bitrate = this.bitrate;
             this.videoPreviewMessageObject.videoEditedInfo.resultWidth = this.resultWidth;
             this.videoPreviewMessageObject.videoEditedInfo.resultHeight = this.resultHeight;
-            if (MediaController.getInstance().scheduleVideoConvert(this.videoPreviewMessageObject, true)) {
+            if (!MediaController.getInstance().scheduleVideoConvert(this.videoPreviewMessageObject, true)) {
+                this.tryStartRequestPreviewOnFinish = true;
+            }
+            if (this.videoPlayer == null) {
                 this.requestingPreview = true;
                 this.playButton.setImageDrawable(null);
                 this.progressView.setVisibility(0);
-                return;
             }
-            this.tryStartRequestPreviewOnFinish = true;
         }
     }
 
@@ -1282,13 +1294,23 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
         } else if (id == NotificationCenter.FilePreparingFailed) {
-            if (this.tryStartRequestPreviewOnFinish) {
+            MessageObject messageObject = args[0];
+            if (this.loadInitialVideo) {
+                this.loadInitialVideo = false;
+                this.progressView.setVisibility(4);
+                reinitPlayer(this.videoPath);
+            } else if (this.tryStartRequestPreviewOnFinish) {
+                destroyPlayer();
                 if (MediaController.getInstance().scheduleVideoConvert(this.videoPreviewMessageObject, true)) {
                     z = false;
                 }
                 this.tryStartRequestPreviewOnFinish = z;
+            } else if (messageObject == this.videoPreviewMessageObject) {
+                this.requestingPreview = false;
+                this.progressView.setVisibility(4);
+                this.playButton.setImageResource(R.drawable.video_edit_play);
             }
-        } else if (id == NotificationCenter.FileNewChunkAvailable && args[0] == this.videoPreviewMessageObject) {
+        } else if (id == NotificationCenter.FileNewChunkAvailable && ((MessageObject) args[0]) == this.videoPreviewMessageObject) {
             String finalPath = args[1];
             if (((Long) args[2]).longValue() != 0) {
                 this.requestingPreview = false;

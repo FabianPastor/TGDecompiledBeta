@@ -184,6 +184,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messages_getMessageEditData;
 import org.telegram.tgnet.TLRPC.TL_messages_getWebPagePreview;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
@@ -8649,10 +8650,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             if (this.currentChat == null || this.isBroadcast) {
                                 if (message.messageOwner.action != null && (message.messageOwner.action instanceof TL_messageActionPhoneCall)) {
                                     String string;
-                                    if (!(message.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonMissed) || message.isOutOwner()) {
-                                        string = LocaleController.getString("CallAgain", R.string.CallAgain);
-                                    } else {
+                                    TL_messageActionPhoneCall call = message.messageOwner.action;
+                                    if (((call.reason instanceof TL_phoneCallDiscardReasonMissed) || (call.reason instanceof TL_phoneCallDiscardReasonBusy)) && !message.isOutOwner()) {
                                         string = LocaleController.getString("CallBack", R.string.CallBack);
+                                    } else {
+                                        string = LocaleController.getString("CallAgain", R.string.CallAgain);
                                     }
                                     items.add(string);
                                     options.add(Integer.valueOf(18));

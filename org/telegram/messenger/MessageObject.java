@@ -99,6 +99,8 @@ import org.telegram.tgnet.TLRPC.TL_message_old2;
 import org.telegram.tgnet.TLRPC.TL_message_old3;
 import org.telegram.tgnet.TLRPC.TL_message_old4;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
@@ -369,7 +371,7 @@ public class MessageObject {
                     generateGameMessageText(fromUser);
                 } else if (message.action instanceof TL_messageActionPhoneCall) {
                     TL_messageActionPhoneCall call = this.messageOwner.action;
-                    boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
+                    boolean isMissed = (call.reason instanceof TL_phoneCallDiscardReasonMissed) || (call.reason instanceof TL_phoneCallDiscardReasonBusy) || (call.reason instanceof TL_phoneCallDiscardReasonDisconnect);
                     if (this.messageOwner.from_id == UserConfig.getClientUserId()) {
                         if (isMissed) {
                             this.messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);

@@ -641,8 +641,7 @@ public class Theme {
     public static final String key_inappPlayerPerformer = "inappPlayerPerformer";
     public static final String key_inappPlayerPlayPause = "inappPlayerPlayPause";
     public static final String key_inappPlayerTitle = "inappPlayerTitle";
-    public static final String key_listSelector = "listSelector";
-    public static final String key_listSelectorSDK21 = "listSelectorSDK21";
+    public static final String key_listSelector = "listSelectorSDK21";
     public static final String key_location_markerX = "location_markerX";
     public static final String key_location_sendLocationBackground = "location_sendLocationBackground";
     public static final String key_location_sendLocationIcon = "location_sendLocationIcon";
@@ -878,8 +877,7 @@ public class Theme {
         defaultColors.put(key_checkboxSquareCheck, Integer.valueOf(-1));
         defaultColors.put(key_checkboxSquareUnchecked, Integer.valueOf(-9211021));
         defaultColors.put(key_checkboxSquareDisabled, Integer.valueOf(-5197648));
-        defaultColors.put(key_listSelector, Integer.valueOf(ACTION_BAR_AUDIO_SELECTOR_COLOR));
-        defaultColors.put(key_listSelectorSDK21, Integer.valueOf(251658240));
+        defaultColors.put(key_listSelector, Integer.valueOf(251658240));
         defaultColors.put(key_radioBackground, Integer.valueOf(-5000269));
         defaultColors.put(key_radioBackgroundChecked, Integer.valueOf(-13129232));
         defaultColors.put(key_windowBackgroundGray, Integer.valueOf(-986896));
@@ -1568,21 +1566,18 @@ public class Theme {
     }
 
     public static Drawable getSelectorDrawable(boolean whiteBackground) {
-        if (whiteBackground) {
-            if (VERSION.SDK_INT >= 21) {
-                return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{getColor(key_listSelectorSDK21)}), new ColorDrawable(getColor(key_windowBackgroundWhite)), new ColorDrawable(-1));
-            }
-            int color = getColor(key_listSelector);
-            Drawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{16842919}, new ColorDrawable(color));
-            stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(color));
-            stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(getColor(key_windowBackgroundWhite)));
-            return stateListDrawable;
-        } else if (VERSION.SDK_INT >= 21) {
-            return createSelectorDrawable(getColor(key_listSelectorSDK21), 2);
-        } else {
+        if (!whiteBackground) {
             return createSelectorDrawable(getColor(key_listSelector), 2);
         }
+        if (VERSION.SDK_INT >= 21) {
+            return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{getColor(key_listSelector)}), new ColorDrawable(getColor(key_windowBackgroundWhite)), new ColorDrawable(-1));
+        }
+        int color = getColor(key_listSelector);
+        Drawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{16842919}, new ColorDrawable(color));
+        stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(color));
+        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(getColor(key_windowBackgroundWhite)));
+        return stateListDrawable;
     }
 
     public static Drawable createSelectorDrawable(int color) {
@@ -2694,12 +2689,12 @@ public class Theme {
             Utilities.searchQueue.postRunnable(new Runnable() {
                 public void run() {
                     Throwable e;
-                    int i;
                     SharedPreferences preferences;
                     int selectedBackground;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        File toFile;
+                        int i;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

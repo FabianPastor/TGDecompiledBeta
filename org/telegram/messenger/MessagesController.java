@@ -2040,7 +2040,6 @@ public class MessagesController implements NotificationCenterDelegate {
         TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
-        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2068,6 +2067,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
+            NativeByteBuffer data2;
             if (channelId != 0) {
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
@@ -5106,7 +5106,6 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
-        Integer channelPts;
         Throwable e;
         long newTaskId;
         TL_updates_getChannelDifference req;
@@ -5117,6 +5116,7 @@ public class MessagesController implements NotificationCenterDelegate {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
+            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));

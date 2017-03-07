@@ -620,6 +620,9 @@ public class AndroidUtilities {
         }
     }
 
+    public static void endIncomingCall() {
+    }
+
     private static Intent createShortcutIntent(long did, boolean forDelete) {
         Intent intent = new Intent(ApplicationLoader.applicationContext, OpenChatReceiver.class);
         int lower_id = (int) did;

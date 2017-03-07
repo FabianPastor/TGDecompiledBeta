@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.PhoneCallDiscardReason;
 import org.telegram.tgnet.TLRPC.TL_account_updateNotifySettings;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inputNotifyPeer;
@@ -76,6 +77,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageService;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
+import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.LaunchActivity;
@@ -797,10 +799,7 @@ public class NotificationsController {
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
                     return LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
                 } else if (messageObject.messageOwner.action instanceof TL_messageActionLoginUnknownLocation) {
-                    r26 = new Object[2];
-                    r26[0] = LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000);
-                    r26[1] = LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000);
-                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, r26);
+                    String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
                     return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, UserConfig.getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                 } else if ((messageObject.messageOwner.action instanceof TL_messageActionGameScore) || (messageObject.messageOwner.action instanceof TL_messageActionPaymentSent)) {
                     return messageObject.messageText.toString();
@@ -808,12 +807,11 @@ public class NotificationsController {
                     if (!(messageObject.messageOwner.action instanceof TL_messageActionPhoneCall)) {
                         return null;
                     }
-                    boolean isMissed = messageObject.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonMissed;
-                    boolean isBusy = messageObject.messageOwner.action.reason instanceof TL_phoneCallDiscardReasonBusy;
+                    PhoneCallDiscardReason reason = messageObject.messageOwner.action.reason;
                     if (messageObject.isOut()) {
                         return null;
                     }
-                    if (isMissed || isBusy) {
+                    if ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy) || (reason instanceof TL_phoneCallDiscardReasonDisconnect)) {
                         return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
                     }
                     return null;

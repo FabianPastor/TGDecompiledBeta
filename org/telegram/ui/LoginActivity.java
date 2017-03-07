@@ -1491,6 +1491,7 @@ public class LoginActivity extends BaseFragment {
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public void run() {
                                 LoginActivitySmsView.this.nextPressed = false;
+                                boolean ok = false;
                                 if (error == null) {
                                     LoginActivity.this.needHideProgress();
                                     TL_auth_authorization res = response;
@@ -1514,6 +1515,7 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 LoginActivitySmsView.this.lastError = error.text;
                                 if (error.text.contains("PHONE_NUMBER_UNOCCUPIED")) {
+                                    ok = true;
                                     LoginActivity.this.needHideProgress();
                                     Bundle params = new Bundle();
                                     params.putString("phoneFormated", LoginActivitySmsView.this.requestPhone);
@@ -1523,6 +1525,7 @@ public class LoginActivity extends BaseFragment {
                                     LoginActivitySmsView.this.destroyTimer();
                                     LoginActivitySmsView.this.destroyCodeTimer();
                                 } else if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
+                                    ok = true;
                                     ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
                                         public void run(final TLObject response, final TL_error error) {
                                             AndroidUtilities.runOnUIThread(new Runnable() {
@@ -1568,22 +1571,24 @@ public class LoginActivity extends BaseFragment {
                                         NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
                                     }
                                     LoginActivitySmsView.this.waitingForEvent = true;
-                                    if (LoginActivitySmsView.this.currentType == 3) {
-                                        return;
+                                    if (LoginActivitySmsView.this.currentType != 3) {
+                                        if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                        } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                        } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                            LoginActivitySmsView.this.onBackPressed();
+                                            LoginActivity.this.setPage(0, true, null, true);
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                        } else {
+                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                        }
                                     }
-                                    if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                    } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                    } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                        LoginActivitySmsView.this.onBackPressed();
-                                        LoginActivity.this.setPage(0, true, null, true);
-                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                    } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
-                                    } else {
-                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
-                                    }
+                                }
+                                if (ok) {
+                                    AndroidUtilities.endIncomingCall();
                                 }
                             }
                         });

@@ -1974,10 +1974,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
                         }
                     }
                 } else if (VERSION.SDK_INT >= 16) {
-                    if (AndroidUtilities.isTablet()) {
-                        this.actionBarLayout.presentFragment(chatActivity, false, true, true);
-                    } else {
+                    if (!AndroidUtilities.isTablet()) {
                         this.actionBarLayout.addFragmentToStack(chatActivity, dialogsFragment != null ? this.actionBarLayout.fragmentsStack.size() - 1 : this.actionBarLayout.fragmentsStack.size());
+                    } else if (this.tabletFullSize) {
+                        this.actionBarLayout.presentFragment(chatActivity, false, true, false);
+                    } else {
+                        this.rightActionBarLayout.removeAllFragments();
+                        this.rightActionBarLayout.addFragmentToStack(chatActivity);
+                        this.rightActionBarLayout.setVisibility(0);
+                        this.rightActionBarLayout.showLastFragment();
                     }
                     if (!(chatActivity.openVideoEditor(this.videoPath, dialogsFragment != null, false) || AndroidUtilities.isTablet())) {
                         if (dialogsFragment != null) {

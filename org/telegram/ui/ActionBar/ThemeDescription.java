@@ -284,14 +284,8 @@ public class ThemeDescription {
         }
         if (this.viewToInvalidate instanceof RecyclerListView) {
             RecyclerListView recyclerListView = this.viewToInvalidate;
-            if ((this.changeFlags & FLAG_SELECTOR) != 0) {
-                if (VERSION.SDK_INT >= 21) {
-                    if (this.currentKey.equals(Theme.key_listSelectorSDK21)) {
-                        recyclerListView.setListSelectorColor(color);
-                    }
-                } else if (this.currentKey.equals(Theme.key_listSelector)) {
-                    recyclerListView.setListSelectorColor(color);
-                }
+            if ((this.changeFlags & FLAG_SELECTOR) != 0 && this.currentKey.equals(Theme.key_listSelector)) {
+                recyclerListView.setListSelectorColor(color);
             }
             if ((this.changeFlags & FLAG_FASTSCROLL) != 0) {
                 recyclerListView.updateFastScrollColors();
