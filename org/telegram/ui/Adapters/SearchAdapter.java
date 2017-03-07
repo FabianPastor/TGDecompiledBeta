@@ -236,11 +236,11 @@ public class SearchAdapter extends SelectionAdapter {
         Throwable e;
         Object username;
         ProfileSearchCell profileSearchCell;
-        boolean z;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
                 UserCell userCell;
+                boolean z;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {

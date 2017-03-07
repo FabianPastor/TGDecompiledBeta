@@ -296,7 +296,7 @@ public class VoIPActivity extends Activity implements StateListener {
                 VoIPActivity.this.acceptSwipe.setEnabled(false);
                 VoIPActivity.this.declineSwipe.setEnabled(false);
                 if (VoIPService.getSharedInstance() != null) {
-                    VoIPService.getSharedInstance().declineIncomingCall();
+                    VoIPService.getSharedInstance().declineIncomingCall(4, null);
                 }
             }
 

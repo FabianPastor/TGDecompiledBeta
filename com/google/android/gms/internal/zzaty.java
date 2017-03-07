@@ -76,10 +76,10 @@ public class zzaty extends zzauh {
             int i;
             HttpURLConnection httpURLConnection;
             Throwable th;
+            Map map2;
             this.zzbsY.zzJW();
             int i2 = 0;
             HttpURLConnection zzc;
-            Map map2;
             try {
                 zzc = this.zzbsY.zzc(this.zzIe);
                 try {

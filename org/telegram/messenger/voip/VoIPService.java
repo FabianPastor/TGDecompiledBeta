@@ -169,6 +169,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     VoIPService.this.stopForeground(true);
                     VoIPService.this.hangUp();
                 }
+            } else if ((VoIPService.this.getPackageName() + ".DECLINE_CALL").equals(intent.getAction())) {
+                if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
+                    VoIPService.this.stopForeground(true);
+                    VoIPService.this.declineIncomingCall(4, null);
+                }
             } else if ((VoIPService.this.getPackageName() + ".ANSWER_CALL").equals(intent.getAction())) {
                 if (intent.getIntExtra("end_hash", 0) == VoIPService.this.endHash) {
                     VoIPService.this.showNotification();
@@ -290,6 +295,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 filter.addAction("android.media.ACTION_SCO_AUDIO_STATE_UPDATED");
             }
             filter.addAction(getPackageName() + ".END_CALL");
+            filter.addAction(getPackageName() + ".DECLINE_CALL");
             filter.addAction(getPackageName() + ".ANSWER_CALL");
             registerReceiver(this.receiver, filter);
             ConnectionsManager.getInstance().setAppPaused(false, false);
@@ -945,7 +951,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             answerIntent.putExtra("end_hash", this.endHash);
             builder.addAction(R.drawable.ic_call_white_24dp, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall), PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
             Intent endIntent = new Intent();
-            endIntent.setAction(getPackageName() + ".END_CALL");
+            endIntent.setAction(getPackageName() + ".DECLINE_CALL");
             endIntent.putExtra("end_hash", this.endHash);
             builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall), PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
             builder.setPriority(2);
@@ -1103,17 +1109,22 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     @SuppressLint({"NewApi"})
     public void onSensorChanged(SensorEvent event) {
         boolean newIsNear = false;
-        if (event.sensor.getType() == 8 && !this.isHeadsetPlugged && !((AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO)).isSpeakerphoneOn()) {
-            if (event.values[0] < Math.min(event.sensor.getMaximumRange(), 3.0f)) {
-                newIsNear = true;
-            }
-            if (newIsNear != this.isProximityNear) {
-                FileLog.d("proximity " + newIsNear);
-                this.isProximityNear = newIsNear;
-                if (this.isProximityNear) {
-                    this.proximityWakelock.acquire();
-                } else {
-                    this.proximityWakelock.release(1);
+        if (event.sensor.getType() == 8) {
+            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+            if (!this.isHeadsetPlugged && !am.isSpeakerphoneOn()) {
+                if (!isBluetoothHeadsetConnected() || !am.isBluetoothScoOn()) {
+                    if (event.values[0] < Math.min(event.sensor.getMaximumRange(), 3.0f)) {
+                        newIsNear = true;
+                    }
+                    if (newIsNear != this.isProximityNear) {
+                        FileLog.d("proximity " + newIsNear);
+                        this.isProximityNear = newIsNear;
+                        if (this.isProximityNear) {
+                            this.proximityWakelock.acquire();
+                        } else {
+                            this.proximityWakelock.release(1);
+                        }
+                    }
                 }
             }
         }

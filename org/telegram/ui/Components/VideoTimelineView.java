@@ -26,6 +26,7 @@ public class VideoTimelineView extends View {
     private int frameWidth;
     private ArrayList<Bitmap> frames = new ArrayList();
     private int framesToLoad;
+    private float maxProgressDiff;
     private MediaMetadataRetriever mediaMetadataRetriever;
     private Paint paint = new Paint(1);
     private Paint paint2;
@@ -55,6 +56,14 @@ public class VideoTimelineView extends View {
 
     public float getRightProgress() {
         return this.progressRight;
+    }
+
+    public void setMaxProgressDiff(float value) {
+        this.maxProgressDiff = value;
+        if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
+            this.progressRight = this.progressLeft + this.maxProgressDiff;
+            invalidate();
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -104,6 +113,9 @@ public class VideoTimelineView extends View {
                     startX = endX;
                 }
                 this.progressLeft = ((float) (startX - AndroidUtilities.dp(16.0f))) / ((float) width);
+                if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
+                    this.progressRight = this.progressLeft + this.maxProgressDiff;
+                }
                 if (this.delegate != null) {
                     this.delegate.onLeftProgressChanged(this.progressLeft);
                 }
@@ -119,6 +131,9 @@ public class VideoTimelineView extends View {
                     endX = width + AndroidUtilities.dp(16.0f);
                 }
                 this.progressRight = ((float) (endX - AndroidUtilities.dp(16.0f))) / ((float) width);
+                if (this.progressRight - this.progressLeft > this.maxProgressDiff) {
+                    this.progressLeft = this.progressRight - this.maxProgressDiff;
+                }
                 if (this.delegate != null) {
                     this.delegate.onRifhtProgressChanged(this.progressRight);
                 }

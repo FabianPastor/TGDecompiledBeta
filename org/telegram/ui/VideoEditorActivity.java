@@ -220,6 +220,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         private Paint paint = new Paint(1);
         private int sideSide;
         private boolean startMoving;
+        private int startMovingQuality;
         private float startX;
         private TextPaint textPaint = new TextPaint(1);
 
@@ -247,6 +248,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         }
                         this.startMoving = z;
                         this.startX = x;
+                        this.startMovingQuality = VideoEditorActivity.this.selectedCompression;
                     }
                 }
             } else if (event.getAction() == 2) {
@@ -256,29 +258,33 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                         this.startMoving = false;
                     }
                 } else if (this.moving) {
-                    for (a = 0; a < VideoEditorActivity.this.compressionsCount; a++) {
+                    a = 0;
+                    while (a < VideoEditorActivity.this.compressionsCount) {
                         cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
                         int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
-                        if (x > ((float) (cx - diff)) && x < ((float) (cx + diff))) {
+                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
+                            a++;
+                        } else if (VideoEditorActivity.this.selectedCompression != a) {
                             VideoEditorActivity.this.selectedCompression = a;
                             VideoEditorActivity.this.didChangedCompressionLevel(false);
                             invalidate();
-                            break;
                         }
                     }
                 }
             } else if (event.getAction() == 1 || event.getAction() == 3) {
                 if (!this.moving) {
-                    for (a = 0; a < VideoEditorActivity.this.compressionsCount; a++) {
+                    a = 0;
+                    while (a < VideoEditorActivity.this.compressionsCount) {
                         cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        if (x > ((float) (cx - AndroidUtilities.dp(15.0f))) && x < ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
+                            a++;
+                        } else if (VideoEditorActivity.this.selectedCompression != a) {
                             VideoEditorActivity.this.selectedCompression = a;
                             VideoEditorActivity.this.didChangedCompressionLevel(true);
                             invalidate();
-                            break;
                         }
                     }
-                } else {
+                } else if (VideoEditorActivity.this.selectedCompression != this.startMovingQuality) {
                     VideoEditorActivity.this.requestVideoPreview(1);
                 }
                 this.startMoving = false;
@@ -310,7 +316,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 if (a == VideoEditorActivity.this.compressionsCount - 1) {
                     text = VideoEditorActivity.this.originalHeight + TtmlNode.TAG_P;
                 } else if (a == 0) {
-                    text = "270p";
+                    text = "240p";
                 } else if (a == 1) {
                     text = "360p";
                 } else if (a == 2) {
@@ -635,6 +641,8 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     }
                 }
                 if (VideoEditorActivity.this.delegate != null) {
+                    if (VideoEditorActivity.this.muteVideo) {
+                    }
                     if (VideoEditorActivity.this.compressItem.getVisibility() == 8 || (VideoEditorActivity.this.compressItem.getVisibility() == 0 && VideoEditorActivity.this.selectedCompression == VideoEditorActivity.this.compressionsCount - 1)) {
                         VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.originalBitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
                     } else {
@@ -1085,7 +1093,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.qualityChooseView = new QualityChooseView(context);
             this.qualityChooseView.setTranslationY((float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN));
             this.qualityChooseView.setVisibility(4);
-            frameLayout.addView(this.qualityChooseView, LayoutHelper.createFrame(-1, 44.0f, 83, 0.0f, 0.0f, 0.0f, 67.0f));
+            frameLayout.addView(this.qualityChooseView, LayoutHelper.createFrame(-1, 90.0f, 83, 0.0f, 0.0f, 0.0f, 44.0f));
         }
         updateVideoInfo();
         updateMuteButton();
@@ -1301,22 +1309,23 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             this.actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
             this.actionBar.setSubtitle(null);
             this.muteItem.setImageResource(R.drawable.volume_off);
-            if (this.captionItem.getVisibility() == 0) {
+            if (this.compressItem.getVisibility() == 0) {
                 this.compressItem.setClickable(false);
                 this.compressItem.setAlpha(0.5f);
                 this.compressItem.setEnabled(false);
-                return;
             }
+            this.videoTimelineView.setMaxProgressDiff(30000.0f / this.videoDuration);
             return;
         }
         this.actionBar.setTitle(LocaleController.getString("AttachVideo", R.string.AttachVideo));
         this.actionBar.setSubtitle(this.currentSubtitle);
         this.muteItem.setImageResource(R.drawable.volume_on);
-        if (this.captionItem.getVisibility() == 0) {
+        if (this.compressItem.getVisibility() == 0) {
             this.compressItem.setClickable(true);
             this.compressItem.setAlpha(1.0f);
             this.compressItem.setEnabled(true);
         }
+        this.videoTimelineView.setMaxProgressDiff(1.0f);
     }
 
     private void onPlayComplete() {
@@ -1410,7 +1419,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             float scale;
             switch (this.selectedCompression) {
                 case 0:
-                    maxSize = 480.0f;
+                    maxSize = 432.0f;
                     targetBitrate = 400000;
                     break;
                 case 1:
