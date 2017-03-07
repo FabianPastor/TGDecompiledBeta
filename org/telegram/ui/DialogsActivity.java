@@ -764,7 +764,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 if (!DialogsActivity.this.searching || !DialogsActivity.this.searchWas) {
                     if (visibleItemCount > 0 && DialogsActivity.this.layoutManager.findLastVisibleItemPosition() >= DialogsActivity.this.getDialogsArray().size() - 10) {
-                        MessagesController.getInstance().loadDialogs(-1, 100, !MessagesController.getInstance().dialogsEndReached);
+                        boolean fromCache = !MessagesController.getInstance().dialogsEndReached;
+                        if (fromCache || !MessagesController.getInstance().serverDialogsEndReached) {
+                            MessagesController.getInstance().loadDialogs(-1, 100, fromCache);
+                        }
                     }
                     if (DialogsActivity.this.floatingButton.getVisibility() != 8) {
                         boolean goingDown;

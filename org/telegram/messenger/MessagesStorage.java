@@ -6094,36 +6094,36 @@ Error: java.util.NoSuchElementException
                                     }
                                 }
                             } catch (Throwable e) {
-                                FileLog.e(e);
+                                try {
+                                    FileLog.e(e);
+                                } catch (Throwable e2) {
+                                    dialogs.dialogs.clear();
+                                    dialogs.users.clear();
+                                    dialogs.chats.clear();
+                                    encryptedChats.clear();
+                                    FileLog.e(e2);
+                                    MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
+                                    return;
+                                }
                             }
                         }
                     }
-                    try {
-                        int lower_id = (int) dialog.id;
-                        int high_id = (int) (dialog.id >> 32);
-                        if (lower_id == 0) {
-                            if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
-                                encryptedToLoad.add(Integer.valueOf(high_id));
-                            }
-                        } else if (high_id == 1) {
-                            if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
-                                chatsToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (lower_id > 0) {
-                            if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
-                                usersToLoad.add(Integer.valueOf(lower_id));
-                            }
-                        } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
-                            chatsToLoad.add(Integer.valueOf(-lower_id));
+                    int lower_id = (int) dialog.id;
+                    int high_id = (int) (dialog.id >> 32);
+                    if (lower_id == 0) {
+                        if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
+                            encryptedToLoad.add(Integer.valueOf(high_id));
                         }
-                    } catch (Throwable e2) {
-                        dialogs.dialogs.clear();
-                        dialogs.users.clear();
-                        dialogs.chats.clear();
-                        encryptedChats.clear();
-                        FileLog.e(e2);
-                        MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false);
-                        return;
+                    } else if (high_id == 1) {
+                        if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
+                            chatsToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (lower_id > 0) {
+                        if (!usersToLoad.contains(Integer.valueOf(lower_id))) {
+                            usersToLoad.add(Integer.valueOf(lower_id));
+                        }
+                    } else if (!chatsToLoad.contains(Integer.valueOf(-lower_id))) {
+                        chatsToLoad.add(Integer.valueOf(-lower_id));
                     }
                 }
                 cursor.dispose();
@@ -6156,7 +6156,7 @@ Error: java.util.NoSuchElementException
                 if (!usersToLoad.isEmpty()) {
                     MessagesStorage.this.getUsersInternal(TextUtils.join(",", usersToLoad), dialogs.users);
                 }
-                MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false);
+                MessagesController.getInstance().processLoadedDialogs(dialogs, encryptedChats, offset, count, 1, false, false, true);
             }
         });
     }

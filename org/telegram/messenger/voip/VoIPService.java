@@ -465,10 +465,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                         VoIPService.this.dispatchStateChanged(8);
                                         VoIPService.this.timeoutRunnable = new Runnable() {
                                             public void run() {
+                                                VoIPService.this.timeoutRunnable = null;
                                                 TL_phone_discardCall req = new TL_phone_discardCall();
                                                 req.peer = new TL_inputPhoneCall();
                                                 req.peer.access_hash = VoIPService.this.call.access_hash;
                                                 req.peer.id = VoIPService.this.call.id;
+                                                req.reason = new TL_phoneCallDiscardReasonMissed();
                                                 ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                                     public void run(TLObject response, TL_error error) {
                                                         if (error != null) {
@@ -787,9 +789,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
                     if (this.timeoutRunnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
+                        this.timeoutRunnable = null;
                     }
                     this.timeoutRunnable = new Runnable() {
                         public void run() {
+                            VoIPService.this.timeoutRunnable = null;
                             VoIPService.this.declineIncomingCall(3, null);
                         }
                     };
@@ -1071,6 +1075,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     }
                 }
             }, 1000);
+        }
+        if (this.timeoutRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
+            this.timeoutRunnable = null;
         }
         stopSelf();
     }

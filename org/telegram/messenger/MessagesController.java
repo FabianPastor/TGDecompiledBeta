@@ -348,9 +348,9 @@ public class MessagesController implements NotificationCenterDelegate {
     private ConcurrentHashMap<Integer, Chat> chats = new ConcurrentHashMap(100, 1.0f, 2);
     private HashMap<Integer, Boolean> checkingLastMessagesDialogs = new HashMap();
     private ArrayList<Long> createdDialogIds = new ArrayList();
-    private Runnable currentDeleteTaskRunnable = null;
-    private ArrayList<Integer> currentDeletingTaskMids = null;
-    private int currentDeletingTaskTime = 0;
+    private Runnable currentDeleteTaskRunnable;
+    private ArrayList<Integer> currentDeletingTaskMids;
+    private int currentDeletingTaskTime;
     private final Comparator<TL_dialog> dialogComparator = new Comparator<TL_dialog>() {
         public int compare(TL_dialog dialog1, TL_dialog dialog2) {
             if (!dialog1.pinned && dialog2.pinned) {
@@ -385,7 +385,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public HashMap<Integer, MessageObject> dialogMessagesByIds = new HashMap();
     public HashMap<Long, MessageObject> dialogMessagesByRandomIds = new HashMap();
     public ArrayList<TL_dialog> dialogs = new ArrayList();
-    public boolean dialogsEndReached = false;
+    public boolean dialogsEndReached;
     public ArrayList<TL_dialog> dialogsGroupsOnly = new ArrayList();
     public ArrayList<TL_dialog> dialogsServerOnly = new ArrayList();
     public ConcurrentHashMap<Long, TL_dialog> dialogs_dict = new ConcurrentHashMap(100, 1.0f, 2);
@@ -395,16 +395,16 @@ public class MessagesController implements NotificationCenterDelegate {
     public boolean enableJoined = true;
     private ConcurrentHashMap<Integer, EncryptedChat> encryptedChats = new ConcurrentHashMap(10, 1.0f, 2);
     private HashMap<Integer, ExportedChatInvite> exportedChats = new HashMap();
-    public boolean firstGettingTask = false;
+    public boolean firstGettingTask;
     public int fontSize = AndroidUtilities.dp(16.0f);
     private HashMap<Integer, TL_userFull> fullUsers = new HashMap();
-    public boolean gettingDifference = false;
+    public boolean gettingDifference;
     private HashMap<Integer, Boolean> gettingDifferenceChannels = new HashMap();
-    private boolean gettingNewDeleteTask = false;
+    private boolean gettingNewDeleteTask;
     private HashMap<Integer, Boolean> gettingUnknownChannels = new HashMap();
     public int groupBigSize;
     private ArrayList<Integer> joiningToChannels = new ArrayList();
-    private int lastPrintingStringCount = 0;
+    private int lastPrintingStringCount;
     private long lastStatusUpdateTime;
     private long lastViewsCheckTime;
     public String linkPrefix = "t.me";
@@ -412,7 +412,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ArrayList<Integer> loadedFullParticipants = new ArrayList();
     private ArrayList<Integer> loadedFullUsers = new ArrayList();
     public boolean loadingBlockedUsers = false;
-    public boolean loadingDialogs = false;
+    public boolean loadingDialogs;
     private ArrayList<Integer> loadingFullChats = new ArrayList();
     private ArrayList<Integer> loadingFullParticipants = new ArrayList();
     private ArrayList<Integer> loadingFullUsers = new ArrayList();
@@ -424,7 +424,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public int maxPinnedDialogsCount = 5;
     public int maxRecentGifsCount = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
     public int maxRecentStickersCount = 30;
-    private boolean migratingDialogs = false;
+    private boolean migratingDialogs;
     public int minGroupConvertSize = Callback.DEFAULT_DRAG_ANIMATION_DURATION;
     private SparseIntArray needShortPollChannels = new SparseIntArray();
     public int nextDialogsCacheOffset;
@@ -434,12 +434,13 @@ public class MessagesController implements NotificationCenterDelegate {
     public HashMap<Long, Integer> printingStringsTypes = new HashMap();
     public ConcurrentHashMap<Long, ArrayList<PrintingUser>> printingUsers = new ConcurrentHashMap(20, 1.0f, 2);
     public int ratingDecay;
-    public boolean registeringForPush = false;
+    public boolean registeringForPush;
     private HashMap<Long, ArrayList<Integer>> reloadingMessages = new HashMap();
     private HashMap<String, ArrayList<MessageObject>> reloadingWebpages = new HashMap();
     private HashMap<Long, ArrayList<MessageObject>> reloadingWebpagesPending = new HashMap();
     public int secretWebpagePreview = 2;
     public HashMap<Integer, HashMap<Long, Boolean>> sendingTypings = new HashMap();
+    public boolean serverDialogsEndReached;
     private SparseIntArray shortPollChannels = new SparseIntArray();
     private int statusRequest;
     private int statusSettingState;
@@ -472,10 +473,10 @@ public class MessagesController implements NotificationCenterDelegate {
     private ArrayList<Updates> updatesQueueQts = new ArrayList();
     private ArrayList<Updates> updatesQueueSeq = new ArrayList();
     private HashMap<Integer, Long> updatesStartWaitTimeChannels = new HashMap();
-    private long updatesStartWaitTimePts = 0;
-    private long updatesStartWaitTimeQts = 0;
-    private long updatesStartWaitTimeSeq = 0;
-    public boolean updatingState = false;
+    private long updatesStartWaitTimePts;
+    private long updatesStartWaitTimeQts;
+    private long updatesStartWaitTimeSeq;
+    public boolean updatingState;
     private String uploadingAvatar;
     public boolean useSystemEmoji;
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap(100, 1.0f, 2);
@@ -883,6 +884,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.gettingNewDeleteTask = false;
         this.loadingDialogs = false;
         this.dialogsEndReached = false;
+        this.serverDialogsEndReached = false;
         this.loadingBlockedUsers = false;
         this.firstGettingTask = false;
         this.updatingState = false;
@@ -2037,9 +2039,9 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, EncryptedChat encryptedChat, int channelId, boolean forAll, long taskId, TLObject taskRequest) {
-        TL_channels_deleteMessages req;
         long newTaskId;
         NativeByteBuffer data;
+        NativeByteBuffer data2;
         Throwable e;
         final int i;
         if ((messages != null && !messages.isEmpty()) || taskRequest != null) {
@@ -2067,8 +2069,8 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance().updateDialogsWithDeletedMessages(messages, null, true, channelId);
                 NotificationCenter.getInstance().postNotificationName(NotificationCenter.messagesDeleted, messages, Integer.valueOf(channelId));
             }
-            NativeByteBuffer data2;
             if (channelId != 0) {
+                TL_channels_deleteMessages req;
                 if (taskRequest != null) {
                     req = (TL_channels_deleteMessages) taskRequest;
                     newTaskId = taskId;
@@ -3119,7 +3121,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                                 public void run(TLObject response, TL_error error) {
                                     if (error == null) {
-                                        MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false);
+                                        MessagesController.this.processLoadedDialogs((messages_Dialogs) response, null, 0, count, 0, false, false, false);
                                     }
                                 }
                             });
@@ -3275,7 +3277,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                         }
                                     }
                                     cursor.dispose();
-                                    MessagesController.this.processLoadedDialogs(dialogsRes, null, offsetId, 0, 0, false, true);
+                                    MessagesController.this.processLoadedDialogs(dialogsRes, null, offsetId, 0, 0, false, true, false);
                                 } catch (Throwable e) {
                                     FileLog.e(e);
                                     AndroidUtilities.runOnUIThread(new Runnable() {
@@ -3298,7 +3300,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     }
 
-    public void processLoadedDialogs(messages_Dialogs dialogsRes, ArrayList<EncryptedChat> encChats, int offset, int count, int loadType, boolean resetEnd, boolean migrate) {
+    public void processLoadedDialogs(messages_Dialogs dialogsRes, ArrayList<EncryptedChat> encChats, int offset, int count, int loadType, boolean resetEnd, boolean migrate, boolean fromCache) {
         final int i = loadType;
         final messages_Dialogs org_telegram_tgnet_TLRPC_messages_Dialogs = dialogsRes;
         final boolean z = resetEnd;
@@ -3306,6 +3308,7 @@ public class MessagesController implements NotificationCenterDelegate {
         final int i3 = offset;
         final ArrayList<EncryptedChat> arrayList = encChats;
         final boolean z2 = migrate;
+        final boolean z3 = fromCache;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 FileLog.e("loaded loadType " + i + " count " + org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size());
@@ -3316,6 +3319,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             MessagesController.this.loadingDialogs = false;
                             if (z) {
                                 MessagesController.this.dialogsEndReached = false;
+                                MessagesController.this.serverDialogsEndReached = false;
                             }
                             NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                             MessagesController.this.loadDialogs(0, i2, false);
@@ -3324,7 +3328,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     return;
                 }
                 int a;
-                Integer value;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 AbstractMap usersDict = new HashMap();
@@ -3369,6 +3372,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 final ArrayList<TL_dialog> dialogsToReload = new ArrayList();
                 for (a = 0; a < org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size(); a++) {
+                    Integer value;
                     TL_dialog d = (TL_dialog) org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.get(a);
                     if (d.id == 0 && d.peer != null) {
                         if (d.peer.user_id != 0) {
@@ -3548,6 +3552,11 @@ public class MessagesController implements NotificationCenterDelegate {
                             MessagesController messagesController = MessagesController.this;
                             boolean z = (org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() == 0 || org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() != i2) && i == 0;
                             messagesController.dialogsEndReached = z;
+                            if (!z3) {
+                                messagesController = MessagesController.this;
+                                z = (org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() == 0 || org_telegram_tgnet_TLRPC_messages_Dialogs.dialogs.size() != i2) && i == 0;
+                                messagesController.serverDialogsEndReached = z;
+                            }
                         }
                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
                         if (z2) {
@@ -3779,6 +3788,7 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {
                 int a;
+                Chat chat;
                 final HashMap<Long, TL_dialog> new_dialogs_dict = new HashMap();
                 final HashMap<Long, MessageObject> new_dialogMessage = new HashMap();
                 HashMap<Integer, User> usersDict = new HashMap();
@@ -3793,7 +3803,6 @@ public class MessagesController implements NotificationCenterDelegate {
                     chatsDict.put(Integer.valueOf(c.id), c);
                 }
                 for (a = 0; a < dialogsRes.messages.size(); a++) {
-                    Chat chat;
                     Message message = (Message) dialogsRes.messages.get(a);
                     MessageObject messageObject;
                     if (message.to_id.channel_id != 0) {
@@ -5059,7 +5068,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                             dialogs.messages.addAll(res.messages);
                                             dialogs.users.addAll(res.users);
                                             dialogs.chats.addAll(res.chats);
-                                            MessagesController.this.processLoadedDialogs(dialogs, null, 0, 1, 2, false, false);
+                                            MessagesController.this.processLoadedDialogs(dialogs, null, 0, 1, 2, false, false, false);
                                         }
                                     }
                                     if (newTaskId != 0) {
@@ -5106,17 +5115,13 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     protected void getChannelDifference(int channelId, int newDialogType, long taskId, InputChannel inputChannel) {
+        Integer channelPts;
         Throwable e;
-        long newTaskId;
-        TL_updates_getChannelDifference req;
-        final int i;
-        final int i2;
         Boolean gettingDifferenceChannel = (Boolean) this.gettingDifferenceChannels.get(Integer.valueOf(channelId));
         if (gettingDifferenceChannel == null) {
             gettingDifferenceChannel = Boolean.valueOf(false);
         }
         if (!gettingDifferenceChannel.booleanValue()) {
-            Integer channelPts;
             int limit = 100;
             if (newDialogType != 1) {
                 channelPts = (Integer) this.channelsPts.get(Integer.valueOf(channelId));
@@ -5142,6 +5147,10 @@ public class MessagesController implements NotificationCenterDelegate {
                 inputChannel = getInputChannel(channelId);
             }
             if (inputChannel != null && inputChannel.access_hash != 0) {
+                long newTaskId;
+                TL_updates_getChannelDifference req;
+                final int i;
+                final int i2;
                 if (taskId == 0) {
                     NativeByteBuffer data = null;
                     try {
@@ -7287,47 +7296,7 @@ public class MessagesController implements NotificationCenterDelegate {
             } else if (update instanceof TL_updateReadFeaturedStickers) {
                 updatesOnMainThread.add(update);
             } else if (update instanceof TL_updatePhoneCall) {
-                PhoneCall call = ((TL_updatePhoneCall) update).phone_call;
-                VoIPService svc = VoIPService.getSharedInstance();
-                if (BuildVars.DEBUG_VERSION) {
-                    FileLog.d("Received call in update: " + call);
-                    FileLog.d("call id " + call.id);
-                }
-                if (call instanceof TL_phoneCallRequested) {
-                    if (call.date + (this.callRingTimeout / 1000) >= ConnectionsManager.getInstance().getCurrentTime()) {
-                        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                        if (svc == null && tm.getCallState() == 0) {
-                            if (BuildVars.DEBUG_VERSION) {
-                                FileLog.d("Starting service for call " + call.id);
-                            }
-                            VoIPService.callIShouldHavePutIntoIntent = call;
-                            Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
-                            intent.putExtra("is_outgoing", false);
-                            intent.putExtra("user_id", call.participant_id == UserConfig.getClientUserId() ? call.admin_id : call.participant_id);
-                            ApplicationLoader.applicationContext.startService(intent);
-                        } else {
-                            if (BuildVars.DEBUG_VERSION) {
-                                FileLog.d("Auto-declining call " + call.id + " because there's already active one");
-                            }
-                            TLObject req = new TL_phone_discardCall();
-                            req.peer = new TL_inputPhoneCall();
-                            req.peer.access_hash = call.access_hash;
-                            req.peer.id = call.id;
-                            req.reason = new TL_phoneCallDiscardReasonBusy();
-                            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                                public void run(TLObject response, TL_error error) {
-                                    if (response != null) {
-                                        MessagesController.this.processUpdates((Updates) response, false);
-                                    }
-                                }
-                            });
-                        }
-                    } else if (BuildVars.DEBUG_VERSION) {
-                        FileLog.d("ignoring too old call");
-                    }
-                } else if (!(svc == null || call == null)) {
-                    svc.onCallUpdated(call);
-                }
+                updatesOnMainThread.add(update);
             }
         }
         if (!messages.isEmpty()) {
@@ -7576,6 +7545,48 @@ public class MessagesController implements NotificationCenterDelegate {
                             DraftQuery.saveDraft(did, update.draft, null, true);
                         } else if (update instanceof TL_updateReadFeaturedStickers) {
                             StickersQuery.markFaturedStickersAsRead(false);
+                        } else if (update instanceof TL_updatePhoneCall) {
+                            PhoneCall call = ((TL_updatePhoneCall) update).phone_call;
+                            VoIPService svc = VoIPService.getSharedInstance();
+                            if (BuildVars.DEBUG_VERSION) {
+                                FileLog.d("Received call in update: " + call);
+                                FileLog.d("call id " + call.id);
+                            }
+                            if (call instanceof TL_phoneCallRequested) {
+                                if (call.date + (MessagesController.this.callRingTimeout / 1000) >= ConnectionsManager.getInstance().getCurrentTime()) {
+                                    TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                                    if (svc == null && tm.getCallState() == 0) {
+                                        if (BuildVars.DEBUG_VERSION) {
+                                            FileLog.d("Starting service for call " + call.id);
+                                        }
+                                        VoIPService.callIShouldHavePutIntoIntent = call;
+                                        Intent intent = new Intent(ApplicationLoader.applicationContext, VoIPService.class);
+                                        intent.putExtra("is_outgoing", false);
+                                        intent.putExtra("user_id", call.participant_id == UserConfig.getClientUserId() ? call.admin_id : call.participant_id);
+                                        ApplicationLoader.applicationContext.startService(intent);
+                                    } else {
+                                        if (BuildVars.DEBUG_VERSION) {
+                                            FileLog.d("Auto-declining call " + call.id + " because there's already active one");
+                                        }
+                                        TLObject req = new TL_phone_discardCall();
+                                        req.peer = new TL_inputPhoneCall();
+                                        req.peer.access_hash = call.access_hash;
+                                        req.peer.id = call.id;
+                                        req.reason = new TL_phoneCallDiscardReasonBusy();
+                                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                            public void run(TLObject response, TL_error error) {
+                                                if (response != null) {
+                                                    MessagesController.this.processUpdates((Updates) response, false);
+                                                }
+                                            }
+                                        });
+                                    }
+                                } else if (BuildVars.DEBUG_VERSION) {
+                                    FileLog.d("ignoring too old call");
+                                }
+                            } else if (!(svc == null || call == null)) {
+                                svc.onCallUpdated(call);
+                            }
                         }
                     }
                     if (editor != null) {
