@@ -413,7 +413,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                         PaymentFormActivity.this.finishFragment();
                     }
                 } else if (id == 1 && !PaymentFormActivity.this.donePressed) {
-                    AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
+                    if (PaymentFormActivity.this.currentStep != 3) {
+                        AndroidUtilities.hideKeyboard(PaymentFormActivity.this.getParentActivity().getCurrentFocus());
+                    }
                     if (PaymentFormActivity.this.currentStep == 0) {
                         PaymentFormActivity.this.setDonePressed(true);
                         PaymentFormActivity.this.sendForm();
@@ -555,6 +557,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             return true;
                         }
                     });
+                    this.inputFields[a].setInputType(0);
                 }
                 if (a == 9 || a == 8) {
                     this.inputFields[a].setInputType(3);
@@ -887,13 +890,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
                 try {
                     this.need_card_name = jSONObject.getBoolean("need_cardholder_name");
-                    try {
-                        this.stripeApiKey = jSONObject.getString("publishable_key");
-                    } catch (Exception e5) {
-                        this.stripeApiKey = "";
-                    }
-                } catch (Throwable e22) {
-                    FileLog.e("tmessages", e22);
+                } catch (Exception e5) {
+                    this.need_card_name = false;
+                }
+                try {
+                    this.stripeApiKey = jSONObject.getString("publishable_key");
+                } catch (Exception e6) {
+                    this.stripeApiKey = "";
                 }
                 this.inputFields = new EditText[6];
                 a = 0;
@@ -951,6 +954,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 return true;
                             }
                         });
+                        this.inputFields[a].setInputType(0);
                     } else if (a == 1) {
                         this.inputFields[a].setInputType(InputDeviceCompat.SOURCE_STYLUS);
                     } else if (a == 2) {
@@ -1418,11 +1422,12 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             return true;
                         }
                     });
+                    this.inputFields[a].setInputType(0);
                 } else {
                     this.inputFields[a].setInputType(TsExtractor.TS_STREAM_TYPE_AC3);
                     this.inputFields[a].setTypeface(Typeface.DEFAULT);
                 }
-                this.inputFields[a].setImeOptions((a == 5 ? 6 : 5) | 268435456);
+                this.inputFields[a].setImeOptions(268435462);
                 switch (a) {
                     case 0:
                         this.inputFields[a].setText(this.paymentForm.saved_credentials.title);
@@ -2219,6 +2224,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                                         v.vibrate(200);
                                                     }
                                                     AndroidUtilities.shakeView(PaymentFormActivity.this.inputFields[1], 2.0f, 0);
+                                                    PaymentFormActivity.this.inputFields[1].setText("");
                                                 } else {
                                                     AlertsCreator.processError(error, PaymentFormActivity.this, req, new Object[0]);
                                                 }

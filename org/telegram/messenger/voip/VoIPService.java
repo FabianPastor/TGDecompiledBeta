@@ -58,6 +58,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
@@ -89,6 +90,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_getCallConfig;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
 import org.telegram.tgnet.TLRPC.TL_phone_receivedCall;
 import org.telegram.tgnet.TLRPC.TL_phone_requestCall;
+import org.telegram.tgnet.TLRPC.TL_phone_saveCallDebug;
 import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_DhConfig;
@@ -144,6 +146,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private Boolean mHasEarpiece = null;
     private boolean micMute;
     private boolean needPlayEndSound;
+    private boolean needSendDebugLog = false;
     private Notification ongoingCallNotification;
     private boolean playingSound;
     private Stats prevStats = new Stats();
@@ -240,15 +243,18 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (this.user == null) {
             FileLog.w("VoIPService: user==null");
             stopSelf();
-        } else if (this.isOutgoing) {
-            startOutgoingCall();
-            if (intent.getBooleanExtra("start_incall_activity", false)) {
-                startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
-            }
         } else {
-            this.call = callIShouldHavePutIntoIntent;
-            callIShouldHavePutIntoIntent = null;
-            acknowledgeCallAndStartRinging();
+            if (this.isOutgoing) {
+                startOutgoingCall();
+                if (intent.getBooleanExtra("start_incall_activity", false)) {
+                    startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
+                }
+            } else {
+                this.call = callIShouldHavePutIntoIntent;
+                callIShouldHavePutIntoIntent = null;
+                acknowledgeCallAndStartRinging();
+            }
+            sharedInstance = this;
         }
         return 2;
     }
@@ -256,7 +262,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void onCreate() {
         super.onCreate();
         FileLog.d("=============== VoIPService STARTING ===============");
-        sharedInstance = this;
         if (VERSION.SDK_INT >= 17) {
             AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
             int outFramesPerBuffer = Integer.parseInt(am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER"));
@@ -337,10 +342,29 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         unregisterReceiver(this.receiver);
         super.onDestroy();
         sharedInstance = null;
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didEndedCall, new Object[0]);
+            }
+        });
         if (this.controller != null && this.controllerStarted) {
             this.lastKnownDuration = this.controller.getCallDuration();
             updateStats();
             StatsController.getInstance().incrementTotalCallsTime(getStatsNetworkType(), ((int) (this.lastKnownDuration / 1000)) % 5);
+            if (this.needSendDebugLog) {
+                String debugLog = this.controller.getDebugLog();
+                TL_phone_saveCallDebug req = new TL_phone_saveCallDebug();
+                req.debug = new TL_dataJSON();
+                req.debug.data = debugLog;
+                req.peer = new TL_inputPhoneCall();
+                req.peer.access_hash = this.call.access_hash;
+                req.peer.id = this.call.id;
+                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                    public void run(TLObject response, TL_error error) {
+                        FileLog.d("Sent debug logs, response=" + response);
+                    }
+                });
+            }
             this.controller.release();
             this.controller = null;
         }
@@ -415,6 +439,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         showNotification();
         startConnectingSound();
         dispatchStateChanged(9);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+            }
+        });
         Utilities.random.nextBytes(new byte[256]);
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
@@ -486,6 +515,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                         AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
                                     } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
                                         VoIPService.this.callFailed(-1);
+                                    } else if (error.code == 403 && "USER_PRIVACY_RESTRICTED".equals(error.text)) {
+                                        VoIPService.this.callFailed(-2);
                                     } else {
                                         FileLog.e("Error on phone.requestCall: " + error);
                                         VoIPService.this.callFailed();
@@ -583,6 +614,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         configureDeviceForCall();
         startConnectingSound();
         dispatchStateChanged(7);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public void run() {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
+            }
+        });
         TL_messages_getDhConfig req = new TL_messages_getDhConfig();
         req.random_length = 256;
         req.version = MessagesStorage.lastSecretVersion;
@@ -756,8 +792,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void onCallUpdated(PhoneCall call) {
         if (this.call != null && call != null) {
             if (call.id == this.call.id) {
+                if (call.access_hash == 0) {
+                    call.access_hash = this.call.access_hash;
+                }
                 this.call = call;
                 if (call instanceof TL_phoneCallDiscarded) {
+                    this.needSendDebugLog = call.need_debug;
                     FileLog.d("call discarded, stopping service");
                     if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
                         dispatchStateChanged(12);
@@ -1153,14 +1193,18 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                             type = 1;
                             break;
                         case 2:
+                        case 7:
                             type = 2;
                             break;
                         case 3:
+                        case 5:
                             type = 3;
                             break;
+                        case 6:
                         case 8:
                         case 9:
                         case 10:
+                        case 12:
                         case 15:
                             type = 4;
                             break;
@@ -1340,5 +1384,9 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.mHasEarpiece = Boolean.TRUE;
         }
         return this.mHasEarpiece.booleanValue();
+    }
+
+    public int getCallState() {
+        return this.currentState;
     }
 }

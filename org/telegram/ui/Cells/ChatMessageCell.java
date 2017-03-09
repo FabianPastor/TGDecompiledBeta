@@ -124,6 +124,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     private int backgroundWidth = 100;
     private ArrayList<BotButton> botButtons = new ArrayList();
     private HashMap<String, BotButton> botButtonsByData = new HashMap();
+    private HashMap<String, BotButton> botButtonsByPosition = new HashMap();
+    private String botButtonsLayout;
     private int buttonPressed;
     private int buttonState;
     private int buttonX;
@@ -1745,17 +1747,20 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
         boolean z;
+        int i;
         int dp;
-        int linkPreviewMaxWidth;
-        String author;
         String description;
+        Photo photo;
+        TLObject document;
+        String type;
         int duration;
+        boolean smallImage;
         TL_webDocument webDocument;
-        TL_webDocument webDocument2;
-        int additinalWidth;
         int height;
-        int width;
         Throwable e;
+        int restLinesCount;
+        int a;
+        int lineLeft;
         boolean authorIsRTL;
         boolean hasRTL;
         int textWidth;
@@ -1767,7 +1772,6 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int durationWidth;
         ArrayList arrayList;
         float scale;
-        String fileName;
         int seconds;
         CharSequence str;
         String price;
@@ -1779,13 +1783,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         float f;
         int maxButtonWidth;
         int maxButtonsWidth;
+        HashMap<String, BotButton> hashMap;
+        HashMap<String, BotButton> oldByPosition;
         TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
-        int b;
         ChatMessageCell chatMessageCell;
         BotButton botButton;
         String key;
+        String position;
         BotButton oldButton;
         CharSequence buttonText;
         if (messageObject.checkLayout()) {
@@ -1795,8 +1801,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int i;
-            int a;
+            int width;
+            int b;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1866,6 +1872,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             boolean photoExist;
+            String fileName;
             String str2;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -1923,15 +1930,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 int maxChildWidth = Math.max(Math.max(Math.max(Math.max(this.backgroundWidth, this.nameWidth), this.forwardedNameWidth), this.replyNameWidth), this.replyTextWidth);
                 int maxWebWidth = 0;
                 if (this.hasLinkPreview || this.hasGamePreview || this.hasInvoicePreview) {
+                    int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    Photo photo;
-                    TLObject document;
-                    String type;
-                    boolean smallImage;
+                    String author;
+                    TL_webDocument webDocument2;
+                    int additinalWidth;
                     int restLines;
-                    int restLinesCount;
-                    int lineLeft;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -2437,6 +2442,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
+                                        this.botButtonsByPosition.clear();
+                                        this.botButtonsLayout = null;
                                     }
                                     if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                         this.substractBackgroundHeight = 0;
@@ -2461,6 +2468,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             fullWidth = true;
                                         }
                                         maxButtonsWidth = 0;
+                                        hashMap = new HashMap(this.botButtonsByData);
+                                        if (messageObject.botButtonsLayout == null) {
+                                        }
+                                        if (messageObject.botButtonsLayout != null) {
+                                            this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                        }
+                                        oldByPosition = null;
+                                        this.botButtonsByData.clear();
                                         for (a = 0; a < rows; a++) {
                                             row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                             buttonsCount = row.buttons.size();
@@ -2474,7 +2489,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton = new BotButton();
                                                     botButton.button = (KeyboardButton) row.buttons.get(b);
                                                     key = Utilities.bytesToHex(botButton.button.data);
-                                                    oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                    position = a + "" + b;
+                                                    if (oldByPosition != null) {
+                                                        oldButton = (BotButton) hashMap.get(key);
+                                                    } else {
+                                                        oldButton = (BotButton) oldByPosition.get(position);
+                                                    }
                                                     if (oldButton != null) {
                                                         botButton.lastUpdateTime = System.currentTimeMillis();
                                                     } else {
@@ -2483,6 +2503,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                         botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                     }
                                                     this.botButtonsByData.put(key, botButton);
+                                                    this.botButtonsByPosition.put(position, botButton);
                                                     botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                     botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                     botButton.width = buttonWidth;
@@ -2564,6 +2585,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
+                                    this.botButtonsByPosition.clear();
+                                    this.botButtonsLayout = null;
                                 }
                                 if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                     rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -2585,6 +2608,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         fullWidth = true;
                                     }
                                     maxButtonsWidth = 0;
+                                    hashMap = new HashMap(this.botButtonsByData);
+                                    if (messageObject.botButtonsLayout == null) {
+                                    }
+                                    if (messageObject.botButtonsLayout != null) {
+                                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                    }
+                                    oldByPosition = null;
+                                    this.botButtonsByData.clear();
                                     for (a = 0; a < rows; a++) {
                                         row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                         buttonsCount = row.buttons.size();
@@ -2598,7 +2629,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton = new BotButton();
                                                 botButton.button = (KeyboardButton) row.buttons.get(b);
                                                 key = Utilities.bytesToHex(botButton.button.data);
-                                                oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                position = a + "" + b;
+                                                if (oldByPosition != null) {
+                                                    oldButton = (BotButton) oldByPosition.get(position);
+                                                } else {
+                                                    oldButton = (BotButton) hashMap.get(key);
+                                                }
                                                 if (oldButton != null) {
                                                     botButton.progressAlpha = oldButton.progressAlpha;
                                                     botButton.angle = oldButton.angle;
@@ -2607,6 +2643,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton.lastUpdateTime = System.currentTimeMillis();
                                                 }
                                                 this.botButtonsByData.put(key, botButton);
+                                                this.botButtonsByPosition.put(position, botButton);
                                                 botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                 botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                 botButton.width = buttonWidth;
@@ -2764,6 +2801,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
+                                    this.botButtonsByPosition.clear();
+                                    this.botButtonsLayout = null;
                                 }
                                 if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                     this.substractBackgroundHeight = 0;
@@ -2788,6 +2827,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         fullWidth = true;
                                     }
                                     maxButtonsWidth = 0;
+                                    hashMap = new HashMap(this.botButtonsByData);
+                                    if (messageObject.botButtonsLayout == null) {
+                                    }
+                                    if (messageObject.botButtonsLayout != null) {
+                                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                    }
+                                    oldByPosition = null;
+                                    this.botButtonsByData.clear();
                                     for (a = 0; a < rows; a++) {
                                         row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                         buttonsCount = row.buttons.size();
@@ -2801,7 +2848,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton = new BotButton();
                                                 botButton.button = (KeyboardButton) row.buttons.get(b);
                                                 key = Utilities.bytesToHex(botButton.button.data);
-                                                oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                position = a + "" + b;
+                                                if (oldByPosition != null) {
+                                                    oldButton = (BotButton) hashMap.get(key);
+                                                } else {
+                                                    oldButton = (BotButton) oldByPosition.get(position);
+                                                }
                                                 if (oldButton != null) {
                                                     botButton.lastUpdateTime = System.currentTimeMillis();
                                                 } else {
@@ -2810,6 +2862,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                 }
                                                 this.botButtonsByData.put(key, botButton);
+                                                this.botButtonsByPosition.put(position, botButton);
                                                 botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                 botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                 botButton.width = buttonWidth;
@@ -2895,6 +2948,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.botButtons.clear();
                             if (messageIdChanged) {
                                 this.botButtonsByData.clear();
+                                this.botButtonsByPosition.clear();
+                                this.botButtonsLayout = null;
                             }
                             if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                 rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -2916,6 +2971,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     fullWidth = true;
                                 }
                                 maxButtonsWidth = 0;
+                                hashMap = new HashMap(this.botButtonsByData);
+                                if (messageObject.botButtonsLayout == null) {
+                                }
+                                if (messageObject.botButtonsLayout != null) {
+                                    this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                }
+                                oldByPosition = null;
+                                this.botButtonsByData.clear();
                                 for (a = 0; a < rows; a++) {
                                     row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                     buttonsCount = row.buttons.size();
@@ -2929,7 +2992,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             botButton = new BotButton();
                                             botButton.button = (KeyboardButton) row.buttons.get(b);
                                             key = Utilities.bytesToHex(botButton.button.data);
-                                            oldButton = (BotButton) this.botButtonsByData.get(key);
+                                            position = a + "" + b;
+                                            if (oldByPosition != null) {
+                                                oldButton = (BotButton) oldByPosition.get(position);
+                                            } else {
+                                                oldButton = (BotButton) hashMap.get(key);
+                                            }
                                             if (oldButton != null) {
                                                 botButton.progressAlpha = oldButton.progressAlpha;
                                                 botButton.angle = oldButton.angle;
@@ -2938,6 +3006,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton.lastUpdateTime = System.currentTimeMillis();
                                             }
                                             this.botButtonsByData.put(key, botButton);
+                                            this.botButtonsByPosition.put(position, botButton);
                                             botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                             botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                             botButton.width = buttonWidth;
@@ -3343,6 +3412,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.botButtons.clear();
                                         if (messageIdChanged) {
                                             this.botButtonsByData.clear();
+                                            this.botButtonsByPosition.clear();
+                                            this.botButtonsLayout = null;
                                         }
                                         if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                             this.substractBackgroundHeight = 0;
@@ -3367,6 +3438,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 fullWidth = true;
                                             }
                                             maxButtonsWidth = 0;
+                                            hashMap = new HashMap(this.botButtonsByData);
+                                            if (messageObject.botButtonsLayout == null) {
+                                            }
+                                            if (messageObject.botButtonsLayout != null) {
+                                                this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                            }
+                                            oldByPosition = null;
+                                            this.botButtonsByData.clear();
                                             for (a = 0; a < rows; a++) {
                                                 row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                                 buttonsCount = row.buttons.size();
@@ -3380,7 +3459,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                         botButton = new BotButton();
                                                         botButton.button = (KeyboardButton) row.buttons.get(b);
                                                         key = Utilities.bytesToHex(botButton.button.data);
-                                                        oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                        position = a + "" + b;
+                                                        if (oldByPosition != null) {
+                                                            oldButton = (BotButton) hashMap.get(key);
+                                                        } else {
+                                                            oldButton = (BotButton) oldByPosition.get(position);
+                                                        }
                                                         if (oldButton != null) {
                                                             botButton.lastUpdateTime = System.currentTimeMillis();
                                                         } else {
@@ -3389,6 +3473,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                             botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                         }
                                                         this.botButtonsByData.put(key, botButton);
+                                                        this.botButtonsByPosition.put(position, botButton);
                                                         botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                         botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                         botButton.width = buttonWidth;
@@ -3470,6 +3555,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
+                                        this.botButtonsByPosition.clear();
+                                        this.botButtonsLayout = null;
                                     }
                                     if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                         rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -3491,6 +3578,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             fullWidth = true;
                                         }
                                         maxButtonsWidth = 0;
+                                        hashMap = new HashMap(this.botButtonsByData);
+                                        if (messageObject.botButtonsLayout == null) {
+                                        }
+                                        if (messageObject.botButtonsLayout != null) {
+                                            this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                        }
+                                        oldByPosition = null;
+                                        this.botButtonsByData.clear();
                                         for (a = 0; a < rows; a++) {
                                             row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                             buttonsCount = row.buttons.size();
@@ -3504,7 +3599,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton = new BotButton();
                                                     botButton.button = (KeyboardButton) row.buttons.get(b);
                                                     key = Utilities.bytesToHex(botButton.button.data);
-                                                    oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                    position = a + "" + b;
+                                                    if (oldByPosition != null) {
+                                                        oldButton = (BotButton) oldByPosition.get(position);
+                                                    } else {
+                                                        oldButton = (BotButton) hashMap.get(key);
+                                                    }
                                                     if (oldButton != null) {
                                                         botButton.progressAlpha = oldButton.progressAlpha;
                                                         botButton.angle = oldButton.angle;
@@ -3513,6 +3613,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                         botButton.lastUpdateTime = System.currentTimeMillis();
                                                     }
                                                     this.botButtonsByData.put(key, botButton);
+                                                    this.botButtonsByPosition.put(position, botButton);
                                                     botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                     botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                     botButton.width = buttonWidth;
@@ -3670,6 +3771,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
+                                        this.botButtonsByPosition.clear();
+                                        this.botButtonsLayout = null;
                                     }
                                     if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                         this.substractBackgroundHeight = 0;
@@ -3694,6 +3797,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             fullWidth = true;
                                         }
                                         maxButtonsWidth = 0;
+                                        hashMap = new HashMap(this.botButtonsByData);
+                                        if (messageObject.botButtonsLayout == null) {
+                                        }
+                                        if (messageObject.botButtonsLayout != null) {
+                                            this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                        }
+                                        oldByPosition = null;
+                                        this.botButtonsByData.clear();
                                         for (a = 0; a < rows; a++) {
                                             row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                             buttonsCount = row.buttons.size();
@@ -3707,7 +3818,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton = new BotButton();
                                                     botButton.button = (KeyboardButton) row.buttons.get(b);
                                                     key = Utilities.bytesToHex(botButton.button.data);
-                                                    oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                    position = a + "" + b;
+                                                    if (oldByPosition != null) {
+                                                        oldButton = (BotButton) hashMap.get(key);
+                                                    } else {
+                                                        oldButton = (BotButton) oldByPosition.get(position);
+                                                    }
                                                     if (oldButton != null) {
                                                         botButton.lastUpdateTime = System.currentTimeMillis();
                                                     } else {
@@ -3716,6 +3832,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                         botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                     }
                                                     this.botButtonsByData.put(key, botButton);
+                                                    this.botButtonsByPosition.put(position, botButton);
                                                     botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                     botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                     botButton.width = buttonWidth;
@@ -3797,6 +3914,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
+                                    this.botButtonsByPosition.clear();
+                                    this.botButtonsLayout = null;
                                 }
                                 if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                     rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -3818,6 +3937,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         fullWidth = true;
                                     }
                                     maxButtonsWidth = 0;
+                                    hashMap = new HashMap(this.botButtonsByData);
+                                    if (messageObject.botButtonsLayout == null) {
+                                    }
+                                    if (messageObject.botButtonsLayout != null) {
+                                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                    }
+                                    oldByPosition = null;
+                                    this.botButtonsByData.clear();
                                     for (a = 0; a < rows; a++) {
                                         row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                         buttonsCount = row.buttons.size();
@@ -3831,7 +3958,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton = new BotButton();
                                                 botButton.button = (KeyboardButton) row.buttons.get(b);
                                                 key = Utilities.bytesToHex(botButton.button.data);
-                                                oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                position = a + "" + b;
+                                                if (oldByPosition != null) {
+                                                    oldButton = (BotButton) oldByPosition.get(position);
+                                                } else {
+                                                    oldButton = (BotButton) hashMap.get(key);
+                                                }
                                                 if (oldButton != null) {
                                                     botButton.progressAlpha = oldButton.progressAlpha;
                                                     botButton.angle = oldButton.angle;
@@ -3840,6 +3972,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton.lastUpdateTime = System.currentTimeMillis();
                                                 }
                                                 this.botButtonsByData.put(key, botButton);
+                                                this.botButtonsByPosition.put(position, botButton);
                                                 botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                 botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                 botButton.width = buttonWidth;
@@ -4217,6 +4350,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.botButtons.clear();
                                     if (messageIdChanged) {
                                         this.botButtonsByData.clear();
+                                        this.botButtonsByPosition.clear();
+                                        this.botButtonsLayout = null;
                                     }
                                     if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                         this.substractBackgroundHeight = 0;
@@ -4241,6 +4376,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             fullWidth = true;
                                         }
                                         maxButtonsWidth = 0;
+                                        hashMap = new HashMap(this.botButtonsByData);
+                                        if (messageObject.botButtonsLayout == null) {
+                                        }
+                                        if (messageObject.botButtonsLayout != null) {
+                                            this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                        }
+                                        oldByPosition = null;
+                                        this.botButtonsByData.clear();
                                         for (a = 0; a < rows; a++) {
                                             row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                             buttonsCount = row.buttons.size();
@@ -4254,7 +4397,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton = new BotButton();
                                                     botButton.button = (KeyboardButton) row.buttons.get(b);
                                                     key = Utilities.bytesToHex(botButton.button.data);
-                                                    oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                    position = a + "" + b;
+                                                    if (oldByPosition != null) {
+                                                        oldButton = (BotButton) hashMap.get(key);
+                                                    } else {
+                                                        oldButton = (BotButton) oldByPosition.get(position);
+                                                    }
                                                     if (oldButton != null) {
                                                         botButton.lastUpdateTime = System.currentTimeMillis();
                                                     } else {
@@ -4263,6 +4411,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                         botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                     }
                                                     this.botButtonsByData.put(key, botButton);
+                                                    this.botButtonsByPosition.put(position, botButton);
                                                     botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                     botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                     botButton.width = buttonWidth;
@@ -4344,6 +4493,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
+                                    this.botButtonsByPosition.clear();
+                                    this.botButtonsLayout = null;
                                 }
                                 if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                     rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -4365,6 +4516,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         fullWidth = true;
                                     }
                                     maxButtonsWidth = 0;
+                                    hashMap = new HashMap(this.botButtonsByData);
+                                    if (messageObject.botButtonsLayout == null) {
+                                    }
+                                    if (messageObject.botButtonsLayout != null) {
+                                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                    }
+                                    oldByPosition = null;
+                                    this.botButtonsByData.clear();
                                     for (a = 0; a < rows; a++) {
                                         row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                         buttonsCount = row.buttons.size();
@@ -4378,7 +4537,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton = new BotButton();
                                                 botButton.button = (KeyboardButton) row.buttons.get(b);
                                                 key = Utilities.bytesToHex(botButton.button.data);
-                                                oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                position = a + "" + b;
+                                                if (oldByPosition != null) {
+                                                    oldButton = (BotButton) oldByPosition.get(position);
+                                                } else {
+                                                    oldButton = (BotButton) hashMap.get(key);
+                                                }
                                                 if (oldButton != null) {
                                                     botButton.progressAlpha = oldButton.progressAlpha;
                                                     botButton.angle = oldButton.angle;
@@ -4387,6 +4551,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton.lastUpdateTime = System.currentTimeMillis();
                                                 }
                                                 this.botButtonsByData.put(key, botButton);
+                                                this.botButtonsByPosition.put(position, botButton);
                                                 botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                 botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                 botButton.width = buttonWidth;
@@ -4544,6 +4709,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.botButtons.clear();
                                 if (messageIdChanged) {
                                     this.botButtonsByData.clear();
+                                    this.botButtonsByPosition.clear();
+                                    this.botButtonsLayout = null;
                                 }
                                 if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                     this.substractBackgroundHeight = 0;
@@ -4568,6 +4735,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         fullWidth = true;
                                     }
                                     maxButtonsWidth = 0;
+                                    hashMap = new HashMap(this.botButtonsByData);
+                                    if (messageObject.botButtonsLayout == null) {
+                                    }
+                                    if (messageObject.botButtonsLayout != null) {
+                                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                    }
+                                    oldByPosition = null;
+                                    this.botButtonsByData.clear();
                                     for (a = 0; a < rows; a++) {
                                         row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                         buttonsCount = row.buttons.size();
@@ -4581,7 +4756,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton = new BotButton();
                                                 botButton.button = (KeyboardButton) row.buttons.get(b);
                                                 key = Utilities.bytesToHex(botButton.button.data);
-                                                oldButton = (BotButton) this.botButtonsByData.get(key);
+                                                position = a + "" + b;
+                                                if (oldByPosition != null) {
+                                                    oldButton = (BotButton) hashMap.get(key);
+                                                } else {
+                                                    oldButton = (BotButton) oldByPosition.get(position);
+                                                }
                                                 if (oldButton != null) {
                                                     botButton.lastUpdateTime = System.currentTimeMillis();
                                                 } else {
@@ -4590,6 +4770,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                     botButton.lastUpdateTime = oldButton.lastUpdateTime;
                                                 }
                                                 this.botButtonsByData.put(key, botButton);
+                                                this.botButtonsByPosition.put(position, botButton);
                                                 botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                                 botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                                 botButton.width = buttonWidth;
@@ -4671,6 +4852,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.botButtons.clear();
                             if (messageIdChanged) {
                                 this.botButtonsByData.clear();
+                                this.botButtonsByPosition.clear();
+                                this.botButtonsLayout = null;
                             }
                             if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                                 rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -4692,6 +4875,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     fullWidth = true;
                                 }
                                 maxButtonsWidth = 0;
+                                hashMap = new HashMap(this.botButtonsByData);
+                                if (messageObject.botButtonsLayout == null) {
+                                }
+                                if (messageObject.botButtonsLayout != null) {
+                                    this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                                }
+                                oldByPosition = null;
+                                this.botButtonsByData.clear();
                                 for (a = 0; a < rows; a++) {
                                     row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                                     buttonsCount = row.buttons.size();
@@ -4705,7 +4896,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             botButton = new BotButton();
                                             botButton.button = (KeyboardButton) row.buttons.get(b);
                                             key = Utilities.bytesToHex(botButton.button.data);
-                                            oldButton = (BotButton) this.botButtonsByData.get(key);
+                                            position = a + "" + b;
+                                            if (oldByPosition != null) {
+                                                oldButton = (BotButton) oldByPosition.get(position);
+                                            } else {
+                                                oldButton = (BotButton) hashMap.get(key);
+                                            }
                                             if (oldButton != null) {
                                                 botButton.progressAlpha = oldButton.progressAlpha;
                                                 botButton.angle = oldButton.angle;
@@ -4714,6 +4910,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 botButton.lastUpdateTime = System.currentTimeMillis();
                                             }
                                             this.botButtonsByData.put(key, botButton);
+                                            this.botButtonsByPosition.put(position, botButton);
                                             botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                                             botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                                             botButton.width = buttonWidth;
@@ -5729,6 +5926,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             this.botButtons.clear();
             if (messageIdChanged) {
                 this.botButtonsByData.clear();
+                this.botButtonsByPosition.clear();
+                this.botButtonsLayout = null;
             }
             if (messageObject.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
                 rows = messageObject.messageOwner.reply_markup.rows.size();
@@ -5749,6 +5948,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     fullWidth = true;
                 }
                 maxButtonsWidth = 0;
+                hashMap = new HashMap(this.botButtonsByData);
+                if (messageObject.botButtonsLayout == null && this.botButtonsLayout != null && this.botButtonsLayout.equals(messageObject.botButtonsLayout.toString())) {
+                    hashMap = new HashMap(this.botButtonsByPosition);
+                } else {
+                    if (messageObject.botButtonsLayout != null) {
+                        this.botButtonsLayout = messageObject.botButtonsLayout.toString();
+                    }
+                    oldByPosition = null;
+                }
+                this.botButtonsByData.clear();
                 for (a = 0; a < rows; a++) {
                     row = (TL_keyboardButtonRow) messageObject.messageOwner.reply_markup.rows.get(a);
                     buttonsCount = row.buttons.size();
@@ -5761,7 +5970,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             botButton = new BotButton();
                             botButton.button = (KeyboardButton) row.buttons.get(b);
                             key = Utilities.bytesToHex(botButton.button.data);
-                            oldButton = (BotButton) this.botButtonsByData.get(key);
+                            position = a + "" + b;
+                            if (oldByPosition != null) {
+                                oldButton = (BotButton) oldByPosition.get(position);
+                            } else {
+                                oldButton = (BotButton) hashMap.get(key);
+                            }
                             if (oldButton != null) {
                                 botButton.progressAlpha = oldButton.progressAlpha;
                                 botButton.angle = oldButton.angle;
@@ -5770,6 +5984,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 botButton.lastUpdateTime = System.currentTimeMillis();
                             }
                             this.botButtonsByData.put(key, botButton);
+                            this.botButtonsByPosition.put(position, botButton);
                             botButton.x = (AndroidUtilities.dp(5.0f) + buttonWidth) * b;
                             botButton.y = (AndroidUtilities.dp(48.0f) * a) + AndroidUtilities.dp(5.0f);
                             botButton.width = buttonWidth;

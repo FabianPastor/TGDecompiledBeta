@@ -893,23 +893,12 @@ public class VoIPActivity extends Activity implements StateListener {
                     } else {
                         lastError = 0;
                     }
-                    AlertDialog dlg;
                     if (lastError == 1) {
-                        dlg = new AlertDialog.Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
-                        dlg.setCanceledOnTouchOutside(true);
-                        dlg.setOnDismissListener(new OnDismissListener() {
-                            public void onDismiss(DialogInterface dialog) {
-                                VoIPActivity.this.finish();
-                            }
-                        });
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
                     } else if (lastError == -1) {
-                        dlg = new AlertDialog.Builder(VoIPActivity.this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name)))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
-                        dlg.setCanceledOnTouchOutside(true);
-                        dlg.setOnDismissListener(new OnDismissListener() {
-                            public void onDismiss(DialogInterface dialog) {
-                                VoIPActivity.this.finish();
-                            }
-                        });
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == -2) {
+                        VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
                     } else {
                         VoIPActivity.this.stateText.postDelayed(new Runnable() {
                             public void run() {
@@ -918,6 +907,16 @@ public class VoIPActivity extends Activity implements StateListener {
                         }, 1000);
                     }
                 }
+            }
+        });
+    }
+
+    private void showErrorDialog(CharSequence message) {
+        AlertDialog dlg = new AlertDialog.Builder(this).setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed)).setMessage(message).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+        dlg.setCanceledOnTouchOutside(true);
+        dlg.setOnDismissListener(new OnDismissListener() {
+            public void onDismiss(DialogInterface dialog) {
+                VoIPActivity.this.finish();
             }
         });
     }

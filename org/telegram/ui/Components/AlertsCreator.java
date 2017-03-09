@@ -146,8 +146,11 @@ public class AlertsCreator {
                                                                             showSimpleToast(fragment, error.text);
                                                                             break;
                                                                     }
+                                                                } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                                    showSimpleToast(fragment, getFloodWaitString(error.text));
+                                                                } else {
+                                                                    showSimpleToast(fragment, error.text);
                                                                 }
-                                                                showSimpleToast(fragment, error.text);
                                                             } else if (error == null || error.text.startsWith("FLOOD_WAIT")) {
                                                                 showSimpleAlert(fragment, LocaleController.getString("FloodWait", R.string.FloodWait));
                                                             } else {
@@ -374,6 +377,17 @@ public class AlertsCreator {
             }
         });
         return builder.create();
+    }
+
+    private static String getFloodWaitString(String error) {
+        String timeString;
+        int time = Utilities.parseInt(error).intValue();
+        if (time < 60) {
+            timeString = LocaleController.formatPluralString("Seconds", time);
+        } else {
+            timeString = LocaleController.formatPluralString("Minutes", time / 60);
+        }
+        return LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString);
     }
 
     public static void showFloodWaitAlert(String error, BaseFragment fragment) {

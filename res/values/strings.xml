@@ -1539,8 +1539,10 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
+    <string name="CallNotAvailable">Sorry, &lt;b&gt;%1$s&lt;/b&gt; doesn\'t accept calls.</string>
     <string name="CallViaTelegram">Telegram Call</string>
     <string name="PaymentCardExpireDate">MM/YY</string>
+    <string name="ReturnToCall">RETURN TO CALL</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Earpiece</string>
     <string name="VoipAudioRoutingSpeaker">Speaker</string>

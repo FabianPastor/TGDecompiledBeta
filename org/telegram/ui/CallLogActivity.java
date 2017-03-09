@@ -82,7 +82,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     private static final int TYPE_OUT = 0;
     private OnClickListener callBtnClickListener = new OnClickListener() {
         public void onClick(View v) {
-            VoIPHelper.startCall(CallLogActivity.this.lastCallUser = ((CallLogRow) v.getTag()).user, CallLogActivity.this.getParentActivity());
+            VoIPHelper.startCall(CallLogActivity.this.lastCallUser = ((CallLogRow) v.getTag()).user, CallLogActivity.this.getParentActivity(), null);
         }
     };
     private ArrayList<CallLogRow> calls = new ArrayList();
@@ -440,7 +440,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                 ContactsActivity contactsFragment = new ContactsActivity(args);
                 contactsFragment.setDelegate(new ContactsActivityDelegate() {
                     public void didSelectContact(User user, String param) {
-                        VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity());
+                        VoIPHelper.startCall(user, CallLogActivity.this.getParentActivity(), null);
                     }
                 });
                 CallLogActivity.this.presentFragment(contactsFragment);
@@ -573,7 +573,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 101 && grantResults[0] == 0) {
-            VoIPHelper.startCall(this.lastCallUser, getParentActivity());
+            VoIPHelper.startCall(this.lastCallUser, getParentActivity(), null);
         }
     }
 

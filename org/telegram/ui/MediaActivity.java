@@ -103,9 +103,9 @@ import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell.SharedPhotoVideoCellDelegate;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
-import org.telegram.ui.Components.PlayerView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
@@ -139,6 +139,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private ImageView emptyImageView;
     private TextView emptyTextView;
     private LinearLayout emptyView;
+    private FragmentContextView fragmentContextView;
     protected ChatFull info = null;
     private LinearLayoutManager layoutManager;
     private SharedLinksAdapter linksAdapter;
@@ -146,7 +147,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     private RecyclerListView listView;
     private long mergeDialogId;
     private SharedPhotoVideoAdapter photoVideoAdapter;
-    private PlayerView playerView;
     private ActionBarPopupWindowLayout popupLayout;
     private RadialProgressView progressBar;
     private LinearLayout progressView;
@@ -1418,9 +1418,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         this.progressView.addView(this.progressBar, LayoutHelper.createLinear(-2, -2));
         switchToCurrentSelectedMode();
         if (!AndroidUtilities.isTablet()) {
-            View playerView = new PlayerView(context, this);
-            this.playerView = playerView;
-            frameLayout.addView(playerView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
+            View fragmentContextView = new FragmentContextView(context, this);
+            this.fragmentContextView = fragmentContextView;
+            frameLayout.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
         }
         return this.fragmentView;
     }
@@ -1866,6 +1866,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
     }
 
     private void onItemClick(int index, View view, MessageObject message, int a) {
+        Builder builder;
         if (message != null) {
             if (this.actionBar.isActionModeShowed()) {
                 int loadIndex = message.getDialogId() == this.dialog_id ? 0 : 1;
@@ -1913,7 +1914,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                                 f = FileLoader.getPathToMessage(message.messageOwner);
                             }
                             if (f != null && f.exists()) {
-                                Builder builder;
                                 if (f.getName().endsWith("attheme")) {
                                     ThemeInfo themeInfo = Theme.applyThemeFile(f, message.getDocumentName(), true);
                                     if (themeInfo != null) {
@@ -2109,11 +2109,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         themeDescriptionArr[45] = new ThemeDescription(this.listView, 0, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText);
         themeDescriptionArr[46] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedPhotoVideoCell.class}, null, null, сellDelegate, Theme.key_checkbox);
         themeDescriptionArr[47] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedPhotoVideoCell.class}, null, null, сellDelegate, Theme.key_checkboxCheck);
-        themeDescriptionArr[48] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{PlayerView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
-        themeDescriptionArr[49] = new ThemeDescription(this.playerView, 0, new Class[]{PlayerView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
-        themeDescriptionArr[50] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PlayerView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
-        themeDescriptionArr[51] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{PlayerView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
-        themeDescriptionArr[52] = new ThemeDescription(this.playerView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{PlayerView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
+        themeDescriptionArr[48] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerBackground);
+        themeDescriptionArr[49] = new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, Theme.key_inappPlayerPlayPause);
+        themeDescriptionArr[50] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, Theme.key_inappPlayerTitle);
+        themeDescriptionArr[51] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, Theme.key_inappPlayerPerformer);
+        themeDescriptionArr[52] = new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, Theme.key_inappPlayerClose);
         return themeDescriptionArr;
     }
 }

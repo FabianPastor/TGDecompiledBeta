@@ -160,6 +160,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private static final int add_contact = 1;
     private static final int add_shortcut = 14;
     private static final int block_contact = 2;
+    private static final int call_item = 15;
     private static final int convert_to_supergroup = 13;
     private static final int delete_contact = 5;
     private static final int edit_channel = 12;
@@ -179,6 +180,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private AvatarUpdater avatarUpdater;
     private int blockedUsersRow;
     private BotInfo botInfo;
+    private ActionBarMenuItem callItem;
     private int channelInfoRow;
     private int channelNameRow;
     private int chat_id;
@@ -213,6 +215,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private HashMap<Integer, ChatParticipant> participantsMap = new HashMap();
     private int phoneRow;
     private boolean playProfileAnimation;
+    private boolean recreateMenuAfterAnimation;
     private int rowCount = 0;
     private int sectionRow;
     private int selectedUser;
@@ -936,6 +939,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } catch (Throwable e2) {
                             FileLog.e(e2);
                         }
+                    } else if (id == 15) {
+                        user = MessagesController.getInstance().getUser(Integer.valueOf(ProfileActivity.this.user_id));
+                        if (user != null) {
+                            VoIPHelper.startCall(user, ProfileActivity.this.getParentActivity(), MessagesController.getInstance().getUserFull(user.id));
+                        }
                     }
                 }
             }
@@ -1499,7 +1507,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                             FileLog.e(e2);
                         }
                     } else if (i == 2) {
-                        VoIPHelper.startCall(user, ProfileActivity.this.getParentActivity());
+                        VoIPHelper.startCall(user, ProfileActivity.this.getParentActivity(), MessagesController.getInstance().getUserFull(user.id));
                     }
                 }
             });
@@ -1766,7 +1774,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                         } else {
                             width = AndroidUtilities.displaySize.x;
                         }
-                        width = (int) (((float) (width - AndroidUtilities.dp(126.0f + (40.0f * (1.0f - diff))))) - this.nameTextView[a].getTranslationX());
+                        width = (int) (((float) (width - AndroidUtilities.dp((((float) ((this.callItem != null ? 48 : 0) + 40)) * (1.0f - diff)) + 126.0f))) - this.nameTextView[a].getTranslationX());
                         layoutParams = (FrameLayout.LayoutParams) this.nameTextView[a].getLayoutParams();
                         if (((float) width) < (this.nameTextView[a].getPaint().measureText(this.nameTextView[a].getText().toString()) * this.nameTextView[a].getScaleX()) + ((float) this.nameTextView[a].getSideDrawablesSize())) {
                             layoutParams.width = (int) Math.ceil((double) (((float) width) / this.nameTextView[a].getScaleX()));
@@ -1954,6 +1962,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (id == NotificationCenter.userInfoDidLoaded) {
             if (((Integer) args[0]).intValue() == this.user_id) {
+                if (this.openAnimationInProgress || this.callItem != null) {
+                    this.recreateMenuAfterAnimation = true;
+                } else {
+                    createActionBarMenu();
+                }
                 updateRowsIds();
                 if (this.listAdapter != null) {
                     this.listAdapter.notifyDataSetChanged();
@@ -2000,6 +2013,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (!backward && this.playProfileAnimation && this.allowProfileAnimation) {
             this.openAnimationInProgress = false;
+            if (this.recreateMenuAfterAnimation) {
+                createActionBarMenu();
+            }
         }
         NotificationCenter.getInstance().setAnimationInProgress(false);
     }
@@ -2145,6 +2161,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 this.animatingItem.setAlpha(1.0f);
                 animators.add(ObjectAnimator.ofFloat(this.animatingItem, "alpha", new float[]{0.0f}));
             }
+            if (this.callItem != null) {
+                this.callItem.setAlpha(0.0f);
+                animators.add(ObjectAnimator.ofFloat(this.callItem, "alpha", new float[]{1.0f}));
+            }
             animatorSet.playTogether(animators);
         } else {
             this.initialAnimationExtraHeight = this.extraHeight;
@@ -2172,6 +2192,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             if (this.animatingItem != null) {
                 this.animatingItem.setAlpha(0.0f);
                 animators.add(ObjectAnimator.ofFloat(this.animatingItem, "alpha", new float[]{1.0f}));
+            }
+            if (this.callItem != null) {
+                this.callItem.setAlpha(1.0f);
+                animators.add(ObjectAnimator.ofFloat(this.callItem, "alpha", new float[]{0.0f}));
             }
             animatorSet.playTogether(animators);
         }
@@ -2757,43 +2781,48 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.animatingItem = null;
         ActionBarMenuItem item = null;
         if (this.user_id != 0) {
-            if (UserConfig.getClientUserId() == this.user_id) {
-                item = menu.addItem(10, (int) R.drawable.ic_ab_other);
-                item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
-            } else if (ContactsController.getInstance().contactsDict.get(this.user_id) == null) {
-                User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
-                if (user != null) {
-                    item = menu.addItem(10, (int) R.drawable.ic_ab_other);
-                    if (user.bot) {
-                        if (!user.bot_nochats) {
-                            item.addSubItem(9, LocaleController.getString("BotInvite", R.string.BotInvite));
-                        }
-                        item.addSubItem(10, LocaleController.getString("BotShare", R.string.BotShare));
-                    }
-                    if (user.phone != null && user.phone.length() != 0) {
-                        String string;
-                        item.addSubItem(1, LocaleController.getString("AddContact", R.string.AddContact));
-                        item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
-                        if (this.userBlocked) {
-                            string = LocaleController.getString("Unblock", R.string.Unblock);
-                        } else {
-                            string = LocaleController.getString("BlockContact", R.string.BlockContact);
-                        }
-                        item.addSubItem(2, string);
-                    } else if (user.bot) {
-                        item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
-                    } else {
-                        item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
-                    }
-                } else {
-                    return;
+            if (UserConfig.getClientUserId() != this.user_id) {
+                TL_userFull userFull = MessagesController.getInstance().getUserFull(this.user_id);
+                if (MessagesController.getInstance().callsEnabled && userFull != null && userFull.phone_calls_available) {
+                    this.callItem = menu.addItem(15, (int) R.drawable.ic_call_white_24dp);
                 }
-            } else {
+                if (ContactsController.getInstance().contactsDict.get(this.user_id) == null) {
+                    User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
+                    if (user != null) {
+                        item = menu.addItem(10, (int) R.drawable.ic_ab_other);
+                        if (user.bot) {
+                            if (!user.bot_nochats) {
+                                item.addSubItem(9, LocaleController.getString("BotInvite", R.string.BotInvite));
+                            }
+                            item.addSubItem(10, LocaleController.getString("BotShare", R.string.BotShare));
+                        }
+                        if (user.phone != null && user.phone.length() != 0) {
+                            String string;
+                            item.addSubItem(1, LocaleController.getString("AddContact", R.string.AddContact));
+                            item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
+                            if (this.userBlocked) {
+                                string = LocaleController.getString("Unblock", R.string.Unblock);
+                            } else {
+                                string = LocaleController.getString("BlockContact", R.string.BlockContact);
+                            }
+                            item.addSubItem(2, string);
+                        } else if (user.bot) {
+                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+                        } else {
+                            item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                        }
+                    } else {
+                        return;
+                    }
+                }
                 item = menu.addItem(10, (int) R.drawable.ic_ab_other);
                 item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
                 item.addSubItem(2, !this.userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
                 item.addSubItem(4, LocaleController.getString("EditContact", R.string.EditContact));
                 item.addSubItem(5, LocaleController.getString("DeleteContact", R.string.DeleteContact));
+            } else {
+                item = menu.addItem(10, (int) R.drawable.ic_ab_other);
+                item.addSubItem(3, LocaleController.getString("ShareContact", R.string.ShareContact));
             }
         } else if (this.chat_id != 0) {
             if (this.chat_id > 0) {
@@ -2876,7 +2905,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
             if (user != null) {
                 if (grantResults[0] == 0) {
-                    VoIPHelper.startCall(user, getParentActivity());
+                    VoIPHelper.startCall(user, getParentActivity(), MessagesController.getInstance().getUserFull(user.id));
                 } else {
                     VoIPHelper.permissionDenied(getParentActivity(), null);
                 }

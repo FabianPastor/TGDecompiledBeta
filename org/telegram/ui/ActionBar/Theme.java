@@ -680,6 +680,8 @@ public class Theme {
     public static final String key_progressCircle = "progressCircle";
     public static final String key_radioBackground = "radioBackground";
     public static final String key_radioBackgroundChecked = "radioBackgroundChecked";
+    public static final String key_returnToCallBackground = "returnToCallBackground";
+    public static final String key_returnToCallText = "returnToCallText";
     public static final String key_sessions_devicesImage = "sessions_devicesImage";
     public static final String key_sharedMedia_linkPlaceholder = "sharedMedia_linkPlaceholder";
     public static final String key_sharedMedia_linkPlaceholderText = "sharedMedia_linkPlaceholderText";
@@ -1263,6 +1265,8 @@ public class Theme {
         defaultColors.put(key_inappPlayerBackground, Integer.valueOf(-1));
         defaultColors.put(key_inappPlayerPlayPause, Integer.valueOf(-10309397));
         defaultColors.put(key_inappPlayerClose, Integer.valueOf(-5723992));
+        defaultColors.put(key_returnToCallBackground, Integer.valueOf(-12279325));
+        defaultColors.put(key_returnToCallText, Integer.valueOf(-1));
         defaultColors.put(key_sharedMedia_startStopLoadIcon, Integer.valueOf(-13196562));
         defaultColors.put(key_sharedMedia_linkPlaceholder, Integer.valueOf(-986896));
         defaultColors.put(key_sharedMedia_linkPlaceholderText, Integer.valueOf(-1));

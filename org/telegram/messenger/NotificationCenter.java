@@ -39,6 +39,7 @@ public class NotificationCenter {
     public static final int dialogPhotosLoaded;
     public static final int dialogsNeedReload;
     public static final int didCreatedNewDeleteTask;
+    public static final int didEndedCall;
     public static final int didLoadedPinnedMessage;
     public static final int didLoadedReplyMessages;
     public static final int didReceiveCall;
@@ -51,6 +52,7 @@ public class NotificationCenter {
     public static final int didSetNewWallpapper;
     public static final int didSetPasscode;
     public static final int didSetTwoStepPassword;
+    public static final int didStartedCall;
     public static final int didUpdatedConnectionState;
     public static final int didUpdatedMessagesViews;
     public static final int emojiDidLoaded;
@@ -419,6 +421,12 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         audioRouteChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didStartedCall = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        didEndedCall = i;
     }
 
     public static NotificationCenter getInstance() {

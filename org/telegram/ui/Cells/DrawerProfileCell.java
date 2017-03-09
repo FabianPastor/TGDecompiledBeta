@@ -36,6 +36,7 @@ public class DrawerProfileCell extends FrameLayout {
     private CloudView cloudView;
     private Integer currentColor;
     private Rect destRect = new Rect();
+    private int lastCloudColor;
     private TextView nameTextView;
     private Paint paint = new Paint();
     private TextView phoneTextView;
@@ -55,6 +56,9 @@ public class DrawerProfileCell extends FrameLayout {
             } else {
                 this.paint.setColor(Theme.getServiceMessageColor());
             }
+            if (DrawerProfileCell.this.lastCloudColor != Theme.getColor(Theme.key_chats_menuCloud)) {
+                DrawerProfileCell.this.cloudDrawable.setColorFilter(new PorterDuffColorFilter(DrawerProfileCell.this.lastCloudColor = Theme.getColor(Theme.key_chats_menuCloud), Mode.MULTIPLY));
+            }
             canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) AndroidUtilities.dp(34.0f)) / 2.0f, this.paint);
             int l = (getMeasuredWidth() - AndroidUtilities.dp(33.0f)) / 2;
             int t = (getMeasuredHeight() - AndroidUtilities.dp(33.0f)) / 2;
@@ -66,7 +70,10 @@ public class DrawerProfileCell extends FrameLayout {
     public DrawerProfileCell(Context context) {
         super(context);
         this.cloudDrawable = context.getResources().getDrawable(R.drawable.cloud);
-        this.cloudDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuCloud), Mode.MULTIPLY));
+        Drawable drawable = this.cloudDrawable;
+        int color = Theme.getColor(Theme.key_chats_menuCloud);
+        this.lastCloudColor = color;
+        drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
         this.shadowView.setScaleType(ScaleType.FIT_XY);

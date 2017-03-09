@@ -2526,6 +2526,7 @@ public class TLRPC {
         public byte[] g_a_or_b;
         public long id;
         public long key_fingerprint;
+        public boolean need_debug;
         public boolean need_rating;
         public int participant_id;
         public TL_phoneCallProtocol protocol;
@@ -10377,6 +10378,22 @@ public class TLRPC {
         }
     }
 
+    public static class TL_phone_saveCallDebug extends TLObject {
+        public static int constructor = 662363518;
+        public TL_dataJSON debug;
+        public TL_inputPhoneCall peer;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.peer.serializeToStream(stream);
+            this.debug.serializeToStream(stream);
+        }
+    }
+
     public static class TL_phone_setCallRating extends TLObject {
         public static int constructor = 475228724;
         public String comment;
@@ -11037,6 +11054,7 @@ public class TLRPC {
         public TL_contacts_link link;
         public PeerNotifySettings notify_settings;
         public boolean phone_calls_available;
+        public boolean phone_calls_private;
         public Photo profile_photo;
         public User user;
 
@@ -11053,13 +11071,20 @@ public class TLRPC {
         }
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
-            boolean z = true;
+            boolean z;
+            boolean z2 = true;
             this.flags = stream.readInt32(exception);
             this.blocked = (this.flags & 1) != 0;
-            if ((this.flags & 16) == 0) {
+            if ((this.flags & 16) != 0) {
+                z = true;
+            } else {
                 z = false;
             }
             this.phone_calls_available = z;
+            if ((this.flags & 32) == 0) {
+                z2 = false;
+            }
+            this.phone_calls_private = z2;
             this.user = User.TLdeserialize(stream, stream.readInt32(exception), exception);
             if ((this.flags & 2) != 0) {
                 this.about = stream.readString(exception);
@@ -11079,6 +11104,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             this.flags = this.blocked ? this.flags | 1 : this.flags & -2;
             this.flags = this.phone_calls_available ? this.flags | 16 : this.flags & -17;
+            this.flags = this.phone_calls_private ? this.flags | 32 : this.flags & -33;
             stream.writeInt32(this.flags);
             this.user.serializeToStream(stream);
             if ((this.flags & 2) != 0) {
@@ -19456,8 +19482,13 @@ public class TLRPC {
         public static int constructor = NUM;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z = true;
             this.flags = stream.readInt32(exception);
             this.need_rating = (this.flags & 4) != 0;
+            if ((this.flags & 8) == 0) {
+                z = false;
+            }
+            this.need_debug = z;
             this.id = stream.readInt64(exception);
             if ((this.flags & 1) != 0) {
                 this.reason = PhoneCallDiscardReason.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -19469,8 +19500,9 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            this.flags = this.need_rating ? this.flags | 4 : this.flags & -5;
             stream.writeInt32(this.flags);
+            this.flags = this.need_rating ? this.flags | 4 : this.flags & -5;
+            this.flags = this.need_debug ? this.flags | 8 : this.flags & -9;
             stream.writeInt64(this.id);
             if ((this.flags & 1) != 0) {
                 this.reason.serializeToStream(stream);

@@ -125,6 +125,7 @@ public class MessageObject {
     public boolean attachPathExists;
     public float audioProgress;
     public int audioProgressSec;
+    public StringBuilder botButtonsLayout;
     public CharSequence caption;
     public int contentType;
     public String customReplyName;
@@ -683,6 +684,11 @@ public class MessageObject {
         this.wantedBotKeyboardWidth = 0;
         if (this.messageOwner.reply_markup instanceof TL_replyInlineMarkup) {
             Theme.createChatResources(null, true);
+            if (this.botButtonsLayout == null) {
+                this.botButtonsLayout = new StringBuilder();
+            } else {
+                this.botButtonsLayout.setLength(0);
+            }
             for (int a = 0; a < this.messageOwner.reply_markup.rows.size(); a++) {
                 TL_keyboardButtonRow row = (TL_keyboardButtonRow) this.messageOwner.reply_markup.rows.get(a);
                 int maxButtonSize = 0;
@@ -690,6 +696,7 @@ public class MessageObject {
                 for (int b = 0; b < size; b++) {
                     CharSequence text;
                     KeyboardButton button = (KeyboardButton) row.buttons.get(b);
+                    this.botButtonsLayout.append(a).append(b);
                     if (!(button instanceof TL_keyboardButtonBuy) || (this.messageOwner.media.flags & 4) == 0) {
                         text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false);
                     } else {
@@ -803,6 +810,21 @@ public class MessageObject {
         this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
         generateLayout(fromUser);
         return true;
+    }
+
+    public String getMimeType() {
+        if (this.messageOwner.media instanceof TL_messageMediaDocument) {
+            return this.messageOwner.media.document.mime_type;
+        }
+        if (this.messageOwner.media instanceof TL_messageMediaInvoice) {
+            TL_webDocument photo = ((TL_messageMediaInvoice) this.messageOwner.media).photo;
+            if (photo != null) {
+                return photo.mime_type;
+            }
+        } else if (this.messageOwner.media instanceof TL_messageMediaPhoto) {
+            return "image/jpeg";
+        }
+        return "";
     }
 
     public static boolean isGifDocument(Document document) {

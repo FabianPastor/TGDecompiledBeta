@@ -215,7 +215,6 @@ public final class R {
         public static final int greydivider = NUM;
         public static final int greydivider_bottom = NUM;
         public static final int greydivider_top = NUM;
-        public static final int hd = NUM;
         public static final int header_shadow = NUM;
         public static final int header_shadow_reverse = NUM;
         public static final int hockeyapp_btn_background = NUM;
@@ -524,6 +523,11 @@ public final class R {
         public static final int transparent = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
+        public static final int video_1080 = NUM;
+        public static final int video_240 = NUM;
+        public static final int video_360 = NUM;
+        public static final int video_480 = NUM;
+        public static final int video_720 = NUM;
         public static final int video_actions = NUM;
         public static final int video_edit_play = NUM;
         public static final int video_play = NUM;
@@ -824,6 +828,7 @@ public final class R {
         public static final int CallMessageOutgoing = NUM;
         public static final int CallMessageOutgoingMissed = NUM;
         public static final int CallMessageWithDuration = NUM;
+        public static final int CallNotAvailable = NUM;
         public static final int CallText = NUM;
         public static final int CallViaTelegram = NUM;
         public static final int Calling = NUM;
@@ -1767,6 +1772,7 @@ public final class R {
         public static final int RestorePasswordNoEmailText = NUM;
         public static final int RestorePasswordNoEmailTitle = NUM;
         public static final int Retry = NUM;
+        public static final int ReturnToCall = NUM;
         public static final int RevokeAlert = NUM;
         public static final int RevokeAlertNewLink = NUM;
         public static final int RevokeButton = NUM;

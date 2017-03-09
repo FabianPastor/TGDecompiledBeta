@@ -20,8 +20,8 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
     String[] param;
 
     public PropertyBoxParserImpl(String... customProperties) {
-        InputStream is = getClass().getResourceAsStream("/isoparser-default.properties");
         InputStream customIS;
+        InputStream is = getClass().getResourceAsStream("/isoparser-default.properties");
         try {
             this.mapping = new Properties();
             this.mapping.load(is);

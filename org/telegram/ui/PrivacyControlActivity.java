@@ -588,12 +588,12 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         i = this.rowCount;
         this.rowCount = i + 1;
         this.myContactsRow = i;
-        if (this.rulesType != 0) {
-            this.nobodyRow = -1;
-        } else {
+        if (this.rulesType == 0 || this.rulesType == 2) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.nobodyRow = i;
+        } else {
+            this.nobodyRow = -1;
         }
         i = this.rowCount;
         this.rowCount = i + 1;

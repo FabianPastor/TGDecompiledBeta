@@ -17,6 +17,7 @@ public class VoIPController {
     public static final int DATA_SAVING_NEVER = 0;
     public static final int ERROR_INCOMPATIBLE = 1;
     public static final int ERROR_PEER_OUTDATED = -1;
+    public static final int ERROR_PRIVACY = -2;
     public static final int ERROR_TIMEOUT = 2;
     public static final int ERROR_UNKNOWN = 0;
     public static final int NET_TYPE_3G = 3;
@@ -57,6 +58,8 @@ public class VoIPController {
     private native void nativeConnect(long j);
 
     private native void nativeDebugCtl(long j, int i, int i2);
+
+    private native String nativeGetDebugLog(long j);
 
     private native String nativeGetDebugString(long j);
 
@@ -212,5 +215,10 @@ public class VoIPController {
     private String getLogFilePath() {
         Calendar c = Calendar.getInstance();
         return new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_voip.txt", new Object[]{Integer.valueOf(c.get(5)), Integer.valueOf(c.get(2) + 1), Integer.valueOf(c.get(1)), Integer.valueOf(c.get(11)), Integer.valueOf(c.get(12)), Integer.valueOf(c.get(13))})).getAbsolutePath();
+    }
+
+    public String getDebugLog() {
+        ensureNativeInstance();
+        return nativeGetDebugLog(this.nativeInst);
     }
 }

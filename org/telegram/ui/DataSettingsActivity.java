@@ -274,15 +274,14 @@ public class DataSettingsActivity extends BaseFragment {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.useLessDataForCallsRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.callsSection2Row = i;
         } else {
             this.usageSection2Row = -1;
             this.callsSectionRow = -1;
             this.useLessDataForCallsRow = -1;
-            this.callsSection2Row = -1;
         }
+        i = this.rowCount;
+        this.rowCount = i + 1;
+        this.callsSection2Row = i;
         return true;
     }
 

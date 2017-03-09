@@ -997,6 +997,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     Intent intent = new Intent("android.intent.action.SEND");
                     if (isVideo) {
                         intent.setType(MimeTypes.VIDEO_MP4);
+                    } else if (this.currentMessageObject != null) {
+                        intent.setType(this.currentMessageObject.getMimeType());
                     } else {
                         intent.setType("image/jpeg");
                     }

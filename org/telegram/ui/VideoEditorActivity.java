@@ -654,6 +654,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     if (VideoEditorActivity.this.compressItem.getVisibility() == 8 || (VideoEditorActivity.this.compressItem.getVisibility() == 0 && VideoEditorActivity.this.selectedCompression == VideoEditorActivity.this.compressionsCount - 1)) {
                         VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.originalBitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
                     } else {
+                        if (VideoEditorActivity.this.muteVideo) {
+                            VideoEditorActivity.this.selectedCompression = 1;
+                            VideoEditorActivity.this.updateWidthHeightBitrateForCompression();
+                        }
                         VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.resultWidth, VideoEditorActivity.this.resultHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.bitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
                     }
                 }
@@ -684,7 +688,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         });
         this.compressItem = new ImageView(context);
         this.compressItem.setScaleType(ScaleType.CENTER);
-        this.compressItem.setImageResource(R.drawable.hd);
         this.compressItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         this.compressItem.setVisibility(this.compressionsCount > 1 ? 0 : 8);
         itemsLayout.addView(this.compressItem, LayoutHelper.createLinear(56, 48));
@@ -1017,10 +1020,10 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 }
                 if (VideoEditorActivity.this.allowMentions) {
                     VideoEditorActivity.this.mentionListAnimation = new AnimatorSet();
-                    AnimatorSet access$5100 = VideoEditorActivity.this.mentionListAnimation;
+                    AnimatorSet access$5200 = VideoEditorActivity.this.mentionListAnimation;
                     Animator[] animatorArr = new Animator[1];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.mentionListView, "alpha", new float[]{0.0f});
-                    access$5100.playTogether(animatorArr);
+                    access$5200.playTogether(animatorArr);
                     VideoEditorActivity.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation) {
                             if (VideoEditorActivity.this.mentionListAnimation != null && VideoEditorActivity.this.mentionListAnimation.equals(animation)) {
@@ -1379,6 +1382,17 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             int width;
             int height;
             CharSequence charSequence;
+            if (this.selectedCompression == 0) {
+                this.compressItem.setImageResource(R.drawable.video_240);
+            } else if (this.selectedCompression == 1) {
+                this.compressItem.setImageResource(R.drawable.video_360);
+            } else if (this.selectedCompression == 2) {
+                this.compressItem.setImageResource(R.drawable.video_480);
+            } else if (this.selectedCompression == 3) {
+                this.compressItem.setImageResource(R.drawable.video_720);
+            } else if (this.selectedCompression == 4) {
+                this.compressItem.setImageResource(R.drawable.video_1080);
+            }
             this.esimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
             if (this.compressItem.getVisibility() == 8 || (this.compressItem.getVisibility() == 0 && this.selectedCompression == this.compressionsCount - 1)) {
                 width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalHeight : this.originalWidth;
@@ -1431,9 +1445,9 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
             } else {
                 this.compressionsCount = 1;
             }
-            if (this.selectedCompression >= this.compressionsCount) {
-                this.selectedCompression = this.compressionsCount - 1;
-            }
+        }
+        if (this.selectedCompression >= this.compressionsCount) {
+            this.selectedCompression = this.compressionsCount - 1;
         }
         if (this.selectedCompression != this.compressionsCount - 1) {
             float maxSize;
