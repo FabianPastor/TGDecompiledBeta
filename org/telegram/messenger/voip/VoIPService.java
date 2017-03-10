@@ -237,24 +237,28 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.userID = intent.getIntExtra("user_id", 0);
-        this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
-        this.user = MessagesController.getInstance().getUser(Integer.valueOf(this.userID));
-        if (this.user == null) {
-            FileLog.w("VoIPService: user==null");
-            stopSelf();
+        if (sharedInstance != null) {
+            FileLog.e("Tried to start the VoIP service when it's already started");
         } else {
-            if (this.isOutgoing) {
-                startOutgoingCall();
-                if (intent.getBooleanExtra("start_incall_activity", false)) {
-                    startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
-                }
+            this.userID = intent.getIntExtra("user_id", 0);
+            this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
+            this.user = MessagesController.getInstance().getUser(Integer.valueOf(this.userID));
+            if (this.user == null) {
+                FileLog.w("VoIPService: user==null");
+                stopSelf();
             } else {
-                this.call = callIShouldHavePutIntoIntent;
-                callIShouldHavePutIntoIntent = null;
-                acknowledgeCallAndStartRinging();
+                if (this.isOutgoing) {
+                    startOutgoingCall();
+                    if (intent.getBooleanExtra("start_incall_activity", false)) {
+                        startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
+                    }
+                } else {
+                    this.call = callIShouldHavePutIntoIntent;
+                    callIShouldHavePutIntoIntent = null;
+                    acknowledgeCallAndStartRinging();
+                }
+                sharedInstance = this;
             }
-            sharedInstance = this;
         }
         return 2;
     }

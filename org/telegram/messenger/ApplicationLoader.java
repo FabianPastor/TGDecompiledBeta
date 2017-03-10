@@ -29,6 +29,8 @@ public class ApplicationLoader extends Application {
     private static volatile boolean applicationInited = false;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
+    public static volatile boolean mainInterfacePausedStageQueue = true;
+    public static volatile long mainInterfacePausedStageQueueTime;
 
     private static void convertConfig() {
         SharedPreferences preferences = applicationContext.getSharedPreferences("dataconfig", 0);

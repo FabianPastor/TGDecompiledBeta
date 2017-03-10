@@ -2132,6 +2132,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     protected void onPause() {
         super.onPause();
         ApplicationLoader.mainInterfacePaused = true;
+        Utilities.stageQueue.postRunnable(new Runnable() {
+            public void run() {
+                ApplicationLoader.mainInterfacePausedStageQueue = true;
+                ApplicationLoader.mainInterfacePausedStageQueueTime = 0;
+            }
+        });
         onPasscodePause();
         this.actionBarLayout.onPause();
         if (AndroidUtilities.isTablet()) {
@@ -2199,6 +2205,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     protected void onResume() {
         super.onResume();
         ApplicationLoader.mainInterfacePaused = false;
+        Utilities.stageQueue.postRunnable(new Runnable() {
+            public void run() {
+                ApplicationLoader.mainInterfacePausedStageQueue = false;
+                ApplicationLoader.mainInterfacePausedStageQueueTime = System.currentTimeMillis();
+            }
+        });
         onPasscodeResume();
         if (this.passcodeView.getVisibility() != 0) {
             this.actionBarLayout.onResume();

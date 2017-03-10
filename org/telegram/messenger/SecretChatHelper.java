@@ -58,7 +58,6 @@ import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaVideo;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageService;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessageService_layer8;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
@@ -236,15 +235,8 @@ public class SecretChatHelper {
 
     public void sendMessagesReadMessage(EncryptedChat encryptedChat, ArrayList<Long> random_ids, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -321,15 +313,8 @@ public class SecretChatHelper {
 
     public void sendMessagesDeleteMessage(EncryptedChat encryptedChat, ArrayList<Long> random_ids, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -345,15 +330,8 @@ public class SecretChatHelper {
 
     public void sendClearHistoryMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -368,16 +346,9 @@ public class SecretChatHelper {
 
     public void sendNotifyLayerMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if ((encryptedChat instanceof TL_encryptedChat) && !this.sendingNotifyLayer.contains(Integer.valueOf(encryptedChat.id))) {
-            TL_decryptedMessageService reqSend;
             Message message;
             this.sendingNotifyLayer.add(Integer.valueOf(encryptedChat.id));
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -393,15 +364,8 @@ public class SecretChatHelper {
 
     public void sendRequestKeyMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -418,15 +382,8 @@ public class SecretChatHelper {
 
     public void sendAcceptKeyMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -444,15 +401,8 @@ public class SecretChatHelper {
 
     public void sendCommitKeyMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -469,15 +419,8 @@ public class SecretChatHelper {
 
     public void sendAbortKeyMessage(EncryptedChat encryptedChat, Message resendMessage, long excange_id) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -493,15 +436,8 @@ public class SecretChatHelper {
 
     public void sendNoopMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -516,15 +452,8 @@ public class SecretChatHelper {
 
     public void sendTTLMessage(EncryptedChat encryptedChat, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;
@@ -546,15 +475,8 @@ public class SecretChatHelper {
 
     public void sendScreenshotMessage(EncryptedChat encryptedChat, ArrayList<Long> random_ids, Message resendMessage) {
         if (encryptedChat instanceof TL_encryptedChat) {
-            TL_decryptedMessageService reqSend;
             Message message;
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                reqSend = new TL_decryptedMessageService();
-            } else {
-                reqSend = new TL_decryptedMessageService_layer8();
-                reqSend.random_bytes = new byte[15];
-                Utilities.random.nextBytes(reqSend.random_bytes);
-            }
+            TL_decryptedMessageService reqSend = new TL_decryptedMessageService();
             if (resendMessage != null) {
                 message = resendMessage;
                 reqSend.action = message.action.encryptedAction;

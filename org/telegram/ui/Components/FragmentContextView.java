@@ -136,7 +136,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.playButton.setVisibility(8);
                 this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.titleTextView.setTextSize(1, 14.0f);
-                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 3.0f));
+                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 2.0f));
             }
         }
     }
@@ -167,7 +167,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, AndroidUtilities.dp(39.0f));
+        super.onMeasure(widthMeasureSpec, AndroidUtilities.dp2(39.0f));
     }
 
     public void didReceivedNotification(int id, Object... args) {
@@ -204,7 +204,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.animatorSet = new AnimatorSet();
                 AnimatorSet animatorSet = this.animatorSet;
                 r6 = new Animator[2];
-                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp(36.0f))});
+                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f))});
                 r6[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
                 animatorSet.playTogether(r6);
                 this.animatorSet.setDuration(200);
@@ -224,7 +224,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         int prevStyle = this.currentStyle;
         updateStyle(0);
         if (create && this.topPadding == 0.0f) {
-            setTopPadding((float) AndroidUtilities.dp(36.0f));
+            setTopPadding((float) AndroidUtilities.dp2(36.0f));
             setTranslationY(0.0f);
             this.yPosition = 0.0f;
         }
@@ -237,8 +237,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.animatorSet = new AnimatorSet();
                 animatorSet = this.animatorSet;
                 r6 = new Animator[2];
-                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp(36.0f)), 0.0f});
-                r6[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp(36.0f)});
+                r6[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f)), 0.0f});
+                r6[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                 animatorSet.playTogether(r6);
                 this.animatorSet.setDuration(200);
                 this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -289,7 +289,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (callAvailable) {
             updateStyle(1);
             if (create && this.topPadding == 0.0f) {
-                setTopPadding((float) AndroidUtilities.dp(36.0f));
+                setTopPadding((float) AndroidUtilities.dp2(36.0f));
                 setTranslationY(0.0f);
                 this.yPosition = 0.0f;
             }
@@ -302,8 +302,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.animatorSet = new AnimatorSet();
                     animatorSet = this.animatorSet;
                     animatorArr = new Animator[2];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp(36.0f)), 0.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp(36.0f)});
+                    animatorArr[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f)), 0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)});
                     animatorSet.playTogether(animatorArr);
                     this.animatorSet.setDuration(200);
                     this.animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -334,7 +334,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.animatorSet = new AnimatorSet();
             animatorSet = this.animatorSet;
             animatorArr = new Animator[2];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp(36.0f))});
+            animatorArr[0] = ObjectAnimator.ofFloat(this, "translationY", new float[]{(float) (-AndroidUtilities.dp2(36.0f))});
             animatorArr[1] = ObjectAnimator.ofFloat(this, "topPadding", new float[]{0.0f});
             animatorSet.playTogether(animatorArr);
             this.animatorSet.setDuration(200);
@@ -359,7 +359,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         int restoreToCount = canvas.save();
         if (this.yPosition < 0.0f) {
-            canvas.clipRect(0, (int) (-this.yPosition), child.getMeasuredWidth(), AndroidUtilities.dp(39.0f));
+            canvas.clipRect(0, (int) (-this.yPosition), child.getMeasuredWidth(), AndroidUtilities.dp2(39.0f));
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
         canvas.restoreToCount(restoreToCount);

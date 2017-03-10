@@ -16,7 +16,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.Px;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -323,16 +322,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.sideMenu.setGlowColor(Theme.getColor(Theme.key_chats_menuBackground));
             this.sideMenu.getAdapter().notifyDataSetChanged();
         }
-        FrameLayout frameLayout = new FrameLayout(context) {
-            public void setPadding(@Px int left, @Px int top, @Px int right, @Px int bottom) {
-                super.setPadding(left, top, right, bottom);
-            }
-
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
-                FileLog.e("tmessages");
-            }
-        };
+        FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(true);

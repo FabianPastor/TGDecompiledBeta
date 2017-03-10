@@ -277,8 +277,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
+        String path;
         while (true) {
-            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -469,6 +469,13 @@ public class AndroidUtilities {
             return 0;
         }
         return (int) Math.ceil((double) (density * value));
+    }
+
+    public static int dp2(float value) {
+        if (value == 0.0f) {
+            return 0;
+        }
+        return (int) Math.floor((double) (density * value));
     }
 
     public static int compare(int lhs, int rhs) {

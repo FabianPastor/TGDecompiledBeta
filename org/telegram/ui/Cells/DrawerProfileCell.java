@@ -158,7 +158,7 @@ public class DrawerProfileCell extends FrameLayout {
             try {
                 canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
             } catch (Throwable e) {
-                FileLog.e("tmessages", e);
+                FileLog.e(e);
             }
         }
     }

@@ -21,6 +21,8 @@ import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.VoIPActivity;
 
 public class VoIPHelper {
+    private static long lastCallRequestTime = 0;
+
     public static void startCall(User user, final Activity activity, TL_userFull userFull) {
         boolean isAirplaneMode = true;
         if (userFull != null && userFull.phone_calls_private) {
@@ -75,14 +77,15 @@ public class VoIPHelper {
                     return;
                 }
                 activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(268435456));
-                return;
+            } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
+                doInitiateCall(user, activity);
             }
-            doInitiateCall(user, activity);
         }
     }
 
     private static void doInitiateCall(User user, Activity activity) {
-        if (activity != null && user != null) {
+        if (activity != null && user != null && System.currentTimeMillis() - lastCallRequestTime >= 1000) {
+            lastCallRequestTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
             intent.putExtra("user_id", user.id);
             intent.putExtra("is_outgoing", true);
