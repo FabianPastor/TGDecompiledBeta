@@ -175,7 +175,7 @@ public final class LocalBroadcastManager {
                                 case C.RESULT_BUFFER_READ /*-4*/:
                                     reason = "category";
                                     break;
-                                case C.RESULT_NOTHING_READ /*-3*/:
+                                case -3:
                                     reason = "action";
                                     break;
                                 case -2:

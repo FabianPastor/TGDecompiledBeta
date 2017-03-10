@@ -267,8 +267,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             return LocaleController.getString("CancelAccountReset", R.string.CancelAccountReset);
         }
 
-        public void setParams(Bundle params) {
-            int i = 0;
+        public void setParams(Bundle params, boolean restore) {
             if (params != null) {
                 this.codeField.setText("");
                 this.waitingForEvent = true;
@@ -282,9 +281,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 this.currentParams = params;
                 this.phone = params.getString("phone");
                 this.phoneHash = params.getString("phoneHash");
-                int i2 = params.getInt("timeout");
-                this.time = i2;
-                this.timeout = i2;
+                int i = params.getInt("timeout");
+                this.time = i;
+                this.timeout = i;
                 this.openTime = (int) (System.currentTimeMillis() / 1000);
                 this.nextType = params.getInt("nextType");
                 this.pattern = params.getString("pattern");
@@ -295,13 +294,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     this.codeField.setFilters(new InputFilter[0]);
                 }
                 if (this.progressView != null) {
-                    ProgressView progressView = this.progressView;
-                    if (this.nextType != 0) {
-                        i2 = 0;
-                    } else {
-                        i2 = 8;
-                    }
-                    progressView.setVisibility(i2);
+                    this.progressView.setVisibility(this.nextType != 0 ? 0 : 8);
                 }
                 if (this.phone != null) {
                     String number = PhoneFormat.getInstance().format(this.phone);
@@ -330,11 +323,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setVisibility(0);
                         this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
-                        TextView textView = this.problemText;
-                        if (this.time >= 1000) {
-                            i = 8;
-                        }
-                        textView.setVisibility(i);
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         createTimer();
                     } else {
                         this.timeText.setVisibility(8);
@@ -567,8 +556,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
+            final TL_account_sendConfirmPhoneCode req;
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
-                final TL_account_sendConfirmPhoneCode req;
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 boolean simcardAvailable;
                 if (tm.getSimState() == 1 || tm.getPhoneType() == 0) {
@@ -765,7 +754,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         final SlideView outView = this.views[this.currentViewNum];
         final SlideView newView = this.views[page];
         this.currentViewNum = page;
-        newView.setParams(params);
+        newView.setParams(params, false);
         this.actionBar.setTitle(newView.getHeaderName());
         newView.onShow();
         newView.setX(back ? (float) (-AndroidUtilities.displaySize.x) : (float) AndroidUtilities.displaySize.x);

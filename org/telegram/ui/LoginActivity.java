@@ -320,7 +320,7 @@ public class LoginActivity extends BaseFragment {
             return LocaleController.getString("LoginPassword", R.string.LoginPassword);
         }
 
-        public void setParams(Bundle params) {
+        public void setParams(Bundle params, boolean restore) {
             boolean z = true;
             if (params != null) {
                 if (params.isEmpty()) {
@@ -458,7 +458,7 @@ public class LoginActivity extends BaseFragment {
         public void restoreStateParams(Bundle bundle) {
             this.currentParams = bundle.getBundle("passview_params");
             if (this.currentParams != null) {
-                setParams(this.currentParams);
+                setParams(this.currentParams, true);
             }
             String code = bundle.getString("passview_code");
             if (code != null) {
@@ -557,7 +557,7 @@ public class LoginActivity extends BaseFragment {
             return LocaleController.getString("LoginPassword", R.string.LoginPassword);
         }
 
-        public void setParams(Bundle params) {
+        public void setParams(Bundle params, boolean restore) {
             if (params != null) {
                 this.codeField.setText("");
                 this.currentParams = params;
@@ -664,7 +664,7 @@ public class LoginActivity extends BaseFragment {
         public void restoreStateParams(Bundle bundle) {
             this.currentParams = bundle.getBundle("recoveryview_params");
             if (this.currentParams != null) {
-                setParams(this.currentParams);
+                setParams(this.currentParams, true);
             }
             String code = bundle.getString("recoveryview_code");
             if (code != null) {
@@ -768,7 +768,7 @@ public class LoginActivity extends BaseFragment {
             }
         }
 
-        public void setParams(Bundle params) {
+        public void setParams(Bundle params, boolean restore) {
             if (params != null) {
                 this.firstNameField.setText("");
                 this.lastNameField.setText("");
@@ -848,7 +848,7 @@ public class LoginActivity extends BaseFragment {
         public void restoreStateParams(Bundle bundle) {
             this.currentParams = bundle.getBundle("registerview_params");
             if (this.currentParams != null) {
-                setParams(this.currentParams);
+                setParams(this.currentParams, true);
             }
             String first = bundle.getString("registerview_first");
             if (first != null) {
@@ -1012,7 +1012,7 @@ public class LoginActivity extends BaseFragment {
             this.resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText6));
         }
 
-        public void setParams(Bundle params) {
+        public void setParams(Bundle params, boolean restore) {
             if (params != null) {
                 this.currentParams = params;
                 this.requestPhone = params.getString("phoneFormated");
@@ -1053,7 +1053,7 @@ public class LoginActivity extends BaseFragment {
         public void restoreStateParams(Bundle bundle) {
             this.currentParams = bundle.getBundle("resetview_params");
             if (this.currentParams != null) {
-                setParams(this.currentParams);
+                setParams(this.currentParams, true);
             }
         }
     }
@@ -1067,6 +1067,7 @@ public class LoginActivity extends BaseFragment {
         private int currentType;
         private String emailPhone;
         private boolean ignoreOnTextChange;
+        private boolean isRestored;
         private double lastCodeTime;
         private double lastCurrentTime;
         private String lastError = "";
@@ -1261,9 +1262,9 @@ public class LoginActivity extends BaseFragment {
             return LocaleController.getString("YourCode", R.string.YourCode);
         }
 
-        public void setParams(Bundle params) {
-            int i = 0;
+        public void setParams(Bundle params, boolean restore) {
             if (params != null) {
+                this.isRestored = restore;
                 this.codeField.setText("");
                 this.waitingForEvent = true;
                 if (this.currentType == 2) {
@@ -1278,9 +1279,9 @@ public class LoginActivity extends BaseFragment {
                 this.emailPhone = params.getString("ephone");
                 this.requestPhone = params.getString("phoneFormated");
                 this.phoneHash = params.getString("phoneHash");
-                int i2 = params.getInt("timeout");
-                this.time = i2;
-                this.timeout = i2;
+                int i = params.getInt("timeout");
+                this.time = i;
+                this.timeout = i;
                 this.openTime = (int) (System.currentTimeMillis() / 1000);
                 this.nextType = params.getInt("nextType");
                 this.pattern = params.getString("pattern");
@@ -1291,13 +1292,7 @@ public class LoginActivity extends BaseFragment {
                     this.codeField.setFilters(new InputFilter[0]);
                 }
                 if (this.progressView != null) {
-                    ProgressView progressView = this.progressView;
-                    if (this.nextType != 0) {
-                        i2 = 0;
-                    } else {
-                        i2 = 8;
-                    }
-                    progressView.setVisibility(i2);
+                    this.progressView.setVisibility(this.nextType != 0 ? 0 : 8);
                 }
                 if (this.phone != null) {
                     String number = PhoneFormat.getInstance().format(this.phone);
@@ -1332,15 +1327,19 @@ public class LoginActivity extends BaseFragment {
                         } else if (this.nextType == 2) {
                             this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
                         }
+                        String callLogNumber = this.isRestored ? AndroidUtilities.obtainLoginPhoneCall(this.pattern) : null;
+                        if (callLogNumber != null) {
+                            this.ignoreOnTextChange = true;
+                            this.codeField.setText(callLogNumber);
+                            this.ignoreOnTextChange = false;
+                            onNextPressed();
+                            return;
+                        }
                         createTimer();
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setVisibility(0);
                         this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
-                        TextView textView = this.problemText;
-                        if (this.time >= 1000) {
-                            i = 8;
-                        }
-                        textView.setVisibility(i);
+                        this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         createTimer();
                     } else {
                         this.timeText.setVisibility(8);
@@ -1480,9 +1479,10 @@ public class LoginActivity extends BaseFragment {
                     NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                 }
                 this.waitingForEvent = false;
+                final String code = this.codeField.getText().toString();
                 final TL_auth_signIn req = new TL_auth_signIn();
                 req.phone_number = this.requestPhone;
-                req.phone_code = this.codeField.getText().toString();
+                req.phone_code = code;
                 req.phone_code_hash = this.phoneHash;
                 destroyTimer();
                 LoginActivity.this.needShowProgress();
@@ -1493,6 +1493,7 @@ public class LoginActivity extends BaseFragment {
                                 LoginActivitySmsView.this.nextPressed = false;
                                 boolean ok = false;
                                 if (error == null) {
+                                    ok = true;
                                     LoginActivity.this.needHideProgress();
                                     TL_auth_authorization res = response;
                                     ConnectionsManager.getInstance().setUserId(res.user.id);
@@ -1511,84 +1512,85 @@ public class LoginActivity extends BaseFragment {
                                     MessagesController.getInstance().getBlockedUsers(true);
                                     ConnectionsManager.getInstance().updateDcSettings();
                                     LoginActivity.this.needFinishActivity();
-                                    return;
-                                }
-                                LoginActivitySmsView.this.lastError = error.text;
-                                if (error.text.contains("PHONE_NUMBER_UNOCCUPIED")) {
-                                    ok = true;
-                                    LoginActivity.this.needHideProgress();
-                                    Bundle params = new Bundle();
-                                    params.putString("phoneFormated", LoginActivitySmsView.this.requestPhone);
-                                    params.putString("phoneHash", LoginActivitySmsView.this.phoneHash);
-                                    params.putString("code", req.phone_code);
-                                    LoginActivity.this.setPage(5, true, params, false);
-                                    LoginActivitySmsView.this.destroyTimer();
-                                    LoginActivitySmsView.this.destroyCodeTimer();
-                                } else if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
-                                    ok = true;
-                                    ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
-                                        public void run(final TLObject response, final TL_error error) {
-                                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                                public void run() {
-                                                    LoginActivity.this.needHideProgress();
-                                                    if (error == null) {
-                                                        int i;
-                                                        TL_account_password password = response;
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString("current_salt", Utilities.bytesToHex(password.current_salt));
-                                                        bundle.putString(TrackReferenceTypeBox.TYPE1, password.hint);
-                                                        bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern);
-                                                        bundle.putString("phoneFormated", LoginActivitySmsView.this.requestPhone);
-                                                        bundle.putString("phoneHash", LoginActivitySmsView.this.phoneHash);
-                                                        bundle.putString("code", req.phone_code);
-                                                        String str = "has_recovery";
-                                                        if (password.has_recovery) {
-                                                            i = 1;
-                                                        } else {
-                                                            i = 0;
-                                                        }
-                                                        bundle.putInt(str, i);
-                                                        LoginActivity.this.setPage(6, true, bundle, false);
-                                                        return;
-                                                    }
-                                                    LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
-                                                }
-                                            });
-                                        }
-                                    }, 10);
-                                    LoginActivitySmsView.this.destroyTimer();
-                                    LoginActivitySmsView.this.destroyCodeTimer();
                                 } else {
-                                    LoginActivity.this.needHideProgress();
-                                    if ((LoginActivitySmsView.this.currentType == 3 && (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2)) || (LoginActivitySmsView.this.currentType == 2 && (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3))) {
-                                        LoginActivitySmsView.this.createTimer();
-                                    }
-                                    if (LoginActivitySmsView.this.currentType == 2) {
-                                        AndroidUtilities.setWaitingForSms(true);
-                                        NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
-                                    } else if (LoginActivitySmsView.this.currentType == 3) {
-                                        AndroidUtilities.setWaitingForCall(true);
-                                        NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
-                                    }
-                                    LoginActivitySmsView.this.waitingForEvent = true;
-                                    if (LoginActivitySmsView.this.currentType != 3) {
-                                        if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
-                                        } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
-                                        } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                                            LoginActivitySmsView.this.onBackPressed();
-                                            LoginActivity.this.setPage(0, true, null, true);
-                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
-                                        } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
-                                        } else {
-                                            LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                    LoginActivitySmsView.this.lastError = error.text;
+                                    if (error.text.contains("PHONE_NUMBER_UNOCCUPIED")) {
+                                        ok = true;
+                                        LoginActivity.this.needHideProgress();
+                                        Bundle params = new Bundle();
+                                        params.putString("phoneFormated", LoginActivitySmsView.this.requestPhone);
+                                        params.putString("phoneHash", LoginActivitySmsView.this.phoneHash);
+                                        params.putString("code", req.phone_code);
+                                        LoginActivity.this.setPage(5, true, params, false);
+                                        LoginActivitySmsView.this.destroyTimer();
+                                        LoginActivitySmsView.this.destroyCodeTimer();
+                                    } else if (error.text.contains("SESSION_PASSWORD_NEEDED")) {
+                                        ok = true;
+                                        ConnectionsManager.getInstance().sendRequest(new TL_account_getPassword(), new RequestDelegate() {
+                                            public void run(final TLObject response, final TL_error error) {
+                                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                                    public void run() {
+                                                        LoginActivity.this.needHideProgress();
+                                                        if (error == null) {
+                                                            int i;
+                                                            TL_account_password password = response;
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("current_salt", Utilities.bytesToHex(password.current_salt));
+                                                            bundle.putString(TrackReferenceTypeBox.TYPE1, password.hint);
+                                                            bundle.putString("email_unconfirmed_pattern", password.email_unconfirmed_pattern);
+                                                            bundle.putString("phoneFormated", LoginActivitySmsView.this.requestPhone);
+                                                            bundle.putString("phoneHash", LoginActivitySmsView.this.phoneHash);
+                                                            bundle.putString("code", req.phone_code);
+                                                            String str = "has_recovery";
+                                                            if (password.has_recovery) {
+                                                                i = 1;
+                                                            } else {
+                                                                i = 0;
+                                                            }
+                                                            bundle.putInt(str, i);
+                                                            LoginActivity.this.setPage(6, true, bundle, false);
+                                                            return;
+                                                        }
+                                                        LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                                    }
+                                                });
+                                            }
+                                        }, 10);
+                                        LoginActivitySmsView.this.destroyTimer();
+                                        LoginActivitySmsView.this.destroyCodeTimer();
+                                    } else {
+                                        LoginActivity.this.needHideProgress();
+                                        if ((LoginActivitySmsView.this.currentType == 3 && (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2)) || (LoginActivitySmsView.this.currentType == 2 && (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3))) {
+                                            LoginActivitySmsView.this.createTimer();
+                                        }
+                                        if (LoginActivitySmsView.this.currentType == 2) {
+                                            AndroidUtilities.setWaitingForSms(true);
+                                            NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveSmsCode);
+                                        } else if (LoginActivitySmsView.this.currentType == 3) {
+                                            AndroidUtilities.setWaitingForCall(true);
+                                            NotificationCenter.getInstance().addObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                                        }
+                                        LoginActivitySmsView.this.waitingForEvent = true;
+                                        if (LoginActivitySmsView.this.currentType != 3) {
+                                            if (error.text.contains("PHONE_NUMBER_INVALID")) {
+                                                LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                            } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
+                                                LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                            } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
+                                                LoginActivitySmsView.this.onBackPressed();
+                                                LoginActivity.this.setPage(0, true, null, true);
+                                                LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                            } else if (error.text.startsWith("FLOOD_WAIT")) {
+                                                LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            } else {
+                                                LoginActivity.this.needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                            }
                                         }
                                     }
                                 }
-                                if (ok) {
+                                if (ok && LoginActivitySmsView.this.currentType == 3) {
                                     AndroidUtilities.endIncomingCall();
+                                    AndroidUtilities.removeLoginPhoneCall(code, true);
                                 }
                             }
                         });
@@ -1627,7 +1629,7 @@ public class LoginActivity extends BaseFragment {
 
         public void onShow() {
             super.onShow();
-            if (this.codeField != null) {
+            if (this.codeField != null && this.currentType != 3) {
                 this.codeField.requestFocus();
                 this.codeField.setSelection(this.codeField.length());
             }
@@ -1671,7 +1673,7 @@ public class LoginActivity extends BaseFragment {
         public void restoreStateParams(Bundle bundle) {
             this.currentParams = bundle.getBundle("smsview_params_" + this.currentType);
             if (this.currentParams != null) {
-                setParams(this.currentParams);
+                setParams(this.currentParams, true);
             }
             String code = bundle.getString("smsview_code_" + this.currentType);
             if (code != null) {
@@ -2034,6 +2036,7 @@ public class LoginActivity extends BaseFragment {
                 if (VERSION.SDK_INT >= 23 && simcardAvailable) {
                     allowCall = LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
                     boolean allowSms = LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.RECEIVE_SMS") == 0;
+                    boolean allowCancelCall = LoginActivity.this.getParentActivity().checkSelfPermission("android.permission.CALL_PHONE") == 0;
                     if (LoginActivity.this.checkPermissions) {
                         LoginActivity.this.permissionsItems.clear();
                         if (!allowCall) {
@@ -2042,14 +2045,22 @@ public class LoginActivity extends BaseFragment {
                         if (!allowSms) {
                             LoginActivity.this.permissionsItems.add("android.permission.RECEIVE_SMS");
                         }
+                        if (!allowCancelCall) {
+                            LoginActivity.this.permissionsItems.add("android.permission.CALL_PHONE");
+                            LoginActivity.this.permissionsItems.add("android.permission.WRITE_CALL_LOG");
+                            LoginActivity.this.permissionsItems.add("android.permission.READ_CALL_LOG");
+                        }
                         if (!LoginActivity.this.permissionsItems.isEmpty()) {
                             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-                            if (preferences.getBoolean("firstlogin", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
+                            if (!allowCancelCall && allowCall) {
+                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                return;
+                            } else if (preferences.getBoolean("firstlogin", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
                                 preferences.edit().putBoolean("firstlogin", false).commit();
                                 Builder builder = new Builder(LoginActivity.this.getParentActivity());
                                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                                 builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                if (LoginActivity.this.permissionsItems.size() == 2) {
+                                if (LoginActivity.this.permissionsItems.size() >= 2) {
                                     builder.setMessage(LocaleController.getString("AllowReadCallAndSms", R.string.AllowReadCallAndSms));
                                 } else if (allowSms) {
                                     builder.setMessage(LocaleController.getString("AllowReadCall", R.string.AllowReadCall));
@@ -2058,9 +2069,10 @@ public class LoginActivity extends BaseFragment {
                                 }
                                 LoginActivity.this.permissionsDialog = LoginActivity.this.showDialog(builder.create());
                                 return;
+                            } else {
+                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                return;
                             }
-                            LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
-                            return;
                         }
                     }
                 }
@@ -2549,7 +2561,7 @@ public class LoginActivity extends BaseFragment {
                 i = 0;
             }
             actionBar.setBackButtonImage(i);
-            newView.setParams(params);
+            newView.setParams(params, false);
             this.actionBar.setTitle(newView.getHeaderName());
             newView.onShow();
             if (back) {
@@ -2603,7 +2615,7 @@ public class LoginActivity extends BaseFragment {
         actionBar.setBackButtonImage(i);
         this.views[this.currentViewNum].setVisibility(8);
         this.currentViewNum = page;
-        this.views[page].setParams(params);
+        this.views[page].setParams(params, false);
         this.views[page].setVisibility(0);
         this.actionBar.setTitle(this.views[page].getHeaderName());
         this.views[page].onShow();

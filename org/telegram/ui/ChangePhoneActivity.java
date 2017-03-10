@@ -314,7 +314,7 @@ public class ChangePhoneActivity extends BaseFragment {
             return LocaleController.getString("YourCode", R.string.YourCode);
         }
 
-        public void setParams(Bundle params) {
+        public void setParams(Bundle params, boolean restore) {
             int i = 0;
             if (params != null) {
                 this.codeField.setText("");
@@ -1220,7 +1220,7 @@ public class ChangePhoneActivity extends BaseFragment {
         final SlideView outView = this.views[this.currentViewNum];
         final SlideView newView = this.views[page];
         this.currentViewNum = page;
-        newView.setParams(params);
+        newView.setParams(params, false);
         this.actionBar.setTitle(newView.getHeaderName());
         newView.onShow();
         newView.setX(back ? (float) (-AndroidUtilities.displaySize.x) : (float) AndroidUtilities.displaySize.x);

@@ -393,12 +393,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                                 abi = "arm";
                                 break;
                             case 1:
+                            case 3:
                                 abi = "arm-v7a";
                                 break;
                             case 2:
+                            case 4:
                                 abi = "x86";
                                 break;
-                            case 3:
+                            case 5:
                                 abi = "universal";
                                 break;
                         }

@@ -13,7 +13,7 @@ public class SlideView extends LinearLayout {
         return "";
     }
 
-    public void setParams(Bundle params) {
+    public void setParams(Bundle params, boolean restore) {
     }
 
     public void onBackPressed() {

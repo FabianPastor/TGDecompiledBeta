@@ -390,7 +390,7 @@ public final class DefaultTrackOutput implements TrackOutput {
                 readData(this.extrasHolder.offset, buffer.data, this.extrasHolder.size);
                 dropDownstreamTo(this.extrasHolder.nextOffset);
                 return -4;
-            case C.RESULT_NOTHING_READ /*-3*/:
+            case -3:
                 if (!loadingFinished) {
                     return -3;
                 }

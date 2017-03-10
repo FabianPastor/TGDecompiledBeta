@@ -763,7 +763,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean result = false;
         if (event.getAction() == 0) {
             if (this.currentMessageObject.type == 16) {
-                if (x >= this.otherX && x <= this.otherX + AndroidUtilities.dp(225.0f) && y >= this.otherY - AndroidUtilities.dp(14.0f) && y <= this.otherY + AndroidUtilities.dp(50.0f)) {
+                if (x >= this.otherX && x <= this.otherX + AndroidUtilities.dp(235.0f) && y >= this.otherY - AndroidUtilities.dp(14.0f) && y <= this.otherY + AndroidUtilities.dp(50.0f)) {
                     this.otherPressed = true;
                     result = true;
                     invalidate();
@@ -1745,30 +1745,22 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* JADX WARNING: inconsistent code. */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
-        boolean z;
         String description;
         Photo photo;
-        TLObject document;
-        String type;
         int duration;
-        boolean smallImage;
-        TL_webDocument webDocument;
         int additinalWidth;
-        int height;
         int width;
         Throwable e;
+        int restLinesCount;
         int a;
         int lineLeft;
         boolean authorIsRTL;
-        boolean hasRTL;
         int textWidth;
-        DocumentAttribute attribute;
         PhotoSize photoSize;
         PhotoSize photoSize2;
         int dp;
         int durationWidth;
         ArrayList arrayList;
-        float scale;
         String fileName;
         int seconds;
         String str;
@@ -1872,7 +1864,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.needNewVisiblePart = true;
             }
             int maxWidth;
+            boolean z;
             int maxPhotoWidth;
+            DocumentAttribute attribute;
+            float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -1934,9 +1929,14 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     String site_name;
                     String title;
                     String author;
+                    TLObject document;
+                    String type;
+                    boolean smallImage;
+                    TL_webDocument webDocument;
                     TL_webDocument webDocument2;
+                    int height;
                     int restLines;
-                    int restLinesCount;
+                    boolean hasRTL;
                     if (AndroidUtilities.isTablet()) {
                         if (!messageObject.isFromUser() || ((this.currentMessageObject.messageOwner.to_id.channel_id == 0 && this.currentMessageObject.messageOwner.to_id.chat_id == 0) || this.currentMessageObject.isOut())) {
                             linkPreviewMaxWidth = AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(80.0f);
@@ -1978,12 +1978,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 if (this.currentMessageObject.photoThumbs != null) {
                                     z = true;
                                     this.isSmallImage = z;
-                                    webDocument2 = null;
+                                    webDocument = null;
                                 }
                             }
                             z = false;
                             this.isSmallImage = z;
-                            webDocument2 = null;
+                            webDocument = null;
                         }
                         smallImage = false;
                         if (type.equals("app")) {
@@ -1993,11 +1993,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         if (this.currentMessageObject.photoThumbs != null) {
                             z = true;
                             this.isSmallImage = z;
-                            webDocument2 = null;
+                            webDocument = null;
                         }
                         z = false;
                         this.isSmallImage = z;
-                        webDocument2 = null;
+                        webDocument = null;
                     } else if (this.hasInvoicePreview) {
                         site_name = messageObject.messageOwner.media.title;
                         title = null;
@@ -2005,12 +2005,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         photo = null;
                         author = null;
                         document = null;
-                        webDocument = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
+                        webDocument2 = ((TL_messageMediaInvoice) messageObject.messageOwner.media).photo;
                         duration = 0;
                         type = "invoice";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument2 = webDocument;
+                        webDocument = webDocument2;
                     } else {
                         TL_game game = messageObject.messageOwner.media.game;
                         site_name = game.title;
@@ -2023,7 +2023,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         type = "game";
                         this.isSmallImage = false;
                         smallImage = false;
-                        webDocument2 = null;
+                        webDocument = null;
                     }
                     if (this.hasInvoicePreview) {
                         additinalWidth = 0;
@@ -2187,7 +2187,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp;
                                     photoSize.w = dp;
                                     this.documentAttachType = 2;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (!MessageObject.isVideoDocument(document)) {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -2204,7 +2204,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp;
                                     photoSize.w = dp;
                                     createDocumentLayout(0, messageObject);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (MessageObject.isStickerDocument(document)) {
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (!MessageObject.isStickerDocument(document)) {
@@ -2217,7 +2217,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.totalHeight += AndroidUtilities.dp(44.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         } else if (MessageObject.isMusicDocument(document)) {
                                             createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                             this.drawImageButton = true;
@@ -2226,12 +2226,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                                 this.totalHeight += AndroidUtilities.dp(64.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             } else {
                                                 this.totalHeight += AndroidUtilities.dp(100.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                                 this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
                                         } else {
                                             durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
@@ -2243,10 +2243,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -2264,7 +2264,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize.w = dp;
                                     this.documentAttach = document;
                                     this.documentAttachType = 6;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                             } else if (photo == null) {
                                 if (type != null) {
@@ -2281,9 +2281,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                             this.currentPhotoObjectThumb = null;
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 }
                                 z = false;
@@ -2300,19 +2300,19 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else {
-                                if (webDocument2 != null) {
-                                    if (webDocument2.mime_type.startsWith("image/")) {
-                                        webDocument = null;
+                                if (webDocument != null) {
+                                    if (webDocument.mime_type.startsWith("image/")) {
+                                        webDocument2 = null;
                                     } else {
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                     this.drawImageButton = false;
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -2341,7 +2341,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (smallImage) {
                                     if (!this.hasGamePreview) {
@@ -2366,8 +2366,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     this.photoImage.setImage(this.documentAttach, null, this.currentPhotoFilter, null, this.currentPhotoObject == null ? this.currentPhotoObject.location : null, "b1", this.documentAttach.size, "webp", true);
                                 } else if (this.documentAttachType != 4) {
@@ -2689,7 +2689,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -2719,8 +2719,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -3127,15 +3127,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 if (document == null) {
                                     if (photo == null) {
-                                        if (webDocument2 != null) {
-                                            if (webDocument2.mime_type.startsWith("image/")) {
-                                                webDocument = webDocument2;
+                                        if (webDocument != null) {
+                                            if (webDocument.mime_type.startsWith("image/")) {
+                                                webDocument2 = webDocument;
                                             } else {
-                                                webDocument = null;
+                                                webDocument2 = null;
                                             }
                                             this.drawImageButton = false;
                                         }
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else {
                                         if (type != null) {
                                             if (type.equals("photo")) {
@@ -3153,9 +3153,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                     this.currentPhotoObjectThumb = null;
-                                                    webDocument = webDocument2;
+                                                    webDocument2 = webDocument;
                                                 }
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
                                         }
                                         z = false;
@@ -3172,9 +3172,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                             this.currentPhotoObjectThumb = null;
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 } else if (!MessageObject.isGifDocument(document)) {
                                     if (MediaController.getInstance().canAutoplayGifs()) {
@@ -3197,7 +3197,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp;
                                     photoSize.w = dp;
                                     this.documentAttachType = 2;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (!MessageObject.isVideoDocument(document)) {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -3214,7 +3214,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize2.h = dp;
                                     photoSize.w = dp;
                                     createDocumentLayout(0, messageObject);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (MessageObject.isStickerDocument(document)) {
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                     if (MessageObject.isStickerDocument(document)) {
@@ -3227,7 +3227,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.totalHeight += AndroidUtilities.dp(44.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         } else if (MessageObject.isMusicDocument(document)) {
                                             createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                             this.drawImageButton = true;
@@ -3236,12 +3236,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                                 this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                                 this.totalHeight += AndroidUtilities.dp(64.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             } else {
                                                 this.totalHeight += AndroidUtilities.dp(100.0f);
                                                 this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                                 this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
                                         } else {
                                             durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
@@ -3253,10 +3253,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     this.currentPhotoObject = document.thumb;
                                     for (a = 0; a < document.attributes.size(); a++) {
@@ -3274,7 +3274,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     photoSize.w = dp;
                                     this.documentAttach = document;
                                     this.documentAttachType = 6;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -3305,7 +3305,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.currentPhotoObjectThumb.size = -1;
                                         }
                                     } else {
-                                        webDocument.size = -1;
+                                        webDocument2.size = -1;
                                     }
                                     if (smallImage) {
                                         height = maxPhotoWidth;
@@ -3330,8 +3330,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.photoImage.setImageCoords(0, 0, width, height);
                                     this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                     this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                    if (webDocument == null) {
-                                        this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                                    if (webDocument2 == null) {
+                                        this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                                     } else if (this.documentAttachType != 6) {
                                         if (this.currentPhotoObject == null) {
                                         }
@@ -3659,7 +3659,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                                 maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                                 if (this.currentPhotoObject == null) {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 } else {
                                     this.currentPhotoObject.size = -1;
                                     if (this.currentPhotoObjectThumb != null) {
@@ -3689,8 +3689,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -4065,15 +4065,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             if (document == null) {
                                 if (photo == null) {
-                                    if (webDocument2 != null) {
-                                        if (webDocument2.mime_type.startsWith("image/")) {
-                                            webDocument = webDocument2;
+                                    if (webDocument != null) {
+                                        if (webDocument.mime_type.startsWith("image/")) {
+                                            webDocument2 = webDocument;
                                         } else {
-                                            webDocument = null;
+                                            webDocument2 = null;
                                         }
                                         this.drawImageButton = false;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     if (type != null) {
                                         if (type.equals("photo")) {
@@ -4091,9 +4091,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                             if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                                 this.currentPhotoObjectThumb = null;
-                                                webDocument = webDocument2;
+                                                webDocument2 = webDocument;
                                             }
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     }
                                     z = false;
@@ -4110,9 +4110,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                     if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                         this.currentPhotoObjectThumb = null;
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
                             } else if (!MessageObject.isGifDocument(document)) {
                                 if (MediaController.getInstance().canAutoplayGifs()) {
@@ -4135,7 +4135,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 photoSize2.h = dp;
                                 photoSize.w = dp;
                                 this.documentAttachType = 2;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (!MessageObject.isVideoDocument(document)) {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -4152,7 +4152,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 photoSize2.h = dp;
                                 photoSize.w = dp;
                                 createDocumentLayout(0, messageObject);
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else if (MessageObject.isStickerDocument(document)) {
                                 calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                                 if (MessageObject.isStickerDocument(document)) {
@@ -4165,7 +4165,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.totalHeight += AndroidUtilities.dp(44.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else if (MessageObject.isMusicDocument(document)) {
                                         createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                         this.drawImageButton = true;
@@ -4174,12 +4174,12 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                             this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                             this.totalHeight += AndroidUtilities.dp(64.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         } else {
                                             this.totalHeight += AndroidUtilities.dp(100.0f);
                                             this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                             this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                            webDocument = webDocument2;
+                                            webDocument2 = webDocument;
                                         }
                                     } else {
                                         durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
@@ -4191,10 +4191,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.songLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                         calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             } else {
                                 this.currentPhotoObject = document.thumb;
                                 for (a = 0; a < document.attributes.size(); a++) {
@@ -4212,7 +4212,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 photoSize.w = dp;
                                 this.documentAttach = document;
                                 this.documentAttachType = 6;
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             if (this.currentPhotoObject == null) {
                             }
@@ -4243,7 +4243,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (smallImage) {
                                     height = maxPhotoWidth;
@@ -4268,8 +4268,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -4597,7 +4597,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -4627,8 +4627,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }
@@ -5034,7 +5034,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                             }
                             this.documentAttachType = 2;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else if (!MessageObject.isVideoDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5055,7 +5055,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 }
                             }
                             createDocumentLayout(0, messageObject);
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else if (MessageObject.isStickerDocument(document)) {
                             this.currentPhotoObject = document.thumb;
                             if (this.currentPhotoObject != null && (this.currentPhotoObject.w == 0 || this.currentPhotoObject.h == 0)) {
@@ -5077,7 +5077,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             this.documentAttach = document;
                             this.documentAttachType = 6;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         } else {
                             calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
                             if (MessageObject.isStickerDocument(document)) {
@@ -5090,7 +5090,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                     this.totalHeight += AndroidUtilities.dp(44.0f);
                                     this.linkPreviewHeight += AndroidUtilities.dp(44.0f);
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else if (MessageObject.isMusicDocument(document)) {
                                     durationWidth = createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(10.0f), messageObject);
                                     this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
@@ -5105,7 +5105,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         maxChildWidth = (int) Math.max((float) maxChildWidth, (this.performerLayout.getLineWidth(0) + ((float) additinalWidth)) + ((float) AndroidUtilities.dp(86.0f)));
                                     }
                                     calcBackgroundWidth(maxWidth, timeMore, maxChildWidth);
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 } else {
                                     createDocumentLayout(this.backgroundWidth - AndroidUtilities.dp(168.0f), messageObject);
                                     this.drawImageButton = true;
@@ -5113,17 +5113,17 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.totalHeight += AndroidUtilities.dp(100.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(86.0f);
                                         this.photoImage.setImageCoords(0, this.totalHeight + this.namesOffset, AndroidUtilities.dp(86.0f), AndroidUtilities.dp(86.0f));
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     } else {
                                         this.mediaOffsetY = (this.currentMessageObject.textHeight + AndroidUtilities.dp(8.0f)) + this.linkPreviewHeight;
                                         this.photoImage.setImageCoords(0, (this.totalHeight + this.namesOffset) - AndroidUtilities.dp(14.0f), AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
                                         this.totalHeight += AndroidUtilities.dp(64.0f);
                                         this.linkPreviewHeight += AndroidUtilities.dp(50.0f);
-                                        webDocument = webDocument2;
+                                        webDocument2 = webDocument;
                                     }
                                 }
                             }
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         }
                     } else if (photo == null) {
                         if (type != null) {
@@ -5142,9 +5142,9 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                                 if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                                     this.currentPhotoObjectThumb = null;
-                                    webDocument = webDocument2;
+                                    webDocument2 = webDocument;
                                 }
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                         }
                         z = false;
@@ -5161,22 +5161,22 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                         this.currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                         if (this.currentPhotoObjectThumb == this.currentPhotoObject) {
                             this.currentPhotoObjectThumb = null;
-                            webDocument = webDocument2;
+                            webDocument2 = webDocument;
                         }
-                        webDocument = webDocument2;
+                        webDocument2 = webDocument;
                     } else {
-                        if (webDocument2 != null) {
-                            if (webDocument2.mime_type.startsWith("image/")) {
-                                webDocument = null;
+                        if (webDocument != null) {
+                            if (webDocument.mime_type.startsWith("image/")) {
+                                webDocument2 = null;
                             } else {
-                                webDocument = webDocument2;
+                                webDocument2 = webDocument;
                             }
                             this.drawImageButton = false;
                         }
-                        webDocument = webDocument2;
+                        webDocument2 = webDocument;
                     }
                     if (!(this.documentAttachType == 5 || this.documentAttachType == 3 || this.documentAttachType == 1)) {
-                        if (this.currentPhotoObject == null || webDocument != null) {
+                        if (this.currentPhotoObject == null || webDocument2 != null) {
                             if (type != null) {
                                 if (type.equals("photo")) {
                                     if (!type.equals("document") || this.documentAttachType == 6) {
@@ -5206,7 +5206,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                         this.currentPhotoObjectThumb.size = -1;
                                     }
                                 } else {
-                                    webDocument.size = -1;
+                                    webDocument2.size = -1;
                                 }
                                 if (smallImage) {
                                     height = maxPhotoWidth;
@@ -5237,8 +5237,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                                 this.photoImage.setImageCoords(0, 0, width, height);
                                 this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                                 this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                                if (webDocument == null) {
-                                    this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                                if (webDocument2 == null) {
+                                    this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                                 } else if (this.documentAttachType != 6) {
                                     if (this.currentPhotoObject == null) {
                                     }
@@ -5304,7 +5304,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             }
                             maxChildWidth = Math.max(maxChildWidth, (maxPhotoWidth - (this.hasInvoicePreview ? AndroidUtilities.dp(12.0f) : 0)) + additinalWidth);
                             if (this.currentPhotoObject == null) {
-                                webDocument.size = -1;
+                                webDocument2.size = -1;
                             } else {
                                 this.currentPhotoObject.size = -1;
                                 if (this.currentPhotoObjectThumb != null) {
@@ -5334,8 +5334,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                             this.photoImage.setImageCoords(0, 0, width, height);
                             this.currentPhotoFilter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
                             this.currentPhotoFilterThumb = String.format(Locale.US, "%d_%d_b", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-                            if (webDocument == null) {
-                                this.photoImage.setImage(webDocument, null, this.currentPhotoFilter, null, null, "b1", webDocument.size, null, true);
+                            if (webDocument2 == null) {
+                                this.photoImage.setImage(webDocument2, null, this.currentPhotoFilter, null, null, "b1", webDocument2.size, null, true);
                             } else if (this.documentAttachType != 6) {
                                 if (this.currentPhotoObject == null) {
                                 }

@@ -16,6 +16,7 @@ public class VoIPController {
     public static final int DATA_SAVING_MOBILE = 1;
     public static final int DATA_SAVING_NEVER = 0;
     public static final int ERROR_INCOMPATIBLE = 1;
+    public static final int ERROR_LOCALIZED = -3;
     public static final int ERROR_PEER_OUTDATED = -1;
     public static final int ERROR_PRIVACY = -2;
     public static final int ERROR_TIMEOUT = 2;

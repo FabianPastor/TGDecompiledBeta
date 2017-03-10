@@ -1402,9 +1402,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -2762,7 +2762,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 });
                                 sentMessages.add(newMsgObj);
                             } else if (response instanceof Updates) {
-                                Updates updates = response;
+                                final Updates updates = response;
                                 ArrayList<Update> updatesArr = ((Updates) response).updates;
                                 Message message3 = null;
                                 int a = 0;
@@ -2810,7 +2810,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 } else {
                                     isSentError = true;
                                 }
-                                MessagesController.getInstance().processUpdates(updates, false);
+                                Utilities.stageQueue.postRunnable(new Runnable() {
+                                    public void run() {
+                                        MessagesController.getInstance().processUpdates(updates, false);
+                                    }
+                                });
                             }
                             if (!isSentError) {
                                 int i2;

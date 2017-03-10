@@ -899,6 +899,8 @@ public class VoIPActivity extends Activity implements StateListener {
                         VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
                     } else if (lastError == -2) {
                         VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == -3) {
+                        VoIPActivity.this.finish();
                     } else {
                         VoIPActivity.this.stateText.postDelayed(new Runnable() {
                             public void run() {

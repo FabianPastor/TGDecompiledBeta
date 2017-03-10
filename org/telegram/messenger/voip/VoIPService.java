@@ -521,6 +521,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                         VoIPService.this.callFailed(-1);
                                     } else if (error.code == 403 && "USER_PRIVACY_RESTRICTED".equals(error.text)) {
                                         VoIPService.this.callFailed(-2);
+                                    } else if (error.code == 406) {
+                                        VoIPService.this.callFailed(-3);
                                     } else {
                                         FileLog.e("Error on phone.requestCall: " + error);
                                         VoIPService.this.callFailed();
@@ -1091,16 +1093,18 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 });
             }
             dispatchStateChanged(4);
-            this.playingSound = true;
-            this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    VoIPService.this.soundPool.release();
-                    if (VoIPService.this.isBtHeadsetConnected) {
-                        ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+            if (errorCode != -3) {
+                this.playingSound = true;
+                this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        VoIPService.this.soundPool.release();
+                        if (VoIPService.this.isBtHeadsetConnected) {
+                            ((AudioManager) ApplicationLoader.applicationContext.getSystemService(MimeTypes.BASE_TYPE_AUDIO)).stopBluetoothSco();
+                        }
                     }
-                }
-            }, 1000);
+                }, 1000);
+            }
             stopSelf();
         }
     }

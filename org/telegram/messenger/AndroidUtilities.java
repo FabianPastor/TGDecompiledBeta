@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -38,6 +40,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
+import android.os.Handler;
+import android.provider.CallLog.Calls;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images.Media;
@@ -46,6 +50,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.EdgeEffectCompat;
+import android.telephony.TelephonyManager;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -60,6 +65,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.io.ByteArrayOutputStream;
@@ -70,6 +76,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,9 +109,11 @@ public class AndroidUtilities {
     private static int adjustOwnerClassGuid = 0;
     private static RectF bitmapRect;
     private static final Object callLock = new Object();
+    private static ContentObserver callLogContentObserver;
     public static float density = 1.0f;
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static Point displaySize = new Point();
+    private static boolean hasCallPermissions;
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
     private static Boolean isTablet = null;
@@ -117,11 +126,108 @@ public class AndroidUtilities {
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable();
+    private static Runnable unregisterRunnable;
     public static boolean usingHardwareInput;
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
 
+    public static void removeLoginPhoneCall(java.lang.String r10, boolean r11) {
+        /* JADX: method processing error */
+/*
+Error: java.util.NoSuchElementException
+	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1439)
+	at java.util.HashMap$KeyIterator.next(HashMap.java:1461)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.applyRemove(BlockFinallyExtract.java:535)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.extractFinally(BlockFinallyExtract.java:175)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.processExceptionHandler(BlockFinallyExtract.java:80)
+	at jadx.core.dex.visitors.blocksmaker.BlockFinallyExtract.visit(BlockFinallyExtract.java:51)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:31)
+	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:17)
+	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:306)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler$1.run(JadxDecompiler.java:199)
+*/
+        /*
+        r0 = hasCallPermissions;
+        if (r0 != 0) goto L_0x0005;
+    L_0x0004:
+        return;
+    L_0x0005:
+        r6 = 0;
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r0 = r0.getContentResolver();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r1 = android.provider.CallLog.Calls.CONTENT_URI;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r2 = 2;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r2 = new java.lang.String[r2];	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r4 = "_id";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r2[r3] = r4;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r4 = "number";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r2[r3] = r4;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3 = "type IN (3,1,5)";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r4 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r5 = "date DESC LIMIT 5";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r6 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r9 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x0029:
+        r0 = r6.moveToNext();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        if (r0 == 0) goto L_0x005e;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x002f:
+        r0 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r8 = r6.getString(r0);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r0 = r8.contains(r10);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        if (r0 != 0) goto L_0x0040;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x003a:
+        r0 = r10.contains(r8);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        if (r0 == 0) goto L_0x0029;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x0040:
+        r9 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r0 = r0.getContentResolver();	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r1 = android.provider.CallLog.Calls.CONTENT_URI;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r2 = "_id = ? ";	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3 = new java.lang.String[r3];	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r4 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r5 = 0;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r5 = r6.getInt(r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r5 = java.lang.String.valueOf(r5);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r3[r4] = r5;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        r0.delete(r1, r2, r3);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x005e:
+        if (r9 != 0) goto L_0x0066;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x0060:
+        if (r11 == 0) goto L_0x0066;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x0062:
+        r0 = 1;	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        registerLoginContentObserver(r0, r10);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+    L_0x0066:
+        if (r6 == 0) goto L_0x0004;
+    L_0x0068:
+        r6.close();
+        goto L_0x0004;
+    L_0x006c:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ Exception -> 0x006c, all -> 0x0076 }
+        if (r6 == 0) goto L_0x0004;
+    L_0x0072:
+        r6.close();
+        goto L_0x0004;
+    L_0x0076:
+        r0 = move-exception;
+        if (r6 == 0) goto L_0x007c;
+    L_0x0079:
+        r6.close();
+    L_0x007c:
+        throw r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.removeLoginPhoneCall(java.lang.String, boolean):void");
+    }
+
     static {
+        boolean z;
         WEB_URL = null;
         try {
             String GOOD_IRI_CHAR = "a-zA-Z0-9 -퟿豈-﷏ﷰ-￯";
@@ -134,6 +240,12 @@ public class AndroidUtilities {
             FileLog.e(e);
         }
         checkDisplaySize(ApplicationLoader.applicationContext, null);
+        if (VERSION.SDK_INT >= 23) {
+            z = true;
+        } else {
+            z = false;
+        }
+        hasCallPermissions = z;
     }
 
     public static int[] calcDrawableColor(Drawable drawable) {
@@ -277,8 +389,8 @@ public class AndroidUtilities {
         if (pathString == null) {
             return false;
         }
-        String path;
         while (true) {
+            String path;
             String newPath = Utilities.readlink(pathString);
             if (newPath != null && !newPath.equals(pathString)) {
                 pathString = newPath;
@@ -628,6 +740,100 @@ public class AndroidUtilities {
     }
 
     public static void endIncomingCall() {
+        if (hasCallPermissions) {
+            try {
+                TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                Method m = Class.forName(tm.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
+                m.setAccessible(true);
+                ITelephony telephonyService = (ITelephony) m.invoke(tm, new Object[0]);
+                telephonyService = (ITelephony) m.invoke(tm, new Object[0]);
+                telephonyService.silenceRinger();
+                telephonyService.endCall();
+            } catch (Exception e) {
+                FileLog.e("tmessages", e);
+            }
+        }
+    }
+
+    public static String obtainLoginPhoneCall(String pattern) {
+        if (!hasCallPermissions) {
+            return null;
+        }
+        Cursor cursor = null;
+        try {
+            cursor = ApplicationLoader.applicationContext.getContentResolver().query(Calls.CONTENT_URI, new String[]{"number", "date"}, "type IN (3,1,5)", null, "date DESC LIMIT 5");
+            String patternNumbers;
+            if (pattern.equals("*")) {
+                patternNumbers = pattern;
+            } else {
+                patternNumbers = pattern.replace("*", "");
+            }
+            while (cursor.moveToNext()) {
+                String number = cursor.getString(0);
+                long date = cursor.getLong(1);
+                FileLog.e("number = " + number);
+                if (Math.abs(System.currentTimeMillis() - date) < 3600000 && (patternNumbers.equals("*") || number.contains(patternNumbers))) {
+                    if (cursor == null) {
+                        return number;
+                    }
+                    cursor.close();
+                    return number;
+                }
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (Throwable th) {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    private static void registerLoginContentObserver(boolean shouldRegister, final String number) {
+        if (shouldRegister) {
+            if (callLogContentObserver == null) {
+                ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
+                Uri uri = Calls.CONTENT_URI;
+                ContentObserver anonymousClass2 = new ContentObserver(new Handler()) {
+                    public boolean deliverSelfNotifications() {
+                        return true;
+                    }
+
+                    public void onChange(boolean selfChange) {
+                        AndroidUtilities.registerLoginContentObserver(false, number);
+                        AndroidUtilities.removeLoginPhoneCall(number, false);
+                    }
+                };
+                callLogContentObserver = anonymousClass2;
+                contentResolver.registerContentObserver(uri, true, anonymousClass2);
+                Runnable anonymousClass3 = new Runnable() {
+                    public void run() {
+                        AndroidUtilities.unregisterRunnable = null;
+                        AndroidUtilities.registerLoginContentObserver(false, number);
+                    }
+                };
+                unregisterRunnable = anonymousClass3;
+                runOnUIThread(anonymousClass3);
+            }
+        } else if (callLogContentObserver != null) {
+            if (unregisterRunnable != null) {
+                cancelRunOnUIThread(unregisterRunnable);
+                unregisterRunnable = null;
+            }
+            try {
+                ApplicationLoader.applicationContext.getContentResolver().unregisterContentObserver(callLogContentObserver);
+            } catch (Exception e) {
+            } finally {
+                callLogContentObserver = null;
+            }
+        }
     }
 
     private static Intent createShortcutIntent(long did, boolean forDelete) {

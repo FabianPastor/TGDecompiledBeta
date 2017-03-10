@@ -35,7 +35,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
-import org.telegram.messenger.exoplayer2.C;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.RadialProgressView;
@@ -698,7 +697,7 @@ public class AlertDialog extends Dialog implements Callback {
 
     public void setButton(int type, CharSequence text, OnClickListener listener) {
         switch (type) {
-            case C.RESULT_NOTHING_READ /*-3*/:
+            case -3:
                 this.neutralButtonText = text;
                 this.neutralButtonListener = listener;
                 return;

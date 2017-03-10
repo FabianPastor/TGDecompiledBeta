@@ -298,7 +298,7 @@ public class zzatv extends zzauh {
     public List<com.google.android.gms.common.internal.safeparcel.zza> zzlD(int i) {
         Object obj;
         Throwable th;
-        Object obj2;
+        Parcel obtain;
         zzmR();
         zzJV();
         int i2 = VERSION.SDK_INT;
@@ -343,12 +343,13 @@ public class zzatv extends zzauh {
                         long j2 = query.getLong(0);
                         int i5 = query.getInt(1);
                         byte[] blob = query.getBlob(2);
+                        Object obj2;
                         if (i5 == 0) {
-                            Parcel obtain = Parcel.obtain();
+                            Parcel obtain2 = Parcel.obtain();
                             try {
-                                obtain.unmarshall(blob, 0, blob.length);
-                                obtain.setDataPosition(0);
-                                obj2 = (zzatq) zzatq.CREATOR.createFromParcel(obtain);
+                                obtain2.unmarshall(blob, 0, blob.length);
+                                obtain2.setDataPosition(0);
+                                obj2 = (zzatq) zzatq.CREATOR.createFromParcel(obtain2);
                                 if (obj2 != null) {
                                     arrayList.add(obj2);
                                 }
@@ -357,14 +358,14 @@ public class zzatv extends zzauh {
                                 obj2.log("Failed to load event from local database");
                                 j = j2;
                             } finally {
-                                obtain.recycle();
+                                obtain2.recycle();
                             }
                         } else if (i5 == 1) {
-                            r7 = Parcel.obtain();
+                            obtain = Parcel.obtain();
                             try {
-                                r7.unmarshall(blob, 0, blob.length);
-                                r7.setDataPosition(0);
-                                obj2 = (zzauq) zzauq.CREATOR.createFromParcel(r7);
+                                obtain.unmarshall(blob, 0, blob.length);
+                                obtain.setDataPosition(0);
+                                obj2 = (zzauq) zzauq.CREATOR.createFromParcel(obtain);
                             } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e4) {
                                 obj2 = zzKk().zzLX();
                                 obj2.log("Failed to load user property from local database");
@@ -374,17 +375,17 @@ public class zzatv extends zzauh {
                                 }
                                 j = j2;
                             } finally {
-                                r7.recycle();
+                                obtain.recycle();
                             }
                             if (obj2 != null) {
                                 arrayList.add(obj2);
                             }
                         } else if (i5 == 2) {
-                            r7 = Parcel.obtain();
+                            obtain = Parcel.obtain();
                             try {
-                                r7.unmarshall(blob, 0, blob.length);
-                                r7.setDataPosition(0);
-                                obj2 = (zzatg) zzatg.CREATOR.createFromParcel(r7);
+                                obtain.unmarshall(blob, 0, blob.length);
+                                obtain.setDataPosition(0);
+                                obj2 = (zzatg) zzatg.CREATOR.createFromParcel(obtain);
                             } catch (com.google.android.gms.common.internal.safeparcel.zzb.zza e5) {
                                 obj2 = zzKk().zzLX();
                                 obj2.log("Failed to load user property from local database");
@@ -394,7 +395,7 @@ public class zzatv extends zzauh {
                                 }
                                 j = j2;
                             } finally {
-                                r7.recycle();
+                                obtain.recycle();
                             }
                             if (obj2 != null) {
                                 arrayList.add(obj2);
