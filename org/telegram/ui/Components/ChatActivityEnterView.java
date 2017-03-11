@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -200,6 +201,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private FrameLayout recordPanel;
     private LinearLayout recordTimeContainer;
     private TextView recordTimeText;
+    private boolean recordVideo = BuildVars.DEBUG_PRIVATE_VERSION;
     private View recordedAudioBackground;
     private FrameLayout recordedAudioPanel;
     private ImageView recordedAudioPlayButton;
@@ -229,6 +231,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void didPressedAttachButton();
 
         void needSendTyping();
+
+        void needStartRecordVideo(int i);
 
         void onAttachButtonHidden();
 
@@ -800,35 +804,43 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.audioSendButton.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
-                    if (ChatActivityEnterView.this.parentFragment != null) {
-                        if (VERSION.SDK_INT < 23 || ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-                            String action;
-                            if (((int) ChatActivityEnterView.this.dialog_id) < 0) {
-                                Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) ChatActivityEnterView.this.dialog_id)));
-                                if (currentChat == null || currentChat.participants_count <= MessagesController.getInstance().groupBigSize) {
-                                    action = "chat_upload_audio";
+                    if (ChatActivityEnterView.this.recordVideo) {
+                        ChatActivityEnterView.this.delegate.needStartRecordVideo(0);
+                    } else {
+                        if (ChatActivityEnterView.this.parentFragment != null) {
+                            if (VERSION.SDK_INT < 23 || ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                                String action;
+                                if (((int) ChatActivityEnterView.this.dialog_id) < 0) {
+                                    Chat currentChat = MessagesController.getInstance().getChat(Integer.valueOf(-((int) ChatActivityEnterView.this.dialog_id)));
+                                    if (currentChat == null || currentChat.participants_count <= MessagesController.getInstance().groupBigSize) {
+                                        action = "chat_upload_audio";
+                                    } else {
+                                        action = "bigchat_upload_audio";
+                                    }
                                 } else {
-                                    action = "bigchat_upload_audio";
+                                    action = "pm_upload_audio";
                                 }
-                            } else {
-                                action = "pm_upload_audio";
+                                if (!MessagesController.isFeatureEnabled(action, ChatActivityEnterView.this.parentFragment)) {
+                                    return false;
+                                }
                             }
-                            if (!MessagesController.isFeatureEnabled(action, ChatActivityEnterView.this.parentFragment)) {
-                                return false;
-                            }
+                            ChatActivityEnterView.this.parentActivity.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 3);
+                            return false;
                         }
-                        ChatActivityEnterView.this.parentActivity.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 3);
-                        return false;
+                        ChatActivityEnterView.this.startedDraggingX = -1.0f;
+                        MediaController.getInstance().startRecording(ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject);
+                        ChatActivityEnterView.this.updateAudioRecordIntefrace();
+                        ChatActivityEnterView.this.audioSendButton.getParent().requestDisallowInterceptTouchEvent(true);
                     }
-                    ChatActivityEnterView.this.startedDraggingX = -1.0f;
-                    MediaController.getInstance().startRecording(ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject);
-                    ChatActivityEnterView.this.updateAudioRecordIntefrace();
-                    ChatActivityEnterView.this.audioSendButton.getParent().requestDisallowInterceptTouchEvent(true);
                 } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    ChatActivityEnterView.this.startedDraggingX = -1.0f;
-                    MediaController.getInstance().stopRecording(1);
-                    ChatActivityEnterView.this.recordingAudio = false;
-                    ChatActivityEnterView.this.updateAudioRecordIntefrace();
+                    if (ChatActivityEnterView.this.recordVideo) {
+                        ChatActivityEnterView.this.delegate.needStartRecordVideo(1);
+                    } else {
+                        ChatActivityEnterView.this.startedDraggingX = -1.0f;
+                        MediaController.getInstance().stopRecording(1);
+                        ChatActivityEnterView.this.recordingAudio = false;
+                        ChatActivityEnterView.this.updateAudioRecordIntefrace();
+                    }
                 } else if (motionEvent.getAction() == 2 && ChatActivityEnterView.this.recordingAudio) {
                     float x = motionEvent.getX();
                     if (x < (-ChatActivityEnterView.this.distCanMove)) {

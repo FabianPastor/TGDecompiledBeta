@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow.ActionBarPopupWindowLayout;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBar extends FrameLayout {
@@ -181,9 +180,8 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setPopupBackgroundColor(int color) {
-        ActionBarPopupWindowLayout.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         if (this.menu != null) {
-            this.menu.redrawPopup();
+            this.menu.redrawPopup(color);
         }
     }
 

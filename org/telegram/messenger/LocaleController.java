@@ -1399,12 +1399,17 @@ public class LocaleController {
 
     public static String formatCallDuration(int duration) {
         if (duration > 3600) {
-            return formatPluralString("Hours", duration / 3600) + ", " + formatPluralString("Minutes", (duration % 3600) / 60);
-        }
-        if (duration > 60) {
+            String result = formatPluralString("Hours", duration / 3600);
+            int minutes = (duration % 3600) / 60;
+            if (minutes > 0) {
+                return result + ", " + formatPluralString("Minutes", minutes);
+            }
+            return result;
+        } else if (duration > 60) {
             return formatPluralString("Minutes", duration / 60);
+        } else {
+            return formatPluralString("Seconds", duration);
         }
-        return formatPluralString("Seconds", duration);
     }
 
     public void onDeviceConfigurationChange(Configuration newConfig) {

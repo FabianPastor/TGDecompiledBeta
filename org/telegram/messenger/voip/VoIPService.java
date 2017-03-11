@@ -42,6 +42,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.InputDeviceCompat;
 import android.telephony.TelephonyManager;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
@@ -420,11 +422,13 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void hangUp() {
-        declineIncomingCall(this.currentState == 11 ? 3 : 1, null);
+        int i = (this.currentState == 11 || (this.currentState == 8 && this.isOutgoing)) ? 3 : 1;
+        declineIncomingCall(i, null);
     }
 
     public void hangUp(Runnable onDone) {
-        declineIncomingCall(this.currentState == 11 ? 3 : 1, onDone);
+        int i = (this.currentState == 11 || (this.currentState == 8 && this.isOutgoing)) ? 3 : 1;
+        declineIncomingCall(i, onDone);
     }
 
     public void registerStateListener(StateListener l) {
@@ -701,8 +705,13 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                                 if (error == null) {
                                     FileLog.w("accept call ok! " + response);
                                     VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                    VoIPService.this.initiateActualEncryptedCall();
-                                    return;
+                                    if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
+                                        VoIPService.this.onCallUpdated(VoIPService.this.call);
+                                        return;
+                                    } else {
+                                        VoIPService.this.initiateActualEncryptedCall();
+                                        return;
+                                    }
                                 }
                                 FileLog.e("Error on phone.acceptCall: " + error);
                                 VoIPService.this.callFailed();
@@ -996,14 +1005,26 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         Builder builder = new Builder(this).setContentTitle(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentText(ContactsController.formatName(this.user.first_name, this.user.last_name)).setSmallIcon(R.drawable.notification).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
         if (VERSION.SDK_INT >= 16) {
             this.endHash = Utilities.random.nextInt();
-            Intent answerIntent = new Intent();
-            answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
-            answerIntent.putExtra("end_hash", this.endHash);
-            builder.addAction(R.drawable.ic_call_white_24dp, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall), PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
             Intent endIntent = new Intent();
             endIntent.setAction(getPackageName() + ".DECLINE_CALL");
             endIntent.putExtra("end_hash", this.endHash);
-            builder.addAction(R.drawable.ic_call_end_white_24dp, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall), PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
+            CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
+            if (VERSION.SDK_INT >= 24) {
+                CharSequence endTitle2 = new SpannableString(endTitle);
+                ((SpannableString) endTitle2).setSpan(new ForegroundColorSpan(-769226), 0, endTitle2.length(), 0);
+                endTitle = endTitle2;
+            }
+            builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, PendingIntent.getBroadcast(this, 0, endIntent, 134217728));
+            Intent answerIntent = new Intent();
+            answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
+            answerIntent.putExtra("end_hash", this.endHash);
+            CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall);
+            if (VERSION.SDK_INT >= 24) {
+                CharSequence answerTitle2 = new SpannableString(answerTitle);
+                ((SpannableString) answerTitle2).setSpan(new ForegroundColorSpan(-16733696), 0, answerTitle2.length(), 0);
+                answerTitle = answerTitle2;
+            }
+            builder.addAction(R.drawable.ic_call_white_24dp, answerTitle, PendingIntent.getBroadcast(this, 0, answerIntent, 134217728));
             builder.setPriority(2);
         }
         if (VERSION.SDK_INT >= 17) {
@@ -1016,7 +1037,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
         }
         if (this.user.photo != null) {
-            FileLocation photoPath = this.user.photo.photo_small;
+            TLObject photoPath = this.user.photo.photo_small;
             if (photoPath != null) {
                 BitmapDrawable img = ImageLoader.getInstance().getImageFromMemory(photoPath, null, "50_50");
                 if (img != null) {

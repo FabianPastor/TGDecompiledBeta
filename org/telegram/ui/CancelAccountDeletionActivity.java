@@ -531,7 +531,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     onNextPressed();
                 } else if (id == NotificationCenter.didReceiveCall) {
                     String num = "" + args[0];
-                    if (this.pattern.equals("*") || num.contains(this.pattern.replace("*", ""))) {
+                    if (AndroidUtilities.checkPhonePattern(this.pattern, num)) {
                         this.ignoreOnTextChange = true;
                         this.codeField.setText(num);
                         this.ignoreOnTextChange = false;
@@ -556,8 +556,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         public void onNextPressed() {
-            final TL_account_sendConfirmPhoneCode req;
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
+                final TL_account_sendConfirmPhoneCode req;
                 TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 boolean simcardAvailable;
                 if (tm.getSimState() == 1 || tm.getPhoneType() == 0) {

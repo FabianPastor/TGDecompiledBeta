@@ -1321,8 +1321,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
-        long newTaskId;
         if (peer != null && game != null) {
+            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1402,9 +1402,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
-        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
+            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -3999,7 +3999,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
-                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -4048,6 +4047,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
+                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;

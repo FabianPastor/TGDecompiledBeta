@@ -39,7 +39,9 @@ public class AudioRecordJNI {
     }
 
     public void stop() {
-        this.audioRecord.stop();
+        if (this.audioRecord != null) {
+            this.audioRecord.stop();
+        }
     }
 
     public void release() {

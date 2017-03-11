@@ -626,7 +626,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     onNextPressed();
                 } else if (id == NotificationCenter.didReceiveCall) {
                     String num = "" + args[0];
-                    if (this.pattern.equals("*") || num.contains(this.pattern.replace("*", ""))) {
+                    if (AndroidUtilities.checkPhonePattern(this.pattern, num)) {
                         this.ignoreOnTextChange = true;
                         this.codeField.setText(num);
                         this.ignoreOnTextChange = false;

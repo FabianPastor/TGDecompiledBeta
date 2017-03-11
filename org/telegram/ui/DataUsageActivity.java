@@ -142,7 +142,7 @@ public class DataUsageActivity extends BaseFragment {
                         } else {
                             time = String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(total)});
                         }
-                        textCell.setTextAndValue(LocaleController.getString("IncomingCalls", R.string.IncomingCalls), time, false);
+                        textCell.setTextAndValue(LocaleController.getString("CallsTotalTime", R.string.CallsTotalTime), time, false);
                         return;
                     } else if (position == DataUsageActivity.this.messagesSentRow || position == DataUsageActivity.this.photosSentRow || position == DataUsageActivity.this.videosSentRow || position == DataUsageActivity.this.audiosSentRow || position == DataUsageActivity.this.filesSentRow) {
                         textCell.setTextAndValue(LocaleController.getString("CountSent", R.string.CountSent), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance().getSentItemsCount(DataUsageActivity.this.currentType, type))}), true);

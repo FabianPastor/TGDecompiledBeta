@@ -942,7 +942,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                             public void run() {
                                 AndroidUtilities.runOnUIThread(ChatAttachAlert.this.videoRecordRunnable, 1000);
                             }
-                        });
+                        }, false);
                         ChatAttachAlert.this.shutterButton.setState(ShutterButton.State.RECORDING, true);
                         return true;
                     }

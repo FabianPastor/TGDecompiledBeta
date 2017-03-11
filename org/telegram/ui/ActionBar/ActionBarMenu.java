@@ -104,12 +104,12 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    protected void redrawPopup() {
+    protected void redrawPopup(int color) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
             if (view instanceof ActionBarMenuItem) {
-                ((ActionBarMenuItem) view).redrawPopup();
+                ((ActionBarMenuItem) view).redrawPopup(color);
             }
         }
     }

@@ -71,6 +71,7 @@ import java.util.regex.Matcher;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
@@ -242,6 +243,7 @@ import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.ExtendedGridLayoutManager;
 import org.telegram.ui.Components.FragmentContextView;
+import org.telegram.ui.Components.InstantCameraView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.RadialProgressView;
@@ -447,6 +449,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private boolean ignoreAttachOnPause;
     protected ChatFull info = null;
     private long inlineReturn;
+    private InstantCameraView instantCameraView;
     private boolean isBroadcast;
     private int lastLoadIndex;
     private int last_message_id = 0;
@@ -651,10 +654,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 ChatActivity.this.chatActivityEnterView.closeKeyboard();
                             }
                             ChatActivity chatActivity = ChatActivity.this;
-                            Context access$16100 = ChatActivityAdapter.this.mContext;
+                            Context access$16200 = ChatActivityAdapter.this.mContext;
                             MessageObject messageObject = cell.getMessageObject();
                             boolean z = ChatObject.isChannel(ChatActivity.this.currentChat) && !ChatActivity.this.currentChat.megagroup && ChatActivity.this.currentChat.username != null && ChatActivity.this.currentChat.username.length() > 0;
-                            chatActivity.showDialog(new ShareAlert(access$16100, messageObject, null, z, null, false));
+                            chatActivity.showDialog(new ShareAlert(access$16200, messageObject, null, z, null, false));
                         }
                     }
 
@@ -3159,6 +3162,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             public void didPressedAttachButton() {
                 ChatActivity.this.openAttachMenu();
             }
+
+            public void needStartRecordVideo(int state) {
+                if (ChatActivity.this.instantCameraView == null) {
+                    return;
+                }
+                if (state == 0) {
+                    ChatActivity.this.instantCameraView.showCamera();
+                } else if (state == 1) {
+                    ChatActivity.this.instantCameraView.send();
+                } else if (state == 2) {
+                    ChatActivity.this.instantCameraView.cancel();
+                }
+            }
         });
         View anonymousClass39 = new FrameLayout(context) {
             public void setTranslationY(float translationY) {
@@ -3473,6 +3489,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             this.fragmentContextView = fragmentContextView;
             contentView.addView(fragmentContextView, LayoutHelper.createFrame(-1, 39.0f, 51, 0.0f, -36.0f, 0.0f, 0.0f));
         }
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            this.instantCameraView = new InstantCameraView(context, this);
+            contentView.addView(this.instantCameraView, LayoutHelper.createFrame(100, 100.0f, 81, 0.0f, 0.0f, 0.0f, 100.0f));
+        }
         updateContactStatus();
         updateBottomOverlay();
         updateSecretStatus();
@@ -3720,7 +3740,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 if (ChatActivity.this.stickersPanel.getVisibility() != 4) {
                                     float f2;
                                     ChatActivity.this.runningAnimation = new AnimatorSet();
-                                    AnimatorSet access$12800 = ChatActivity.this.runningAnimation;
+                                    AnimatorSet access$12900 = ChatActivity.this.runningAnimation;
                                     Animator[] animatorArr = new Animator[1];
                                     FrameLayout access$11000 = ChatActivity.this.stickersPanel;
                                     String str = "alpha";
@@ -3736,7 +3756,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                     }
                                     fArr[1] = f;
                                     animatorArr[0] = ObjectAnimator.ofFloat(access$11000, str, fArr);
-                                    access$12800.playTogether(animatorArr);
+                                    access$12900.playTogether(animatorArr);
                                     ChatActivity.this.runningAnimation.setDuration(150);
                                     ChatActivity.this.runningAnimation.addListener(new AnimatorListenerAdapter() {
                                         public void onAnimationEnd(Animator animation) {
@@ -7682,10 +7702,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$14500 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$14600 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, "translationY", new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$14500.playTogether(animatorArr);
+                        access$14600.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {

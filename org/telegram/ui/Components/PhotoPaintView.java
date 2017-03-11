@@ -971,7 +971,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 LinearLayout parent = new LinearLayout(PhotoPaintView.this.getContext());
                 parent.setOrientation(0);
                 TextView deleteView = new TextView(PhotoPaintView.this.getContext());
-                deleteView.setTextColor(-14606047);
+                deleteView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                 deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 deleteView.setGravity(16);
                 deleteView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
@@ -989,7 +989,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                 parent.addView(deleteView, LayoutHelper.createLinear(-2, 48));
                 if (entityView instanceof TextPaintView) {
                     TextView editView = new TextView(PhotoPaintView.this.getContext());
-                    editView.setTextColor(-14606047);
+                    editView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                     editView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     editView.setGravity(16);
                     editView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
@@ -1007,7 +1007,7 @@ public class PhotoPaintView extends FrameLayout implements EntityViewDelegate {
                     parent.addView(editView, LayoutHelper.createLinear(-2, 48));
                 }
                 TextView duplicateView = new TextView(PhotoPaintView.this.getContext());
-                duplicateView.setTextColor(-14606047);
+                duplicateView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
                 duplicateView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 duplicateView.setGravity(16);
                 duplicateView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);

@@ -212,11 +212,13 @@ public class VoIPActivity extends Activity implements StateListener {
         });
         this.micToggle.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (VoIPService.getSharedInstance() != null) {
-                    boolean checked = !VoIPActivity.this.micToggle.isChecked();
-                    VoIPActivity.this.micToggle.setChecked(checked);
-                    VoIPService.getSharedInstance().setMicMute(checked);
+                if (VoIPService.getSharedInstance() == null) {
+                    VoIPActivity.this.finish();
+                    return;
                 }
+                boolean checked = !VoIPActivity.this.micToggle.isChecked();
+                VoIPActivity.this.micToggle.setChecked(checked);
+                VoIPService.getSharedInstance().setMicMute(checked);
             }
         });
         this.chatBtn.setOnClickListener(new OnClickListener() {
@@ -238,15 +240,17 @@ public class VoIPActivity extends Activity implements StateListener {
             public void onDragComplete() {
                 VoIPActivity.this.acceptSwipe.setEnabled(false);
                 VoIPActivity.this.declineSwipe.setEnabled(false);
-                if (VoIPService.getSharedInstance() != null) {
-                    VoIPActivity.this.didAcceptFromHere = true;
-                    if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-                        VoIPService.getSharedInstance().acceptIncomingCall();
-                        VoIPActivity.this.callAccepted();
-                        return;
-                    }
-                    VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
+                if (VoIPService.getSharedInstance() == null) {
+                    VoIPActivity.this.finish();
+                    return;
                 }
+                VoIPActivity.this.didAcceptFromHere = true;
+                if (VERSION.SDK_INT < 23 || VoIPActivity.this.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                    VoIPService.getSharedInstance().acceptIncomingCall();
+                    VoIPActivity.this.callAccepted();
+                    return;
+                }
+                VoIPActivity.this.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
             }
 
             public void onDragStart() {
@@ -297,6 +301,8 @@ public class VoIPActivity extends Activity implements StateListener {
                 VoIPActivity.this.declineSwipe.setEnabled(false);
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().declineIncomingCall(4, null);
+                } else {
+                    VoIPActivity.this.finish();
                 }
             }
 
@@ -840,7 +846,7 @@ public class VoIPActivity extends Activity implements StateListener {
                     }
                     VoIPActivity.this.firstStateChange = false;
                 }
-                if (VoIPActivity.this.isIncomingWaiting && state != 10) {
+                if (!(!VoIPActivity.this.isIncomingWaiting || state == 10 || state == 6 || state == 5)) {
                     VoIPActivity.this.isIncomingWaiting = false;
                     if (!VoIPActivity.this.didAcceptFromHere) {
                         VoIPActivity.this.callAccepted();
@@ -869,7 +875,6 @@ public class VoIPActivity extends Activity implements StateListener {
                         }
                     }, 200);
                 } else if (state == 12) {
-                    VoIPActivity.this.endBtn.setEnabled(false);
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipBusy", R.string.VoipBusy), false);
                     VoIPActivity.this.stateText.postDelayed(new Runnable() {
                         public void run() {

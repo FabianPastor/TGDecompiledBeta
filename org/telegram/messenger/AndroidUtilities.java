@@ -52,6 +52,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.telephony.TelephonyManager;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
@@ -86,6 +87,7 @@ import java.util.regex.Pattern;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.tgnet.ConnectionsManager;
@@ -755,6 +757,30 @@ Error: java.util.NoSuchElementException
         }
     }
 
+    public static boolean checkPhonePattern(String pattern, String phone) {
+        if (TextUtils.isEmpty(pattern) || pattern.equals("*")) {
+            return true;
+        }
+        String[] args = pattern.split("\\*");
+        phone = PhoneFormat.stripExceptNumbers(phone);
+        int checkStart = 0;
+        for (int a = 0; a < args.length; a++) {
+            String arg = args[a];
+            if (TextUtils.isEmpty(arg)) {
+                checkStart++;
+            } else if (a != args.length - 1 || pattern.endsWith("*")) {
+                int index = phone.indexOf(arg, checkStart);
+                if (index == -1) {
+                    return false;
+                }
+                checkStart = index + arg.length();
+            } else if (!phone.endsWith(arg)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String obtainLoginPhoneCall(String pattern) {
         if (!hasCallPermissions) {
             return null;
@@ -762,17 +788,11 @@ Error: java.util.NoSuchElementException
         Cursor cursor = null;
         try {
             cursor = ApplicationLoader.applicationContext.getContentResolver().query(Calls.CONTENT_URI, new String[]{"number", "date"}, "type IN (3,1,5)", null, "date DESC LIMIT 5");
-            String patternNumbers;
-            if (pattern.equals("*")) {
-                patternNumbers = pattern;
-            } else {
-                patternNumbers = pattern.replace("*", "");
-            }
             while (cursor.moveToNext()) {
                 String number = cursor.getString(0);
                 long date = cursor.getLong(1);
                 FileLog.e("number = " + number);
-                if (Math.abs(System.currentTimeMillis() - date) < 3600000 && (patternNumbers.equals("*") || number.contains(patternNumbers))) {
+                if (Math.abs(System.currentTimeMillis() - date) < 3600000 && checkPhonePattern(pattern, number)) {
                     if (cursor == null) {
                         return number;
                     }
@@ -820,7 +840,7 @@ Error: java.util.NoSuchElementException
                     }
                 };
                 unregisterRunnable = anonymousClass3;
-                runOnUIThread(anonymousClass3);
+                runOnUIThread(anonymousClass3, 10000);
             }
         } else if (callLogContentObserver != null) {
             if (unregisterRunnable != null) {

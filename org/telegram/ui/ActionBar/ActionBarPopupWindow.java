@@ -41,11 +41,11 @@ public class ActionBarPopupWindow extends PopupWindow {
     private AnimatorSet windowAnimatorSet;
 
     public static class ActionBarPopupWindowLayout extends FrameLayout {
-        protected static Drawable backgroundDrawable;
         private boolean animationEnabled = ActionBarPopupWindow.allowAnimation;
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
+        protected Drawable backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
         private int lastStartedChild = 0;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -55,10 +55,7 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
-            if (backgroundDrawable == null) {
-                backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed);
-                backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Mode.MULTIPLY));
-            }
+            this.backgroundDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Mode.MULTIPLY));
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
             try {
@@ -184,15 +181,15 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         protected void onDraw(Canvas canvas) {
-            if (backgroundDrawable != null) {
-                backgroundDrawable.setAlpha(this.backAlpha);
+            if (this.backgroundDrawable != null) {
+                this.backgroundDrawable.setAlpha(this.backAlpha);
                 int height = getMeasuredHeight();
                 if (this.showedFromBotton) {
-                    backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
+                    this.backgroundDrawable.setBounds(0, (int) (((float) getMeasuredHeight()) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), getMeasuredHeight());
                 } else {
-                    backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
+                    this.backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
                 }
-                backgroundDrawable.draw(canvas);
+                this.backgroundDrawable.draw(canvas);
             }
         }
 
