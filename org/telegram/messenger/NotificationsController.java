@@ -76,8 +76,6 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_messageService;
-import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
-import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.LaunchActivity;
@@ -808,13 +806,10 @@ public class NotificationsController {
                         return null;
                     }
                     PhoneCallDiscardReason reason = messageObject.messageOwner.action.reason;
-                    if (messageObject.isOut()) {
+                    if (messageObject.isOut() || !(reason instanceof TL_phoneCallDiscardReasonMissed)) {
                         return null;
                     }
-                    if ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy) || (reason instanceof TL_phoneCallDiscardReasonDisconnect)) {
-                        return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
-                    }
-                    return null;
+                    return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
                 }
             } else if (messageObject.isMediaEmpty()) {
                 if (shortMessage) {

@@ -24,7 +24,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
-import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -268,14 +267,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     public void onCreate() {
         super.onCreate();
         FileLog.d("=============== VoIPService STARTING ===============");
-        if (VERSION.SDK_INT >= 17) {
-            AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-            int outFramesPerBuffer = Integer.parseInt(am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER"));
-            int outSampleRate = Integer.parseInt(am.getProperty("android.media.property.OUTPUT_SAMPLE_RATE"));
-            int inFramesPerBuffer = AudioRecord.getMinBufferSize(48000, 16, 2) / 2;
-            VoIPController.setNativeBufferSize(outFramesPerBuffer);
-        } else {
+        AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
+        if (VERSION.SDK_INT < 17 || am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER") == null) {
             VoIPController.setNativeBufferSize(AudioTrack.getMinBufferSize(48000, 4, 2) / 2);
+        } else {
+            VoIPController.setNativeBufferSize(Integer.parseInt(am.getProperty("android.media.property.OUTPUT_FRAMES_PER_BUFFER")));
         }
         final SharedPreferences preferences = getSharedPreferences("mainconfig", 0);
         VoIPServerConfig.setConfig(preferences.getString("voip_server_config", "{}"));
@@ -296,7 +292,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.controller.setConfig(((double) MessagesController.getInstance().callPacketTimeout) / 1000.0d, ((double) MessagesController.getInstance().callConnectTimeout) / 1000.0d, preferences.getInt("VoipDataSaving", 0));
             this.cpuWakelock = ((PowerManager) getSystemService("power")).newWakeLock(1, "telegram-voip");
             this.cpuWakelock.acquire();
-            am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
             this.btAdapter = am.isBluetoothScoAvailableOffCall() ? BluetoothAdapter.getDefaultAdapter() : null;
             IntentFilter filter = new IntentFilter();
             filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -328,7 +323,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     ((StateListener) it.next()).onAudioSettingsChanged();
                 }
             }
-        } catch (Throwable x) {
+        } catch (Exception x) {
             FileLog.e("error initializing voip controller", x);
             callFailed();
         }
@@ -607,7 +602,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (VERSION.SDK_INT < 21 || ((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode() || !NotificationManagerCompat.from(this).areNotificationsEnabled()) {
             FileLog.d("Starting incall activity for incoming call");
             try {
-                PendingIntent.getActivity(this, 0, new Intent(this, VoIPActivity.class).addFlags(805306368), 0).send();
+                PendingIntent.getActivity(this, 12345, new Intent(this, VoIPActivity.class).addFlags(268435456), 0).send();
                 return;
             } catch (Exception x) {
                 FileLog.e("Error starting incall activity", x);
@@ -1185,21 +1180,25 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
 
     @SuppressLint({"NewApi"})
     public void onSensorChanged(SensorEvent event) {
-        boolean newIsNear = false;
+        boolean newIsNear = true;
         if (event.sensor.getType() == 8) {
             AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
             if (!this.isHeadsetPlugged && !am.isSpeakerphoneOn()) {
                 if (!isBluetoothHeadsetConnected() || !am.isBluetoothScoOn()) {
-                    if (event.values[0] < Math.min(event.sensor.getMaximumRange(), 3.0f)) {
-                        newIsNear = true;
+                    if (event.values[0] >= Math.min(event.sensor.getMaximumRange(), 3.0f)) {
+                        newIsNear = false;
                     }
                     if (newIsNear != this.isProximityNear) {
                         FileLog.d("proximity " + newIsNear);
                         this.isProximityNear = newIsNear;
-                        if (this.isProximityNear) {
-                            this.proximityWakelock.acquire();
-                        } else {
-                            this.proximityWakelock.release(1);
+                        try {
+                            if (this.isProximityNear) {
+                                this.proximityWakelock.acquire();
+                            } else {
+                                this.proximityWakelock.release(1);
+                            }
+                        } catch (Throwable x) {
+                            FileLog.e(x);
                         }
                     }
                 }
@@ -1286,8 +1285,12 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         SensorManager sm = (SensorManager) getSystemService("sensor");
         Sensor proximity = sm.getDefaultSensor(8);
         if (proximity != null) {
-            sm.registerListener(this, proximity, 3);
-            this.proximityWakelock = ((PowerManager) getSystemService("power")).newWakeLock(32, "telegram-voip-prx");
+            try {
+                this.proximityWakelock = ((PowerManager) getSystemService("power")).newWakeLock(32, "telegram-voip-prx");
+                sm.registerListener(this, proximity, 3);
+            } catch (Exception x) {
+                FileLog.e("Error initializing proximity sensor", x);
+            }
         }
     }
 

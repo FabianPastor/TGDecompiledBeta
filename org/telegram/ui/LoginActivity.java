@@ -1059,6 +1059,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     public class LoginActivitySmsView extends SlideView implements NotificationCenterDelegate {
+        private String catchedPhone;
         private EditText codeField;
         private volatile int codeTime = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
         private Timer codeTimer;
@@ -1333,9 +1334,14 @@ public class LoginActivity extends BaseFragment {
                             this.codeField.setText(callLogNumber);
                             this.ignoreOnTextChange = false;
                             onNextPressed();
-                            return;
+                        } else if (this.catchedPhone != null) {
+                            this.ignoreOnTextChange = true;
+                            this.codeField.setText(this.catchedPhone);
+                            this.ignoreOnTextChange = false;
+                            onNextPressed();
+                        } else {
+                            createTimer();
                         }
-                        createTimer();
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
                         this.timeText.setVisibility(0);
                         this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
@@ -1645,6 +1651,11 @@ public class LoginActivity extends BaseFragment {
                 } else if (id == NotificationCenter.didReceiveCall) {
                     String num = "" + args[0];
                     if (AndroidUtilities.checkPhonePattern(this.pattern, num)) {
+                        if (!this.pattern.equals("*")) {
+                            this.catchedPhone = num;
+                            AndroidUtilities.endIncomingCall();
+                            AndroidUtilities.removeLoginPhoneCall(num, true);
+                        }
                         this.ignoreOnTextChange = true;
                         this.codeField.setText(num);
                         this.ignoreOnTextChange = false;
@@ -1658,6 +1669,9 @@ public class LoginActivity extends BaseFragment {
             String code = this.codeField.getText().toString();
             if (code.length() != 0) {
                 bundle.putString("smsview_code_" + this.currentType, code);
+            }
+            if (this.catchedPhone != null) {
+                bundle.putString("catchedPhone", this.catchedPhone);
             }
             if (this.currentParams != null) {
                 bundle.putBundle("smsview_params_" + this.currentType, this.currentParams);
@@ -1674,6 +1688,10 @@ public class LoginActivity extends BaseFragment {
             this.currentParams = bundle.getBundle("smsview_params_" + this.currentType);
             if (this.currentParams != null) {
                 setParams(this.currentParams, true);
+            }
+            String catched = bundle.getString("catchedPhone");
+            if (catched != null) {
+                this.catchedPhone = catched;
             }
             String code = bundle.getString("smsview_code_" + this.currentType);
             if (code != null) {

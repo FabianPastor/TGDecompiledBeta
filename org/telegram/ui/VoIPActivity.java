@@ -30,6 +30,7 @@ import android.text.style.CharacterStyle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -39,15 +40,20 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
+import org.telegram.messenger.voip.EncryptionKeyEmojifier;
 import org.telegram.messenger.voip.VoIPController;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.messenger.voip.VoIPService.StateListener;
@@ -58,6 +64,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.IdenticonDrawable;
@@ -68,7 +75,7 @@ import org.telegram.ui.Components.voip.CheckableImageView;
 import org.telegram.ui.Components.voip.FabBackgroundDrawable;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
-public class VoIPActivity extends Activity implements StateListener {
+public class VoIPActivity extends Activity implements StateListener, NotificationCenterDelegate {
     private static final String TAG = "tg-voip-ui";
     private View acceptBtn;
     private CallSwipeView acceptSwipe;
@@ -83,15 +90,20 @@ public class VoIPActivity extends Activity implements StateListener {
     private TextView durationText;
     private AnimatorSet ellAnimator;
     private TextAlphaSpan[] ellSpans;
+    private AnimatorSet emojiAnimator;
+    private ImageView emojiToggleBtn;
     private View endBtn;
     private FabBackgroundDrawable endBtnBg;
     private View endBtnIcon;
     private boolean firstStateChange = true;
     private boolean isIncomingWaiting;
     private ImageView keyButton;
+    private ImageView[] keyEmojiViews = new ImageView[5];
+    private boolean keyEmojiVisible;
     private ImageView keyImage;
     private View keyOverlay;
     private TextView keyText;
+    private TextView keyText2;
     private String lastStateText;
     private CheckableImageView micToggle;
     private TextView nameText;
@@ -354,6 +366,7 @@ public class VoIPActivity extends Activity implements StateListener {
             }
         });
         getWindow().getDecorView().setKeepScreenOn(true);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
     }
 
     private View createContentView() {
@@ -531,27 +544,77 @@ public class VoIPActivity extends Activity implements StateListener {
         anonymousClass9.setScaleType(ScaleType.FIT_XY);
         this.keyImage = anonymousClass9;
         anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, -1, 1.0f, 20, 20, 20, 20));
+        anonymousClass9 = new RelativeLayout(this);
+        anonymousClass9 = new FrameLayout(this);
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createFrame(-1, -2, 17));
+        anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, -1, 1.0f, 10, 10, 10, 10));
+        ViewGroup.LayoutParams layoutParams = new RelativeLayout.LayoutParams(-1, -2);
         anonymousClass9 = new TextView(this);
         anonymousClass9.setTextSize(1, 16.0f);
         anonymousClass9.setTextColor(-1);
         anonymousClass9.setGravity(17);
+        anonymousClass9.setId(1);
+        anonymousClass9.setTypeface(Typeface.MONOSPACE);
         this.keyText = anonymousClass9;
-        anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(-1, -1, 1.0f, 10, 10, 10, 10));
+        anonymousClass9.addView(anonymousClass9, layoutParams);
+        layoutParams = new RelativeLayout.LayoutParams(-1, -2);
+        layoutParams.addRule(3, 1);
+        layoutParams.topMargin = AndroidUtilities.dp(16.0f);
+        anonymousClass9 = new TextView(this);
+        anonymousClass9.setTextSize(1, 16.0f);
+        anonymousClass9.setTextColor(-1);
+        anonymousClass9.setGravity(17);
+        anonymousClass9.setId(2);
+        this.keyText2 = anonymousClass9;
+        anonymousClass9.addView(anonymousClass9, layoutParams);
+        anonymousClass9 = new LinearLayout(this);
+        anonymousClass9.setOrientation(0);
+        anonymousClass9.setGravity(17);
+        layoutParams = new RelativeLayout.LayoutParams(-1, -2);
+        layoutParams.addRule(6, 1);
+        layoutParams.addRule(5, 1);
+        layoutParams.addRule(7, 1);
+        layoutParams.addRule(8, 1);
+        anonymousClass9.addView(anonymousClass9, layoutParams);
+        int i = 0;
+        while (i < 5) {
+            anonymousClass9 = new ImageView(this);
+            anonymousClass9.setScaleType(ScaleType.FIT_XY);
+            anonymousClass9.setAlpha(0.0f);
+            anonymousClass9.addView(anonymousClass9, LayoutHelper.createLinear(32, 32, 0.0f, 0.0f, i == 4 ? 0.0f : 16.0f, 0.0f));
+            this.keyEmojiViews[i] = anonymousClass9;
+            i++;
+        }
+        this.emojiToggleBtn = new ImageView(this);
+        this.emojiToggleBtn.setImageDrawable(Theme.createSimpleSelectorDrawable(this, R.drawable.ic_smiles2_smile, -1, -13920542));
+        this.emojiToggleBtn.setScaleType(ScaleType.CENTER);
+        this.emojiToggleBtn.setBackgroundResource(R.drawable.bar_selector_white);
+        this.emojiToggleBtn.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                VoIPActivity.this.setKeyEmojiVisible(!VoIPActivity.this.keyEmojiVisible);
+            }
+        });
+        layoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(48.0f), AndroidUtilities.dp(48.0f));
+        layoutParams.addRule(6, 1);
+        layoutParams.addRule(8, 1);
+        layoutParams.addRule(11);
+        anonymousClass9.addView(this.emojiToggleBtn, layoutParams);
         anonymousClass9.setVisibility(8);
         anonymousClass9.setAlpha(0.0f);
+        anonymousClass9.setClickable(true);
         this.keyOverlay = anonymousClass9;
         frameLayout.addView(anonymousClass9);
         int ellMaxAlpha = this.stateText.getPaint().getAlpha();
         this.ellAnimator = new AnimatorSet();
         AnimatorSet animatorSet = this.ellAnimator;
-        r39 = new Animator[6];
-        r39[0] = createAlphaAnimator(this.ellSpans[0], 0, ellMaxAlpha, 0, 300);
-        r39[1] = createAlphaAnimator(this.ellSpans[1], 0, ellMaxAlpha, 150, 300);
-        r39[2] = createAlphaAnimator(this.ellSpans[2], 0, ellMaxAlpha, 300, 300);
-        r39[3] = createAlphaAnimator(this.ellSpans[0], ellMaxAlpha, 0, 1000, 400);
-        r39[4] = createAlphaAnimator(this.ellSpans[1], ellMaxAlpha, 0, 1000, 400);
-        r39[5] = createAlphaAnimator(this.ellSpans[2], ellMaxAlpha, 0, 1000, 400);
-        animatorSet.playTogether(r39);
+        r46 = new Animator[6];
+        r46[0] = createAlphaAnimator(this.ellSpans[0], 0, ellMaxAlpha, 0, 300);
+        r46[1] = createAlphaAnimator(this.ellSpans[1], 0, ellMaxAlpha, 150, 300);
+        r46[2] = createAlphaAnimator(this.ellSpans[2], 0, ellMaxAlpha, 300, 300);
+        r46[3] = createAlphaAnimator(this.ellSpans[0], ellMaxAlpha, 0, 1000, 400);
+        r46[4] = createAlphaAnimator(this.ellSpans[1], ellMaxAlpha, 0, 1000, 400);
+        r46[5] = createAlphaAnimator(this.ellSpans[2], ellMaxAlpha, 0, 1000, 400);
+        animatorSet.playTogether(r46);
         this.ellAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 if (!VoIPActivity.this.isFinishing()) {
@@ -573,6 +636,7 @@ public class VoIPActivity extends Activity implements StateListener {
     }
 
     protected void onDestroy() {
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().unregisterStateListener(this);
         }
@@ -660,13 +724,70 @@ public class VoIPActivity extends Activity implements StateListener {
                         }
                     }
                     hash.append(hex.substring(a * 2, (a * 2) + 2));
-                    hash.append(' ');
+                    if (a % 8 != 7) {
+                        hash.append(' ');
+                    }
                 }
-                hash.append("\n\n");
             }
-            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
+            this.keyText2.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
             this.keyText.setText(hash);
+            String[] emoji = EncryptionKeyEmojifier.emojify(sha256);
+            for (int i = 0; i < 5; i++) {
+                this.keyEmojiViews[i].setImageDrawable(Emoji.getEmojiBigDrawable(emoji[i]));
+            }
         }
+    }
+
+    private void setKeyEmojiVisible(boolean visible) {
+        if (this.emojiAnimator != null) {
+            this.emojiAnimator.cancel();
+        }
+        this.keyEmojiVisible = visible;
+        this.emojiToggleBtn.setSelected(visible);
+        AnimatorSet set = new AnimatorSet();
+        Animator[] animatorArr;
+        if (visible) {
+            if (this.keyEmojiViews[0].getAlpha() == 0.0f) {
+                this.keyEmojiViews[0].setTranslationX((float) AndroidUtilities.dp(32.0f));
+                this.keyEmojiViews[4].setTranslationX((float) AndroidUtilities.dp(-32.0f));
+                this.keyEmojiViews[1].setTranslationX((float) AndroidUtilities.dp(16.0f));
+                this.keyEmojiViews[3].setTranslationX((float) AndroidUtilities.dp(-16.0f));
+            }
+            animatorArr = new Animator[10];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.keyText, "alpha", new float[]{0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.keyEmojiViews[0], "alpha", new float[]{1.0f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.keyEmojiViews[1], "alpha", new float[]{1.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.keyEmojiViews[2], "alpha", new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.keyEmojiViews[3], "alpha", new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.keyEmojiViews[4], "alpha", new float[]{1.0f});
+            animatorArr[6] = ObjectAnimator.ofFloat(this.keyEmojiViews[0], "translationX", new float[]{0.0f});
+            animatorArr[7] = ObjectAnimator.ofFloat(this.keyEmojiViews[1], "translationX", new float[]{0.0f});
+            animatorArr[8] = ObjectAnimator.ofFloat(this.keyEmojiViews[3], "translationX", new float[]{0.0f});
+            animatorArr[9] = ObjectAnimator.ofFloat(this.keyEmojiViews[4], "translationX", new float[]{0.0f});
+            set.playTogether(animatorArr);
+        } else {
+            animatorArr = new Animator[10];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.keyText, "alpha", new float[]{1.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.keyEmojiViews[0], "alpha", new float[]{0.0f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.keyEmojiViews[1], "alpha", new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.keyEmojiViews[2], "alpha", new float[]{0.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.keyEmojiViews[3], "alpha", new float[]{0.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.keyEmojiViews[4], "alpha", new float[]{0.0f});
+            animatorArr[6] = ObjectAnimator.ofFloat(this.keyEmojiViews[0], "translationX", new float[]{(float) AndroidUtilities.dp(-32.0f)});
+            animatorArr[7] = ObjectAnimator.ofFloat(this.keyEmojiViews[1], "translationX", new float[]{(float) AndroidUtilities.dp(-16.0f)});
+            animatorArr[8] = ObjectAnimator.ofFloat(this.keyEmojiViews[3], "translationX", new float[]{(float) AndroidUtilities.dp(16.0f)});
+            animatorArr[9] = ObjectAnimator.ofFloat(this.keyEmojiViews[4], "translationX", new float[]{(float) AndroidUtilities.dp(32.0f)});
+            set.playTogether(animatorArr);
+        }
+        set.setDuration(300);
+        set.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        this.emojiAnimator = set;
+        set.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                VoIPActivity.this.emojiAnimator = null;
+            }
+        });
+        set.start();
     }
 
     private void showDebugAlert() {
@@ -739,13 +860,13 @@ public class VoIPActivity extends Activity implements StateListener {
                 if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null && VoIPActivity.this.callState == 3) {
                     CharSequence format;
                     long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                    TextView access$2000 = VoIPActivity.this.durationText;
+                    TextView access$2300 = VoIPActivity.this.durationText;
                     if (duration > 3600) {
                         format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
                     } else {
                         format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                     }
-                    access$2000.setText(format);
+                    access$2300.setText(format);
                     VoIPActivity.this.durationText.postDelayed(this, 500);
                 }
             }
@@ -1018,6 +1139,14 @@ public class VoIPActivity extends Activity implements StateListener {
             });
             this.textChangingAnim = set;
             set.start();
+        }
+    }
+
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.emojiDidLoaded) {
+            for (ImageView iv : this.keyEmojiViews) {
+                iv.postInvalidate();
+            }
         }
     }
 }

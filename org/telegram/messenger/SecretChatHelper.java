@@ -565,7 +565,7 @@ public class SecretChatHelper {
                     try {
                         TLObject reqToSend;
                         TLObject layer = new TL_decryptedMessageLayer();
-                        layer.layer = Math.min(Math.max(17, AndroidUtilities.getMyLayerVersion(encryptedChat.layer)), Math.max(17, AndroidUtilities.getPeerLayerVersion(encryptedChat.layer)));
+                        layer.layer = Math.min(Math.max(46, AndroidUtilities.getMyLayerVersion(encryptedChat.layer)), Math.max(46, AndroidUtilities.getPeerLayerVersion(encryptedChat.layer)));
                         layer.message = decryptedMessage;
                         layer.random_bytes = new byte[15];
                         Utilities.random.nextBytes(layer.random_bytes);

@@ -51,7 +51,6 @@ import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messages_search;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
-import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.messages_Messages;
@@ -235,7 +234,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                     int userID = msg.messageOwner.from_id == UserConfig.getClientUserId() ? msg.messageOwner.to_id.user_id : msg.messageOwner.from_id;
                     int callType = msg.messageOwner.from_id == UserConfig.getClientUserId() ? 0 : 1;
                     PhoneCallDiscardReason reason = msg.messageOwner.action.reason;
-                    if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy) || (reason instanceof TL_phoneCallDiscardReasonDisconnect))) {
+                    if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy))) {
                         callType = 2;
                     }
                     if (this.calls.size() > 0) {
@@ -514,7 +513,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
                                             callType = 1;
                                         }
                                         PhoneCallDiscardReason reason = msg.action.reason;
-                                        if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy) || (reason instanceof TL_phoneCallDiscardReasonDisconnect))) {
+                                        if (callType == 1 && ((reason instanceof TL_phoneCallDiscardReasonMissed) || (reason instanceof TL_phoneCallDiscardReasonBusy))) {
                                             callType = 2;
                                         }
                                         int userID = msg.from_id == UserConfig.getClientUserId() ? msg.to_id.user_id : msg.from_id;

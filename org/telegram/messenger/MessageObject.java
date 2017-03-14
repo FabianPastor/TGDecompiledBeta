@@ -100,7 +100,6 @@ import org.telegram.tgnet.TLRPC.TL_message_old3;
 import org.telegram.tgnet.TLRPC.TL_message_old4;
 import org.telegram.tgnet.TLRPC.TL_message_secret;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
-import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonMissed;
 import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
@@ -372,7 +371,7 @@ public class MessageObject {
                     generateGameMessageText(fromUser);
                 } else if (message.action instanceof TL_messageActionPhoneCall) {
                     TL_messageActionPhoneCall call = this.messageOwner.action;
-                    boolean isMissed = (call.reason instanceof TL_phoneCallDiscardReasonMissed) || (call.reason instanceof TL_phoneCallDiscardReasonBusy) || (call.reason instanceof TL_phoneCallDiscardReasonDisconnect);
+                    boolean isMissed = call.reason instanceof TL_phoneCallDiscardReasonMissed;
                     if (this.messageOwner.from_id == UserConfig.getClientUserId()) {
                         if (isMissed) {
                             this.messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
@@ -381,6 +380,8 @@ public class MessageObject {
                         }
                     } else if (isMissed) {
                         this.messageText = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                    } else if (call.reason instanceof TL_phoneCallDiscardReasonBusy) {
+                        this.messageText = LocaleController.getString("CallMessageIncomingDeclined", R.string.CallMessageIncomingDeclined);
                     } else {
                         this.messageText = LocaleController.getString("CallMessageIncoming", R.string.CallMessageIncoming);
                     }

@@ -82,29 +82,22 @@ import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionResend;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionScreenshotMessages;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionTyping;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaAudio;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaContact;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaDocument;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaDocument_layer8;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaExternalDocument;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaGeoPoint;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaPhoto;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaPhoto_layer8;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaVenue;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaVideo;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaVideo_layer17;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaWebPage;
-import org.telegram.tgnet.TLRPC.TL_decryptedMessage_layer17;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAnimated;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
-import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio_old;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker_layer55;
-import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker_old;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
@@ -1321,8 +1314,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
 
     public void sendGame(InputPeer peer, TL_inputMediaGame game, long random_id, long taskId) {
         Throwable e;
+        long newTaskId;
         if (peer != null && game != null) {
-            long newTaskId;
             TL_messages_sendMedia request = new TL_messages_sendMedia();
             request.peer = peer;
             if (request.peer instanceof TL_inputPeerChannel) {
@@ -1398,13 +1391,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         sendMessage(null, null, photo, null, null, null, null, peer, path, reply_to_msg, null, true, null, null, replyMarkup, params);
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void sendMessage(String message, MessageMedia location, TL_photo photo, VideoEditedInfo videoEditedInfo, User user, TL_document document, TL_game game, long peer, String path, MessageObject reply_to_msg, WebPage webPage, boolean searchLinks, MessageObject retryMessageObject, ArrayList<MessageEntity> entities, ReplyMarkup replyMarkup, HashMap<String, String> params) {
         Throwable e;
+        MessageObject newMsgObj;
         if (peer != 0) {
             Chat chat;
-            MessageObject newMsgObj;
             int a;
             DocumentAttribute attribute;
             String originalPath = null;
@@ -1504,10 +1495,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
             }
             if (message != null) {
-                if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 17) {
-                    newMsg = new TL_message();
-                } else {
+                if (encryptedChat != null) {
                     newMsg = new TL_message_secret();
+                } else {
+                    newMsg = new TL_message();
                 }
                 if (!(entities == null || entities.isEmpty())) {
                     newMsg.entities = entities;
@@ -1536,10 +1527,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 type = 0;
                 newMsg.message = message;
             } else if (location != null) {
-                if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 17) {
-                    newMsg = new TL_message();
-                } else {
+                if (encryptedChat != null) {
                     newMsg = new TL_message_secret();
+                } else {
+                    newMsg = new TL_message();
                 }
                 newMsg.media = location;
                 newMsg.message = "";
@@ -1550,10 +1541,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
                 type = 1;
             } else if (photo != null) {
-                if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 17) {
-                    newMsg = new TL_message();
-                } else {
+                if (encryptedChat != null) {
                     newMsg = new TL_message_secret();
+                } else {
+                    newMsg = new TL_message();
                 }
                 newMsg.media = new TL_messageMediaPhoto();
                 newMsg.media.caption = photo.caption != null ? photo.caption : "";
@@ -1605,33 +1596,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             } else if (user != null) {
                 String str;
                 if (encryptedChat != null) {
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 17) {
-                        newMsg = new TL_message_secret();
-                        newMsg.media = new TL_messageMediaContact();
-                        newMsg.media.phone_number = user.phone;
-                        newMsg.media.first_name = user.first_name;
-                        newMsg.media.last_name = user.last_name;
-                        newMsg.media.user_id = user.id;
-                        if (newMsg.media.first_name == null) {
-                            str = "";
-                            newMsg.media.first_name = str;
-                            user.first_name = str;
-                        }
-                        if (newMsg.media.last_name == null) {
-                            str = "";
-                            newMsg.media.last_name = str;
-                            user.last_name = str;
-                        }
-                        newMsg.message = "";
-                        if (params != null) {
-                            if (params.containsKey("query_id")) {
-                                type = 9;
-                            }
-                        }
-                        type = 6;
-                    }
+                    newMsg = new TL_message_secret();
+                } else {
+                    newMsg = new TL_message();
                 }
-                newMsg = new TL_message();
                 newMsg.media = new TL_messageMediaContact();
                 newMsg.media.phone_number = user.phone;
                 newMsg.media.first_name = user.first_name;
@@ -1657,10 +1625,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             } else if (document != null) {
                 TL_documentAttributeSticker_layer55 attributeSticker;
                 String name;
-                if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 17) {
-                    newMsg = new TL_message();
-                } else {
+                if (encryptedChat != null) {
                     newMsg = new TL_message_secret();
+                } else {
+                    newMsg = new TL_message();
                 }
                 newMsg.media = new TL_messageMediaDocument();
                 newMsg.media.caption = document.caption != null ? document.caption : "";
@@ -1683,11 +1651,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             while (a < document.attributes.size()) {
                                 attribute = (DocumentAttribute) document.attributes.get(a);
                                 if (attribute instanceof TL_documentAttributeSticker) {
-                                    a++;
-                                } else if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
-                                    document.attributes.remove(a);
-                                    document.attributes.add(new TL_documentAttributeSticker_old());
-                                } else {
                                     document.attributes.remove(a);
                                     attributeSticker = new TL_documentAttributeSticker_layer55();
                                     document.attributes.add(attributeSticker);
@@ -1707,6 +1670,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     } else {
                                         attributeSticker.stickerset = new TL_inputStickerSetEmpty();
                                     }
+                                } else {
+                                    a++;
                                 }
                             }
                         }
@@ -1727,7 +1692,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         attribute = (DocumentAttribute) document.attributes.get(a);
                         if (attribute instanceof TL_documentAttributeSticker) {
                             a++;
-                        } else if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
+                        } else {
                             document.attributes.remove(a);
                             attributeSticker = new TL_documentAttributeSticker_layer55();
                             document.attributes.add(attributeSticker);
@@ -1747,9 +1712,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                     attributeSticker.stickerset.short_name = name;
                                 }
                             }
-                        } else {
-                            document.attributes.remove(a);
-                            document.attributes.add(new TL_documentAttributeSticker_old());
                         }
                     }
                 } else {
@@ -1770,11 +1732,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     while (a < document.attributes.size()) {
                         attribute = (DocumentAttribute) document.attributes.get(a);
                         if (attribute instanceof TL_documentAttributeSticker) {
-                            a++;
-                        } else if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
-                            document.attributes.remove(a);
-                            document.attributes.add(new TL_documentAttributeSticker_old());
-                        } else {
                             document.attributes.remove(a);
                             attributeSticker = new TL_documentAttributeSticker_layer55();
                             document.attributes.add(attributeSticker);
@@ -1794,6 +1751,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             } else {
                                 attributeSticker.stickerset = new TL_inputStickerSetEmpty();
                             }
+                        } else {
+                            a++;
                         }
                     }
                 }
@@ -1941,10 +1900,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     processSentMessage(newMsg.id);
                 }
             }
-            if (encryptedChat != null) {
-            }
-            if (high_id != 1 && MessageObject.isVoiceMessage(newMsg) && newMsg.to_id.channel_id == 0) {
-                newMsg.media_unread = true;
+            if (high_id != 1) {
+                if (MessageObject.isVoiceMessage(newMsg) && newMsg.to_id.channel_id == 0) {
+                    newMsg.media_unread = true;
+                }
             }
             newMsg.send_state = 1;
             newMsgObj = new MessageObject(newMsg, null, true);
@@ -1966,21 +1925,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 ArrayList<Long> random_ids;
                 if (type == 0 || !(type != 9 || message == null || encryptedChat == null)) {
                     if (encryptedChat != null) {
-                        TL_decryptedMessage reqSend;
-                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                            reqSend = new TL_decryptedMessage();
-                            reqSend.ttl = newMsg.ttl;
-                            if (!(entities == null || entities.isEmpty())) {
-                                reqSend.entities = entities;
-                                reqSend.flags |= 128;
-                            }
-                            if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
-                                reqSend.reply_to_random_id = reply_to_msg.messageOwner.random_id;
-                                reqSend.flags |= 8;
-                            }
-                        } else {
-                            reqSend = new TL_decryptedMessage_layer17();
-                            reqSend.ttl = newMsg.ttl;
+                        TL_decryptedMessage reqSend = new TL_decryptedMessage();
+                        reqSend.ttl = newMsg.ttl;
+                        if (!(entities == null || entities.isEmpty())) {
+                            reqSend.entities = entities;
+                            reqSend.flags |= 128;
+                        }
+                        if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
+                            reqSend.reply_to_random_id = reply_to_msg.messageOwner.random_id;
+                            reqSend.flags |= 8;
                         }
                         if (params != null) {
                             if (params.get("bot_name") != null) {
@@ -2294,23 +2247,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                     }
                 } else {
-                    DecryptedMessage reqSend7;
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                        reqSend7 = new TL_decryptedMessage();
-                        reqSend7.ttl = newMsg.ttl;
-                        if (!(entities == null || entities.isEmpty())) {
-                            reqSend7.entities = entities;
-                            reqSend7.flags |= 128;
-                        }
-                        if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
-                            reqSend7.reply_to_random_id = reply_to_msg.messageOwner.random_id;
-                            reqSend7.flags |= 8;
-                        }
-                        reqSend7.flags |= 512;
-                    } else {
-                        reqSend7 = new TL_decryptedMessage_layer17();
-                        reqSend7.ttl = newMsg.ttl;
+                    DecryptedMessage reqSend7 = new TL_decryptedMessage();
+                    reqSend7.ttl = newMsg.ttl;
+                    if (!(entities == null || entities.isEmpty())) {
+                        reqSend7.entities = entities;
+                        reqSend7.flags |= 128;
                     }
+                    if (!(reply_to_msg == null || reply_to_msg.messageOwner.random_id == 0)) {
+                        reqSend7.reply_to_random_id = reply_to_msg.messageOwner.random_id;
+                        reqSend7.flags |= 8;
+                    }
+                    reqSend7.flags |= 512;
                     if (params != null) {
                         if (params.get("bot_name") != null) {
                             reqSend7.via_bot_name = (String) params.get("bot_name");
@@ -2320,14 +2267,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     reqSend7.random_id = newMsg.random_id;
                     reqSend7.message = "";
                     if (type == 1) {
-                        if (!(location instanceof TL_messageMediaVenue) || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
-                            reqSend7.media = new TL_decryptedMessageMediaGeoPoint();
-                        } else {
+                        if (location instanceof TL_messageMediaVenue) {
                             reqSend7.media = new TL_decryptedMessageMediaVenue();
                             reqSend7.media.address = location.address;
                             reqSend7.media.title = location.title;
                             reqSend7.media.provider = location.provider;
                             reqSend7.media.venue_id = location.venue_id;
+                        } else {
+                            reqSend7.media = new TL_decryptedMessageMediaGeoPoint();
                         }
                         reqSend7.media.lat = location.geo.lat;
                         reqSend7.media._long = location.geo._long;
@@ -2336,21 +2283,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         PhotoSize small = (PhotoSize) photo.sizes.get(0);
                         PhotoSize big = (PhotoSize) photo.sizes.get(photo.sizes.size() - 1);
                         ImageLoader.fillPhotoSizeWithBytes(small);
-                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                            reqSend7.media = new TL_decryptedMessageMediaPhoto();
-                            reqSend7.media.caption = photo.caption != null ? photo.caption : "";
-                            if (small.bytes != null) {
-                                ((TL_decryptedMessageMediaPhoto) reqSend7.media).thumb = small.bytes;
-                            } else {
-                                ((TL_decryptedMessageMediaPhoto) reqSend7.media).thumb = new byte[0];
-                            }
+                        reqSend7.media = new TL_decryptedMessageMediaPhoto();
+                        reqSend7.media.caption = photo.caption != null ? photo.caption : "";
+                        if (small.bytes != null) {
+                            ((TL_decryptedMessageMediaPhoto) reqSend7.media).thumb = small.bytes;
                         } else {
-                            reqSend7.media = new TL_decryptedMessageMediaPhoto_layer8();
-                            if (small.bytes != null) {
-                                ((TL_decryptedMessageMediaPhoto_layer8) reqSend7.media).thumb = small.bytes;
-                            } else {
-                                ((TL_decryptedMessageMediaPhoto_layer8) reqSend7.media).thumb = new byte[0];
-                            }
+                            ((TL_decryptedMessageMediaPhoto) reqSend7.media).thumb = new byte[0];
                         }
                         reqSend7.media.thumb_h = small.h;
                         reqSend7.media.thumb_w = small.w;
@@ -2382,14 +2320,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         }
                     } else if (type == 3) {
                         ImageLoader.fillPhotoSizeWithBytes(document.thumb);
-                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
-                            reqSend7.media = new TL_decryptedMessageMediaVideo_layer17();
-                            if (document.thumb == null || document.thumb.bytes == null) {
-                                ((TL_decryptedMessageMediaVideo_layer17) reqSend7.media).thumb = new byte[0];
-                            } else {
-                                ((TL_decryptedMessageMediaVideo_layer17) reqSend7.media).thumb = document.thumb.bytes;
-                            }
-                        } else if (MessageObject.isNewGifDocument(document)) {
+                        if (MessageObject.isNewGifDocument(document)) {
                             reqSend7.media = new TL_decryptedMessageMediaDocument();
                             reqSend7.media.attributes = document.attributes;
                             if (document.thumb == null || document.thumb.bytes == null) {
@@ -2463,31 +2394,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             SecretChatHelper.getInstance().performSendEncryptedRequest(reqSend7, newMsgObj.messageOwner, encryptedChat, null, null, newMsgObj);
                         } else {
                             ImageLoader.fillPhotoSizeWithBytes(document.thumb);
-                            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                                reqSend7.media = new TL_decryptedMessageMediaDocument();
-                                reqSend7.media.attributes = document.attributes;
-                                reqSend7.media.caption = document.caption != null ? document.caption : "";
-                                if (document.thumb == null || document.thumb.bytes == null) {
-                                    ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = new byte[0];
-                                    reqSend7.media.thumb_h = 0;
-                                    reqSend7.media.thumb_w = 0;
-                                } else {
-                                    ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = document.thumb.bytes;
-                                    reqSend7.media.thumb_h = document.thumb.h;
-                                    reqSend7.media.thumb_w = document.thumb.w;
-                                }
+                            reqSend7.media = new TL_decryptedMessageMediaDocument();
+                            reqSend7.media.attributes = document.attributes;
+                            reqSend7.media.caption = document.caption != null ? document.caption : "";
+                            if (document.thumb == null || document.thumb.bytes == null) {
+                                ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = new byte[0];
+                                reqSend7.media.thumb_h = 0;
+                                reqSend7.media.thumb_w = 0;
                             } else {
-                                reqSend7.media = new TL_decryptedMessageMediaDocument_layer8();
-                                reqSend7.media.file_name = FileLoader.getDocumentFileName(document);
-                                if (document.thumb == null || document.thumb.bytes == null) {
-                                    ((TL_decryptedMessageMediaDocument_layer8) reqSend7.media).thumb = new byte[0];
-                                    reqSend7.media.thumb_h = 0;
-                                    reqSend7.media.thumb_w = 0;
-                                } else {
-                                    ((TL_decryptedMessageMediaDocument_layer8) reqSend7.media).thumb = document.thumb.bytes;
-                                    reqSend7.media.thumb_h = document.thumb.h;
-                                    reqSend7.media.thumb_w = document.thumb.w;
-                                }
+                                ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = document.thumb.bytes;
+                                reqSend7.media.thumb_h = document.thumb.h;
+                                reqSend7.media.thumb_w = document.thumb.w;
                             }
                             reqSend7.media.size = document.size;
                             reqSend7.media.mime_type = document.mime_type;
@@ -2521,35 +2438,21 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         r0.obj = newMsgObj;
                         r0.documentLocation = document;
                         r0.type = 3;
-                        if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                            reqSend7.media = new TL_decryptedMessageMediaDocument();
-                            reqSend7.media.attributes = document.attributes;
-                            reqSend7.media.caption = document.caption != null ? document.caption : "";
-                            if (document.thumb == null || document.thumb.bytes == null) {
-                                ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = new byte[0];
-                                reqSend7.media.thumb_h = 0;
-                                reqSend7.media.thumb_w = 0;
-                            } else {
-                                ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = document.thumb.bytes;
-                                reqSend7.media.thumb_h = document.thumb.h;
-                                reqSend7.media.thumb_w = document.thumb.w;
-                            }
-                            reqSend7.media.mime_type = document.mime_type;
-                            reqSend7.media.size = document.size;
-                            r0.originalPath = originalPath;
+                        reqSend7.media = new TL_decryptedMessageMediaDocument();
+                        reqSend7.media.attributes = document.attributes;
+                        reqSend7.media.caption = document.caption != null ? document.caption : "";
+                        if (document.thumb == null || document.thumb.bytes == null) {
+                            ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = new byte[0];
+                            reqSend7.media.thumb_h = 0;
+                            reqSend7.media.thumb_w = 0;
                         } else {
-                            reqSend7.media = new TL_decryptedMessageMediaAudio();
-                            for (a = 0; a < document.attributes.size(); a++) {
-                                attribute = (DocumentAttribute) document.attributes.get(a);
-                                if (attribute instanceof TL_documentAttributeAudio) {
-                                    reqSend7.media.duration = attribute.duration;
-                                    break;
-                                }
-                            }
-                            reqSend7.media.mime_type = "audio/ogg";
-                            reqSend7.media.size = document.size;
-                            r0.type = 3;
+                            ((TL_decryptedMessageMediaDocument) reqSend7.media).thumb = document.thumb.bytes;
+                            reqSend7.media.thumb_h = document.thumb.h;
+                            reqSend7.media.thumb_w = document.thumb.w;
                         }
+                        reqSend7.media.mime_type = document.mime_type;
+                        reqSend7.media.size = document.size;
+                        r0.originalPath = originalPath;
                         performSendDelayedMessage(r0);
                     }
                     if (retryMessageObject == null) {
@@ -3161,15 +3064,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             AudioInfo audioInfo = AudioInfo.getAudioInfo(file);
             if (!(audioInfo == null || audioInfo.getDuration() == 0)) {
                 if (isEncrypted) {
-                    EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32)));
-                    if (encryptedChat == null) {
+                    if (MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))) == null) {
                         return false;
                     }
-                    if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46) {
-                        attributeAudio = new TL_documentAttributeAudio();
-                    } else {
-                        attributeAudio = new TL_documentAttributeAudio_old();
-                    }
+                    attributeAudio = new TL_documentAttributeAudio();
                 } else {
                     attributeAudio = new TL_documentAttributeAudio();
                 }
@@ -3320,20 +3218,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         tL_document = messageObject.messageOwner.media.document;
                     }
                     if (isEncrypted) {
-                        EncryptedChat encryptedChat = MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32)));
-                        if (encryptedChat != null) {
-                            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) < 46) {
-                                for (int b = 0; b < tL_document.attributes.size(); b++) {
-                                    if (tL_document.attributes.get(b) instanceof TL_documentAttributeAudio) {
-                                        TL_documentAttributeAudio_old old = new TL_documentAttributeAudio_old();
-                                        old.duration = ((DocumentAttribute) tL_document.attributes.get(b)).duration;
-                                        tL_document.attributes.remove(b);
-                                        tL_document.attributes.add(old);
-                                        break;
-                                    }
-                                }
-                            }
-                        } else {
+                        if (MessagesController.getInstance().getEncryptedChat(Integer.valueOf((int) (dialog_id >> 32))) == null) {
                             return;
                         }
                     }

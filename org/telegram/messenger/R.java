@@ -824,6 +824,7 @@ public final class R {
         public static final int CallBack = NUM;
         public static final int CallEncryptionKeyDescription = NUM;
         public static final int CallMessageIncoming = NUM;
+        public static final int CallMessageIncomingDeclined = NUM;
         public static final int CallMessageIncomingMissed = NUM;
         public static final int CallMessageOutgoing = NUM;
         public static final int CallMessageOutgoingMissed = NUM;

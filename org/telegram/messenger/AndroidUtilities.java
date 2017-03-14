@@ -764,18 +764,13 @@ Error: java.util.NoSuchElementException
         String[] args = pattern.split("\\*");
         phone = PhoneFormat.stripExceptNumbers(phone);
         int checkStart = 0;
-        for (int a = 0; a < args.length; a++) {
-            String arg = args[a];
-            if (TextUtils.isEmpty(arg)) {
-                checkStart++;
-            } else if (a != args.length - 1 || pattern.endsWith("*")) {
+        for (String arg : args) {
+            if (!TextUtils.isEmpty(arg)) {
                 int index = phone.indexOf(arg, checkStart);
                 if (index == -1) {
                     return false;
                 }
                 checkStart = index + arg.length();
-            } else if (!phone.endsWith(arg)) {
-                return false;
             }
         }
         return true;

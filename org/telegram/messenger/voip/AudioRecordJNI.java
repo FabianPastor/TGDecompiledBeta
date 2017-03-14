@@ -4,7 +4,6 @@ import android.media.AudioRecord;
 import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
-import android.util.Log;
 import java.nio.ByteBuffer;
 import org.telegram.messenger.FileLog;
 
@@ -28,7 +27,7 @@ public class AudioRecordJNI {
         return Math.max(AudioRecord.getMinBufferSize(48000, 16, 2), min);
     }
 
-    public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
+    public synchronized void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
         if (this.audioRecord != null) {
             throw new IllegalStateException("already inited");
         }
@@ -38,13 +37,13 @@ public class AudioRecordJNI {
         this.buffer = ByteBuffer.allocateDirect(bufferSize);
     }
 
-    public void stop() {
+    public synchronized void stop() {
         if (this.audioRecord != null) {
             this.audioRecord.stop();
         }
     }
 
-    public void release() {
+    public synchronized void release() {
         this.running = false;
         if (this.thread != null) {
             try {
@@ -82,35 +81,33 @@ public class AudioRecordJNI {
         }
         this.running = true;
         this.thread = new Thread(new Runnable() {
+            /* JADX WARNING: inconsistent code. */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
             public void run() {
-                AudioRecordJNI.this.audioRecord.startRecording();
-                if (VERSION.SDK_INT >= 16) {
-                    if (AutomaticGainControl.isAvailable()) {
-                        AudioRecordJNI.this.agc = AutomaticGainControl.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
-                        AudioRecordJNI.this.agc.setEnabled(false);
-                    } else {
-                        FileLog.w("AutomaticGainControl is not available on this device :(");
+                synchronized (AudioRecordJNI.this) {
+                    if (AudioRecordJNI.this.audioRecord == null) {
+                        return;
                     }
-                    if (NoiseSuppressor.isAvailable()) {
-                        AudioRecordJNI.this.ns = NoiseSuppressor.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
-                        AudioRecordJNI.this.ns.setEnabled(true);
-                    } else {
-                        FileLog.w("NoiseSuppressor is not available on this device :(");
-                    }
-                }
-                while (AudioRecordJNI.this.running) {
-                    try {
-                        AudioRecordJNI.this.audioRecord.read(AudioRecordJNI.this.buffer, 1920);
-                        if (!AudioRecordJNI.this.running) {
-                            AudioRecordJNI.this.audioRecord.stop();
-                            break;
+                    AudioRecordJNI.this.audioRecord.startRecording();
+                    if (VERSION.SDK_INT >= 16) {
+                        if (AutomaticGainControl.isAvailable()) {
+                            AudioRecordJNI.this.agc = AutomaticGainControl.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
+                            if (AudioRecordJNI.this.agc != null) {
+                                AudioRecordJNI.this.agc.setEnabled(false);
+                            }
+                        } else {
+                            FileLog.w("AutomaticGainControl is not available on this device :(");
                         }
-                        AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
-                    } catch (Throwable e) {
-                        FileLog.e(e);
+                        if (NoiseSuppressor.isAvailable()) {
+                            AudioRecordJNI.this.ns = NoiseSuppressor.create(AudioRecordJNI.this.audioRecord.getAudioSessionId());
+                            if (AudioRecordJNI.this.ns != null) {
+                                AudioRecordJNI.this.ns.setEnabled(true);
+                            }
+                        } else {
+                            FileLog.w("NoiseSuppressor is not available on this device :(");
+                        }
                     }
                 }
-                Log.i("tg-voip", "audiotrack thread exits");
             }
         });
         this.thread.start();

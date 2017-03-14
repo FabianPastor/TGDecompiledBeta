@@ -125,7 +125,13 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
     }
 
     public int getId(int position) {
+        if (position < 0 || position >= this.items.size()) {
+            return -1;
+        }
         Item item = (Item) this.items.get(position);
-        return item != null ? item.id : -1;
+        if (item != null) {
+            return item.id;
+        }
+        return -1;
     }
 }
