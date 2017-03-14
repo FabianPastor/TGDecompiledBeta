@@ -21,13 +21,13 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
     Uri mUri;
 
     public Cursor loadInBackground() {
-        Cursor cursor;
         synchronized (this) {
             if (isLoadInBackgroundCanceled()) {
                 throw new OperationCanceledException();
             }
             this.mCancellationSignal = new CancellationSignal();
         }
+        Cursor cursor;
         try {
             cursor = ContentResolverCompat.query(getContext().getContentResolver(), this.mUri, this.mProjection, this.mSelection, this.mSelectionArgs, this.mSortOrder, this.mCancellationSignal);
             if (cursor != null) {

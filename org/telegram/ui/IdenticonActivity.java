@@ -37,7 +37,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -192,11 +191,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 }
                 hash.append("\n");
                 for (a = 0; a < 5; a++) {
-                    int num = (((encryptedChat.key_hash[(a * 4) + 16] << 24) | (encryptedChat.key_hash[((a * 4) + 16) + 1] << 16)) | (encryptedChat.key_hash[((a * 4) + 16) + 2] << 8)) | encryptedChat.key_hash[((a * 4) + 16) + 3];
+                    int num = ((((encryptedChat.key_hash[(a * 4) + 16] & 127) << 24) | ((encryptedChat.key_hash[((a * 4) + 16) + 1] & 255) << 16)) | ((encryptedChat.key_hash[((a * 4) + 16) + 2] & 255) << 8)) | (encryptedChat.key_hash[((a * 4) + 16) + 3] & 255);
                     if (a != 0) {
                         emojis.append(" ");
                     }
-                    emojis.append(EmojiData.emojiSecret[(ConnectionsManager.DEFAULT_DATACENTER_ID & num) % EmojiData.emojiSecret.length]);
+                    emojis.append(EmojiData.emojiSecret[num % EmojiData.emojiSecret.length]);
                 }
                 this.emojiTextView.setText(Emoji.replaceEmoji(emojis, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(32.0f), false));
                 this.emojiButton.setVisibility(0);
