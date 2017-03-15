@@ -5,25 +5,42 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Build.VERSION;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MediaController.PhotoEntry;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 
 public class InstantCameraView extends FrameLayout {
+    private View actionBar;
     private ChatActivity baseFragment;
     private File cameraFile;
     private CameraView cameraView;
     private boolean deviceHasGoodCamera;
+    private long recordStartTime;
+    private boolean recording;
     private boolean requestingPermissions;
+    private Runnable timerRunnable = new Runnable() {
+        public void run() {
+            if (InstantCameraView.this.recording) {
+                NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordProgressChanged, Long.valueOf(System.currentTimeMillis() - InstantCameraView.this.recordStartTime), Double.valueOf(0.0d));
+                AndroidUtilities.runOnUIThread(InstantCameraView.this.timerRunnable, 50);
+            }
+        }
+    };
 
-    public InstantCameraView(Context context, ChatActivity parentFragment) {
+    public InstantCameraView(Context context, ChatActivity parentFragment, View actionBarOverlay) {
         super(context);
+        this.actionBar = actionBarOverlay;
+        setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.baseFragment = parentFragment;
         setVisibility(8);
     }
@@ -51,12 +68,25 @@ public class InstantCameraView extends FrameLayout {
         }
     }
 
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        this.actionBar.setVisibility(visibility);
+    }
+
     @TargetApi(16)
     public void showCamera() {
         if (this.cameraView == null) {
+            int size;
             setVisibility(0);
-            this.cameraView = new CameraView(getContext());
-            addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
+            this.cameraView = new CameraView(getContext(), true);
+            if (AndroidUtilities.isTablet()) {
+                size = AndroidUtilities.dp(100.0f);
+            } else {
+                size = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) / 2;
+            }
+            LayoutParams layoutParams = new LayoutParams(size, size, 17);
+            layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
+            addView(this.cameraView, layoutParams);
             this.cameraView.setDelegate(new CameraViewDelegate() {
                 public void onCameraCreated(Camera camera) {
                 }
@@ -74,6 +104,10 @@ public class InstantCameraView extends FrameLayout {
                             }
                         }, new Runnable() {
                             public void run() {
+                                InstantCameraView.this.recording = true;
+                                InstantCameraView.this.recordStartTime = System.currentTimeMillis();
+                                AndroidUtilities.runOnUIThread(InstantCameraView.this.timerRunnable);
+                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStarted, new Object[0]);
                             }
                         }, true);
                         return;
@@ -87,6 +121,9 @@ public class InstantCameraView extends FrameLayout {
 
     public void send() {
         if (this.cameraView != null && this.cameraFile != null) {
+            this.recording = false;
+            AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);
             CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), false);
             hideCamera(true);
             setVisibility(8);
@@ -95,6 +132,9 @@ public class InstantCameraView extends FrameLayout {
 
     public void cancel() {
         if (this.cameraView != null && this.cameraFile != null) {
+            this.recording = false;
+            AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
+            NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);
             CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), true);
             this.cameraFile.delete();
             this.cameraFile = null;
@@ -103,7 +143,7 @@ public class InstantCameraView extends FrameLayout {
         }
     }
 
-    public void hideCamera(boolean async) {
+    private void hideCamera(boolean async) {
         if (this.cameraView != null) {
             this.cameraView.destroy(async, null);
             removeView(this.cameraView);

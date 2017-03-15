@@ -5,11 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -52,9 +50,12 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     private int chat_id;
     private TextView codeTextView;
     private FrameLayout container;
-    private ImageView emojiButton;
     private boolean emojiSelected;
+    private String emojiText;
     private TextView emojiTextView;
+    private AnimatorSet hintAnimatorSet;
+    private TextView hintTextView;
+    private LinearLayout linearLayout;
     private LinearLayout linearLayout1;
     private TextView textView;
     private int textWidth;
@@ -99,37 +100,43 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 }
             }
         });
-        this.fragmentView = new LinearLayout(context);
-        LinearLayout linearLayout = this.fragmentView;
-        linearLayout.setOrientation(1);
-        linearLayout.setWeightSum(100.0f);
-        linearLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        this.fragmentView = new FrameLayout(context) {
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                super.onLayout(changed, l, t, r, b);
+                int x = ((IdenticonActivity.this.container.getLeft() + IdenticonActivity.this.codeTextView.getLeft()) + (IdenticonActivity.this.codeTextView.getMeasuredWidth() / 2)) - (IdenticonActivity.this.hintTextView.getMeasuredWidth() / 2);
+                int y = Math.max(AndroidUtilities.dp(5.0f), (IdenticonActivity.this.container.getTop() + IdenticonActivity.this.codeTextView.getTop()) - AndroidUtilities.dp(10.0f));
+                IdenticonActivity.this.hintTextView.layout(x, y, IdenticonActivity.this.hintTextView.getMeasuredWidth() + x, IdenticonActivity.this.hintTextView.getMeasuredHeight() + y);
+            }
+        };
+        FrameLayout parentFrameLayout = this.fragmentView;
+        this.fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         this.fragmentView.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
+        this.linearLayout = new LinearLayout(context);
+        this.linearLayout.setOrientation(1);
+        this.linearLayout.setWeightSum(100.0f);
+        parentFrameLayout.addView(this.linearLayout, LayoutHelper.createFrame(-1, -1.0f));
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(20.0f));
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -1, 50.0f));
+        this.linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -1, 50.0f));
         ImageView identiconView = new ImageView(context);
         identiconView.setScaleType(ScaleType.FIT_XY);
         frameLayout.addView(identiconView, LayoutHelper.createFrame(-1, -1.0f));
         this.container = new FrameLayout(context) {
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
-                if (IdenticonActivity.this.codeTextView != null && IdenticonActivity.this.emojiButton != null) {
-                    int x = ((right - left) - IdenticonActivity.this.emojiButton.getMeasuredWidth()) - AndroidUtilities.dp(5.0f);
-                    int y = ((IdenticonActivity.this.codeTextView.getMeasuredHeight() - AndroidUtilities.dp(68.0f)) / 2) + IdenticonActivity.this.linearLayout1.getTop();
-                    IdenticonActivity.this.emojiButton.layout(x, y, IdenticonActivity.this.emojiButton.getMeasuredWidth() + x, IdenticonActivity.this.emojiButton.getMeasuredHeight() + y);
-                    x = (IdenticonActivity.this.codeTextView.getLeft() + (IdenticonActivity.this.codeTextView.getMeasuredWidth() / 2)) - (IdenticonActivity.this.emojiTextView.getMeasuredWidth() / 2);
-                    y = (((IdenticonActivity.this.codeTextView.getMeasuredHeight() - IdenticonActivity.this.emojiTextView.getMeasuredHeight()) / 2) + IdenticonActivity.this.linearLayout1.getTop()) - AndroidUtilities.dp(16.0f);
+                if (IdenticonActivity.this.codeTextView != null) {
+                    int x = (IdenticonActivity.this.codeTextView.getLeft() + (IdenticonActivity.this.codeTextView.getMeasuredWidth() / 2)) - (IdenticonActivity.this.emojiTextView.getMeasuredWidth() / 2);
+                    int y = (((IdenticonActivity.this.codeTextView.getMeasuredHeight() - IdenticonActivity.this.emojiTextView.getMeasuredHeight()) / 2) + IdenticonActivity.this.linearLayout1.getTop()) - AndroidUtilities.dp(16.0f);
                     IdenticonActivity.this.emojiTextView.layout(x, y, IdenticonActivity.this.emojiTextView.getMeasuredWidth() + x, IdenticonActivity.this.emojiTextView.getMeasuredHeight() + y);
                 }
             }
         };
         this.container.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        linearLayout.addView(this.container, LayoutHelper.createLinear(-1, -1, 50.0f));
+        this.linearLayout.addView(this.container, LayoutHelper.createLinear(-1, -1, 50.0f));
         this.linearLayout1 = new LinearLayout(context);
         this.linearLayout1.setOrientation(1);
         this.linearLayout1.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
@@ -139,7 +146,30 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.codeTextView.setGravity(17);
         this.codeTextView.setTypeface(Typeface.MONOSPACE);
         this.codeTextView.setTextSize(1, 16.0f);
+        this.codeTextView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                boolean z;
+                IdenticonActivity identiconActivity = IdenticonActivity.this;
+                if (IdenticonActivity.this.emojiSelected) {
+                    z = false;
+                } else {
+                    z = true;
+                }
+                identiconActivity.emojiSelected = z;
+                IdenticonActivity.this.updateEmojiButton(true);
+                IdenticonActivity.this.showHint(false);
+            }
+        });
         this.linearLayout1.addView(this.codeTextView, LayoutHelper.createLinear(-2, -2, 1));
+        this.hintTextView = new TextView(getParentActivity());
+        this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
+        this.hintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
+        this.hintTextView.setTextSize(1, 14.0f);
+        this.hintTextView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+        this.hintTextView.setText(LocaleController.getString("TapToEmojify", R.string.TapToEmojify));
+        this.hintTextView.setGravity(16);
+        this.hintTextView.setAlpha(0.0f);
+        parentFrameLayout.addView(this.hintTextView, LayoutHelper.createFrame(-2, 32.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         this.textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
@@ -149,19 +179,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.textView.setGravity(17);
         this.textView.setMovementMethod(new LinkMovementMethodMy());
         this.linearLayout1.addView(this.textView, LayoutHelper.createFrame(-2, -2, 1));
-        this.emojiButton = new ImageView(context);
-        this.emojiButton.setImageResource(R.drawable.ic_smiles2_smile);
-        this.emojiButton.setScaleType(ScaleType.CENTER);
-        if (VERSION.SDK_INT >= 21) {
-            this.emojiButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
-        }
-        this.container.addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f));
-        this.emojiButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                IdenticonActivity.this.emojiSelected = !IdenticonActivity.this.emojiSelected;
-                IdenticonActivity.this.updateEmojiButton(true);
-            }
-        });
         this.emojiTextView = new TextView(context);
         this.emojiTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         this.emojiTextView.setGravity(17);
@@ -197,10 +214,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                     }
                     emojis.append(EmojiData.emojiSecret[num % EmojiData.emojiSecret.length]);
                 }
-                this.emojiTextView.setText(Emoji.replaceEmoji(emojis, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(32.0f), false));
-                this.emojiButton.setVisibility(0);
-            } else {
-                this.emojiButton.setVisibility(8);
+                this.emojiText = emojis.toString();
             }
             this.codeTextView.setText(hash.toString());
             hash.clear();
@@ -296,8 +310,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
                 public void onAnimationEnd(Animator animation) {
                     if (animation.equals(IdenticonActivity.this.animatorSet)) {
                         IdenticonActivity.this.animatorSet = null;
-                        if (!IdenticonActivity.this.emojiSelected) {
-                        }
                     }
                 }
             });
@@ -340,7 +352,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             }
             textView4.setScaleY(f);
         }
-        this.emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(!this.emojiSelected ? Theme.key_chat_emojiPanelIcon : Theme.key_chat_emojiPanelIconSelected), Mode.MULTIPLY));
+        this.emojiTextView.setTag(!this.emojiSelected ? Theme.key_chat_emojiPanelIcon : Theme.key_chat_emojiPanelIconSelected);
     }
 
     private void fixLayout() {
@@ -348,12 +360,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             public boolean onPreDraw() {
                 if (IdenticonActivity.this.fragmentView != null) {
                     IdenticonActivity.this.fragmentView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    LinearLayout layout = (LinearLayout) IdenticonActivity.this.fragmentView;
                     int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
                     if (rotation == 3 || rotation == 1) {
-                        layout.setOrientation(0);
+                        IdenticonActivity.this.linearLayout.setOrientation(0);
                     } else {
-                        layout.setOrientation(1);
+                        IdenticonActivity.this.linearLayout.setOrientation(1);
                     }
                     IdenticonActivity.this.fragmentView.setPadding(IdenticonActivity.this.fragmentView.getPaddingLeft(), 0, IdenticonActivity.this.fragmentView.getPaddingRight(), IdenticonActivity.this.fragmentView.getPaddingBottom());
                 }
@@ -362,16 +373,64 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         });
     }
 
+    private void showHint(boolean show) {
+        float f = 0.0f;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+        if (show) {
+            if (preferences.getBoolean("secrethint", false)) {
+                return;
+            }
+        } else if (this.hintTextView.getAlpha() != 0.0f) {
+            preferences.edit().putBoolean("secrethint", true).commit();
+        } else {
+            return;
+        }
+        if (this.hintAnimatorSet != null) {
+            this.hintAnimatorSet.cancel();
+        }
+        this.hintAnimatorSet = new AnimatorSet();
+        AnimatorSet animatorSet = this.hintAnimatorSet;
+        Animator[] animatorArr = new Animator[1];
+        TextView textView = this.hintTextView;
+        String str = "alpha";
+        float[] fArr = new float[1];
+        if (show) {
+            f = 1.0f;
+        }
+        fArr[0] = f;
+        animatorArr[0] = ObjectAnimator.ofFloat(textView, str, fArr);
+        animatorSet.playTogether(animatorArr);
+        this.hintAnimatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                if (animation.equals(IdenticonActivity.this.hintAnimatorSet)) {
+                    IdenticonActivity.this.hintAnimatorSet = null;
+                }
+            }
+        });
+        this.hintAnimatorSet.setDuration(300);
+        this.hintAnimatorSet.start();
+    }
+
+    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+        if (isOpen && !backward && this.emojiText != null) {
+            this.emojiTextView.setText(Emoji.replaceEmoji(this.emojiText, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(32.0f), false));
+            showHint(true);
+        }
+    }
+
     public ThemeDescription[] getThemeDescriptions() {
-        r8 = new ThemeDescription[8];
-        r8[0] = new ThemeDescription(this.container, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
-        r8[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
-        r8[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
-        r8[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
-        r8[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
-        r8[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
-        r8[6] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
-        r8[7] = new ThemeDescription(this.textView, ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteLinkText);
-        return r8;
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[11];
+        themeDescriptionArr[0] = new ThemeDescription(this.container, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite);
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray);
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault);
+        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon);
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle);
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector);
+        themeDescriptionArr[6] = new ThemeDescription(this.textView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[7] = new ThemeDescription(this.codeTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText4);
+        themeDescriptionArr[8] = new ThemeDescription(this.textView, ThemeDescription.FLAG_LINKCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteLinkText);
+        themeDescriptionArr[9] = new ThemeDescription(this.hintTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_chat_gifSaveHintBackground);
+        themeDescriptionArr[10] = new ThemeDescription(this.hintTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_gifSaveHintText);
+        return themeDescriptionArr;
     }
 }

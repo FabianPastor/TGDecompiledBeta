@@ -1598,7 +1598,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     public void showCamera() {
         if (!this.paused) {
             if (this.cameraView == null) {
-                this.cameraView = new CameraView(this.baseFragment.getParentActivity());
+                this.cameraView = new CameraView(this.baseFragment.getParentActivity(), false);
                 this.container.addView(this.cameraView, 1, LayoutHelper.createFrame(80, 80.0f));
                 this.cameraView.setDelegate(new CameraViewDelegate() {
                     public void onCameraCreated(Camera camera) {

@@ -2904,10 +2904,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         if (requestCode == 101) {
             User user = MessagesController.getInstance().getUser(Integer.valueOf(this.user_id));
             if (user != null) {
-                if (grantResults[0] == 0) {
-                    VoIPHelper.startCall(user, getParentActivity(), MessagesController.getInstance().getUserFull(user.id));
-                } else {
+                if (grantResults.length <= 0 || grantResults[0] != 0) {
                     VoIPHelper.permissionDenied(getParentActivity(), null);
+                } else {
+                    VoIPHelper.startCall(user, getParentActivity(), MessagesController.getInstance().getUserFull(user.id));
                 }
             }
         }

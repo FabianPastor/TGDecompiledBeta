@@ -269,6 +269,7 @@ public final class R {
         public static final int ic_msg_panel_kb = NUM;
         public static final int ic_msg_panel_smiles = NUM;
         public static final int ic_msg_panel_stickers = NUM;
+        public static final int ic_msg_panel_video = NUM;
         public static final int ic_outfullscreen = NUM;
         public static final int ic_outinline = NUM;
         public static final int ic_pause = NUM;
@@ -1914,6 +1915,7 @@ public final class R {
         public static final int Support = NUM;
         public static final int SystemRoot = NUM;
         public static final int TapHereGifs = NUM;
+        public static final int TapToEmojify = NUM;
         public static final int TelegramFaq = NUM;
         public static final int TelegramFaqUrl = NUM;
         public static final int TelegramVersion = NUM;

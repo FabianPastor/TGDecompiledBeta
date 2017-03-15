@@ -571,7 +571,12 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 101 && grantResults[0] == 0) {
+        if (requestCode != 101) {
+            return;
+        }
+        if (grantResults.length <= 0 || grantResults[0] != 0) {
+            VoIPHelper.permissionDenied(getParentActivity(), null);
+        } else {
             VoIPHelper.startCall(this.lastCallUser, getParentActivity(), null);
         }
     }

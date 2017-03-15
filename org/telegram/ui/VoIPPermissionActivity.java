@@ -15,7 +15,7 @@ public class VoIPPermissionActivity extends Activity {
         if (requestCode != 101) {
             return;
         }
-        if (grantResults[0] == 0) {
+        if (grantResults.length > 0 && grantResults[0] == 0) {
             if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().acceptIncomingCall();
             }

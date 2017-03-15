@@ -15,6 +15,7 @@ public class VoIPController {
     public static final int DATA_SAVING_ALWAYS = 2;
     public static final int DATA_SAVING_MOBILE = 1;
     public static final int DATA_SAVING_NEVER = 0;
+    public static final int ERROR_AUDIO_IO = 3;
     public static final int ERROR_INCOMPATIBLE = 1;
     public static final int ERROR_LOCALIZED = -3;
     public static final int ERROR_PEER_OUTDATED = -1;
@@ -181,8 +182,8 @@ public class VoIPController {
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
         ensureNativeInstance();
         long j = this.nativeInst;
-        boolean z = VERSION.SDK_INT < 16 || !AcousticEchoCanceler.isAvailable();
-        boolean z2 = VERSION.SDK_INT < 16 || !NoiseSuppressor.isAvailable();
+        boolean z = (VERSION.SDK_INT >= 16 && AcousticEchoCanceler.isAvailable() && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
+        boolean z2 = (VERSION.SDK_INT >= 16 && NoiseSuppressor.isAvailable() && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
         nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, BuildConfig.DEBUG ? getLogFilePath() : null);
     }
 

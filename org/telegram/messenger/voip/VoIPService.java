@@ -60,6 +60,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
@@ -99,7 +100,7 @@ import org.telegram.ui.VoIPActivity;
 import org.telegram.ui.VoIPFeedbackActivity;
 import org.telegram.ui.VoIPPermissionActivity;
 
-public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener {
+public class VoIPService extends Service implements ConnectionStateListener, SensorEventListener, OnAudioFocusChangeListener, NotificationCenterDelegate {
     public static final String ACTION_HEADSET_PLUG = "android.intent.action.HEADSET_PLUG";
     private static final int CALL_MAX_LAYER = 65;
     private static final int CALL_MIN_LAYER = 65;
@@ -323,6 +324,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     ((StateListener) it.next()).onAudioSettingsChanged();
                 }
             }
+            NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
         } catch (Exception x) {
             FileLog.e("error initializing voip controller", x);
             callFailed();
@@ -333,6 +335,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         FileLog.d("=============== VoIPService STOPPING ===============");
         stopForeground(true);
         stopRinging();
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.appDidLogout);
         SensorManager sm = (SensorManager) getSystemService("sensor");
         if (sm.getDefaultSensor(8) != null) {
             sm.unregisterListener(this);
@@ -1420,5 +1423,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
 
     public int getCallState() {
         return this.currentState;
+    }
+
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.appDidLogout) {
+            callEnded();
+        }
     }
 }

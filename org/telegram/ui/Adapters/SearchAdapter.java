@@ -236,11 +236,11 @@ public class SearchAdapter extends SelectionAdapter {
         Throwable e;
         Object username;
         UserCell userCell;
-        boolean z;
         if (holder.getItemViewType() == 0) {
             TLObject object = getItem(position);
             if (object != null) {
                 ProfileSearchCell profileSearchCell;
+                boolean z;
                 int id = 0;
                 String un = null;
                 if (object instanceof User) {
@@ -274,54 +274,38 @@ public class SearchAdapter extends SelectionAdapter {
                             username = un;
                             FileLog.e(e);
                             if (this.useUserCell) {
-                                userCell = holder.itemView;
-                                userCell.setData(object, name, username2, 0);
-                                if (this.checkedMap == null) {
-                                    userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
-                                    return;
+                                profileSearchCell = holder.itemView;
+                                profileSearchCell.setData(object, null, name, username2, false);
+                                if (position == getItemCount() + -1) {
                                 }
+                                profileSearchCell.useSeparator = z;
+                            }
+                            userCell = holder.itemView;
+                            userCell.setData(object, name, username2, 0);
+                            if (this.checkedMap == null) {
+                                userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
                                 return;
                             }
-                            profileSearchCell = holder.itemView;
-                            profileSearchCell.setData(object, null, name, username2, false);
-                            if (position == getItemCount() + -1) {
-                            }
-                            profileSearchCell.useSeparator = z;
-                            if (this.ignoreUsers == null) {
-                                return;
-                            }
-                            if (this.ignoreUsers.containsKey(Integer.valueOf(id))) {
-                                profileSearchCell.drawAlpha = 0.5f;
-                            } else {
-                                profileSearchCell.drawAlpha = 1.0f;
-                            }
+                            return;
                         }
                     } catch (Exception e3) {
                         e = e3;
                         username = un;
                         FileLog.e(e);
                         if (this.useUserCell) {
-                            profileSearchCell = holder.itemView;
-                            profileSearchCell.setData(object, null, name, username2, false);
-                            if (position == getItemCount() + -1) {
-                            }
-                            profileSearchCell.useSeparator = z;
-                            if (this.ignoreUsers == null) {
-                                if (this.ignoreUsers.containsKey(Integer.valueOf(id))) {
-                                    profileSearchCell.drawAlpha = 1.0f;
-                                } else {
-                                    profileSearchCell.drawAlpha = 0.5f;
-                                }
+                            userCell = holder.itemView;
+                            userCell.setData(object, name, username2, 0);
+                            if (this.checkedMap == null) {
+                                userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
+                                return;
                             }
                             return;
                         }
-                        userCell = holder.itemView;
-                        userCell.setData(object, name, username2, 0);
-                        if (this.checkedMap == null) {
-                            userCell.setChecked(this.checkedMap.containsKey(Integer.valueOf(id)), false);
-                            return;
+                        profileSearchCell = holder.itemView;
+                        profileSearchCell.setData(object, null, name, username2, false);
+                        if (position == getItemCount() + -1) {
                         }
-                        return;
+                        profileSearchCell.useSeparator = z;
                     }
                 }
                 if (this.useUserCell) {
@@ -337,14 +321,6 @@ public class SearchAdapter extends SelectionAdapter {
                 profileSearchCell.setData(object, null, name, username2, false);
                 z = position == getItemCount() + -1 && position != this.searchResult.size() - 1;
                 profileSearchCell.useSeparator = z;
-                if (this.ignoreUsers == null) {
-                    return;
-                }
-                if (this.ignoreUsers.containsKey(Integer.valueOf(id))) {
-                    profileSearchCell.drawAlpha = 0.5f;
-                } else {
-                    profileSearchCell.drawAlpha = 1.0f;
-                }
             }
         }
     }

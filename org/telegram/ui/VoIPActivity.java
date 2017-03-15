@@ -22,6 +22,7 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.media.AudioManager;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -64,7 +65,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.IdenticonDrawable;
@@ -91,7 +91,6 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private AnimatorSet ellAnimator;
     private TextAlphaSpan[] ellSpans;
     private AnimatorSet emojiAnimator;
-    private ImageView emojiToggleBtn;
     private View endBtn;
     private FabBackgroundDrawable endBtnBg;
     private View endBtnIcon;
@@ -585,20 +584,11 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             this.keyEmojiViews[i] = anonymousClass9;
             i++;
         }
-        this.emojiToggleBtn = new ImageView(this);
-        this.emojiToggleBtn.setImageDrawable(Theme.createSimpleSelectorDrawable(this, R.drawable.ic_smiles2_smile, -1, -13920542));
-        this.emojiToggleBtn.setScaleType(ScaleType.CENTER);
-        this.emojiToggleBtn.setBackgroundResource(R.drawable.bar_selector_white);
-        this.emojiToggleBtn.setOnClickListener(new OnClickListener() {
+        anonymousClass9.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 VoIPActivity.this.setKeyEmojiVisible(!VoIPActivity.this.keyEmojiVisible);
             }
         });
-        layoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(48.0f), AndroidUtilities.dp(48.0f));
-        layoutParams.addRule(6, 1);
-        layoutParams.addRule(8, 1);
-        layoutParams.addRule(11);
-        anonymousClass9.addView(this.emojiToggleBtn, layoutParams);
         anonymousClass9.setVisibility(8);
         anonymousClass9.setAlpha(0.0f);
         anonymousClass9.setClickable(true);
@@ -670,7 +660,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         if (requestCode != 101) {
             return;
         }
-        if (grantResults[0] == 0) {
+        if (grantResults.length > 0 && grantResults[0] == 0) {
             VoIPService.getSharedInstance().acceptIncomingCall();
             callAccepted();
         } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
@@ -703,6 +693,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     private void updateKeyView() {
         if (VoIPService.getSharedInstance() != null) {
             IdenticonDrawable img = new IdenticonDrawable();
+            img.setColors(new int[]{ViewCompat.MEASURED_SIZE_MASK, -1, -NUM, 872415231});
             EncryptedChat encryptedChat = new EncryptedChat();
             encryptedChat.auth_key = VoIPService.getSharedInstance().getEncryptionKey();
             byte[] sha256 = Utilities.computeSHA256(encryptedChat.auth_key, 0, encryptedChat.auth_key.length);
@@ -743,7 +734,6 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             this.emojiAnimator.cancel();
         }
         this.keyEmojiVisible = visible;
-        this.emojiToggleBtn.setSelected(visible);
         AnimatorSet set = new AnimatorSet();
         Animator[] animatorArr;
         if (visible) {
@@ -1025,6 +1015,8 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                         VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
                     } else if (lastError == -2) {
                         VoIPActivity.this.showErrorDialog(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, ContactsController.formatName(VoIPActivity.this.user.first_name, VoIPActivity.this.user.last_name))));
+                    } else if (lastError == 3) {
+                        VoIPActivity.this.showErrorDialog("Error initializing audio hardware");
                     } else if (lastError == -3) {
                         VoIPActivity.this.finish();
                     } else {
@@ -1145,7 +1137,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationCenter.emojiDidLoaded) {
             for (ImageView iv : this.keyEmojiViews) {
-                iv.postInvalidate();
+                iv.invalidate();
             }
         }
     }

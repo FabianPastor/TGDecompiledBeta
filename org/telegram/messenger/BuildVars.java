@@ -13,5 +13,4 @@ public class BuildVars {
     public static String FOURSQUARE_API_VERSION = "20150326";
     public static String HOCKEY_APP_HASH = "a5b5c4f551dadedc9918d9766a22ca7c";
     public static String HOCKEY_APP_HASH_DEBUG = "dc3b3c6317af4a3caa5269a58697e088";
-    public static String SEND_LOGS_EMAIL = "drklo.2kb@gmail.com";
 }

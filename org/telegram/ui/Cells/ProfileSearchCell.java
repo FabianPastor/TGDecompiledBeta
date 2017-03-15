@@ -39,7 +39,6 @@ public class ProfileSearchCell extends BaseCell {
     private int countWidth;
     private CharSequence currentName;
     private long dialog_id;
-    public float drawAlpha = 1.0f;
     private boolean drawCheck;
     private boolean drawCount;
     private boolean drawNameBot;
@@ -401,9 +400,6 @@ public class ProfileSearchCell extends BaseCell {
                 } else {
                     canvas.drawLine((float) AndroidUtilities.dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
                 }
-            }
-            if (this.drawAlpha != 1.0f) {
-                canvas.saveLayerAlpha(0.0f, 0.0f, (float) canvas.getWidth(), (float) canvas.getHeight(), (int) (255.0f * this.drawAlpha), 4);
             }
             if (this.drawNameLock) {
                 setDrawableBounds(Theme.dialogs_lockDrawable, this.nameLockLeft, this.nameLockTop);

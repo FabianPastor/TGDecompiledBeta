@@ -1544,6 +1544,7 @@
     <string name="CallViaTelegram">Telegram Call</string>
     <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="ReturnToCall">RETURN TO CALL</string>
+    <string name="TapToEmojify">Tap to emojify</string>
     <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
     <string name="VoipAudioRoutingEarpiece">Earpiece</string>
     <string name="VoipAudioRoutingSpeaker">Speaker</string>

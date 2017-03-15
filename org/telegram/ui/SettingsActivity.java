@@ -1394,7 +1394,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!uris.isEmpty()) {
                 Intent i = new Intent("android.intent.action.SEND_MULTIPLE");
                 i.setType("message/rfc822");
-                i.putExtra("android.intent.extra.EMAIL", new String[]{BuildVars.SEND_LOGS_EMAIL});
+                i.putExtra("android.intent.extra.EMAIL", "");
                 i.putExtra("android.intent.extra.SUBJECT", "last logs");
                 i.putParcelableArrayListExtra("android.intent.extra.STREAM", uris);
                 getParentActivity().startActivityForResult(Intent.createChooser(i, "Select email application."), 500);

@@ -1151,9 +1151,6 @@ public class RecyclerListView extends RecyclerView {
                     }
                     canvas.translate(width, (float) top);
                     canvas.clipRect(0, 0, getWidth(), header.getMeasuredHeight());
-                    if (top < 0) {
-                        canvas.saveLayerAlpha(0.0f, (float) top, (float) header.getWidth(), (float) (canvas.getHeight() + top), (int) (255.0f * (1.0f + (((float) top) / ((float) header.getMeasuredHeight())))), 4);
-                    }
                     header.draw(canvas);
                     canvas.restoreToCount(saveCount);
                 }
