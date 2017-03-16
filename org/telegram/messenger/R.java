@@ -823,6 +823,7 @@ public final class R {
         public static final int Call = NUM;
         public static final int CallAgain = NUM;
         public static final int CallBack = NUM;
+        public static final int CallEmojiKeyTooltip = NUM;
         public static final int CallEncryptionKeyDescription = NUM;
         public static final int CallMessageIncoming = NUM;
         public static final int CallMessageIncomingDeclined = NUM;

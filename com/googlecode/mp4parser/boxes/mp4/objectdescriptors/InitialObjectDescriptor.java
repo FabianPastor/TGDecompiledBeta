@@ -22,7 +22,6 @@ public class InitialObjectDescriptor extends ObjectDescriptorBase {
     int visualProfileLevelIndication;
 
     public void parseDetail(ByteBuffer bb) throws IOException {
-        BaseDescriptor descriptor;
         int data = IsoTypeReader.readUInt16(bb);
         this.objectDescriptorId = (65472 & data) >> 6;
         this.urlFlag = (data & 63) >> 5;
@@ -40,6 +39,7 @@ public class InitialObjectDescriptor extends ObjectDescriptorBase {
             this.graphicsProfileLevelIndication = IsoTypeReader.readUInt8(bb);
             sizeLeft -= 5;
             if (sizeLeft > 2) {
+                BaseDescriptor descriptor;
                 descriptor = ObjectDescriptorFactory.createFrom(-1, bb);
                 sizeLeft -= descriptor.getSize();
                 if (descriptor instanceof ESDescriptor) {

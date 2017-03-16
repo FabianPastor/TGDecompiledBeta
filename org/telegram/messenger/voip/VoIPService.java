@@ -808,6 +808,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         FileLog.w("stopping VoIP service, Ga == null");
                         callFailed();
                     } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
+                        this.g_a = call.g_a_or_b;
                         BigInteger g_a = new BigInteger(1, call.g_a_or_b);
                         BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
                         if (Utilities.isGoodGaAndGb(g_a, p)) {
@@ -1457,6 +1458,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
 
     public int getCallState() {
         return this.currentState;
+    }
+
+    public byte[] getGA() {
+        return this.g_a;
     }
 
     public void didReceivedNotification(int id, Object... args) {
