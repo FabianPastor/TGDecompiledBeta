@@ -2522,8 +2522,9 @@ public class TLRPC {
         public int date;
         public int duration;
         public int flags;
-        public byte[] g_a;
+        public byte[] g_a_hash;
         public byte[] g_a_or_b;
+        public byte[] g_b;
         public long id;
         public long key_fingerprint;
         public boolean need_debug;
@@ -2537,6 +2538,9 @@ public class TLRPC {
         public static PhoneCall TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             PhoneCall result = null;
             switch (constructor) {
+                case -2089411356:
+                    result = new TL_phoneCallRequested();
+                    break;
                 case -1660057:
                     result = new TL_phoneCall();
                     break;
@@ -2549,8 +2553,8 @@ public class TLRPC {
                 case 1399245077:
                     result = new TL_phoneCallEmpty();
                     break;
-                case 1816431336:
-                    result = new TL_phoneCallRequested();
+                case 1828732223:
+                    result = new TL_phoneCallAccepted();
                     break;
             }
             if (result == null && exception) {
@@ -10245,9 +10249,8 @@ public class TLRPC {
     }
 
     public static class TL_phone_acceptCall extends TLObject {
-        public static int constructor = 571411232;
+        public static int constructor = NUM;
         public byte[] g_b;
-        public long key_fingerprint;
         public TL_inputPhoneCall peer;
         public TL_phoneCallProtocol protocol;
 
@@ -10259,6 +10262,25 @@ public class TLRPC {
             stream.writeInt32(constructor);
             this.peer.serializeToStream(stream);
             stream.writeByteArray(this.g_b);
+            this.protocol.serializeToStream(stream);
+        }
+    }
+
+    public static class TL_phone_confirmCall extends TLObject {
+        public static int constructor = 788404002;
+        public byte[] g_a;
+        public long key_fingerprint;
+        public TL_inputPhoneCall peer;
+        public TL_phoneCallProtocol protocol;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return TL_phone_phoneCall.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.peer.serializeToStream(stream);
+            stream.writeByteArray(this.g_a);
             stream.writeInt64(this.key_fingerprint);
             this.protocol.serializeToStream(stream);
         }
@@ -10359,8 +10381,8 @@ public class TLRPC {
     }
 
     public static class TL_phone_requestCall extends TLObject {
-        public static int constructor = -NUM;
-        public byte[] g_a;
+        public static int constructor = NUM;
+        public byte[] g_a_hash;
         public TL_phoneCallProtocol protocol;
         public int random_id;
         public InputUser user_id;
@@ -10373,7 +10395,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             this.user_id.serializeToStream(stream);
             stream.writeInt32(this.random_id);
-            stream.writeByteArray(this.g_a);
+            stream.writeByteArray(this.g_a_hash);
             this.protocol.serializeToStream(stream);
         }
     }
@@ -19446,6 +19468,31 @@ public class TLRPC {
         }
     }
 
+    public static class TL_phoneCallAccepted extends PhoneCall {
+        public static int constructor = NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.id = stream.readInt64(exception);
+            this.access_hash = stream.readInt64(exception);
+            this.date = stream.readInt32(exception);
+            this.admin_id = stream.readInt32(exception);
+            this.participant_id = stream.readInt32(exception);
+            this.g_b = stream.readByteArray(exception);
+            this.protocol = TL_phoneCallProtocol.TLdeserialize(stream, stream.readInt32(exception), exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt64(this.id);
+            stream.writeInt64(this.access_hash);
+            stream.writeInt32(this.date);
+            stream.writeInt32(this.admin_id);
+            stream.writeInt32(this.participant_id);
+            stream.writeByteArray(this.g_b);
+            this.protocol.serializeToStream(stream);
+        }
+    }
+
     public static class TL_phoneCallDiscardReasonBusy extends PhoneCallDiscardReason {
         public static int constructor = -84416311;
 
@@ -19500,9 +19547,9 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeInt32(this.flags);
             this.flags = this.need_rating ? this.flags | 4 : this.flags & -5;
             this.flags = this.need_debug ? this.flags | 8 : this.flags & -9;
+            stream.writeInt32(this.flags);
             stream.writeInt64(this.id);
             if ((this.flags & 1) != 0) {
                 this.reason.serializeToStream(stream);
@@ -19527,7 +19574,7 @@ public class TLRPC {
     }
 
     public static class TL_phoneCallRequested extends PhoneCall {
-        public static int constructor = NUM;
+        public static int constructor = -NUM;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.id = stream.readInt64(exception);
@@ -19535,7 +19582,7 @@ public class TLRPC {
             this.date = stream.readInt32(exception);
             this.admin_id = stream.readInt32(exception);
             this.participant_id = stream.readInt32(exception);
-            this.g_a = stream.readByteArray(exception);
+            this.g_a_hash = stream.readByteArray(exception);
             this.protocol = TL_phoneCallProtocol.TLdeserialize(stream, stream.readInt32(exception), exception);
         }
 
@@ -19546,7 +19593,7 @@ public class TLRPC {
             stream.writeInt32(this.date);
             stream.writeInt32(this.admin_id);
             stream.writeInt32(this.participant_id);
-            stream.writeByteArray(this.g_a);
+            stream.writeByteArray(this.g_a_hash);
             this.protocol.serializeToStream(stream);
         }
     }

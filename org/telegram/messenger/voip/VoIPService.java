@@ -47,6 +47,7 @@ import android.view.KeyEvent;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -79,6 +80,7 @@ import org.telegram.tgnet.TLRPC.TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_messages_dhConfig;
 import org.telegram.tgnet.TLRPC.TL_messages_getDhConfig;
 import org.telegram.tgnet.TLRPC.TL_phoneCall;
+import org.telegram.tgnet.TLRPC.TL_phoneCallAccepted;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonDisconnect;
 import org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonHangup;
@@ -87,6 +89,7 @@ import org.telegram.tgnet.TLRPC.TL_phoneCallDiscarded;
 import org.telegram.tgnet.TLRPC.TL_phoneCallProtocol;
 import org.telegram.tgnet.TLRPC.TL_phoneConnection;
 import org.telegram.tgnet.TLRPC.TL_phone_acceptCall;
+import org.telegram.tgnet.TLRPC.TL_phone_confirmCall;
 import org.telegram.tgnet.TLRPC.TL_phone_discardCall;
 import org.telegram.tgnet.TLRPC.TL_phone_getCallConfig;
 import org.telegram.tgnet.TLRPC.TL_phone_phoneCall;
@@ -136,6 +139,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private WakeLock cpuWakelock;
     private int currentState = 0;
     private int endHash;
+    private byte[] g_a;
+    private byte[] g_a_hash;
     private boolean haveAudioFocus;
     private boolean isBtHeadsetConnected;
     private boolean isHeadsetPlugged;
@@ -488,7 +493,8 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     tL_phoneCallProtocol.udp_p2p = true;
                     reqCall.protocol.min_layer = 65;
                     reqCall.protocol.max_layer = 65;
-                    reqCall.g_a = g_a;
+                    VoIPService.this.g_a = g_a;
+                    reqCall.g_a_hash = Utilities.computeSHA256(g_a, 0, g_a.length);
                     reqCall.random_id = Utilities.random.nextInt();
                     ConnectionsManager.getInstance().sendRequest(reqCall, new RequestDelegate() {
                         public void run(final TLObject response, final TL_error error) {
@@ -633,7 +639,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
             public void run(TLObject response, TL_error error) {
                 if (error == null) {
-                    int a;
                     messages_DhConfig res = (messages_DhConfig) response;
                     if (response instanceof TL_messages_dhConfig) {
                         if (Utilities.isGoodPrime(res.p, res.g)) {
@@ -648,77 +653,44 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         }
                     }
                     byte[] salt = new byte[256];
-                    for (a = 0; a < 256; a++) {
+                    for (int a = 0; a < 256; a++) {
                         salt[a] = (byte) (((byte) ((int) (Utilities.random.nextDouble() * 256.0d))) ^ res.random[a]);
                     }
                     VoIPService.this.a_or_b = salt;
-                    BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
-                    BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), p);
-                    if (VoIPService.this.call.g_a == null) {
-                        FileLog.w("stopping VoIP service, Ga == null");
-                        VoIPService.this.callFailed();
-                        return;
+                    BigInteger g_b = BigInteger.valueOf((long) MessagesStorage.secretG).modPow(new BigInteger(1, salt), new BigInteger(1, MessagesStorage.secretPBytes));
+                    VoIPService.this.g_a_hash = VoIPService.this.call.g_a_hash;
+                    byte[] g_b_bytes = g_b.toByteArray();
+                    if (g_b_bytes.length > 256) {
+                        byte[] correctedAuth = new byte[256];
+                        System.arraycopy(g_b_bytes, 1, correctedAuth, 0, 256);
+                        g_b_bytes = correctedAuth;
                     }
-                    BigInteger g_a = new BigInteger(1, VoIPService.this.call.g_a);
-                    if (Utilities.isGoodGaAndGb(g_a, p)) {
-                        byte[] correctedAuth;
-                        byte[] g_b_bytes = g_b.toByteArray();
-                        if (g_b_bytes.length > 256) {
-                            correctedAuth = new byte[256];
-                            System.arraycopy(g_b_bytes, 1, correctedAuth, 0, 256);
-                            g_b_bytes = correctedAuth;
-                        }
-                        byte[] authKey = g_a.modPow(new BigInteger(1, salt), p).toByteArray();
-                        if (authKey.length > 256) {
-                            correctedAuth = new byte[256];
-                            System.arraycopy(authKey, authKey.length + InputDeviceCompat.SOURCE_ANY, correctedAuth, 0, 256);
-                            authKey = correctedAuth;
-                        } else if (authKey.length < 256) {
-                            correctedAuth = new byte[256];
-                            System.arraycopy(authKey, 0, correctedAuth, 256 - authKey.length, authKey.length);
-                            for (a = 0; a < 256 - authKey.length; a++) {
-                                authKey[a] = (byte) 0;
-                            }
-                            authKey = correctedAuth;
-                        }
-                        byte[] authKeyHash = Utilities.computeSHA1(authKey);
-                        byte[] authKeyId = new byte[8];
-                        System.arraycopy(authKeyHash, authKeyHash.length - 8, authKeyId, 0, 8);
-                        VoIPService.this.authKey = authKey;
-                        VoIPService.this.keyFingerprint = Utilities.bytesToLong(authKeyId);
-                        TL_phone_acceptCall req = new TL_phone_acceptCall();
-                        req.g_b = g_b_bytes;
-                        req.key_fingerprint = Utilities.bytesToLong(authKeyId);
-                        req.peer = new TL_inputPhoneCall();
-                        req.peer.id = VoIPService.this.call.id;
-                        req.peer.access_hash = VoIPService.this.call.access_hash;
-                        req.protocol = new TL_phoneCallProtocol();
-                        TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
-                        req.protocol.udp_reflector = true;
-                        tL_phoneCallProtocol.udp_p2p = true;
-                        req.protocol.min_layer = 65;
-                        req.protocol.max_layer = 65;
-                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                            public void run(TLObject response, TL_error error) {
-                                if (error == null) {
-                                    FileLog.w("accept call ok! " + response);
-                                    VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                    if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
-                                        VoIPService.this.onCallUpdated(VoIPService.this.call);
-                                        return;
-                                    } else {
-                                        VoIPService.this.initiateActualEncryptedCall();
-                                        return;
-                                    }
+                    TL_phone_acceptCall req = new TL_phone_acceptCall();
+                    req.g_b = g_b_bytes;
+                    req.peer = new TL_inputPhoneCall();
+                    req.peer.id = VoIPService.this.call.id;
+                    req.peer.access_hash = VoIPService.this.call.access_hash;
+                    req.protocol = new TL_phoneCallProtocol();
+                    TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
+                    req.protocol.udp_reflector = true;
+                    tL_phoneCallProtocol.udp_p2p = true;
+                    req.protocol.min_layer = 65;
+                    req.protocol.max_layer = 65;
+                    ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                        public void run(TLObject response, TL_error error) {
+                            if (error == null) {
+                                FileLog.w("accept call ok! " + response);
+                                VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                                if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
+                                    VoIPService.this.onCallUpdated(VoIPService.this.call);
+                                    return;
                                 }
-                                FileLog.e("Error on phone.acceptCall: " + error);
-                                VoIPService.this.callFailed();
+                                return;
                             }
-                        }, 2);
-                        return;
-                    }
-                    FileLog.w("stopping VoIP service, bad Ga and Gb (accepting)");
-                    VoIPService.this.callFailed();
+                            FileLog.e("Error on phone.acceptCall: " + error);
+                            VoIPService.this.callFailed();
+                        }
+                    }, 2);
                     return;
                 }
                 VoIPService.this.callFailed();
@@ -832,6 +804,47 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         startRatingActivity();
                     }
                 } else if ((call instanceof TL_phoneCall) && this.authKey == null) {
+                    if (call.g_a_or_b == null) {
+                        FileLog.w("stopping VoIP service, Ga == null");
+                        callFailed();
+                    } else if (Arrays.equals(this.g_a_hash, Utilities.computeSHA256(call.g_a_or_b, 0, call.g_a_or_b.length))) {
+                        BigInteger g_a = new BigInteger(1, call.g_a_or_b);
+                        BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
+                        if (Utilities.isGoodGaAndGb(g_a, p)) {
+                            byte[] authKey = g_a.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();
+                            byte[] correctedAuth;
+                            if (authKey.length > 256) {
+                                correctedAuth = new byte[256];
+                                System.arraycopy(authKey, authKey.length + InputDeviceCompat.SOURCE_ANY, correctedAuth, 0, 256);
+                                authKey = correctedAuth;
+                            } else if (authKey.length < 256) {
+                                correctedAuth = new byte[256];
+                                System.arraycopy(authKey, 0, correctedAuth, 256 - authKey.length, authKey.length);
+                                for (int a = 0; a < 256 - authKey.length; a++) {
+                                    authKey[a] = (byte) 0;
+                                }
+                                authKey = correctedAuth;
+                            }
+                            byte[] authKeyHash = Utilities.computeSHA1(authKey);
+                            byte[] authKeyId = new byte[8];
+                            System.arraycopy(authKeyHash, authKeyHash.length - 8, authKeyId, 0, 8);
+                            this.authKey = authKey;
+                            this.keyFingerprint = Utilities.bytesToLong(authKeyId);
+                            if (this.keyFingerprint != call.key_fingerprint) {
+                                FileLog.w("key fingerprints don't match");
+                                callFailed();
+                                return;
+                            }
+                            initiateActualEncryptedCall();
+                            return;
+                        }
+                        FileLog.w("stopping VoIP service, bad Ga and Gb (accepting)");
+                        callFailed();
+                    } else {
+                        FileLog.w("stopping VoIP service, Ga hash doesn't match");
+                        callFailed();
+                    }
+                } else if ((call instanceof TL_phoneCallAccepted) && this.authKey == null) {
                     processAcceptedCall();
                 } else if (this.currentState == 8 && call.receive_date != 0) {
                     dispatchStateChanged(11);
@@ -884,7 +897,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
 
     private void processAcceptedCall() {
         BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
-        BigInteger i_authKey = new BigInteger(1, this.call.g_a_or_b);
+        BigInteger i_authKey = new BigInteger(1, this.call.g_b);
         if (Utilities.isGoodGaAndGb(i_authKey, p)) {
             byte[] authKey = i_authKey.modPow(new BigInteger(1, this.a_or_b), p).toByteArray();
             byte[] correctedAuth;
@@ -904,13 +917,30 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             byte[] authKeyId = new byte[8];
             System.arraycopy(authKeyHash, authKeyHash.length - 8, authKeyId, 0, 8);
             long fingerprint = Utilities.bytesToLong(authKeyId);
-            if (this.call.key_fingerprint == fingerprint) {
-                this.authKey = authKey;
-                this.keyFingerprint = fingerprint;
-                initiateActualEncryptedCall();
-                return;
-            }
-            declineIncomingCall();
+            this.authKey = authKey;
+            this.keyFingerprint = fingerprint;
+            TL_phone_confirmCall req = new TL_phone_confirmCall();
+            req.g_a = this.g_a;
+            req.key_fingerprint = fingerprint;
+            req.peer = new TL_inputPhoneCall();
+            req.peer.id = this.call.id;
+            req.peer.access_hash = this.call.access_hash;
+            req.protocol = new TL_phoneCallProtocol();
+            req.protocol.max_layer = 65;
+            req.protocol.min_layer = 65;
+            TL_phoneCallProtocol tL_phoneCallProtocol = req.protocol;
+            req.protocol.udp_reflector = true;
+            tL_phoneCallProtocol.udp_p2p = true;
+            ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                public void run(TLObject response, TL_error error) {
+                    if (error != null) {
+                        VoIPService.this.callFailed();
+                        return;
+                    }
+                    VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                    VoIPService.this.initiateActualEncryptedCall();
+                }
+            });
             return;
         }
         FileLog.w("stopping VoIP service, bad Ga and Gb");
@@ -1179,6 +1209,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             }
         }
         dispatchStateChanged(newState);
+    }
+
+    public boolean isOutgoing() {
+        return this.isOutgoing;
     }
 
     @SuppressLint({"NewApi"})

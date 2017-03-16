@@ -43,6 +43,8 @@ import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -51,6 +53,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
@@ -695,7 +698,21 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             IdenticonDrawable img = new IdenticonDrawable();
             img.setColors(new int[]{ViewCompat.MEASURED_SIZE_MASK, -1, -NUM, 872415231});
             EncryptedChat encryptedChat = new EncryptedChat();
-            encryptedChat.auth_key = VoIPService.getSharedInstance().getEncryptionKey();
+            try {
+                int i;
+                ByteArrayOutputStream buf = new ByteArrayOutputStream();
+                buf.write(VoIPService.getSharedInstance().getEncryptionKey());
+                DataOutputStream os = new DataOutputStream(buf);
+                os.writeInt(VoIPService.getSharedInstance().isOutgoing() ? UserConfig.getClientUserId() : this.user.id);
+                if (VoIPService.getSharedInstance().isOutgoing()) {
+                    i = this.user.id;
+                } else {
+                    i = UserConfig.getClientUserId();
+                }
+                os.writeInt(i);
+                encryptedChat.auth_key = buf.toByteArray();
+            } catch (Exception e) {
+            }
             byte[] sha256 = Utilities.computeSHA256(encryptedChat.auth_key, 0, encryptedChat.auth_key.length);
             byte[] key_hash = new byte[36];
             System.arraycopy(AndroidUtilities.calcAuthKeyHash(encryptedChat.auth_key), 0, key_hash, 0, 16);
@@ -723,8 +740,8 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
             this.keyText2.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CallEncryptionKeyDescription", R.string.CallEncryptionKeyDescription, this.user.first_name, this.user.first_name)));
             this.keyText.setText(hash);
             String[] emoji = EncryptionKeyEmojifier.emojify(sha256);
-            for (int i = 0; i < 5; i++) {
-                this.keyEmojiViews[i].setImageDrawable(Emoji.getEmojiBigDrawable(emoji[i]));
+            for (int i2 = 0; i2 < 5; i2++) {
+                this.keyEmojiViews[i2].setImageDrawable(Emoji.getEmojiBigDrawable(emoji[i2]));
             }
         }
     }

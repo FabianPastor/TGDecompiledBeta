@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
@@ -146,20 +144,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
         this.codeTextView.setGravity(17);
         this.codeTextView.setTypeface(Typeface.MONOSPACE);
         this.codeTextView.setTextSize(1, 16.0f);
-        this.codeTextView.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                boolean z;
-                IdenticonActivity identiconActivity = IdenticonActivity.this;
-                if (IdenticonActivity.this.emojiSelected) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                identiconActivity.emojiSelected = z;
-                IdenticonActivity.this.updateEmojiButton(true);
-                IdenticonActivity.this.showHint(false);
-            }
-        });
         this.linearLayout1.addView(this.codeTextView, LayoutHelper.createLinear(-2, -2, 1));
         this.hintTextView = new TextView(getParentActivity());
         this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), Theme.getColor(Theme.key_chat_gifSaveHintBackground)));
@@ -374,41 +358,6 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
     }
 
     private void showHint(boolean show) {
-        float f = 0.0f;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-        if (show) {
-            if (preferences.getBoolean("secrethint", false)) {
-                return;
-            }
-        } else if (this.hintTextView.getAlpha() != 0.0f) {
-            preferences.edit().putBoolean("secrethint", true).commit();
-        } else {
-            return;
-        }
-        if (this.hintAnimatorSet != null) {
-            this.hintAnimatorSet.cancel();
-        }
-        this.hintAnimatorSet = new AnimatorSet();
-        AnimatorSet animatorSet = this.hintAnimatorSet;
-        Animator[] animatorArr = new Animator[1];
-        TextView textView = this.hintTextView;
-        String str = "alpha";
-        float[] fArr = new float[1];
-        if (show) {
-            f = 1.0f;
-        }
-        fArr[0] = f;
-        animatorArr[0] = ObjectAnimator.ofFloat(textView, str, fArr);
-        animatorSet.playTogether(animatorArr);
-        this.hintAnimatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(IdenticonActivity.this.hintAnimatorSet)) {
-                    IdenticonActivity.this.hintAnimatorSet = null;
-                }
-            }
-        });
-        this.hintAnimatorSet.setDuration(300);
-        this.hintAnimatorSet.start();
     }
 
     protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
