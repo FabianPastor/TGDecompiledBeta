@@ -225,26 +225,28 @@ class NotificationCompatJellybean {
     }
 
     public static Action getAction(Notification notif, int actionIndex, Factory factory, RemoteInput.Factory remoteInputFactory) {
-        Action readAction;
         synchronized (sActionsLock) {
             try {
-                Object actionObject = getActionObjectsLocked(notif)[actionIndex];
-                Bundle actionExtras = null;
-                Bundle extras = getExtras(notif);
-                if (extras != null) {
-                    SparseArray<Bundle> actionExtrasMap = extras.getSparseParcelableArray("android.support.actionExtras");
-                    if (actionExtrasMap != null) {
-                        actionExtras = (Bundle) actionExtrasMap.get(actionIndex);
+                Object[] actionObjects = getActionObjectsLocked(notif);
+                if (actionObjects != null) {
+                    Object actionObject = actionObjects[actionIndex];
+                    Bundle actionExtras = null;
+                    Bundle extras = getExtras(notif);
+                    if (extras != null) {
+                        SparseArray<Bundle> actionExtrasMap = extras.getSparseParcelableArray("android.support.actionExtras");
+                        if (actionExtrasMap != null) {
+                            actionExtras = (Bundle) actionExtrasMap.get(actionIndex);
+                        }
                     }
+                    Action readAction = readAction(factory, remoteInputFactory, sActionIconField.getInt(actionObject), (CharSequence) sActionTitleField.get(actionObject), (PendingIntent) sActionIntentField.get(actionObject), actionExtras);
+                    return readAction;
                 }
-                readAction = readAction(factory, remoteInputFactory, sActionIconField.getInt(actionObject), (CharSequence) sActionTitleField.get(actionObject), (PendingIntent) sActionIntentField.get(actionObject), actionExtras);
             } catch (IllegalAccessException e) {
                 Log.e(TAG, "Unable to access notification actions", e);
                 sActionsAccessFailed = true;
-                return null;
             }
         }
-        return readAction;
+        return null;
     }
 
     private static Object[] getActionObjectsLocked(Notification notif) {

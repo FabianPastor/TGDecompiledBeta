@@ -138,6 +138,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     private boolean controllerStarted;
     private WakeLock cpuWakelock;
     private int currentState = 0;
+    private boolean endCallAfterRequest = false;
     private int endHash;
     private byte[] g_a;
     private byte[] g_a_hash;
@@ -500,41 +501,53 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         public void run(final TLObject response, final TL_error error) {
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    if (error == null) {
-                                        VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                        VoIPService.this.a_or_b = salt;
-                                        VoIPService.this.dispatchStateChanged(8);
-                                        VoIPService.this.timeoutRunnable = new Runnable() {
-                                            public void run() {
-                                                VoIPService.this.timeoutRunnable = null;
-                                                TL_phone_discardCall req = new TL_phone_discardCall();
-                                                req.peer = new TL_inputPhoneCall();
-                                                req.peer.access_hash = VoIPService.this.call.access_hash;
-                                                req.peer.id = VoIPService.this.call.id;
-                                                req.reason = new TL_phoneCallDiscardReasonMissed();
-                                                ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                                                    public void run(TLObject response, TL_error error) {
-                                                        if (error != null) {
-                                                            FileLog.e("error on phone.discardCall: " + error);
-                                                        } else {
-                                                            FileLog.d("phone.discardCall " + response);
-                                                        }
-                                                        VoIPService.this.callFailed();
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            if (error == null) {
+                                                VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                                                VoIPService.this.a_or_b = salt;
+                                                VoIPService.this.dispatchStateChanged(8);
+                                                if (VoIPService.this.endCallAfterRequest) {
+                                                    VoIPService.this.hangUp();
+                                                    return;
+                                                }
+                                                VoIPService.this.timeoutRunnable = new Runnable() {
+                                                    public void run() {
+                                                        VoIPService.this.timeoutRunnable = null;
+                                                        TL_phone_discardCall req = new TL_phone_discardCall();
+                                                        req.peer = new TL_inputPhoneCall();
+                                                        req.peer.access_hash = VoIPService.this.call.access_hash;
+                                                        req.peer.id = VoIPService.this.call.id;
+                                                        req.reason = new TL_phoneCallDiscardReasonMissed();
+                                                        ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
+                                                            public void run(TLObject response, TL_error error) {
+                                                                if (error != null) {
+                                                                    FileLog.e("error on phone.discardCall: " + error);
+                                                                } else {
+                                                                    FileLog.d("phone.discardCall " + response);
+                                                                }
+                                                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                                                    public void run() {
+                                                                        VoIPService.this.callFailed();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }, 2);
                                                     }
-                                                }, 2);
+                                                };
+                                                AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
+                                            } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
+                                                VoIPService.this.callFailed(-1);
+                                            } else if (error.code == 403 && "USER_PRIVACY_RESTRICTED".equals(error.text)) {
+                                                VoIPService.this.callFailed(-2);
+                                            } else if (error.code == 406) {
+                                                VoIPService.this.callFailed(-3);
+                                            } else {
+                                                FileLog.e("Error on phone.requestCall: " + error);
+                                                VoIPService.this.callFailed();
                                             }
-                                        };
-                                        AndroidUtilities.runOnUIThread(VoIPService.this.timeoutRunnable, (long) MessagesController.getInstance().callReceiveTimeout);
-                                    } else if (error.code == 400 && "PARTICIPANT_VERSION_OUTDATED".equals(error.text)) {
-                                        VoIPService.this.callFailed(-1);
-                                    } else if (error.code == 403 && "USER_PRIVACY_RESTRICTED".equals(error.text)) {
-                                        VoIPService.this.callFailed(-2);
-                                    } else if (error.code == 406) {
-                                        VoIPService.this.callFailed(-3);
-                                    } else {
-                                        FileLog.e("Error on phone.requestCall: " + error);
-                                        VoIPService.this.callFailed();
-                                    }
+                                        }
+                                    });
                                 }
                             }, 2);
                         }
@@ -553,14 +566,20 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         req.peer.id = this.call.id;
         req.peer.access_hash = this.call.access_hash;
         ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-            public void run(TLObject response, TL_error error) {
-                FileLog.w("receivedCall response = " + response);
-                if (error != null) {
-                    FileLog.e("error on receivedCall: " + error);
-                    VoIPService.this.stopSelf();
-                    return;
-                }
-                VoIPService.this.startRinging();
+            public void run(final TLObject response, final TL_error error) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public void run() {
+                        if (VoIPService.sharedInstance != null) {
+                            FileLog.w("receivedCall response = " + response);
+                            if (error != null) {
+                                FileLog.e("error on receivedCall: " + error);
+                                VoIPService.this.stopSelf();
+                                return;
+                            }
+                            VoIPService.this.startRinging();
+                        }
+                    }
+                });
             }
         }, 2);
     }
@@ -589,8 +608,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.ringtonePlayer.prepareAsync();
         } catch (Throwable e) {
             FileLog.e(e);
-            this.ringtonePlayer.release();
-            this.ringtonePlayer = null;
+            if (this.ringtonePlayer != null) {
+                this.ringtonePlayer.release();
+                this.ringtonePlayer = null;
+            }
         }
         AudioManager am = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
         if (prefs.getBoolean("custom_" + this.user.id, false)) {
@@ -677,18 +698,22 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     req.protocol.min_layer = 65;
                     req.protocol.max_layer = 65;
                     ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                        public void run(TLObject response, TL_error error) {
-                            if (error == null) {
-                                FileLog.w("accept call ok! " + response);
-                                VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                                if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
-                                    VoIPService.this.onCallUpdated(VoIPService.this.call);
-                                    return;
+                        public void run(final TLObject response, final TL_error error) {
+                            AndroidUtilities.runOnUIThread(new Runnable() {
+                                public void run() {
+                                    if (error == null) {
+                                        FileLog.w("accept call ok! " + response);
+                                        VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                                        if (VoIPService.this.call instanceof TL_phoneCallDiscarded) {
+                                            VoIPService.this.onCallUpdated(VoIPService.this.call);
+                                            return;
+                                        }
+                                        return;
+                                    }
+                                    FileLog.e("Error on phone.acceptCall: " + error);
+                                    VoIPService.this.callFailed();
                                 }
-                                return;
-                            }
-                            FileLog.e("Error on phone.acceptCall: " + error);
-                            VoIPService.this.callFailed();
+                            });
                         }
                     }, 2);
                     return;
@@ -703,7 +728,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     public void declineIncomingCall(int reason, final Runnable onDone) {
-        if (this.currentState != 5 && this.currentState != 6) {
+        boolean wasNotConnected = true;
+        if (this.currentState == 9) {
+            this.endCallAfterRequest = true;
+        } else if (this.currentState != 5 && this.currentState != 6) {
             dispatchStateChanged(5);
             if (this.call == null) {
                 if (onDone != null) {
@@ -718,7 +746,6 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 return;
             }
             int i;
-            boolean wasNotConnected;
             TL_phone_discardCall req = new TL_phone_discardCall();
             req.peer = new TL_inputPhoneCall();
             req.peer.access_hash = this.call.access_hash;
@@ -745,9 +772,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                     req.reason = new TL_phoneCallDiscardReasonHangup();
                     break;
             }
-            if (ConnectionsManager.getInstance().getConnectionState() != 3) {
-                wasNotConnected = true;
-            } else {
+            if (ConnectionsManager.getInstance().getConnectionState() == 3) {
                 wasNotConnected = false;
             }
             if (wasNotConnected) {
@@ -933,13 +958,17 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             req.protocol.udp_reflector = true;
             tL_phoneCallProtocol.udp_p2p = true;
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
-                public void run(TLObject response, TL_error error) {
-                    if (error != null) {
-                        VoIPService.this.callFailed();
-                        return;
-                    }
-                    VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
-                    VoIPService.this.initiateActualEncryptedCall();
+                public void run(final TLObject response, final TL_error error) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            if (error != null) {
+                                VoIPService.this.callFailed();
+                                return;
+                            }
+                            VoIPService.this.call = ((TL_phone_phoneCall) response).phone_call;
+                            VoIPService.this.initiateActualEncryptedCall();
+                        }
+                    });
                 }
             });
             return;
@@ -955,7 +984,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         }
         try {
             FileLog.d("InitCall: keyID=" + this.keyFingerprint);
-            this.controller.setEncryptionKey(this.authKey);
+            this.controller.setEncryptionKey(this.authKey, this.isOutgoing);
             TL_phoneConnection[] endpoints = new TL_phoneConnection[(this.call.alternative_connections.size() + 1)];
             endpoints[0] = this.call.connection;
             for (int i = 0; i < this.call.alternative_connections.size(); i++) {

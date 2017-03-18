@@ -17,6 +17,8 @@ import android.support.v4.app.NotificationCompatBase.UnreadConversation.Factory;
 import android.support.v4.app.RemoteInputCompatBase.RemoteInput;
 import android.support.v4.os.BuildCompat;
 import android.widget.RemoteViews;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -539,6 +541,10 @@ public class NotificationCompat {
         UnreadConversation getUnreadConversationFromBundle(Bundle bundle, Factory factory, RemoteInput.Factory factory2);
 
         boolean isGroupSummary(Notification notification);
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface NotificationVisibility {
     }
 
     public static abstract class Style {
@@ -1206,7 +1212,7 @@ public class NotificationCompat {
 
         public static MessagingStyle extractMessagingStyleFromNotification(Notification notif) {
             Bundle extras = NotificationCompat.IMPL.getExtras(notif);
-            if (!extras.containsKey(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)) {
+            if (extras != null && !extras.containsKey(NotificationCompat.EXTRA_SELF_DISPLAY_NAME)) {
                 return null;
             }
             try {

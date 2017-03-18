@@ -832,12 +832,43 @@ public class MessageObject {
         return (document == null || document.thumb == null || document.mime_type == null || (!document.mime_type.equals("image/gif") && !isNewGifDocument(document))) ? false : true;
     }
 
+    public static boolean isVoiceVideoDocument(Document document) {
+        if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
+            int width = 0;
+            int height = 0;
+            boolean animated = false;
+            for (int a = 0; a < document.attributes.size(); a++) {
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (attribute instanceof TL_documentAttributeAnimated) {
+                    animated = true;
+                } else if (attribute instanceof TL_documentAttributeVideo) {
+                    width = attribute.w;
+                    height = attribute.w;
+                }
+            }
+            if (animated && width <= 1080 && height <= 1080) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isNewGifDocument(Document document) {
         if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
+            int width = 0;
+            int height = 0;
+            boolean animated = false;
             for (int a = 0; a < document.attributes.size(); a++) {
-                if (document.attributes.get(a) instanceof TL_documentAttributeAnimated) {
-                    return true;
+                DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                if (attribute instanceof TL_documentAttributeAnimated) {
+                    animated = true;
+                } else if (attribute instanceof TL_documentAttributeVideo) {
+                    width = attribute.w;
+                    height = attribute.w;
                 }
+            }
+            if (animated && width <= 1080 && height <= 1080) {
+                return true;
             }
         }
         return false;
@@ -1654,13 +1685,20 @@ public class MessageObject {
         }
         boolean isAnimated = false;
         boolean isVideo = false;
+        int width = 0;
+        int height = 0;
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeVideo) {
                 isVideo = true;
+                width = attribute.w;
+                height = attribute.h;
             } else if (attribute instanceof TL_documentAttributeAnimated) {
                 isAnimated = true;
             }
+        }
+        if (isAnimated && (width > 1080 || height > 1080)) {
+            isAnimated = false;
         }
         if (!isVideo || isAnimated) {
             return false;
@@ -1688,6 +1726,10 @@ public class MessageObject {
             return isMusicDocument(message.media.webpage.document);
         }
         return (message.media == null || message.media.document == null || !isMusicDocument(message.media.document)) ? false : true;
+    }
+
+    public static boolean isVideoVoiceMessage(Message message) {
+        return (message.media == null || message.media.document == null || !isVoiceVideoDocument(message.media.document)) ? false : true;
     }
 
     public static boolean isVoiceMessage(Message message) {
@@ -1891,6 +1933,10 @@ public class MessageObject {
 
     public boolean isInvoice() {
         return isInvoiceMessage(this.messageOwner);
+    }
+
+    public boolean isVideoVoice() {
+        return isVideoVoiceMessage(this.messageOwner) && BuildVars.DEBUG_PRIVATE_VERSION;
     }
 
     public boolean hasPhotoStickers() {

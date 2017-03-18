@@ -15,10 +15,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class CallSwipeView extends View {
-    private boolean animatingArrows = true;
+    private boolean animatingArrows = false;
     private Path arrow = new Path();
     private int[] arrowAlphas = new int[]{64, 64, 64};
     private AnimatorSet arrowAnim;
@@ -87,15 +88,27 @@ public class CallSwipeView extends View {
         this.arrowAnim.playTogether(anims);
         this.arrowAnim.addListener(new AnimatorListenerAdapter() {
             private boolean canceled = false;
+            private Runnable restarter = new Runnable() {
+                public void run() {
+                    CallSwipeView.this.arrowAnim.start();
+                }
+            };
+            private long startTime;
 
             public void onAnimationEnd(Animator animation) {
-                if (!this.canceled && CallSwipeView.this.animatingArrows) {
-                    animation.start();
+                if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
+                    FileLog.w("Not repeating animation because previous loop was too fast");
+                } else if (!this.canceled && CallSwipeView.this.animatingArrows) {
+                    CallSwipeView.this.post(this.restarter);
                 }
             }
 
             public void onAnimationCancel(Animator animation) {
                 this.canceled = true;
+            }
+
+            public void onAnimationStart(Animator animation) {
+                this.startTime = System.currentTimeMillis();
             }
         });
     }
@@ -146,15 +159,15 @@ public class CallSwipeView extends View {
             }
             view.setTranslationX(Math.max(f2, Math.min(x, f)));
             invalidate();
-        } else if (ev.getAction() == 1) {
-            if (Math.abs(this.viewToDrag.getTranslationX()) >= ((float) (getWidth() - getDraggedViewWidth()))) {
-                this.listener.onDragComplete();
-            } else {
+        } else if (ev.getAction() == 1 || ev.getAction() == 3) {
+            if (Math.abs(this.viewToDrag.getTranslationX()) < ((float) (getWidth() - getDraggedViewWidth())) || ev.getAction() != 1) {
                 this.listener.onDragCancel();
                 this.viewToDrag.animate().translationX(0.0f).setDuration(200).start();
                 invalidate();
                 startAnimatingArrows();
                 this.dragging = false;
+            } else {
+                this.listener.onDragComplete();
             }
         }
         return this.dragging;
@@ -165,8 +178,10 @@ public class CallSwipeView extends View {
     }
 
     public void startAnimatingArrows() {
-        this.animatingArrows = true;
-        this.arrowAnim.start();
+        if (!this.animatingArrows) {
+            this.animatingArrows = true;
+            this.arrowAnim.start();
+        }
     }
 
     public void reset() {

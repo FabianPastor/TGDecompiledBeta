@@ -1539,7 +1539,7 @@
     <string name="hockeyapp_update_dialog_positive_button">Show</string>
     <string name="hockeyapp_update_dialog_title">Update Available</string>
     <string name="hockeyapp_update_mandatory_toast">%s is available and is a mandatory update!</string>
-    <string name="CallEmojiKeyTooltip">If these emoji are the same on your partner\'s screen, end-to-end encryption is guaranteed.</string>
+    <string name="CallEmojiKeyTooltip">If emoji on %1$s\'s screen are the same, this call is 100%% secure.</string>
     <string name="CallMessageIncomingDeclined">Declined Call</string>
     <string name="CallNotAvailable">Sorry, &lt;b&gt;%1$s&lt;/b&gt; doesn\'t accept calls.</string>
     <string name="CallViaTelegram">Telegram Call</string>

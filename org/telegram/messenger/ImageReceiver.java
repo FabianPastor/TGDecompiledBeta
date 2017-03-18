@@ -528,6 +528,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     bitmapH = (int) (((float) bitmapH) / scaleW);
                     this.drawRegion.set(this.imageX, this.imageY - ((bitmapH - this.imageH) / 2), this.imageX + this.imageW, this.imageY + ((this.imageH + bitmapH) / 2));
                 }
+                if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
+                }
                 if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                     width = (this.drawRegion.right - this.drawRegion.left) / 2;
                     height = (this.drawRegion.bottom - this.drawRegion.top) / 2;
@@ -565,6 +568,9 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     }
                 }
                 this.drawRegion.set(this.imageX, this.imageY, this.imageX + this.imageW, this.imageY + this.imageH);
+                if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
+                }
                 if (this.orientation % 360 == 90 || this.orientation % 360 == 270) {
                     width = (this.drawRegion.right - this.drawRegion.left) / 2;
                     height = (this.drawRegion.bottom - this.drawRegion.top) / 2;

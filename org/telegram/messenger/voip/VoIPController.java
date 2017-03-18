@@ -79,7 +79,7 @@ public class VoIPController {
 
     private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str);
 
-    private native void nativeSetEncryptionKey(long j, byte[] bArr);
+    private native void nativeSetEncryptionKey(long j, byte[] bArr, boolean z);
 
     private native void nativeSetMicMute(long j, boolean z);
 
@@ -125,12 +125,12 @@ public class VoIPController {
         nativeSetRemoteEndpoints(this.nativeInst, endpoints, allowP2p);
     }
 
-    public void setEncryptionKey(byte[] key) {
+    public void setEncryptionKey(byte[] key, boolean isOutgoing) {
         if (key.length != 256) {
             throw new IllegalArgumentException("key length must be exactly 256 bytes but is " + key.length);
         }
         ensureNativeInstance();
-        nativeSetEncryptionKey(this.nativeInst, key);
+        nativeSetEncryptionKey(this.nativeInst, key, isOutgoing);
     }
 
     public static void setNativeBufferSize(int size) {
