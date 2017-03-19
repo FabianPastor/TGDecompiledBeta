@@ -76,6 +76,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
     private boolean firstLoaded;
     private boolean isAdmin;
     private boolean isMegagroup;
+    private boolean isModerator;
     private boolean isPublic;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
@@ -348,6 +349,8 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
             if (chat.creator) {
                 this.isAdmin = true;
                 this.isPublic = (chat.flags & 64) != 0;
+            } else if (chat.editor) {
+                this.isModerator = true;
             }
             this.isMegagroup = chat.megagroup;
         }
@@ -503,7 +506,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        if (this.isAdmin || (this.isMegagroup && this.type == 0)) {
+        if (this.isAdmin || ((this.isModerator && this.type == 2) || (this.isMegagroup && this.type == 0))) {
             this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
                 public boolean onItemClick(View view, int position) {
                     if (ChannelUsersActivity.this.getParentActivity() == null) {
@@ -513,7 +516,7 @@ public class ChannelUsersActivity extends BaseFragment implements NotificationCe
                     if (position >= ChannelUsersActivity.this.participantsStartRow && position < ChannelUsersActivity.this.participants.size() + ChannelUsersActivity.this.participantsStartRow) {
                         participant = (ChannelParticipant) ChannelUsersActivity.this.participants.get(position - ChannelUsersActivity.this.participantsStartRow);
                     }
-                    if (participant == null) {
+                    if (participant == null || participant.user_id == UserConfig.getClientUserId()) {
                         return false;
                     }
                     final ChannelParticipant finalParticipant = participant;

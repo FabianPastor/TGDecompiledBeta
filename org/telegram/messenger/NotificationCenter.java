@@ -34,6 +34,7 @@ public class NotificationCenter {
     public static final int chatInfoDidLoaded;
     public static final int chatSearchResultsAvailable;
     public static final int closeChats;
+    public static final int closeInCallActivity;
     public static final int closeOtherAppActivities;
     public static final int contactsDidLoaded;
     public static final int dialogPhotosLoaded;
@@ -427,6 +428,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         didEndedCall = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        closeInCallActivity = i;
     }
 
     public static NotificationCenter getInstance() {

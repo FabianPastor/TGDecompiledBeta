@@ -702,9 +702,9 @@ public class ChangePhoneActivity extends BaseFragment {
             this.codeField.setInputType(3);
             this.codeField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             AndroidUtilities.clearCursorDrawable(this.codeField);
+            this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setPadding(AndroidUtilities.dp(10.0f), 0, 0, 0);
             this.codeField.setTextSize(1, 18.0f);
-            this.codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
             this.codeField.setMaxLines(1);
             this.codeField.setGravity(19);
             this.codeField.setImeOptions(268435461);

@@ -36,7 +36,11 @@ public class AudioRecordJNI {
         }
         int size = getBufferSize(bufferSize);
         this.bufferSize = bufferSize;
-        this.audioRecord = new AudioRecord(7, sampleRate, channels == 1 ? 16 : 12, 2, size);
+        try {
+            this.audioRecord = new AudioRecord(7, sampleRate, channels == 1 ? 16 : 12, 2, size);
+        } catch (Exception x) {
+            FileLog.e("AudioRecord init failed!", x);
+        }
         this.buffer = ByteBuffer.allocateDirect(bufferSize);
     }
 

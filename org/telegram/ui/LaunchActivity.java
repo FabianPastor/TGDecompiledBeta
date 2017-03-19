@@ -805,74 +805,73 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     private void checkLayout() {
         int i = 0;
         int i2 = 8;
-        if (!AndroidUtilities.isTablet()) {
-            return;
-        }
-        int a;
-        if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
-            this.tabletFullSize = true;
-            if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
-                a = 0;
-                while (this.rightActionBarLayout.fragmentsStack.size() > 0) {
-                    BaseFragment chatFragment;
-                    chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
+        if (AndroidUtilities.isTablet() && this.rightActionBarLayout != null) {
+            int a;
+            BaseFragment chatFragment;
+            if (AndroidUtilities.isInMultiwindow || (AndroidUtilities.isSmallTablet() && getResources().getConfiguration().orientation != 2)) {
+                this.tabletFullSize = true;
+                if (!this.rightActionBarLayout.fragmentsStack.isEmpty()) {
+                    a = 0;
+                    while (this.rightActionBarLayout.fragmentsStack.size() > 0) {
+                        chatFragment = (BaseFragment) this.rightActionBarLayout.fragmentsStack.get(a);
+                        if (chatFragment instanceof ChatActivity) {
+                            ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
+                        }
+                        chatFragment.onPause();
+                        this.rightActionBarLayout.fragmentsStack.remove(a);
+                        this.actionBarLayout.fragmentsStack.add(chatFragment);
+                        a = (a - 1) + 1;
+                    }
+                    if (this.passcodeView.getVisibility() != 0) {
+                        this.actionBarLayout.showLastFragment();
+                    }
+                }
+                this.shadowTabletSide.setVisibility(8);
+                this.rightActionBarLayout.setVisibility(8);
+                View view = this.backgroundTablet;
+                if (this.actionBarLayout.fragmentsStack.isEmpty()) {
+                    i2 = 0;
+                }
+                view.setVisibility(i2);
+                return;
+            }
+            int i3;
+            this.tabletFullSize = false;
+            if (this.actionBarLayout.fragmentsStack.size() >= 2) {
+                for (a = 1; a < this.actionBarLayout.fragmentsStack.size(); a = (a - 1) + 1) {
+                    chatFragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(a);
                     if (chatFragment instanceof ChatActivity) {
                         ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
                     }
                     chatFragment.onPause();
-                    this.rightActionBarLayout.fragmentsStack.remove(a);
-                    this.actionBarLayout.fragmentsStack.add(chatFragment);
-                    a = (a - 1) + 1;
+                    this.actionBarLayout.fragmentsStack.remove(a);
+                    this.rightActionBarLayout.fragmentsStack.add(chatFragment);
                 }
                 if (this.passcodeView.getVisibility() != 0) {
                     this.actionBarLayout.showLastFragment();
+                    this.rightActionBarLayout.showLastFragment();
                 }
             }
-            this.shadowTabletSide.setVisibility(8);
-            this.rightActionBarLayout.setVisibility(8);
-            View view = this.backgroundTablet;
+            ActionBarLayout actionBarLayout = this.rightActionBarLayout;
+            if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
+                i3 = 8;
+            } else {
+                i3 = 0;
+            }
+            actionBarLayout.setVisibility(i3);
+            View view2 = this.backgroundTablet;
+            if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
+                i3 = 0;
+            } else {
+                i3 = 8;
+            }
+            view2.setVisibility(i3);
+            FrameLayout frameLayout = this.shadowTabletSide;
             if (this.actionBarLayout.fragmentsStack.isEmpty()) {
-                i2 = 0;
+                i = 8;
             }
-            view.setVisibility(i2);
-            return;
+            frameLayout.setVisibility(i);
         }
-        int i3;
-        this.tabletFullSize = false;
-        if (this.actionBarLayout.fragmentsStack.size() >= 2) {
-            for (a = 1; a < this.actionBarLayout.fragmentsStack.size(); a = (a - 1) + 1) {
-                chatFragment = (BaseFragment) this.actionBarLayout.fragmentsStack.get(a);
-                if (chatFragment instanceof ChatActivity) {
-                    ((ChatActivity) chatFragment).setIgnoreAttachOnPause(true);
-                }
-                chatFragment.onPause();
-                this.actionBarLayout.fragmentsStack.remove(a);
-                this.rightActionBarLayout.fragmentsStack.add(chatFragment);
-            }
-            if (this.passcodeView.getVisibility() != 0) {
-                this.actionBarLayout.showLastFragment();
-                this.rightActionBarLayout.showLastFragment();
-            }
-        }
-        ActionBarLayout actionBarLayout = this.rightActionBarLayout;
-        if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
-            i3 = 8;
-        } else {
-            i3 = 0;
-        }
-        actionBarLayout.setVisibility(i3);
-        View view2 = this.backgroundTablet;
-        if (this.rightActionBarLayout.fragmentsStack.isEmpty()) {
-            i3 = 0;
-        } else {
-            i3 = 8;
-        }
-        view2.setVisibility(i3);
-        FrameLayout frameLayout = this.shadowTabletSide;
-        if (this.actionBarLayout.fragmentsStack.isEmpty()) {
-            i = 8;
-        }
-        frameLayout.setVisibility(i);
     }
 
     private void showPasscodeActivity() {

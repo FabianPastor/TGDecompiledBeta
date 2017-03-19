@@ -215,6 +215,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 while (it.hasNext()) {
                     ((StateListener) it.next()).onAudioSettingsChanged();
                 }
+            } else if ("android.intent.action.PHONE_STATE".equals(intent.getAction())) {
+                if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(intent.getStringExtra("state"))) {
+                    VoIPService.this.hangUp();
+                }
             }
         }
     };
@@ -261,6 +265,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         startActivity(new Intent(this, VoIPActivity.class).addFlags(268435456));
                     }
                 } else {
+                    NotificationCenter.getInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
                     this.call = callIShouldHavePutIntoIntent;
                     callIShouldHavePutIntoIntent = null;
                     acknowledgeCallAndStartRinging();
@@ -307,6 +312,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 filter.addAction("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED");
                 filter.addAction("android.media.ACTION_SCO_AUDIO_STATE_UPDATED");
             }
+            filter.addAction("android.intent.action.PHONE_STATE");
             filter.addAction(getPackageName() + ".END_CALL");
             filter.addAction(getPackageName() + ".DECLINE_CALL");
             filter.addAction(getPackageName() + ".ANSWER_CALL");
@@ -922,6 +928,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
     }
 
     private void processAcceptedCall() {
+        dispatchStateChanged(7);
         BigInteger p = new BigInteger(1, MessagesStorage.secretPBytes);
         BigInteger i_authKey = new BigInteger(1, this.call.g_b);
         if (Utilities.isGoodGaAndGb(i_authKey, p)) {
