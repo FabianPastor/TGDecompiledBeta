@@ -846,7 +846,7 @@ public class MessageObject {
                     height = attribute.w;
                 }
             }
-            if (animated && width <= 1080 && height <= 1080) {
+            if (animated && width <= 1280 && height <= 1280) {
                 return true;
             }
         }
@@ -867,7 +867,7 @@ public class MessageObject {
                     height = attribute.w;
                 }
             }
-            if (animated && width <= 1080 && height <= 1080) {
+            if (animated && width <= 1280 && height <= 1280) {
                 return true;
             }
         }
@@ -1697,7 +1697,7 @@ public class MessageObject {
                 isAnimated = true;
             }
         }
-        if (isAnimated && (width > 1080 || height > 1080)) {
+        if (isAnimated && (width > 1280 || height > 1280)) {
             isAnimated = false;
         }
         if (!isVideo || isAnimated) {

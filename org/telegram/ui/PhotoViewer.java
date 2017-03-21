@@ -1970,7 +1970,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             });
             this.captionItem = new ImageView(this.parentActivity);
             this.captionItem.setScaleType(ScaleType.CENTER);
-            this.captionItem.setImageResource(R.drawable.photo_text);
             this.captionItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
             itemsLayout.addView(this.captionItem, LayoutHelper.createLinear(56, 48));
             this.captionItem.setOnClickListener(new OnClickListener() {
@@ -3412,8 +3411,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.paintItem.setVisibility(8);
         this.cropItem.setVisibility(8);
         this.tuneItem.setVisibility(8);
-        this.videoTimelineViewContainer.setVisibility(8);
+        if (this.videoTimelineViewContainer != null) {
+            this.videoTimelineViewContainer.setVisibility(8);
+        }
         this.captionItem.setVisibility(8);
+        this.captionItem.setImageResource(R.drawable.photo_text);
         this.compressItem.setVisibility(8);
         this.captionEditText.setVisibility(8);
         this.mentionListView.setVisibility(8);
@@ -4681,7 +4683,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             }
         }
         requestVideoPreview(0);
-        this.videoTimelineView.destroy();
+        if (this.videoTimelineView != null) {
+            this.videoTimelineView.destroy();
+        }
         this.centerImage.setImageBitmap((Bitmap) null);
         this.leftImage.setImageBitmap((Bitmap) null);
         this.rightImage.setImageBitmap((Bitmap) null);

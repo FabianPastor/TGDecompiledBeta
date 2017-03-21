@@ -358,6 +358,10 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
             this.proximityWakelock.release();
         }
         unregisterReceiver(this.receiver);
+        if (this.timeoutRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(this.timeoutRunnable);
+            this.timeoutRunnable = null;
+        }
         super.onDestroy();
         sharedInstance = null;
         AndroidUtilities.runOnUIThread(new Runnable() {
