@@ -65,6 +65,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.query.StickersQuery;
@@ -1146,7 +1147,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    public void sendButtonPressed(int index) {
+    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
     }
 
     public int getSelectedCount() {

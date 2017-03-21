@@ -912,8 +912,8 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         if (this.retryAnim != null) {
             this.retryAnim.cancel();
         }
+        this.endBtn.setEnabled(false);
         this.retrying = true;
-        this.endBtn.setEnabled(true);
         this.cancelBtn.setVisibility(0);
         this.cancelBtn.setAlpha(0.0f);
         AnimatorSet set = new AnimatorSet();
@@ -940,6 +940,7 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 VoIPActivity.this.micToggle.setVisibility(8);
                 VoIPActivity.this.chatBtn.setVisibility(8);
                 VoIPActivity.this.retryAnim = null;
+                VoIPActivity.this.endBtn.setEnabled(true);
             }
         });
         this.retryAnim = set;

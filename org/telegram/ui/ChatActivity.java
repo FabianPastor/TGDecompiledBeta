@@ -376,7 +376,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             return false;
         }
 
-        public void sendButtonPressed(int index) {
+        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
             if (index >= 0 && index < ChatActivity.this.botContextResults.size()) {
                 ChatActivity.this.sendBotInlineResult((BotInlineResult) ChatActivity.this.botContextResults.get(index));
             }
@@ -5628,8 +5628,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
             arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, orientation, false));
             final ArrayList<Object> arrayList2 = arrayList;
             PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 2, new EmptyPhotoViewerProvider() {
-                public void sendButtonPressed(int index) {
-                    ChatActivity.this.sendMedia((PhotoEntry) arrayList2.get(0), false);
+                public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
+                    ChatActivity.this.sendMedia((PhotoEntry) arrayList2.get(0), null);
                 }
             }, this);
             AndroidUtilities.addMediaToGallery(this.currentPicturePath);
@@ -9608,26 +9608,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         return true;
     }
 
-    public void sendButtonPressed(int index) {
+    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
     }
 
     public int getSelectedCount() {
         return 0;
     }
 
-    public void sendMedia(PhotoEntry photoEntry, boolean mutedVideo) {
+    public void sendMedia(PhotoEntry photoEntry, VideoEditedInfo videoEditedInfo) {
         if (photoEntry.isVideo) {
-            VideoEditedInfo videoEditedInfo = null;
-            long size = 0;
-            if (mutedVideo) {
-                videoEditedInfo = new VideoEditedInfo();
-                videoEditedInfo.bitrate = -1;
-                videoEditedInfo.originalPath = photoEntry.path;
-                videoEditedInfo.endTime = -1;
-                videoEditedInfo.startTime = -1;
-                size = new File(photoEntry.path).length();
-            }
-            SendMessagesHelper.prepareSendingVideo(photoEntry.path, size, 0, 0, 0, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null);
+            SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, 0, 0, 0, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null);
             showReplyPanel(false, null, null, null, false);
             DraftQuery.cleanDraft(this.dialog_id, true);
         } else if (photoEntry.imagePath != null) {

@@ -29,6 +29,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
 import org.telegram.messenger.camera.CameraView;
@@ -167,7 +168,13 @@ public class InstantCameraView extends FrameLayout {
                             public void onFinishVideoRecording(Bitmap thumb) {
                                 if (InstantCameraView.this.cameraFile != null && InstantCameraView.this.baseFragment != null) {
                                     AndroidUtilities.addMediaToGallery(InstantCameraView.this.cameraFile.getAbsolutePath());
-                                    InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), true);
+                                    VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
+                                    videoEditedInfo.bitrate = -1;
+                                    videoEditedInfo.originalPath = InstantCameraView.this.cameraFile.getAbsolutePath();
+                                    videoEditedInfo.endTime = -1;
+                                    videoEditedInfo.startTime = -1;
+                                    videoEditedInfo.estimatedSize = InstantCameraView.this.cameraFile.length();
+                                    InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), null);
                                 }
                             }
                         }, new Runnable() {

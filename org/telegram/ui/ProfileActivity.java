@@ -67,6 +67,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.query.BotQuery;
 import org.telegram.messenger.query.SharedMediaQuery;
@@ -2295,7 +2296,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         return true;
     }
 
-    public void sendButtonPressed(int index) {
+    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
     }
 
     public int getSelectedCount() {

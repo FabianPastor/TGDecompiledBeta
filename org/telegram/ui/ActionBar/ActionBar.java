@@ -9,6 +9,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -111,6 +112,7 @@ public class ActionBar extends FrameLayout {
         if (this.subtitleTextView == null) {
             this.subtitleTextView = new SimpleTextView(getContext());
             this.subtitleTextView.setGravity(3);
+            this.subtitleTextView.setVisibility(8);
             this.subtitleTextView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubtitle));
             addView(this.subtitleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
         }
@@ -130,7 +132,7 @@ public class ActionBar extends FrameLayout {
         }
         if (this.subtitleTextView != null) {
             SimpleTextView simpleTextView = this.subtitleTextView;
-            int i = (value == null || this.isSearchFieldVisible) ? 8 : 0;
+            int i = (TextUtils.isEmpty(value) || this.isSearchFieldVisible) ? 8 : 0;
             simpleTextView.setVisibility(i);
             this.subtitleTextView.setText(value);
         }

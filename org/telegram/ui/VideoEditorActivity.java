@@ -1149,21 +1149,15 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         AnimatorSet animatorSet = new AnimatorSet();
         Animator[] animatorArr;
         if (show) {
-            animatorArr = new Animator[1];
+            animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.pickerView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
-            animatorSet.playTogether(animatorArr);
-            animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.videoTimelineView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
-            animatorSet.playTogether(animatorArr);
-            animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.videoSeekBarView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.videoTimelineView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.videoSeekBarView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
             animatorSet.playTogether(animatorArr);
         } else {
-            animatorArr = new Animator[1];
+            animatorArr = new Animator[2];
             animatorArr[0] = ObjectAnimator.ofFloat(this.qualityChooseView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)});
-            animatorSet.playTogether(animatorArr);
-            animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.qualityPicker, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.qualityPicker, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(BitmapDescriptorFactory.HUE_GREEN)});
             animatorSet.playTogether(animatorArr);
         }
         animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -1173,23 +1167,17 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                 if (show) {
                     VideoEditorActivity.this.qualityChooseView.setVisibility(0);
                     VideoEditorActivity.this.qualityPicker.setVisibility(0);
-                    animatorArr = new Animator[1];
+                    animatorArr = new Animator[2];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.qualityChooseView, "translationY", new float[]{0.0f});
-                    animatorSet.playTogether(animatorArr);
-                    animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.qualityPicker, "translationY", new float[]{0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(VideoEditorActivity.this.qualityPicker, "translationY", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                 } else {
                     VideoEditorActivity.this.qualityChooseView.setVisibility(4);
                     VideoEditorActivity.this.qualityPicker.setVisibility(4);
-                    animatorArr = new Animator[1];
+                    animatorArr = new Animator[3];
                     animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.pickerView, "translationY", new float[]{0.0f});
-                    animatorSet.playTogether(animatorArr);
-                    animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.videoTimelineView, "translationY", new float[]{0.0f});
-                    animatorSet.playTogether(animatorArr);
-                    animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(VideoEditorActivity.this.videoSeekBarView, "translationY", new float[]{0.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(VideoEditorActivity.this.videoTimelineView, "translationY", new float[]{0.0f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(VideoEditorActivity.this.videoSeekBarView, "translationY", new float[]{0.0f});
                     animatorSet.playTogether(animatorArr);
                 }
                 animatorSet.setDuration(200);
@@ -1210,7 +1198,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
         if (apply) {
             this.currentCaption = this.captionEditText.getFieldCharSequence();
         }
-        this.actionBar.setSubtitle(this.currentSubtitle);
         this.pickerView.setVisibility(0);
         if (!AndroidUtilities.isTablet()) {
             this.videoSeekBarView.setVisibility(0);

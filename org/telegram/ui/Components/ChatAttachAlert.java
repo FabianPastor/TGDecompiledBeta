@@ -49,6 +49,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
@@ -922,10 +923,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                             return true;
                                         }
 
-                                        public void sendButtonPressed(int index) {
+                                        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
                                             if (ChatAttachAlert.this.cameraFile != null) {
                                                 AndroidUtilities.addMediaToGallery(ChatAttachAlert.this.cameraFile.getAbsolutePath());
-                                                ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), PhotoViewer.getInstance().isMuteVideo());
+                                                ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), videoEditedInfo);
                                                 ChatAttachAlert.this.closeCamera(false);
                                                 ChatAttachAlert.this.dismiss();
                                                 ChatAttachAlert.this.cameraFile = null;
@@ -1012,10 +1013,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                                             return true;
                                         }
 
-                                        public void sendButtonPressed(int index) {
+                                        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
                                             if (ChatAttachAlert.this.cameraFile != null) {
                                                 AndroidUtilities.addMediaToGallery(ChatAttachAlert.this.cameraFile.getAbsolutePath());
-                                                ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), false);
+                                                ChatAttachAlert.this.baseFragment.sendMedia((PhotoEntry) ChatAttachAlert.this.cameraPhoto.get(0), null);
                                                 ChatAttachAlert.this.closeCamera(false);
                                                 ChatAttachAlert.this.dismiss();
                                                 ChatAttachAlert.this.cameraFile = null;
@@ -1947,7 +1948,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         return false;
     }
 
-    public void sendButtonPressed(int index) {
+    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
         if (this.photoAttachAdapter.getSelectedPhotos().isEmpty()) {
             if (index >= 0 && index < MediaController.allPhotosAlbumEntry.photos.size()) {
                 PhotoEntry photoEntry = (PhotoEntry) MediaController.allPhotosAlbumEntry.photos.get(index);

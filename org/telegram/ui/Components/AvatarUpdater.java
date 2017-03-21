@@ -149,7 +149,7 @@ public class AvatarUpdater implements NotificationCenterDelegate, PhotoEditActiv
             final ArrayList<Object> arrayList = new ArrayList();
             arrayList.add(new PhotoEntry(0, 0, 0, this.currentPicturePath, orientation, false));
             PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 1, new EmptyPhotoViewerProvider() {
-                public void sendButtonPressed(int index) {
+                public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
                     String path = null;
                     PhotoEntry photoEntry = (PhotoEntry) arrayList.get(0);
                     if (photoEntry.imagePath != null) {

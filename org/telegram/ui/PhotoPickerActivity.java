@@ -894,7 +894,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         return true;
     }
 
-    public void sendButtonPressed(int index) {
+    public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
         if (this.selectedAlbum != null) {
             if (this.selectedPhotos.isEmpty()) {
                 if (index >= 0 && index < this.selectedAlbum.photos.size()) {
