@@ -1093,6 +1093,7 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     VideoEditorActivity.this.selectedCompression = VideoEditorActivity.this.previousCompression;
                     VideoEditorActivity.this.didChangedCompressionLevel(false);
                     VideoEditorActivity.this.showQualityView(false);
+                    VideoEditorActivity.this.requestVideoPreview(2);
                 }
             });
             this.qualityPicker.doneButton.setOnClickListener(new OnClickListener() {

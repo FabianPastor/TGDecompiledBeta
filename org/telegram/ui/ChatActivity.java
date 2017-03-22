@@ -9617,7 +9617,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public void sendMedia(PhotoEntry photoEntry, VideoEditedInfo videoEditedInfo) {
         if (photoEntry.isVideo) {
-            SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, 0, 0, 0, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null);
+            SendMessagesHelper.prepareSendingVideo(photoEntry.path, videoEditedInfo.estimatedSize, videoEditedInfo.estimatedDuration, videoEditedInfo.resultWidth, videoEditedInfo.resultHeight, videoEditedInfo, this.dialog_id, this.replyingMessageObject, photoEntry.caption != null ? photoEntry.caption.toString() : null);
             showReplyPanel(false, null, null, null, false);
             DraftQuery.cleanDraft(this.dialog_id, true);
         } else if (photoEntry.imagePath != null) {

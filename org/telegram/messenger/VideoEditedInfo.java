@@ -5,6 +5,7 @@ import java.util.Locale;
 public class VideoEditedInfo {
     public int bitrate;
     public long endTime;
+    public long estimatedDuration;
     public long estimatedSize;
     public int originalHeight;
     public String originalPath;

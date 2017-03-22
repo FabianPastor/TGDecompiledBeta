@@ -209,9 +209,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public void start() {
         if (!this.isRunning) {
             this.isRunning = true;
-            if (this.renderingBitmap == null) {
-                scheduleNextGetFrame();
-            }
+            scheduleNextGetFrame();
             runOnUiThread(this.mStartTask);
         }
     }
@@ -220,7 +218,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (this.loadFrameTask != null) {
             return;
         }
-        if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
+        if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone && this.isRunning) {
             long ms = 0;
             if (this.lastFrameDecodeTime != 0) {
                 ms = Math.min((long) this.invalidateAfter, Math.max(0, ((long) this.invalidateAfter) - (System.currentTimeMillis() - this.lastFrameDecodeTime)));

@@ -190,7 +190,6 @@ public class ConnectionsManager {
                     tLObject.freeResources();
                     ConnectionsManager.native_sendRequest(buffer.address, new RequestDelegateInternal() {
                         public void run(int response, int errorCode, String errorText, int networkType) {
-                            Throwable e;
                             TLObject resp = null;
                             TL_error error = null;
                             if (response != 0) {
@@ -198,8 +197,8 @@ public class ConnectionsManager {
                                     NativeByteBuffer buff = NativeByteBuffer.wrap(response);
                                     buff.reused = true;
                                     resp = tLObject.deserializeResponse(buff, buff.readInt32(true), true);
-                                } catch (Exception e2) {
-                                    e = e2;
+                                } catch (Exception e) {
+                                    e = e;
                                     FileLog.e(e);
                                     return;
                                 }
@@ -210,10 +209,11 @@ public class ConnectionsManager {
                                     error2.text = errorText;
                                     FileLog.e(tLObject + " got error " + error2.code + " " + error2.text);
                                     error = error2;
-                                } catch (Exception e3) {
-                                    e = e3;
+                                } catch (Exception e2) {
+                                    Throwable e3;
+                                    e3 = e2;
                                     error = error2;
-                                    FileLog.e(e);
+                                    FileLog.e(e3);
                                     return;
                                 }
                             }

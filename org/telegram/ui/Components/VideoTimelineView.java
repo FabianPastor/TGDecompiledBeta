@@ -145,6 +145,8 @@ public class VideoTimelineView extends View {
 
     public void setVideoPath(String path) {
         this.mediaMetadataRetriever = new MediaMetadataRetriever();
+        this.progressLeft = 0.0f;
+        this.progressRight = 1.0f;
         try {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));

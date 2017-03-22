@@ -243,7 +243,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private PickerBottomLayoutViewer editorDoneLayout;
     private boolean[] endReached = new boolean[]{false, true};
     private long endTime;
-    private long esimatedDuration;
+    private long estimatedDuration;
     private int estimatedSize;
     private GestureDetector gestureDetector;
     private PlaceProviderObject hideAfterAnimation;
@@ -312,6 +312,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     private int previousCompression;
     private RadialProgressView progressView;
     private QualityChooseView qualityChooseView;
+    private AnimatorSet qualityChooseViewAnimation;
     private PickerBottomLayoutViewer qualityPicker;
     private boolean requestingPreview;
     private TextView resetButton;
@@ -692,7 +693,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 if (a <= PhotoViewer.this.selectedCompression) {
                     this.paint.setColor(-11292945);
                 } else {
-                    this.paint.setColor(-14540254);
+                    this.paint.setColor(NUM);
                 }
                 if (a == PhotoViewer.this.compressionsCount - 1) {
                     text = PhotoViewer.this.originalHeight + TtmlNode.TAG_P;
@@ -1800,7 +1801,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                 PhotoViewer.this.videoPlayer.pause();
                                 return;
                             }
-                            if (PhotoViewer.this.videoPlayer.getCurrentPosition() == PhotoViewer.this.videoPlayer.getDuration()) {
+                            if (Math.abs(PhotoViewer.this.videoPlayerSeekbar.getProgress() - 1.0f) < 0.01f || PhotoViewer.this.videoPlayer.getCurrentPosition() == PhotoViewer.this.videoPlayer.getDuration()) {
                                 PhotoViewer.this.videoPlayer.seekTo(0);
                             }
                             PhotoViewer.this.videoPlayer.play();
@@ -1856,6 +1857,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.selectedCompression = PhotoViewer.this.previousCompression;
                         PhotoViewer.this.didChangedCompressionLevel(false);
                         PhotoViewer.this.showQualityView(false);
+                        PhotoViewer.this.requestVideoPreview(2);
                     }
                 });
                 this.qualityPicker.doneButton.setOnClickListener(new OnClickListener() {
@@ -1909,6 +1911,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                             videoEditedInfo.bitrate = PhotoViewer.this.bitrate;
                             videoEditedInfo.originalPath = PhotoViewer.this.currentPlayingVideoFile.getAbsolutePath();
                             videoEditedInfo.estimatedSize = (long) PhotoViewer.this.estimatedSize;
+                            videoEditedInfo.estimatedDuration = PhotoViewer.this.estimatedDuration;
                             if (PhotoViewer.this.compressItem.getVisibility() == 8 || (PhotoViewer.this.compressItem.getVisibility() == 0 && PhotoViewer.this.selectedCompression == PhotoViewer.this.compressionsCount - 1)) {
                                 videoEditedInfo.resultWidth = PhotoViewer.this.originalWidth;
                                 videoEditedInfo.resultHeight = PhotoViewer.this.originalHeight;
@@ -2229,10 +2232,10 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     }
                     if (PhotoViewer.this.allowMentions) {
                         PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$9800 = PhotoViewer.this.mentionListAnimation;
+                        AnimatorSet access$9900 = PhotoViewer.this.mentionListAnimation;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, "alpha", new float[]{0.0f});
-                        access$9800.playTogether(animatorArr);
+                        access$9900.playTogether(animatorArr);
                         PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
@@ -2865,14 +2868,14 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$10700 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$10800 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[3];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, "translationY", new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
                     float[] fArr = new float[2];
                     r13[1] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     fArr = new float[2];
                     r13[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, "alpha", new float[]{0.0f, 1.0f});
-                    access$10700.playTogether(r13);
+                    access$10800.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -2976,12 +2979,12 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$10700 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$10800 = PhotoViewer.this.imageMoveAnimation;
                     r12 = new Animator[2];
                     float[] fArr = new float[2];
                     r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
                     r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), "translationY", new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$10700.playTogether(r12);
+                    access$10800.playTogether(r12);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -3075,7 +3078,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                         PhotoViewer.this.zoomAnimation = true;
                     }
                     PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$10700 = PhotoViewer.this.imageMoveAnimation;
+                    AnimatorSet access$10800 = PhotoViewer.this.imageMoveAnimation;
                     r13 = new Animator[4];
                     float[] fArr = new float[2];
                     r13[0] = ObjectAnimator.ofFloat(PhotoViewer.this, "animationValue", new float[]{0.0f, 1.0f});
@@ -3087,7 +3090,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                     fArr2[0] = (float) ((-ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
                     fArr2[1] = 0.0f;
                     r13[3] = ObjectAnimator.ofFloat(actionBar, str, fArr2);
-                    access$10700.playTogether(r13);
+                    access$10800.playTogether(r13);
                     PhotoViewer.this.imageMoveAnimation.setDuration(200);
                     PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animation) {
@@ -3398,6 +3401,13 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.captionTextViewNew.setTranslationY(0.0f);
         this.bottomLayout.setTranslationY(0.0f);
         this.shareButton.setVisibility(8);
+        this.qualityChooseView.setVisibility(4);
+        this.qualityPicker.setVisibility(4);
+        this.qualityChooseView.setTag(null);
+        if (this.qualityChooseViewAnimation != null) {
+            this.qualityChooseViewAnimation.cancel();
+            this.qualityChooseViewAnimation = null;
+        }
         this.allowShare = false;
         this.menuItem.hideSubItem(2);
         this.menuItem.hideSubItem(10);
@@ -4413,225 +4423,232 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     public void closePhoto(boolean animated, boolean fromEditMode) {
         if (fromEditMode || this.currentEditMode == 0) {
-            try {
-                if (this.visibleDialog != null) {
-                    this.visibleDialog.dismiss();
-                    this.visibleDialog = null;
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-            if (this.currentEditMode != 0) {
-                if (this.currentEditMode == 2) {
-                    this.photoFilterView.shutdown();
-                    this.containerView.removeView(this.photoFilterView);
-                    this.photoFilterView = null;
-                } else if (this.currentEditMode == 1) {
-                    this.editorDoneLayout.setVisibility(8);
-                    this.photoCropView.setVisibility(8);
-                }
-                this.currentEditMode = 0;
-            }
-            if (this.parentActivity != null && this.isVisible && !checkAnimation() && this.placeProvider != null) {
-                if (!this.captionEditText.hideActionMode() || fromEditMode) {
-                    releasePlayer();
-                    this.captionEditText.onDestroy();
-                    this.parentChatActivity = null;
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidFailedLoad);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidLoaded);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileLoadProgressChanged);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.mediaCountDidLoaded);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.mediaDidLoaded);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.dialogPhotosLoaded);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FilePreparingFailed);
-                    NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileNewChunkAvailable);
-                    ConnectionsManager.getInstance().cancelRequestsForGuid(this.classGuid);
-                    this.isActionBarVisible = false;
-                    if (this.velocityTracker != null) {
-                        this.velocityTracker.recycle();
-                        this.velocityTracker = null;
+            if (VERSION.SDK_INT < 16 || this.qualityChooseView == null || this.qualityChooseView.getTag() == null) {
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.dismiss();
+                        this.visibleDialog = null;
                     }
-                    ConnectionsManager.getInstance().cancelRequestsForGuid(this.classGuid);
-                    PlaceProviderObject object = this.placeProvider.getPlaceForPhoto(this.currentMessageObject, this.currentFileLocation, this.currentIndex);
-                    AnimatorSet animatorSet;
-                    Animator[] animatorArr;
-                    final PlaceProviderObject placeProviderObject;
-                    if (animated) {
-                        float scale2;
-                        this.animationInProgress = 1;
-                        this.animatingImageView.setVisibility(0);
-                        this.containerView.invalidate();
-                        animatorSet = new AnimatorSet();
-                        ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
-                        Rect drawRegion = null;
-                        int orientation = this.centerImage.getOrientation();
-                        int animatedOrientation = 0;
-                        if (!(object == null || object.imageReceiver == null)) {
-                            animatedOrientation = object.imageReceiver.getAnimatedOrientation();
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+                if (this.currentEditMode != 0) {
+                    if (this.currentEditMode == 2) {
+                        this.photoFilterView.shutdown();
+                        this.containerView.removeView(this.photoFilterView);
+                        this.photoFilterView = null;
+                    } else if (this.currentEditMode == 1) {
+                        this.editorDoneLayout.setVisibility(8);
+                        this.photoCropView.setVisibility(8);
+                    }
+                    this.currentEditMode = 0;
+                }
+                if (this.parentActivity != null && this.isVisible && !checkAnimation() && this.placeProvider != null) {
+                    if (!this.captionEditText.hideActionMode() || fromEditMode) {
+                        releasePlayer();
+                        this.captionEditText.onDestroy();
+                        this.parentChatActivity = null;
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidFailedLoad);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileDidLoaded);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.mediaCountDidLoaded);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.mediaDidLoaded);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.dialogPhotosLoaded);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FilePreparingFailed);
+                        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.FileNewChunkAvailable);
+                        ConnectionsManager.getInstance().cancelRequestsForGuid(this.classGuid);
+                        this.isActionBarVisible = false;
+                        if (this.velocityTracker != null) {
+                            this.velocityTracker.recycle();
+                            this.velocityTracker = null;
                         }
-                        if (animatedOrientation != 0) {
-                            orientation = animatedOrientation;
-                        }
-                        this.animatingImageView.setOrientation(orientation);
-                        if (object != null) {
-                            this.animatingImageView.setNeedRadius(object.radius != 0);
-                            drawRegion = object.imageReceiver.getDrawRegion();
-                            layoutParams.width = drawRegion.right - drawRegion.left;
-                            layoutParams.height = drawRegion.bottom - drawRegion.top;
-                            this.animatingImageView.setImageBitmap(object.thumb);
-                        } else {
-                            this.animatingImageView.setNeedRadius(false);
-                            layoutParams.width = this.centerImage.getImageWidth();
-                            layoutParams.height = this.centerImage.getImageHeight();
-                            this.animatingImageView.setImageBitmap(this.centerImage.getBitmap());
-                        }
-                        this.animatingImageView.setLayoutParams(layoutParams);
-                        float scaleX = ((float) AndroidUtilities.displaySize.x) / ((float) layoutParams.width);
-                        float scaleY = ((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) / ((float) layoutParams.height);
-                        if (scaleX > scaleY) {
-                            scale2 = scaleY;
-                        } else {
-                            scale2 = scaleX;
-                        }
-                        float yPos = (((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) - ((((float) layoutParams.height) * this.scale) * scale2)) / 2.0f;
-                        this.animatingImageView.setTranslationX(this.translationX + ((((float) AndroidUtilities.displaySize.x) - ((((float) layoutParams.width) * this.scale) * scale2)) / 2.0f));
-                        this.animatingImageView.setTranslationY(this.translationY + yPos);
-                        this.animatingImageView.setScaleX(this.scale * scale2);
-                        this.animatingImageView.setScaleY(this.scale * scale2);
-                        if (object != null) {
-                            object.imageReceiver.setVisible(false, true);
-                            int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
-                            int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
-                            int[] coords2 = new int[2];
-                            object.parentView.getLocationInWindow(coords2);
-                            int clipTop = ((coords2[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) - (object.viewY + drawRegion.top)) + object.clipTopAddition;
-                            if (clipTop < 0) {
-                                clipTop = 0;
+                        ConnectionsManager.getInstance().cancelRequestsForGuid(this.classGuid);
+                        PlaceProviderObject object = this.placeProvider.getPlaceForPhoto(this.currentMessageObject, this.currentFileLocation, this.currentIndex);
+                        AnimatorSet animatorSet;
+                        Animator[] animatorArr;
+                        final PlaceProviderObject placeProviderObject;
+                        if (animated) {
+                            float scale2;
+                            this.animationInProgress = 1;
+                            this.animatingImageView.setVisibility(0);
+                            this.containerView.invalidate();
+                            animatorSet = new AnimatorSet();
+                            ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
+                            Rect drawRegion = null;
+                            int orientation = this.centerImage.getOrientation();
+                            int animatedOrientation = 0;
+                            if (!(object == null || object.imageReceiver == null)) {
+                                animatedOrientation = object.imageReceiver.getAnimatedOrientation();
                             }
-                            int clipBottom = (((drawRegion.bottom - drawRegion.top) + (object.viewY + drawRegion.top)) - ((object.parentView.getHeight() + coords2[1]) - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight))) + object.clipBottomAddition;
-                            if (clipBottom < 0) {
-                                clipBottom = 0;
+                            if (animatedOrientation != 0) {
+                                orientation = animatedOrientation;
                             }
-                            clipTop = Math.max(clipTop, clipVertical);
-                            clipBottom = Math.max(clipBottom, clipVertical);
-                            this.animationValues[0][0] = this.animatingImageView.getScaleX();
-                            this.animationValues[0][1] = this.animatingImageView.getScaleY();
-                            this.animationValues[0][2] = this.animatingImageView.getTranslationX();
-                            this.animationValues[0][3] = this.animatingImageView.getTranslationY();
-                            this.animationValues[0][4] = 0.0f;
-                            this.animationValues[0][5] = 0.0f;
-                            this.animationValues[0][6] = 0.0f;
-                            this.animationValues[0][7] = 0.0f;
-                            this.animationValues[1][0] = object.scale;
-                            this.animationValues[1][1] = object.scale;
-                            this.animationValues[1][2] = ((float) object.viewX) + (((float) drawRegion.left) * object.scale);
-                            this.animationValues[1][3] = ((float) object.viewY) + (((float) drawRegion.top) * object.scale);
-                            this.animationValues[1][4] = ((float) clipHorizontal) * object.scale;
-                            this.animationValues[1][5] = ((float) clipTop) * object.scale;
-                            this.animationValues[1][6] = ((float) clipBottom) * object.scale;
-                            this.animationValues[1][7] = (float) object.radius;
-                            animatorArr = new Animator[3];
-                            float[] fArr = new float[2];
-                            animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
-                            animatorArr[1] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
-                            animatorArr[2] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
-                            animatorSet.playTogether(animatorArr);
-                        } else {
-                            float f;
-                            int h = AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                            Animator[] animatorArr2 = new Animator[4];
-                            animatorArr2[0] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
-                            animatorArr2[1] = ObjectAnimator.ofFloat(this.animatingImageView, "alpha", new float[]{0.0f});
-                            ClippingImageView clippingImageView = this.animatingImageView;
-                            String str = "translationY";
-                            float[] fArr2 = new float[1];
-                            if (this.translationY >= 0.0f) {
-                                f = (float) h;
+                            this.animatingImageView.setOrientation(orientation);
+                            if (object != null) {
+                                this.animatingImageView.setNeedRadius(object.radius != 0);
+                                drawRegion = object.imageReceiver.getDrawRegion();
+                                layoutParams.width = drawRegion.right - drawRegion.left;
+                                layoutParams.height = drawRegion.bottom - drawRegion.top;
+                                this.animatingImageView.setImageBitmap(object.thumb);
                             } else {
-                                f = (float) (-h);
+                                this.animatingImageView.setNeedRadius(false);
+                                layoutParams.width = this.centerImage.getImageWidth();
+                                layoutParams.height = this.centerImage.getImageHeight();
+                                this.animatingImageView.setImageBitmap(this.centerImage.getBitmap());
                             }
-                            fArr2[0] = f;
-                            animatorArr2[2] = ObjectAnimator.ofFloat(clippingImageView, str, fArr2);
-                            animatorArr2[3] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
-                            animatorSet.playTogether(animatorArr2);
-                        }
-                        placeProviderObject = object;
-                        this.animationEndRunnable = new Runnable() {
-                            public void run() {
-                                if (VERSION.SDK_INT >= 18) {
-                                    PhotoViewer.this.containerView.setLayerType(0, null);
+                            this.animatingImageView.setLayoutParams(layoutParams);
+                            float scaleX = ((float) AndroidUtilities.displaySize.x) / ((float) layoutParams.width);
+                            float scaleY = ((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) / ((float) layoutParams.height);
+                            if (scaleX > scaleY) {
+                                scale2 = scaleY;
+                            } else {
+                                scale2 = scaleX;
+                            }
+                            float yPos = (((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) - ((((float) layoutParams.height) * this.scale) * scale2)) / 2.0f;
+                            this.animatingImageView.setTranslationX(this.translationX + ((((float) AndroidUtilities.displaySize.x) - ((((float) layoutParams.width) * this.scale) * scale2)) / 2.0f));
+                            this.animatingImageView.setTranslationY(this.translationY + yPos);
+                            this.animatingImageView.setScaleX(this.scale * scale2);
+                            this.animatingImageView.setScaleY(this.scale * scale2);
+                            if (object != null) {
+                                object.imageReceiver.setVisible(false, true);
+                                int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+                                int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
+                                int[] coords2 = new int[2];
+                                object.parentView.getLocationInWindow(coords2);
+                                int clipTop = ((coords2[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) - (object.viewY + drawRegion.top)) + object.clipTopAddition;
+                                if (clipTop < 0) {
+                                    clipTop = 0;
                                 }
-                                PhotoViewer.this.animationInProgress = 0;
-                                PhotoViewer.this.onPhotoClosed(placeProviderObject);
+                                int clipBottom = (((drawRegion.bottom - drawRegion.top) + (object.viewY + drawRegion.top)) - ((object.parentView.getHeight() + coords2[1]) - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight))) + object.clipBottomAddition;
+                                if (clipBottom < 0) {
+                                    clipBottom = 0;
+                                }
+                                clipTop = Math.max(clipTop, clipVertical);
+                                clipBottom = Math.max(clipBottom, clipVertical);
+                                this.animationValues[0][0] = this.animatingImageView.getScaleX();
+                                this.animationValues[0][1] = this.animatingImageView.getScaleY();
+                                this.animationValues[0][2] = this.animatingImageView.getTranslationX();
+                                this.animationValues[0][3] = this.animatingImageView.getTranslationY();
+                                this.animationValues[0][4] = 0.0f;
+                                this.animationValues[0][5] = 0.0f;
+                                this.animationValues[0][6] = 0.0f;
+                                this.animationValues[0][7] = 0.0f;
+                                this.animationValues[1][0] = object.scale;
+                                this.animationValues[1][1] = object.scale;
+                                this.animationValues[1][2] = ((float) object.viewX) + (((float) drawRegion.left) * object.scale);
+                                this.animationValues[1][3] = ((float) object.viewY) + (((float) drawRegion.top) * object.scale);
+                                this.animationValues[1][4] = ((float) clipHorizontal) * object.scale;
+                                this.animationValues[1][5] = ((float) clipTop) * object.scale;
+                                this.animationValues[1][6] = ((float) clipBottom) * object.scale;
+                                this.animationValues[1][7] = (float) object.radius;
+                                animatorArr = new Animator[3];
+                                float[] fArr = new float[2];
+                                animatorArr[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
+                                animatorArr[1] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
+                                animatorArr[2] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
+                                animatorSet.playTogether(animatorArr);
+                            } else {
+                                float f;
+                                int h = AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                                Animator[] animatorArr2 = new Animator[4];
+                                animatorArr2[0] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
+                                animatorArr2[1] = ObjectAnimator.ofFloat(this.animatingImageView, "alpha", new float[]{0.0f});
+                                ClippingImageView clippingImageView = this.animatingImageView;
+                                String str = "translationY";
+                                float[] fArr2 = new float[1];
+                                if (this.translationY >= 0.0f) {
+                                    f = (float) h;
+                                } else {
+                                    f = (float) (-h);
+                                }
+                                fArr2[0] = f;
+                                animatorArr2[2] = ObjectAnimator.ofFloat(clippingImageView, str, fArr2);
+                                animatorArr2[3] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
+                                animatorSet.playTogether(animatorArr2);
                             }
-                        };
-                        animatorSet.setDuration(200);
-                        animatorSet.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
-                                AndroidUtilities.runOnUIThread(new Runnable() {
-                                    public void run() {
-                                        if (PhotoViewer.this.animationEndRunnable != null) {
-                                            PhotoViewer.this.animationEndRunnable.run();
-                                            PhotoViewer.this.animationEndRunnable = null;
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        this.transitionAnimationStartTime = System.currentTimeMillis();
-                        if (VERSION.SDK_INT >= 18) {
-                            this.containerView.setLayerType(2, null);
-                        }
-                        animatorSet.start();
-                    } else {
-                        animatorSet = new AnimatorSet();
-                        animatorArr = new Animator[4];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "scaleX", new float[]{0.9f});
-                        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "scaleY", new float[]{0.9f});
-                        animatorArr[2] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
-                        animatorArr[3] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
-                        animatorSet.playTogether(animatorArr);
-                        this.animationInProgress = 2;
-                        placeProviderObject = object;
-                        this.animationEndRunnable = new Runnable() {
-                            public void run() {
-                                if (PhotoViewer.this.containerView != null) {
+                            placeProviderObject = object;
+                            this.animationEndRunnable = new Runnable() {
+                                public void run() {
                                     if (VERSION.SDK_INT >= 18) {
                                         PhotoViewer.this.containerView.setLayerType(0, null);
                                     }
                                     PhotoViewer.this.animationInProgress = 0;
                                     PhotoViewer.this.onPhotoClosed(placeProviderObject);
-                                    PhotoViewer.this.containerView.setScaleX(1.0f);
-                                    PhotoViewer.this.containerView.setScaleY(1.0f);
                                 }
-                            }
-                        };
-                        animatorSet.setDuration(200);
-                        animatorSet.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
-                                if (PhotoViewer.this.animationEndRunnable != null) {
-                                    PhotoViewer.this.animationEndRunnable.run();
-                                    PhotoViewer.this.animationEndRunnable = null;
+                            };
+                            animatorSet.setDuration(200);
+                            animatorSet.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animation) {
+                                    AndroidUtilities.runOnUIThread(new Runnable() {
+                                        public void run() {
+                                            if (PhotoViewer.this.animationEndRunnable != null) {
+                                                PhotoViewer.this.animationEndRunnable.run();
+                                                PhotoViewer.this.animationEndRunnable = null;
+                                            }
+                                        }
+                                    });
                                 }
+                            });
+                            this.transitionAnimationStartTime = System.currentTimeMillis();
+                            if (VERSION.SDK_INT >= 18) {
+                                this.containerView.setLayerType(2, null);
                             }
-                        });
-                        this.transitionAnimationStartTime = System.currentTimeMillis();
-                        if (VERSION.SDK_INT >= 18) {
-                            this.containerView.setLayerType(2, null);
+                            animatorSet.start();
+                        } else {
+                            animatorSet = new AnimatorSet();
+                            animatorArr = new Animator[4];
+                            animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, "scaleX", new float[]{0.9f});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, "scaleY", new float[]{0.9f});
+                            animatorArr[2] = ObjectAnimator.ofInt(this.backgroundDrawable, "alpha", new int[]{0});
+                            animatorArr[3] = ObjectAnimator.ofFloat(this.containerView, "alpha", new float[]{0.0f});
+                            animatorSet.playTogether(animatorArr);
+                            this.animationInProgress = 2;
+                            placeProviderObject = object;
+                            this.animationEndRunnable = new Runnable() {
+                                public void run() {
+                                    if (PhotoViewer.this.containerView != null) {
+                                        if (VERSION.SDK_INT >= 18) {
+                                            PhotoViewer.this.containerView.setLayerType(0, null);
+                                        }
+                                        PhotoViewer.this.animationInProgress = 0;
+                                        PhotoViewer.this.onPhotoClosed(placeProviderObject);
+                                        PhotoViewer.this.containerView.setScaleX(1.0f);
+                                        PhotoViewer.this.containerView.setScaleY(1.0f);
+                                    }
+                                }
+                            };
+                            animatorSet.setDuration(200);
+                            animatorSet.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animation) {
+                                    if (PhotoViewer.this.animationEndRunnable != null) {
+                                        PhotoViewer.this.animationEndRunnable.run();
+                                        PhotoViewer.this.animationEndRunnable = null;
+                                    }
+                                }
+                            });
+                            this.transitionAnimationStartTime = System.currentTimeMillis();
+                            if (VERSION.SDK_INT >= 18) {
+                                this.containerView.setLayerType(2, null);
+                            }
+                            animatorSet.start();
                         }
-                        animatorSet.start();
+                        if (this.currentAnimation != null) {
+                            this.currentAnimation.setSecondParentView(null);
+                            this.currentAnimation = null;
+                            this.centerImage.setImageBitmap((Drawable) null);
+                        }
+                        if (this.placeProvider instanceof EmptyPhotoViewerProvider) {
+                            this.placeProvider.cancelButtonPressed();
+                            return;
+                        }
+                        return;
                     }
-                    if (this.currentAnimation != null) {
-                        this.currentAnimation.setSecondParentView(null);
-                        this.currentAnimation = null;
-                        this.centerImage.setImageBitmap((Drawable) null);
-                    }
-                    if (this.placeProvider instanceof EmptyPhotoViewerProvider) {
-                        this.placeProvider.cancelButtonPressed();
-                    }
+                    return;
                 }
+                return;
             }
+            this.qualityPicker.cancelButton.callOnClick();
         } else if (this.currentEditMode != 3 || this.photoPaintView == null) {
             if (this.currentEditMode == 1) {
                 this.photoCropView.cancelAnimationRunnable();
@@ -4724,6 +4741,9 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
 
     public void onResume() {
         redraw(0);
+        if (this.videoPlayer != null) {
+            this.videoPlayer.seekTo(this.videoPlayer.getCurrentPosition() + 1);
+        }
     }
 
     public void onPause() {
@@ -5558,15 +5578,15 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
             } else if (this.selectedCompression == 4) {
                 this.compressItem.setImageResource(R.drawable.video_1080);
             }
-            this.esimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
+            this.estimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
             if (this.compressItem.getVisibility() == 8 || (this.compressItem.getVisibility() == 0 && this.selectedCompression == this.compressionsCount - 1)) {
                 width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalHeight : this.originalWidth;
                 height = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalWidth : this.originalHeight;
-                this.estimatedSize = (int) (((float) this.originalSize) * (((float) this.esimatedDuration) / this.videoDuration));
+                this.estimatedSize = (int) (((float) this.originalSize) * (((float) this.estimatedDuration) / this.videoDuration));
             } else {
                 width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultHeight : this.resultWidth;
                 height = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultWidth : this.resultHeight;
-                this.estimatedSize = (int) (((float) (this.audioFramesSize + this.videoFramesSize)) * (((float) this.esimatedDuration) / this.videoDuration));
+                this.estimatedSize = (int) (((float) (this.audioFramesSize + this.videoFramesSize)) * (((float) this.estimatedDuration) / this.videoDuration));
                 this.estimatedSize += (this.estimatedSize / 32768) * 16;
             }
             if (this.videoTimelineView.getLeftProgress() == 0.0f) {
@@ -5580,8 +5600,8 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                 this.endTime = ((long) (this.videoTimelineView.getRightProgress() * this.videoDuration)) * 1000;
             }
             String videoDimension = String.format("%dx%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-            int seconds = ((int) Math.ceil((double) (this.esimatedDuration / 1000))) - (((int) ((this.esimatedDuration / 1000) / 60)) * 60);
-            String videoTimeSize = String.format("%d:%02d, ~%s", new Object[]{Integer.valueOf((int) ((this.esimatedDuration / 1000) / 60)), Integer.valueOf(seconds), AndroidUtilities.formatFileSize((long) this.estimatedSize)});
+            int seconds = ((int) Math.ceil((double) (this.estimatedDuration / 1000))) - (((int) ((this.estimatedDuration / 1000) / 60)) * 60);
+            String videoTimeSize = String.format("%d:%02d, ~%s", new Object[]{Integer.valueOf((int) ((this.estimatedDuration / 1000) / 60)), Integer.valueOf(seconds), AndroidUtilities.formatFileSize((long) this.estimatedSize)});
             this.currentSubtitle = String.format("%s, %s", new Object[]{videoDimension, videoTimeSize});
             ActionBar actionBar = this.actionBar;
             if (this.muteVideo) {
@@ -5660,19 +5680,6 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     }
 
     private void updateWidthHeightBitrateForCompression() {
-        if (this.compressionsCount == -1) {
-            if (this.originalWidth > 1280 || this.originalHeight > 1280) {
-                this.compressionsCount = 5;
-            } else if (this.originalWidth > 848 || this.originalHeight > 848) {
-                this.compressionsCount = 4;
-            } else if (this.originalWidth > 640 || this.originalHeight > 640) {
-                this.compressionsCount = 3;
-            } else if (this.originalWidth > 480 || this.originalHeight > 480) {
-                this.compressionsCount = 2;
-            } else {
-                this.compressionsCount = 1;
-            }
-        }
         if (this.selectedCompression >= this.compressionsCount) {
             this.selectedCompression = this.compressionsCount - 1;
         }
@@ -5716,148 +5723,185 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (show) {
             this.previousCompression = this.selectedCompression;
         }
-        AnimatorSet animatorSet = new AnimatorSet();
+        if (this.qualityChooseViewAnimation != null) {
+            this.qualityChooseViewAnimation.cancel();
+        }
+        this.qualityChooseViewAnimation = new AnimatorSet();
+        AnimatorSet animatorSet;
         Animator[] animatorArr;
         if (show) {
+            this.qualityChooseView.setTag(Integer.valueOf(1));
+            animatorSet = this.qualityChooseViewAnimation;
             animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.pickerView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
             animatorArr[1] = ObjectAnimator.ofFloat(this.videoTimelineViewContainer, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
             animatorArr[2] = ObjectAnimator.ofFloat(this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f)), (float) AndroidUtilities.dp(104.0f)});
             animatorSet.playTogether(animatorArr);
         } else {
+            this.qualityChooseView.setTag(null);
+            animatorSet = this.qualityChooseViewAnimation;
             animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.qualityChooseView, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(166.0f)});
             animatorArr[1] = ObjectAnimator.ofFloat(this.qualityPicker, "translationY", new float[]{0.0f, (float) AndroidUtilities.dp(166.0f)});
             animatorArr[2] = ObjectAnimator.ofFloat(this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f)), (float) AndroidUtilities.dp(118.0f)});
             animatorSet.playTogether(animatorArr);
         }
-        animatorSet.addListener(new AnimatorListenerAdapter() {
+        this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
-                AnimatorSet animatorSet = new AnimatorSet();
-                Animator[] animatorArr;
-                if (show) {
-                    PhotoViewer.this.qualityChooseView.setVisibility(0);
-                    PhotoViewer.this.qualityPicker.setVisibility(0);
-                    animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, "translationY", new float[]{0.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, "translationY", new float[]{0.0f});
-                    animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                    animatorSet.playTogether(animatorArr);
-                } else {
-                    PhotoViewer.this.qualityChooseView.setVisibility(4);
-                    PhotoViewer.this.qualityPicker.setVisibility(4);
-                    animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, "translationY", new float[]{0.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.videoTimelineViewContainer, "translationY", new float[]{0.0f});
-                    animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                    animatorSet.playTogether(animatorArr);
+                if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
+                    PhotoViewer.this.qualityChooseViewAnimation = new AnimatorSet();
+                    AnimatorSet access$13400;
+                    Animator[] animatorArr;
+                    if (show) {
+                        PhotoViewer.this.qualityChooseView.setVisibility(0);
+                        PhotoViewer.this.qualityPicker.setVisibility(0);
+                        access$13400 = PhotoViewer.this.qualityChooseViewAnimation;
+                        animatorArr = new Animator[3];
+                        animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, "translationY", new float[]{0.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, "translationY", new float[]{0.0f});
+                        animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
+                        access$13400.playTogether(animatorArr);
+                    } else {
+                        PhotoViewer.this.qualityChooseView.setVisibility(4);
+                        PhotoViewer.this.qualityPicker.setVisibility(4);
+                        access$13400 = PhotoViewer.this.qualityChooseViewAnimation;
+                        animatorArr = new Animator[3];
+                        animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, "translationY", new float[]{0.0f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.videoTimelineViewContainer, "translationY", new float[]{0.0f});
+                        animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, "translationY", new float[]{(float) (-AndroidUtilities.dp(48.0f))});
+                        access$13400.playTogether(animatorArr);
+                    }
+                    PhotoViewer.this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
+                                PhotoViewer.this.qualityChooseViewAnimation = null;
+                            }
+                        }
+                    });
+                    PhotoViewer.this.qualityChooseViewAnimation.setDuration(200);
+                    PhotoViewer.this.qualityChooseViewAnimation.setInterpolator(new AccelerateInterpolator());
+                    PhotoViewer.this.qualityChooseViewAnimation.start();
                 }
-                animatorSet.setDuration(200);
-                animatorSet.setInterpolator(new AccelerateInterpolator());
-                animatorSet.start();
+            }
+
+            public void onAnimationCancel(Animator animation) {
+                PhotoViewer.this.qualityChooseViewAnimation = null;
             }
         });
-        animatorSet.setDuration(200);
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        animatorSet.start();
+        this.qualityChooseViewAnimation.setDuration(200);
+        this.qualityChooseViewAnimation.setInterpolator(new DecelerateInterpolator());
+        this.qualityChooseViewAnimation.start();
     }
 
     private boolean processOpenVideo(String videoPath) {
-        try {
-            this.originalSize = new File(videoPath).length();
-            Container isoFile = new IsoFile(videoPath);
-            List<Box> boxes = Path.getPaths(isoFile, "/moov/trak/");
-            TrackHeaderBox trackHeaderBox = null;
-            boolean isAvc = true;
-            boolean isMp4A = true;
-            if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null) {
-                isMp4A = false;
-            }
-            if (!isMp4A) {
-                return false;
-            }
-            int i;
-            if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
-                isAvc = false;
-            }
-            for (int b = 0; b < boxes.size(); b++) {
-                TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
-                long sampleSizes = 0;
-                long trackBitrate = 0;
-                try {
-                    MediaBox mediaBox = trackBox.getMediaBox();
-                    MediaHeaderBox mediaHeaderBox = mediaBox.getMediaHeaderBox();
-                    for (long j : mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes()) {
-                        sampleSizes += j;
-                    }
-                    this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
-                    trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / this.videoDuration));
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-                TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
-                if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
-                    this.audioFramesSize += sampleSizes;
-                } else {
-                    trackHeaderBox = headerBox;
-                    i = (int) ((trackBitrate / 100000) * 100000);
-                    this.bitrate = i;
-                    this.originalBitrate = i;
-                    if (this.bitrate > 900000) {
-                        this.bitrate = 900000;
-                    }
-                    this.videoFramesSize += sampleSizes;
-                }
-            }
-            if (trackHeaderBox == null) {
-                return false;
-            }
-            Matrix matrix = trackHeaderBox.getMatrix();
-            if (matrix.equals(Matrix.ROTATE_90)) {
-                this.rotationValue = 90;
-            } else if (matrix.equals(Matrix.ROTATE_180)) {
-                this.rotationValue = 180;
-            } else if (matrix.equals(Matrix.ROTATE_270)) {
-                this.rotationValue = 270;
-            }
-            i = (int) trackHeaderBox.getWidth();
-            this.originalWidth = i;
-            this.resultWidth = i;
-            i = (int) trackHeaderBox.getHeight();
-            this.originalHeight = i;
-            this.resultHeight = i;
-            this.videoDuration *= 1000.0f;
-            this.selectedCompression = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("compress_video2", 1);
-            updateWidthHeightBitrateForCompression();
-            if (!isAvc && (this.resultWidth == this.originalWidth || this.resultHeight == this.originalHeight)) {
-                return false;
-            }
-            updateVideoInfo();
-            updateMuteButton();
-            this.compressItem.setVisibility(this.compressionsCount > 1 ? 0 : 8);
-            if (VERSION.SDK_INT >= 16 && VERSION.SDK_INT < 18 && this.compressItem.getVisibility() == 0) {
-                try {
-                    MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
-                    if (codecInfo == null) {
-                        this.compressItem.setVisibility(8);
-                    } else {
-                        String name = codecInfo.getName();
-                        if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                            this.compressItem.setVisibility(8);
-                        } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
-                            this.compressItem.setVisibility(8);
-                        }
-                    }
-                } catch (Throwable e2) {
-                    this.compressItem.setVisibility(8);
-                    FileLog.e(e2);
-                }
-            }
-            this.videoTimelineView.setVideoPath(videoPath);
-            return true;
-        } catch (Throwable e22) {
-            FileLog.e(e22);
+        this.videoPreviewMessageObject = null;
+        this.compressItem.setVisibility(8);
+        this.muteVideo = false;
+        this.videoTimelineView.setVideoPath(videoPath);
+        this.compressionsCount = -1;
+        this.originalSize = new File(videoPath).length();
+        Container isoFile = new IsoFile(videoPath);
+        List<Box> boxes = Path.getPaths(isoFile, "/moov/trak/");
+        TrackHeaderBox trackHeaderBox = null;
+        boolean isAvc = true;
+        boolean isMp4A = true;
+        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null) {
+            isMp4A = false;
+        }
+        if (!isMp4A) {
             return false;
         }
+        if (Path.getPath(isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
+            isAvc = false;
+        }
+        for (int b = 0; b < boxes.size(); b++) {
+            TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
+            long sampleSizes = 0;
+            long trackBitrate = 0;
+            try {
+                MediaBox mediaBox = trackBox.getMediaBox();
+                MediaHeaderBox mediaHeaderBox = mediaBox.getMediaHeaderBox();
+                for (long j : mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes()) {
+                    sampleSizes += j;
+                }
+                this.videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
+                trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / this.videoDuration));
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
+            TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
+            if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
+                try {
+                    this.audioFramesSize += sampleSizes;
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
+                    return false;
+                }
+            }
+            trackHeaderBox = headerBox;
+            int i = (int) ((trackBitrate / 100000) * 100000);
+            this.bitrate = i;
+            this.originalBitrate = i;
+            if (this.bitrate > 900000) {
+                this.bitrate = 900000;
+            }
+            this.videoFramesSize += sampleSizes;
+        }
+        if (trackHeaderBox == null) {
+            return false;
+        }
+        Matrix matrix = trackHeaderBox.getMatrix();
+        if (matrix.equals(Matrix.ROTATE_90)) {
+            this.rotationValue = 90;
+        } else if (matrix.equals(Matrix.ROTATE_180)) {
+            this.rotationValue = 180;
+        } else if (matrix.equals(Matrix.ROTATE_270)) {
+            this.rotationValue = 270;
+        }
+        i = (int) trackHeaderBox.getWidth();
+        this.originalWidth = i;
+        this.resultWidth = i;
+        i = (int) trackHeaderBox.getHeight();
+        this.originalHeight = i;
+        this.resultHeight = i;
+        this.videoDuration *= 1000.0f;
+        this.selectedCompression = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getInt("compress_video2", 1);
+        if (this.originalWidth > 1280 || this.originalHeight > 1280) {
+            this.compressionsCount = 5;
+        } else if (this.originalWidth > 848 || this.originalHeight > 848) {
+            this.compressionsCount = 4;
+        } else if (this.originalWidth > 640 || this.originalHeight > 640) {
+            this.compressionsCount = 3;
+        } else if (this.originalWidth > 480 || this.originalHeight > 480) {
+            this.compressionsCount = 2;
+        } else {
+            this.compressionsCount = 1;
+        }
+        updateWidthHeightBitrateForCompression();
+        if (!isAvc && (this.resultWidth == this.originalWidth || this.resultHeight == this.originalHeight)) {
+            return false;
+        }
+        this.compressItem.setVisibility(this.compressionsCount > 1 ? 0 : 8);
+        if (VERSION.SDK_INT >= 16 && VERSION.SDK_INT < 18 && this.compressItem.getVisibility() == 0) {
+            try {
+                MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
+                if (codecInfo == null) {
+                    this.compressItem.setVisibility(8);
+                } else {
+                    String name = codecInfo.getName();
+                    if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
+                        this.compressItem.setVisibility(8);
+                    } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
+                        this.compressItem.setVisibility(8);
+                    }
+                }
+            } catch (Throwable e22) {
+                this.compressItem.setVisibility(8);
+                FileLog.e(e22);
+            }
+        }
+        updateVideoInfo();
+        updateMuteButton();
+        return true;
     }
 }

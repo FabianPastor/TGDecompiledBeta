@@ -82,6 +82,10 @@ public class SeekBar {
         }
     }
 
+    public float getProgress() {
+        return ((float) this.thumbX) / ((float) (this.width - thumbWidth));
+    }
+
     public boolean isDragging() {
         return this.pressed;
     }
