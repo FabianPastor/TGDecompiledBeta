@@ -1619,8 +1619,6 @@ public final class R {
         public static final int PaymentBillingAddress = NUM;
         public static final int PaymentCardCvv = NUM;
         public static final int PaymentCardExpireDate = NUM;
-        public static final int PaymentCardExpireDateMonth = NUM;
-        public static final int PaymentCardExpireDateYear = NUM;
         public static final int PaymentCardInfo = NUM;
         public static final int PaymentCardName = NUM;
         public static final int PaymentCardNameTitle = NUM;
@@ -1644,7 +1642,6 @@ public final class R {
         public static final int PaymentNoShippingMethod = NUM;
         public static final int PaymentPrecheckoutFailed = NUM;
         public static final int PaymentReceipt = NUM;
-        public static final int PaymentShipment = NUM;
         public static final int PaymentShippingAddress = NUM;
         public static final int PaymentShippingAddress1Placeholder = NUM;
         public static final int PaymentShippingAddress2Placeholder = NUM;
@@ -1663,7 +1660,6 @@ public final class R {
         public static final int PaymentSuccessfullyPaid = NUM;
         public static final int PaymentSuccessfullyPaidNoItem = NUM;
         public static final int PaymentTestInvoice = NUM;
-        public static final int PaymentTestShipment = NUM;
         public static final int PaymentTransactionMessage = NUM;
         public static final int PaymentTransactionReview = NUM;
         public static final int PaymentTransactionTotal = NUM;

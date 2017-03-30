@@ -267,6 +267,106 @@ public class NotificationsController {
         return false;
     }
 
+    protected void showSingleBackgroundNotification() {
+        this.notificationsQueue.postRunnable(new Runnable() {
+            public void run() {
+                try {
+                    if (ApplicationLoader.mainInterfacePaused) {
+                        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0);
+                        boolean notifyDisabled = false;
+                        int needVibrate = 0;
+                        String choosenSoundPath = null;
+                        int ledColor = -16776961;
+                        int priority = 0;
+                        if (!preferences.getBoolean("EnableAll", true)) {
+                            notifyDisabled = true;
+                        }
+                        String defaultPath = System.DEFAULT_NOTIFICATION_URI.getPath();
+                        if (!notifyDisabled) {
+                            choosenSoundPath = null;
+                            boolean vibrateOnlyIfSilent = false;
+                            if (choosenSoundPath != null && choosenSoundPath.equals(defaultPath)) {
+                                choosenSoundPath = null;
+                            } else if (choosenSoundPath == null) {
+                                choosenSoundPath = preferences.getString("GlobalSoundPath", defaultPath);
+                            }
+                            needVibrate = preferences.getInt("vibrate_messages", 0);
+                            priority = preferences.getInt("priority_group", 1);
+                            ledColor = preferences.getInt("MessagesLed", -16776961);
+                            if (needVibrate == 4) {
+                                vibrateOnlyIfSilent = true;
+                                needVibrate = 0;
+                            }
+                            if ((needVibrate == 2 && (0 == 1 || 0 == 3)) || ((needVibrate != 2 && 0 == 2) || !(null == null || 0 == 4))) {
+                                needVibrate = 0;
+                            }
+                            if (vibrateOnlyIfSilent && needVibrate != 2) {
+                                try {
+                                    int mode = NotificationsController.this.audioManager.getRingerMode();
+                                    if (!(mode == 0 || mode == 1)) {
+                                        needVibrate = 2;
+                                    }
+                                } catch (Throwable e) {
+                                    FileLog.e(e);
+                                }
+                            }
+                        }
+                        Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                        intent.setAction("com.tmessages.openchat" + Math.random() + ConnectionsManager.DEFAULT_DATACENTER_ID);
+                        intent.setFlags(32768);
+                        Builder mBuilder = new Builder(ApplicationLoader.applicationContext).setContentTitle(LocaleController.getString("AppName", R.string.AppName)).setSmallIcon(R.drawable.notification).setAutoCancel(true).setNumber(NotificationsController.this.total_unread_count).setContentIntent(PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, NUM)).setGroup("messages").setGroupSummary(true).setColor(-13851168);
+                        mBuilder.setCategory("msg");
+                        String lastMessage = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
+                        mBuilder.setContentText(lastMessage);
+                        mBuilder.setStyle(new BigTextStyle().bigText(lastMessage));
+                        if (priority == 0) {
+                            mBuilder.setPriority(0);
+                        } else if (priority == 1) {
+                            mBuilder.setPriority(1);
+                        } else if (priority == 2) {
+                            mBuilder.setPriority(2);
+                        }
+                        long[] jArr;
+                        if (notifyDisabled) {
+                            jArr = new long[2];
+                            mBuilder.setVibrate(new long[]{0, 0});
+                        } else {
+                            if (lastMessage.length() > 100) {
+                                lastMessage = lastMessage.substring(0, 100).replace('\n', ' ').trim() + "...";
+                            }
+                            mBuilder.setTicker(lastMessage);
+                            if (!(choosenSoundPath == null || choosenSoundPath.equals("NoSound"))) {
+                                if (choosenSoundPath.equals(defaultPath)) {
+                                    mBuilder.setSound(System.DEFAULT_NOTIFICATION_URI, 5);
+                                } else {
+                                    mBuilder.setSound(Uri.parse(choosenSoundPath), 5);
+                                }
+                            }
+                            if (ledColor != 0) {
+                                mBuilder.setLights(ledColor, 1000, 1000);
+                            }
+                            if (needVibrate == 2 || MediaController.getInstance().isRecordingAudio()) {
+                                jArr = new long[2];
+                                mBuilder.setVibrate(new long[]{0, 0});
+                            } else if (needVibrate == 1) {
+                                jArr = new long[4];
+                                mBuilder.setVibrate(new long[]{0, 100, 0, 100});
+                            } else if (needVibrate == 0 || needVibrate == 4) {
+                                mBuilder.setDefaults(2);
+                            } else if (needVibrate == 3) {
+                                jArr = new long[2];
+                                mBuilder.setVibrate(new long[]{0, 1000});
+                            }
+                        }
+                        NotificationsController.this.notificationManager.notify(1, mBuilder.build());
+                    }
+                } catch (Throwable e2) {
+                    FileLog.e(e2);
+                }
+            }
+        });
+    }
+
     protected void forceShowPopupForReply() {
         this.notificationsQueue.postRunnable(new Runnable() {
             public void run() {

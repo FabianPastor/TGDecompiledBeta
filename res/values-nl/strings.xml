@@ -205,15 +205,19 @@
     <string name="CacheEmpty">Leeg</string>
     <string name="CalculatingSize">Berekenen...</string>
     <string name="Call">Bellen</string>
-    <string name="CallAgain">Opnieuw bellen</string>
+    <string name="CallAgain">Herhaal</string>
     <string name="CallBack">Terugbellen</string>
+    <string name="CallEmojiKeyTooltip">Als deze emoji\'s er bij %1$s hetzelfde uitzien is deze oproep 100%% veilig.</string>
     <string name="CallEncryptionKeyDescription">Deze afbeelding en tekst zijn afgeleid van de encryptiesleutel voor deze oproep met &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Als dit er hetzelfde uitziet op het apparaat van &lt;b&gt;%2$s&lt;/b&gt;, dan is end-to-end-encryptie gegarandeerd.</string>
     <string name="CallMessageIncoming">Inkomende oproep</string>
+    <string name="CallMessageIncomingDeclined">Geweigerde oproep</string>
     <string name="CallMessageIncomingMissed">Gemiste oproep</string>
     <string name="CallMessageOutgoing">Uitgaande oproep</string>
     <string name="CallMessageOutgoingMissed">Oproep geannuleerd</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
+    <string name="CallNotAvailable">Sorry, &lt;b&gt;%1$s&lt;/b&gt; neemt geen oproepen aan.</string>
     <string name="CallText">We bellen je over %1$d:%2$02d</string>
+    <string name="CallViaTelegram">Telegram-oproep</string>
     <string name="Calling">We bellen je</string>
     <string name="Calls">Oproepen</string>
     <string name="CallsDataUsage">Oproepen</string>
@@ -998,8 +1002,7 @@
     <string name="PasswordReset">Wachtwoord uitgeschakeld</string>
     <string name="PaymentBillingAddress">Factuuradres</string>
     <string name="PaymentCardCvv">Veiligheidscode (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">Maand</string>
-    <string name="PaymentCardExpireDateYear">Jaar</string>
+    <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="PaymentCardInfo">Betaalinformatie</string>
     <string name="PaymentCardName">Achternaam</string>
     <string name="PaymentCardNameTitle">Kaarthouder</string>
@@ -1023,7 +1026,6 @@
     <string name="PaymentNoShippingMethod">Sorry, afleveren op jouw adres is niet mogelijk.</string>
     <string name="PaymentPrecheckoutFailed">Sorry, de bot heeft je betaling geannuleerd.</string>
     <string name="PaymentReceipt">Betalingsbewijs</string>
-    <string name="PaymentShipment">VERZENDING</string>
     <string name="PaymentShippingAddress">Verzendadres</string>
     <string name="PaymentShippingAddress1Placeholder">Adres 1 (Straat)</string>
     <string name="PaymentShippingAddress2Placeholder">Adres 2 (Straat)</string>
@@ -1041,8 +1043,7 @@
     <string name="PaymentShippingZipPlaceholder">Postcode</string>
     <string name="PaymentSuccessfullyPaid">%1$s is succesvol overgemaakt naar %2$s voor %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">%1$s is succesvol overgemaakt naar %2$s</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
+    <string name="PaymentTestInvoice">TEST FACTUUR</string>
     <string name="PaymentTransactionMessage">Echt %1$s overmaken naar de bot %2$s voor %3$s?</string>
     <string name="PaymentTransactionReview">Transactie-overzicht</string>
     <string name="PaymentTransactionTotal">Totaal</string>
@@ -1154,6 +1155,7 @@
     <string name="RestorePasswordNoEmailText">Omdat je geen herstel-e-mailadres hebt opgegeven voor je wachtwoord zul je bij verlies van je wachtwoord je account moeten resetten.</string>
     <string name="RestorePasswordNoEmailTitle">Sorry</string>
     <string name="Retry">Opnieuw proberen</string>
+    <string name="ReturnToCall">TERUG NAAR GESPREK</string>
     <string name="RevokeAlert">Deze link echt intrekken? Na intrekken kan niemand meer lid worden met de oude link.</string>
     <string name="RevokeAlertNewLink">De oude link is nu inactief. Een nieuwe link is aangemaakt.</string>
     <string name="RevokeButton">Intrekken</string>
@@ -1294,6 +1296,7 @@
     <string name="Support">Ondersteuning</string>
     <string name="SystemRoot">Systeemmap</string>
     <string name="TapHereGifs">Tik hier om opgeslagen GIF\'s te bekijken</string>
+    <string name="TapToEmojify">Tik voor emoji-weergave</string>
     <string name="TelegramFaq">Veelgestelde vragen</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq</string>
     <string name="TelegramVersion">Telegram voor Android %1$s</string>
@@ -1367,6 +1370,9 @@
     <string name="ViewPackPreview">Bundel bekijken</string>
     <string name="Vignette">Vignet</string>
     <string name="VoipAnswerCall">Opnemen</string>
+    <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
+    <string name="VoipAudioRoutingEarpiece">Oorstuk</string>
+    <string name="VoipAudioRoutingSpeaker">Luidspreker</string>
     <string name="VoipBusy">In gesprek</string>
     <string name="VoipCallEnded">Oproep beëindigd</string>
     <string name="VoipConnecting">Verbinden</string>
@@ -1410,7 +1416,7 @@
     <string name="WhenRoaming">Bij roaming</string>
     <string name="WhenUsingMobileData">Bij mobiele verbinding</string>
     <string name="WhoCanAddMe">Wie kan me toevoegen aan groepchats?</string>
-    <string name="WhoCanAddMeInfo">Je kunt met precisie bepalen wie je aan groepen en kanalen mag toevoegen.</string>
+    <string name="WhoCanAddMeInfo">Je kunt nauwkeurig bepalen wie je aan groepen en kanalen mag toevoegen.</string>
     <string name="WhoCanAddMembers">Wie kan leden toevoegen?</string>
     <string name="WhoCanAddMembersAdmins">Alleen beheerders</string>
     <string name="WhoCanAddMembersAllMembers">Alle leden</string>

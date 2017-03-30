@@ -207,13 +207,17 @@
     <string name="Call">Ligar</string>
     <string name="CallAgain">Ligar Novamente</string>
     <string name="CallBack">Ligar de Volta</string>
-    <string name="CallEncryptionKeyDescription">Essa imagem e texto foram derivadas da chave criptográfica para essa chamada com &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Se você vê o mesmo no dispositivo de &lt;b&gt;%2$s\'s&lt;/b&gt;, a criptografia ponta a ponta está garantida.</string>
-    <string name="CallMessageIncoming">Recebendo Chamada</string>
+    <string name="CallEmojiKeyTooltip">Se os emojis na tela de %1$s são os mesmos, essa chamada é 100%% segura.</string>
+    <string name="CallEncryptionKeyDescription">Essa imagem e texto foram derivadas da chave criptográfica para essa chamada com &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Se você vê o mesmo no dispositivo de &lt;b&gt;%2$s&lt;/b&gt;, a criptografia ponta a ponta está garantida.</string>
+    <string name="CallMessageIncoming">Chamada Recebida</string>
+    <string name="CallMessageIncomingDeclined">Chamada Rejeitada</string>
     <string name="CallMessageIncomingMissed">Chamada Perdida</string>
-    <string name="CallMessageOutgoing">Chamando</string>
+    <string name="CallMessageOutgoing">Chamada Efetuada</string>
     <string name="CallMessageOutgoingMissed">Chamada Cancelada</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
+    <string name="CallNotAvailable">Desculpe, &lt;b&gt;%1$s&lt;/b&gt; não aceita chamadas.</string>
     <string name="CallText">Vamos te ligar em %1$d:%2$02d</string>
+    <string name="CallViaTelegram">Chamada do Telegram</string>
     <string name="Calling">Estamos te ligando...</string>
     <string name="Calls">Chamadas</string>
     <string name="CallsDataUsage">Chamadas</string>
@@ -961,7 +965,7 @@
     <string name="OpenInExternalApp">Abrir em...</string>
     <string name="OpenUrlAlert">Abrir URL em %1$s?</string>
     <string name="OtherSessions">Sessões Ativas</string>
-    <string name="OutgoingCalls">Chamadas Realizadas</string>
+    <string name="OutgoingCalls">Chamadas Efetuadas</string>
     <string name="Page1Message">O mais &lt;b&gt;rápido&lt;/b&gt; aplicativo de mensagem do mundo. &lt;br/&gt;É &lt;b&gt;gratuito&lt;/b&gt; e &lt;b&gt;seguro&lt;/b&gt;.</string>
     <string name="Page1Title">Telegram</string>
     <string name="Page2Message">O &lt;b&gt;Telegram&lt;/b&gt; envia mensagens mais rápido&lt;br/&gt;que qualquer outro aplicativo.</string>
@@ -998,8 +1002,7 @@
     <string name="PasswordReset">Senha desativada</string>
     <string name="PaymentBillingAddress">Endereço de cobrança</string>
     <string name="PaymentCardCvv">Código de Segurança (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">Mês</string>
-    <string name="PaymentCardExpireDateYear">Ano</string>
+    <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="PaymentCardInfo">Informação de pagamento</string>
     <string name="PaymentCardName">Nome Sobrenome</string>
     <string name="PaymentCardNameTitle">Titular do cartão</string>
@@ -1023,8 +1026,7 @@
     <string name="PaymentNoShippingMethod">Desculpe, não é possível entregar neste endereço.</string>
     <string name="PaymentPrecheckoutFailed">Desculpe, o pagamento foi cancelado pelo bot.</string>
     <string name="PaymentReceipt">Recibo</string>
-    <string name="PaymentShipment">ENVIO</string>
-    <string name="PaymentShippingAddress">Endereço do envio</string>
+    <string name="PaymentShippingAddress">Endereço de envio</string>
     <string name="PaymentShippingAddress1Placeholder">Endereço 1 (Rua)</string>
     <string name="PaymentShippingAddress2Placeholder">Endereço 2 (Rua)</string>
     <string name="PaymentShippingCityPlaceholder">Cidade</string>
@@ -1041,8 +1043,7 @@
     <string name="PaymentShippingZipPlaceholder">Código Postal</string>
     <string name="PaymentSuccessfullyPaid">Você transferiu com sucesso %1$s para %2$s por %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">Você transferiu com sucesso %1$s para %2$s</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
+    <string name="PaymentTestInvoice">FATURA DE TESTES</string>
     <string name="PaymentTransactionMessage">Você realmente deseja transferir %1$s para o bot %2$s por %3$s?</string>
     <string name="PaymentTransactionReview">Revisão da Transação</string>
     <string name="PaymentTransactionTotal">Total</string>
@@ -1154,6 +1155,7 @@
     <string name="RestorePasswordNoEmailText">Como você não indicou um e-mail de recuperação quando configurou a sua senha, as únicas opções restantes são lembrar a senha ou apagar a sua conta.</string>
     <string name="RestorePasswordNoEmailTitle">Desculpe</string>
     <string name="Retry">Tentar novamente</string>
+    <string name="ReturnToCall">RETORNAR À LIGAÇÃO</string>
     <string name="RevokeAlert">Você tem certeza que deseja desativar o link? Uma vez feito, ninguém conseguirá entrar usando-o.</string>
     <string name="RevokeAlertNewLink">Este link de convite está inativo. Um novo link foi gerado.</string>
     <string name="RevokeButton">Desativar</string>
@@ -1294,6 +1296,7 @@
     <string name="Support">Suporte</string>
     <string name="SystemRoot">Administrador do Sistema</string>
     <string name="TapHereGifs">Toque aqui para acessar os GIFs salvos</string>
+    <string name="TapToEmojify">Toque para emojizar</string>
     <string name="TelegramFaq">Perguntas Frequentes</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/br</string>
     <string name="TelegramVersion">Telegram para Android %1$s</string>
@@ -1367,6 +1370,9 @@
     <string name="ViewPackPreview">Ver Pacote</string>
     <string name="Vignette">Vignette</string>
     <string name="VoipAnswerCall">Atender</string>
+    <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
+    <string name="VoipAudioRoutingEarpiece">Auricular</string>
+    <string name="VoipAudioRoutingSpeaker">Alto-falante</string>
     <string name="VoipBusy">Linha ocupada</string>
     <string name="VoipCallEnded">Chamada encerrada</string>
     <string name="VoipConnecting">Conectando</string>
@@ -1378,7 +1384,7 @@
     <string name="VoipFeedbackCommentHint">Adicionar um comentário opcional</string>
     <string name="VoipHangingUp">Desligando</string>
     <string name="VoipInCallBranding">Chamada do Telegram</string>
-    <string name="VoipIncoming">Recebendo Chamada</string>
+    <string name="VoipIncoming">Recebendo chamada</string>
     <string name="VoipNeedMicPermission">O Telegram precisa acessar seu microfone para poder fazer chamadas.</string>
     <string name="VoipNotificationSettings">Chamadas de voz</string>
     <string name="VoipOffline">Você está offline. Conecte à internet para poder realizar chamadas.</string>
@@ -1387,7 +1393,7 @@
     <string name="VoipOfflineOpenSettings">Configurações</string>
     <string name="VoipOfflineTitle">Desconectado</string>
     <string name="VoipOngoingAlert">Você está em uma chamada com &lt;b&gt;%1$s&lt;/b&gt;. Gostaria de encerrar e iniciar uma nova chamada com &lt;b&gt;%2$s&lt;/b&gt;?</string>
-    <string name="VoipOngoingAlertTitle">Outra chamada em progresso</string>
+    <string name="VoipOngoingAlertTitle">Outra chamada em andamento</string>
     <string name="VoipOutgoingCall">Realizando chamada do Telegram</string>
     <string name="VoipPeerIncompatible">O aplicativo de &lt;b&gt;%1$s&lt;/b&gt; está usando um protocolo incompatível. O aplicativo desse usuário precisa ser atualizado para que você possa chamá-lo.</string>
     <string name="VoipPeerOutdated">O aplicativo de &lt;b&gt;%1$s&lt;/b&gt; não suporta chamadas. O aplicativo desse usuário precisa ser atualizado para que você possa chamá-lo.</string>
@@ -1396,7 +1402,7 @@
     <string name="VoipRinging">Tocando</string>
     <string name="VoipRingtoneInfo">Você pode personalizar o toque usado quando esse contato te chamar no Telegram</string>
     <string name="VoipSettingsRingtone">Toque</string>
-    <string name="VoipUseLessData">Usar menos dados para ligações</string>
+    <string name="VoipUseLessData">Usar menos dados para chamadas</string>
     <string name="VoipWaiting">Aguardando</string>
     <string name="WaitingForNetwork">Aguardando rede...</string>
     <string name="Warmth">Calor</string>

@@ -231,6 +231,9 @@ public class UserConfig {
                 notificationsConverted = preferences.getBoolean("notificationsConverted", false);
                 allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
                 pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
+                if (passcodeHash.length() > 0 && lastPauseTime == 0) {
+                    lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
+                }
                 migrateOffsetId = preferences.getInt("migrateOffsetId", 0);
                 if (migrateOffsetId != -1) {
                     migrateOffsetDate = preferences.getInt("migrateOffsetDate", 0);

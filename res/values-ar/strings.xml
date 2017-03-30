@@ -207,13 +207,17 @@
     <string name="Call">اتصال</string>
     <string name="CallAgain">اتصل مرة أخرى</string>
     <string name="CallBack">أعد الاتصال بالرقم</string>
+    <string name="CallEmojiKeyTooltip">إذا كانت هذه الايموجيات مطابقة للتي تظهر على شاشة %1$s، فالمكالمة 100%% آمنة.</string>
     <string name="CallEncryptionKeyDescription">هذه الصورة والنص تم اشتقاقهم من مفتاح التشفير لهذه المحادثة السرية مع &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;إذا كانت مطابقة لما يظهر على جهاز &lt;b&gt;%2$s&lt;/b&gt; ، التشفير من البداية للنهاية مضمون.</string>
     <string name="CallMessageIncoming">مكالمات واردة</string>
+    <string name="CallMessageIncomingDeclined">مكالمة مرفوضة</string>
     <string name="CallMessageIncomingMissed">مكالمات فائتة</string>
     <string name="CallMessageOutgoing">مكالمات صادرة</string>
     <string name="CallMessageOutgoingMissed">مكالمات ملغاة</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
+    <string name="CallNotAvailable">المعذرة، &lt;b&gt;%1$s&lt;/b&gt; لا يستقبل مكالمات.</string>
     <string name="CallText">سنتصل بك خلال %1$d:%2$02d</string>
+    <string name="CallViaTelegram">مكالمة تيليجرام</string>
     <string name="Calling">جاري الاتصال بك ...</string>
     <string name="Calls">مكالمات</string>
     <string name="CallsDataUsage">مكالمات</string>
@@ -998,8 +1002,7 @@
     <string name="PasswordReset">تم تعطيل كلمة المرور</string>
     <string name="PaymentBillingAddress">عنوان الدفع</string>
     <string name="PaymentCardCvv">رمز الأمان (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">الشهر</string>
-    <string name="PaymentCardExpireDateYear">السنة</string>
+    <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="PaymentCardInfo">معلومات الشحن</string>
     <string name="PaymentCardName">الاسم</string>
     <string name="PaymentCardNameTitle">صاحب البطاقة</string>
@@ -1023,7 +1026,6 @@
     <string name="PaymentNoShippingMethod">المعذرة، لا يمكن التوصيل لعنوانك.</string>
     <string name="PaymentPrecheckoutFailed">المعذرة، تم إلغاء عملية الدفع من البوت.</string>
     <string name="PaymentReceipt">الفاتورة</string>
-    <string name="PaymentShipment">الشحنة</string>
     <string name="PaymentShippingAddress">عنوان الشحن</string>
     <string name="PaymentShippingAddress1Placeholder">العنوان ١ (الشارع)</string>
     <string name="PaymentShippingAddress2Placeholder">العنوان ٢ (الشارع)</string>
@@ -1041,8 +1043,7 @@
     <string name="PaymentShippingZipPlaceholder">الرمز البريدي</string>
     <string name="PaymentSuccessfullyPaid">لقد قمت بنجاح تحويل %1$s إلى %2$s لـ %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">لقد قمت بنجاح تحويل %1$s إلى %2$s</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
+    <string name="PaymentTestInvoice">الفاتورة التجريبية</string>
     <string name="PaymentTransactionMessage">هل حقًا ترغب في تحويل %1$s إلى البوت %2$s لـ %3$s؟</string>
     <string name="PaymentTransactionReview">مراجعة العملية</string>
     <string name="PaymentTransactionTotal">الإجمالي</string>
@@ -1154,6 +1155,7 @@
     <string name="RestorePasswordNoEmailText">لم تقم بإضافة بريد إلكتروني لإستعادة كلمة المرور عند اختيارها، لذلك خياراتك المتبقية هي تذكّر كلمة المرور أو إعادة تعيين حسابك.</string>
     <string name="RestorePasswordNoEmailTitle">عذرًا</string>
     <string name="Retry">إعادة المحاولة</string>
+    <string name="ReturnToCall">الرجوع للمكالمة</string>
     <string name="RevokeAlert">هل أنت متأكد من رغبتك في إلغاء الرابط؟ اذا قمت بذلك، لن يستطيع أحد الدخول باستخدامه.</string>
     <string name="RevokeAlertNewLink">رابط الدعوة السابق لا يعمل الآن. سيتم إنشاء رابط جديد.</string>
     <string name="RevokeButton">إلغاء الرابط</string>
@@ -1294,6 +1296,7 @@
     <string name="Support">الدعم</string>
     <string name="SystemRoot">جذر النظام</string>
     <string name="TapHereGifs">اضغط هنا للوصول للصور المتحركة المحفوظة</string>
+    <string name="TapToEmojify">اضغط للتحويل لإيموجي</string>
     <string name="TelegramFaq">الأسئلة الشائعة عن تيليجرام</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ar</string>
     <string name="TelegramVersion">تيليجرام للأندرويد %1$s</string>
@@ -1367,6 +1370,9 @@
     <string name="ViewPackPreview">استعرض الحزمة</string>
     <string name="Vignette">النقش</string>
     <string name="VoipAnswerCall">رد</string>
+    <string name="VoipAudioRoutingBluetooth">بلوتوث</string>
+    <string name="VoipAudioRoutingEarpiece">سماعة الأذن</string>
+    <string name="VoipAudioRoutingSpeaker">سماعة</string>
     <string name="VoipBusy">الخط مشغول</string>
     <string name="VoipCallEnded">تم إنهاء المكالمة</string>
     <string name="VoipConnecting">جاري الإتصال</string>

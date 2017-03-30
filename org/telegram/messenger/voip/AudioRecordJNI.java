@@ -30,7 +30,7 @@ public class AudioRecordJNI {
         return Math.max(AudioRecord.getMinBufferSize(48000, 16, 2), min);
     }
 
-    public synchronized void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
+    public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
         if (this.audioRecord != null) {
             throw new IllegalStateException("already inited");
         }
@@ -44,13 +44,13 @@ public class AudioRecordJNI {
         this.buffer = ByteBuffer.allocateDirect(bufferSize);
     }
 
-    public synchronized void stop() {
+    public void stop() {
         if (this.audioRecord != null) {
             this.audioRecord.stop();
         }
     }
 
-    public synchronized void release() {
+    public void release() {
         this.running = false;
         if (this.thread != null) {
             try {
@@ -78,45 +78,41 @@ public class AudioRecordJNI {
         }
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean start() {
         try {
-            if (this.thread == null) {
-                synchronized (this) {
-                    if (this.audioRecord == null) {
-                        return false;
-                    }
-                    this.audioRecord.startRecording();
-                    if (VERSION.SDK_INT >= 16) {
-                        if (AutomaticGainControl.isAvailable()) {
-                            this.agc = AutomaticGainControl.create(this.audioRecord.getAudioSessionId());
-                            if (this.agc != null) {
-                                this.agc.setEnabled(false);
-                            }
-                        } else {
-                            FileLog.w("AutomaticGainControl is not available on this device :(");
-                        }
-                        if (NoiseSuppressor.isAvailable()) {
-                            this.ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
-                            if (this.ns != null) {
-                                this.ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
-                            }
-                        } else {
-                            FileLog.w("NoiseSuppressor is not available on this device :(");
-                        }
-                        if (AcousticEchoCanceler.isAvailable()) {
-                            this.aec = AcousticEchoCanceler.create(this.audioRecord.getAudioSessionId());
-                            if (this.aec != null) {
-                                this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
-                            }
-                        } else {
-                            FileLog.w("AcousticEchoCanceler is not available on this device");
-                        }
-                    }
-                }
+            if (this.thread != null) {
+                this.audioRecord.startRecording();
+            } else if (this.audioRecord == null) {
+                return false;
             } else {
                 this.audioRecord.startRecording();
+                if (VERSION.SDK_INT >= 16) {
+                    if (AutomaticGainControl.isAvailable()) {
+                        this.agc = AutomaticGainControl.create(this.audioRecord.getAudioSessionId());
+                        if (this.agc != null) {
+                            this.agc.setEnabled(false);
+                        }
+                    } else {
+                        FileLog.w("AutomaticGainControl is not available on this device :(");
+                    }
+                    if (NoiseSuppressor.isAvailable()) {
+                        this.ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
+                        if (this.ns != null) {
+                            this.ns.setEnabled(VoIPServerConfig.getBoolean("user_system_ns", true));
+                        }
+                    } else {
+                        FileLog.w("NoiseSuppressor is not available on this device :(");
+                    }
+                    if (AcousticEchoCanceler.isAvailable()) {
+                        this.aec = AcousticEchoCanceler.create(this.audioRecord.getAudioSessionId());
+                        if (this.aec != null) {
+                            this.aec.setEnabled(VoIPServerConfig.getBoolean("use_system_aec", true));
+                        }
+                    } else {
+                        FileLog.w("AcousticEchoCanceler is not available on this device");
+                    }
+                }
+                startThread();
             }
             return true;
         } catch (Exception x) {

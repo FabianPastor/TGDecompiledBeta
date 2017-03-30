@@ -1482,12 +1482,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             ArrayList<CharSequence> items = new ArrayList();
             final ArrayList<Integer> actions = new ArrayList();
             TL_userFull userFull = MessagesController.getInstance().getUserFull(user.id);
-            items.add(LocaleController.getString("Call", R.string.Call));
-            actions.add(Integer.valueOf(0));
             if (MessagesController.getInstance().callsEnabled && userFull != null && userFull.phone_calls_available) {
                 items.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
                 actions.add(Integer.valueOf(2));
             }
+            items.add(LocaleController.getString("Call", R.string.Call));
+            actions.add(Integer.valueOf(0));
             items.add(LocaleController.getString("Copy", R.string.Copy));
             actions.add(Integer.valueOf(1));
             builder.setItems((CharSequence[]) items.toArray(new CharSequence[items.size()]), new OnClickListener() {

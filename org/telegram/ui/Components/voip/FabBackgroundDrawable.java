@@ -19,8 +19,13 @@ public class FabBackgroundDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
+        if (this.shadowBitmap == null) {
+            onBoundsChange(getBounds());
+        }
         int size = Math.min(getBounds().width(), getBounds().height());
-        canvas.drawBitmap(this.shadowBitmap, (float) (getBounds().centerX() - (this.shadowBitmap.getWidth() / 2)), (float) (getBounds().centerY() - (this.shadowBitmap.getHeight() / 2)), this.shadowPaint);
+        if (this.shadowBitmap != null) {
+            canvas.drawBitmap(this.shadowBitmap, (float) (getBounds().centerX() - (this.shadowBitmap.getWidth() / 2)), (float) (getBounds().centerY() - (this.shadowBitmap.getHeight() / 2)), this.shadowPaint);
+        }
         canvas.drawCircle((float) (size / 2), (float) (size / 2), (float) ((size / 2) - AndroidUtilities.dp(4.0f)), this.bgPaint);
     }
 

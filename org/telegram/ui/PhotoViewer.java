@@ -3401,9 +3401,11 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         this.captionTextViewNew.setTranslationY(0.0f);
         this.bottomLayout.setTranslationY(0.0f);
         this.shareButton.setVisibility(8);
-        this.qualityChooseView.setVisibility(4);
-        this.qualityPicker.setVisibility(4);
-        this.qualityChooseView.setTag(null);
+        if (this.qualityChooseView != null) {
+            this.qualityChooseView.setVisibility(4);
+            this.qualityPicker.setVisibility(4);
+            this.qualityChooseView.setTag(null);
+        }
         if (this.qualityChooseViewAnimation != null) {
             this.qualityChooseViewAnimation.cancel();
             this.qualityChooseViewAnimation = null;

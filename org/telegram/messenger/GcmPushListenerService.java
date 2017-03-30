@@ -1,5 +1,7 @@
 package org.telegram.messenger;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONObject;
@@ -22,6 +24,11 @@ public class GcmPushListenerService extends GcmListenerService {
                             ConnectionsManager.getInstance().applyDatacenterAddress(dc, parts[0], Integer.parseInt(parts[1]));
                         } else {
                             return;
+                        }
+                    } else if (ApplicationLoader.mainInterfacePaused && bundle.getInt("badge", -1) == -1) {
+                        NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+                        if (netInfo == null || !netInfo.isConnected()) {
+                            NotificationsController.getInstance().showSingleBackgroundNotification();
                         }
                     }
                 } catch (Throwable e) {

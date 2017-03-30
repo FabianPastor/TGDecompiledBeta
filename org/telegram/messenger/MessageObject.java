@@ -364,7 +364,8 @@ public class MessageObject {
                 } else if (message.action instanceof TL_messageActionChannelMigrateFrom) {
                     this.messageText = LocaleController.getString("ActionMigrateFromGroup", R.string.ActionMigrateFromGroup);
                 } else if (message.action instanceof TL_messageActionPinMessage) {
-                    generatePinMessageText(fromUser, fromUser == null ? (Chat) chats.get(Integer.valueOf(message.to_id.channel_id)) : null);
+                    Chat chat = (fromUser != null || chats == null) ? null : (Chat) chats.get(Integer.valueOf(message.to_id.channel_id));
+                    generatePinMessageText(fromUser, chat);
                 } else if (message.action instanceof TL_messageActionHistoryClear) {
                     this.messageText = LocaleController.getString("HistoryCleared", R.string.HistoryCleared);
                 } else if (message.action instanceof TL_messageActionGameScore) {

@@ -207,13 +207,17 @@
     <string name="Call">전화 걸기</string>
     <string name="CallAgain">다시 전화걸기</string>
     <string name="CallBack">전화 회신</string>
+    <string name="CallEmojiKeyTooltip">%1$s님과 이모티콘이 일치한다면, 이 통화는 100%% 안전합니다</string>
     <string name="CallEncryptionKeyDescription">이 이미지와 텍스트는 &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt; 님과의 현재 전화를 위하여 파생된 것입니다. 이 이미지와 텍스트가 &lt;b&gt;%2$s\'s&lt;/b&gt; 님의 휴대전화와 동일하다면 단말기간(end-to-end)의 암호화가 정상적으로 진행되고 있음을 보장합니다.</string>
     <string name="CallMessageIncoming">수신 전화</string>
+    <string name="CallMessageIncomingDeclined">거절한 전화</string>
     <string name="CallMessageIncomingMissed">부재중 전화</string>
     <string name="CallMessageOutgoing">발신 전화</string>
     <string name="CallMessageOutgoingMissed">취소된 전화</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
+    <string name="CallNotAvailable">죄송합니다, &lt;b&gt;%1$s&lt;/b&gt; 님은 수신거부 상태입니다.</string>
     <string name="CallText">텔레그램이 %1$d:%2$02d 후에는 전화를 겁니다.</string>
+    <string name="CallViaTelegram">텔레그램 전화</string>
     <string name="Calling">텔레그램이 전화 거는 중...</string>
     <string name="Calls">전화</string>
     <string name="CallsDataUsage">전화</string>
@@ -998,8 +1002,7 @@
     <string name="PasswordReset">비밀번호 비활성화</string>
     <string name="PaymentBillingAddress">결제주소</string>
     <string name="PaymentCardCvv">보안코드 (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">월</string>
-    <string name="PaymentCardExpireDateYear">년</string>
+    <string name="PaymentCardExpireDate">MM/YY</string>
     <string name="PaymentCardInfo">결제정보</string>
     <string name="PaymentCardName">성</string>
     <string name="PaymentCardNameTitle">카드소유자</string>
@@ -1023,7 +1026,6 @@
     <string name="PaymentNoShippingMethod">죄송합니다. 이 주소로 배송이 가능하지 않습니다.</string>
     <string name="PaymentPrecheckoutFailed">죄송합니다, 결제가 봇에 의하여 거절되었습니다.</string>
     <string name="PaymentReceipt">영수증</string>
-    <string name="PaymentShipment">배송</string>
     <string name="PaymentShippingAddress">배송주소</string>
     <string name="PaymentShippingAddress1Placeholder">주소 1 (Street)</string>
     <string name="PaymentShippingAddress2Placeholder">주소 2 (Street)</string>
@@ -1041,8 +1043,7 @@
     <string name="PaymentShippingZipPlaceholder">우편번호</string>
     <string name="PaymentSuccessfullyPaid">%3$s에 대한 %1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
     <string name="PaymentSuccessfullyPaidNoItem">%1$s 금액을 %2$s 에게 성공적으로 전송하였습니다.</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
+    <string name="PaymentTestInvoice">테스트 인보이스</string>
     <string name="PaymentTransactionMessage">%3$s에 대한 %1$s 금액을 %2$s 봇에게 전송하시겠습니까?</string>
     <string name="PaymentTransactionReview">거래내역 확인</string>
     <string name="PaymentTransactionTotal">전체</string>
@@ -1154,6 +1155,7 @@
     <string name="RestorePasswordNoEmailText">비밀번호 복구 이메일을 설정하지 않았기때문에, 비밀번호를 기억해내시거나 계정 초기화를 진행해주셔야합니다.</string>
     <string name="RestorePasswordNoEmailTitle">죄송합니다.</string>
     <string name="Retry">재전송</string>
+    <string name="ReturnToCall">전화로 이동</string>
     <string name="RevokeAlert">초대링크를 폐지하시겠습니까? 진행하실 경우 해당 링크로 방에 참여할 수 없게 됩니다.</string>
     <string name="RevokeAlertNewLink">기존 초대링크는 비활성화 되었습니다. 새로운 링크가 생성되었습니다.</string>
     <string name="RevokeButton">폐지하기</string>
@@ -1294,6 +1296,7 @@
     <string name="Support">지원</string>
     <string name="SystemRoot">시스템 루트</string>
     <string name="TapHereGifs">저장된 GIF 파일을 보려면 탭하세요.</string>
+    <string name="TapToEmojify">탭을 하여 이모티콘화</string>
     <string name="TelegramFaq">자주 묻는 질문</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/ko</string>
     <string name="TelegramVersion">텔레그램 안드로이드 %1$s</string>
@@ -1367,6 +1370,9 @@
     <string name="ViewPackPreview">팩 보기</string>
     <string name="Vignette">비네팅</string>
     <string name="VoipAnswerCall">받기</string>
+    <string name="VoipAudioRoutingBluetooth">블루투스</string>
+    <string name="VoipAudioRoutingEarpiece">이어폰</string>
+    <string name="VoipAudioRoutingSpeaker">스피커</string>
     <string name="VoipBusy">통화 중</string>
     <string name="VoipCallEnded">전화 종료</string>
     <string name="VoipConnecting">연결 중</string>

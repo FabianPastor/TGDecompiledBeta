@@ -207,13 +207,17 @@
     <string name="Call">Llamar</string>
     <string name="CallAgain">Llamar de nuevo</string>
     <string name="CallBack">Devolver llamada</string>
+    <string name="CallEmojiKeyTooltip">Si estos emojis son los mismos en la pantalla de %1$s, esta llamada es 100%% segura.</string>
     <string name="CallEncryptionKeyDescription">El texto e imagen derivan de la clave de cifrado para la llamada con &lt;b&gt;%1$s&lt;/b&gt;.&lt;br&gt;&lt;br&gt;Si se ven igual en el dispositivo de &lt;b&gt;%2$s\'s&lt;/b&gt; el cifrado end-to-end está garantizado.</string>
     <string name="CallMessageIncoming">Llamada entrante</string>
+    <string name="CallMessageIncomingDeclined">Llamada rechazada</string>
     <string name="CallMessageIncomingMissed">Llamada perdida</string>
     <string name="CallMessageOutgoing">Llamada saliente</string>
     <string name="CallMessageOutgoingMissed">Llamada cancelada</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
+    <string name="CallNotAvailable">Lo sentimos, &lt;b&gt;%1$s&lt;/b&gt; no acepta llamadas.</string>
     <string name="CallText">Te llamaremos en %1$d:%2$02d</string>
+    <string name="CallViaTelegram">Llamada de Telegram</string>
     <string name="Calling">Llamándote...</string>
     <string name="Calls">Llamadas</string>
     <string name="CallsDataUsage">Llamadas</string>
@@ -246,7 +250,7 @@
     <string name="ChannelAlertCreate">CREAR CANAL</string>
     <string name="ChannelAlertText">Los canales son una nueva herramienta para difundir tus mensajes a grandes audiencias.</string>
     <string name="ChannelAlertTitle">¿Qué es un canal?</string>
-    <string name="ChannelBlockedUsers">Bloqueados</string>
+    <string name="ChannelBlockedUsers">Suspendidos</string>
     <string name="ChannelBroadcast">Difundir</string>
     <string name="ChannelCantOpenBanned">Lamentablemente, fuiste suspendido de participar en grupos públicos.</string>
     <string name="ChannelCantOpenNa">Lo sentimos, este chat ya no es accesible.</string>
@@ -814,7 +818,7 @@
     <string name="No">No</string>
     <string name="NoAudio">Por favor, añade archivos a la carpeta de música en tu dispositivo para verlos aquí.</string>
     <string name="NoBlocked">No hay usuarios bloqueados</string>
-    <string name="NoBlockedGroup">Los usuarios bloqueados son eliminados del grupo y sólo pueden volver si son invitados por un administrador. Los enlaces de invitación no funcionan para ellos.</string>
+    <string name="NoBlockedGroup">Los usuarios suspendidos son eliminados del grupo y sólo pueden volver si son invitados por un administrador. Los enlaces de invitación no funcionan para ellos.</string>
     <string name="NoCallLog">Aún no has realizado llamadas.</string>
     <string name="NoChats">Aún no hay chats...</string>
     <string name="NoChatsHelp">Envía mensajes tocando el botón para\nredactar, en la parte inferior derecha,\no pulsa el botón menú para más opciones.</string>
@@ -998,8 +1002,7 @@
     <string name="PasswordReset">Contraseña desactivada</string>
     <string name="PaymentBillingAddress">Dirección de facturación</string>
     <string name="PaymentCardCvv">Código de seguridad (CVV)</string>
-    <string name="PaymentCardExpireDateMonth">Mes</string>
-    <string name="PaymentCardExpireDateYear">Año</string>
+    <string name="PaymentCardExpireDate">MM/AA</string>
     <string name="PaymentCardInfo">Información de pago</string>
     <string name="PaymentCardName">Nombre Apellidos</string>
     <string name="PaymentCardNameTitle">Dueño de la tarjeta</string>
@@ -1023,7 +1026,6 @@
     <string name="PaymentNoShippingMethod">Lo sentimos, pero no es posible hacer envíos a tu dirección.</string>
     <string name="PaymentPrecheckoutFailed">Lo sentimos, el pago fue cancelado por el bot.</string>
     <string name="PaymentReceipt">Recibo</string>
-    <string name="PaymentShipment">ENVÍO</string>
     <string name="PaymentShippingAddress">Dirección de envío</string>
     <string name="PaymentShippingAddress1Placeholder">Dirección 1 (calle)</string>
     <string name="PaymentShippingAddress2Placeholder">Dirección 2 (calle)</string>
@@ -1041,8 +1043,7 @@
     <string name="PaymentShippingZipPlaceholder">Código postal</string>
     <string name="PaymentSuccessfullyPaid">Has transferido satisfactoriamente %1$s a %2$s por %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">Has transferido satisfactoriamente %1$s a %2$s</string>
-    <string name="PaymentTestInvoice">TEST INVOICE</string>
-    <string name="PaymentTestShipment">TEST SHIPMENT</string>
+    <string name="PaymentTestInvoice">PROBAR FACTURA</string>
     <string name="PaymentTransactionMessage">¿Quieres transferir %1$s al bot %2$s por %3$s?</string>
     <string name="PaymentTransactionReview">Repaso de la transacción</string>
     <string name="PaymentTransactionTotal">Total</string>
@@ -1154,6 +1155,7 @@
     <string name="RestorePasswordNoEmailText">Como no estableciste un e-mail de recuperación cuando configuraste tu contraseña, las opciones restantes son recordar tu contraseña o restablecer tu cuenta.</string>
     <string name="RestorePasswordNoEmailTitle">Lo sentimos</string>
     <string name="Retry">Reintentar</string>
+    <string name="ReturnToCall">VOLVER A LA LLAMADA</string>
     <string name="RevokeAlert">¿Quieres anular este enlace? Una vez anulado, nadie podrá unirse a través de él.</string>
     <string name="RevokeAlertNewLink">El enlace de invitación anterior está inactivo. Ha sido creado uno nuevo.</string>
     <string name="RevokeButton">Anular</string>
@@ -1294,6 +1296,7 @@
     <string name="Support">Soporte</string>
     <string name="SystemRoot">Raíz del Sistema</string>
     <string name="TapHereGifs">Toca y ve los GIF guardados</string>
+    <string name="TapToEmojify">Toca para ver emojis</string>
     <string name="TelegramFaq">Preguntas frecuentes</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq/es</string>
     <string name="TelegramVersion">Telegram para Android %1$s</string>
@@ -1367,6 +1370,9 @@
     <string name="ViewPackPreview">Ver pack</string>
     <string name="Vignette">Viñeta</string>
     <string name="VoipAnswerCall">Contestar</string>
+    <string name="VoipAudioRoutingBluetooth">Bluetooth</string>
+    <string name="VoipAudioRoutingEarpiece">Auricular</string>
+    <string name="VoipAudioRoutingSpeaker">Altavoz</string>
     <string name="VoipBusy">Línea ocupada</string>
     <string name="VoipCallEnded">Llamada terminada</string>
     <string name="VoipConnecting">Conectando</string>
@@ -1393,7 +1399,7 @@
     <string name="VoipPeerOutdated">La app de &lt;b&gt;%1$s&lt;/b&gt; no soporta llamadas. Necesita actualizar la app para poder llamar.</string>
     <string name="VoipRateCallAlert">Por favor, evalúa la calidad de tu llamada de Telegram</string>
     <string name="VoipRequesting">Solicitando</string>
-    <string name="VoipRinging">Marcando</string>
+    <string name="VoipRinging">Llamando</string>
     <string name="VoipRingtoneInfo">Puedes personalizar el tono de llamada desde este contacto en Telegram.</string>
     <string name="VoipSettingsRingtone">Tono de llamada</string>
     <string name="VoipUseLessData">Usar menos datos</string>

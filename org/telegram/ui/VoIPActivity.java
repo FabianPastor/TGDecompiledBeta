@@ -1009,6 +1009,9 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                         VoIPActivity.this.declineBtn.setVisibility(8);
                         VoIPActivity.this.getWindow().clearFlags(2097152);
                     }
+                    if (state != 3) {
+                        VoIPActivity.this.emojiWrap.setVisibility(8);
+                    }
                     VoIPActivity.this.firstStateChange = false;
                 }
                 if (!(!VoIPActivity.this.isIncomingWaiting || state == 10 || state == 6 || state == 5)) {
@@ -1059,6 +1062,11 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     VoIPActivity.this.setStateTextAnimated("0:00", false);
                     VoIPActivity.this.startUpdatingCallDuration();
                     VoIPActivity.this.updateKeyView();
+                    if (VoIPActivity.this.emojiWrap.getVisibility() != 0) {
+                        VoIPActivity.this.emojiWrap.setVisibility(0);
+                        VoIPActivity.this.emojiWrap.setAlpha(0.0f);
+                        VoIPActivity.this.emojiWrap.animate().alpha(1.0f).setDuration(200).setInterpolator(new DecelerateInterpolator()).start();
+                    }
                 } else if (state == 4) {
                     int lastError;
                     VoIPActivity.this.setStateTextAnimated(LocaleController.getString("VoipFailed", R.string.VoipFailed), false);
