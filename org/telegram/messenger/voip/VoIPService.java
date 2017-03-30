@@ -801,6 +801,20 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 }
                 callEnded();
             }
+            final Runnable stopper = new Runnable() {
+                private boolean done = false;
+
+                public void run() {
+                    if (!this.done) {
+                        this.done = true;
+                        if (onDone != null) {
+                            onDone.run();
+                        }
+                        VoIPService.this.callEnded();
+                    }
+                }
+            };
+            AndroidUtilities.runOnUIThread(stopper, (long) ((int) (VoIPServerConfig.getDouble("hangup_ui_timeout", 5.0d) * 1000.0d)));
             ConnectionsManager.getInstance().sendRequest(req, new RequestDelegate() {
                 public void run(TLObject response, TL_error error) {
                     if (error != null) {
@@ -811,8 +825,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                         }
                         FileLog.d("phone.discardCall " + response);
                     }
-                    if (onDone != null && !wasNotConnected) {
-                        AndroidUtilities.runOnUIThread(onDone);
+                    if (!wasNotConnected) {
+                        AndroidUtilities.cancelRunOnUIThread(stopper);
+                        if (onDone != null) {
+                            onDone.run();
+                        }
                     }
                 }
             }, 2);
@@ -1210,7 +1227,7 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
                 });
             }
             dispatchStateChanged(4);
-            if (errorCode != -3) {
+            if (!(errorCode == -3 || this.soundPool == null)) {
                 this.playingSound = true;
                 this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
                 AndroidUtilities.runOnUIThread(new Runnable() {

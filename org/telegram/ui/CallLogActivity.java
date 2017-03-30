@@ -552,15 +552,17 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     private void confirmAndDelete(final CallLogRow row) {
-        new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog)).setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                ArrayList<Integer> ids = new ArrayList();
-                for (Message msg : row.calls) {
-                    ids.add(Integer.valueOf(msg.id));
+        if (getParentActivity() != null) {
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("ConfirmDeleteCallLog", R.string.ConfirmDeleteCallLog)).setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ArrayList<Integer> ids = new ArrayList();
+                    for (Message msg : row.calls) {
+                        ids.add(Integer.valueOf(msg.id));
+                    }
+                    MessagesController.getInstance().deleteMessages(ids, null, null, 0, false);
                 }
-                MessagesController.getInstance().deleteMessages(ids, null, null, 0, false);
-            }
-        }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
+            }).setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null).show().setCanceledOnTouchOutside(true);
+        }
     }
 
     public void onResume() {

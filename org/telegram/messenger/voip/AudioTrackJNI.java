@@ -32,7 +32,9 @@ public class AudioTrackJNI {
     }
 
     public void stop() {
-        this.audioTrack.stop();
+        if (this.audioTrack != null) {
+            this.audioTrack.stop();
+        }
     }
 
     public void release() {
@@ -66,20 +68,24 @@ public class AudioTrackJNI {
         this.running = true;
         this.thread = new Thread(new Runnable() {
             public void run() {
-                AudioTrackJNI.this.audioTrack.play();
-                while (AudioTrackJNI.this.running) {
-                    try {
-                        AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
-                        AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1920);
-                        if (!AudioTrackJNI.this.running) {
-                            AudioTrackJNI.this.audioTrack.stop();
-                            break;
+                try {
+                    AudioTrackJNI.this.audioTrack.play();
+                    while (AudioTrackJNI.this.running) {
+                        try {
+                            AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
+                            AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1920);
+                            if (!AudioTrackJNI.this.running) {
+                                AudioTrackJNI.this.audioTrack.stop();
+                                break;
+                            }
+                        } catch (Throwable e) {
+                            FileLog.e(e);
                         }
-                    } catch (Throwable e) {
-                        FileLog.e(e);
                     }
+                    Log.i("tg-voip", "audiotrack thread exits");
+                } catch (Exception x) {
+                    FileLog.e("error starting AudioTrack", x);
                 }
-                Log.i("tg-voip", "audiotrack thread exits");
             }
         });
         this.thread.start();

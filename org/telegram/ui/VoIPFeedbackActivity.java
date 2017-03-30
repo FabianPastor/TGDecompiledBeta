@@ -23,6 +23,7 @@ import org.telegram.tgnet.TLRPC.TL_phone_setCallRating;
 import org.telegram.tgnet.TLRPC.TL_updates;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.BetterRatingView.OnRatingChangeListener;
 import org.telegram.ui.Components.LayoutHelper;
@@ -39,7 +40,7 @@ public class VoIPFeedbackActivity extends Activity {
         ll.setPadding(pad, pad, pad, pad);
         TextView text = new TextView(this);
         text.setTextSize(2, 16.0f);
-        text.setTextColor(-16777216);
+        text.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         text.setGravity(17);
         text.setText(LocaleController.getString("VoipRateCallAlert", R.string.VoipRateCallAlert));
         ll.addView(text);
@@ -49,6 +50,9 @@ public class VoIPFeedbackActivity extends Activity {
         commentBox.setHint(LocaleController.getString("VoipFeedbackCommentHint", R.string.VoipFeedbackCommentHint));
         commentBox.setInputType(147457);
         commentBox.setVisibility(8);
+        commentBox.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        commentBox.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+        commentBox.setBackgroundDrawable(Theme.createEditTextDrawable(this, true));
         ll.addView(commentBox, LayoutHelper.createLinear(-1, -2, 1, 0, 16, 0, 0));
         AlertDialog alert = new Builder(this).setTitle(LocaleController.getString("AppName", R.string.AppName)).setView(ll).setPositiveButton(LocaleController.getString("OK", R.string.OK), new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -56,6 +60,8 @@ public class VoIPFeedbackActivity extends Activity {
                 req.rating = bar.getRating();
                 if (req.rating < 5) {
                     req.comment = commentBox.getText().toString();
+                } else {
+                    req.comment = "";
                 }
                 req.peer = new TL_inputPhoneCall();
                 req.peer.access_hash = VoIPFeedbackActivity.this.getIntent().getLongExtra("call_access_hash", 0);

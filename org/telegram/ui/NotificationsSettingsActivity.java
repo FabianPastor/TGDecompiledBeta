@@ -767,20 +767,24 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         return;
                     }
                 } else if (position == NotificationsSettingsActivity.this.messageVibrateRow || position == NotificationsSettingsActivity.this.groupVibrateRow || position == NotificationsSettingsActivity.this.callsVibrateRow) {
-                    String key = null;
-                    if (position == NotificationsSettingsActivity.this.messageVibrateRow) {
-                        key = "vibrate_messages";
-                    } else if (position == NotificationsSettingsActivity.this.groupVibrateRow) {
-                        key = "vibrate_group";
-                    } else if (position == NotificationsSettingsActivity.this.callsVibrateRow) {
-                        key = "vibrate_calls";
-                    }
-                    r1 = position;
-                    NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, key, new Runnable() {
-                        public void run() {
-                            NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
+                    if (NotificationsSettingsActivity.this.getParentActivity() != null) {
+                        String key = null;
+                        if (position == NotificationsSettingsActivity.this.messageVibrateRow) {
+                            key = "vibrate_messages";
+                        } else if (position == NotificationsSettingsActivity.this.groupVibrateRow) {
+                            key = "vibrate_group";
+                        } else if (position == NotificationsSettingsActivity.this.callsVibrateRow) {
+                            key = "vibrate_calls";
                         }
-                    }));
+                        r1 = position;
+                        NotificationsSettingsActivity.this.showDialog(AlertsCreator.createVibrationSelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, key, new Runnable() {
+                            public void run() {
+                                NotificationsSettingsActivity.this.adapter.notifyItemChanged(r1);
+                            }
+                        }));
+                    } else {
+                        return;
+                    }
                 } else if (position == NotificationsSettingsActivity.this.messagePriorityRow || position == NotificationsSettingsActivity.this.groupPriorityRow) {
                     r1 = position;
                     NotificationsSettingsActivity.this.showDialog(AlertsCreator.createPrioritySelectDialog(NotificationsSettingsActivity.this.getParentActivity(), NotificationsSettingsActivity.this, 0, position == NotificationsSettingsActivity.this.groupPriorityRow, position == NotificationsSettingsActivity.this.messagePriorityRow, new Runnable() {

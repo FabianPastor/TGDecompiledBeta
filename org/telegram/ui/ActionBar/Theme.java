@@ -2694,11 +2694,11 @@ public class Theme {
                 public void run() {
                     Throwable e;
                     int i;
-                    int selectedBackground;
+                    SharedPreferences preferences;
+                    File toFile;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        SharedPreferences preferences;
-                        File toFile;
+                        int selectedBackground;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

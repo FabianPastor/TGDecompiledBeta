@@ -1,7 +1,6 @@
 package org.telegram.messenger.voip;
 
 import android.media.audiofx.AcousticEchoCanceler;
-import android.media.audiofx.NoiseSuppressor;
 import android.os.Build.VERSION;
 import android.os.SystemClock;
 import java.io.File;
@@ -181,9 +180,18 @@ public class VoIPController {
 
     public void setConfig(double recvTimeout, double initTimeout, int dataSavingOption) {
         ensureNativeInstance();
+        boolean sysAecAvailable = false;
+        boolean sysNsAvailable = false;
+        if (VERSION.SDK_INT >= 16) {
+            try {
+                sysAecAvailable = AcousticEchoCanceler.isAvailable();
+                sysNsAvailable = AcousticEchoCanceler.isAvailable();
+            } catch (Throwable th) {
+            }
+        }
         long j = this.nativeInst;
-        boolean z = (VERSION.SDK_INT >= 16 && AcousticEchoCanceler.isAvailable() && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
-        boolean z2 = (VERSION.SDK_INT >= 16 && NoiseSuppressor.isAvailable() && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
+        boolean z = (VERSION.SDK_INT >= 16 && sysAecAvailable && VoIPServerConfig.getBoolean("use_system_aec", true)) ? false : true;
+        boolean z2 = (VERSION.SDK_INT >= 16 && sysNsAvailable && VoIPServerConfig.getBoolean("use_system_ns", true)) ? false : true;
         nativeSetConfig(j, recvTimeout, initTimeout, dataSavingOption, z, z2, true, BuildConfig.DEBUG ? getLogFilePath() : null);
     }
 

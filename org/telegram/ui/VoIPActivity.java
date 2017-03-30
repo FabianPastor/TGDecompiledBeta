@@ -206,10 +206,10 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                     VoIPActivity.this.hideRetry();
                     VoIPActivity.this.endBtn.postDelayed(new Runnable() {
                         public void run() {
-                            if (VoIPService.getSharedInstance() != null || VoIPActivity.this.isFinishing()) {
-                                VoIPService.getSharedInstance().registerStateListener(VoIPActivity.this);
-                            } else {
+                            if (VoIPService.getSharedInstance() == null && !VoIPActivity.this.isFinishing()) {
                                 VoIPActivity.this.endBtn.postDelayed(this, 100);
+                            } else if (VoIPService.getSharedInstance() != null) {
+                                VoIPService.getSharedInstance().registerStateListener(VoIPActivity.this);
                             }
                         }
                     }, 100);
@@ -660,10 +660,17 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         r38[5] = createAlphaAnimator(this.ellSpans[2], ellMaxAlpha, 0, 1000, 400);
         animatorSet.playTogether(r38);
         this.ellAnimator.addListener(new AnimatorListenerAdapter() {
+            private Runnable restarter = new Runnable() {
+                public void run() {
+                    if (!VoIPActivity.this.isFinishing()) {
+                        VoIPActivity.this.ellAnimator.start();
+                    }
+                }
+            };
+
             public void onAnimationEnd(Animator animation) {
                 if (!VoIPActivity.this.isFinishing()) {
-                    VoIPActivity.this.ellAnimator.setStartDelay(300);
-                    VoIPActivity.this.ellAnimator.start();
+                    VoIPActivity.this.content.postDelayed(this.restarter, 300);
                 }
             }
         });
@@ -825,13 +832,13 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
                 if (!VoIPActivity.this.isFinishing() && VoIPService.getSharedInstance() != null && VoIPActivity.this.callState == 3) {
                     CharSequence format;
                     long duration = VoIPService.getSharedInstance().getCallDuration() / 1000;
-                    TextView access$2500 = VoIPActivity.this.durationText;
+                    TextView access$2600 = VoIPActivity.this.durationText;
                     if (duration > 3600) {
                         format = String.format("%d:%02d:%02d", new Object[]{Long.valueOf(duration / 3600), Long.valueOf((duration % 3600) / 60), Long.valueOf(duration % 60)});
                     } else {
                         format = String.format("%d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60)});
                     }
-                    access$2500.setText(format);
+                    access$2600.setText(format);
                     VoIPActivity.this.durationText.postDelayed(this, 500);
                 }
             }
@@ -842,7 +849,11 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         if (!this.isIncomingWaiting || (keyCode != 25 && keyCode != 24)) {
             return super.onKeyDown(keyCode, event);
         }
-        VoIPService.getSharedInstance().stopRinging();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().stopRinging();
+        } else {
+            finish();
+        }
         return true;
     }
 

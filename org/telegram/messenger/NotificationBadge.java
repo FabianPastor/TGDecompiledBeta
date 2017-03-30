@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.InputStreamReader;
@@ -447,6 +448,12 @@ public class NotificationBadge {
             if (badgeCount >= 0) {
                 if (mQueryHandler == null) {
                     mQueryHandler = new AsyncQueryHandler(ApplicationLoader.applicationContext.getApplicationContext().getContentResolver()) {
+                        public void handleMessage(Message msg) {
+                            try {
+                                super.handleMessage(msg);
+                            } catch (Throwable th) {
+                            }
+                        }
                     };
                 }
                 insertBadgeAsync(badgeCount, NotificationBadge.componentName.getPackageName(), NotificationBadge.componentName.getClassName());

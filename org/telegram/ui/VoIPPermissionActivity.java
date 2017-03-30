@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.Components.voip.VoIPHelper;
@@ -20,6 +21,7 @@ public class VoIPPermissionActivity extends Activity {
                 VoIPService.getSharedInstance().acceptIncomingCall();
             }
             finish();
+            startActivity(new Intent(this, VoIPActivity.class));
         } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
             finish();
         } else {

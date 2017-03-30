@@ -534,9 +534,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
-            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
+                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -840,29 +840,37 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
                 }
             }
             boolean encrypted = false;
-            String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params);
-            if (isCancelled()) {
-                return null;
-            }
-            if (videoInfo != null) {
-                String[] args = videoInfo.split("&");
-                for (int a = 0; a < args.length; a++) {
-                    String[] args2;
-                    if (args[a].startsWith("dashmpd")) {
-                        args2 = args[a].split("=");
-                        if (args2.length == 2) {
-                            try {
-                                this.result[0] = URLDecoder.decode(args2[1], "UTF-8");
-                            } catch (Throwable e2) {
-                                FileLog.e(e2);
+            String[] extra = new String[]{"", "&el=info", "&el=embedded", "&el=detailpage", "&el=vevo"};
+            for (String str : extra) {
+                String videoInfo = WebPlayerView.this.downloadUrlContent(this, "https://www.youtube.com/get_video_info?" + params + str);
+                if (isCancelled()) {
+                    return null;
+                }
+                boolean exists = false;
+                if (videoInfo != null) {
+                    String[] args = videoInfo.split("&");
+                    for (int a = 0; a < args.length; a++) {
+                        String[] args2;
+                        if (args[a].startsWith("dashmpd")) {
+                            exists = true;
+                            args2 = args[a].split("=");
+                            if (args2.length == 2) {
+                                try {
+                                    this.result[0] = URLDecoder.decode(args2[1], "UTF-8");
+                                } catch (Throwable e2) {
+                                    FileLog.e(e2);
+                                }
+                            }
+                        } else if (args[a].startsWith("use_cipher_signature")) {
+                            args2 = args[a].split("=");
+                            if (args2.length == 2 && args2[1].toLowerCase().equals("true")) {
+                                encrypted = true;
                             }
                         }
-                    } else if (args[a].startsWith("use_cipher_signature")) {
-                        args2 = args[a].split("=");
-                        if (args2.length == 2 && args2[1].toLowerCase().equals("true")) {
-                            encrypted = true;
-                        }
                     }
+                }
+                if (exists) {
+                    break;
                 }
             }
             if (this.result[0] != null && ((encrypted || this.result[0].contains("/s/")) && embedCode != null)) {

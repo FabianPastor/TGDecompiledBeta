@@ -94,7 +94,10 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     ((ArchivedStickerSetCell) view).setOnCheckClick(new OnCheckedChangeListener() {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            StickersQuery.removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue())).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
+                            int num = ((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue();
+                            if (num < ArchivedStickersActivity.this.sets.size()) {
+                                StickersQuery.removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
+                            }
                         }
                     });
                     break;

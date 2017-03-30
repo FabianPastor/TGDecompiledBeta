@@ -33,6 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
@@ -614,14 +615,16 @@ public class AlertDialog extends Dialog implements Callback {
                 this.shadowAnimation[num].cancel();
             }
             this.shadowAnimation[num] = new AnimatorSet();
-            AnimatorSet animatorSet = this.shadowAnimation[num];
-            Animator[] animatorArr = new Animator[1];
-            Object obj = this.shadow[num];
-            String str = "alpha";
-            int[] iArr = new int[1];
-            iArr[0] = show ? 255 : 0;
-            animatorArr[0] = ObjectAnimator.ofInt(obj, str, iArr);
-            animatorSet.playTogether(animatorArr);
+            if (this.shadow[num] != null) {
+                AnimatorSet animatorSet = this.shadowAnimation[num];
+                Animator[] animatorArr = new Animator[1];
+                Object obj = this.shadow[num];
+                String str = "alpha";
+                int[] iArr = new int[1];
+                iArr[0] = show ? 255 : 0;
+                animatorArr[0] = ObjectAnimator.ofInt(obj, str, iArr);
+                animatorSet.playTogether(animatorArr);
+            }
             this.shadowAnimation[num].setDuration(150);
             this.shadowAnimation[num].addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
@@ -636,7 +639,11 @@ public class AlertDialog extends Dialog implements Callback {
                     }
                 }
             });
-            this.shadowAnimation[num].start();
+            try {
+                this.shadowAnimation[num].start();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            }
         }
     }
 

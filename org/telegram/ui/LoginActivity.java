@@ -2068,11 +2068,11 @@ public class LoginActivity extends BaseFragment {
                             LoginActivity.this.permissionsItems.add("android.permission.WRITE_CALL_LOG");
                             LoginActivity.this.permissionsItems.add("android.permission.READ_CALL_LOG");
                         }
+                        boolean ok = true;
                         if (!LoginActivity.this.permissionsItems.isEmpty()) {
                             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                             if (!allowCancelCall && allowCall) {
                                 LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
-                                return;
                             } else if (preferences.getBoolean("firstlogin", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE") || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.RECEIVE_SMS")) {
                                 preferences.edit().putBoolean("firstlogin", false).commit();
                                 Builder builder = new Builder(LoginActivity.this.getParentActivity());
@@ -2086,9 +2086,14 @@ public class LoginActivity extends BaseFragment {
                                     builder.setMessage(LocaleController.getString("AllowReadSms", R.string.AllowReadSms));
                                 }
                                 LoginActivity.this.permissionsDialog = LoginActivity.this.showDialog(builder.create());
-                                return;
                             } else {
-                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                try {
+                                    LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                } catch (Exception e) {
+                                    ok = false;
+                                }
+                            }
+                            if (ok) {
                                 return;
                             }
                         }
@@ -2122,17 +2127,17 @@ public class LoginActivity extends BaseFragment {
                                     req.allow_flashcall = false;
                                 }
                             }
-                        } catch (Throwable e) {
+                        } catch (Throwable e2) {
                             req.allow_flashcall = false;
-                            FileLog.e(e);
+                            FileLog.e(e2);
                         }
                     }
                     final Bundle params = new Bundle();
                     params.putString("phone", "+" + this.codeField.getText() + this.phoneField.getText());
                     try {
                         params.putString("ephone", "+" + PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
-                    } catch (Throwable e2) {
-                        FileLog.e(e2);
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                         params.putString("ephone", "+" + phone);
                     }
                     params.putString("phoneFormated", phone);
@@ -2466,9 +2471,15 @@ public class LoginActivity extends BaseFragment {
             return;
         }
         if (dialog == this.permissionsDialog && !this.permissionsItems.isEmpty() && getParentActivity() != null) {
-            getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
+            try {
+                getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
+            } catch (Exception e) {
+            }
         } else if (dialog == this.permissionsShowDialog && !this.permissionsShowItems.isEmpty() && getParentActivity() != null) {
-            getParentActivity().requestPermissions((String[]) this.permissionsShowItems.toArray(new String[this.permissionsShowItems.size()]), 7);
+            try {
+                getParentActivity().requestPermissions((String[]) this.permissionsShowItems.toArray(new String[this.permissionsShowItems.size()]), 7);
+            } catch (Exception e2) {
+            }
         }
     }
 

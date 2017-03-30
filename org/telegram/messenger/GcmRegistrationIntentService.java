@@ -23,19 +23,21 @@ public class GcmRegistrationIntentService extends IntentService {
             });
         } catch (Throwable e) {
             FileLog.e(e);
-            final int failCount = intent.getIntExtra("failCount", 0);
-            if (failCount < 60) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        try {
-                            Intent intent = new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class);
-                            intent.putExtra("failCount", failCount + 1);
-                            GcmRegistrationIntentService.this.startService(intent);
-                        } catch (Throwable e) {
-                            FileLog.e(e);
+            if (intent != null) {
+                final int failCount = intent.getIntExtra("failCount", 0);
+                if (failCount < 60) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public void run() {
+                            try {
+                                Intent intent = new Intent(ApplicationLoader.applicationContext, GcmRegistrationIntentService.class);
+                                intent.putExtra("failCount", failCount + 1);
+                                GcmRegistrationIntentService.this.startService(intent);
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
                         }
-                    }
-                }, failCount < 20 ? 10000 : 1800000);
+                    }, failCount < 20 ? 10000 : 1800000);
+                }
             }
         }
     }
