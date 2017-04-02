@@ -16,6 +16,7 @@ public class AudioRecordJNI {
     private ByteBuffer buffer;
     private int bufferSize;
     private long nativeInst;
+    private boolean needResampling = false;
     private NoiseSuppressor ns;
     private boolean running;
     private Thread thread;
@@ -26,20 +27,43 @@ public class AudioRecordJNI {
         this.nativeInst = nativeInst;
     }
 
-    private int getBufferSize(int min) {
-        return Math.max(AudioRecord.getMinBufferSize(48000, 16, 2), min);
+    private int getBufferSize(int min, int sampleRate) {
+        return Math.max(AudioRecord.getMinBufferSize(sampleRate, 16, 2), min);
     }
 
     public void init(int sampleRate, int bitsPerSample, int channels, int bufferSize) {
         if (this.audioRecord != null) {
             throw new IllegalStateException("already inited");
         }
-        int size = getBufferSize(bufferSize);
+        int size = getBufferSize(bufferSize, 48000);
         this.bufferSize = bufferSize;
         try {
-            this.audioRecord = new AudioRecord(7, sampleRate, channels == 1 ? 16 : 12, 2, size);
+            this.audioRecord = new AudioRecord(7, 48000, channels == 1 ? 16 : 12, 2, size);
         } catch (Exception x) {
             FileLog.e("AudioRecord init failed!", x);
+        }
+        if (this.audioRecord == null || this.audioRecord.getState() != 1) {
+            if (this.audioRecord != null) {
+                try {
+                    this.audioRecord.release();
+                } catch (Throwable th) {
+                }
+            }
+            FileLog.w("Failed to init AudioRecord, retrying with 44100");
+            size = getBufferSize(bufferSize, 44100);
+            this.bufferSize = bufferSize;
+            try {
+                int i;
+                if (channels == 1) {
+                    i = 16;
+                } else {
+                    i = 12;
+                }
+                this.audioRecord = new AudioRecord(7, 44100, i, 2, size);
+            } catch (Exception x2) {
+                FileLog.e("AudioRecord init failed!", x2);
+            }
+            this.needResampling = true;
         }
         this.buffer = ByteBuffer.allocateDirect(bufferSize);
     }
@@ -138,11 +162,17 @@ public class AudioRecordJNI {
             throw new IllegalStateException("thread already started");
         }
         this.running = true;
+        final ByteBuffer tmpBuf = this.needResampling ? ByteBuffer.allocateDirect(1764) : null;
         this.thread = new Thread(new Runnable() {
             public void run() {
                 while (AudioRecordJNI.this.running) {
                     try {
-                        AudioRecordJNI.this.audioRecord.read(AudioRecordJNI.this.buffer, 1920);
+                        if (AudioRecordJNI.this.needResampling) {
+                            AudioRecordJNI.this.audioRecord.read(tmpBuf, 1764);
+                            Resampler.convert44to48(tmpBuf, AudioRecordJNI.this.buffer);
+                        } else {
+                            AudioRecordJNI.this.audioRecord.read(AudioRecordJNI.this.buffer, 1920);
+                        }
                         if (!AudioRecordJNI.this.running) {
                             AudioRecordJNI.this.audioRecord.stop();
                             break;

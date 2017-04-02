@@ -534,9 +534,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         }
 
         private void interpretExpression(String expr, HashMap<String, String> localVars, int allowRecursion) throws Exception {
+            Matcher matcher;
             expr = expr.trim();
             if (!TextUtils.isEmpty(expr)) {
-                Matcher matcher;
                 if (expr.charAt(0) == '(') {
                     int parens_count = 0;
                     matcher = WebPlayerView.exprParensPattern.matcher(expr);
@@ -752,22 +752,32 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             try {
                 JSONObject files = new JSONObject(playerCode).getJSONObject("request").getJSONObject("files");
                 if (files.has("hls")) {
-                    this.results[0] = files.getJSONObject("hls").getString("url");
+                    JSONObject hls = files.getJSONObject("hls");
+                    try {
+                        this.results[0] = hls.getString("url");
+                    } catch (Exception e) {
+                        this.results[0] = hls.getJSONObject("cdns").getJSONObject(hls.getString("default_cdn")).getString("url");
+                    }
                     this.results[1] = "hls";
-                } else if (files.has("progressive")) {
+                    if (isCancelled()) {
+                        return this.results[0];
+                    }
+                    return null;
+                }
+                if (files.has("progressive")) {
                     this.results[1] = "other";
                     JSONArray progressive = files.getJSONArray("progressive");
                     if (0 < progressive.length()) {
                         this.results[0] = progressive.getJSONObject(0).getString("url");
                     }
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-            if (isCancelled()) {
+                if (isCancelled()) {
+                    return this.results[0];
+                }
                 return null;
+            } catch (Throwable e2) {
+                FileLog.e(e2);
             }
-            return this.results[0];
         }
 
         protected void onPostExecute(String result) {

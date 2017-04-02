@@ -727,7 +727,9 @@ public class VoIPActivity extends Activity implements StateListener, Notificatio
         if (requestCode != 101) {
             return;
         }
-        if (grantResults.length > 0 && grantResults[0] == 0) {
+        if (VoIPService.getSharedInstance() == null) {
+            finish();
+        } else if (grantResults.length > 0 && grantResults[0] == 0) {
             VoIPService.getSharedInstance().acceptIncomingCall();
             callAccepted();
         } else if (shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {

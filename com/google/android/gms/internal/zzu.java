@@ -112,11 +112,11 @@ public class zzu implements zzg {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public zzj zza(zzl<?> com_google_android_gms_internal_zzl_) throws zzs {
         HttpResponse zza;
-        int statusCode;
         long elapsedRealtime = SystemClock.elapsedRealtime();
         while (true) {
             HttpResponse httpResponse = null;
             Map emptyMap = Collections.emptyMap();
+            int statusCode;
             try {
                 Map hashMap = new HashMap();
                 zza(hashMap, com_google_android_gms_internal_zzl_.zzh());

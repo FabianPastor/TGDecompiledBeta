@@ -395,7 +395,11 @@ public class VoIPService extends Service implements ConnectionStateListener, Sen
         if (this.isBtHeadsetConnected && !this.playingSound) {
             am.stopBluetoothSco();
         }
-        am.setMode(0);
+        try {
+            am.setMode(0);
+        } catch (SecurityException x) {
+            FileLog.e("Error setting audio more to normal", x);
+        }
         am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
         if (this.haveAudioFocus) {
             am.abandonAudioFocus(this);
