@@ -90,7 +90,9 @@ public class CallSwipeView extends View {
             private boolean canceled = false;
             private Runnable restarter = new Runnable() {
                 public void run() {
-                    CallSwipeView.this.arrowAnim.start();
+                    if (CallSwipeView.this.arrowAnim != null) {
+                        CallSwipeView.this.arrowAnim.start();
+                    }
                 }
             };
             private long startTime;
@@ -111,6 +113,14 @@ public class CallSwipeView extends View {
                 this.startTime = System.currentTimeMillis();
             }
         });
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (this.arrowAnim != null) {
+            this.arrowAnim.cancel();
+            this.arrowAnim = null;
+        }
     }
 
     public void setColor(int color) {

@@ -21,6 +21,7 @@ public class UserConfig {
     private static User currentUser;
     public static boolean draftsLoaded;
     public static boolean isWaitingForPasscodeEnter;
+    public static long lastAppPauseTime;
     public static int lastBroadcastId = -1;
     public static int lastContactsSyncTime;
     public static int lastHintsSyncTime;
@@ -78,6 +79,7 @@ public class UserConfig {
                 editor.putInt("passcodeType", passcodeType);
                 editor.putInt("autoLockIn", autoLockIn);
                 editor.putInt("lastPauseTime", lastPauseTime);
+                editor.putLong("lastAppPauseTime", lastAppPauseTime);
                 editor.putString("lastUpdateVersion2", lastUpdateVersion);
                 editor.putInt("lastContactsSyncTime", lastContactsSyncTime);
                 editor.putBoolean("useFingerprint", useFingerprint);
@@ -223,6 +225,7 @@ public class UserConfig {
                 passcodeType = preferences.getInt("passcodeType", 0);
                 autoLockIn = preferences.getInt("autoLockIn", 3600);
                 lastPauseTime = preferences.getInt("lastPauseTime", 0);
+                lastAppPauseTime = preferences.getLong("lastAppPauseTime", 0);
                 useFingerprint = preferences.getBoolean("useFingerprint", true);
                 lastUpdateVersion = preferences.getString("lastUpdateVersion2", "3.5");
                 lastContactsSyncTime = preferences.getInt("lastContactsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 82800);

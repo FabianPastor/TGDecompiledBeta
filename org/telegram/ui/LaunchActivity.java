@@ -2130,6 +2130,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
 
     protected void onPause() {
         super.onPause();
+        UserConfig.lastAppPauseTime = System.currentTimeMillis();
         ApplicationLoader.mainInterfacePaused = true;
         Utilities.stageQueue.postRunnable(new Runnable() {
             public void run() {

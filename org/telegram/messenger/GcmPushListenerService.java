@@ -25,10 +25,21 @@ public class GcmPushListenerService extends GcmListenerService {
                         } else {
                             return;
                         }
-                    } else if (ApplicationLoader.mainInterfacePaused && bundle.getInt("badge", -1) == -1) {
-                        NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-                        if (netInfo == null || !netInfo.isConnected()) {
-                            NotificationsController.getInstance().showSingleBackgroundNotification();
+                    } else if (ApplicationLoader.mainInterfacePaused && UserConfig.isClientActivated() && bundle.getString("badge") == null) {
+                        long time;
+                        Object obj = bundle.get("google.sent_time");
+                        if (obj instanceof String) {
+                            time = Utilities.parseLong((String) obj).longValue();
+                        } else if (obj instanceof Long) {
+                            time = ((Long) obj).longValue();
+                        } else {
+                            time = -1;
+                        }
+                        if (time == -1 || UserConfig.lastAppPauseTime < time) {
+                            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+                            if (!(netInfo == null || netInfo.isConnected() || netInfo.getType() == 1)) {
+                                NotificationsController.getInstance().showSingleBackgroundNotification();
+                            }
                         }
                     }
                 } catch (Throwable e) {

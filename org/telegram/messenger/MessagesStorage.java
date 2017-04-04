@@ -4604,12 +4604,12 @@ Error: java.util.NoSuchElementException
 
     private void putMessagesInternal(ArrayList<Message> messages, boolean withTransaction, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         Message lastMessage;
-        SQLiteCursor cursor;
         int a;
         Integer type;
         Integer count;
         if (ifNoLastMessage) {
             try {
+                SQLiteCursor cursor;
                 lastMessage = (Message) messages.get(0);
                 if (lastMessage.dialog_id == 0) {
                     if (lastMessage.to_id.user_id != 0) {
@@ -5032,7 +5032,6 @@ Error: java.util.NoSuchElementException
     }
 
     private long[] updateMessageStateAndIdInternal(long random_id, Integer _oldId, int newId, int date, int channelId) {
-        SQLitePreparedStatement state;
         SQLiteCursor cursor = null;
         long newMessageId = (long) newId;
         if (_oldId == null) {
@@ -5085,6 +5084,7 @@ Error: java.util.NoSuchElementException
         if (did == 0) {
             return null;
         }
+        SQLitePreparedStatement state;
         if (oldMessageId != newMessageId || date == 0) {
             state = null;
             try {

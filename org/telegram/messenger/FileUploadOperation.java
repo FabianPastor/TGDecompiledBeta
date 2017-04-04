@@ -108,9 +108,13 @@ public class FileUploadOperation {
     public void cancel() {
         if (this.state != 3) {
             this.state = 2;
-            for (Integer num : this.requestTokens.values()) {
-                ConnectionsManager.getInstance().cancelRequest(num.intValue(), true);
-            }
+            Utilities.stageQueue.postRunnable(new Runnable() {
+                public void run() {
+                    for (Integer num : FileUploadOperation.this.requestTokens.values()) {
+                        ConnectionsManager.getInstance().cancelRequest(num.intValue(), true);
+                    }
+                }
+            });
             this.delegate.didFailedUploadingFile(this);
             cleanup();
         }
@@ -382,7 +386,7 @@ public class FileUploadOperation {
                     final int requestSize = finalRequest.getObjectSize() + 4;
                     ConnectionsManager instance = ConnectionsManager.getInstance();
                     final int i2 = currentRequestBytes;
-                    RequestDelegate anonymousClass3 = new RequestDelegate() {
+                    RequestDelegate anonymousClass4 = new RequestDelegate() {
                         public void run(TLObject response, TL_error error) {
                             int networkType = response != null ? response.networkType : ConnectionsManager.getCurrentNetworkType();
                             if (FileUploadOperation.this.currentType == ConnectionsManager.FileTypeAudio) {
@@ -497,7 +501,7 @@ public class FileUploadOperation {
                     } else {
                         i = 65540;
                     }
-                    this.requestTokens.put(Integer.valueOf(requestNumFinal), Integer.valueOf(instance.sendRequest(finalRequest, anonymousClass3, 0, i)));
+                    this.requestTokens.put(Integer.valueOf(requestNumFinal), Integer.valueOf(instance.sendRequest(finalRequest, anonymousClass4, 0, i)));
                 }
             } catch (Throwable e22) {
                 FileLog.e(e22);
