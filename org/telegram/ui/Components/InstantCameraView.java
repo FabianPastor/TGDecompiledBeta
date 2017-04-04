@@ -48,11 +48,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private FrameLayout cameraContainer;
     private File cameraFile;
     private CameraView cameraView;
+    private boolean cancelled;
     private boolean deviceHasGoodCamera;
     private Paint paint;
     private int[] position = new int[2];
     private float progress;
     private long recordStartTime;
+    private long recordedTime;
     private boolean recording;
     private RectF rect;
     private boolean requestingPermissions;
@@ -134,7 +136,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationCenter.recordProgressChanged) {
-            this.progress = ((float) ((Long) args[0]).longValue()) / 60000.0f;
+            long t = ((Long) args[0]).longValue();
+            this.progress = ((float) t) / 60000.0f;
+            this.recordedTime = t;
             invalidate();
         }
     }
@@ -189,6 +193,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void showCamera() {
         if (this.cameraView == null) {
             this.progress = 0.0f;
+            this.cancelled = false;
             setVisibility(0);
             this.cameraView = new CameraView(getContext(), true);
             this.cameraView.setMirror(true);
@@ -198,41 +203,45 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
 
                 public void onCameraInit() {
-                    if (VERSION.SDK_INT < 23 || InstantCameraView.this.baseFragment.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-                        try {
-                            ((Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator")).vibrate(50);
-                        } catch (Throwable e) {
-                            FileLog.e(e);
-                        }
-                        AndroidUtilities.lockOrientation(InstantCameraView.this.baseFragment.getParentActivity());
-                        InstantCameraView.this.cameraFile = AndroidUtilities.generateVideoPath();
-                        CameraController.getInstance().recordVideo(InstantCameraView.this.cameraView.getCameraSession(), InstantCameraView.this.cameraFile, new VideoTakeCallback() {
-                            public void onFinishVideoRecording(Bitmap thumb) {
-                                if (InstantCameraView.this.cameraFile != null && InstantCameraView.this.baseFragment != null) {
-                                    AndroidUtilities.addMediaToGallery(InstantCameraView.this.cameraFile.getAbsolutePath());
-                                    VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
-                                    videoEditedInfo.bitrate = 400000;
-                                    videoEditedInfo.originalPath = InstantCameraView.this.cameraFile.getAbsolutePath();
-                                    videoEditedInfo.endTime = -1;
-                                    videoEditedInfo.startTime = -1;
-                                    videoEditedInfo.estimatedSize = InstantCameraView.this.cameraFile.length();
-                                    videoEditedInfo.roundVideo = true;
-                                    InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), videoEditedInfo);
+                    if (!InstantCameraView.this.cancelled) {
+                        if (VERSION.SDK_INT < 23 || InstantCameraView.this.baseFragment.getParentActivity().checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                            try {
+                                ((Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator")).vibrate(50);
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                            AndroidUtilities.lockOrientation(InstantCameraView.this.baseFragment.getParentActivity());
+                            InstantCameraView.this.cameraFile = AndroidUtilities.generateVideoPath();
+                            CameraController.getInstance().recordVideo(InstantCameraView.this.cameraView.getCameraSession(), InstantCameraView.this.cameraFile, new VideoTakeCallback() {
+                                public void onFinishVideoRecording(Bitmap thumb) {
+                                    if (InstantCameraView.this.cameraFile != null && InstantCameraView.this.baseFragment != null) {
+                                        AndroidUtilities.addMediaToGallery(InstantCameraView.this.cameraFile.getAbsolutePath());
+                                        VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
+                                        videoEditedInfo.bitrate = 400000;
+                                        videoEditedInfo.originalPath = InstantCameraView.this.cameraFile.getAbsolutePath();
+                                        videoEditedInfo.endTime = -1;
+                                        videoEditedInfo.startTime = -1;
+                                        videoEditedInfo.estimatedSize = InstantCameraView.this.cameraFile.length();
+                                        videoEditedInfo.roundVideo = true;
+                                        InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), videoEditedInfo);
+                                    }
                                 }
-                            }
-                        }, new Runnable() {
-                            public void run() {
-                                InstantCameraView.this.recording = true;
-                                InstantCameraView.this.recordStartTime = System.currentTimeMillis();
-                                AndroidUtilities.runOnUIThread(InstantCameraView.this.timerRunnable);
-                                NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStarted, new Object[0]);
-                                InstantCameraView.this.startAnimation(true);
-                            }
-                        }, true);
-                        return;
+                            }, new Runnable() {
+                                public void run() {
+                                    if (!InstantCameraView.this.cancelled) {
+                                        InstantCameraView.this.recording = true;
+                                        InstantCameraView.this.recordStartTime = System.currentTimeMillis();
+                                        AndroidUtilities.runOnUIThread(InstantCameraView.this.timerRunnable);
+                                        NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStarted, new Object[0]);
+                                        InstantCameraView.this.startAnimation(true);
+                                    }
+                                }
+                            }, true);
+                            return;
+                        }
+                        InstantCameraView.this.requestingPermissions = true;
+                        InstantCameraView.this.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 21);
                     }
-                    InstantCameraView.this.requestingPermissions = true;
-                    InstantCameraView.this.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 21);
                 }
             });
         }
@@ -330,16 +339,21 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void send() {
-        if (this.cameraView != null && this.cameraFile != null) {
+        if (this.cameraView != null) {
+            this.cancelled = this.recordedTime < 2;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);
-            CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), false);
+            CameraController.getInstance().stopVideoRecording(this.cameraView.getCameraSession(), this.cancelled);
+            if (this.cancelled) {
+                startAnimation(false);
+            }
         }
     }
 
     public void cancel() {
-        if (this.cameraView != null && this.cameraFile != null) {
+        if (this.cameraView != null) {
+            this.cancelled = true;
             this.recording = false;
             AndroidUtilities.cancelRunOnUIThread(this.timerRunnable);
             NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStopped, new Object[0]);

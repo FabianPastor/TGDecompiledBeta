@@ -138,6 +138,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private BotKeyboardView botKeyboardView;
     private MessageObject botMessageObject;
     private TL_replyKeyboardMarkup botReplyMarkup;
+    private boolean calledRecordRunnable;
     private Drawable cameraDrawable;
     private boolean canWriteToChannel;
     private ImageView cancelBotButton;
@@ -437,6 +438,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordAudioVideoRunnable = new Runnable() {
             public void run() {
                 if (ChatActivityEnterView.this.delegate != null && ChatActivityEnterView.this.parentActivity != null) {
+                    ChatActivityEnterView.this.calledRecordRunnable = true;
                     ChatActivityEnterView.this.recordAudioVideoRunnableStarted = false;
                     if (ChatActivityEnterView.this.videoSendButton == null || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                         if (ChatActivityEnterView.this.parentFragment != null) {
@@ -555,11 +557,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 ChatActivityEnterView.this.showPopup(1, 0);
-                EmojiView access$2100 = ChatActivityEnterView.this.emojiView;
+                EmojiView access$2200 = ChatActivityEnterView.this.emojiView;
                 if (ChatActivityEnterView.this.messageEditText.length() <= 0 || ChatActivityEnterView.this.messageEditText.getText().toString().startsWith("@gif")) {
                     z = false;
                 }
-                access$2100.onOpen(z);
+                access$2200.onOpen(z);
             }
         });
         this.messageEditText = new EditTextCaption(context) {
@@ -892,6 +894,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 boolean z = false;
                 if (motionEvent.getAction() == 0) {
                     if (ChatActivityEnterView.this.hasRecordVideo) {
+                        ChatActivityEnterView.this.calledRecordRunnable = false;
                         ChatActivityEnterView.this.recordAudioVideoRunnableStarted = true;
                         AndroidUtilities.runOnUIThread(ChatActivityEnterView.this.recordAudioVideoRunnable, 150);
                     } else {
@@ -913,7 +916,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             z = true;
                         }
                         chatActivityEnterView.setRecordVideoButtonVisible(z, true);
-                    } else if (ChatActivityEnterView.this.recordingAudioVideo) {
+                    } else if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.calledRecordRunnable) {
                         ChatActivityEnterView.this.startedDraggingX = -1.0f;
                         if (!ChatActivityEnterView.this.hasRecordVideo || ChatActivityEnterView.this.videoSendButton.getTag() == null) {
                             MediaController.getInstance().stopRecording(1);
@@ -2869,6 +2872,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.startedDraggingX = -1.0f;
                 this.delegate.needStartRecordVideo(1);
                 this.recordingAudioVideo = false;
+                this.calledRecordRunnable = false;
                 updateRecordIntefrace();
             }
         } else if (id == NotificationCenter.closeChats) {

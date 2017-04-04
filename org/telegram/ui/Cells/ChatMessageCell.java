@@ -1852,25 +1852,24 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(MessageObject messageObject, boolean bottomNear, boolean topNear) {
         int maxWidth;
-        int dp;
+        boolean z;
+        int i;
         String author;
-        Photo photo;
+        String description;
         TLObject document;
         int duration;
-        boolean smallImage;
         TL_webDocument webDocument;
+        TL_webDocument webDocument2;
         int additinalWidth;
-        int height;
         int width;
         Throwable e;
-        int restLinesCount;
         int a;
-        boolean authorIsRTL;
+        int lineLeft;
         int textWidth;
         int maxPhotoWidth;
         ArrayList arrayList;
+        DocumentAttribute attribute;
         int durationWidth;
-        float scale;
         String fileName;
         int seconds;
         String str;
@@ -1881,11 +1880,11 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         int timeWidthTotal;
         int rows;
         boolean fullWidth;
+        float f;
         int maxButtonWidth;
         int maxButtonsWidth;
         HashMap<String, BotButton> hashMap;
         HashMap<String, BotButton> oldByPosition;
-        TL_keyboardButtonRow row;
         int buttonsCount;
         int buttonWidth;
         int b;
@@ -1902,8 +1901,8 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         boolean messageChanged = this.currentMessageObject != messageObject || messageObject.forceUpdate;
         boolean dataChanged = this.currentMessageObject == messageObject && (isUserDataChanged() || this.photoNotSet);
         if (messageChanged || dataChanged || isPhotoDataChanged(messageObject) || this.pinnedBottom != bottomNear || this.pinnedTop != topNear) {
-            int i;
-            float f;
+            int dp;
+            TL_keyboardButtonRow row;
             this.pinnedBottom = bottomNear;
             this.pinnedTop = topNear;
             this.currentMessageObject = messageObject;
@@ -1973,8 +1972,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 this.lastVisibleBlockNum = 0;
                 this.needNewVisiblePart = true;
             }
-            boolean z;
-            DocumentAttribute attribute;
+            float scale;
             boolean photoExist;
             if (messageObject.type == 0) {
                 this.drawForwardedName = true;
@@ -2035,11 +2033,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     int linkPreviewMaxWidth;
                     String site_name;
                     String title;
-                    String description;
+                    Photo photo;
                     String type;
-                    TL_webDocument webDocument2;
+                    boolean smallImage;
+                    int height;
                     int restLines;
-                    int lineLeft;
+                    int restLinesCount;
+                    boolean authorIsRTL;
                     boolean hasRTL;
                     PhotoSize photoSize;
                     PhotoSize photoSize2;
