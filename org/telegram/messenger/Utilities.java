@@ -20,6 +20,8 @@ public class Utilities {
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
 
+    public static native void aesCtrDecryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, int i, int i2);
+
     private static native void aesIgeEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, boolean z, int i, int i2);
 
     public static native void blurBitmap(Object obj, int i, int i2, int i3, int i4, int i5);

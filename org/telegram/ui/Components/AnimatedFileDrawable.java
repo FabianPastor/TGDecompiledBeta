@@ -30,6 +30,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private Bitmap backgroundBitmap;
     private BitmapShader backgroundShader;
     private RectF bitmapRect = new RectF();
+    private boolean decodeSingleFrame;
     private boolean decoderCreated;
     private boolean destroyWhenDone;
     private final Rect dstRect = new Rect();
@@ -98,6 +99,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private float scaleY = 1.0f;
     private View secondParentView = null;
     private Matrix shaderMatrix = new Matrix();
+    private boolean singleFrameDecoded;
     private Runnable uiRunnable = new Runnable() {
         public void run() {
             if (AnimatedFileDrawable.this.destroyWhenDone && AnimatedFileDrawable.this.nativePtr != 0) {
@@ -116,6 +118,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 }
                 return;
             }
+            AnimatedFileDrawable.this.singleFrameDecoded = true;
             AnimatedFileDrawable.this.loadFrameTask = null;
             AnimatedFileDrawable.this.nextRenderingBitmap = AnimatedFileDrawable.this.backgroundBitmap;
             AnimatedFileDrawable.this.nextRenderingShader = AnimatedFileDrawable.this.backgroundShader;
@@ -158,6 +161,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (view == null && this.recycleWithSecond) {
             recycle();
         }
+    }
+
+    public void setAllowDecodeSingleFrame(boolean value) {
+        this.decodeSingleFrame = value;
     }
 
     public void recycle() {
@@ -218,7 +225,15 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (this.loadFrameTask != null) {
             return;
         }
-        if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone && this.isRunning) {
+        if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
+            if (!this.isRunning) {
+                if (!this.decodeSingleFrame) {
+                    return;
+                }
+                if (this.decodeSingleFrame && this.singleFrameDecoded) {
+                    return;
+                }
+            }
             long ms = 0;
             if (this.lastFrameDecodeTime != 0) {
                 ms = Math.min((long) this.invalidateAfter, Math.max(0, ((long) this.invalidateAfter) - (System.currentTimeMillis() - this.lastFrameDecodeTime)));
@@ -262,7 +277,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public void draw(Canvas canvas) {
         if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
             long now = System.currentTimeMillis();
-            if (this.isRunning) {
+            if (this.isRunning || !(this.isRunning || !this.decodeSingleFrame || this.singleFrameDecoded)) {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
                 } else if (Math.abs(now - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {

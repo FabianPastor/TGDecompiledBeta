@@ -30,6 +30,7 @@ import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 
 public class StaggeredGridLayoutManager extends LayoutManager implements ScrollVectorProvider {
     static final boolean DEBUG = false;
@@ -2523,7 +2524,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                     return Integer.MIN_VALUE;
                 }
                 return -1;
-            case 66:
+            case TLRPC.LAYER /*66*/:
                 if (this.mOrientation != 0) {
                     i2 = Integer.MIN_VALUE;
                 }

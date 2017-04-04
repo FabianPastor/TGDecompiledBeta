@@ -931,7 +931,7 @@ public class NotificationsController {
                 return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "📹 " + messageObject.messageOwner.media.caption);
             } else if (messageObject.isGame()) {
                 return LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, name, messageObject.messageOwner.media.game.title);
-            } else if (messageObject.isVoice()) {
+            } else if (messageObject.isVoice() || messageObject.isRoundVideo()) {
                 return LocaleController.formatString("NotificationMessageAudio", R.string.NotificationMessageAudio, name);
             } else if (messageObject.isMusic()) {
                 return LocaleController.formatString("NotificationMessageMusic", R.string.NotificationMessageMusic, name);
@@ -1060,7 +1060,7 @@ public class NotificationsController {
                                     } else {
                                         return LocaleController.formatString("NotificationActionPinnedGifChannel", R.string.NotificationActionPinnedGifChannel, chat.title);
                                     }
-                                } else if (object.isVoice()) {
+                                } else if (object.isVoice() || object.isRoundVideo()) {
                                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
                                         return LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, name, chat.title);
                                     }
@@ -1156,7 +1156,7 @@ public class NotificationsController {
                             return LocaleController.formatString("NotificationMessageGroupVideo", R.string.NotificationMessageGroupVideo, name, chat.title);
                         }
                         return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "📹 " + messageObject.messageOwner.media.caption);
-                    } else if (messageObject.isVoice()) {
+                    } else if (messageObject.isVoice() || messageObject.isRoundVideo()) {
                         return LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, name, chat.title);
                     } else if (messageObject.isMusic()) {
                         return LocaleController.formatString("NotificationMessageGroupMusic", R.string.NotificationMessageGroupMusic, name, chat.title);
@@ -1201,7 +1201,7 @@ public class NotificationsController {
                             return LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, name);
                         }
                         return LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "📹 " + messageObject.messageOwner.media.caption);
-                    } else if (messageObject.isVoice()) {
+                    } else if (messageObject.isVoice() || messageObject.isRoundVideo()) {
                         return LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, name);
                     } else if (messageObject.isMusic()) {
                         return LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name);
@@ -1243,7 +1243,7 @@ public class NotificationsController {
                         return LocaleController.formatString("ChannelMessageGroupVideo", R.string.ChannelMessageGroupVideo, name, chat.title);
                     }
                     return LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "📹 " + messageObject.messageOwner.media.caption);
-                } else if (messageObject.isVoice()) {
+                } else if (messageObject.isVoice() || messageObject.isRoundVideo()) {
                     return LocaleController.formatString("ChannelMessageGroupAudio", R.string.ChannelMessageGroupAudio, name, chat.title);
                 } else if (messageObject.isMusic()) {
                     return LocaleController.formatString("ChannelMessageGroupMusic", R.string.ChannelMessageGroupMusic, name, chat.title);

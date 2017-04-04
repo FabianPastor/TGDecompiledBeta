@@ -12,12 +12,13 @@ import java.nio.FloatBuffer;
 @TargetApi(16)
 public class TextureRenderer {
     private static final int FLOAT_SIZE_BYTES = 4;
-    private static final String FRAGMENT_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision mediump float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n";
+    private static final String FRAGMENT_SHADER = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n";
+    private static final String FRAGMENT_SHADER_ROUND = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform samplerExternalOES sTexture;\nvoid main() {\nvec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\ngl_FragColor = texture2D(sTexture, vTextureCoord) * ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n}\n";
     private static final int TRIANGLE_VERTICES_DATA_POS_OFFSET = 0;
     private static final int TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 20;
     private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
     private static final String VERTEX_SHADER = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
-    private static final float[] mTriangleVerticesData = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+    private boolean isRound;
     private float[] mMVPMatrix = new float[16];
     private int mProgram;
     private float[] mSTMatrix = new float[16];
@@ -27,10 +28,36 @@ public class TextureRenderer {
     private int maTextureHandle;
     private int muMVPMatrixHandle;
     private int muSTMatrixHandle;
-    private int rotationAngle = 0;
+    private int rotationAngle;
+    private float scaleX;
+    private int scaleXHandle;
+    private float scaleY;
+    private int scaleYHandle;
 
-    public TextureRenderer(int rotation) {
+    public TextureRenderer(int rotation, float sX, float sY, boolean scaleRotated, boolean round) {
         this.rotationAngle = rotation;
+        float[] mTriangleVerticesData = new float[]{-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+        if (round) {
+            float f;
+            float tX = (1.0f / (scaleRotated ? sY : sX)) / 2.0f;
+            if (scaleRotated) {
+                f = sX;
+            } else {
+                f = sY;
+            }
+            float tY = (1.0f / f) / 2.0f;
+            mTriangleVerticesData[3] = 0.5f - tX;
+            mTriangleVerticesData[4] = 0.5f - tY;
+            mTriangleVerticesData[8] = 0.5f + tX;
+            mTriangleVerticesData[9] = 0.5f - tY;
+            mTriangleVerticesData[13] = 0.5f - tX;
+            mTriangleVerticesData[14] = 0.5f + tY;
+            mTriangleVerticesData[18] = 0.5f + tX;
+            mTriangleVerticesData[19] = 0.5f + tY;
+        }
+        this.scaleX = sX;
+        this.scaleY = sY;
+        this.isRound = round;
         this.mTriangleVertices = ByteBuffer.allocateDirect(mTriangleVerticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.mTriangleVertices.put(mTriangleVerticesData).position(0);
         Matrix.setIdentityM(this.mSTMatrix, 0);
@@ -61,6 +88,10 @@ public class TextureRenderer {
         checkGlError("glVertexAttribPointer maTextureHandle");
         GLES20.glEnableVertexAttribArray(this.maTextureHandle);
         checkGlError("glEnableVertexAttribArray maTextureHandle");
+        if (this.isRound) {
+            GLES20.glUniform1f(this.scaleXHandle, this.scaleX);
+            GLES20.glUniform1f(this.scaleYHandle, this.scaleY);
+        }
         GLES20.glUniformMatrix4fv(this.muSTMatrixHandle, 1, false, this.mSTMatrix, 0);
         GLES20.glUniformMatrix4fv(this.muMVPMatrixHandle, 1, false, this.mMVPMatrix, 0);
         GLES20.glDrawArrays(5, 0, 4);
@@ -69,7 +100,7 @@ public class TextureRenderer {
     }
 
     public void surfaceCreated() {
-        this.mProgram = createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
+        this.mProgram = createProgram(VERTEX_SHADER, this.isRound ? FRAGMENT_SHADER_ROUND : FRAGMENT_SHADER);
         if (this.mProgram == 0) {
             throw new RuntimeException("failed creating program");
         }
@@ -82,6 +113,18 @@ public class TextureRenderer {
         checkGlError("glGetAttribLocation aTextureCoord");
         if (this.maTextureHandle == -1) {
             throw new RuntimeException("Could not get attrib location for aTextureCoord");
+        }
+        if (this.isRound) {
+            this.scaleXHandle = GLES20.glGetUniformLocation(this.mProgram, "scaleX");
+            checkGlError("glGetAttribLocation scaleX");
+            if (this.scaleXHandle == -1) {
+                throw new RuntimeException("Could not get attrib location for scaleX");
+            }
+            this.scaleYHandle = GLES20.glGetUniformLocation(this.mProgram, "scaleY");
+            checkGlError("glGetAttribLocation scaleY");
+            if (this.scaleYHandle == -1) {
+                throw new RuntimeException("Could not get attrib location for scaleY");
+            }
         }
         this.muMVPMatrixHandle = GLES20.glGetUniformLocation(this.mProgram, "uMVPMatrix");
         checkGlError("glGetUniformLocation uMVPMatrix");

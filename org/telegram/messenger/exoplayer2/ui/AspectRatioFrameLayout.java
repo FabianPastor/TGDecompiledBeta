@@ -16,6 +16,7 @@ public class AspectRatioFrameLayout extends FrameLayout {
     public static final int RESIZE_MODE_FIT = 0;
     public static final int RESIZE_MODE_FIXED_HEIGHT = 2;
     public static final int RESIZE_MODE_FIXED_WIDTH = 1;
+    private boolean drawingReady;
     private Matrix matrix;
     private int resizeMode;
     private int rotation;
@@ -33,6 +34,16 @@ public class AspectRatioFrameLayout extends FrameLayout {
         super(context, attrs);
         this.matrix = new Matrix();
         this.resizeMode = 0;
+    }
+
+    public void setDrawingReady(boolean value) {
+        if (this.drawingReady != value) {
+            this.drawingReady = value;
+        }
+    }
+
+    public boolean isDrawingReady() {
+        return this.drawingReady;
     }
 
     public void setAspectRatio(float widthHeightRatio, int rotation) {

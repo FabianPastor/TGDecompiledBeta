@@ -63,9 +63,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.playButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (MediaController.getInstance().isAudioPaused()) {
-                    MediaController.getInstance().playAudio(MediaController.getInstance().getPlayingMessageObject());
+                    MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                 } else {
-                    MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+                    MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                 }
             }
         });
@@ -144,18 +144,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.topPadding = 0.0f;
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidReset);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidStarted);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidStarted);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.didEndedCall);
     }
 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidReset);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidStarted);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didStartedCall);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.didEndedCall);
         boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 10) ? false : true;
@@ -171,7 +171,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationCenter.audioDidStarted || id == NotificationCenter.audioPlayStateChanged || id == NotificationCenter.audioDidReset || id == NotificationCenter.didEndedCall) {
+        if (id == NotificationCenter.messagePlayingDidStarted || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset || id == NotificationCenter.didEndedCall) {
             checkPlayer(false);
         } else if (id == NotificationCenter.didStartedCall) {
             checkCall(false);
@@ -261,7 +261,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (this.lastMessageObject != messageObject || prevStyle != 0) {
             SpannableStringBuilder stringBuilder;
             this.lastMessageObject = messageObject;
-            if (this.lastMessageObject.isVoice()) {
+            if (this.lastMessageObject.isVoice() || this.lastMessageObject.isRoundVideo()) {
                 stringBuilder = new SpannableStringBuilder(String.format("%s %s", new Object[]{messageObject.getMusicAuthor(), messageObject.getMusicTitle()}));
                 this.titleTextView.setEllipsize(TruncateAt.MIDDLE);
             } else {

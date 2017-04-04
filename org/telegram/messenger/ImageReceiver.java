@@ -29,6 +29,7 @@ import org.telegram.ui.Components.AnimatedFileDrawable;
 public class ImageReceiver implements NotificationCenterDelegate {
     private static Paint roundPaint;
     private static PorterDuffColorFilter selectedColorFilter = new PorterDuffColorFilter(-2236963, Mode.MULTIPLY);
+    private boolean allowDecodeSingleFrame;
     private boolean allowStartAnimation;
     private RectF bitmapRect;
     private BitmapShader bitmapShader;
@@ -922,6 +923,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.allowStartAnimation = value;
     }
 
+    public void setAllowDecodeSingleFrame(boolean value) {
+        this.allowDecodeSingleFrame = value;
+    }
+
     public boolean isAllowStartAnimation() {
         return this.allowStartAnimation;
     }
@@ -974,7 +979,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 }
                 ImageLoader.getInstance().incrementUseCount(this.currentThumbKey);
                 this.currentThumb = bitmap;
-                if (this.roundRadius == 0 || this.currentImage != null || !(bitmap instanceof BitmapDrawable)) {
+                if (this.roundRadius == 0 || !(bitmap instanceof BitmapDrawable)) {
                     this.bitmapShaderThumb = null;
                 } else if (bitmap instanceof AnimatedFileDrawable) {
                     ((AnimatedFileDrawable) bitmap).setRoundRadius(this.roundRadius);
@@ -1033,6 +1038,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 if (this.allowStartAnimation) {
                     fileDrawable.start();
                 }
+                fileDrawable.setAllowDecodeSingleFrame(this.allowDecodeSingleFrame);
             }
             if (this.parentView != null) {
                 if (this.invalidateAll) {

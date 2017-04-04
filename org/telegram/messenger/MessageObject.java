@@ -421,7 +421,7 @@ public class MessageObject {
             this.messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
         } else if (isVideo()) {
             this.messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
-        } else if (isVoice()) {
+        } else if (isVoice() || isRoundVideo()) {
             this.messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
         } else if ((message.media instanceof TL_messageMediaGeo) || (message.media instanceof TL_messageMediaVenue)) {
             this.messageText = LocaleController.getString("AttachLocation", R.string.AttachLocation);
@@ -466,7 +466,7 @@ public class MessageObject {
         int dateMonth = rightNow.get(2);
         this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth), Integer.valueOf(dateDay)});
         this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(dateYear), Integer.valueOf(dateMonth)});
-        if (this.messageOwner.message != null && this.messageOwner.id < 0 && this.messageOwner.message.length() > 6 && (isVideo() || isNewGif())) {
+        if (this.messageOwner.message != null && this.messageOwner.id < 0 && this.messageOwner.message.length() > 6 && (isVideo() || isNewGif() || isRoundVideo())) {
             this.videoEditedInfo = new VideoEditedInfo();
             if (!this.videoEditedInfo.parseString(this.messageOwner.message)) {
                 this.videoEditedInfo = null;
@@ -610,7 +610,7 @@ public class MessageObject {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
-        } else if (this.replyMessageObject.isVoice()) {
+        } else if (this.replyMessageObject.isVoice() || this.replyMessageObject.isRoundVideo()) {
             string = LocaleController.getString("ActionPinnedVoice", R.string.ActionPinnedVoice);
             str = "un1";
             if (fromUser == null) {
@@ -726,6 +726,8 @@ public class MessageObject {
                 this.type = 1;
             } else if ((this.messageOwner.media instanceof TL_messageMediaGeo) || (this.messageOwner.media instanceof TL_messageMediaVenue)) {
                 this.type = 4;
+            } else if (isRoundVideo()) {
+                this.type = 5;
             } else if (isVideo()) {
                 this.type = 3;
             } else if (isVoice()) {
@@ -833,21 +835,20 @@ public class MessageObject {
         return (document == null || document.thumb == null || document.mime_type == null || (!document.mime_type.equals("image/gif") && !isNewGifDocument(document))) ? false : true;
     }
 
-    public static boolean isVoiceVideoDocument(Document document) {
+    public static boolean isRoundVideoDocument(Document document) {
         if (!(document == null || document.mime_type == null || !document.mime_type.equals(MimeTypes.VIDEO_MP4))) {
             int width = 0;
             int height = 0;
-            boolean animated = false;
+            boolean round = false;
             for (int a = 0; a < document.attributes.size(); a++) {
                 DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-                if (attribute instanceof TL_documentAttributeAnimated) {
-                    animated = true;
-                } else if (attribute instanceof TL_documentAttributeVideo) {
+                if (attribute instanceof TL_documentAttributeVideo) {
                     width = attribute.w;
                     height = attribute.w;
+                    round = attribute.round_message;
                 }
             }
-            if (animated && width <= 1280 && height <= 1280) {
+            if (round && width <= 1280 && height <= 1280) {
                 return true;
             }
         }
@@ -1691,6 +1692,9 @@ public class MessageObject {
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeVideo) {
+                if (attribute.round_message) {
+                    return false;
+                }
                 isVideo = true;
                 width = attribute.w;
                 height = attribute.h;
@@ -1729,8 +1733,8 @@ public class MessageObject {
         return (message.media == null || message.media.document == null || !isMusicDocument(message.media.document)) ? false : true;
     }
 
-    public static boolean isVideoVoiceMessage(Message message) {
-        return (message.media == null || message.media.document == null || !isVoiceVideoDocument(message.media.document)) ? false : true;
+    public static boolean isRoundVideoMessage(Message message) {
+        return (message.media == null || message.media.document == null || !isRoundVideoDocument(message.media.document)) ? false : true;
     }
 
     public static boolean isVoiceMessage(Message message) {
@@ -1936,8 +1940,8 @@ public class MessageObject {
         return isInvoiceMessage(this.messageOwner);
     }
 
-    public boolean isVideoVoice() {
-        return isVideoVoiceMessage(this.messageOwner) && BuildVars.DEBUG_PRIVATE_VERSION;
+    public boolean isRoundVideo() {
+        return isRoundVideoMessage(this.messageOwner);
     }
 
     public boolean hasPhotoStickers() {
@@ -1966,11 +1970,10 @@ public class MessageObject {
         int a = 0;
         while (a < document.attributes.size()) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
-            if (!(attribute instanceof TL_documentAttributeAudio)) {
-                a++;
-            } else if (attribute.voice) {
-                return LocaleController.formatDateAudio((long) this.messageOwner.date);
-            } else {
+            if (attribute instanceof TL_documentAttributeAudio) {
+                if (attribute.voice) {
+                    return LocaleController.formatDateAudio((long) this.messageOwner.date);
+                }
                 String title = attribute.title;
                 if (title != null && title.length() != 0) {
                     return title;
@@ -1980,6 +1983,10 @@ public class MessageObject {
                     return LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
                 }
                 return title;
+            } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
+                return LocaleController.formatDateAudio((long) this.messageOwner.date);
+            } else {
+                a++;
             }
         }
         return "";
@@ -2008,36 +2015,43 @@ public class MessageObject {
         } else {
             document = this.messageOwner.media.document;
         }
+        boolean isVoice = false;
         for (int a = 0; a < document.attributes.size(); a++) {
             DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
             if (attribute instanceof TL_documentAttributeAudio) {
                 if (attribute.voice) {
-                    if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getClientUserId())) {
-                        return LocaleController.getString("FromYou", R.string.FromYou);
+                    isVoice = true;
+                } else {
+                    String performer = attribute.performer;
+                    if (performer == null || performer.length() == 0) {
+                        return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
                     }
-                    User user = null;
-                    Chat chat = null;
-                    if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0) {
-                        chat = MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
-                    } else if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id != 0) {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
-                    } else if (this.messageOwner.from_id < 0) {
-                        chat = MessagesController.getInstance().getChat(Integer.valueOf(-this.messageOwner.from_id));
-                    } else {
-                        user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
-                    }
-                    if (user != null) {
-                        return UserObject.getUserName(user);
-                    }
-                    if (chat != null) {
-                        return chat.title;
-                    }
+                    return performer;
                 }
-                String performer = attribute.performer;
-                if (performer == null || performer.length() == 0) {
-                    return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
+            } else if ((attribute instanceof TL_documentAttributeVideo) && attribute.round_message) {
+                isVoice = true;
+            }
+            if (isVoice) {
+                if (isOutOwner() || (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id == UserConfig.getClientUserId())) {
+                    return LocaleController.getString("FromYou", R.string.FromYou);
                 }
-                return performer;
+                User user = null;
+                Chat chat = null;
+                if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.channel_id != 0) {
+                    chat = MessagesController.getInstance().getChat(Integer.valueOf(this.messageOwner.fwd_from.channel_id));
+                } else if (this.messageOwner.fwd_from != null && this.messageOwner.fwd_from.from_id != 0) {
+                    user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.fwd_from.from_id));
+                } else if (this.messageOwner.from_id < 0) {
+                    chat = MessagesController.getInstance().getChat(Integer.valueOf(-this.messageOwner.from_id));
+                } else {
+                    user = MessagesController.getInstance().getUser(Integer.valueOf(this.messageOwner.from_id));
+                }
+                if (user != null) {
+                    return UserObject.getUserName(user);
+                }
+                if (chat != null) {
+                    return chat.title;
+                }
             }
         }
         return "";

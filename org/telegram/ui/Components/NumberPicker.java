@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import java.util.Locale;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 public class NumberPicker extends LinearLayout {
@@ -457,7 +458,7 @@ public class NumberPicker extends LinearLayout {
                         break;
                 }
             case 23:
-            case 66:
+            case TLRPC.LAYER /*66*/:
                 removeAllCallbacks();
                 break;
         }

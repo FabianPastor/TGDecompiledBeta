@@ -23,6 +23,7 @@ import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.ViewDropHandler;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC;
 
 public class LinearLayoutManager extends LayoutManager implements ViewDropHandler, ScrollVectorProvider {
     static final boolean DEBUG = false;
@@ -1294,7 +1295,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
                     return Integer.MIN_VALUE;
                 }
                 return -1;
-            case 66:
+            case TLRPC.LAYER /*66*/:
                 if (this.mOrientation != 0) {
                     i2 = Integer.MIN_VALUE;
                 }

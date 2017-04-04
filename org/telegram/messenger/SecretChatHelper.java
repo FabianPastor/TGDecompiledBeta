@@ -961,7 +961,7 @@ public class SecretChatHelper {
                         newMessage.media.document.thumb.location = new TL_fileLocationUnavailable();
                     }
                     newMessage.media.document.dc_id = file.dc_id;
-                    if (!MessageObject.isVoiceMessage(newMessage)) {
+                    if (!MessageObject.isVoiceMessage(newMessage) && !MessageObject.isRoundVideoMessage(newMessage)) {
                         return newMessage;
                     }
                     newMessage.media_unread = true;

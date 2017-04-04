@@ -1,5 +1,6 @@
 package org.telegram.tgnet;
 
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -7,7 +8,7 @@ import org.telegram.messenger.exoplayer2.util.MimeTypes;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 65;
+    public static final int LAYER = 66;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -846,6 +847,7 @@ public class TLRPC {
         public boolean mask;
         public TL_maskCoords mask_coords;
         public String performer;
+        public boolean round_message;
         public InputStickerSet stickerset;
         public String title;
         public boolean voice;
@@ -873,6 +875,9 @@ public class TLRPC {
                 case 85215461:
                     result = new TL_documentAttributeAudio_old();
                     break;
+                case 250621158:
+                    result = new TL_documentAttributeVideo();
+                    break;
                 case 297109817:
                     result = new TL_documentAttributeAnimated();
                     break;
@@ -883,7 +888,7 @@ public class TLRPC {
                     result = new TL_documentAttributeSticker_layer55();
                     break;
                 case 1494273227:
-                    result = new TL_documentAttributeVideo();
+                    result = new TL_documentAttributeVideo_layer65();
                     break;
                 case 1662637586:
                     result = new TL_documentAttributeSticker();
@@ -2233,6 +2238,9 @@ public class TLRPC {
                     break;
                 case -1614803355:
                     result = new TL_inputMessagesFilterVideo();
+                    break;
+                case -1253451181:
+                    result = new TL_inputMessagesFilterRoundVideo();
                     break;
                 case -648121413:
                     result = new TL_inputMessagesFilterPhotoVideoDocuments();
@@ -5624,6 +5632,7 @@ public class TLRPC {
 
     public static class TL_dcOption extends TLObject {
         public static int constructor = 98092748;
+        public boolean cdn;
         public int flags;
         public int id;
         public String ip_address;
@@ -5655,10 +5664,16 @@ public class TLRPC {
                 z = false;
             }
             this.media_only = z;
-            if ((this.flags & 4) == 0) {
+            if ((this.flags & 4) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.tcpo_only = z;
+            if ((this.flags & 8) == 0) {
                 z2 = false;
             }
-            this.tcpo_only = z2;
+            this.cdn = z2;
             this.id = stream.readInt32(exception);
             this.ip_address = stream.readString(exception);
             this.port = stream.readInt32(exception);
@@ -5669,6 +5684,7 @@ public class TLRPC {
             this.flags = this.ipv6 ? this.flags | 1 : this.flags & -2;
             this.flags = this.media_only ? this.flags | 2 : this.flags & -3;
             this.flags = this.tcpo_only ? this.flags | 4 : this.flags & -5;
+            this.flags = this.cdn ? this.flags | 8 : this.flags & -9;
             stream.writeInt32(this.flags);
             stream.writeInt32(this.id);
             stream.writeString(this.ip_address);
@@ -10894,42 +10910,21 @@ public class TLRPC {
         }
     }
 
-    public static class TL_upload_file extends TLObject {
-        public static int constructor = 157948117;
-        public NativeByteBuffer bytes;
-        public int mtime;
-        public storage_FileType type;
+    public static class TL_upload_getCdnFile extends TLObject {
+        public static int constructor = 536919235;
+        public byte[] file_token;
+        public int limit;
+        public int offset;
 
-        public static TL_upload_file TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
-            if (constructor == constructor) {
-                TL_upload_file result = new TL_upload_file();
-                result.readParams(stream, exception);
-                return result;
-            } else if (!exception) {
-                return null;
-            } else {
-                throw new RuntimeException(String.format("can't parse magic %x in TL_upload_file", new Object[]{Integer.valueOf(constructor)}));
-            }
-        }
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            this.type = storage_FileType.TLdeserialize(stream, stream.readInt32(exception), exception);
-            this.mtime = stream.readInt32(exception);
-            this.bytes = stream.readByteBuffer(exception);
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return upload_CdnFile.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
-            this.type.serializeToStream(stream);
-            stream.writeInt32(this.mtime);
-            stream.writeByteBuffer(this.bytes);
-        }
-
-        public void freeResources() {
-            if (!this.disableFree && this.bytes != null) {
-                this.bytes.reuse();
-                this.bytes = null;
-            }
+            stream.writeByteArray(this.file_token);
+            stream.writeInt32(this.offset);
+            stream.writeInt32(this.limit);
         }
     }
 
@@ -10940,7 +10935,7 @@ public class TLRPC {
         public int offset;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return TL_upload_file.TLdeserialize(stream, constructor, exception);
+            return upload_File.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -10966,6 +10961,22 @@ public class TLRPC {
             this.location.serializeToStream(stream);
             stream.writeInt32(this.offset);
             stream.writeInt32(this.limit);
+        }
+    }
+
+    public static class TL_upload_reuploadCdnFile extends TLObject {
+        public static int constructor = 779755552;
+        public byte[] file_token;
+        public byte[] request_token;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeByteArray(this.file_token);
+            stream.writeByteArray(this.request_token);
         }
     }
 
@@ -11591,6 +11602,7 @@ public class TLRPC {
         public int flags;
         public int id;
         public boolean inactive;
+        public String lang_code;
         public String last_name;
         public boolean min;
         public boolean mutual_contact;
@@ -11613,7 +11625,7 @@ public class TLRPC {
                     result = new TL_userContact_old2();
                     break;
                 case -787638374:
-                    result = new TL_user();
+                    result = new TL_user_layer65();
                     break;
                 case -704549510:
                     result = new TL_userDeleted_old2();
@@ -11638,6 +11650,9 @@ public class TLRPC {
                     break;
                 case 585682608:
                     result = new TL_userRequest_old();
+                    break;
+                case 773059779:
+                    result = new TL_user();
                     break;
                 case 1377093789:
                     result = new TL_userForeign_old();
@@ -12505,6 +12520,59 @@ public class TLRPC {
             }
             if (result == null && exception) {
                 throw new RuntimeException(String.format("can't parse magic %x in updates_Difference", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static class upload_CdnFile extends TLObject {
+        public NativeByteBuffer bytes;
+        public byte[] request_token;
+
+        public static upload_CdnFile TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            upload_CdnFile result = null;
+            switch (constructor) {
+                case -1449145777:
+                    result = new TL_upload_cdnFile();
+                    break;
+                case -290921362:
+                    result = new TL_upload_cdnFileReuploadNeeded();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in upload_CdnFile", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static class upload_File extends TLObject {
+        public NativeByteBuffer bytes;
+        public int dc_id;
+        public byte[] encryption_iv;
+        public byte[] encryption_key;
+        public byte[] file_token;
+        public int mtime;
+        public storage_FileType type;
+
+        public static upload_File TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            upload_File result = null;
+            switch (constructor) {
+                case 157948117:
+                    result = new TL_upload_file();
+                    break;
+                case 352864346:
+                    result = new TL_upload_fileCdnRedirect();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in upload_File", new Object[]{Integer.valueOf(constructor)}));
             }
             if (result != null) {
                 result.readParams(stream, exception);
@@ -14829,9 +14897,11 @@ public class TLRPC {
     }
 
     public static class TL_documentAttributeVideo extends DocumentAttribute {
-        public static int constructor = NUM;
+        public static int constructor = 250621158;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.flags = stream.readInt32(exception);
+            this.round_message = (this.flags & 1) != 0;
             this.duration = stream.readInt32(exception);
             this.w = stream.readInt32(exception);
             this.h = stream.readInt32(exception);
@@ -14839,6 +14909,8 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+            this.flags = this.round_message ? this.flags | 1 : this.flags & -2;
+            stream.writeInt32(this.flags);
             stream.writeInt32(this.duration);
             stream.writeInt32(this.w);
             stream.writeInt32(this.h);
@@ -16235,6 +16307,14 @@ public class TLRPC {
     }
 
     public static class TL_inputMessagesFilterPhotos extends MessagesFilter {
+        public static int constructor = -NUM;
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_inputMessagesFilterRoundVideo extends MessagesFilter {
         public static int constructor = -NUM;
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -22519,8 +22599,84 @@ public class TLRPC {
         }
     }
 
+    public static class TL_upload_cdnFile extends upload_CdnFile {
+        public static int constructor = -NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.bytes = stream.readByteBuffer(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeByteBuffer(this.bytes);
+        }
+
+        public void freeResources() {
+            if (!this.disableFree && this.bytes != null) {
+                this.bytes.reuse();
+                this.bytes = null;
+            }
+        }
+    }
+
+    public static class TL_upload_cdnFileReuploadNeeded extends upload_CdnFile {
+        public static int constructor = -290921362;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.request_token = stream.readByteArray(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeByteArray(this.request_token);
+        }
+    }
+
+    public static class TL_upload_file extends upload_File {
+        public static int constructor = 157948117;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.type = storage_FileType.TLdeserialize(stream, stream.readInt32(exception), exception);
+            this.mtime = stream.readInt32(exception);
+            this.bytes = stream.readByteBuffer(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.type.serializeToStream(stream);
+            stream.writeInt32(this.mtime);
+            stream.writeByteBuffer(this.bytes);
+        }
+
+        public void freeResources() {
+            if (!this.disableFree && this.bytes != null) {
+                this.bytes.reuse();
+                this.bytes = null;
+            }
+        }
+    }
+
+    public static class TL_upload_fileCdnRedirect extends upload_File {
+        public static int constructor = 352864346;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.dc_id = stream.readInt32(exception);
+            this.file_token = stream.readByteArray(exception);
+            this.encryption_key = stream.readByteArray(exception);
+            this.encryption_iv = stream.readByteArray(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(this.dc_id);
+            stream.writeByteArray(this.file_token);
+            stream.writeByteArray(this.encryption_key);
+            stream.writeByteArray(this.encryption_iv);
+        }
+    }
+
     public static class TL_user extends User {
-        public static int constructor = -787638374;
+        public static int constructor = 773059779;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             boolean z;
@@ -22616,6 +22772,9 @@ public class TLRPC {
             if ((this.flags & 524288) != 0) {
                 this.bot_inline_placeholder = stream.readString(exception);
             }
+            if ((this.flags & AccessibilityEventCompat.TYPE_WINDOWS_CHANGED) != 0) {
+                this.lang_code = stream.readString(exception);
+            }
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -22662,6 +22821,9 @@ public class TLRPC {
             }
             if ((this.flags & 524288) != 0) {
                 stream.writeString(this.bot_inline_placeholder);
+            }
+            if ((this.flags & AccessibilityEventCompat.TYPE_WINDOWS_CHANGED) != 0) {
+                stream.writeString(this.lang_code);
             }
         }
     }
@@ -24124,6 +24286,23 @@ public class TLRPC {
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
+        }
+    }
+
+    public static class TL_documentAttributeVideo_layer65 extends TL_documentAttributeVideo {
+        public static int constructor = NUM;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            this.duration = stream.readInt32(exception);
+            this.w = stream.readInt32(exception);
+            this.h = stream.readInt32(exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt32(this.duration);
+            stream.writeInt32(this.w);
+            stream.writeInt32(this.h);
         }
     }
 
@@ -25888,6 +26067,153 @@ public class TLRPC {
             this.photo.serializeToStream(stream);
             this.status.serializeToStream(stream);
             stream.writeBool(this.inactive);
+        }
+    }
+
+    public static class TL_user_layer65 extends TL_user {
+        public static int constructor = -787638374;
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z;
+            boolean z2 = true;
+            this.flags = stream.readInt32(exception);
+            this.self = (this.flags & 1024) != 0;
+            if ((this.flags & 2048) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.contact = z;
+            if ((this.flags & 4096) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.mutual_contact = z;
+            if ((this.flags & 8192) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.deleted = z;
+            if ((this.flags & 16384) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.bot = z;
+            if ((this.flags & 32768) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.bot_chat_history = z;
+            if ((this.flags & 65536) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.bot_nochats = z;
+            if ((this.flags & 131072) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.verified = z;
+            if ((this.flags & 262144) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.restricted = z;
+            if ((this.flags & 1048576) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.min = z;
+            if ((this.flags & 2097152) == 0) {
+                z2 = false;
+            }
+            this.bot_inline_geo = z2;
+            this.id = stream.readInt32(exception);
+            if ((this.flags & 1) != 0) {
+                this.access_hash = stream.readInt64(exception);
+            }
+            if ((this.flags & 2) != 0) {
+                this.first_name = stream.readString(exception);
+            }
+            if ((this.flags & 4) != 0) {
+                this.last_name = stream.readString(exception);
+            }
+            if ((this.flags & 8) != 0) {
+                this.username = stream.readString(exception);
+            }
+            if ((this.flags & 16) != 0) {
+                this.phone = stream.readString(exception);
+            }
+            if ((this.flags & 32) != 0) {
+                this.photo = UserProfilePhoto.TLdeserialize(stream, stream.readInt32(exception), exception);
+            }
+            if ((this.flags & 64) != 0) {
+                this.status = UserStatus.TLdeserialize(stream, stream.readInt32(exception), exception);
+            }
+            if ((this.flags & 16384) != 0) {
+                this.bot_info_version = stream.readInt32(exception);
+            }
+            if ((this.flags & 262144) != 0) {
+                this.restriction_reason = stream.readString(exception);
+            }
+            if ((this.flags & 524288) != 0) {
+                this.bot_inline_placeholder = stream.readString(exception);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.flags = this.self ? this.flags | 1024 : this.flags & -1025;
+            this.flags = this.contact ? this.flags | 2048 : this.flags & -2049;
+            this.flags = this.mutual_contact ? this.flags | 4096 : this.flags & -4097;
+            this.flags = this.deleted ? this.flags | 8192 : this.flags & -8193;
+            this.flags = this.bot ? this.flags | 16384 : this.flags & -16385;
+            this.flags = this.bot_chat_history ? this.flags | 32768 : this.flags & -32769;
+            this.flags = this.bot_nochats ? this.flags | 65536 : this.flags & -65537;
+            this.flags = this.verified ? this.flags | 131072 : this.flags & -131073;
+            this.flags = this.restricted ? this.flags | 262144 : this.flags & -262145;
+            this.flags = this.min ? this.flags | 1048576 : this.flags & -1048577;
+            this.flags = this.bot_inline_geo ? this.flags | 2097152 : this.flags & -2097153;
+            stream.writeInt32(this.flags);
+            stream.writeInt32(this.id);
+            if ((this.flags & 1) != 0) {
+                stream.writeInt64(this.access_hash);
+            }
+            if ((this.flags & 2) != 0) {
+                stream.writeString(this.first_name);
+            }
+            if ((this.flags & 4) != 0) {
+                stream.writeString(this.last_name);
+            }
+            if ((this.flags & 8) != 0) {
+                stream.writeString(this.username);
+            }
+            if ((this.flags & 16) != 0) {
+                stream.writeString(this.phone);
+            }
+            if ((this.flags & 32) != 0) {
+                this.photo.serializeToStream(stream);
+            }
+            if ((this.flags & 64) != 0) {
+                this.status.serializeToStream(stream);
+            }
+            if ((this.flags & 16384) != 0) {
+                stream.writeInt32(this.bot_info_version);
+            }
+            if ((this.flags & 262144) != 0) {
+                stream.writeString(this.restriction_reason);
+            }
+            if ((this.flags & 524288) != 0) {
+                stream.writeString(this.bot_inline_placeholder);
+            }
         }
     }
 

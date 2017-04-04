@@ -649,8 +649,6 @@ public class VideoEditorActivity extends BaseFragment implements NotificationCen
                     }
                 }
                 if (VideoEditorActivity.this.delegate != null) {
-                    if (VideoEditorActivity.this.muteVideo) {
-                    }
                     if (VideoEditorActivity.this.compressItem.getVisibility() == 8 || (VideoEditorActivity.this.compressItem.getVisibility() == 0 && VideoEditorActivity.this.selectedCompression == VideoEditorActivity.this.compressionsCount - 1)) {
                         VideoEditorActivity.this.delegate.didFinishEditVideo(VideoEditorActivity.this.videoPath, VideoEditorActivity.this.startTime, VideoEditorActivity.this.endTime, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.rotationValue, VideoEditorActivity.this.originalWidth, VideoEditorActivity.this.originalHeight, VideoEditorActivity.this.muteVideo ? -1 : VideoEditorActivity.this.originalBitrate, (long) VideoEditorActivity.this.estimatedSize, VideoEditorActivity.this.esimatedDuration, VideoEditorActivity.this.currentCaption != null ? VideoEditorActivity.this.currentCaption.toString() : null);
                     } else {

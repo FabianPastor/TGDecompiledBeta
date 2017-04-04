@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
@@ -58,16 +57,6 @@ public class CallSwipeView extends View {
 
     public CallSwipeView(Context context) {
         super(context);
-        init();
-    }
-
-    public CallSwipeView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public CallSwipeView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
         init();
     }
 
@@ -190,7 +179,9 @@ public class CallSwipeView extends View {
     public void startAnimatingArrows() {
         if (!this.animatingArrows) {
             this.animatingArrows = true;
-            this.arrowAnim.start();
+            if (this.arrowAnim != null) {
+                this.arrowAnim.start();
+            }
         }
     }
 

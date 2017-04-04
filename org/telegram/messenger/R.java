@@ -1223,6 +1223,8 @@ public final class R {
         public static final int HiddenName = NUM;
         public static final int Highlights = NUM;
         public static final int HistoryCleared = NUM;
+        public static final int HoldToAudio = NUM;
+        public static final int HoldToVideo = NUM;
         public static final int HoursBold_few = NUM;
         public static final int HoursBold_many = NUM;
         public static final int HoursBold_one = NUM;

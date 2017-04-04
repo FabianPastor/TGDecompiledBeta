@@ -236,6 +236,12 @@ public class VideoPlayer implements EventListener, VideoListener {
         }
     }
 
+    public void setVolume(float volume) {
+        if (this.player != null) {
+            this.player.setVolume(volume);
+        }
+    }
+
     public void seekTo(long positionMs) {
         if (this.player != null) {
             this.player.seekTo(positionMs);

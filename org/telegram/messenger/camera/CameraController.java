@@ -484,7 +484,9 @@ public class CameraController implements OnInfoListener {
                                 CameraController.this.recorder.setMaxDuration(0);
                                 if (CameraController.this.recordingSmallVideo) {
                                     pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 640, 480, new Size(4, 3));
-                                    CameraController.this.recorder.setVideoEncodingBitRate(900000);
+                                    CameraController.this.recorder.setVideoEncodingBitRate(400000);
+                                    CameraController.this.recorder.setAudioEncodingBitRate(16000);
+                                    CameraController.this.recorder.setAudioChannels(1);
                                 } else {
                                     pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 720, 480, new Size(16, 9));
                                     CameraController.this.recorder.setVideoEncodingBitRate(1800000);

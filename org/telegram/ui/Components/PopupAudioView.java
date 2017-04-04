@@ -165,7 +165,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
 
     private void didPressedButton() {
         if (this.buttonState == 0) {
-            boolean result = MediaController.getInstance().playAudio(this.currentMessageObject);
+            boolean result = MediaController.getInstance().playMessage(this.currentMessageObject);
             if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.to_id.channel_id == 0) {
                 MessagesController.getInstance().markMessageContentAsRead(this.currentMessageObject);
                 this.currentMessageObject.setContentIsRead();
@@ -175,7 +175,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseAudio(this.currentMessageObject)) {
+            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }
@@ -196,7 +196,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
                 this.seekBar.setProgress(this.currentMessageObject.audioProgress);
             }
             int duration = 0;
-            if (MediaController.getInstance().isPlayingAudio(this.currentMessageObject)) {
+            if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
                 duration = this.currentMessageObject.audioProgressSec;
             } else {
                 for (int a = 0; a < this.currentMessageObject.getDocument().attributes.size(); a++) {
@@ -228,7 +228,7 @@ public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDow
         String fileName = this.currentMessageObject.getFileName();
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
             MediaController.getInstance().removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance().isPlayingAudio(this.currentMessageObject);
+            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
             if (!playing || (playing && MediaController.getInstance().isAudioPaused())) {
                 this.buttonState = 0;
             } else {

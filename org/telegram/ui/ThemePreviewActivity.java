@@ -387,7 +387,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                     public void didPressedShare(ChatMessageCell cell) {
                     }
 
-                    public boolean needPlayAudio(MessageObject messageObject) {
+                    public boolean needPlayMessage(MessageObject messageObject) {
                         return false;
                     }
 

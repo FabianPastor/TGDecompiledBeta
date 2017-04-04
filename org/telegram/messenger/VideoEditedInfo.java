@@ -7,12 +7,14 @@ public class VideoEditedInfo {
     public long endTime;
     public long estimatedDuration;
     public long estimatedSize;
+    public boolean muted;
     public int originalHeight;
     public String originalPath;
     public int originalWidth;
     public int resultHeight;
     public int resultWidth;
     public int rotationValue;
+    public boolean roundVideo;
     public long startTime;
 
     public String getString() {

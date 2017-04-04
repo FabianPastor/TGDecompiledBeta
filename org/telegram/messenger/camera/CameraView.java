@@ -33,6 +33,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private CameraViewDelegate delegate;
     private int focusAreaSize;
     private float focusProgress = 1.0f;
+    private boolean initialFrontface;
     private boolean initied;
     private float innerAlpha;
     private Paint innerPaint = new Paint(1);
@@ -56,6 +57,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     public CameraView(Context context, boolean frontface) {
         super(context, null);
         this.isFrontface = frontface;
+        this.initialFrontface = frontface;
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
@@ -119,7 +121,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 int wantedWidth;
                 int wantedHeight;
                 float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
-                if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
+                if (this.initialFrontface) {
+                    aspectRatio = new Size(4, 3);
+                    wantedWidth = 480;
+                    wantedHeight = 360;
+                } else if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
                     aspectRatio = new Size(4, 3);
                     wantedWidth = 1280;
                     wantedHeight = 960;

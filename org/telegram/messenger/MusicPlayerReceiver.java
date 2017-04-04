@@ -15,10 +15,10 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                         case 79:
                         case 85:
                             if (MediaController.getInstance().isAudioPaused()) {
-                                MediaController.getInstance().playAudio(MediaController.getInstance().getPlayingMessageObject());
+                                MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             } else {
-                                MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+                                MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             }
                         case 86:
@@ -30,10 +30,10 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                             MediaController.getInstance().playPreviousMessage();
                             return;
                         case 126:
-                            MediaController.getInstance().playAudio(MediaController.getInstance().getPlayingMessageObject());
+                            MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                             return;
                         case 127:
-                            MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+                            MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                             return;
                         default:
                             return;
@@ -41,9 +41,9 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                 }
             }
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PLAY)) {
-            MediaController.getInstance().playAudio(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PAUSE) || intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
-            MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_NEXT)) {
             MediaController.getInstance().playNextMessage();
         } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_CLOSE)) {

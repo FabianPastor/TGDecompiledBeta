@@ -185,9 +185,8 @@ public class Theme {
     public static Paint chat_statusRecordPaint = null;
     public static Drawable chat_systemDrawable = null;
     public static Paint chat_textSearchSelectionPaint = null;
-    public static Drawable chat_timeBackgroundDrawable = null;
+    public static Paint chat_timeBackgroundPaint = null;
     public static TextPaint chat_timePaint = null;
-    public static Drawable chat_timeStickerBackgroundDrawable = null;
     public static Paint chat_urlPaint = null;
     public static Paint checkboxSquare_backgroundPaint = null;
     public static Paint checkboxSquare_checkPaint = null;
@@ -400,6 +399,7 @@ public class Theme {
     public static final String key_chat_mediaProgress = "chat_mediaProgress";
     public static final String key_chat_mediaSentCheck = "chat_mediaSentCheck";
     public static final String key_chat_mediaSentClock = "chat_mediaSentClock";
+    public static final String key_chat_mediaTimeBackground = "chat_mediaTimeBackground";
     public static final String key_chat_mediaTimeText = "chat_mediaTimeText";
     public static final String key_chat_mediaViews = "chat_mediaViews";
     public static final String key_chat_messageLinkIn = "chat_messageLinkIn";
@@ -1010,6 +1010,7 @@ public class Theme {
         defaultColors.put(key_chat_serviceText, Integer.valueOf(-1));
         defaultColors.put(key_chat_serviceLink, Integer.valueOf(-1));
         defaultColors.put(key_chat_serviceIcon, Integer.valueOf(-1));
+        defaultColors.put(key_chat_mediaTimeBackground, Integer.valueOf(NUM));
         defaultColors.put(key_chat_outSentCheck, Integer.valueOf(-10637232));
         defaultColors.put(key_chat_outSentCheckSelected, Integer.valueOf(-10637232));
         defaultColors.put(key_chat_outSentClock, Integer.valueOf(-9061026));
@@ -2170,6 +2171,7 @@ public class Theme {
             chat_actionTextPaint = new TextPaint(1);
             chat_actionTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_actionBackgroundPaint = new Paint(1);
+            chat_timeBackgroundPaint = new Paint(1);
             chat_contextResult_titleTextPaint = new TextPaint(1);
             chat_contextResult_titleTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_contextResult_descriptionTextPaint = new TextPaint(1);
@@ -2234,8 +2236,6 @@ public class Theme {
             chat_msgOutMediaShadowDrawable = resources.getDrawable(R.drawable.msg_photo_shadow);
             chat_botLinkDrawalbe = resources.getDrawable(R.drawable.bot_link);
             chat_botInlineDrawable = resources.getDrawable(R.drawable.bot_lines);
-            chat_timeBackgroundDrawable = resources.getDrawable(R.drawable.phototime2_b);
-            chat_timeStickerBackgroundDrawable = resources.getDrawable(R.drawable.phototime2);
             chat_systemDrawable = resources.getDrawable(R.drawable.system);
             chat_contextResult_shadowUnderSwitchDrawable = resources.getDrawable(R.drawable.header_shadow).mutate();
             chat_attachButtonDrawables[0] = resources.getDrawable(R.drawable.attach_camera_states);
@@ -2370,6 +2370,7 @@ public class Theme {
             chat_actionTextPaint.linkColor = getColor(key_chat_serviceLink);
             chat_contextResult_titleTextPaint.setColor(getColor(key_windowBackgroundWhiteBlackText));
             chat_composeBackgroundPaint.setColor(getColor(key_chat_messagePanelBackground));
+            chat_timeBackgroundPaint.setColor(getColor(key_chat_mediaTimeBackground));
             setDrawableColorByKey(chat_msgInDrawable, key_chat_inBubble);
             setDrawableColorByKey(chat_msgInSelectedDrawable, key_chat_inBubbleSelected);
             setDrawableColorByKey(chat_msgInShadowDrawable, key_chat_inBubbleShadow);
@@ -2487,12 +2488,11 @@ public class Theme {
                 chat_actionBackgroundPaint.setColor(serviceColor.intValue());
                 colorFilter = new PorterDuffColorFilter(serviceColor.intValue(), Mode.MULTIPLY);
                 currentColor = serviceColor.intValue();
-                if (chat_timeStickerBackgroundDrawable != null) {
+                if (chat_cornerOuter[0] != null) {
                     for (int a = 0; a < 4; a++) {
                         chat_cornerOuter[a].setColorFilter(colorFilter);
                         chat_cornerInner[a].setColorFilter(colorFilter);
                     }
-                    chat_timeStickerBackgroundDrawable.setColorFilter(colorFilter);
                 }
             }
             if (currentSelectedColor != servicePressedColor.intValue()) {
@@ -2694,11 +2694,11 @@ public class Theme {
                 public void run() {
                     Throwable e;
                     int i;
-                    SharedPreferences preferences;
-                    File toFile;
+                    int selectedBackground;
                     Throwable th;
                     synchronized (Theme.wallpaperSync) {
-                        int selectedBackground;
+                        SharedPreferences preferences;
+                        File toFile;
                         if (!ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).getBoolean("overrideThemeWallpaper", false)) {
                             Integer backgroundColor = (Integer) Theme.currentColors.get(Theme.key_chat_wallpaper);
                             if (backgroundColor != null) {

@@ -296,13 +296,13 @@ class zzatj extends zzauh {
 
     @WorkerThread
     static boolean zza(zzatx com_google_android_gms_internal_zzatx, SQLiteDatabase sQLiteDatabase, String str) {
-        Cursor query;
         Object e;
         Throwable th;
         Cursor cursor = null;
         if (com_google_android_gms_internal_zzatx == null) {
             throw new IllegalArgumentException("Monitor must not be null");
         }
+        Cursor query;
         try {
             SQLiteDatabase sQLiteDatabase2 = sQLiteDatabase;
             query = sQLiteDatabase2.query("SQLITE_MASTER", new String[]{"name"}, "name=?", new String[]{str}, null, null, null);
@@ -514,10 +514,10 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public String zzLC() {
+        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
-        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from queue order by has_realtime desc, rowid asc limit 1;", null);
             try {
@@ -1107,6 +1107,7 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdr(str);
@@ -1114,7 +1115,6 @@ class zzatj extends zzauh {
         zzob();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_internal_zzatj_zza = new zza();
-        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1724,13 +1724,13 @@ class zzatj extends zzauh {
     }
 
     public List<zzatg> zzc(String str, String[] strArr) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
         zzmR();
         zzob();
         List<zzatg> arrayList = new ArrayList();
-        Cursor query;
         try {
             String[] strArr2 = new String[]{"app_id", "origin", "name", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"};
             zzKm().zzKY();

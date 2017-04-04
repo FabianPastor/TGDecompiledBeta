@@ -112,7 +112,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
         loadAudio();
         return true;
     }
@@ -120,8 +120,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance().removeObserver(this, NotificationCenter.closeChats);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidReset);
-        if (this.playingAudio != null && MediaController.getInstance().isPlayingAudio(this.playingAudio)) {
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
+        if (this.playingAudio != null && MediaController.getInstance().isPlayingMessage(this.playingAudio)) {
             MediaController.getInstance().cleanupPlayer(true, true);
         }
     }
@@ -205,7 +205,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationCenter.closeChats) {
             removeSelfFromStack();
-        } else if (id == NotificationCenter.audioDidReset && this.listViewAdapter != null) {
+        } else if (id == NotificationCenter.messagePlayingDidReset && this.listViewAdapter != null) {
             this.listViewAdapter.notifyDataSetChanged();
         }
     }

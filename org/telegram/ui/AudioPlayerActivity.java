@@ -140,18 +140,18 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
 
     public boolean onFragmentCreate() {
         this.TAG = MediaController.getInstance().generateObserverTag();
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidReset);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidStarted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioProgressDidChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidReset);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidStarted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioProgressDidChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         MediaController.getInstance().removeLoadingFileObserver(this);
         super.onFragmentDestroy();
     }
@@ -256,9 +256,9 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
             public void onClick(View v) {
                 if (!MediaController.getInstance().isDownloadingCurrentMessage()) {
                     if (MediaController.getInstance().isAudioPaused()) {
-                        MediaController.getInstance().playAudio(MediaController.getInstance().getPlayingMessageObject());
+                        MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                     } else {
-                        MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+                        MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
                     }
                 }
             }
@@ -295,10 +295,10 @@ public class AudioPlayerActivity extends BaseFragment implements NotificationCen
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationCenter.audioDidStarted || id == NotificationCenter.audioPlayStateChanged || id == NotificationCenter.audioDidReset) {
-            boolean z = id == NotificationCenter.audioDidReset && ((Boolean) args[1]).booleanValue();
+        if (id == NotificationCenter.messagePlayingDidStarted || id == NotificationCenter.messagePlayingPlayStateChanged || id == NotificationCenter.messagePlayingDidReset) {
+            boolean z = id == NotificationCenter.messagePlayingDidReset && ((Boolean) args[1]).booleanValue();
             updateTitle(z);
-        } else if (id == NotificationCenter.audioProgressDidChanged) {
+        } else if (id == NotificationCenter.messagePlayingProgressDidChanged) {
             MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null && messageObject.isMusic()) {
                 updateProgress(messageObject);

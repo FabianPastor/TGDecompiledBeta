@@ -10,10 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.os.Build.VERSION;
@@ -29,6 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraController.VideoTakeCallback;
@@ -37,7 +41,7 @@ import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 
-public class InstantCameraView extends FrameLayout {
+public class InstantCameraView extends FrameLayout implements NotificationCenterDelegate {
     private View actionBar;
     private AnimatorSet animatorSet;
     private ChatActivity baseFragment;
@@ -45,9 +49,12 @@ public class InstantCameraView extends FrameLayout {
     private File cameraFile;
     private CameraView cameraView;
     private boolean deviceHasGoodCamera;
+    private Paint paint;
     private int[] position = new int[2];
+    private float progress;
     private long recordStartTime;
     private boolean recording;
+    private RectF rect;
     private boolean requestingPermissions;
     private Runnable timerRunnable = new Runnable() {
         public void run() {
@@ -61,11 +68,34 @@ public class InstantCameraView extends FrameLayout {
     public InstantCameraView(Context context, ChatActivity parentFragment, View actionBarOverlay) {
         int size;
         super(context);
+        setWillNotDraw(false);
         this.actionBar = actionBarOverlay;
         setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         this.baseFragment = parentFragment;
+        this.paint = new Paint(1);
+        this.paint.setStyle(Style.STROKE);
+        this.paint.setStrokeCap(Cap.ROUND);
+        this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+        this.paint.setColor(-1);
+        this.rect = new RectF();
+        if (AndroidUtilities.isTablet()) {
+            size = Math.min(AndroidUtilities.getPhotoSize(), (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.5f));
+        } else {
+            size = Math.min(AndroidUtilities.getPhotoSize(), (int) (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) * 0.5f));
+        }
         if (VERSION.SDK_INT >= 21) {
-            this.cameraContainer = new FrameLayout(context);
+            this.cameraContainer = new FrameLayout(context) {
+                public void setTranslationY(float translationY) {
+                    super.setTranslationY(translationY);
+                }
+            };
+            this.cameraContainer.setOutlineProvider(new ViewOutlineProvider() {
+                @TargetApi(21)
+                public void getOutline(View view, Outline outline) {
+                    outline.setOval(0, 0, size, size);
+                }
+            });
+            this.cameraContainer.setClipToOutline(true);
         } else {
             final Path path = new Path();
             final Paint paint = new Paint(1);
@@ -84,27 +114,29 @@ public class InstantCameraView extends FrameLayout {
                     canvas.drawPath(path, paint);
                 }
             };
-        }
-        if (AndroidUtilities.isTablet()) {
-            size = AndroidUtilities.dp(100.0f);
-        } else {
-            size = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) / 2;
+            this.cameraContainer.setLayerType(2, null);
         }
         LayoutParams layoutParams = new LayoutParams(size, size, 17);
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         addView(this.cameraContainer, layoutParams);
-        if (VERSION.SDK_INT >= 21) {
-            this.cameraContainer.setOutlineProvider(new ViewOutlineProvider() {
-                @TargetApi(21)
-                public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, size, size);
-                }
-            });
-            this.cameraContainer.setClipToOutline(true);
-        } else {
-            this.cameraContainer.setLayerType(2, null);
-        }
         setVisibility(8);
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.recordProgressChanged);
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.recordProgressChanged);
+    }
+
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationCenter.recordProgressChanged) {
+            this.progress = ((float) ((Long) args[0]).longValue()) / 60000.0f;
+            invalidate();
+        }
     }
 
     public void checkCamera(boolean request) {
@@ -130,6 +162,15 @@ public class InstantCameraView extends FrameLayout {
         }
     }
 
+    protected void onDraw(Canvas canvas) {
+        float x = this.cameraContainer.getX();
+        float y = this.cameraContainer.getY();
+        this.rect.set(x - ((float) AndroidUtilities.dp(8.0f)), y - ((float) AndroidUtilities.dp(8.0f)), (((float) this.cameraView.getMeasuredWidth()) + x) + ((float) AndroidUtilities.dp(8.0f)), (((float) this.cameraView.getMeasuredHeight()) + y) + ((float) AndroidUtilities.dp(8.0f)));
+        if (this.progress != 0.0f) {
+            canvas.drawArc(this.rect, -90.0f, this.progress * 360.0f, false, this.paint);
+        }
+    }
+
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         this.actionBar.setVisibility(visibility);
@@ -147,6 +188,7 @@ public class InstantCameraView extends FrameLayout {
     @TargetApi(16)
     public void showCamera() {
         if (this.cameraView == null) {
+            this.progress = 0.0f;
             setVisibility(0);
             this.cameraView = new CameraView(getContext(), true);
             this.cameraView.setMirror(true);
@@ -169,12 +211,13 @@ public class InstantCameraView extends FrameLayout {
                                 if (InstantCameraView.this.cameraFile != null && InstantCameraView.this.baseFragment != null) {
                                     AndroidUtilities.addMediaToGallery(InstantCameraView.this.cameraFile.getAbsolutePath());
                                     VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
-                                    videoEditedInfo.bitrate = -1;
+                                    videoEditedInfo.bitrate = 400000;
                                     videoEditedInfo.originalPath = InstantCameraView.this.cameraFile.getAbsolutePath();
                                     videoEditedInfo.endTime = -1;
                                     videoEditedInfo.startTime = -1;
                                     videoEditedInfo.estimatedSize = InstantCameraView.this.cameraFile.length();
-                                    InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), null);
+                                    videoEditedInfo.roundVideo = true;
+                                    InstantCameraView.this.baseFragment.sendMedia(new PhotoEntry(0, 0, 0, InstantCameraView.this.cameraFile.getAbsolutePath(), 0, true), videoEditedInfo);
                                 }
                             }
                         }, new Runnable() {
@@ -315,6 +358,8 @@ public class InstantCameraView extends FrameLayout {
         if (this.cameraView != null) {
             this.cameraView.destroy(async, null);
             this.cameraContainer.removeView(this.cameraView);
+            this.cameraContainer.setTranslationX(0.0f);
+            this.cameraContainer.setTranslationY(0.0f);
             this.cameraView = null;
         }
     }

@@ -53,8 +53,8 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
 
     public void onCreate() {
         this.audioManager = (AudioManager) getSystemService(MimeTypes.BASE_TYPE_AUDIO);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioProgressDidChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         super.onCreate();
     }
 
@@ -204,12 +204,12 @@ public class MusicPlayerService extends Service implements NotificationCenterDel
             metadataEditor.apply();
             this.audioManager.unregisterRemoteControlClient(this.remoteControlClient);
         }
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioProgressDidChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioPlayStateChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
     }
 
     public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationCenter.audioPlayStateChanged) {
+        if (id == NotificationCenter.messagePlayingPlayStateChanged) {
             MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (messageObject != null) {
                 createNotification(messageObject);

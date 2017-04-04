@@ -1919,6 +1919,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                     i = PhotoViewer.this.originalBitrate;
                                 }
                                 videoEditedInfo.bitrate = i;
+                                videoEditedInfo.muted = PhotoViewer.this.muteVideo;
                             } else {
                                 if (PhotoViewer.this.muteVideo) {
                                     PhotoViewer.this.selectedCompression = 1;
@@ -1930,6 +1931,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
                                     i = PhotoViewer.this.bitrate;
                                 }
                                 videoEditedInfo.bitrate = i;
+                                videoEditedInfo.muted = PhotoViewer.this.muteVideo;
                             }
                         }
                         PhotoViewer.this.placeProvider.sendButtonPressed(PhotoViewer.this.currentIndex, videoEditedInfo);

@@ -99,7 +99,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (messageObject == null) {
                 onPlayFromMediaId(MusicBrowserService.this.lastSelectedDialog + "_" + 0, null);
             } else {
-                MediaController.getInstance().playAudio(messageObject);
+                MediaController.getInstance().playMessage(messageObject);
             }
         }
 
@@ -205,9 +205,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         extras.putBoolean(SLOT_RESERVATION_SKIP_TO_NEXT, true);
         this.mediaSession.setExtras(extras);
         updatePlaybackState(null);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidStarted);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
     }
 
     public int onStartCommand(Intent startIntent, int flags, int startId) {
@@ -484,9 +484,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         updatePlaybackState(withError);
         stopSelf();
         this.serviceStarted = false;
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioPlayStateChanged);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidStarted);
-        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidReset);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidStarted);
+        NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
     }
 
     private void handlePlayRequest() {
@@ -516,7 +516,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     private void handlePauseRequest() {
-        MediaController.getInstance().pauseAudio(MediaController.getInstance().getPlayingMessageObject());
+        MediaController.getInstance().pauseMessage(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

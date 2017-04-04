@@ -491,13 +491,13 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             return;
         }
         if (this.buttonState == 0) {
-            if (MediaController.getInstance().playAudio(this.currentMessageObject)) {
+            if (MediaController.getInstance().playMessage(this.currentMessageObject)) {
                 this.buttonState = 1;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
             }
         } else if (this.buttonState == 1) {
-            if (MediaController.getInstance().pauseAudio(this.currentMessageObject)) {
+            if (MediaController.getInstance().pauseMessage(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
                 invalidate();
@@ -687,7 +687,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (cacheFile.exists()) {
             MediaController.getInstance().removeLoadingFileObserver(this);
             if (this.documentAttachType == 5 || this.documentAttachType == 3) {
-                boolean playing = MediaController.getInstance().isPlayingAudio(this.currentMessageObject);
+                boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
                 if (!playing || (playing && MediaController.getInstance().isAudioPaused())) {
                     this.buttonState = 0;
                 } else {

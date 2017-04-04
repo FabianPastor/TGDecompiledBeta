@@ -167,8 +167,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.appDidLogout);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.pushMessagesUpdated);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioProgressDidChanged);
-        NotificationCenter.getInstance().addObserver(this, NotificationCenter.audioDidReset);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance().addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.contactsDidLoaded);
         NotificationCenter.getInstance().addObserver(this, NotificationCenter.emojiDidLoaded);
         this.typingDotsDrawable = new TypingDotsDrawable();
@@ -278,6 +278,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
 
             public void onTextChanged(CharSequence text, boolean big) {
+            }
+
+            public void onSwitchRecordMode(boolean video) {
             }
 
             public void onMessageEditEnd(boolean loading) {
@@ -1141,7 +1144,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     }
                 }
             }
-        } else if (id == NotificationCenter.audioDidReset) {
+        } else if (id == NotificationCenter.messagePlayingDidReset) {
             mid = args[0];
             if (this.messageContainer != null) {
                 count = this.messageContainer.getChildCount();
@@ -1156,7 +1159,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     }
                 }
             }
-        } else if (id == NotificationCenter.audioProgressDidChanged) {
+        } else if (id == NotificationCenter.messagePlayingProgressDidChanged) {
             mid = (Integer) args[0];
             if (this.messageContainer != null) {
                 count = this.messageContainer.getChildCount();
@@ -1209,8 +1212,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.appDidLogout);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.pushMessagesUpdated);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.updateInterfaces);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioProgressDidChanged);
-            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.audioDidReset);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance().removeObserver(this, NotificationCenter.messagePlayingDidReset);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.contactsDidLoaded);
             NotificationCenter.getInstance().removeObserver(this, NotificationCenter.emojiDidLoaded);
             if (this.chatActivityEnterView != null) {

@@ -3,10 +3,10 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.FrameLayout;
 
-public class BaseCell extends View {
+public class BaseCell extends FrameLayout {
     private boolean checkingForLongPress = false;
     private CheckForLongPress pendingCheckForLongPress = null;
     private CheckForTap pendingCheckForTap = null;
@@ -51,6 +51,7 @@ public class BaseCell extends View {
 
     public BaseCell(Context context) {
         super(context);
+        setWillNotDraw(false);
     }
 
     protected void setDrawableBounds(Drawable drawable, int x, int y) {

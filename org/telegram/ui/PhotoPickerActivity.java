@@ -541,6 +541,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                 videoEditedInfo.resultWidth = resultWidth;
                                 videoEditedInfo.resultHeight = resultHeight;
                                 videoEditedInfo.originalPath = videoPath;
+                                videoEditedInfo.muted = videoEditedInfo.bitrate == -1;
                                 PhotoPickerActivity.this.delegate.didSelectVideo(videoPath, videoEditedInfo, estimatedSize, estimatedDuration, caption);
                             }
                         });
