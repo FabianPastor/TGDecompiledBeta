@@ -13,7 +13,7 @@ public class zzbkb implements Creator<zzbka> {
         zzc.zzc(parcel, 2, com_google_android_gms_internal_zzbka.width);
         zzc.zzc(parcel, 3, com_google_android_gms_internal_zzbka.height);
         zzc.zzc(parcel, 4, com_google_android_gms_internal_zzbka.id);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzbka.zzbPp);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzbka.zzbPl);
         zzc.zzc(parcel, 6, com_google_android_gms_internal_zzbka.rotation);
         zzc.zzJ(parcel, zzaZ);
     }

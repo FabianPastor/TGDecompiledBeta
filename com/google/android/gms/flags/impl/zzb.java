@@ -16,10 +16,10 @@ public class zzb {
         }
 
         public /* synthetic */ Object call() throws Exception {
-            return zzDH();
+            return zzDI();
         }
 
-        public SharedPreferences zzDH() {
+        public SharedPreferences zzDI() {
             return this.zztf.getSharedPreferences("google_sdk_flags", 1);
         }
     }

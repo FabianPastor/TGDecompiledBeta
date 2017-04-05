@@ -666,6 +666,7 @@ public final class R {
         public static final int ActionPinnedMusic = NUM;
         public static final int ActionPinnedNoText = NUM;
         public static final int ActionPinnedPhoto = NUM;
+        public static final int ActionPinnedRound = NUM;
         public static final int ActionPinnedSticker = NUM;
         public static final int ActionPinnedText = NUM;
         public static final int ActionPinnedVideo = NUM;
@@ -779,6 +780,7 @@ public final class R {
         public static final int AttachLocation = NUM;
         public static final int AttachMusic = NUM;
         public static final int AttachPhoto = NUM;
+        public static final int AttachRound = NUM;
         public static final int AttachSticker = NUM;
         public static final int AttachVideo = NUM;
         public static final int AudioTitle = NUM;
@@ -902,6 +904,7 @@ public final class R {
         public static final int ChannelMessageGroupMusic = NUM;
         public static final int ChannelMessageGroupNoText = NUM;
         public static final int ChannelMessageGroupPhoto = NUM;
+        public static final int ChannelMessageGroupRound = NUM;
         public static final int ChannelMessageGroupSticker = NUM;
         public static final int ChannelMessageGroupStickerEmoji = NUM;
         public static final int ChannelMessageGroupVideo = NUM;
@@ -909,6 +912,7 @@ public final class R {
         public static final int ChannelMessageMusic = NUM;
         public static final int ChannelMessageNoText = NUM;
         public static final int ChannelMessagePhoto = NUM;
+        public static final int ChannelMessageRound = NUM;
         public static final int ChannelMessageSticker = NUM;
         public static final int ChannelMessageStickerEmoji = NUM;
         public static final int ChannelMessageVideo = NUM;
@@ -1176,6 +1180,12 @@ public final class R {
         public static final int ForwardedPhoto_other = NUM;
         public static final int ForwardedPhoto_two = NUM;
         public static final int ForwardedPhoto_zero = NUM;
+        public static final int ForwardedRound_few = NUM;
+        public static final int ForwardedRound_many = NUM;
+        public static final int ForwardedRound_one = NUM;
+        public static final int ForwardedRound_other = NUM;
+        public static final int ForwardedRound_two = NUM;
+        public static final int ForwardedRound_zero = NUM;
         public static final int ForwardedSticker_few = NUM;
         public static final int ForwardedSticker_many = NUM;
         public static final int ForwardedSticker_one = NUM;
@@ -1265,6 +1275,7 @@ public final class R {
         public static final int InviteToGroupError = NUM;
         public static final int InviteUser = NUM;
         public static final int IsRecordingAudio = NUM;
+        public static final int IsRecordingRound = NUM;
         public static final int IsSendingAudio = NUM;
         public static final int IsSendingFile = NUM;
         public static final int IsSendingGame = NUM;
@@ -1491,6 +1502,8 @@ public final class R {
         public static final int NotificationActionPinnedNoTextChannel = NUM;
         public static final int NotificationActionPinnedPhoto = NUM;
         public static final int NotificationActionPinnedPhotoChannel = NUM;
+        public static final int NotificationActionPinnedRound = NUM;
+        public static final int NotificationActionPinnedRoundChannel = NUM;
         public static final int NotificationActionPinnedSticker = NUM;
         public static final int NotificationActionPinnedStickerChannel = NUM;
         public static final int NotificationActionPinnedStickerEmoji = NUM;
@@ -1527,6 +1540,7 @@ public final class R {
         public static final int NotificationMessageGroupMusic = NUM;
         public static final int NotificationMessageGroupNoText = NUM;
         public static final int NotificationMessageGroupPhoto = NUM;
+        public static final int NotificationMessageGroupRound = NUM;
         public static final int NotificationMessageGroupSticker = NUM;
         public static final int NotificationMessageGroupStickerEmoji = NUM;
         public static final int NotificationMessageGroupText = NUM;
@@ -1535,6 +1549,7 @@ public final class R {
         public static final int NotificationMessageMusic = NUM;
         public static final int NotificationMessageNoText = NUM;
         public static final int NotificationMessagePhoto = NUM;
+        public static final int NotificationMessageRound = NUM;
         public static final int NotificationMessageSticker = NUM;
         public static final int NotificationMessageStickerEmoji = NUM;
         public static final int NotificationMessageText = NUM;
@@ -1730,6 +1745,7 @@ public final class R {
         public static final int ReEnterYourPasscode = NUM;
         public static final int Recent = NUM;
         public static final int RecordingAudio = NUM;
+        public static final int RecordingRound = NUM;
         public static final int RecoveryEmail = NUM;
         public static final int RegisterText = NUM;
         public static final int Regular = NUM;

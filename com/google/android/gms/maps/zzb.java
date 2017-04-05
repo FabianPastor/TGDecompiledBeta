@@ -14,11 +14,11 @@ public class zzb implements Creator<StreetViewPanoramaOptions> {
         zzc.zza(parcel, 3, streetViewPanoramaOptions.getPanoramaId(), false);
         zzc.zza(parcel, 4, streetViewPanoramaOptions.getPosition(), i, false);
         zzc.zza(parcel, 5, streetViewPanoramaOptions.getRadius(), false);
-        zzc.zza(parcel, 6, streetViewPanoramaOptions.zzJA());
-        zzc.zza(parcel, 7, streetViewPanoramaOptions.zzJs());
-        zzc.zza(parcel, 8, streetViewPanoramaOptions.zzJB());
-        zzc.zza(parcel, 9, streetViewPanoramaOptions.zzJC());
-        zzc.zza(parcel, 10, streetViewPanoramaOptions.zzJo());
+        zzc.zza(parcel, 6, streetViewPanoramaOptions.zzJB());
+        zzc.zza(parcel, 7, streetViewPanoramaOptions.zzJt());
+        zzc.zza(parcel, 8, streetViewPanoramaOptions.zzJC());
+        zzc.zza(parcel, 9, streetViewPanoramaOptions.zzJD());
+        zzc.zza(parcel, 10, streetViewPanoramaOptions.zzJp());
         zzc.zzJ(parcel, zzaZ);
     }
 

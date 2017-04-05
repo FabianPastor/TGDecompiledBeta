@@ -10,7 +10,7 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 public class zzd implements Creator<GroundOverlayOptions> {
     static void zza(GroundOverlayOptions groundOverlayOptions, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, groundOverlayOptions.zzJJ(), false);
+        zzc.zza(parcel, 2, groundOverlayOptions.zzJK(), false);
         zzc.zza(parcel, 3, groundOverlayOptions.getLocation(), i, false);
         zzc.zza(parcel, 4, groundOverlayOptions.getWidth());
         zzc.zza(parcel, 5, groundOverlayOptions.getHeight());

@@ -10,14 +10,14 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class CameraUpdateFactory {
-    private static ICameraUpdateFactoryDelegate zzbnz;
+    private static ICameraUpdateFactoryDelegate zzbnv;
 
     private CameraUpdateFactory() {
     }
 
     public static CameraUpdate newCameraPosition(CameraPosition cameraPosition) {
         try {
-            return new CameraUpdate(zzJm().newCameraPosition(cameraPosition));
+            return new CameraUpdate(zzJn().newCameraPosition(cameraPosition));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -25,7 +25,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate newLatLng(LatLng latLng) {
         try {
-            return new CameraUpdate(zzJm().newLatLng(latLng));
+            return new CameraUpdate(zzJn().newLatLng(latLng));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -33,7 +33,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate newLatLngBounds(LatLngBounds latLngBounds, int i) {
         try {
-            return new CameraUpdate(zzJm().newLatLngBounds(latLngBounds, i));
+            return new CameraUpdate(zzJn().newLatLngBounds(latLngBounds, i));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -41,7 +41,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate newLatLngBounds(LatLngBounds latLngBounds, int i, int i2, int i3) {
         try {
-            return new CameraUpdate(zzJm().newLatLngBoundsWithSize(latLngBounds, i, i2, i3));
+            return new CameraUpdate(zzJn().newLatLngBoundsWithSize(latLngBounds, i, i2, i3));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -49,7 +49,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate newLatLngZoom(LatLng latLng, float f) {
         try {
-            return new CameraUpdate(zzJm().newLatLngZoom(latLng, f));
+            return new CameraUpdate(zzJn().newLatLngZoom(latLng, f));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -57,7 +57,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate scrollBy(float f, float f2) {
         try {
-            return new CameraUpdate(zzJm().scrollBy(f, f2));
+            return new CameraUpdate(zzJn().scrollBy(f, f2));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -65,7 +65,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate zoomBy(float f) {
         try {
-            return new CameraUpdate(zzJm().zoomBy(f));
+            return new CameraUpdate(zzJn().zoomBy(f));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -73,7 +73,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate zoomBy(float f, Point point) {
         try {
-            return new CameraUpdate(zzJm().zoomByWithFocus(f, point.x, point.y));
+            return new CameraUpdate(zzJn().zoomByWithFocus(f, point.x, point.y));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -81,7 +81,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate zoomIn() {
         try {
-            return new CameraUpdate(zzJm().zoomIn());
+            return new CameraUpdate(zzJn().zoomIn());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -89,7 +89,7 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate zoomOut() {
         try {
-            return new CameraUpdate(zzJm().zoomOut());
+            return new CameraUpdate(zzJn().zoomOut());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -97,17 +97,17 @@ public final class CameraUpdateFactory {
 
     public static CameraUpdate zoomTo(float f) {
         try {
-            return new CameraUpdate(zzJm().zoomTo(f));
+            return new CameraUpdate(zzJn().zoomTo(f));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
     }
 
-    private static ICameraUpdateFactoryDelegate zzJm() {
-        return (ICameraUpdateFactoryDelegate) zzac.zzb(zzbnz, (Object) "CameraUpdateFactory is not initialized");
+    private static ICameraUpdateFactoryDelegate zzJn() {
+        return (ICameraUpdateFactoryDelegate) zzac.zzb(zzbnv, (Object) "CameraUpdateFactory is not initialized");
     }
 
     public static void zza(ICameraUpdateFactoryDelegate iCameraUpdateFactoryDelegate) {
-        zzbnz = (ICameraUpdateFactoryDelegate) zzac.zzw(iCameraUpdateFactoryDelegate);
+        zzbnv = (ICameraUpdateFactoryDelegate) zzac.zzw(iCameraUpdateFactoryDelegate);
     }
 }

@@ -12,7 +12,7 @@ public class zzk implements Creator<PolygonOptions> {
     static void zza(PolygonOptions polygonOptions, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 2, polygonOptions.getPoints(), false);
-        zzc.zzd(parcel, 3, polygonOptions.zzJO(), false);
+        zzc.zzd(parcel, 3, polygonOptions.zzJP(), false);
         zzc.zza(parcel, 4, polygonOptions.getStrokeWidth());
         zzc.zzc(parcel, 5, polygonOptions.getStrokeColor());
         zzc.zzc(parcel, 6, polygonOptions.getFillColor());

@@ -5,15 +5,15 @@ import com.google.android.gms.maps.internal.IUiSettingsDelegate;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public final class UiSettings {
-    private final IUiSettingsDelegate zzbpa;
+    private final IUiSettingsDelegate zzboW;
 
     UiSettings(IUiSettingsDelegate iUiSettingsDelegate) {
-        this.zzbpa = iUiSettingsDelegate;
+        this.zzboW = iUiSettingsDelegate;
     }
 
     public boolean isCompassEnabled() {
         try {
-            return this.zzbpa.isCompassEnabled();
+            return this.zzboW.isCompassEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -21,7 +21,7 @@ public final class UiSettings {
 
     public boolean isIndoorLevelPickerEnabled() {
         try {
-            return this.zzbpa.isIndoorLevelPickerEnabled();
+            return this.zzboW.isIndoorLevelPickerEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -29,7 +29,7 @@ public final class UiSettings {
 
     public boolean isMapToolbarEnabled() {
         try {
-            return this.zzbpa.isMapToolbarEnabled();
+            return this.zzboW.isMapToolbarEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -37,7 +37,7 @@ public final class UiSettings {
 
     public boolean isMyLocationButtonEnabled() {
         try {
-            return this.zzbpa.isMyLocationButtonEnabled();
+            return this.zzboW.isMyLocationButtonEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -45,7 +45,7 @@ public final class UiSettings {
 
     public boolean isRotateGesturesEnabled() {
         try {
-            return this.zzbpa.isRotateGesturesEnabled();
+            return this.zzboW.isRotateGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -53,7 +53,7 @@ public final class UiSettings {
 
     public boolean isScrollGesturesEnabled() {
         try {
-            return this.zzbpa.isScrollGesturesEnabled();
+            return this.zzboW.isScrollGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -61,7 +61,7 @@ public final class UiSettings {
 
     public boolean isTiltGesturesEnabled() {
         try {
-            return this.zzbpa.isTiltGesturesEnabled();
+            return this.zzboW.isTiltGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -69,7 +69,7 @@ public final class UiSettings {
 
     public boolean isZoomControlsEnabled() {
         try {
-            return this.zzbpa.isZoomControlsEnabled();
+            return this.zzboW.isZoomControlsEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -77,7 +77,7 @@ public final class UiSettings {
 
     public boolean isZoomGesturesEnabled() {
         try {
-            return this.zzbpa.isZoomGesturesEnabled();
+            return this.zzboW.isZoomGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -85,7 +85,7 @@ public final class UiSettings {
 
     public void setAllGesturesEnabled(boolean z) {
         try {
-            this.zzbpa.setAllGesturesEnabled(z);
+            this.zzboW.setAllGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -93,7 +93,7 @@ public final class UiSettings {
 
     public void setCompassEnabled(boolean z) {
         try {
-            this.zzbpa.setCompassEnabled(z);
+            this.zzboW.setCompassEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -101,7 +101,7 @@ public final class UiSettings {
 
     public void setIndoorLevelPickerEnabled(boolean z) {
         try {
-            this.zzbpa.setIndoorLevelPickerEnabled(z);
+            this.zzboW.setIndoorLevelPickerEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -109,7 +109,7 @@ public final class UiSettings {
 
     public void setMapToolbarEnabled(boolean z) {
         try {
-            this.zzbpa.setMapToolbarEnabled(z);
+            this.zzboW.setMapToolbarEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -117,7 +117,7 @@ public final class UiSettings {
 
     public void setMyLocationButtonEnabled(boolean z) {
         try {
-            this.zzbpa.setMyLocationButtonEnabled(z);
+            this.zzboW.setMyLocationButtonEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -125,7 +125,7 @@ public final class UiSettings {
 
     public void setRotateGesturesEnabled(boolean z) {
         try {
-            this.zzbpa.setRotateGesturesEnabled(z);
+            this.zzboW.setRotateGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -133,7 +133,7 @@ public final class UiSettings {
 
     public void setScrollGesturesEnabled(boolean z) {
         try {
-            this.zzbpa.setScrollGesturesEnabled(z);
+            this.zzboW.setScrollGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -141,7 +141,7 @@ public final class UiSettings {
 
     public void setTiltGesturesEnabled(boolean z) {
         try {
-            this.zzbpa.setTiltGesturesEnabled(z);
+            this.zzboW.setTiltGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -149,7 +149,7 @@ public final class UiSettings {
 
     public void setZoomControlsEnabled(boolean z) {
         try {
-            this.zzbpa.setZoomControlsEnabled(z);
+            this.zzboW.setZoomControlsEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -157,7 +157,7 @@ public final class UiSettings {
 
     public void setZoomGesturesEnabled(boolean z) {
         try {
-            this.zzbpa.setZoomGesturesEnabled(z);
+            this.zzboW.setZoomGesturesEnabled(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

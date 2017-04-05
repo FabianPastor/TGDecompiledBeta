@@ -9,8 +9,8 @@ import com.google.android.gms.dynamite.DynamiteModule.zza;
 public abstract class zzbjz<T> {
     private final Context mContext;
     private final String mTag;
-    private boolean zzbPn = false;
-    private T zzbPo;
+    private boolean zzbPj = false;
+    private T zzbPk;
     private final Object zzrJ = new Object();
 
     public zzbjz(Context context, String str) {
@@ -19,57 +19,57 @@ public abstract class zzbjz<T> {
     }
 
     public boolean isOperational() {
-        return zzTR() != null;
+        return zzTS() != null;
     }
 
-    protected abstract void zzTO() throws RemoteException;
+    protected abstract void zzTP() throws RemoteException;
 
-    public void zzTQ() {
+    public void zzTR() {
         synchronized (this.zzrJ) {
-            if (this.zzbPo == null) {
+            if (this.zzbPk == null) {
                 return;
             }
             try {
-                zzTO();
+                zzTP();
             } catch (Throwable e) {
                 Log.e(this.mTag, "Could not finalize native handle", e);
             }
         }
     }
 
-    protected T zzTR() {
+    protected T zzTS() {
         T t;
         Throwable e;
         synchronized (this.zzrJ) {
-            if (this.zzbPo != null) {
-                t = this.zzbPo;
+            if (this.zzbPk != null) {
+                t = this.zzbPk;
             } else {
                 try {
-                    this.zzbPo = zzb(DynamiteModule.zza(this.mContext, DynamiteModule.zzaRX, "com.google.android.gms.vision.dynamite"), this.mContext);
+                    this.zzbPk = zzb(DynamiteModule.zza(this.mContext, DynamiteModule.zzaRX, "com.google.android.gms.vision.dynamite"), this.mContext);
                 } catch (zza e2) {
                     e = e2;
                     Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!!this.zzbPn) {
+                    if (!!this.zzbPj) {
                     }
                     Log.w(this.mTag, "Native handle is now available.");
-                    t = this.zzbPo;
+                    t = this.zzbPk;
                     return t;
                 } catch (RemoteException e3) {
                     e = e3;
                     Log.e(this.mTag, "Error creating remote native handle", e);
-                    if (!this.zzbPn) {
+                    if (!this.zzbPj) {
                     }
                     Log.w(this.mTag, "Native handle is now available.");
-                    t = this.zzbPo;
+                    t = this.zzbPk;
                     return t;
                 }
-                if (!this.zzbPn && this.zzbPo == null) {
+                if (!this.zzbPj && this.zzbPk == null) {
                     Log.w(this.mTag, "Native handle not yet available. Reverting to no-op handle.");
-                    this.zzbPn = true;
-                } else if (this.zzbPn && this.zzbPo != null) {
+                    this.zzbPj = true;
+                } else if (this.zzbPj && this.zzbPk != null) {
                     Log.w(this.mTag, "Native handle is now available.");
                 }
-                t = this.zzbPo;
+                t = this.zzbPk;
             }
         }
         return t;

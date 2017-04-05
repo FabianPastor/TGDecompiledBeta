@@ -30,7 +30,7 @@ public interface zzaf {
             this.zzaY = null;
             this.zzaZ = null;
             this.zzba = null;
-            this.zzcuJ = -1;
+            this.zzcuR = -1;
         }
 
         public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
@@ -73,15 +73,15 @@ public interface zzaf {
 
         public zza zze(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
             while (true) {
-                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
-                switch (zzaen) {
+                int zzaeo = com_google_android_gms_internal_zzbxl.zzaeo();
+                switch (zzaeo) {
                     case 0:
                         break;
                     case 10:
                         this.zzaS = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case 16:
-                        this.zzaT = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaeq());
+                        this.zzaT = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
                     case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
                         this.stackTrace = com_google_android_gms_internal_zzbxl.readString();
@@ -93,22 +93,22 @@ public interface zzaf {
                         this.zzaV = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case 48:
-                        this.zzaW = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaeq());
+                        this.zzaW = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
                     case 56:
-                        this.zzaX = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaeq());
+                        this.zzaX = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
                     case TLRPC.LAYER /*66*/:
                         this.zzaY = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     case XtraBox.MP4_XTRA_BT_GUID /*72*/:
-                        this.zzaZ = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaeq());
+                        this.zzaZ = Long.valueOf(com_google_android_gms_internal_zzbxl.zzaer());
                         continue;
                     case 82:
                         this.zzba = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     default:
-                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaeo)) {
                             break;
                         }
                         continue;

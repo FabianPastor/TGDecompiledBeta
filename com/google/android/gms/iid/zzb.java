@@ -39,20 +39,12 @@ public interface zzb extends IInterface {
             }
         }
 
-        public zza() {
-            attachInterface(this, "com.google.android.gms.iid.IMessengerCompat");
-        }
-
         public static zzb zzcZ(IBinder iBinder) {
             if (iBinder == null) {
                 return null;
             }
             IInterface queryLocalInterface = iBinder.queryLocalInterface("com.google.android.gms.iid.IMessengerCompat");
             return (queryLocalInterface == null || !(queryLocalInterface instanceof zzb)) ? new zza(iBinder) : (zzb) queryLocalInterface;
-        }
-
-        public IBinder asBinder() {
-            return this;
         }
 
         public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {

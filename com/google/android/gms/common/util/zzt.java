@@ -58,4 +58,8 @@ public final class zzt {
     public static boolean zzzp() {
         return VERSION.SDK_INT >= 23;
     }
+
+    public static boolean zzzq() {
+        return VERSION.SDK_INT > 25 || "O".equals(VERSION.CODENAME) || VERSION.CODENAME.startsWith("OMR");
+    }
 }

@@ -10,9 +10,9 @@ public class zzatr implements Creator<zzatq> {
     static void zza(zzatq com_google_android_gms_internal_zzatq, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zza(parcel, 2, com_google_android_gms_internal_zzatq.name, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatq.zzbrK, i, false);
-        zzc.zza(parcel, 4, com_google_android_gms_internal_zzatq.zzbqZ, false);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatq.zzbrL);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatq.zzbrG, i, false);
+        zzc.zza(parcel, 4, com_google_android_gms_internal_zzatq.zzbqV, false);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatq.zzbrH);
         zzc.zzJ(parcel, zzaZ);
     }
 

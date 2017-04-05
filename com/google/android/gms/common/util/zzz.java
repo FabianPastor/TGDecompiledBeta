@@ -12,11 +12,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class zzz {
-    private static final Method zzaIq = zzzr();
-    private static final Method zzaIr = zzzs();
-    private static final Method zzaIs = zzzt();
-    private static final Method zzaIt = zzzu();
-    private static final Method zzaIu = zzzv();
+    private static final Method zzaIq = zzzs();
+    private static final Method zzaIr = zzzt();
+    private static final Method zzaIs = zzzu();
+    private static final Method zzaIt = zzzv();
+    private static final Method zzaIu = zzzw();
 
     public static WorkSource zzF(Context context, String str) {
         String str2;
@@ -112,7 +112,7 @@ public class zzz {
         return workSource;
     }
 
-    private static Method zzzr() {
+    private static Method zzzs() {
         Method method = null;
         try {
             method = WorkSource.class.getMethod("add", new Class[]{Integer.TYPE});
@@ -121,7 +121,7 @@ public class zzz {
         return method;
     }
 
-    private static Method zzzs() {
+    private static Method zzzt() {
         Method method = null;
         if (zzt.zzzk()) {
             try {
@@ -132,7 +132,7 @@ public class zzz {
         return method;
     }
 
-    private static Method zzzt() {
+    private static Method zzzu() {
         Method method = null;
         try {
             method = WorkSource.class.getMethod("size", new Class[0]);
@@ -141,7 +141,7 @@ public class zzz {
         return method;
     }
 
-    private static Method zzzu() {
+    private static Method zzzv() {
         Method method = null;
         try {
             method = WorkSource.class.getMethod("get", new Class[]{Integer.TYPE});
@@ -150,7 +150,7 @@ public class zzz {
         return method;
     }
 
-    private static Method zzzv() {
+    private static Method zzzw() {
         Method method = null;
         if (zzt.zzzk()) {
             try {

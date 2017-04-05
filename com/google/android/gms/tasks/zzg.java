@@ -5,8 +5,8 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 class zzg<TResult> {
-    private Queue<zzf<TResult>> zzbNE;
-    private boolean zzbNF;
+    private Queue<zzf<TResult>> zzbNA;
+    private boolean zzbNB;
     private final Object zzrJ = new Object();
 
     zzg() {
@@ -16,19 +16,19 @@ class zzg<TResult> {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void zza(@NonNull Task<TResult> task) {
         synchronized (this.zzrJ) {
-            if (this.zzbNE == null || this.zzbNF) {
+            if (this.zzbNA == null || this.zzbNB) {
             } else {
-                this.zzbNF = true;
+                this.zzbNB = true;
             }
         }
     }
 
     public void zza(@NonNull zzf<TResult> com_google_android_gms_tasks_zzf_TResult) {
         synchronized (this.zzrJ) {
-            if (this.zzbNE == null) {
-                this.zzbNE = new ArrayDeque();
+            if (this.zzbNA == null) {
+                this.zzbNA = new ArrayDeque();
             }
-            this.zzbNE.add(com_google_android_gms_tasks_zzf_TResult);
+            this.zzbNA.add(com_google_android_gms_tasks_zzf_TResult);
         }
     }
 }

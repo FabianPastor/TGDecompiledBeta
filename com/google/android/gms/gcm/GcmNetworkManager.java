@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import com.google.android.gms.common.internal.zzac;
+import com.google.android.gms.iid.zzc;
 import com.google.firebase.analytics.FirebaseAnalytics.Param;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class GcmNetworkManager {
     public static final int RESULT_FAILURE = 2;
     public static final int RESULT_RESCHEDULE = 1;
     public static final int RESULT_SUCCESS = 0;
-    private static GcmNetworkManager zzbgp;
+    private static GcmNetworkManager zzbgm;
     private Context mContext;
     private final PendingIntent mPendingIntent = PendingIntent.getBroadcast(this.mContext, 0, new Intent().setPackage("com.google.example.invalidpackage"), 0);
 
@@ -28,29 +29,29 @@ public class GcmNetworkManager {
     public static GcmNetworkManager getInstance(Context context) {
         GcmNetworkManager gcmNetworkManager;
         synchronized (GcmNetworkManager.class) {
-            if (zzbgp == null) {
-                zzbgp = new GcmNetworkManager(context.getApplicationContext());
+            if (zzbgm == null) {
+                zzbgm = new GcmNetworkManager(context.getApplicationContext());
             }
-            gcmNetworkManager = zzbgp;
+            gcmNetworkManager = zzbgm;
         }
         return gcmNetworkManager;
     }
 
     private Intent zzGO() {
-        String zzbv = GoogleCloudMessaging.zzbv(this.mContext);
+        String zzbA = zzc.zzbA(this.mContext);
         int i = -1;
-        if (zzbv != null) {
-            i = GoogleCloudMessaging.zzbw(this.mContext);
+        if (zzbA != null) {
+            i = GoogleCloudMessaging.zzbv(this.mContext);
         }
-        if (zzbv == null || i < GoogleCloudMessaging.zzbgB) {
+        if (zzbA == null || i < GoogleCloudMessaging.zzbgC) {
             Log.e("GcmNetworkManager", "Google Play Services is not available, dropping GcmNetworkManager request. code=" + i);
             return null;
         }
         Intent intent = new Intent("com.google.android.gms.gcm.ACTION_SCHEDULE");
-        intent.setPackage(zzbv);
+        intent.setPackage(zzbA);
         intent.putExtra("app", this.mPendingIntent);
         intent.putExtra(Param.SOURCE, 4);
-        intent.putExtra("source_version", 10298000);
+        intent.putExtra("source_version", 10400000);
         return intent;
     }
 

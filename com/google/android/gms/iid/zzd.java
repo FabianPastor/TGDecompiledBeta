@@ -16,7 +16,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 public class zzd {
-    SharedPreferences zzbij;
+    SharedPreferences zzbif;
     Context zzqn;
 
     public zzd(Context context) {
@@ -25,7 +25,7 @@ public class zzd {
 
     public zzd(Context context, String str) {
         this.zzqn = context;
-        this.zzbij = context.getSharedPreferences(str, 0);
+        this.zzbif = context.getSharedPreferences(str, 0);
         String valueOf = String.valueOf(str);
         String valueOf2 = String.valueOf("-no-backup");
         zzeG(valueOf2.length() != 0 ? valueOf.concat(valueOf2) : new String(valueOf));
@@ -56,23 +56,23 @@ public class zzd {
     }
 
     synchronized String get(String str) {
-        return this.zzbij.getString(str, null);
+        return this.zzbif.getString(str, null);
     }
 
     synchronized String get(String str, String str2) {
         SharedPreferences sharedPreferences;
         String valueOf;
-        sharedPreferences = this.zzbij;
+        sharedPreferences = this.zzbif;
         valueOf = String.valueOf("|S|");
         return sharedPreferences.getString(new StringBuilder((String.valueOf(str).length() + String.valueOf(valueOf).length()) + String.valueOf(str2).length()).append(str).append(valueOf).append(str2).toString(), null);
     }
 
     public boolean isEmpty() {
-        return this.zzbij.getAll().isEmpty();
+        return this.zzbif.getAll().isEmpty();
     }
 
-    public synchronized void zzHn() {
-        this.zzbij.edit().clear().commit();
+    public synchronized void zzHo() {
+        this.zzbif.edit().clear().commit();
     }
 
     synchronized void zza(Editor editor, String str, String str2, String str3) {
@@ -82,7 +82,7 @@ public class zzd {
 
     public synchronized void zza(String str, String str2, String str3, String str4, String str5) {
         String zzg = zzg(str, str2, str3);
-        Editor edit = this.zzbij.edit();
+        Editor edit = this.zzbif.edit();
         edit.putString(zzg, str4);
         edit.putString("appVersion", str5);
         edit.putString("lastToken", Long.toString(System.currentTimeMillis() / 1000));
@@ -90,19 +90,19 @@ public class zzd {
     }
 
     synchronized KeyPair zze(String str, long j) {
-        KeyPair zzHf;
-        zzHf = zza.zzHf();
-        Editor edit = this.zzbij.edit();
-        zza(edit, str, "|P|", InstanceID.zzv(zzHf.getPublic().getEncoded()));
-        zza(edit, str, "|K|", InstanceID.zzv(zzHf.getPrivate().getEncoded()));
+        KeyPair zzHg;
+        zzHg = zza.zzHg();
+        Editor edit = this.zzbif.edit();
+        zza(edit, str, "|P|", InstanceID.zzv(zzHg.getPublic().getEncoded()));
+        zza(edit, str, "|K|", InstanceID.zzv(zzHg.getPrivate().getEncoded()));
         zza(edit, str, "cre", Long.toString(j));
         edit.commit();
-        return zzHf;
+        return zzHg;
     }
 
     public synchronized void zzeH(String str) {
-        Editor edit = this.zzbij.edit();
-        for (String str2 : this.zzbij.getAll().keySet()) {
+        Editor edit = this.zzbif.edit();
+        for (String str2 : this.zzbif.getAll().keySet()) {
             if (str2.startsWith(str)) {
                 edit.remove(str2);
             }
@@ -150,12 +150,12 @@ public class zzd {
     }
 
     public synchronized String zzh(String str, String str2, String str3) {
-        return this.zzbij.getString(zzg(str, str2, str3), null);
+        return this.zzbif.getString(zzg(str, str2, str3), null);
     }
 
     public synchronized void zzi(String str, String str2, String str3) {
         String zzg = zzg(str, str2, str3);
-        Editor edit = this.zzbij.edit();
+        Editor edit = this.zzbif.edit();
         edit.remove(zzg);
         edit.commit();
     }

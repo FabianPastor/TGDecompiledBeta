@@ -11,7 +11,7 @@ public class zzaqb {
     private final Collection<zzd> zzBb = new ArrayList();
 
     public static void initialize(Context context) {
-        zzaqe.zzDE().initialize(context);
+        zzaqe.zzDF().initialize(context);
     }
 
     public void zza(zzaqa com_google_android_gms_internal_zzaqa) {

@@ -7,8 +7,8 @@ import java.util.List;
 
 class zzbxq implements Cloneable {
     private Object value;
-    private zzbxo<?, ?> zzcuG;
-    private List<zzbxv> zzcuH = new ArrayList();
+    private zzbxo<?, ?> zzcuO;
+    private List<zzbxv> zzcuP = new ArrayList();
 
     zzbxq() {
     }
@@ -20,7 +20,7 @@ class zzbxq implements Cloneable {
     }
 
     public /* synthetic */ Object clone() throws CloneNotSupportedException {
-        return zzaeJ();
+        return zzaeK();
     }
 
     public boolean equals(Object obj) {
@@ -32,10 +32,10 @@ class zzbxq implements Cloneable {
         }
         zzbxq com_google_android_gms_internal_zzbxq = (zzbxq) obj;
         if (this.value != null && com_google_android_gms_internal_zzbxq.value != null) {
-            return this.zzcuG == com_google_android_gms_internal_zzbxq.zzcuG ? !this.zzcuG.zzckQ.isArray() ? this.value.equals(com_google_android_gms_internal_zzbxq.value) : this.value instanceof byte[] ? Arrays.equals((byte[]) this.value, (byte[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof int[] ? Arrays.equals((int[]) this.value, (int[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof long[] ? Arrays.equals((long[]) this.value, (long[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof float[] ? Arrays.equals((float[]) this.value, (float[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof double[] ? Arrays.equals((double[]) this.value, (double[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof boolean[] ? Arrays.equals((boolean[]) this.value, (boolean[]) com_google_android_gms_internal_zzbxq.value) : Arrays.deepEquals((Object[]) this.value, (Object[]) com_google_android_gms_internal_zzbxq.value) : false;
+            return this.zzcuO == com_google_android_gms_internal_zzbxq.zzcuO ? !this.zzcuO.zzckM.isArray() ? this.value.equals(com_google_android_gms_internal_zzbxq.value) : this.value instanceof byte[] ? Arrays.equals((byte[]) this.value, (byte[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof int[] ? Arrays.equals((int[]) this.value, (int[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof long[] ? Arrays.equals((long[]) this.value, (long[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof float[] ? Arrays.equals((float[]) this.value, (float[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof double[] ? Arrays.equals((double[]) this.value, (double[]) com_google_android_gms_internal_zzbxq.value) : this.value instanceof boolean[] ? Arrays.equals((boolean[]) this.value, (boolean[]) com_google_android_gms_internal_zzbxq.value) : Arrays.deepEquals((Object[]) this.value, (Object[]) com_google_android_gms_internal_zzbxq.value) : false;
         } else {
-            if (this.zzcuH != null && com_google_android_gms_internal_zzbxq.zzcuH != null) {
-                return this.zzcuH.equals(com_google_android_gms_internal_zzbxq.zzcuH);
+            if (this.zzcuP != null && com_google_android_gms_internal_zzbxq.zzcuP != null) {
+                return this.zzcuP.equals(com_google_android_gms_internal_zzbxq.zzcuP);
             }
             try {
                 return Arrays.equals(toByteArray(), com_google_android_gms_internal_zzbxq.toByteArray());
@@ -55,26 +55,26 @@ class zzbxq implements Cloneable {
 
     void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
         if (this.value != null) {
-            this.zzcuG.zza(this.value, com_google_android_gms_internal_zzbxm);
+            this.zzcuO.zza(this.value, com_google_android_gms_internal_zzbxm);
             return;
         }
-        for (zzbxv zza : this.zzcuH) {
+        for (zzbxv zza : this.zzcuP) {
             zza.zza(com_google_android_gms_internal_zzbxm);
         }
     }
 
     void zza(zzbxv com_google_android_gms_internal_zzbxv) {
-        this.zzcuH.add(com_google_android_gms_internal_zzbxv);
+        this.zzcuP.add(com_google_android_gms_internal_zzbxv);
     }
 
-    public final zzbxq zzaeJ() {
+    public final zzbxq zzaeK() {
         zzbxq com_google_android_gms_internal_zzbxq = new zzbxq();
         try {
-            com_google_android_gms_internal_zzbxq.zzcuG = this.zzcuG;
-            if (this.zzcuH == null) {
-                com_google_android_gms_internal_zzbxq.zzcuH = null;
+            com_google_android_gms_internal_zzbxq.zzcuO = this.zzcuO;
+            if (this.zzcuP == null) {
+                com_google_android_gms_internal_zzbxq.zzcuP = null;
             } else {
-                com_google_android_gms_internal_zzbxq.zzcuH.addAll(this.zzcuH);
+                com_google_android_gms_internal_zzbxq.zzcuP.addAll(this.zzcuP);
             }
             if (this.value != null) {
                 if (this.value instanceof zzbxt) {
@@ -115,10 +115,10 @@ class zzbxq implements Cloneable {
 
     <T> T zzb(zzbxo<?, T> com_google_android_gms_internal_zzbxo___T) {
         if (this.value == null) {
-            this.zzcuG = com_google_android_gms_internal_zzbxo___T;
-            this.value = com_google_android_gms_internal_zzbxo___T.zzac(this.zzcuH);
-            this.zzcuH = null;
-        } else if (!this.zzcuG.equals(com_google_android_gms_internal_zzbxo___T)) {
+            this.zzcuO = com_google_android_gms_internal_zzbxo___T;
+            this.value = com_google_android_gms_internal_zzbxo___T.zzac(this.zzcuP);
+            this.zzcuP = null;
+        } else if (!this.zzcuO.equals(com_google_android_gms_internal_zzbxo___T)) {
             throw new IllegalStateException("Tried to getExtension with a different Extension.");
         }
         return this.value;
@@ -126,10 +126,10 @@ class zzbxq implements Cloneable {
 
     int zzu() {
         if (this.value != null) {
-            return this.zzcuG.zzaU(this.value);
+            return this.zzcuO.zzaU(this.value);
         }
         int i = 0;
-        for (zzbxv zzu : this.zzcuH) {
+        for (zzbxv zzu : this.zzcuP) {
             i = zzu.zzu() + i;
         }
         return i;

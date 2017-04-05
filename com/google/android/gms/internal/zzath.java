@@ -11,16 +11,16 @@ public class zzath implements Creator<zzatg> {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzatg.versionCode);
         zzc.zza(parcel, 2, com_google_android_gms_internal_zzatg.packageName, false);
-        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatg.zzbqZ, false);
-        zzc.zza(parcel, 4, com_google_android_gms_internal_zzatg.zzbra, i, false);
-        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatg.zzbrb);
-        zzc.zza(parcel, 6, com_google_android_gms_internal_zzatg.zzbrc);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzatg.zzbrd, false);
-        zzc.zza(parcel, 8, com_google_android_gms_internal_zzatg.zzbre, i, false);
-        zzc.zza(parcel, 9, com_google_android_gms_internal_zzatg.zzbrf);
-        zzc.zza(parcel, 10, com_google_android_gms_internal_zzatg.zzbrg, i, false);
-        zzc.zza(parcel, 11, com_google_android_gms_internal_zzatg.zzbrh);
-        zzc.zza(parcel, 12, com_google_android_gms_internal_zzatg.zzbri, i, false);
+        zzc.zza(parcel, 3, com_google_android_gms_internal_zzatg.zzbqV, false);
+        zzc.zza(parcel, 4, com_google_android_gms_internal_zzatg.zzbqW, i, false);
+        zzc.zza(parcel, 5, com_google_android_gms_internal_zzatg.zzbqX);
+        zzc.zza(parcel, 6, com_google_android_gms_internal_zzatg.zzbqY);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzatg.zzbqZ, false);
+        zzc.zza(parcel, 8, com_google_android_gms_internal_zzatg.zzbra, i, false);
+        zzc.zza(parcel, 9, com_google_android_gms_internal_zzatg.zzbrb);
+        zzc.zza(parcel, 10, com_google_android_gms_internal_zzatg.zzbrc, i, false);
+        zzc.zza(parcel, 11, com_google_android_gms_internal_zzatg.zzbrd);
+        zzc.zza(parcel, 12, com_google_android_gms_internal_zzatg.zzbre, i, false);
         zzc.zzJ(parcel, zzaZ);
     }
 

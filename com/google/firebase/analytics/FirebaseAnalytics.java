@@ -13,7 +13,7 @@ import com.google.android.gms.internal.zzaue;
 import com.google.android.gms.tasks.Task;
 
 public final class FirebaseAnalytics {
-    private final zzaue zzbqg;
+    private final zzaue zzbqc;
 
     public static class Event {
         public static final String ADD_PAYMENT_INFO = "add_payment_info";
@@ -100,44 +100,44 @@ public final class FirebaseAnalytics {
 
     public FirebaseAnalytics(zzaue com_google_android_gms_internal_zzaue) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqg = com_google_android_gms_internal_zzaue;
+        this.zzbqc = com_google_android_gms_internal_zzaue;
     }
 
     @RequiresPermission(allOf = {"android.permission.INTERNET", "android.permission.ACCESS_NETWORK_STATE", "android.permission.WAKE_LOCK"})
     public static FirebaseAnalytics getInstance(Context context) {
-        return zzaue.zzbM(context).zzMw();
+        return zzaue.zzbM(context).zzMx();
     }
 
     public Task<String> getAppInstanceId() {
-        return this.zzbqg.zzJZ().getAppInstanceId();
+        return this.zzbqc.zzKa().getAppInstanceId();
     }
 
     public void logEvent(@Size(max = 40, min = 1) @NonNull String str, Bundle bundle) {
-        this.zzbqg.zzMv().logEvent(str, bundle);
+        this.zzbqc.zzMw().logEvent(str, bundle);
     }
 
     public void setAnalyticsCollectionEnabled(boolean z) {
-        this.zzbqg.zzMv().setMeasurementEnabled(z);
+        this.zzbqc.zzMw().setMeasurementEnabled(z);
     }
 
     @MainThread
     public void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
-        this.zzbqg.zzKd().setCurrentScreen(activity, str, str2);
+        this.zzbqc.zzKe().setCurrentScreen(activity, str, str2);
     }
 
     public void setMinimumSessionDuration(long j) {
-        this.zzbqg.zzMv().setMinimumSessionDuration(j);
+        this.zzbqc.zzMw().setMinimumSessionDuration(j);
     }
 
     public void setSessionTimeoutDuration(long j) {
-        this.zzbqg.zzMv().setSessionTimeoutDuration(j);
+        this.zzbqc.zzMw().setSessionTimeoutDuration(j);
     }
 
     public void setUserId(String str) {
-        this.zzbqg.zzMv().setUserId(str);
+        this.zzbqc.zzMw().setUserId(str);
     }
 
     public void setUserProperty(@Size(max = 24, min = 1) @NonNull String str, @Nullable @Size(max = 36) String str2) {
-        this.zzbqg.zzMv().setUserProperty(str, str2);
+        this.zzbqc.zzMw().setUserProperty(str, str2);
     }
 }

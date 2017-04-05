@@ -14,7 +14,7 @@ public class zzbke implements Creator<zzbkd> {
         zzc.zzc(parcel, 3, com_google_android_gms_internal_zzbkd.top);
         zzc.zzc(parcel, 4, com_google_android_gms_internal_zzbkd.width);
         zzc.zzc(parcel, 5, com_google_android_gms_internal_zzbkd.height);
-        zzc.zza(parcel, 6, com_google_android_gms_internal_zzbkd.zzbPz);
+        zzc.zza(parcel, 6, com_google_android_gms_internal_zzbkd.zzbPv);
         zzc.zzJ(parcel, zzaZ);
     }
 

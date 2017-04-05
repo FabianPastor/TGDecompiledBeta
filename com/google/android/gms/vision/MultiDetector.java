@@ -6,31 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiDetector extends Detector<Object> {
-    private List<Detector<? extends Object>> zzbOD;
+    private List<Detector<? extends Object>> zzbOz;
 
     public static class Builder {
-        private MultiDetector zzbOE = new MultiDetector();
+        private MultiDetector zzbOA = new MultiDetector();
 
         public Builder add(Detector<? extends Object> detector) {
-            this.zzbOE.zzbOD.add(detector);
+            this.zzbOA.zzbOz.add(detector);
             return this;
         }
 
         public MultiDetector build() {
-            if (this.zzbOE.zzbOD.size() != 0) {
-                return this.zzbOE;
+            if (this.zzbOA.zzbOz.size() != 0) {
+                return this.zzbOA;
             }
             throw new RuntimeException("No underlying detectors added to MultiDetector.");
         }
     }
 
     private MultiDetector() {
-        this.zzbOD = new ArrayList();
+        this.zzbOz = new ArrayList();
     }
 
     public SparseArray<Object> detect(Frame frame) {
         SparseArray<Object> sparseArray = new SparseArray();
-        for (Detector detect : this.zzbOD) {
+        for (Detector detect : this.zzbOz) {
             SparseArray detect2 = detect.detect(frame);
             for (int i = 0; i < detect2.size(); i++) {
                 int keyAt = detect2.keyAt(i);
@@ -44,7 +44,7 @@ public class MultiDetector extends Detector<Object> {
     }
 
     public boolean isOperational() {
-        for (Detector isOperational : this.zzbOD) {
+        for (Detector isOperational : this.zzbOz) {
             if (!isOperational.isOperational()) {
                 return false;
             }
@@ -53,16 +53,16 @@ public class MultiDetector extends Detector<Object> {
     }
 
     public void receiveFrame(Frame frame) {
-        for (Detector receiveFrame : this.zzbOD) {
+        for (Detector receiveFrame : this.zzbOz) {
             receiveFrame.receiveFrame(frame);
         }
     }
 
     public void release() {
-        for (Detector release : this.zzbOD) {
+        for (Detector release : this.zzbOz) {
             release.release();
         }
-        this.zzbOD.clear();
+        this.zzbOz.clear();
     }
 
     public void setProcessor(Processor<Object> processor) {

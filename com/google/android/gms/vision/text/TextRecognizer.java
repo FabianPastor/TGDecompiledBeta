@@ -19,18 +19,18 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public final class TextRecognizer extends Detector<TextBlock> {
-    private final zzbkn zzbPx;
+    private final zzbkn zzbPt;
 
     public static class Builder {
         private Context mContext;
-        private zzbko zzbPy = new zzbko();
+        private zzbko zzbPu = new zzbko();
 
         public Builder(Context context) {
             this.mContext = context;
         }
 
         public TextRecognizer build() {
-            return new TextRecognizer(new zzbkn(this.mContext, this.zzbPy));
+            return new TextRecognizer(new zzbkn(this.mContext, this.zzbPu));
         }
     }
 
@@ -39,7 +39,7 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     private TextRecognizer(zzbkn com_google_android_gms_internal_zzbkn) {
-        this.zzbPx = com_google_android_gms_internal_zzbkn;
+        this.zzbPt = com_google_android_gms_internal_zzbkn;
     }
 
     private Bitmap zza(ByteBuffer byteBuffer, int i, int i2, int i3) {
@@ -73,12 +73,12 @@ public final class TextRecognizer extends Detector<TextBlock> {
         int i = 0;
         SparseArray sparseArray = new SparseArray();
         for (zzbkh com_google_android_gms_internal_zzbkh : com_google_android_gms_internal_zzbkhArr) {
-            SparseArray sparseArray2 = (SparseArray) sparseArray.get(com_google_android_gms_internal_zzbkh.zzbPI);
+            SparseArray sparseArray2 = (SparseArray) sparseArray.get(com_google_android_gms_internal_zzbkh.zzbPE);
             if (sparseArray2 == null) {
                 sparseArray2 = new SparseArray();
-                sparseArray.append(com_google_android_gms_internal_zzbkh.zzbPI, sparseArray2);
+                sparseArray.append(com_google_android_gms_internal_zzbkh.zzbPE, sparseArray2);
             }
-            sparseArray2.append(com_google_android_gms_internal_zzbkh.zzbPJ, com_google_android_gms_internal_zzbkh);
+            sparseArray2.append(com_google_android_gms_internal_zzbkh.zzbPF, com_google_android_gms_internal_zzbkh);
         }
         SparseArray<TextBlock> sparseArray3 = new SparseArray(sparseArray.size());
         while (i < sparseArray.size()) {
@@ -93,12 +93,12 @@ public final class TextRecognizer extends Detector<TextBlock> {
     }
 
     public boolean isOperational() {
-        return this.zzbPx.isOperational();
+        return this.zzbPt.isOperational();
     }
 
     public void release() {
         super.release();
-        this.zzbPx.zzTQ();
+        this.zzbPt.zzTR();
     }
 
     public SparseArray<TextBlock> zza(Frame frame, zzbkj com_google_android_gms_internal_zzbkj) {
@@ -113,10 +113,10 @@ public final class TextRecognizer extends Detector<TextBlock> {
             bitmap = zza(frame.getGrayscaleImageData(), frame.getMetadata().getFormat(), zzc.width, zzc.height);
         }
         bitmap = zzbkc.zzb(bitmap, zzc);
-        if (!com_google_android_gms_internal_zzbkj.zzbPK.isEmpty()) {
-            com_google_android_gms_internal_zzbkj.zzbPK.set(zza(com_google_android_gms_internal_zzbkj.zzbPK, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
+        if (!com_google_android_gms_internal_zzbkj.zzbPG.isEmpty()) {
+            com_google_android_gms_internal_zzbkj.zzbPG.set(zza(com_google_android_gms_internal_zzbkj.zzbPG, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), zzc));
         }
         zzc.rotation = 0;
-        return zza(this.zzbPx.zza(bitmap, zzc, com_google_android_gms_internal_zzbkj));
+        return zza(this.zzbPt.zza(bitmap, zzc, com_google_android_gms_internal_zzbkj));
     }
 }

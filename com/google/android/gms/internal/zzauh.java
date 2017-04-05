@@ -5,7 +5,7 @@ abstract class zzauh extends zzaug {
 
     zzauh(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
-        this.zzbqg.zzb(this);
+        this.zzbqc.zzb(this);
     }
 
     public final void initialize() {
@@ -13,7 +13,7 @@ abstract class zzauh extends zzaug {
             throw new IllegalStateException("Can't initialize twice");
         }
         zzmS();
-        this.zzbqg.zzMJ();
+        this.zzbqc.zzMK();
         this.zzadP = true;
     }
 

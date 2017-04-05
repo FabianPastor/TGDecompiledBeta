@@ -33,8 +33,8 @@ public final class MapsInitializer {
 
     public static void zza(zzc com_google_android_gms_maps_internal_zzc) {
         try {
-            CameraUpdateFactory.zza(com_google_android_gms_maps_internal_zzc.zzJD());
-            BitmapDescriptorFactory.zza(com_google_android_gms_maps_internal_zzc.zzJE());
+            CameraUpdateFactory.zza(com_google_android_gms_maps_internal_zzc.zzJE());
+            BitmapDescriptorFactory.zza(com_google_android_gms_maps_internal_zzc.zzJF());
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

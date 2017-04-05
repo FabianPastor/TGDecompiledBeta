@@ -4,22 +4,22 @@ import android.support.annotation.Nullable;
 
 @Deprecated
 public class zzc {
-    private final FirebaseInstanceId zzcla;
+    private final FirebaseInstanceId zzclg;
 
     private zzc(FirebaseInstanceId firebaseInstanceId) {
-        this.zzcla = firebaseInstanceId;
+        this.zzclg = firebaseInstanceId;
     }
 
-    public static zzc zzabK() {
+    public static zzc zzabL() {
         return new zzc(FirebaseInstanceId.getInstance());
     }
 
     public String getId() {
-        return this.zzcla.getId();
+        return this.zzclg.getId();
     }
 
     @Nullable
     public String getToken() {
-        return this.zzcla.getToken();
+        return this.zzclg.getToken();
     }
 }

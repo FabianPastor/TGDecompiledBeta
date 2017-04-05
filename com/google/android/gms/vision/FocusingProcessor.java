@@ -6,39 +6,39 @@ import com.google.android.gms.vision.Detector.Detections;
 import com.google.android.gms.vision.Detector.Processor;
 
 public abstract class FocusingProcessor<T> implements Processor<T> {
-    private Detector<T> zzbOd;
-    private Tracker<T> zzbOs;
-    private int zzbOt = 3;
-    private boolean zzbOu = false;
-    private int zzbOv;
-    private int zzbOw = 0;
+    private Detector<T> zzbNZ;
+    private Tracker<T> zzbOo;
+    private int zzbOp = 3;
+    private boolean zzbOq = false;
+    private int zzbOr;
+    private int zzbOs = 0;
 
     public FocusingProcessor(Detector<T> detector, Tracker<T> tracker) {
-        this.zzbOd = detector;
-        this.zzbOs = tracker;
+        this.zzbNZ = detector;
+        this.zzbOo = tracker;
     }
 
     public void receiveDetections(Detections<T> detections) {
         SparseArray detectedItems = detections.getDetectedItems();
         if (detectedItems.size() == 0) {
-            if (this.zzbOw == this.zzbOt) {
-                this.zzbOs.onDone();
-                this.zzbOu = false;
+            if (this.zzbOs == this.zzbOp) {
+                this.zzbOo.onDone();
+                this.zzbOq = false;
             } else {
-                this.zzbOs.onMissing(detections);
+                this.zzbOo.onMissing(detections);
             }
-            this.zzbOw++;
+            this.zzbOs++;
             return;
         }
-        this.zzbOw = 0;
-        if (this.zzbOu) {
-            Object obj = detectedItems.get(this.zzbOv);
+        this.zzbOs = 0;
+        if (this.zzbOq) {
+            Object obj = detectedItems.get(this.zzbOr);
             if (obj != null) {
-                this.zzbOs.onUpdate(detections, obj);
+                this.zzbOo.onUpdate(detections, obj);
                 return;
             } else {
-                this.zzbOs.onDone();
-                this.zzbOu = false;
+                this.zzbOo.onDone();
+                this.zzbOq = false;
             }
         }
         int selectFocus = selectFocus(detections);
@@ -47,15 +47,15 @@ public abstract class FocusingProcessor<T> implements Processor<T> {
             Log.w("FocusingProcessor", "Invalid focus selected: " + selectFocus);
             return;
         }
-        this.zzbOu = true;
-        this.zzbOv = selectFocus;
-        this.zzbOd.setFocus(this.zzbOv);
-        this.zzbOs.onNewItem(this.zzbOv, obj2);
-        this.zzbOs.onUpdate(detections, obj2);
+        this.zzbOq = true;
+        this.zzbOr = selectFocus;
+        this.zzbNZ.setFocus(this.zzbOr);
+        this.zzbOo.onNewItem(this.zzbOr, obj2);
+        this.zzbOo.onUpdate(detections, obj2);
     }
 
     public void release() {
-        this.zzbOs.onDone();
+        this.zzbOo.onDone();
     }
 
     public abstract int selectFocus(Detections<T> detections);
@@ -64,6 +64,6 @@ public abstract class FocusingProcessor<T> implements Processor<T> {
         if (i < 0) {
             throw new IllegalArgumentException("Invalid max gap: " + i);
         }
-        this.zzbOt = i;
+        this.zzbOp = i;
     }
 }

@@ -12,14 +12,14 @@ import com.google.android.gms.maps.internal.zzc.zza;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public class zzai {
-    private static Context zzbpb;
-    private static zzc zzbpc;
+    private static Context zzboX;
+    private static zzc zzboY;
 
     private static Context getRemoteContext(Context context) {
-        if (zzbpb == null) {
-            zzbpb = GooglePlayServicesUtil.getRemoteContext(context);
+        if (zzboX == null) {
+            zzboX = GooglePlayServicesUtil.getRemoteContext(context);
         }
-        return zzbpb;
+        return zzboX;
     }
 
     private static <T> T zza(ClassLoader classLoader, String str) {
@@ -34,14 +34,14 @@ public class zzai {
 
     public static zzc zzbI(Context context) throws GooglePlayServicesNotAvailableException {
         zzac.zzw(context);
-        if (zzbpc != null) {
-            return zzbpc;
+        if (zzboY != null) {
+            return zzboY;
         }
         zzbJ(context);
-        zzbpc = zzbK(context);
+        zzboY = zzbK(context);
         try {
-            zzbpc.zzi(zzd.zzA(getRemoteContext(context).getResources()), GooglePlayServicesUtil.GOOGLE_PLAY_SERVICES_VERSION_CODE);
-            return zzbpc;
+            zzboY.zzi(zzd.zzA(getRemoteContext(context).getResources()), GooglePlayServicesUtil.GOOGLE_PLAY_SERVICES_VERSION_CODE);
+            return zzboY;
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

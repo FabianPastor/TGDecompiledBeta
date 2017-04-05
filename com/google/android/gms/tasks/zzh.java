@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 final class zzh<TResult> extends Task<TResult> {
-    private final zzg<TResult> zzbNI = new zzg();
-    private boolean zzbNJ;
-    private TResult zzbNK;
-    private Exception zzbNL;
+    private final zzg<TResult> zzbNE = new zzg();
+    private boolean zzbNF;
+    private TResult zzbNG;
+    private Exception zzbNH;
     private final Object zzrJ = new Object();
 
     private static class zza extends zzabe {
@@ -56,18 +56,18 @@ final class zzh<TResult> extends Task<TResult> {
     zzh() {
     }
 
-    private void zzTF() {
-        zzac.zza(this.zzbNJ, (Object) "Task is not yet complete");
-    }
-
     private void zzTG() {
-        zzac.zza(!this.zzbNJ, (Object) "Task is already complete");
+        zzac.zza(this.zzbNF, (Object) "Task is not yet complete");
     }
 
     private void zzTH() {
+        zzac.zza(!this.zzbNF, (Object) "Task is already complete");
+    }
+
+    private void zzTI() {
         synchronized (this.zzrJ) {
-            if (this.zzbNJ) {
-                this.zzbNI.zza((Task) this);
+            if (this.zzbNF) {
+                this.zzbNE.zza((Task) this);
                 return;
             }
         }
@@ -76,9 +76,9 @@ final class zzh<TResult> extends Task<TResult> {
     @NonNull
     public Task<TResult> addOnCompleteListener(@NonNull Activity activity, @NonNull OnCompleteListener<TResult> onCompleteListener) {
         zzf com_google_android_gms_tasks_zzc = new zzc(TaskExecutors.MAIN_THREAD, onCompleteListener);
-        this.zzbNI.zza(com_google_android_gms_tasks_zzc);
+        this.zzbNE.zza(com_google_android_gms_tasks_zzc);
         zza.zzw(activity).zzb(com_google_android_gms_tasks_zzc);
-        zzTH();
+        zzTI();
         return this;
     }
 
@@ -89,17 +89,17 @@ final class zzh<TResult> extends Task<TResult> {
 
     @NonNull
     public Task<TResult> addOnCompleteListener(@NonNull Executor executor, @NonNull OnCompleteListener<TResult> onCompleteListener) {
-        this.zzbNI.zza(new zzc(executor, onCompleteListener));
-        zzTH();
+        this.zzbNE.zza(new zzc(executor, onCompleteListener));
+        zzTI();
         return this;
     }
 
     @NonNull
     public Task<TResult> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
         zzf com_google_android_gms_tasks_zzd = new zzd(TaskExecutors.MAIN_THREAD, onFailureListener);
-        this.zzbNI.zza(com_google_android_gms_tasks_zzd);
+        this.zzbNE.zza(com_google_android_gms_tasks_zzd);
         zza.zzw(activity).zzb(com_google_android_gms_tasks_zzd);
-        zzTH();
+        zzTI();
         return this;
     }
 
@@ -110,17 +110,17 @@ final class zzh<TResult> extends Task<TResult> {
 
     @NonNull
     public Task<TResult> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-        this.zzbNI.zza(new zzd(executor, onFailureListener));
-        zzTH();
+        this.zzbNE.zza(new zzd(executor, onFailureListener));
+        zzTI();
         return this;
     }
 
     @NonNull
     public Task<TResult> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super TResult> onSuccessListener) {
         zzf com_google_android_gms_tasks_zze = new zze(TaskExecutors.MAIN_THREAD, onSuccessListener);
-        this.zzbNI.zza(com_google_android_gms_tasks_zze);
+        this.zzbNE.zza(com_google_android_gms_tasks_zze);
         zza.zzw(activity).zzb(com_google_android_gms_tasks_zze);
-        zzTH();
+        zzTI();
         return this;
     }
 
@@ -131,8 +131,8 @@ final class zzh<TResult> extends Task<TResult> {
 
     @NonNull
     public Task<TResult> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super TResult> onSuccessListener) {
-        this.zzbNI.zza(new zze(executor, onSuccessListener));
-        zzTH();
+        this.zzbNE.zza(new zze(executor, onSuccessListener));
+        zzTI();
         return this;
     }
 
@@ -144,8 +144,8 @@ final class zzh<TResult> extends Task<TResult> {
     @NonNull
     public <TContinuationResult> Task<TContinuationResult> continueWith(@NonNull Executor executor, @NonNull Continuation<TResult, TContinuationResult> continuation) {
         Task com_google_android_gms_tasks_zzh = new zzh();
-        this.zzbNI.zza(new zza(executor, continuation, com_google_android_gms_tasks_zzh));
-        zzTH();
+        this.zzbNE.zza(new zza(executor, continuation, com_google_android_gms_tasks_zzh));
+        zzTI();
         return com_google_android_gms_tasks_zzh;
     }
 
@@ -157,8 +157,8 @@ final class zzh<TResult> extends Task<TResult> {
     @NonNull
     public <TContinuationResult> Task<TContinuationResult> continueWithTask(@NonNull Executor executor, @NonNull Continuation<TResult, Task<TContinuationResult>> continuation) {
         Task com_google_android_gms_tasks_zzh = new zzh();
-        this.zzbNI.zza(new zzb(executor, continuation, com_google_android_gms_tasks_zzh));
-        zzTH();
+        this.zzbNE.zza(new zzb(executor, continuation, com_google_android_gms_tasks_zzh));
+        zzTI();
         return com_google_android_gms_tasks_zzh;
     }
 
@@ -166,7 +166,7 @@ final class zzh<TResult> extends Task<TResult> {
     public Exception getException() {
         Exception exception;
         synchronized (this.zzrJ) {
-            exception = this.zzbNL;
+            exception = this.zzbNH;
         }
         return exception;
     }
@@ -174,11 +174,11 @@ final class zzh<TResult> extends Task<TResult> {
     public TResult getResult() {
         TResult tResult;
         synchronized (this.zzrJ) {
-            zzTF();
-            if (this.zzbNL != null) {
-                throw new RuntimeExecutionException(this.zzbNL);
+            zzTG();
+            if (this.zzbNH != null) {
+                throw new RuntimeExecutionException(this.zzbNH);
             }
-            tResult = this.zzbNK;
+            tResult = this.zzbNG;
         }
         return tResult;
     }
@@ -186,13 +186,13 @@ final class zzh<TResult> extends Task<TResult> {
     public <X extends Throwable> TResult getResult(@NonNull Class<X> cls) throws Throwable {
         TResult tResult;
         synchronized (this.zzrJ) {
-            zzTF();
-            if (cls.isInstance(this.zzbNL)) {
-                throw ((Throwable) cls.cast(this.zzbNL));
-            } else if (this.zzbNL != null) {
-                throw new RuntimeExecutionException(this.zzbNL);
+            zzTG();
+            if (cls.isInstance(this.zzbNH)) {
+                throw ((Throwable) cls.cast(this.zzbNH));
+            } else if (this.zzbNH != null) {
+                throw new RuntimeExecutionException(this.zzbNH);
             } else {
-                tResult = this.zzbNK;
+                tResult = this.zzbNG;
             }
         }
         return tResult;
@@ -201,7 +201,7 @@ final class zzh<TResult> extends Task<TResult> {
     public boolean isComplete() {
         boolean z;
         synchronized (this.zzrJ) {
-            z = this.zzbNJ;
+            z = this.zzbNF;
         }
         return z;
     }
@@ -209,7 +209,7 @@ final class zzh<TResult> extends Task<TResult> {
     public boolean isSuccessful() {
         boolean z;
         synchronized (this.zzrJ) {
-            z = this.zzbNJ && this.zzbNL == null;
+            z = this.zzbNF && this.zzbNH == null;
         }
         return z;
     }
@@ -217,32 +217,32 @@ final class zzh<TResult> extends Task<TResult> {
     public void setException(@NonNull Exception exception) {
         zzac.zzb((Object) exception, (Object) "Exception must not be null");
         synchronized (this.zzrJ) {
-            zzTG();
-            this.zzbNJ = true;
-            this.zzbNL = exception;
+            zzTH();
+            this.zzbNF = true;
+            this.zzbNH = exception;
         }
-        this.zzbNI.zza((Task) this);
+        this.zzbNE.zza((Task) this);
     }
 
     public void setResult(TResult tResult) {
         synchronized (this.zzrJ) {
-            zzTG();
-            this.zzbNJ = true;
-            this.zzbNK = tResult;
+            zzTH();
+            this.zzbNF = true;
+            this.zzbNG = tResult;
         }
-        this.zzbNI.zza((Task) this);
+        this.zzbNE.zza((Task) this);
     }
 
     public boolean trySetException(@NonNull Exception exception) {
         boolean z = true;
         zzac.zzb((Object) exception, (Object) "Exception must not be null");
         synchronized (this.zzrJ) {
-            if (this.zzbNJ) {
+            if (this.zzbNF) {
                 z = false;
             } else {
-                this.zzbNJ = true;
-                this.zzbNL = exception;
-                this.zzbNI.zza((Task) this);
+                this.zzbNF = true;
+                this.zzbNH = exception;
+                this.zzbNE.zza((Task) this);
             }
         }
         return z;
@@ -251,12 +251,12 @@ final class zzh<TResult> extends Task<TResult> {
     public boolean trySetResult(TResult tResult) {
         boolean z = true;
         synchronized (this.zzrJ) {
-            if (this.zzbNJ) {
+            if (this.zzbNF) {
                 z = false;
             } else {
-                this.zzbNJ = true;
-                this.zzbNK = tResult;
-                this.zzbNI.zza((Task) this);
+                this.zzbNF = true;
+                this.zzbNG = tResult;
+                this.zzbNE.zza((Task) this);
             }
         }
         return z;

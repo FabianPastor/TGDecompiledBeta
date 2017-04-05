@@ -1,21 +1,21 @@
 package com.google.android.gms.internal;
 
 public final class zzbxp implements Cloneable {
-    private static final zzbxq zzcuC = new zzbxq();
+    private static final zzbxq zzcuK = new zzbxq();
     private int mSize;
-    private boolean zzcuD;
-    private int[] zzcuE;
-    private zzbxq[] zzcuF;
+    private boolean zzcuL;
+    private int[] zzcuM;
+    private zzbxq[] zzcuN;
 
     zzbxp() {
         this(10);
     }
 
     zzbxp(int i) {
-        this.zzcuD = false;
+        this.zzcuL = false;
         int idealIntArraySize = idealIntArraySize(i);
-        this.zzcuE = new int[idealIntArraySize];
-        this.zzcuF = new zzbxq[idealIntArraySize];
+        this.zzcuM = new int[idealIntArraySize];
+        this.zzcuN = new zzbxq[idealIntArraySize];
         this.mSize = 0;
     }
 
@@ -50,12 +50,12 @@ public final class zzbxp implements Cloneable {
         return true;
     }
 
-    private int zzrp(int i) {
+    private int zzrq(int i) {
         int i2 = 0;
         int i3 = this.mSize - 1;
         while (i2 <= i3) {
             int i4 = (i2 + i3) >>> 1;
-            int i5 = this.zzcuE[i4];
+            int i5 = this.zzcuM[i4];
             if (i5 < i) {
                 i2 = i4 + 1;
             } else if (i5 <= i) {
@@ -68,7 +68,7 @@ public final class zzbxp implements Cloneable {
     }
 
     public /* synthetic */ Object clone() throws CloneNotSupportedException {
-        return zzaeI();
+        return zzaeJ();
     }
 
     public boolean equals(Object obj) {
@@ -79,13 +79,13 @@ public final class zzbxp implements Cloneable {
             return false;
         }
         zzbxp com_google_android_gms_internal_zzbxp = (zzbxp) obj;
-        return size() != com_google_android_gms_internal_zzbxp.size() ? false : zza(this.zzcuE, com_google_android_gms_internal_zzbxp.zzcuE, this.mSize) && zza(this.zzcuF, com_google_android_gms_internal_zzbxp.zzcuF, this.mSize);
+        return size() != com_google_android_gms_internal_zzbxp.size() ? false : zza(this.zzcuM, com_google_android_gms_internal_zzbxp.zzcuM, this.mSize) && zza(this.zzcuN, com_google_android_gms_internal_zzbxp.zzcuN, this.mSize);
     }
 
     public int hashCode() {
         int i = 17;
         for (int i2 = 0; i2 < this.mSize; i2++) {
-            i = (((i * 31) + this.zzcuE[i2]) * 31) + this.zzcuF[i2].hashCode();
+            i = (((i * 31) + this.zzcuM[i2]) * 31) + this.zzcuN[i2].hashCode();
         }
         return i;
     }
@@ -99,54 +99,54 @@ public final class zzbxp implements Cloneable {
     }
 
     void zza(int i, zzbxq com_google_android_gms_internal_zzbxq) {
-        int zzrp = zzrp(i);
-        if (zzrp >= 0) {
-            this.zzcuF[zzrp] = com_google_android_gms_internal_zzbxq;
+        int zzrq = zzrq(i);
+        if (zzrq >= 0) {
+            this.zzcuN[zzrq] = com_google_android_gms_internal_zzbxq;
             return;
         }
-        zzrp ^= -1;
-        if (zzrp >= this.mSize || this.zzcuF[zzrp] != zzcuC) {
-            if (this.mSize >= this.zzcuE.length) {
+        zzrq ^= -1;
+        if (zzrq >= this.mSize || this.zzcuN[zzrq] != zzcuK) {
+            if (this.mSize >= this.zzcuM.length) {
                 int idealIntArraySize = idealIntArraySize(this.mSize + 1);
                 Object obj = new int[idealIntArraySize];
                 Object obj2 = new zzbxq[idealIntArraySize];
-                System.arraycopy(this.zzcuE, 0, obj, 0, this.zzcuE.length);
-                System.arraycopy(this.zzcuF, 0, obj2, 0, this.zzcuF.length);
-                this.zzcuE = obj;
-                this.zzcuF = obj2;
+                System.arraycopy(this.zzcuM, 0, obj, 0, this.zzcuM.length);
+                System.arraycopy(this.zzcuN, 0, obj2, 0, this.zzcuN.length);
+                this.zzcuM = obj;
+                this.zzcuN = obj2;
             }
-            if (this.mSize - zzrp != 0) {
-                System.arraycopy(this.zzcuE, zzrp, this.zzcuE, zzrp + 1, this.mSize - zzrp);
-                System.arraycopy(this.zzcuF, zzrp, this.zzcuF, zzrp + 1, this.mSize - zzrp);
+            if (this.mSize - zzrq != 0) {
+                System.arraycopy(this.zzcuM, zzrq, this.zzcuM, zzrq + 1, this.mSize - zzrq);
+                System.arraycopy(this.zzcuN, zzrq, this.zzcuN, zzrq + 1, this.mSize - zzrq);
             }
-            this.zzcuE[zzrp] = i;
-            this.zzcuF[zzrp] = com_google_android_gms_internal_zzbxq;
+            this.zzcuM[zzrq] = i;
+            this.zzcuN[zzrq] = com_google_android_gms_internal_zzbxq;
             this.mSize++;
             return;
         }
-        this.zzcuE[zzrp] = i;
-        this.zzcuF[zzrp] = com_google_android_gms_internal_zzbxq;
+        this.zzcuM[zzrq] = i;
+        this.zzcuN[zzrq] = com_google_android_gms_internal_zzbxq;
     }
 
-    public final zzbxp zzaeI() {
+    public final zzbxp zzaeJ() {
         int size = size();
         zzbxp com_google_android_gms_internal_zzbxp = new zzbxp(size);
-        System.arraycopy(this.zzcuE, 0, com_google_android_gms_internal_zzbxp.zzcuE, 0, size);
+        System.arraycopy(this.zzcuM, 0, com_google_android_gms_internal_zzbxp.zzcuM, 0, size);
         for (int i = 0; i < size; i++) {
-            if (this.zzcuF[i] != null) {
-                com_google_android_gms_internal_zzbxp.zzcuF[i] = (zzbxq) this.zzcuF[i].clone();
+            if (this.zzcuN[i] != null) {
+                com_google_android_gms_internal_zzbxp.zzcuN[i] = (zzbxq) this.zzcuN[i].clone();
             }
         }
         com_google_android_gms_internal_zzbxp.mSize = size;
         return com_google_android_gms_internal_zzbxp;
     }
 
-    zzbxq zzrn(int i) {
-        int zzrp = zzrp(i);
-        return (zzrp < 0 || this.zzcuF[zzrp] == zzcuC) ? null : this.zzcuF[zzrp];
+    zzbxq zzro(int i) {
+        int zzrq = zzrq(i);
+        return (zzrq < 0 || this.zzcuN[zzrq] == zzcuK) ? null : this.zzcuN[zzrq];
     }
 
-    zzbxq zzro(int i) {
-        return this.zzcuF[i];
+    zzbxq zzrp(int i) {
+        return this.zzcuN[i];
     }
 }

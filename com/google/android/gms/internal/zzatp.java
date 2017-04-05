@@ -10,7 +10,7 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 public class zzatp implements Creator<zzato> {
     static void zza(zzato com_google_android_gms_internal_zzato, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, com_google_android_gms_internal_zzato.zzLV(), false);
+        zzc.zza(parcel, 2, com_google_android_gms_internal_zzato.zzLW(), false);
         zzc.zzJ(parcel, zzaZ);
     }
 

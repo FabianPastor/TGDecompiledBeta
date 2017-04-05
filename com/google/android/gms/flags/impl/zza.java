@@ -47,10 +47,10 @@ public abstract class zza<T> {
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzDF();
+                return zzDG();
             }
 
-            public Integer zzDF() {
+            public Integer zzDG() {
                 return Integer.valueOf(this.zzaXo.getInt(this.zzaXp, this.zzaXr.intValue()));
             }
         }
@@ -74,10 +74,10 @@ public abstract class zza<T> {
             }
 
             public /* synthetic */ Object call() throws Exception {
-                return zzDG();
+                return zzDH();
             }
 
-            public Long zzDG() {
+            public Long zzDH() {
                 return Long.valueOf(this.zzaXo.getLong(this.zzaXp, this.zzaXs.longValue()));
             }
         }

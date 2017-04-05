@@ -23,7 +23,7 @@ public interface zzbjv extends IInterface {
                 return this.zzrk;
             }
 
-            public void zzTP() throws RemoteException {
+            public void zzTQ() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -104,7 +104,7 @@ public interface zzbjv extends IInterface {
                     return true;
                 case 3:
                     parcel.enforceInterface("com.google.android.gms.vision.face.internal.client.INativeFaceDetector");
-                    zzTP();
+                    zzTQ();
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -116,7 +116,7 @@ public interface zzbjv extends IInterface {
         }
     }
 
-    void zzTP() throws RemoteException;
+    void zzTQ() throws RemoteException;
 
     zzbjr[] zzc(IObjectWrapper iObjectWrapper, zzbka com_google_android_gms_internal_zzbka) throws RemoteException;
 

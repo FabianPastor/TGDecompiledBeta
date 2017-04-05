@@ -98,6 +98,9 @@ public abstract class AsyncTaskLoader<D> extends Loader<D> {
     protected boolean onCancelLoad() {
         boolean cancelled = false;
         if (this.mTask != null) {
+            if (!this.mStarted) {
+                this.mContentChanged = true;
+            }
             if (this.mCancellingTask != null) {
                 if (this.mTask.waiting) {
                     this.mTask.waiting = false;

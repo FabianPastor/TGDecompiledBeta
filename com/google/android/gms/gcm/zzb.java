@@ -21,7 +21,7 @@ public interface zzb extends IInterface {
                 return this.zzrk;
             }
 
-            public void zzjC(int i) throws RemoteException {
+            public void zzjD(int i) throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -48,7 +48,7 @@ public interface zzb extends IInterface {
             switch (i) {
                 case 2:
                     parcel.enforceInterface("com.google.android.gms.gcm.INetworkTaskCallback");
-                    zzjC(parcel.readInt());
+                    zzjD(parcel.readInt());
                     parcel2.writeNoException();
                     return true;
                 case 1598968902:
@@ -60,5 +60,5 @@ public interface zzb extends IInterface {
         }
     }
 
-    void zzjC(int i) throws RemoteException;
+    void zzjD(int i) throws RemoteException;
 }

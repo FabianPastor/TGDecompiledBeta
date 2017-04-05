@@ -263,13 +263,13 @@ public class zzaar implements zzaau {
         if (zzcB(0)) {
             ConnectionResult zzyh = com_google_android_gms_internal_zzbaw.zzyh();
             if (zzyh.isSuccess()) {
-                zzaf zzPT = com_google_android_gms_internal_zzbaw.zzPT();
-                ConnectionResult zzyh2 = zzPT.zzyh();
+                zzaf zzPU = com_google_android_gms_internal_zzbaw.zzPU();
+                ConnectionResult zzyh2 = zzPU.zzyh();
                 if (zzyh2.isSuccess()) {
                     this.zzaBv = true;
-                    this.zzaBw = zzPT.zzyg();
-                    this.zzaBx = zzPT.zzyi();
-                    this.zzaBy = zzPT.zzyj();
+                    this.zzaBw = zzPU.zzyg();
+                    this.zzaBx = zzPU.zzyi();
+                    this.zzaBy = zzPU.zzyj();
                     zzwg();
                     return;
                 }
@@ -292,7 +292,7 @@ public class zzaar implements zzaau {
     private void zzau(boolean z) {
         if (this.zzaBs != null) {
             if (this.zzaBs.isConnected() && z) {
-                this.zzaBs.zzPI();
+                this.zzaBs.zzPJ();
             }
             this.zzaBs.disconnect();
             this.zzaBw = null;

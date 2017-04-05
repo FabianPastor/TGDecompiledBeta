@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupportStreetViewPanoramaFragment extends Fragment {
-    private final zzb zzboZ = new zzb(this);
+    private final zzb zzboV = new zzb(this);
 
     static class zzb extends com.google.android.gms.dynamic.zza<zza> {
         private Activity mActivity;
         private final Fragment zzaRN;
-        private final List<OnStreetViewPanoramaReadyCallback> zzboM = new ArrayList();
-        protected zze<zza> zzbov;
+        private final List<OnStreetViewPanoramaReadyCallback> zzboI = new ArrayList();
+        protected zze<zza> zzbor;
 
         zzb(Fragment fragment) {
             this.zzaRN = fragment;
@@ -37,26 +37,26 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         private void setActivity(Activity activity) {
             this.mActivity = activity;
-            zzJy();
+            zzJz();
         }
 
         public void getStreetViewPanoramaAsync(OnStreetViewPanoramaReadyCallback onStreetViewPanoramaReadyCallback) {
-            if (zzBM() != null) {
-                ((zza) zzBM()).getStreetViewPanoramaAsync(onStreetViewPanoramaReadyCallback);
+            if (zzBN() != null) {
+                ((zza) zzBN()).getStreetViewPanoramaAsync(onStreetViewPanoramaReadyCallback);
             } else {
-                this.zzboM.add(onStreetViewPanoramaReadyCallback);
+                this.zzboI.add(onStreetViewPanoramaReadyCallback);
             }
         }
 
-        public void zzJy() {
-            if (this.mActivity != null && this.zzbov != null && zzBM() == null) {
+        public void zzJz() {
+            if (this.mActivity != null && this.zzbor != null && zzBN() == null) {
                 try {
                     MapsInitializer.initialize(this.mActivity);
-                    this.zzbov.zza(new zza(this.zzaRN, zzai.zzbI(this.mActivity).zzJ(zzd.zzA(this.mActivity))));
-                    for (OnStreetViewPanoramaReadyCallback streetViewPanoramaAsync : this.zzboM) {
-                        ((zza) zzBM()).getStreetViewPanoramaAsync(streetViewPanoramaAsync);
+                    this.zzbor.zza(new zza(this.zzaRN, zzai.zzbI(this.mActivity).zzJ(zzd.zzA(this.mActivity))));
+                    for (OnStreetViewPanoramaReadyCallback streetViewPanoramaAsync : this.zzboI) {
+                        ((zza) zzBN()).getStreetViewPanoramaAsync(streetViewPanoramaAsync);
                     }
-                    this.zzboM.clear();
+                    this.zzboI.clear();
                 } catch (RemoteException e) {
                     throw new RuntimeRemoteException(e);
                 } catch (GooglePlayServicesNotAvailableException e2) {
@@ -65,23 +65,23 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
         }
 
         protected void zza(zze<zza> com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportStreetViewPanoramaFragment_zza) {
-            this.zzbov = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportStreetViewPanoramaFragment_zza;
-            zzJy();
+            this.zzbor = com_google_android_gms_dynamic_zze_com_google_android_gms_maps_SupportStreetViewPanoramaFragment_zza;
+            zzJz();
         }
     }
 
     static class zza implements StreetViewLifecycleDelegate {
         private final Fragment zzaRN;
-        private final IStreetViewPanoramaFragmentDelegate zzboK;
+        private final IStreetViewPanoramaFragmentDelegate zzboG;
 
         public zza(Fragment fragment, IStreetViewPanoramaFragmentDelegate iStreetViewPanoramaFragmentDelegate) {
-            this.zzboK = (IStreetViewPanoramaFragmentDelegate) zzac.zzw(iStreetViewPanoramaFragmentDelegate);
+            this.zzboG = (IStreetViewPanoramaFragmentDelegate) zzac.zzw(iStreetViewPanoramaFragmentDelegate);
             this.zzaRN = (Fragment) zzac.zzw(fragment);
         }
 
         public void getStreetViewPanoramaAsync(final OnStreetViewPanoramaReadyCallback onStreetViewPanoramaReadyCallback) {
             try {
-                this.zzboK.getStreetViewPanoramaAsync(new com.google.android.gms.maps.internal.zzaf.zza(this) {
+                this.zzboG.getStreetViewPanoramaAsync(new com.google.android.gms.maps.internal.zzaf.zza(this) {
                     public void zza(IStreetViewPanoramaDelegate iStreetViewPanoramaDelegate) throws RemoteException {
                         onStreetViewPanoramaReadyCallback.onStreetViewPanoramaReady(new StreetViewPanorama(iStreetViewPanoramaDelegate));
                     }
@@ -99,7 +99,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
                 if (arguments != null && arguments.containsKey("StreetViewPanoramaOptions")) {
                     zzah.zza(bundle2, "StreetViewPanoramaOptions", arguments.getParcelable("StreetViewPanoramaOptions"));
                 }
-                this.zzboK.onCreate(bundle2);
+                this.zzboG.onCreate(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -110,7 +110,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                IObjectWrapper onCreateView = this.zzboK.onCreateView(zzd.zzA(layoutInflater), zzd.zzA(viewGroup), bundle2);
+                IObjectWrapper onCreateView = this.zzboG.onCreateView(zzd.zzA(layoutInflater), zzd.zzA(viewGroup), bundle2);
                 zzah.zzd(bundle2, bundle);
                 return (View) zzd.zzF(onCreateView);
             } catch (RemoteException e) {
@@ -120,7 +120,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         public void onDestroy() {
             try {
-                this.zzboK.onDestroy();
+                this.zzboG.onDestroy();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -128,7 +128,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         public void onDestroyView() {
             try {
-                this.zzboK.onDestroyView();
+                this.zzboG.onDestroyView();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -138,7 +138,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
             try {
                 Bundle bundle3 = new Bundle();
                 zzah.zzd(bundle2, bundle3);
-                this.zzboK.onInflate(zzd.zzA(activity), null, bundle3);
+                this.zzboG.onInflate(zzd.zzA(activity), null, bundle3);
                 zzah.zzd(bundle3, bundle2);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -147,7 +147,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         public void onLowMemory() {
             try {
-                this.zzboK.onLowMemory();
+                this.zzboG.onLowMemory();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -155,7 +155,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         public void onPause() {
             try {
-                this.zzboK.onPause();
+                this.zzboG.onPause();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -163,7 +163,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
         public void onResume() {
             try {
-                this.zzboK.onResume();
+                this.zzboG.onResume();
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
@@ -173,7 +173,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
             try {
                 Bundle bundle2 = new Bundle();
                 zzah.zzd(bundle, bundle2);
-                this.zzboK.onSaveInstanceState(bundle2);
+                this.zzboG.onSaveInstanceState(bundle2);
                 zzah.zzd(bundle2, bundle);
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
@@ -201,7 +201,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
     public void getStreetViewPanoramaAsync(OnStreetViewPanoramaReadyCallback onStreetViewPanoramaReadyCallback) {
         zzac.zzdj("getStreetViewPanoramaAsync() must be called on the main thread");
-        this.zzboZ.getStreetViewPanoramaAsync(onStreetViewPanoramaReadyCallback);
+        this.zzboV.getStreetViewPanoramaAsync(onStreetViewPanoramaReadyCallback);
     }
 
     public void onActivityCreated(Bundle bundle) {
@@ -213,47 +213,47 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.zzboZ.setActivity(activity);
+        this.zzboV.setActivity(activity);
     }
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        this.zzboZ.onCreate(bundle);
+        this.zzboV.onCreate(bundle);
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        return this.zzboZ.onCreateView(layoutInflater, viewGroup, bundle);
+        return this.zzboV.onCreateView(layoutInflater, viewGroup, bundle);
     }
 
     public void onDestroy() {
-        this.zzboZ.onDestroy();
+        this.zzboV.onDestroy();
         super.onDestroy();
     }
 
     public void onDestroyView() {
-        this.zzboZ.onDestroyView();
+        this.zzboV.onDestroyView();
         super.onDestroyView();
     }
 
     public void onInflate(Activity activity, AttributeSet attributeSet, Bundle bundle) {
         super.onInflate(activity, attributeSet, bundle);
-        this.zzboZ.setActivity(activity);
-        this.zzboZ.onInflate(activity, new Bundle(), bundle);
+        this.zzboV.setActivity(activity);
+        this.zzboV.onInflate(activity, new Bundle(), bundle);
     }
 
     public void onLowMemory() {
-        this.zzboZ.onLowMemory();
+        this.zzboV.onLowMemory();
         super.onLowMemory();
     }
 
     public void onPause() {
-        this.zzboZ.onPause();
+        this.zzboV.onPause();
         super.onPause();
     }
 
     public void onResume() {
         super.onResume();
-        this.zzboZ.onResume();
+        this.zzboV.onResume();
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -261,7 +261,7 @@ public class SupportStreetViewPanoramaFragment extends Fragment {
             bundle.setClassLoader(SupportStreetViewPanoramaFragment.class.getClassLoader());
         }
         super.onSaveInstanceState(bundle);
-        this.zzboZ.onSaveInstanceState(bundle);
+        this.zzboV.onSaveInstanceState(bundle);
     }
 
     public void setArguments(Bundle bundle) {

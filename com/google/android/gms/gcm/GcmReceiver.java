@@ -9,9 +9,14 @@ import android.os.Build.VERSION;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Base64;
 import android.util.Log;
+import com.google.android.gms.common.util.zzt;
+import com.google.firebase.iid.zzb.zzb;
 
 public class GcmReceiver extends WakefulBroadcastReceiver {
-    private static String zzbgu = "gcm.googleapis.com/refresh";
+    private static String zzbgr = "gcm.googleapis.com/refresh";
+    private static boolean zzbgs = false;
+    private zzb zzbgt;
+    private zzb zzbgu;
 
     private void doStartService(Context context, Intent intent) {
         if (isOrderedBroadcast()) {
@@ -40,6 +45,22 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
                 setResultCode(401);
             }
         }
+    }
+
+    private synchronized zzb zzK(Context context, String str) {
+        zzb com_google_firebase_iid_zzb_zzb;
+        if ("com.google.android.c2dm.intent.RECEIVE".equals(str)) {
+            if (this.zzbgu == null) {
+                this.zzbgu = new zzb(context, str);
+            }
+            com_google_firebase_iid_zzb_zzb = this.zzbgu;
+        } else {
+            if (this.zzbgt == null) {
+                this.zzbgt = new zzb(context, str);
+            }
+            com_google_firebase_iid_zzb_zzb = this.zzbgt;
+        }
+        return com_google_firebase_iid_zzb_zzb;
     }
 
     private void zze(Context context, Intent intent) {
@@ -71,19 +92,29 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent intent) {
+        if (Log.isLoggable("GcmReceiver", 3)) {
+            Log.d("GcmReceiver", "received new intent");
+        }
         intent.setComponent(null);
         intent.setPackage(context.getPackageName());
         if (VERSION.SDK_INT <= 18) {
             intent.removeCategory(context.getPackageName());
         }
         String stringExtra = intent.getStringExtra("from");
-        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || zzbgu.equals(stringExtra)) {
+        if ("google.com/iid".equals(stringExtra) || zzbgr.equals(stringExtra)) {
             intent.setAction("com.google.android.gms.iid.InstanceID");
         }
         stringExtra = intent.getStringExtra("gcm.rawData64");
         if (stringExtra != null) {
             intent.putExtra("rawData", Base64.decode(stringExtra, 0));
             intent.removeExtra("gcm.rawData64");
+        }
+        if (zzt.zzzq()) {
+            if (isOrderedBroadcast()) {
+                setResultCode(-1);
+            }
+            zzK(context, intent.getAction()).zzb(intent, goAsync());
+            return;
         }
         if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {
             zzd(context, intent);

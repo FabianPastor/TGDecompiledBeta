@@ -3885,6 +3885,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3933,7 +3934,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;
@@ -4229,8 +4229,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         TL_documentAttributeVideo attributeVideo;
                         boolean z;
                         VideoEditedInfo videoEditedInfo;
-                        VideoEditedInfo videoEditedInfo2;
-                        int i;
                         String fileName;
                         File cacheFile;
                         TL_document videoFinal;
@@ -4270,16 +4268,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         document.attributes.add(new TL_documentAttributeAnimated());
                                     }
                                     SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
-                                    videoEditedInfo = videoEditedInfo2;
-                                    videoEditedInfo2 = videoEditedInfo2;
-                                    i = attributeVideo.w;
-                                    videoEditedInfo2.resultWidth = i;
-                                    videoEditedInfo.originalWidth = i;
-                                    videoEditedInfo = videoEditedInfo2;
-                                    videoEditedInfo2 = videoEditedInfo2;
-                                    i = attributeVideo.h;
-                                    videoEditedInfo2.resultHeight = i;
-                                    videoEditedInfo.originalHeight = i;
                                     if (videoEditedInfo2.roundVideo) {
                                         videoEditedInfo2.originalWidth = attributeVideo.w;
                                         videoEditedInfo2.originalHeight = attributeVideo.h;
@@ -4343,16 +4331,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         document.attributes.add(new TL_documentAttributeAnimated());
                                     }
                                     SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
-                                    videoEditedInfo = videoEditedInfo2;
-                                    videoEditedInfo2 = videoEditedInfo2;
-                                    i = attributeVideo.w;
-                                    videoEditedInfo2.resultWidth = i;
-                                    videoEditedInfo.originalWidth = i;
-                                    videoEditedInfo = videoEditedInfo2;
-                                    videoEditedInfo2 = videoEditedInfo2;
-                                    i = attributeVideo.h;
-                                    videoEditedInfo2.resultHeight = i;
-                                    videoEditedInfo.originalHeight = i;
                                     if (videoEditedInfo2.roundVideo) {
                                         videoEditedInfo2.originalWidth = attributeVideo.w;
                                         videoEditedInfo2.originalHeight = attributeVideo.h;

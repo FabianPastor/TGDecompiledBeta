@@ -9,7 +9,7 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 public class zzg implements Creator<MapStyleOptions> {
     static void zza(MapStyleOptions mapStyleOptions, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, mapStyleOptions.zzJK(), false);
+        zzc.zza(parcel, 2, mapStyleOptions.zzJL(), false);
         zzc.zzJ(parcel, zzaZ);
     }
 

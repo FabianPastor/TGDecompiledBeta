@@ -6,12 +6,28 @@ import android.os.Build.VERSION;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Base64;
 import android.util.Log;
+import com.google.android.gms.common.util.zzt;
+import com.google.firebase.iid.zzb.zzb;
 
 public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
-    public void onReceive(Context context, Intent intent) {
-        if (isOrderedBroadcast()) {
-            setResultCode(500);
+    private static boolean zzbgs = false;
+    private zzb zzcll;
+    private zzb zzclm;
+
+    private zzb zzK(Context context, String str) {
+        if ("com.google.android.c2dm.intent.RECEIVE".equals(str)) {
+            if (this.zzclm == null) {
+                this.zzclm = new zzb(context, str);
+            }
+            return this.zzclm;
         }
+        if (this.zzcll == null) {
+            this.zzcll = new zzb(context, str);
+        }
+        return this.zzcll;
+    }
+
+    public void onReceive(Context context, Intent intent) {
         intent.setComponent(null);
         intent.setPackage(context.getPackageName());
         if (VERSION.SDK_INT <= 18) {
@@ -23,7 +39,7 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
             intent.removeExtra("gcm.rawData64");
         }
         stringExtra = intent.getStringExtra("from");
-        if ("com.google.android.c2dm.intent.REGISTRATION".equals(intent.getAction()) || "google.com/iid".equals(stringExtra) || "gcm.googleapis.com/refresh".equals(stringExtra)) {
+        if ("google.com/iid".equals(stringExtra) || "gcm.googleapis.com/refresh".equals(stringExtra)) {
             stringExtra = "com.google.firebase.INSTANCE_ID_EVENT";
         } else if ("com.google.android.c2dm.intent.RECEIVE".equals(intent.getAction())) {
             stringExtra = "com.google.firebase.MESSAGING_EVENT";
@@ -41,6 +57,13 @@ public final class FirebaseInstanceIdReceiver extends WakefulBroadcastReceiver {
     }
 
     public int zza(Context context, String str, Intent intent) {
-        return zzg.zzabT().zzb(context, str, intent);
+        if (!zzt.zzzq()) {
+            return zzg.zzabU().zzb(context, str, intent);
+        }
+        if (isOrderedBroadcast()) {
+            setResultCode(-1);
+        }
+        zzK(context, str).zzb(intent, goAsync());
+        return -1;
     }
 }

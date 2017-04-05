@@ -5,11 +5,11 @@ import java.util.Arrays;
 
 final class zzbxv {
     final int tag;
-    final byte[] zzbyd;
+    final byte[] zzbxZ;
 
     zzbxv(int i, byte[] bArr) {
         this.tag = i;
-        this.zzbyd = bArr;
+        this.zzbxZ = bArr;
     }
 
     public boolean equals(Object obj) {
@@ -20,19 +20,19 @@ final class zzbxv {
             return false;
         }
         zzbxv com_google_android_gms_internal_zzbxv = (zzbxv) obj;
-        return this.tag == com_google_android_gms_internal_zzbxv.tag && Arrays.equals(this.zzbyd, com_google_android_gms_internal_zzbxv.zzbyd);
+        return this.tag == com_google_android_gms_internal_zzbxv.tag && Arrays.equals(this.zzbxZ, com_google_android_gms_internal_zzbxv.zzbxZ);
     }
 
     public int hashCode() {
-        return ((this.tag + 527) * 31) + Arrays.hashCode(this.zzbyd);
+        return ((this.tag + 527) * 31) + Arrays.hashCode(this.zzbxZ);
     }
 
     void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
-        com_google_android_gms_internal_zzbxm.zzrj(this.tag);
-        com_google_android_gms_internal_zzbxm.zzaj(this.zzbyd);
+        com_google_android_gms_internal_zzbxm.zzrk(this.tag);
+        com_google_android_gms_internal_zzbxm.zzaj(this.zzbxZ);
     }
 
     int zzu() {
-        return (zzbxm.zzrk(this.tag) + 0) + this.zzbyd.length;
+        return (zzbxm.zzrl(this.tag) + 0) + this.zzbxZ.length;
     }
 }

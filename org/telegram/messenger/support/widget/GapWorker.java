@@ -96,21 +96,24 @@ final class GapWorker implements Runnable {
         }
 
         public void addPosition(int layoutPosition, int pixelDistance) {
-            if (pixelDistance < 0) {
+            if (layoutPosition < 0) {
+                throw new IllegalArgumentException("Layout positions must be non-negative");
+            } else if (pixelDistance < 0) {
                 throw new IllegalArgumentException("Pixel distance must be non-negative");
+            } else {
+                int storagePosition = this.mCount * 2;
+                if (this.mPrefetchArray == null) {
+                    this.mPrefetchArray = new int[4];
+                    Arrays.fill(this.mPrefetchArray, -1);
+                } else if (storagePosition >= this.mPrefetchArray.length) {
+                    int[] oldArray = this.mPrefetchArray;
+                    this.mPrefetchArray = new int[(storagePosition * 2)];
+                    System.arraycopy(oldArray, 0, this.mPrefetchArray, 0, oldArray.length);
+                }
+                this.mPrefetchArray[storagePosition] = layoutPosition;
+                this.mPrefetchArray[storagePosition + 1] = pixelDistance;
+                this.mCount++;
             }
-            int storagePosition = this.mCount * 2;
-            if (this.mPrefetchArray == null) {
-                this.mPrefetchArray = new int[4];
-                Arrays.fill(this.mPrefetchArray, -1);
-            } else if (storagePosition >= this.mPrefetchArray.length) {
-                int[] oldArray = this.mPrefetchArray;
-                this.mPrefetchArray = new int[(storagePosition * 2)];
-                System.arraycopy(oldArray, 0, this.mPrefetchArray, 0, oldArray.length);
-            }
-            this.mPrefetchArray[storagePosition] = layoutPosition;
-            this.mPrefetchArray[storagePosition + 1] = pixelDistance;
-            this.mCount++;
         }
 
         boolean lastPrefetchIncludedPosition(int position) {
@@ -129,6 +132,7 @@ final class GapWorker implements Runnable {
             if (this.mPrefetchArray != null) {
                 Arrays.fill(this.mPrefetchArray, -1);
             }
+            this.mCount = 0;
         }
     }
 
@@ -157,36 +161,40 @@ final class GapWorker implements Runnable {
         int totalTaskCount = 0;
         for (i = 0; i < viewCount; i++) {
             RecyclerView view = (RecyclerView) this.mRecyclerViews.get(i);
-            view.mPrefetchRegistry.collectPrefetchPositionsFromView(view, false);
-            totalTaskCount += view.mPrefetchRegistry.mCount;
+            if (view.getWindowVisibility() == 0) {
+                view.mPrefetchRegistry.collectPrefetchPositionsFromView(view, false);
+                totalTaskCount += view.mPrefetchRegistry.mCount;
+            }
         }
         this.mTasks.ensureCapacity(totalTaskCount);
         int totalTaskIndex = 0;
         for (i = 0; i < viewCount; i++) {
             view = (RecyclerView) this.mRecyclerViews.get(i);
-            LayoutPrefetchRegistryImpl prefetchRegistry = view.mPrefetchRegistry;
-            int viewVelocity = Math.abs(prefetchRegistry.mPrefetchDx) + Math.abs(prefetchRegistry.mPrefetchDy);
-            for (int j = 0; j < prefetchRegistry.mCount * 2; j += 2) {
-                Task task;
-                boolean z;
-                if (totalTaskIndex >= this.mTasks.size()) {
-                    task = new Task();
-                    this.mTasks.add(task);
-                } else {
-                    task = (Task) this.mTasks.get(totalTaskIndex);
+            if (view.getWindowVisibility() == 0) {
+                LayoutPrefetchRegistryImpl prefetchRegistry = view.mPrefetchRegistry;
+                int viewVelocity = Math.abs(prefetchRegistry.mPrefetchDx) + Math.abs(prefetchRegistry.mPrefetchDy);
+                for (int j = 0; j < prefetchRegistry.mCount * 2; j += 2) {
+                    Task task;
+                    boolean z;
+                    if (totalTaskIndex >= this.mTasks.size()) {
+                        task = new Task();
+                        this.mTasks.add(task);
+                    } else {
+                        task = (Task) this.mTasks.get(totalTaskIndex);
+                    }
+                    int distanceToItem = prefetchRegistry.mPrefetchArray[j + 1];
+                    if (distanceToItem <= viewVelocity) {
+                        z = true;
+                    } else {
+                        z = false;
+                    }
+                    task.immediate = z;
+                    task.viewVelocity = viewVelocity;
+                    task.distanceToItem = distanceToItem;
+                    task.view = view;
+                    task.position = prefetchRegistry.mPrefetchArray[j];
+                    totalTaskIndex++;
                 }
-                int distanceToItem = prefetchRegistry.mPrefetchArray[j + 1];
-                if (distanceToItem <= viewVelocity) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                task.immediate = z;
-                task.viewVelocity = viewVelocity;
-                task.distanceToItem = distanceToItem;
-                task.view = view;
-                task.position = prefetchRegistry.mPrefetchArray[j];
-                totalTaskIndex++;
             }
         }
         Collections.sort(this.mTasks, sTaskComparator);
@@ -277,13 +285,20 @@ final class GapWorker implements Runnable {
         try {
             TraceCompat.beginSection("RV Prefetch");
             if (!this.mRecyclerViews.isEmpty()) {
-                long lastFrameVsyncNs = TimeUnit.MILLISECONDS.toNanos(((RecyclerView) this.mRecyclerViews.get(0)).getDrawingTime());
-                if (lastFrameVsyncNs == 0) {
+                int size = this.mRecyclerViews.size();
+                long latestFrameVsyncMs = 0;
+                for (int i = 0; i < size; i++) {
+                    RecyclerView view = (RecyclerView) this.mRecyclerViews.get(i);
+                    if (view.getWindowVisibility() == 0) {
+                        latestFrameVsyncMs = Math.max(view.getDrawingTime(), latestFrameVsyncMs);
+                    }
+                }
+                if (latestFrameVsyncMs == 0) {
                     this.mPostTimeNs = 0;
                     TraceCompat.endSection();
                     return;
                 }
-                prefetch(lastFrameVsyncNs + this.mFrameIntervalNs);
+                prefetch(TimeUnit.MILLISECONDS.toNanos(latestFrameVsyncMs) + this.mFrameIntervalNs);
                 this.mPostTimeNs = 0;
                 TraceCompat.endSection();
             }

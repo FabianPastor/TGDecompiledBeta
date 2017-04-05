@@ -11,9 +11,9 @@ import com.google.android.gms.measurement.AppMeasurement.zzf;
 import java.util.Map;
 
 public class zzatb extends zzaug {
-    private final Map<String, Long> zzbqp = new ArrayMap();
-    private final Map<String, Integer> zzbqq = new ArrayMap();
-    private long zzbqr;
+    private final Map<String, Long> zzbql = new ArrayMap();
+    private final Map<String, Integer> zzbqm = new ArrayMap();
+    private long zzbqn;
 
     public zzatb(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -21,110 +21,110 @@ public class zzatb extends zzaug {
 
     @WorkerThread
     private void zzX(long j) {
-        for (String put : this.zzbqp.keySet()) {
-            this.zzbqp.put(put, Long.valueOf(j));
+        for (String put : this.zzbql.keySet()) {
+            this.zzbql.put(put, Long.valueOf(j));
         }
-        if (!this.zzbqp.isEmpty()) {
-            this.zzbqr = j;
+        if (!this.zzbql.isEmpty()) {
+            this.zzbqn = j;
         }
     }
 
     @WorkerThread
     private void zza(long j, zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
         if (com_google_android_gms_measurement_AppMeasurement_zzf == null) {
-            zzKk().zzMd().log("Not logging ad exposure. No active activity");
+            zzKl().zzMe().log("Not logging ad exposure. No active activity");
         } else if (j < 1000) {
-            zzKk().zzMd().zzj("Not logging ad exposure. Less than 1000 ms. exposure", Long.valueOf(j));
+            zzKl().zzMe().zzj("Not logging ad exposure. Less than 1000 ms. exposure", Long.valueOf(j));
         } else {
             Bundle bundle = new Bundle();
             bundle.putLong("_xt", j);
             zzauk.zza(com_google_android_gms_measurement_AppMeasurement_zzf, bundle);
-            zzJZ().zze("am", "_xa", bundle);
+            zzKa().zze("am", "_xa", bundle);
         }
     }
 
     @WorkerThread
     private void zza(String str, long j, zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
         if (com_google_android_gms_measurement_AppMeasurement_zzf == null) {
-            zzKk().zzMd().log("Not logging ad unit exposure. No active activity");
+            zzKl().zzMe().log("Not logging ad unit exposure. No active activity");
         } else if (j < 1000) {
-            zzKk().zzMd().zzj("Not logging ad unit exposure. Less than 1000 ms. exposure", Long.valueOf(j));
+            zzKl().zzMe().zzj("Not logging ad unit exposure. Less than 1000 ms. exposure", Long.valueOf(j));
         } else {
             Bundle bundle = new Bundle();
             bundle.putString("_ai", str);
             bundle.putLong("_xt", j);
             zzauk.zza(com_google_android_gms_measurement_AppMeasurement_zzf, bundle);
-            zzJZ().zze("am", "_xu", bundle);
+            zzKa().zze("am", "_xu", bundle);
         }
     }
 
     @WorkerThread
     private void zzf(String str, long j) {
-        zzJV();
+        zzJW();
         zzmR();
         zzac.zzdr(str);
-        if (this.zzbqq.isEmpty()) {
-            this.zzbqr = j;
+        if (this.zzbqm.isEmpty()) {
+            this.zzbqn = j;
         }
-        Integer num = (Integer) this.zzbqq.get(str);
+        Integer num = (Integer) this.zzbqm.get(str);
         if (num != null) {
-            this.zzbqq.put(str, Integer.valueOf(num.intValue() + 1));
-        } else if (this.zzbqq.size() >= 100) {
-            zzKk().zzLZ().log("Too many ads visible");
+            this.zzbqm.put(str, Integer.valueOf(num.intValue() + 1));
+        } else if (this.zzbqm.size() >= 100) {
+            zzKl().zzMa().log("Too many ads visible");
         } else {
-            this.zzbqq.put(str, Integer.valueOf(1));
-            this.zzbqp.put(str, Long.valueOf(j));
+            this.zzbqm.put(str, Integer.valueOf(1));
+            this.zzbql.put(str, Long.valueOf(j));
         }
     }
 
     @WorkerThread
     private void zzg(String str, long j) {
-        zzJV();
+        zzJW();
         zzmR();
         zzac.zzdr(str);
-        Integer num = (Integer) this.zzbqq.get(str);
+        Integer num = (Integer) this.zzbqm.get(str);
         if (num != null) {
-            zzf zzMT = zzKd().zzMT();
+            zzf zzMU = zzKe().zzMU();
             int intValue = num.intValue() - 1;
             if (intValue == 0) {
-                this.zzbqq.remove(str);
-                Long l = (Long) this.zzbqp.get(str);
+                this.zzbqm.remove(str);
+                Long l = (Long) this.zzbql.get(str);
                 if (l == null) {
-                    zzKk().zzLX().log("First ad unit exposure time was never set");
+                    zzKl().zzLY().log("First ad unit exposure time was never set");
                 } else {
                     long longValue = j - l.longValue();
-                    this.zzbqp.remove(str);
-                    zza(str, longValue, zzMT);
+                    this.zzbql.remove(str);
+                    zza(str, longValue, zzMU);
                 }
-                if (!this.zzbqq.isEmpty()) {
+                if (!this.zzbqm.isEmpty()) {
                     return;
                 }
-                if (this.zzbqr == 0) {
-                    zzKk().zzLX().log("First ad exposure time was never set");
+                if (this.zzbqn == 0) {
+                    zzKl().zzLY().log("First ad exposure time was never set");
                     return;
                 }
-                zza(j - this.zzbqr, zzMT);
-                this.zzbqr = 0;
+                zza(j - this.zzbqn, zzMU);
+                this.zzbqn = 0;
                 return;
             }
-            this.zzbqq.put(str, Integer.valueOf(intValue));
+            this.zzbqm.put(str, Integer.valueOf(intValue));
             return;
         }
-        zzKk().zzLX().zzj("Call to endAdUnitExposure for unknown ad unit id", str);
+        zzKl().zzLY().zzj("Call to endAdUnitExposure for unknown ad unit id", str);
     }
 
     public void beginAdUnitExposure(final String str) {
         int i = VERSION.SDK_INT;
         if (str == null || str.length() == 0) {
-            zzKk().zzLX().log("Ad unit id must be a non-empty string");
+            zzKl().zzLY().log("Ad unit id must be a non-empty string");
             return;
         }
         final long elapsedRealtime = zznR().elapsedRealtime();
-        zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqt;
+        zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzatb zzbqp;
 
             public void run() {
-                this.zzbqt.zzf(str, elapsedRealtime);
+                this.zzbqp.zzf(str, elapsedRealtime);
             }
         });
     }
@@ -132,15 +132,15 @@ public class zzatb extends zzaug {
     public void endAdUnitExposure(final String str) {
         int i = VERSION.SDK_INT;
         if (str == null || str.length() == 0) {
-            zzKk().zzLX().log("Ad unit id must be a non-empty string");
+            zzKl().zzLY().log("Ad unit id must be a non-empty string");
             return;
         }
         final long elapsedRealtime = zznR().elapsedRealtime();
-        zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqt;
+        zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzatb zzbqp;
 
             public void run() {
-                this.zzbqt.zzg(str, elapsedRealtime);
+                this.zzbqp.zzg(str, elapsedRealtime);
             }
         });
     }
@@ -149,19 +149,15 @@ public class zzatb extends zzaug {
         return super.getContext();
     }
 
-    public void zzJT() {
+    public void zzJU() {
         final long elapsedRealtime = zznR().elapsedRealtime();
-        zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzatb zzbqt;
+        zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzatb zzbqp;
 
             public void run() {
-                this.zzbqt.zzX(elapsedRealtime);
+                this.zzbqp.zzX(elapsedRealtime);
             }
         });
-    }
-
-    public /* bridge */ /* synthetic */ void zzJU() {
-        super.zzJU();
     }
 
     public /* bridge */ /* synthetic */ void zzJV() {
@@ -172,78 +168,82 @@ public class zzatb extends zzaug {
         super.zzJW();
     }
 
-    public /* bridge */ /* synthetic */ zzatb zzJX() {
-        return super.zzJX();
+    public /* bridge */ /* synthetic */ void zzJX() {
+        super.zzJX();
     }
 
-    public /* bridge */ /* synthetic */ zzatf zzJY() {
+    public /* bridge */ /* synthetic */ zzatb zzJY() {
         return super.zzJY();
     }
 
-    public /* bridge */ /* synthetic */ zzauj zzJZ() {
+    public /* bridge */ /* synthetic */ zzatf zzJZ() {
         return super.zzJZ();
     }
 
-    public /* bridge */ /* synthetic */ zzatu zzKa() {
+    public /* bridge */ /* synthetic */ zzauj zzKa() {
         return super.zzKa();
     }
 
-    public /* bridge */ /* synthetic */ zzatl zzKb() {
+    public /* bridge */ /* synthetic */ zzatu zzKb() {
         return super.zzKb();
     }
 
-    public /* bridge */ /* synthetic */ zzaul zzKc() {
+    public /* bridge */ /* synthetic */ zzatl zzKc() {
         return super.zzKc();
     }
 
-    public /* bridge */ /* synthetic */ zzauk zzKd() {
+    public /* bridge */ /* synthetic */ zzaul zzKd() {
         return super.zzKd();
     }
 
-    public /* bridge */ /* synthetic */ zzatv zzKe() {
+    public /* bridge */ /* synthetic */ zzauk zzKe() {
         return super.zzKe();
     }
 
-    public /* bridge */ /* synthetic */ zzatj zzKf() {
+    public /* bridge */ /* synthetic */ zzatv zzKf() {
         return super.zzKf();
     }
 
-    public /* bridge */ /* synthetic */ zzaut zzKg() {
+    public /* bridge */ /* synthetic */ zzatj zzKg() {
         return super.zzKg();
     }
 
-    public /* bridge */ /* synthetic */ zzauc zzKh() {
+    public /* bridge */ /* synthetic */ zzaut zzKh() {
         return super.zzKh();
     }
 
-    public /* bridge */ /* synthetic */ zzaun zzKi() {
+    public /* bridge */ /* synthetic */ zzauc zzKi() {
         return super.zzKi();
     }
 
-    public /* bridge */ /* synthetic */ zzaud zzKj() {
+    public /* bridge */ /* synthetic */ zzaun zzKj() {
         return super.zzKj();
     }
 
-    public /* bridge */ /* synthetic */ zzatx zzKk() {
+    public /* bridge */ /* synthetic */ zzaud zzKk() {
         return super.zzKk();
     }
 
-    public /* bridge */ /* synthetic */ zzaua zzKl() {
+    public /* bridge */ /* synthetic */ zzatx zzKl() {
         return super.zzKl();
     }
 
-    public /* bridge */ /* synthetic */ zzati zzKm() {
+    public /* bridge */ /* synthetic */ zzaua zzKm() {
         return super.zzKm();
+    }
+
+    public /* bridge */ /* synthetic */ zzati zzKn() {
+        return super.zzKn();
     }
 
     @WorkerThread
     public void zzW(long j) {
-        zzf zzMT = zzKd().zzMT();
-        for (String str : this.zzbqp.keySet()) {
-            zza(str, j - ((Long) this.zzbqp.get(str)).longValue(), zzMT);
+        zzf zzMU = zzKe().zzMU();
+        for (String str : this.zzbql.keySet()) {
+            zza(str, j - ((Long) this.zzbql.get(str)).longValue(), zzMU);
         }
-        if (!this.zzbqp.isEmpty()) {
-            zza(j - this.zzbqr, zzMT);
+        if (!this.zzbql.isEmpty()) {
+            zza(j - this.zzbqn, zzMU);
         }
         zzX(j);
     }

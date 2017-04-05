@@ -181,7 +181,7 @@ public final class DynamiteModule {
         this.zzaRZ = (Context) zzac.zzw(context);
     }
 
-    private static ClassLoader zzBS() {
+    private static ClassLoader zzBT() {
         return new AnonymousClass8(zzaRS, ClassLoader.getSystemClassLoader());
     }
 
@@ -326,9 +326,9 @@ public final class DynamiteModule {
                                 if (zzaRS == null || zzaRS.isEmpty()) {
                                     return zzd;
                                 }
-                                ClassLoader zzBS = zzBS();
-                                zza(zzBS);
-                                declaredField.set(null, zzBS);
+                                ClassLoader zzBT = zzBT();
+                                zza(zzBT);
+                                declaredField.set(null, zzBT);
                                 zzaRO = Boolean.TRUE;
                                 return zzd;
                             } catch (zza e3) {
@@ -479,7 +479,7 @@ public final class DynamiteModule {
         return context.getContentResolver().query(Uri.parse(new StringBuilder(((String.valueOf(valueOf).length() + 1) + String.valueOf(str2).length()) + String.valueOf(str).length()).append(valueOf).append(str2).append("/").append(str).toString()), null, null, null, null);
     }
 
-    public Context zzBR() {
+    public Context zzBS() {
         return this.zzaRZ;
     }
 

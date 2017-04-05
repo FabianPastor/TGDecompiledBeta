@@ -122,9 +122,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 int wantedHeight;
                 float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
                 if (this.initialFrontface) {
-                    aspectRatio = new Size(4, 3);
+                    aspectRatio = new Size(16, 9);
                     wantedWidth = 480;
-                    wantedHeight = 360;
+                    wantedHeight = 270;
                 } else if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
                     aspectRatio = new Size(4, 3);
                     wantedWidth = 1280;

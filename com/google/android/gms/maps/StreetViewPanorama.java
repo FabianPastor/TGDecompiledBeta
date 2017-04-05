@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
 import com.google.android.gms.maps.model.StreetViewPanoramaOrientation;
 
 public class StreetViewPanorama {
-    private final IStreetViewPanoramaDelegate zzboE;
+    private final IStreetViewPanoramaDelegate zzboA;
 
     public interface OnStreetViewPanoramaCameraChangeListener {
         void onStreetViewPanoramaCameraChange(StreetViewPanoramaCamera streetViewPanoramaCamera);
@@ -35,12 +35,12 @@ public class StreetViewPanorama {
     }
 
     protected StreetViewPanorama(IStreetViewPanoramaDelegate iStreetViewPanoramaDelegate) {
-        this.zzboE = (IStreetViewPanoramaDelegate) zzac.zzw(iStreetViewPanoramaDelegate);
+        this.zzboA = (IStreetViewPanoramaDelegate) zzac.zzw(iStreetViewPanoramaDelegate);
     }
 
     public void animateTo(StreetViewPanoramaCamera streetViewPanoramaCamera, long j) {
         try {
-            this.zzboE.animateTo(streetViewPanoramaCamera, j);
+            this.zzboA.animateTo(streetViewPanoramaCamera, j);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -48,7 +48,7 @@ public class StreetViewPanorama {
 
     public StreetViewPanoramaLocation getLocation() {
         try {
-            return this.zzboE.getStreetViewPanoramaLocation();
+            return this.zzboA.getStreetViewPanoramaLocation();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -56,7 +56,7 @@ public class StreetViewPanorama {
 
     public StreetViewPanoramaCamera getPanoramaCamera() {
         try {
-            return this.zzboE.getPanoramaCamera();
+            return this.zzboA.getPanoramaCamera();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -64,7 +64,7 @@ public class StreetViewPanorama {
 
     public boolean isPanningGesturesEnabled() {
         try {
-            return this.zzboE.isPanningGesturesEnabled();
+            return this.zzboA.isPanningGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -72,7 +72,7 @@ public class StreetViewPanorama {
 
     public boolean isStreetNamesEnabled() {
         try {
-            return this.zzboE.isStreetNamesEnabled();
+            return this.zzboA.isStreetNamesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -80,7 +80,7 @@ public class StreetViewPanorama {
 
     public boolean isUserNavigationEnabled() {
         try {
-            return this.zzboE.isUserNavigationEnabled();
+            return this.zzboA.isUserNavigationEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -88,7 +88,7 @@ public class StreetViewPanorama {
 
     public boolean isZoomGesturesEnabled() {
         try {
-            return this.zzboE.isZoomGesturesEnabled();
+            return this.zzboA.isZoomGesturesEnabled();
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -96,7 +96,7 @@ public class StreetViewPanorama {
 
     public Point orientationToPoint(StreetViewPanoramaOrientation streetViewPanoramaOrientation) {
         try {
-            IObjectWrapper orientationToPoint = this.zzboE.orientationToPoint(streetViewPanoramaOrientation);
+            IObjectWrapper orientationToPoint = this.zzboA.orientationToPoint(streetViewPanoramaOrientation);
             return orientationToPoint == null ? null : (Point) zzd.zzF(orientationToPoint);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
@@ -105,7 +105,7 @@ public class StreetViewPanorama {
 
     public StreetViewPanoramaOrientation pointToOrientation(Point point) {
         try {
-            return this.zzboE.pointToOrientation(zzd.zzA(point));
+            return this.zzboA.pointToOrientation(zzd.zzA(point));
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -114,13 +114,13 @@ public class StreetViewPanorama {
     public final void setOnStreetViewPanoramaCameraChangeListener(final OnStreetViewPanoramaCameraChangeListener onStreetViewPanoramaCameraChangeListener) {
         if (onStreetViewPanoramaCameraChangeListener == null) {
             try {
-                this.zzboE.setOnStreetViewPanoramaCameraChangeListener(null);
+                this.zzboA.setOnStreetViewPanoramaCameraChangeListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzboE.setOnStreetViewPanoramaCameraChangeListener(new zza(this) {
+        this.zzboA.setOnStreetViewPanoramaCameraChangeListener(new zza(this) {
             public void onStreetViewPanoramaCameraChange(StreetViewPanoramaCamera streetViewPanoramaCamera) {
                 onStreetViewPanoramaCameraChangeListener.onStreetViewPanoramaCameraChange(streetViewPanoramaCamera);
             }
@@ -130,13 +130,13 @@ public class StreetViewPanorama {
     public final void setOnStreetViewPanoramaChangeListener(final OnStreetViewPanoramaChangeListener onStreetViewPanoramaChangeListener) {
         if (onStreetViewPanoramaChangeListener == null) {
             try {
-                this.zzboE.setOnStreetViewPanoramaChangeListener(null);
+                this.zzboA.setOnStreetViewPanoramaChangeListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzboE.setOnStreetViewPanoramaChangeListener(new com.google.android.gms.maps.internal.zzac.zza(this) {
+        this.zzboA.setOnStreetViewPanoramaChangeListener(new com.google.android.gms.maps.internal.zzac.zza(this) {
             public void onStreetViewPanoramaChange(StreetViewPanoramaLocation streetViewPanoramaLocation) {
                 onStreetViewPanoramaChangeListener.onStreetViewPanoramaChange(streetViewPanoramaLocation);
             }
@@ -146,13 +146,13 @@ public class StreetViewPanorama {
     public final void setOnStreetViewPanoramaClickListener(final OnStreetViewPanoramaClickListener onStreetViewPanoramaClickListener) {
         if (onStreetViewPanoramaClickListener == null) {
             try {
-                this.zzboE.setOnStreetViewPanoramaClickListener(null);
+                this.zzboA.setOnStreetViewPanoramaClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzboE.setOnStreetViewPanoramaClickListener(new zzad.zza(this) {
+        this.zzboA.setOnStreetViewPanoramaClickListener(new zzad.zza(this) {
             public void onStreetViewPanoramaClick(StreetViewPanoramaOrientation streetViewPanoramaOrientation) {
                 onStreetViewPanoramaClickListener.onStreetViewPanoramaClick(streetViewPanoramaOrientation);
             }
@@ -162,13 +162,13 @@ public class StreetViewPanorama {
     public final void setOnStreetViewPanoramaLongClickListener(final OnStreetViewPanoramaLongClickListener onStreetViewPanoramaLongClickListener) {
         if (onStreetViewPanoramaLongClickListener == null) {
             try {
-                this.zzboE.setOnStreetViewPanoramaLongClickListener(null);
+                this.zzboA.setOnStreetViewPanoramaLongClickListener(null);
                 return;
             } catch (RemoteException e) {
                 throw new RuntimeRemoteException(e);
             }
         }
-        this.zzboE.setOnStreetViewPanoramaLongClickListener(new zzae.zza(this) {
+        this.zzboA.setOnStreetViewPanoramaLongClickListener(new zzae.zza(this) {
             public void onStreetViewPanoramaLongClick(StreetViewPanoramaOrientation streetViewPanoramaOrientation) {
                 onStreetViewPanoramaLongClickListener.onStreetViewPanoramaLongClick(streetViewPanoramaOrientation);
             }
@@ -177,7 +177,7 @@ public class StreetViewPanorama {
 
     public void setPanningGesturesEnabled(boolean z) {
         try {
-            this.zzboE.enablePanning(z);
+            this.zzboA.enablePanning(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -185,7 +185,7 @@ public class StreetViewPanorama {
 
     public void setPosition(LatLng latLng) {
         try {
-            this.zzboE.setPosition(latLng);
+            this.zzboA.setPosition(latLng);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -193,7 +193,7 @@ public class StreetViewPanorama {
 
     public void setPosition(LatLng latLng, int i) {
         try {
-            this.zzboE.setPositionWithRadius(latLng, i);
+            this.zzboA.setPositionWithRadius(latLng, i);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -201,7 +201,7 @@ public class StreetViewPanorama {
 
     public void setPosition(String str) {
         try {
-            this.zzboE.setPositionWithID(str);
+            this.zzboA.setPositionWithID(str);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -209,7 +209,7 @@ public class StreetViewPanorama {
 
     public void setStreetNamesEnabled(boolean z) {
         try {
-            this.zzboE.enableStreetNames(z);
+            this.zzboA.enableStreetNames(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -217,7 +217,7 @@ public class StreetViewPanorama {
 
     public void setUserNavigationEnabled(boolean z) {
         try {
-            this.zzboE.enableUserNavigation(z);
+            this.zzboA.enableUserNavigation(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }
@@ -225,7 +225,7 @@ public class StreetViewPanorama {
 
     public void setZoomGesturesEnabled(boolean z) {
         try {
-            this.zzboE.enableZoom(z);
+            this.zzboA.enableZoom(z);
         } catch (RemoteException e) {
             throw new RuntimeRemoteException(e);
         }

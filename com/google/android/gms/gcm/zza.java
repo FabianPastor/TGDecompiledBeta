@@ -24,7 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 class zza {
-    static zza zzbgq;
+    static zza zzbgn;
     private final Context mContext;
 
     private zza(Context context) {
@@ -136,10 +136,10 @@ class zza {
     static synchronized zza zzbt(Context context) {
         zza com_google_android_gms_gcm_zza;
         synchronized (zza.class) {
-            if (zzbgq == null) {
-                zzbgq = new zza(context);
+            if (zzbgn == null) {
+                zzbgn = new zza(context);
             }
-            com_google_android_gms_gcm_zza = zzbgq;
+            com_google_android_gms_gcm_zza = zzbgn;
         }
         return com_google_android_gms_gcm_zza;
     }

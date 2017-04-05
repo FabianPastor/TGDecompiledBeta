@@ -8,7 +8,7 @@ import java.nio.ReadOnlyBufferException;
 import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 
 public final class zzbxm {
-    private final ByteBuffer zzcuz;
+    private final ByteBuffer zzcuH;
 
     public static class zza extends IOException {
         zza(int i, int i2) {
@@ -17,8 +17,8 @@ public final class zzbxm {
     }
 
     private zzbxm(ByteBuffer byteBuffer) {
-        this.zzcuz = byteBuffer;
-        this.zzcuz.order(ByteOrder.LITTLE_ENDIAN);
+        this.zzcuH = byteBuffer;
+        this.zzcuH.order(ByteOrder.LITTLE_ENDIAN);
     }
 
     private zzbxm(byte[] bArr, int i, int i2) {
@@ -26,11 +26,11 @@ public final class zzbxm {
     }
 
     public static int zzL(int i, int i2) {
-        return zzri(i) + zzrf(i2);
+        return zzrj(i) + zzrg(i2);
     }
 
     public static int zzM(int i, int i2) {
-        return zzri(i) + zzrg(i2);
+        return zzrj(i) + zzrh(i2);
     }
 
     private static int zza(CharSequence charSequence, int i) {
@@ -136,15 +136,15 @@ public final class zzbxm {
     }
 
     public static int zzai(byte[] bArr) {
-        return zzrk(bArr.length) + bArr.length;
+        return zzrl(bArr.length) + bArr.length;
     }
 
     public static int zzb(int i, double d) {
-        return zzri(i) + 8;
+        return zzrj(i) + 8;
     }
 
     public static int zzb(int i, zzbxt com_google_android_gms_internal_zzbxt) {
-        return (zzri(i) * 2) + zzd(com_google_android_gms_internal_zzbxt);
+        return (zzrj(i) * 2) + zzd(com_google_android_gms_internal_zzbxt);
     }
 
     private static int zzb(CharSequence charSequence) {
@@ -223,11 +223,11 @@ public final class zzbxm {
     }
 
     public static int zzc(int i, zzbxt com_google_android_gms_internal_zzbxt) {
-        return zzri(i) + zze(com_google_android_gms_internal_zzbxt);
+        return zzrj(i) + zze(com_google_android_gms_internal_zzbxt);
     }
 
     public static int zzc(int i, byte[] bArr) {
-        return zzri(i) + zzai(bArr);
+        return zzrj(i) + zzai(bArr);
     }
 
     public static zzbxm zzc(byte[] bArr, int i, int i2) {
@@ -235,79 +235,79 @@ public final class zzbxm {
     }
 
     public static int zzd(int i, float f) {
-        return zzri(i) + 4;
+        return zzrj(i) + 4;
     }
 
     public static int zzd(zzbxt com_google_android_gms_internal_zzbxt) {
-        return com_google_android_gms_internal_zzbxt.zzaeS();
+        return com_google_android_gms_internal_zzbxt.zzaeT();
     }
 
     public static int zze(int i, long j) {
-        return zzri(i) + zzbe(j);
+        return zzrj(i) + zzbe(j);
     }
 
     public static int zze(zzbxt com_google_android_gms_internal_zzbxt) {
-        int zzaeS = com_google_android_gms_internal_zzbxt.zzaeS();
-        return zzaeS + zzrk(zzaeS);
+        int zzaeT = com_google_android_gms_internal_zzbxt.zzaeT();
+        return zzaeT + zzrl(zzaeT);
     }
 
     public static int zzf(int i, long j) {
-        return zzri(i) + zzbf(j);
+        return zzrj(i) + zzbf(j);
     }
 
     public static int zzg(int i, long j) {
-        return zzri(i) + 8;
+        return zzrj(i) + 8;
     }
 
     public static int zzh(int i, long j) {
-        return zzri(i) + zzbg(j);
+        return zzrj(i) + zzbg(j);
     }
 
     public static int zzh(int i, boolean z) {
-        return zzri(i) + 1;
+        return zzrj(i) + 1;
     }
 
     public static int zzkb(String str) {
         int zzb = zzb((CharSequence) str);
-        return zzb + zzrk(zzb);
+        return zzb + zzrl(zzb);
     }
 
     public static int zzr(int i, String str) {
-        return zzri(i) + zzkb(str);
-    }
-
-    public static int zzrf(int i) {
-        return i >= 0 ? zzrk(i) : 10;
+        return zzrj(i) + zzkb(str);
     }
 
     public static int zzrg(int i) {
-        return zzrk(zzrm(i));
+        return i >= 0 ? zzrl(i) : 10;
     }
 
-    public static int zzri(int i) {
-        return zzrk(zzbxw.zzO(i, 0));
+    public static int zzrh(int i) {
+        return zzrl(zzrn(i));
     }
 
-    public static int zzrk(int i) {
+    public static int zzrj(int i) {
+        return zzrl(zzbxw.zzO(i, 0));
+    }
+
+    public static int zzrl(int i) {
         return (i & -128) == 0 ? 1 : (i & -16384) == 0 ? 2 : (-2097152 & i) == 0 ? 3 : (-268435456 & i) == 0 ? 4 : 5;
     }
 
-    public static int zzrm(int i) {
+    public static int zzrn(int i) {
         return (i << 1) ^ (i >> 31);
     }
 
     public void zzJ(int i, int i2) throws IOException {
         zzN(i, 0);
-        zzrd(i2);
+        zzre(i2);
     }
 
     public void zzK(int i, int i2) throws IOException {
         zzN(i, 0);
-        zzre(i2);
+        zzrf(i2);
     }
 
     public void zzN(int i, int i2) throws IOException {
-        zzrj(zzbxw.zzO(i, i2));
+        zzrk(zzbxw.zzO(i, i2));
     }
 
     public void zza(int i, double d) throws IOException {
@@ -325,18 +325,18 @@ public final class zzbxm {
         zzc(com_google_android_gms_internal_zzbxt);
     }
 
-    public int zzaeE() {
-        return this.zzcuz.remaining();
+    public int zzaeF() {
+        return this.zzcuH.remaining();
     }
 
-    public void zzaeF() {
-        if (zzaeE() != 0) {
+    public void zzaeG() {
+        if (zzaeF() != 0) {
             throw new IllegalStateException("Did not write as much data as expected.");
         }
     }
 
     public void zzah(byte[] bArr) throws IOException {
-        zzrj(bArr.length);
+        zzrk(bArr.length);
         zzaj(bArr);
     }
 
@@ -376,29 +376,29 @@ public final class zzbxm {
 
     public void zzbh(long j) throws IOException {
         while ((-128 & j) != 0) {
-            zzrh((((int) j) & 127) | 128);
+            zzri((((int) j) & 127) | 128);
             j >>>= 7;
         }
-        zzrh((int) j);
+        zzri((int) j);
     }
 
     public void zzbj(long j) throws IOException {
-        if (this.zzcuz.remaining() < 8) {
-            throw new zza(this.zzcuz.position(), this.zzcuz.limit());
+        if (this.zzcuH.remaining() < 8) {
+            throw new zza(this.zzcuH.position(), this.zzcuH.limit());
         }
-        this.zzcuz.putLong(j);
+        this.zzcuH.putLong(j);
     }
 
     public void zzbq(boolean z) throws IOException {
-        zzrh(z ? 1 : 0);
+        zzri(z ? 1 : 0);
     }
 
     public void zzc(byte b) throws IOException {
-        if (this.zzcuz.hasRemaining()) {
-            this.zzcuz.put(b);
+        if (this.zzcuH.hasRemaining()) {
+            this.zzcuH.put(b);
             return;
         }
-        throw new zza(this.zzcuz.position(), this.zzcuz.limit());
+        throw new zza(this.zzcuH.position(), this.zzcuH.limit());
     }
 
     public void zzc(int i, float f) throws IOException {
@@ -412,7 +412,7 @@ public final class zzbxm {
     }
 
     public void zzc(zzbxt com_google_android_gms_internal_zzbxt) throws IOException {
-        zzrj(com_google_android_gms_internal_zzbxt.zzaeR());
+        zzrk(com_google_android_gms_internal_zzbxt.zzaeS());
         com_google_android_gms_internal_zzbxt.zza(this);
     }
 
@@ -422,11 +422,11 @@ public final class zzbxm {
     }
 
     public void zzd(byte[] bArr, int i, int i2) throws IOException {
-        if (this.zzcuz.remaining() >= i2) {
-            this.zzcuz.put(bArr, i, i2);
+        if (this.zzcuH.remaining() >= i2) {
+            this.zzcuH.put(bArr, i, i2);
             return;
         }
-        throw new zza(this.zzcuz.position(), this.zzcuz.limit());
+        throw new zza(this.zzcuH.position(), this.zzcuH.limit());
     }
 
     public void zzg(int i, boolean z) throws IOException {
@@ -435,29 +435,29 @@ public final class zzbxm {
     }
 
     public void zzk(float f) throws IOException {
-        zzrl(Float.floatToIntBits(f));
+        zzrm(Float.floatToIntBits(f));
     }
 
     public void zzka(String str) throws IOException {
         try {
-            int zzrk = zzrk(str.length());
-            if (zzrk == zzrk(str.length() * 3)) {
-                int position = this.zzcuz.position();
-                if (this.zzcuz.remaining() < zzrk) {
-                    throw new zza(zzrk + position, this.zzcuz.limit());
+            int zzrl = zzrl(str.length());
+            if (zzrl == zzrl(str.length() * 3)) {
+                int position = this.zzcuH.position();
+                if (this.zzcuH.remaining() < zzrl) {
+                    throw new zza(zzrl + position, this.zzcuH.limit());
                 }
-                this.zzcuz.position(position + zzrk);
-                zza((CharSequence) str, this.zzcuz);
-                int position2 = this.zzcuz.position();
-                this.zzcuz.position(position);
-                zzrj((position2 - position) - zzrk);
-                this.zzcuz.position(position2);
+                this.zzcuH.position(position + zzrl);
+                zza((CharSequence) str, this.zzcuH);
+                int position2 = this.zzcuH.position();
+                this.zzcuH.position(position);
+                zzrk((position2 - position) - zzrl);
+                this.zzcuH.position(position2);
                 return;
             }
-            zzrj(zzb((CharSequence) str));
-            zza((CharSequence) str, this.zzcuz);
+            zzrk(zzb((CharSequence) str));
+            zza((CharSequence) str, this.zzcuH);
         } catch (Throwable e) {
-            zza com_google_android_gms_internal_zzbxm_zza = new zza(this.zzcuz.position(), this.zzcuz.limit());
+            zza com_google_android_gms_internal_zzbxm_zza = new zza(this.zzcuH.position(), this.zzcuH.limit());
             com_google_android_gms_internal_zzbxm_zza.initCause(e);
             throw com_google_android_gms_internal_zzbxm_zza;
         }
@@ -472,34 +472,34 @@ public final class zzbxm {
         zzka(str);
     }
 
-    public void zzrd(int i) throws IOException {
+    public void zzre(int i) throws IOException {
         if (i >= 0) {
-            zzrj(i);
+            zzrk(i);
         } else {
             zzbh((long) i);
         }
     }
 
-    public void zzre(int i) throws IOException {
-        zzrj(zzrm(i));
+    public void zzrf(int i) throws IOException {
+        zzrk(zzrn(i));
     }
 
-    public void zzrh(int i) throws IOException {
+    public void zzri(int i) throws IOException {
         zzc((byte) i);
     }
 
-    public void zzrj(int i) throws IOException {
+    public void zzrk(int i) throws IOException {
         while ((i & -128) != 0) {
-            zzrh((i & 127) | 128);
+            zzri((i & 127) | 128);
             i >>>= 7;
         }
-        zzrh(i);
+        zzri(i);
     }
 
-    public void zzrl(int i) throws IOException {
-        if (this.zzcuz.remaining() < 4) {
-            throw new zza(this.zzcuz.position(), this.zzcuz.limit());
+    public void zzrm(int i) throws IOException {
+        if (this.zzcuH.remaining() < 4) {
+            throw new zza(this.zzcuH.position(), this.zzcuH.limit());
         }
-        this.zzcuz.putInt(i);
+        this.zzcuH.putInt(i);
     }
 }

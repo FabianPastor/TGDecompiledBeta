@@ -10,7 +10,7 @@ public class zzi implements Creator<PatternItem> {
     static void zza(PatternItem patternItem, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 2, patternItem.getType());
-        zzc.zza(parcel, 3, patternItem.zzJM(), false);
+        zzc.zza(parcel, 3, patternItem.zzJN(), false);
         zzc.zzJ(parcel, zzaZ);
     }
 

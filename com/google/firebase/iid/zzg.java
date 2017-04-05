@@ -14,13 +14,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class zzg {
-    private static zzg zzcls;
-    private final SimpleArrayMap<String, String> zzclt = new SimpleArrayMap();
-    private Boolean zzclu = null;
+    private static zzg zzclA;
+    private final SimpleArrayMap<String, String> zzclB = new SimpleArrayMap();
+    private Boolean zzclC = null;
     @VisibleForTesting
-    final Queue<Intent> zzclv = new LinkedList();
+    final Queue<Intent> zzclD = new LinkedList();
     @VisibleForTesting
-    final Queue<Intent> zzclw = new LinkedList();
+    final Queue<Intent> zzclE = new LinkedList();
 
     private zzg() {
     }
@@ -36,13 +36,13 @@ public class zzg {
         return PendingIntent.getBroadcast(context, i, intent2, i2);
     }
 
-    public static synchronized zzg zzabT() {
+    public static synchronized zzg zzabU() {
         zzg com_google_firebase_iid_zzg;
         synchronized (zzg.class) {
-            if (zzcls == null) {
-                zzcls = new zzg();
+            if (zzclA == null) {
+                zzclA = new zzg();
             }
-            com_google_firebase_iid_zzg = zzcls;
+            com_google_firebase_iid_zzg = zzclA;
         }
         return com_google_firebase_iid_zzg;
     }
@@ -51,17 +51,17 @@ public class zzg {
         return zza(context, i, "com.google.firebase.MESSAGING_EVENT", intent, i2);
     }
 
-    private boolean zzcw(Context context) {
-        if (this.zzclu == null) {
-            this.zzclu = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
+    private boolean zzcv(Context context) {
+        if (this.zzclC == null) {
+            this.zzclC = Boolean.valueOf(context.checkCallingOrSelfPermission("android.permission.WAKE_LOCK") == 0);
         }
-        return this.zzclu.booleanValue();
+        return this.zzclC.booleanValue();
     }
 
     private void zze(Context context, Intent intent) {
         String str;
-        synchronized (this.zzclt) {
-            str = (String) this.zzclt.get(intent.getAction());
+        synchronized (this.zzclB) {
+            str = (String) this.zzclB.get(intent.getAction());
         }
         if (str == null) {
             ResolveInfo resolveService = context.getPackageManager().resolveService(intent, 0);
@@ -82,8 +82,8 @@ public class zzg {
                 str = String.valueOf(str);
                 str = str.length() != 0 ? valueOf2.concat(str) : new String(valueOf2);
             }
-            synchronized (this.zzclt) {
-                this.zzclt.put(intent.getAction(), str);
+            synchronized (this.zzclB) {
+                this.zzclB.put(intent.getAction(), str);
             }
         }
         if (Log.isLoggable("FirebaseInstanceId", 3)) {
@@ -99,7 +99,7 @@ public class zzg {
         zze(context, intent);
         try {
             ComponentName startWakefulService;
-            if (zzcw(context)) {
+            if (zzcv(context)) {
                 startWakefulService = WakefulBroadcastReceiver.startWakefulService(context, intent);
             } else {
                 startWakefulService = context.startService(intent);
@@ -116,12 +116,12 @@ public class zzg {
         }
     }
 
-    public Intent zzabU() {
-        return (Intent) this.zzclv.poll();
+    public Intent zzabV() {
+        return (Intent) this.zzclD.poll();
     }
 
-    public Intent zzabV() {
-        return (Intent) this.zzclw.poll();
+    public Intent zzabW() {
+        return (Intent) this.zzclE.poll();
     }
 
     public int zzb(Context context, String str, Intent intent) {
@@ -142,10 +142,10 @@ public class zzg {
         }
         switch (obj) {
             case null:
-                this.zzclv.offer(intent);
+                this.zzclD.offer(intent);
                 break;
             case 1:
-                this.zzclw.offer(intent);
+                this.zzclE.offer(intent);
                 break;
             default:
                 String str2 = "FirebaseInstanceId";

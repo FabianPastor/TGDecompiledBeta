@@ -421,8 +421,10 @@ public class MessageObject {
             this.messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
         } else if (isVideo()) {
             this.messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
-        } else if (isVoice() || isRoundVideo()) {
+        } else if (isVoice()) {
             this.messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+        } else if (isRoundVideo()) {
+            this.messageText = LocaleController.getString("AttachRound", R.string.AttachRound);
         } else if ((message.media instanceof TL_messageMediaGeo) || (message.media instanceof TL_messageMediaVenue)) {
             this.messageText = LocaleController.getString("AttachLocation", R.string.AttachLocation);
         } else if (message.media instanceof TL_messageMediaContact) {
@@ -610,8 +612,15 @@ public class MessageObject {
                 fromUser2 = chat2;
             }
             this.messageText = replaceWithLink(string, str, fromUser);
-        } else if (this.replyMessageObject.isVoice() || this.replyMessageObject.isRoundVideo()) {
+        } else if (this.replyMessageObject.isVoice()) {
             string = LocaleController.getString("ActionPinnedVoice", R.string.ActionPinnedVoice);
+            str = "un1";
+            if (fromUser == null) {
+                fromUser2 = chat2;
+            }
+            this.messageText = replaceWithLink(string, str, fromUser);
+        } else if (this.replyMessageObject.isRoundVideo()) {
+            string = LocaleController.getString("ActionPinnedRound", R.string.ActionPinnedRound);
             str = "un1";
             if (fromUser == null) {
                 fromUser2 = chat2;
@@ -1233,9 +1242,9 @@ public class MessageObject {
     }
 
     public void generateLayout(User fromUser) {
+        int a;
         if (this.type == 0 && this.messageOwner.to_id != null && this.messageText != null && this.messageText.length() != 0) {
             boolean hasEntities;
-            int a;
             TextPaint paint;
             generateLinkDescription();
             this.textLayoutBlocks = new ArrayList();

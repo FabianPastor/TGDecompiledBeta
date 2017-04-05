@@ -23,6 +23,7 @@ public class CallSwipeView extends View {
     private int[] arrowAlphas = new int[]{64, 64, 64};
     private AnimatorSet arrowAnim;
     private Paint arrowsPaint;
+    private boolean canceled = false;
     private boolean dragFromRight;
     private float dragStartX;
     private boolean dragging = false;
@@ -76,7 +77,6 @@ public class CallSwipeView extends View {
         this.arrowAnim = new AnimatorSet();
         this.arrowAnim.playTogether(anims);
         this.arrowAnim.addListener(new AnimatorListenerAdapter() {
-            private boolean canceled = false;
             private Runnable restarter = new Runnable() {
                 public void run() {
                     if (CallSwipeView.this.arrowAnim != null) {
@@ -89,13 +89,13 @@ public class CallSwipeView extends View {
             public void onAnimationEnd(Animator animation) {
                 if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
                     FileLog.w("Not repeating animation because previous loop was too fast");
-                } else if (!this.canceled && CallSwipeView.this.animatingArrows) {
+                } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                     CallSwipeView.this.post(this.restarter);
                 }
             }
 
             public void onAnimationCancel(Animator animation) {
-                this.canceled = true;
+                CallSwipeView.this.canceled = true;
             }
 
             public void onAnimationStart(Animator animation) {
@@ -107,6 +107,7 @@ public class CallSwipeView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.arrowAnim != null) {
+            this.canceled = true;
             this.arrowAnim.cancel();
             this.arrowAnim = null;
         }
@@ -177,7 +178,7 @@ public class CallSwipeView extends View {
     }
 
     public void startAnimatingArrows() {
-        if (!this.animatingArrows) {
+        if (!this.animatingArrows && this.arrowAnim != null) {
             this.animatingArrows = true;
             if (this.arrowAnim != null) {
                 this.arrowAnim.start();
@@ -186,11 +187,13 @@ public class CallSwipeView extends View {
     }
 
     public void reset() {
-        this.listener.onDragCancel();
-        this.viewToDrag.animate().translationX(0.0f).setDuration(200).start();
-        invalidate();
-        startAnimatingArrows();
-        this.dragging = false;
+        if (this.arrowAnim != null && !this.canceled) {
+            this.listener.onDragCancel();
+            this.viewToDrag.animate().translationX(0.0f).setDuration(200).start();
+            invalidate();
+            startAnimatingArrows();
+            this.dragging = false;
+        }
     }
 
     protected void onDraw(Canvas canvas) {

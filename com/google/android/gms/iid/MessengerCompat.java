@@ -1,9 +1,6 @@
 package com.google.android.gms.iid;
 
-import android.annotation.TargetApi;
-import android.os.Binder;
 import android.os.Build.VERSION;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -11,6 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable.Creator;
 import android.os.RemoteException;
 import com.google.android.gms.common.internal.ReflectedParcelable;
+import com.google.android.gms.iid.zzb.zza;
 
 public class MessengerCompat implements ReflectedParcelable {
     public static final Creator<MessengerCompat> CREATOR = new Creator<MessengerCompat>() {
@@ -31,45 +29,15 @@ public class MessengerCompat implements ReflectedParcelable {
             return new MessengerCompat[i];
         }
     };
-    Messenger zzbhU;
-    zzb zzbhV;
-
-    private final class zza extends com.google.android.gms.iid.zzb.zza {
-        Handler handler;
-
-        zza(MessengerCompat messengerCompat, Handler handler) {
-            this.handler = handler;
-        }
-
-        public void send(Message message) throws RemoteException {
-            message.arg2 = Binder.getCallingUid();
-            this.handler.dispatchMessage(message);
-        }
-    }
-
-    public MessengerCompat(Handler handler) {
-        if (VERSION.SDK_INT >= 21) {
-            this.zzbhU = new Messenger(handler);
-        } else {
-            this.zzbhV = new zza(this, handler);
-        }
-    }
+    Messenger zzbhO;
+    zzb zzbhP;
 
     public MessengerCompat(IBinder iBinder) {
         if (VERSION.SDK_INT >= 21) {
-            this.zzbhU = new Messenger(iBinder);
+            this.zzbhO = new Messenger(iBinder);
         } else {
-            this.zzbhV = com.google.android.gms.iid.zzb.zza.zzcZ(iBinder);
+            this.zzbhP = zza.zzcZ(iBinder);
         }
-    }
-
-    public static int zzc(Message message) {
-        return VERSION.SDK_INT >= 21 ? zzd(message) : message.arg2;
-    }
-
-    @TargetApi(21)
-    private static int zzd(Message message) {
-        return message.sendingUid;
     }
 
     public int describeContents() {
@@ -88,7 +56,7 @@ public class MessengerCompat implements ReflectedParcelable {
     }
 
     public IBinder getBinder() {
-        return this.zzbhU != null ? this.zzbhU.getBinder() : this.zzbhV.asBinder();
+        return this.zzbhO != null ? this.zzbhO.getBinder() : this.zzbhP.asBinder();
     }
 
     public int hashCode() {
@@ -96,18 +64,18 @@ public class MessengerCompat implements ReflectedParcelable {
     }
 
     public void send(Message message) throws RemoteException {
-        if (this.zzbhU != null) {
-            this.zzbhU.send(message);
+        if (this.zzbhO != null) {
+            this.zzbhO.send(message);
         } else {
-            this.zzbhV.send(message);
+            this.zzbhP.send(message);
         }
     }
 
     public void writeToParcel(Parcel parcel, int i) {
-        if (this.zzbhU != null) {
-            parcel.writeStrongBinder(this.zzbhU.getBinder());
+        if (this.zzbhO != null) {
+            parcel.writeStrongBinder(this.zzbhO.getBinder());
         } else {
-            parcel.writeStrongBinder(this.zzbhV.asBinder());
+            parcel.writeStrongBinder(this.zzbhP.asBinder());
         }
     }
 }

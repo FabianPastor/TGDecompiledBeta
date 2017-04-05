@@ -10,8 +10,8 @@ public class zzb implements Creator<Cap> {
     static void zza(Cap cap, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 2, cap.getType());
-        zzc.zza(parcel, 3, cap.zzJH(), false);
-        zzc.zza(parcel, 4, cap.zzJG(), false);
+        zzc.zza(parcel, 3, cap.zzJI(), false);
+        zzc.zza(parcel, 4, cap.zzJH(), false);
         zzc.zzJ(parcel, zzaZ);
     }
 

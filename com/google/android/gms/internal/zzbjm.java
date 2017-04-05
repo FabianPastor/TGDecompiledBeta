@@ -10,7 +10,7 @@ public class zzbjm implements Creator<zzbjl> {
     static void zza(zzbjl com_google_android_gms_internal_zzbjl, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
         zzc.zzc(parcel, 1, com_google_android_gms_internal_zzbjl.versionCode);
-        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzbjl.zzbOK);
+        zzc.zzc(parcel, 2, com_google_android_gms_internal_zzbjl.zzbOG);
         zzc.zzJ(parcel, zzaZ);
     }
 

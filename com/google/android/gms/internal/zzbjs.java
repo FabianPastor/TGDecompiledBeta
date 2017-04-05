@@ -15,12 +15,12 @@ public class zzbjs implements Creator<zzbjr> {
         zzc.zza(parcel, 4, com_google_android_gms_internal_zzbjr.centerY);
         zzc.zza(parcel, 5, com_google_android_gms_internal_zzbjr.width);
         zzc.zza(parcel, 6, com_google_android_gms_internal_zzbjr.height);
-        zzc.zza(parcel, 7, com_google_android_gms_internal_zzbjr.zzbPc);
-        zzc.zza(parcel, 8, com_google_android_gms_internal_zzbjr.zzbPd);
-        zzc.zza(parcel, 9, com_google_android_gms_internal_zzbjr.zzbPe, i, false);
-        zzc.zza(parcel, 10, com_google_android_gms_internal_zzbjr.zzbPf);
-        zzc.zza(parcel, 11, com_google_android_gms_internal_zzbjr.zzbPg);
-        zzc.zza(parcel, 12, com_google_android_gms_internal_zzbjr.zzbPh);
+        zzc.zza(parcel, 7, com_google_android_gms_internal_zzbjr.zzbOY);
+        zzc.zza(parcel, 8, com_google_android_gms_internal_zzbjr.zzbOZ);
+        zzc.zza(parcel, 9, com_google_android_gms_internal_zzbjr.zzbPa, i, false);
+        zzc.zza(parcel, 10, com_google_android_gms_internal_zzbjr.zzbPb);
+        zzc.zza(parcel, 11, com_google_android_gms_internal_zzbjr.zzbPc);
+        zzc.zza(parcel, 12, com_google_android_gms_internal_zzbjr.zzbPd);
         zzc.zzJ(parcel, zzaZ);
     }
 

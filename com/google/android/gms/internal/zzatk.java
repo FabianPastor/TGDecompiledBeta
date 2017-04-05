@@ -7,31 +7,31 @@ import com.google.android.gms.common.internal.zzac;
 abstract class zzatk {
     private static volatile Handler zzafd;
     private volatile long zzafe;
-    private final zzaue zzbqg;
-    private boolean zzbrx = true;
+    private final zzaue zzbqc;
+    private boolean zzbrt = true;
     private final Runnable zzw = new Runnable(this) {
-        final /* synthetic */ zzatk zzbry;
+        final /* synthetic */ zzatk zzbru;
 
         {
-            this.zzbry = r1;
+            this.zzbru = r1;
         }
 
         public void run() {
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                this.zzbry.zzbqg.zzKj().zzm(this);
+                this.zzbru.zzbqc.zzKk().zzm(this);
                 return;
             }
-            boolean zzcy = this.zzbry.zzcy();
-            this.zzbry.zzafe = 0;
-            if (zzcy && this.zzbry.zzbrx) {
-                this.zzbry.run();
+            boolean zzcy = this.zzbru.zzcy();
+            this.zzbru.zzafe = 0;
+            if (zzcy && this.zzbru.zzbrt) {
+                this.zzbru.run();
             }
         }
     };
 
     zzatk(zzaue com_google_android_gms_internal_zzaue) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqg = com_google_android_gms_internal_zzaue;
+        this.zzbqc = com_google_android_gms_internal_zzaue;
     }
 
     private Handler getHandler() {
@@ -41,7 +41,7 @@ abstract class zzatk {
         Handler handler;
         synchronized (zzatk.class) {
             if (zzafd == null) {
-                zzafd = new Handler(this.zzbqg.getContext().getMainLooper());
+                zzafd = new Handler(this.zzbqc.getContext().getMainLooper());
             }
             handler = zzafd;
         }
@@ -62,9 +62,9 @@ abstract class zzatk {
     public void zzy(long j) {
         cancel();
         if (j >= 0) {
-            this.zzafe = this.zzbqg.zznR().currentTimeMillis();
+            this.zzafe = this.zzbqc.zznR().currentTimeMillis();
             if (!getHandler().postDelayed(this.zzw, j)) {
-                this.zzbqg.zzKk().zzLX().zzj("Failed to schedule delayed post. time", Long.valueOf(j));
+                this.zzbqc.zzKl().zzLY().zzj("Failed to schedule delayed post. time", Long.valueOf(j));
             }
         }
     }

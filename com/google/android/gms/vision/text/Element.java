@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Element implements Text {
-    private zzbkq zzbPq;
+    private zzbkq zzbPm;
 
     Element(zzbkq com_google_android_gms_internal_zzbkq) {
-        this.zzbPq = com_google_android_gms_internal_zzbkq;
+        this.zzbPm = com_google_android_gms_internal_zzbkq;
     }
 
     public Rect getBoundingBox() {
@@ -22,14 +22,14 @@ public class Element implements Text {
     }
 
     public Point[] getCornerPoints() {
-        return zza.zza(this.zzbPq.zzbPB);
+        return zza.zza(this.zzbPm.zzbPx);
     }
 
     public String getLanguage() {
-        return this.zzbPq.zzbPv;
+        return this.zzbPm.zzbPr;
     }
 
     public String getValue() {
-        return this.zzbPq.zzbPE;
+        return this.zzbPm.zzbPA;
     }
 }

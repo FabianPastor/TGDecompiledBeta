@@ -10,7 +10,7 @@ public interface zzae {
         public zzc zzaL;
 
         public zza() {
-            this.zzcuJ = -1;
+            this.zzcuR = -1;
         }
 
         public static zza zzc(byte[] bArr) throws zzbxs {
@@ -19,8 +19,8 @@ public interface zzae {
 
         public zza zza(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
             while (true) {
-                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
-                switch (zzaen) {
+                int zzaeo = com_google_android_gms_internal_zzbxl.zzaeo();
+                switch (zzaeo) {
                     case 0:
                         break;
                     case 10:
@@ -36,7 +36,7 @@ public interface zzae {
                         com_google_android_gms_internal_zzbxl.zza(this.zzaL);
                         continue;
                     default:
-                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaeo)) {
                             break;
                         }
                         continue;
@@ -73,7 +73,7 @@ public interface zzae {
 
         public zzb() {
             this.zzaM = null;
-            this.zzcuJ = -1;
+            this.zzcuR = -1;
         }
 
         public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
@@ -89,25 +89,25 @@ public interface zzae {
 
         public zzb zzc(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
             while (true) {
-                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
-                switch (zzaen) {
+                int zzaeo = com_google_android_gms_internal_zzbxl.zzaeo();
+                switch (zzaeo) {
                     case 0:
                         break;
                     case 216:
-                        zzaen = com_google_android_gms_internal_zzbxl.zzaer();
-                        switch (zzaen) {
+                        zzaeo = com_google_android_gms_internal_zzbxl.zzaes();
+                        switch (zzaeo) {
                             case 0:
                             case 1:
                             case 2:
                             case 3:
                             case 4:
-                                this.zzaM = Integer.valueOf(zzaen);
+                                this.zzaM = Integer.valueOf(zzaeo);
                                 break;
                             default:
                                 continue;
                         }
                     default:
-                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaeo)) {
                             break;
                         }
                         continue;
@@ -135,7 +135,7 @@ public interface zzae {
             this.zzaP = null;
             this.zzaQ = null;
             this.zzaR = null;
-            this.zzcuJ = -1;
+            this.zzcuR = -1;
         }
 
         public void zza(zzbxm com_google_android_gms_internal_zzbxm) throws IOException {
@@ -163,8 +163,8 @@ public interface zzae {
 
         public zzc zzd(zzbxl com_google_android_gms_internal_zzbxl) throws IOException {
             while (true) {
-                int zzaen = com_google_android_gms_internal_zzbxl.zzaen();
-                switch (zzaen) {
+                int zzaeo = com_google_android_gms_internal_zzbxl.zzaeo();
+                switch (zzaeo) {
                     case 0:
                         break;
                     case 10:
@@ -183,7 +183,7 @@ public interface zzae {
                         this.zzaR = com_google_android_gms_internal_zzbxl.readString();
                         continue;
                     default:
-                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaen)) {
+                        if (!super.zza(com_google_android_gms_internal_zzbxl, zzaeo)) {
                             break;
                         }
                         continue;

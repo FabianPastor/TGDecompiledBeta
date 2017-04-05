@@ -9,16 +9,16 @@ import com.google.android.gms.dynamite.DynamiteModule;
 import com.google.android.gms.dynamite.DynamiteModule.zza;
 
 public class zzbkn extends zzbjz<zzbkf> {
-    private final zzbko zzbPy;
+    private final zzbko zzbPu;
 
     public zzbkn(Context context, zzbko com_google_android_gms_internal_zzbko) {
         super(context, "TextNativeHandle");
-        this.zzbPy = com_google_android_gms_internal_zzbko;
-        zzTR();
+        this.zzbPu = com_google_android_gms_internal_zzbko;
+        zzTS();
     }
 
-    protected void zzTO() throws RemoteException {
-        ((zzbkf) zzTR()).zzTV();
+    protected void zzTP() throws RemoteException {
+        ((zzbkf) zzTS()).zzTW();
     }
 
     public zzbkh[] zza(Bitmap bitmap, zzbka com_google_android_gms_internal_zzbka, zzbkj com_google_android_gms_internal_zzbkj) {
@@ -26,7 +26,7 @@ public class zzbkn extends zzbjz<zzbkf> {
             return new zzbkh[0];
         }
         try {
-            return ((zzbkf) zzTR()).zza(zzd.zzA(bitmap), com_google_android_gms_internal_zzbka, com_google_android_gms_internal_zzbkj);
+            return ((zzbkf) zzTS()).zza(zzd.zzA(bitmap), com_google_android_gms_internal_zzbka, com_google_android_gms_internal_zzbkj);
         } catch (Throwable e) {
             Log.e("TextNativeHandle", "Error calling native text recognizer", e);
             return new zzbkh[0];
@@ -38,6 +38,6 @@ public class zzbkn extends zzbjz<zzbkf> {
     }
 
     protected zzbkf zzd(DynamiteModule dynamiteModule, Context context) throws RemoteException, zza {
-        return zzbkg.zza.zzfs(dynamiteModule.zzdT("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator")).zza(zzd.zzA(context), this.zzbPy);
+        return zzbkg.zza.zzfs(dynamiteModule.zzdT("com.google.android.gms.vision.text.ChimeraNativeTextRecognizerCreator")).zza(zzd.zzA(context), this.zzbPu);
     }
 }

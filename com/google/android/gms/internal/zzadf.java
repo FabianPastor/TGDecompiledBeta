@@ -63,7 +63,7 @@ public class zzadf {
         return false;
     }
 
-    public boolean zzzw() {
+    public boolean zzzx() {
         return Binder.getCallingUid() == Process.myUid() ? zzade.zzbg(this.mContext) : false;
     }
 }

@@ -10,7 +10,7 @@ import com.google.android.gms.common.internal.safeparcel.zzc;
 public class zzr implements Creator<TileOverlayOptions> {
     static void zza(TileOverlayOptions tileOverlayOptions, Parcel parcel, int i) {
         int zzaZ = zzc.zzaZ(parcel);
-        zzc.zza(parcel, 2, tileOverlayOptions.zzJP(), false);
+        zzc.zza(parcel, 2, tileOverlayOptions.zzJQ(), false);
         zzc.zza(parcel, 3, tileOverlayOptions.isVisible());
         zzc.zza(parcel, 4, tileOverlayOptions.getZIndex());
         zzc.zza(parcel, 5, tileOverlayOptions.getFadeIn());

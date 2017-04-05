@@ -10,13 +10,13 @@ import com.google.android.gms.internal.zzaum;
 import com.google.android.gms.internal.zzaum.zza;
 
 public final class AppMeasurementService extends Service implements zza {
-    private zzaum zzbqo;
+    private zzaum zzbqk;
 
-    private zzaum zzJS() {
-        if (this.zzbqo == null) {
-            this.zzbqo = new zzaum(this);
+    private zzaum zzJT() {
+        if (this.zzbqk == null) {
+            this.zzbqk = new zzaum(this);
         }
-        return this.zzbqo;
+        return this.zzbqk;
     }
 
     public boolean callServiceStopSelfResult(int i) {
@@ -29,35 +29,35 @@ public final class AppMeasurementService extends Service implements zza {
 
     @MainThread
     public IBinder onBind(Intent intent) {
-        return zzJS().onBind(intent);
+        return zzJT().onBind(intent);
     }
 
     @MainThread
     public void onCreate() {
         super.onCreate();
-        zzJS().onCreate();
+        zzJT().onCreate();
     }
 
     @MainThread
     public void onDestroy() {
-        zzJS().onDestroy();
+        zzJT().onDestroy();
         super.onDestroy();
     }
 
     @MainThread
     public void onRebind(Intent intent) {
-        zzJS().onRebind(intent);
+        zzJT().onRebind(intent);
     }
 
     @MainThread
     public int onStartCommand(Intent intent, int i, int i2) {
-        zzJS().onStartCommand(intent, i, i2);
+        zzJT().onStartCommand(intent, i, i2);
         WakefulBroadcastReceiver.completeWakefulIntent(intent);
         return 2;
     }
 
     @MainThread
     public boolean onUnbind(Intent intent) {
-        return zzJS().onUnbind(intent);
+        return zzJT().onUnbind(intent);
     }
 }

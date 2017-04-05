@@ -4421,7 +4421,7 @@ Error: java.util.NoSuchElementException
     }
 
     private int getMessageMediaType(Message message) {
-        if ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) && message.ttl > 0 && message.ttl <= 60) || MessageObject.isVoiceMessage(message) || MessageObject.isVideoMessage(message))) {
+        if ((message instanceof TL_message_secret) && (((message.media instanceof TL_messageMediaPhoto) && message.ttl > 0 && message.ttl <= 60) || MessageObject.isVoiceMessage(message) || MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message))) {
             return 1;
         }
         if ((message.media instanceof TL_messageMediaPhoto) || MessageObject.isVideoMessage(message)) {
@@ -4815,7 +4815,7 @@ Error: java.util.NoSuchElementException
                 int type2 = 0;
                 long id = 0;
                 MessageMedia object = null;
-                if (MessageObject.isVoiceMessage(message)) {
+                if (MessageObject.isVoiceMessage(message) || MessageObject.isRoundVideoMessage(message)) {
                     if ((downloadMask & 2) != 0 && message.media.document.size < 5242880) {
                         id = message.media.document.id;
                         type2 = 2;

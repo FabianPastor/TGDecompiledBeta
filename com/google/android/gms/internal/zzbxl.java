@@ -5,36 +5,36 @@ import org.telegram.tgnet.ConnectionsManager;
 
 public final class zzbxl {
     private final byte[] buffer;
-    private int zzcuq;
-    private int zzcur;
-    private int zzcus;
-    private int zzcut;
-    private int zzcuu;
-    private int zzcuv = ConnectionsManager.DEFAULT_DATACENTER_ID;
-    private int zzcuw;
-    private int zzcux = 64;
-    private int zzcuy = ConnectionsManager.FileTypeFile;
+    private int zzcuA;
+    private int zzcuB;
+    private int zzcuC;
+    private int zzcuD = ConnectionsManager.DEFAULT_DATACENTER_ID;
+    private int zzcuE;
+    private int zzcuF = 64;
+    private int zzcuG = ConnectionsManager.FileTypeFile;
+    private int zzcuy;
+    private int zzcuz;
 
     private zzbxl(byte[] bArr, int i, int i2) {
         this.buffer = bArr;
-        this.zzcuq = i;
-        this.zzcur = i + i2;
-        this.zzcut = i;
+        this.zzcuy = i;
+        this.zzcuz = i + i2;
+        this.zzcuB = i;
     }
 
     public static long zzaZ(long j) {
         return (j >>> 1) ^ (-(1 & j));
     }
 
-    private void zzaeA() {
-        this.zzcur += this.zzcus;
-        int i = this.zzcur;
-        if (i > this.zzcuv) {
-            this.zzcus = i - this.zzcuv;
-            this.zzcur -= this.zzcus;
+    private void zzaeB() {
+        this.zzcuz += this.zzcuA;
+        int i = this.zzcuz;
+        if (i > this.zzcuD) {
+            this.zzcuA = i - this.zzcuD;
+            this.zzcuz -= this.zzcuA;
             return;
         }
-        this.zzcus = 0;
+        this.zzcuA = 0;
     }
 
     public static zzbxl zzaf(byte[] bArr) {
@@ -45,281 +45,281 @@ public final class zzbxl {
         return new zzbxl(bArr, i, i2);
     }
 
-    public static int zzqY(int i) {
+    public static int zzqZ(int i) {
         return (i >>> 1) ^ (-(i & 1));
     }
 
     public int getPosition() {
-        return this.zzcut - this.zzcuq;
+        return this.zzcuB - this.zzcuy;
     }
 
     public byte[] readBytes() throws IOException {
-        int zzaew = zzaew();
-        if (zzaew < 0) {
-            throw zzbxs.zzaeL();
-        } else if (zzaew == 0) {
-            return zzbxw.zzcuV;
+        int zzaex = zzaex();
+        if (zzaex < 0) {
+            throw zzbxs.zzaeM();
+        } else if (zzaex == 0) {
+            return zzbxw.zzcvd;
         } else {
-            if (zzaew > this.zzcur - this.zzcut) {
-                throw zzbxs.zzaeK();
+            if (zzaex > this.zzcuz - this.zzcuB) {
+                throw zzbxs.zzaeL();
             }
-            Object obj = new byte[zzaew];
-            System.arraycopy(this.buffer, this.zzcut, obj, 0, zzaew);
-            this.zzcut = zzaew + this.zzcut;
+            Object obj = new byte[zzaex];
+            System.arraycopy(this.buffer, this.zzcuB, obj, 0, zzaex);
+            this.zzcuB = zzaex + this.zzcuB;
             return obj;
         }
     }
 
     public double readDouble() throws IOException {
-        return Double.longBitsToDouble(zzaez());
+        return Double.longBitsToDouble(zzaeA());
     }
 
     public float readFloat() throws IOException {
-        return Float.intBitsToFloat(zzaey());
+        return Float.intBitsToFloat(zzaez());
     }
 
     public String readString() throws IOException {
-        int zzaew = zzaew();
-        if (zzaew < 0) {
+        int zzaex = zzaex();
+        if (zzaex < 0) {
+            throw zzbxs.zzaeM();
+        } else if (zzaex > this.zzcuz - this.zzcuB) {
             throw zzbxs.zzaeL();
-        } else if (zzaew > this.zzcur - this.zzcut) {
-            throw zzbxs.zzaeK();
         } else {
-            String str = new String(this.buffer, this.zzcut, zzaew, zzbxr.UTF_8);
-            this.zzcut = zzaew + this.zzcut;
+            String str = new String(this.buffer, this.zzcuB, zzaex, zzbxr.UTF_8);
+            this.zzcuB = zzaex + this.zzcuB;
             return str;
         }
     }
 
     public byte[] zzI(int i, int i2) {
         if (i2 == 0) {
-            return zzbxw.zzcuV;
+            return zzbxw.zzcvd;
         }
         Object obj = new byte[i2];
-        System.arraycopy(this.buffer, this.zzcuq + i, obj, 0, i2);
+        System.arraycopy(this.buffer, this.zzcuy + i, obj, 0, i2);
         return obj;
     }
 
     public void zza(zzbxt com_google_android_gms_internal_zzbxt) throws IOException {
-        int zzaew = zzaew();
-        if (this.zzcuw >= this.zzcux) {
-            throw zzbxs.zzaeQ();
+        int zzaex = zzaex();
+        if (this.zzcuE >= this.zzcuF) {
+            throw zzbxs.zzaeR();
         }
-        zzaew = zzqZ(zzaew);
-        this.zzcuw++;
+        zzaex = zzra(zzaex);
+        this.zzcuE++;
         com_google_android_gms_internal_zzbxt.zzb(this);
-        zzqW(0);
-        this.zzcuw--;
-        zzra(zzaew);
+        zzqX(0);
+        this.zzcuE--;
+        zzrb(zzaex);
     }
 
     public void zza(zzbxt com_google_android_gms_internal_zzbxt, int i) throws IOException {
-        if (this.zzcuw >= this.zzcux) {
-            throw zzbxs.zzaeQ();
+        if (this.zzcuE >= this.zzcuF) {
+            throw zzbxs.zzaeR();
         }
-        this.zzcuw++;
+        this.zzcuE++;
         com_google_android_gms_internal_zzbxt.zzb(this);
-        zzqW(zzbxw.zzO(i, 4));
-        this.zzcuw--;
+        zzqX(zzbxw.zzO(i, 4));
+        this.zzcuE--;
     }
 
-    public int zzaeB() {
-        if (this.zzcuv == ConnectionsManager.DEFAULT_DATACENTER_ID) {
+    public long zzaeA() throws IOException {
+        byte zzaeE = zzaeE();
+        byte zzaeE2 = zzaeE();
+        return ((((((((((long) zzaeE2) & 255) << 8) | (((long) zzaeE) & 255)) | ((((long) zzaeE()) & 255) << 16)) | ((((long) zzaeE()) & 255) << 24)) | ((((long) zzaeE()) & 255) << 32)) | ((((long) zzaeE()) & 255) << 40)) | ((((long) zzaeE()) & 255) << 48)) | ((((long) zzaeE()) & 255) << 56);
+    }
+
+    public int zzaeC() {
+        if (this.zzcuD == ConnectionsManager.DEFAULT_DATACENTER_ID) {
             return -1;
         }
-        return this.zzcuv - this.zzcut;
+        return this.zzcuD - this.zzcuB;
     }
 
-    public boolean zzaeC() {
-        return this.zzcut == this.zzcur;
+    public boolean zzaeD() {
+        return this.zzcuB == this.zzcuz;
     }
 
-    public byte zzaeD() throws IOException {
-        if (this.zzcut == this.zzcur) {
-            throw zzbxs.zzaeK();
+    public byte zzaeE() throws IOException {
+        if (this.zzcuB == this.zzcuz) {
+            throw zzbxs.zzaeL();
         }
         byte[] bArr = this.buffer;
-        int i = this.zzcut;
-        this.zzcut = i + 1;
+        int i = this.zzcuB;
+        this.zzcuB = i + 1;
         return bArr[i];
     }
 
-    public int zzaen() throws IOException {
-        if (zzaeC()) {
-            this.zzcuu = 0;
+    public int zzaeo() throws IOException {
+        if (zzaeD()) {
+            this.zzcuC = 0;
             return 0;
         }
-        this.zzcuu = zzaew();
-        if (this.zzcuu != 0) {
-            return this.zzcuu;
+        this.zzcuC = zzaex();
+        if (this.zzcuC != 0) {
+            return this.zzcuC;
+        }
+        throw zzbxs.zzaeO();
+    }
+
+    public void zzaep() throws IOException {
+        int zzaeo;
+        do {
+            zzaeo = zzaeo();
+            if (zzaeo == 0) {
+                return;
+            }
+        } while (zzqY(zzaeo));
+    }
+
+    public long zzaeq() throws IOException {
+        return zzaey();
+    }
+
+    public long zzaer() throws IOException {
+        return zzaey();
+    }
+
+    public int zzaes() throws IOException {
+        return zzaex();
+    }
+
+    public long zzaet() throws IOException {
+        return zzaeA();
+    }
+
+    public boolean zzaeu() throws IOException {
+        return zzaex() != 0;
+    }
+
+    public int zzaev() throws IOException {
+        return zzqZ(zzaex());
+    }
+
+    public long zzaew() throws IOException {
+        return zzaZ(zzaey());
+    }
+
+    public int zzaex() throws IOException {
+        byte zzaeE = zzaeE();
+        if (zzaeE >= (byte) 0) {
+            return zzaeE;
+        }
+        int i = zzaeE & 127;
+        byte zzaeE2 = zzaeE();
+        if (zzaeE2 >= (byte) 0) {
+            return i | (zzaeE2 << 7);
+        }
+        i |= (zzaeE2 & 127) << 7;
+        zzaeE2 = zzaeE();
+        if (zzaeE2 >= (byte) 0) {
+            return i | (zzaeE2 << 14);
+        }
+        i |= (zzaeE2 & 127) << 14;
+        zzaeE2 = zzaeE();
+        if (zzaeE2 >= (byte) 0) {
+            return i | (zzaeE2 << 21);
+        }
+        i |= (zzaeE2 & 127) << 21;
+        zzaeE2 = zzaeE();
+        i |= zzaeE2 << 28;
+        if (zzaeE2 >= (byte) 0) {
+            return i;
+        }
+        for (int i2 = 0; i2 < 5; i2++) {
+            if (zzaeE() >= (byte) 0) {
+                return i;
+            }
         }
         throw zzbxs.zzaeN();
     }
 
-    public void zzaeo() throws IOException {
-        int zzaen;
-        do {
-            zzaen = zzaen();
-            if (zzaen == 0) {
-                return;
-            }
-        } while (zzqX(zzaen));
-    }
-
-    public long zzaep() throws IOException {
-        return zzaex();
-    }
-
-    public long zzaeq() throws IOException {
-        return zzaex();
-    }
-
-    public int zzaer() throws IOException {
-        return zzaew();
-    }
-
-    public long zzaes() throws IOException {
-        return zzaez();
-    }
-
-    public boolean zzaet() throws IOException {
-        return zzaew() != 0;
-    }
-
-    public int zzaeu() throws IOException {
-        return zzqY(zzaew());
-    }
-
-    public long zzaev() throws IOException {
-        return zzaZ(zzaex());
-    }
-
-    public int zzaew() throws IOException {
-        byte zzaeD = zzaeD();
-        if (zzaeD >= (byte) 0) {
-            return zzaeD;
-        }
-        int i = zzaeD & 127;
-        byte zzaeD2 = zzaeD();
-        if (zzaeD2 >= (byte) 0) {
-            return i | (zzaeD2 << 7);
-        }
-        i |= (zzaeD2 & 127) << 7;
-        zzaeD2 = zzaeD();
-        if (zzaeD2 >= (byte) 0) {
-            return i | (zzaeD2 << 14);
-        }
-        i |= (zzaeD2 & 127) << 14;
-        zzaeD2 = zzaeD();
-        if (zzaeD2 >= (byte) 0) {
-            return i | (zzaeD2 << 21);
-        }
-        i |= (zzaeD2 & 127) << 21;
-        zzaeD2 = zzaeD();
-        i |= zzaeD2 << 28;
-        if (zzaeD2 >= (byte) 0) {
-            return i;
-        }
-        for (int i2 = 0; i2 < 5; i2++) {
-            if (zzaeD() >= (byte) 0) {
-                return i;
-            }
-        }
-        throw zzbxs.zzaeM();
-    }
-
-    public long zzaex() throws IOException {
+    public long zzaey() throws IOException {
         long j = 0;
         for (int i = 0; i < 64; i += 7) {
-            byte zzaeD = zzaeD();
-            j |= ((long) (zzaeD & 127)) << i;
-            if ((zzaeD & 128) == 0) {
+            byte zzaeE = zzaeE();
+            j |= ((long) (zzaeE & 127)) << i;
+            if ((zzaeE & 128) == 0) {
                 return j;
             }
         }
-        throw zzbxs.zzaeM();
+        throw zzbxs.zzaeN();
     }
 
-    public int zzaey() throws IOException {
-        return (((zzaeD() & 255) | ((zzaeD() & 255) << 8)) | ((zzaeD() & 255) << 16)) | ((zzaeD() & 255) << 24);
+    public int zzaez() throws IOException {
+        return (((zzaeE() & 255) | ((zzaeE() & 255) << 8)) | ((zzaeE() & 255) << 16)) | ((zzaeE() & 255) << 24);
     }
 
-    public long zzaez() throws IOException {
-        byte zzaeD = zzaeD();
-        byte zzaeD2 = zzaeD();
-        return ((((((((((long) zzaeD2) & 255) << 8) | (((long) zzaeD) & 255)) | ((((long) zzaeD()) & 255) << 16)) | ((((long) zzaeD()) & 255) << 24)) | ((((long) zzaeD()) & 255) << 32)) | ((((long) zzaeD()) & 255) << 40)) | ((((long) zzaeD()) & 255) << 48)) | ((((long) zzaeD()) & 255) << 56);
-    }
-
-    public void zzqW(int i) throws zzbxs {
-        if (this.zzcuu != i) {
-            throw zzbxs.zzaeO();
+    public void zzqX(int i) throws zzbxs {
+        if (this.zzcuC != i) {
+            throw zzbxs.zzaeP();
         }
     }
 
-    public boolean zzqX(int i) throws IOException {
-        switch (zzbxw.zzrq(i)) {
+    public boolean zzqY(int i) throws IOException {
+        switch (zzbxw.zzrr(i)) {
             case 0:
-                zzaer();
+                zzaes();
                 return true;
             case 1:
-                zzaez();
+                zzaeA();
                 return true;
             case 2:
-                zzrc(zzaew());
+                zzrd(zzaex());
                 return true;
             case 3:
-                zzaeo();
-                zzqW(zzbxw.zzO(zzbxw.zzrr(i), 4));
+                zzaep();
+                zzqX(zzbxw.zzO(zzbxw.zzrs(i), 4));
                 return true;
             case 4:
                 return false;
             case 5:
-                zzaey();
+                zzaez();
                 return true;
             default:
-                throw zzbxs.zzaeP();
+                throw zzbxs.zzaeQ();
         }
     }
 
-    public int zzqZ(int i) throws zzbxs {
+    public int zzra(int i) throws zzbxs {
         if (i < 0) {
+            throw zzbxs.zzaeM();
+        }
+        int i2 = this.zzcuB + i;
+        int i3 = this.zzcuD;
+        if (i2 > i3) {
             throw zzbxs.zzaeL();
         }
-        int i2 = this.zzcut + i;
-        int i3 = this.zzcuv;
-        if (i2 > i3) {
-            throw zzbxs.zzaeK();
-        }
-        this.zzcuv = i2;
-        zzaeA();
+        this.zzcuD = i2;
+        zzaeB();
         return i3;
     }
 
-    public void zzra(int i) {
-        this.zzcuv = i;
-        zzaeA();
+    public void zzrb(int i) {
+        this.zzcuD = i;
+        zzaeB();
     }
 
-    public void zzrb(int i) {
-        if (i > this.zzcut - this.zzcuq) {
-            throw new IllegalArgumentException("Position " + i + " is beyond current " + (this.zzcut - this.zzcuq));
+    public void zzrc(int i) {
+        if (i > this.zzcuB - this.zzcuy) {
+            throw new IllegalArgumentException("Position " + i + " is beyond current " + (this.zzcuB - this.zzcuy));
         } else if (i < 0) {
             throw new IllegalArgumentException("Bad position " + i);
         } else {
-            this.zzcut = this.zzcuq + i;
+            this.zzcuB = this.zzcuy + i;
         }
     }
 
-    public void zzrc(int i) throws IOException {
+    public void zzrd(int i) throws IOException {
         if (i < 0) {
+            throw zzbxs.zzaeM();
+        } else if (this.zzcuB + i > this.zzcuD) {
+            zzrd(this.zzcuD - this.zzcuB);
             throw zzbxs.zzaeL();
-        } else if (this.zzcut + i > this.zzcuv) {
-            zzrc(this.zzcuv - this.zzcut);
-            throw zzbxs.zzaeK();
-        } else if (i <= this.zzcur - this.zzcut) {
-            this.zzcut += i;
+        } else if (i <= this.zzcuz - this.zzcuB) {
+            this.zzcuB += i;
         } else {
-            throw zzbxs.zzaeK();
+            throw zzbxs.zzaeL();
         }
     }
 }

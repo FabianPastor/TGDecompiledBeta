@@ -23,7 +23,7 @@ public interface zza extends IInterface {
                 return this.zzrk;
             }
 
-            public IObjectWrapper zzJQ() throws RemoteException {
+            public IObjectWrapper zzJR() throws RemoteException {
                 Parcel obtain = Parcel.obtain();
                 Parcel obtain2 = Parcel.obtain();
                 try {
@@ -178,7 +178,7 @@ public interface zza extends IInterface {
                     return true;
                 case 4:
                     parcel.enforceInterface("com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate");
-                    zzly = zzJQ();
+                    zzly = zzJR();
                     parcel2.writeNoException();
                     if (zzly != null) {
                         iBinder = zzly.asBinder();
@@ -221,7 +221,7 @@ public interface zza extends IInterface {
         }
     }
 
-    IObjectWrapper zzJQ() throws RemoteException;
+    IObjectWrapper zzJR() throws RemoteException;
 
     IObjectWrapper zze(Bitmap bitmap) throws RemoteException;
 

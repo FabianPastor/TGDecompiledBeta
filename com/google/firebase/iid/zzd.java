@@ -9,17 +9,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class zzd {
-    static Map<String, zzd> zzbhG = new HashMap();
-    static String zzbhM;
-    private static zzh zzcll;
-    private static zzf zzclm;
+    static Map<String, zzd> zzbhH = new HashMap();
+    static String zzbhN;
+    private static zzh zzclt;
+    private static zzf zzclu;
     Context mContext;
-    KeyPair zzbhJ;
-    String zzbhK = "";
+    KeyPair zzbhK;
+    String zzbhL = "";
 
     protected zzd(Context context, String str, Bundle bundle) {
         this.mContext = context.getApplicationContext();
-        this.zzbhK = str;
+        this.zzbhL = str;
     }
 
     public static synchronized zzd zzb(Context context, Bundle bundle) {
@@ -28,22 +28,22 @@ public class zzd {
             String string = bundle == null ? "" : bundle.getString("subtype");
             String str = string == null ? "" : string;
             Context applicationContext = context.getApplicationContext();
-            if (zzcll == null) {
-                zzcll = new zzh(applicationContext);
-                zzclm = new zzf(applicationContext);
+            if (zzclt == null) {
+                zzclt = new zzh(applicationContext);
+                zzclu = new zzf(applicationContext);
             }
-            zzbhM = Integer.toString(FirebaseInstanceId.zzcs(applicationContext));
-            com_google_firebase_iid_zzd = (zzd) zzbhG.get(str);
+            zzbhN = Integer.toString(FirebaseInstanceId.zzcr(applicationContext));
+            com_google_firebase_iid_zzd = (zzd) zzbhH.get(str);
             if (com_google_firebase_iid_zzd == null) {
                 com_google_firebase_iid_zzd = new zzd(applicationContext, str, bundle);
-                zzbhG.put(str, com_google_firebase_iid_zzd);
+                zzbhH.put(str, com_google_firebase_iid_zzd);
             }
         }
         return com_google_firebase_iid_zzd;
     }
 
     public long getCreationTime() {
-        return zzcll.zzjy(this.zzbhK);
+        return zzclt.zzjy(this.zzbhL);
     }
 
     public String getToken(String str, String str2, Bundle bundle) throws IOException {
@@ -57,64 +57,52 @@ public class zzd {
         if (bundle.getString("ttl") != null || "jwt".equals(bundle.getString("type"))) {
             obj = null;
         } else {
-            zza zzu = zzcll.zzu(this.zzbhK, str, str2);
-            if (!(zzu == null || zzu.zzjB(zzbhM))) {
-                return zzu.zzbxX;
+            zza zzu = zzclt.zzu(this.zzbhL, str, str2);
+            if (!(zzu == null || zzu.zzjB(zzbhN))) {
+                return zzu.zzbxT;
             }
         }
         String zzc = zzc(str, str2, bundle);
         if (zzc == null || r0 == null) {
             return zzc;
         }
-        zzcll.zza(this.zzbhK, str, str2, zzc, zzbhM);
+        zzclt.zza(this.zzbhL, str, str2, zzc, zzbhN);
         return zzc;
     }
 
-    KeyPair zzHg() {
-        if (this.zzbhJ == null) {
-            this.zzbhJ = zzcll.zzeI(this.zzbhK);
+    KeyPair zzHh() {
+        if (this.zzbhK == null) {
+            this.zzbhK = zzclt.zzeI(this.zzbhL);
         }
-        if (this.zzbhJ == null) {
-            this.zzbhJ = zzcll.zzjz(this.zzbhK);
+        if (this.zzbhK == null) {
+            this.zzbhK = zzclt.zzjz(this.zzbhL);
         }
-        return this.zzbhJ;
+        return this.zzbhK;
     }
 
-    public void zzHh() {
-        zzcll.zzeJ(this.zzbhK);
-        this.zzbhJ = null;
+    public void zzHi() {
+        zzclt.zzeJ(this.zzbhL);
+        this.zzbhK = null;
     }
 
-    public zzh zzabP() {
-        return zzcll;
+    public zzh zzabQ() {
+        return zzclt;
     }
 
-    public zzf zzabQ() {
-        return zzclm;
+    public zzf zzabR() {
+        return zzclu;
     }
 
     public void zzb(String str, String str2, Bundle bundle) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             throw new IOException("MAIN_THREAD");
         }
-        zzcll.zzi(this.zzbhK, str, str2);
+        zzclt.zzi(this.zzbhL, str, str2);
         if (bundle == null) {
             bundle = new Bundle();
         }
-        bundle.putString("sender", str);
-        if (str2 != null) {
-            bundle.putString("scope", str2);
-        }
-        bundle.putString("subscription", str);
         bundle.putString("delete", "1");
-        bundle.putString("X-delete", "1");
-        bundle.putString("subtype", "".equals(this.zzbhK) ? str : this.zzbhK);
-        String str3 = "X-subtype";
-        if (!"".equals(this.zzbhK)) {
-            str = this.zzbhK;
-        }
-        bundle.putString(str3, str);
-        zzclm.zzt(zzclm.zza(bundle, zzHg()));
+        zzc(str, str2, bundle);
     }
 
     public String zzc(String str, String str2, Bundle bundle) throws IOException {
@@ -122,13 +110,11 @@ public class zzd {
             bundle.putString("scope", str2);
         }
         bundle.putString("sender", str);
-        String str3 = "".equals(this.zzbhK) ? str : this.zzbhK;
-        if (!bundle.containsKey("legacy.register")) {
-            bundle.putString("subscription", str);
-            bundle.putString("subtype", str3);
-            bundle.putString("X-subscription", str);
-            bundle.putString("X-subtype", str3);
+        if (!"".equals(this.zzbhL)) {
+            str = this.zzbhL;
         }
-        return zzclm.zzt(zzclm.zza(bundle, zzHg()));
+        bundle.putString("subtype", str);
+        bundle.putString("X-subtype", str);
+        return zzclu.zzq(zzclu.zza(bundle, zzHh()));
     }
 }

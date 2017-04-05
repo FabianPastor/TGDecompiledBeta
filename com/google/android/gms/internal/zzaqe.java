@@ -12,7 +12,7 @@ public final class zzaqe {
     private zzaqe() {
     }
 
-    private static zzaqe zzDC() {
+    private static zzaqe zzDD() {
         zzaqe com_google_android_gms_internal_zzaqe;
         synchronized (zzaqe.class) {
             com_google_android_gms_internal_zzaqe = zzaXl;
@@ -20,12 +20,12 @@ public final class zzaqe {
         return com_google_android_gms_internal_zzaqe;
     }
 
-    public static zzaqb zzDD() {
-        return zzDC().zzaXm;
+    public static zzaqb zzDE() {
+        return zzDD().zzaXm;
     }
 
-    public static zzaqc zzDE() {
-        return zzDC().zzaXn;
+    public static zzaqc zzDF() {
+        return zzDD().zzaXn;
     }
 
     protected static void zza(zzaqe com_google_android_gms_internal_zzaqe) {

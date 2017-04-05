@@ -13,7 +13,7 @@ public class zzh implements Creator<MarkerOptions> {
         zzc.zza(parcel, 2, markerOptions.getPosition(), i, false);
         zzc.zza(parcel, 3, markerOptions.getTitle(), false);
         zzc.zza(parcel, 4, markerOptions.getSnippet(), false);
-        zzc.zza(parcel, 5, markerOptions.zzJL(), false);
+        zzc.zza(parcel, 5, markerOptions.zzJM(), false);
         zzc.zza(parcel, 6, markerOptions.getAnchorU());
         zzc.zza(parcel, 7, markerOptions.getAnchorV());
         zzc.zza(parcel, 8, markerOptions.isDraggable());
