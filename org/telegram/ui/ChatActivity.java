@@ -1111,7 +1111,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                         animatorSet.addListener(new AnimatorListenerAdapter() {
                                             public void onAnimationEnd(Animator animation) {
                                                 ChatActivity.this.instantCameraView.hideCamera(true);
-                                                ChatActivity.this.instantCameraView.setVisibility(8);
+                                                ChatActivity.this.instantCameraView.setVisibility(4);
                                             }
                                         });
                                         animatorSet.start();
@@ -4823,6 +4823,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedContact", messageObjectsToForward.size()));
                             } else if (type == 2) {
                                 this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedAudio", messageObjectsToForward.size()));
+                            } else if (type == 5) {
+                                this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedRound", messageObjectsToForward.size()));
                             } else if (type == 14) {
                                 this.replyObjectTextView.setText(LocaleController.formatPluralString("ForwardedMusic", messageObjectsToForward.size()));
                             } else if (type == 13) {

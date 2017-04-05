@@ -502,7 +502,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         int remainingSpan = this.mSpanCount;
         for (int count = 0; count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0; count++) {
             int pos = layoutState.mCurrentPosition;
-            layoutPrefetchRegistry.addPosition(pos, layoutState.mScrollingOffset);
+            layoutPrefetchRegistry.addPosition(pos, Math.max(0, layoutState.mScrollingOffset));
             remainingSpan -= this.mSpanSizeLookup.getSpanSize(pos);
             layoutState.mCurrentPosition += layoutState.mItemDirection;
         }
@@ -643,7 +643,7 @@ public class GridLayoutManager extends LinearLayoutManager {
             if (params.isItemRemoved() || params.isItemChanged()) {
                 result.mIgnoreConsumed = true;
             }
-            result.mFocusable |= view.isFocusable();
+            result.mFocusable |= view.hasFocusable();
         }
         Arrays.fill(this.mSet, null);
     }
@@ -746,42 +746,70 @@ public class GridLayoutManager extends LinearLayoutManager {
             limit = getChildCount();
         }
         boolean preferLastSpan = this.mOrientation == 1 && isLayoutRTL();
-        View weakCandidate = null;
-        int weakCandidateSpanIndex = -1;
-        int weakCandidateOverlap = 0;
+        View focusableWeakCandidate = null;
+        int focusableWeakCandidateSpanIndex = -1;
+        int focusableWeakCandidateOverlap = 0;
+        View unfocusableWeakCandidate = null;
+        int unfocusableWeakCandidateSpanIndex = -1;
+        int unfocusableWeakCandidateOverlap = 0;
+        int focusableSpanGroupIndex = getSpanGroupIndex(recycler, state, start);
         for (int i = start; i != limit; i += inc) {
+            int spanGroupIndex = getSpanGroupIndex(recycler, state, i);
             View candidate = getChildAt(i);
             if (candidate == prevFocusedChild) {
                 break;
             }
-            if (candidate.isFocusable()) {
+            if (candidate.hasFocusable() && spanGroupIndex != focusableSpanGroupIndex) {
+                if (focusableWeakCandidate != null) {
+                    break;
+                }
+            } else {
                 LayoutParams candidateLp = (LayoutParams) candidate.getLayoutParams();
                 int candidateStart = candidateLp.mSpanIndex;
                 int candidateEnd = candidateLp.mSpanIndex + candidateLp.mSpanSize;
-                if (candidateStart == prevSpanStart && candidateEnd == prevSpanEnd) {
+                if (candidate.hasFocusable() && candidateStart == prevSpanStart && candidateEnd == prevSpanEnd) {
                     return candidate;
                 }
                 boolean assignAsWeek = false;
-                if (weakCandidate == null) {
-                    assignAsWeek = true;
-                } else {
+                if (!(candidate.hasFocusable() && focusableWeakCandidate == null) && (candidate.hasFocusable() || unfocusableWeakCandidate != null)) {
                     int overlap = Math.min(candidateEnd, prevSpanEnd) - Math.max(candidateStart, prevSpanStart);
-                    if (overlap > weakCandidateOverlap) {
-                        assignAsWeek = true;
-                    } else if (overlap == weakCandidateOverlap) {
-                        if (preferLastSpan == (candidateStart > weakCandidateSpanIndex)) {
+                    if (candidate.hasFocusable()) {
+                        if (overlap > focusableWeakCandidateOverlap) {
                             assignAsWeek = true;
+                        } else if (overlap == focusableWeakCandidateOverlap) {
+                            if (preferLastSpan == (candidateStart > focusableWeakCandidateSpanIndex)) {
+                                assignAsWeek = true;
+                            }
+                        }
+                    } else if (focusableWeakCandidate == null && isViewPartiallyVisible(candidate, false, true)) {
+                        if (overlap > unfocusableWeakCandidateOverlap) {
+                            assignAsWeek = true;
+                        } else if (overlap == unfocusableWeakCandidateOverlap) {
+                            if (preferLastSpan == (candidateStart > unfocusableWeakCandidateSpanIndex)) {
+                                assignAsWeek = true;
+                            }
                         }
                     }
+                } else {
+                    assignAsWeek = true;
                 }
                 if (assignAsWeek) {
-                    weakCandidate = candidate;
-                    weakCandidateSpanIndex = candidateLp.mSpanIndex;
-                    weakCandidateOverlap = Math.min(candidateEnd, prevSpanEnd) - Math.max(candidateStart, prevSpanStart);
+                    if (candidate.hasFocusable()) {
+                        focusableWeakCandidate = candidate;
+                        focusableWeakCandidateSpanIndex = candidateLp.mSpanIndex;
+                        focusableWeakCandidateOverlap = Math.min(candidateEnd, prevSpanEnd) - Math.max(candidateStart, prevSpanStart);
+                    } else {
+                        unfocusableWeakCandidate = candidate;
+                        unfocusableWeakCandidateSpanIndex = candidateLp.mSpanIndex;
+                        unfocusableWeakCandidateOverlap = Math.min(candidateEnd, prevSpanEnd) - Math.max(candidateStart, prevSpanStart);
+                    }
                 }
             }
         }
-        return weakCandidate;
+        if (focusableWeakCandidate == null) {
+            focusableWeakCandidate = unfocusableWeakCandidate;
+        }
+        return focusableWeakCandidate;
     }
 
     public boolean supportsPredictiveItemAnimations() {

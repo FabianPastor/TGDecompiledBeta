@@ -12,12 +12,12 @@ public class zzbjr extends zza {
     public final int id;
     public final int versionCode;
     public final float width;
+    public final float zzbOY;
+    public final float zzbOZ;
+    public final zzbjx[] zzbPa;
+    public final float zzbPb;
     public final float zzbPc;
     public final float zzbPd;
-    public final zzbjx[] zzbPe;
-    public final float zzbPf;
-    public final float zzbPg;
-    public final float zzbPh;
 
     public zzbjr(int i, int i2, float f, float f2, float f3, float f4, float f5, float f6, zzbjx[] com_google_android_gms_internal_zzbjxArr, float f7, float f8, float f9) {
         this.versionCode = i;
@@ -26,12 +26,12 @@ public class zzbjr extends zza {
         this.centerY = f2;
         this.width = f3;
         this.height = f4;
-        this.zzbPc = f5;
-        this.zzbPd = f6;
-        this.zzbPe = com_google_android_gms_internal_zzbjxArr;
-        this.zzbPf = f7;
-        this.zzbPg = f8;
-        this.zzbPh = f9;
+        this.zzbOY = f5;
+        this.zzbOZ = f6;
+        this.zzbPa = com_google_android_gms_internal_zzbjxArr;
+        this.zzbPb = f7;
+        this.zzbPc = f8;
+        this.zzbPd = f9;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

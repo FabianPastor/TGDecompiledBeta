@@ -8,31 +8,31 @@ import java.util.Iterator;
 
 public class zzato extends zza implements Iterable<String> {
     public static final Creator<zzato> CREATOR = new zzatp();
-    private final Bundle zzbrH;
+    private final Bundle zzbrD;
 
     zzato(Bundle bundle) {
-        this.zzbrH = bundle;
+        this.zzbrD = bundle;
     }
 
     Object get(String str) {
-        return this.zzbrH.get(str);
+        return this.zzbrD.get(str);
     }
 
     public Iterator<String> iterator() {
         return new Iterator<String>(this) {
-            Iterator<String> zzbrI = this.zzbrJ.zzbrH.keySet().iterator();
-            final /* synthetic */ zzato zzbrJ;
+            Iterator<String> zzbrE = this.zzbrF.zzbrD.keySet().iterator();
+            final /* synthetic */ zzato zzbrF;
 
             {
-                this.zzbrJ = r2;
+                this.zzbrF = r2;
             }
 
             public boolean hasNext() {
-                return this.zzbrI.hasNext();
+                return this.zzbrE.hasNext();
             }
 
             public String next() {
-                return (String) this.zzbrI.next();
+                return (String) this.zzbrE.next();
             }
 
             public void remove() {
@@ -42,18 +42,18 @@ public class zzato extends zza implements Iterable<String> {
     }
 
     public int size() {
-        return this.zzbrH.size();
+        return this.zzbrD.size();
     }
 
     public String toString() {
-        return this.zzbrH.toString();
+        return this.zzbrD.toString();
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         zzatp.zza(this, parcel, i);
     }
 
-    public Bundle zzLV() {
-        return new Bundle(this.zzbrH);
+    public Bundle zzLW() {
+        return new Bundle(this.zzbrD);
     }
 }

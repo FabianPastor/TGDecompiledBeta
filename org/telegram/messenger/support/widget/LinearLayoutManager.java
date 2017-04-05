@@ -33,7 +33,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     private static final String TAG = "LinearLayoutManager";
     public static final int VERTICAL = 1;
     final AnchorInfo mAnchorInfo;
-    private int mInitialItemPrefetchCount;
+    private int mInitialPrefetchItemCount;
     private boolean mLastStackFromEnd;
     private final LayoutChunkResult mLayoutChunkResult;
     private LayoutState mLayoutState;
@@ -298,7 +298,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         this.mPendingSavedState = null;
         this.mAnchorInfo = new AnchorInfo();
         this.mLayoutChunkResult = new LayoutChunkResult();
-        this.mInitialItemPrefetchCount = 2;
+        this.mInitialPrefetchItemCount = 2;
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
         setAutoMeasureEnabled(true);
@@ -996,7 +996,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int pos = layoutState.mCurrentPosition;
         if (pos >= 0 && pos < state.getItemCount()) {
-            layoutPrefetchRegistry.addPosition(pos, layoutState.mScrollingOffset);
+            layoutPrefetchRegistry.addPosition(pos, Math.max(0, layoutState.mScrollingOffset));
         }
     }
 
@@ -1020,18 +1020,23 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
             direction = 1;
         }
         int targetPos = anchorPos;
-        for (int i = 0; i < this.mInitialItemPrefetchCount && targetPos >= 0 && targetPos < adapterItemCount; i++) {
+        for (int i = 0; i < this.mInitialPrefetchItemCount && targetPos >= 0 && targetPos < adapterItemCount; i++) {
             layoutPrefetchRegistry.addPosition(targetPos, 0);
             targetPos += direction;
         }
     }
 
     public void setInitialPrefetchItemCount(int itemCount) {
-        this.mInitialItemPrefetchCount = itemCount;
+        this.mInitialPrefetchItemCount = itemCount;
     }
 
+    public int getInitialPrefetchItemCount() {
+        return this.mInitialPrefetchItemCount;
+    }
+
+    @Deprecated
     public int getInitialItemPrefetchCount() {
-        return this.mInitialItemPrefetchCount;
+        return getInitialPrefetchItemCount();
     }
 
     public void collectAdjacentPrefetchPositions(int dx, int dy, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
@@ -1261,7 +1266,7 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         if (params.isItemRemoved() || params.isItemChanged()) {
             result.mIgnoreConsumed = true;
         }
-        result.mFocusable = view.isFocusable();
+        result.mFocusable = view.hasFocusable();
     }
 
     boolean shouldMeasureTwice() {
@@ -1384,6 +1389,28 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         return outOfBoundsMatch;
     }
 
+    private View findPartiallyOrCompletelyInvisibleChildClosestToEnd(Recycler recycler, State state) {
+        if (this.mShouldReverseLayout) {
+            return findFirstPartiallyOrCompletelyInvisibleChild(recycler, state);
+        }
+        return findLastPartiallyOrCompletelyInvisibleChild(recycler, state);
+    }
+
+    private View findPartiallyOrCompletelyInvisibleChildClosestToStart(Recycler recycler, State state) {
+        if (this.mShouldReverseLayout) {
+            return findLastPartiallyOrCompletelyInvisibleChild(recycler, state);
+        }
+        return findFirstPartiallyOrCompletelyInvisibleChild(recycler, state);
+    }
+
+    private View findFirstPartiallyOrCompletelyInvisibleChild(Recycler recycler, State state) {
+        return findOnePartiallyOrCompletelyInvisibleChild(0, getChildCount());
+    }
+
+    private View findLastPartiallyOrCompletelyInvisibleChild(Recycler recycler, State state) {
+        return findOnePartiallyOrCompletelyInvisibleChild(getChildCount() - 1, -1);
+    }
+
     public int findFirstVisibleItemPosition() {
         View child = findOneVisibleChild(0, getChildCount(), false, true);
         return child == null ? -1 : getPosition(child);
@@ -1411,28 +1438,42 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
     }
 
     View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible, boolean acceptPartiallyVisible) {
+        int preferredBoundsFlag;
         ensureLayoutState();
-        int start = this.mOrientationHelper.getStartAfterPadding();
-        int end = this.mOrientationHelper.getEndAfterPadding();
-        int next = toIndex > fromIndex ? 1 : -1;
-        View partiallyVisible = null;
-        for (int i = fromIndex; i != toIndex; i += next) {
-            View child = getChildAt(i);
-            int childStart = this.mOrientationHelper.getDecoratedStart(child);
-            int childEnd = this.mOrientationHelper.getDecoratedEnd(child);
-            if (childStart < end && childEnd > start) {
-                if (!completelyVisible) {
-                    return child;
-                }
-                if (childStart >= start && childEnd <= end) {
-                    return child;
-                }
-                if (acceptPartiallyVisible && partiallyVisible == null) {
-                    partiallyVisible = child;
-                }
-            }
+        int acceptableBoundsFlag = 0;
+        if (completelyVisible) {
+            preferredBoundsFlag = 24579;
+        } else {
+            preferredBoundsFlag = 320;
         }
-        return partiallyVisible;
+        if (acceptPartiallyVisible) {
+            acceptableBoundsFlag = 320;
+        }
+        if (this.mOrientation == 0) {
+            return this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+        }
+        return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+    }
+
+    View findOnePartiallyOrCompletelyInvisibleChild(int fromIndex, int toIndex) {
+        ensureLayoutState();
+        int next = toIndex > fromIndex ? 1 : toIndex < fromIndex ? -1 : 0;
+        if (next == 0) {
+            return getChildAt(fromIndex);
+        }
+        int preferredBoundsFlag;
+        int acceptableBoundsFlag;
+        if (this.mOrientationHelper.getDecoratedStart(getChildAt(fromIndex)) < this.mOrientationHelper.getStartAfterPadding()) {
+            preferredBoundsFlag = 16644;
+            acceptableBoundsFlag = 16388;
+        } else {
+            preferredBoundsFlag = 4161;
+            acceptableBoundsFlag = 4097;
+        }
+        if (this.mOrientation == 0) {
+            return this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+        }
+        return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
     }
 
     public View onFocusSearchFailed(View focused, int focusDirection, Recycler recycler, State state) {
@@ -1444,28 +1485,28 @@ public class LinearLayoutManager extends LayoutManager implements ViewDropHandle
         if (layoutDir == Integer.MIN_VALUE) {
             return null;
         }
-        View referenceChild;
-        ensureLayoutState();
-        if (layoutDir == -1) {
-            referenceChild = findReferenceChildClosestToStart(recycler, state);
-        } else {
-            referenceChild = findReferenceChildClosestToEnd(recycler, state);
-        }
-        if (referenceChild == null) {
-            return null;
-        }
+        View nextCandidate;
         View nextFocus;
+        ensureLayoutState();
         ensureLayoutState();
         updateLayoutState(layoutDir, (int) (MAX_SCROLL_FACTOR * ((float) this.mOrientationHelper.getTotalSpace())), false, state);
         this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
         this.mLayoutState.mRecycle = false;
         fill(recycler, this.mLayoutState, state, true);
         if (layoutDir == -1) {
+            nextCandidate = findPartiallyOrCompletelyInvisibleChildClosestToStart(recycler, state);
+        } else {
+            nextCandidate = findPartiallyOrCompletelyInvisibleChildClosestToEnd(recycler, state);
+        }
+        if (layoutDir == -1) {
             nextFocus = getChildClosestToStart();
         } else {
             nextFocus = getChildClosestToEnd();
         }
-        if (nextFocus == referenceChild || !nextFocus.isFocusable()) {
+        if (!nextFocus.hasFocusable()) {
+            return nextCandidate;
+        }
+        if (nextCandidate == null) {
             return null;
         }
         return nextFocus;

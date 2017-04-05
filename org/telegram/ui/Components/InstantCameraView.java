@@ -45,6 +45,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private View actionBar;
     private AnimatorSet animatorSet;
     private ChatActivity baseFragment;
+    private Paint blackPaint;
     private FrameLayout cameraContainer;
     private File cameraFile;
     private CameraView cameraView;
@@ -79,6 +80,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.paint.setStrokeCap(Cap.ROUND);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
         this.paint.setColor(-1);
+        this.blackPaint = new Paint(1);
+        this.blackPaint.setColor(-16777216);
         this.rect = new RectF();
         if (AndroidUtilities.isTablet()) {
             size = Math.min(AndroidUtilities.getPhotoSize(), (int) (((float) AndroidUtilities.getMinTabletSide()) * 0.5f));
@@ -87,8 +90,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
         if (VERSION.SDK_INT >= 21) {
             this.cameraContainer = new FrameLayout(context) {
-                public void setTranslationY(float translationY) {
-                    super.setTranslationY(translationY);
+                protected void onDraw(Canvas canvas) {
+                    canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) (size / 2), InstantCameraView.this.blackPaint);
                 }
             };
             this.cameraContainer.setOutlineProvider(new ViewOutlineProvider() {
@@ -98,6 +101,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             });
             this.cameraContainer.setClipToOutline(true);
+            this.cameraContainer.setWillNotDraw(false);
         } else {
             final Path path = new Path();
             final Paint paint = new Paint(1);
@@ -116,12 +120,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     canvas.drawPath(path, paint);
                 }
             };
+            this.cameraContainer.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, null);
         }
         LayoutParams layoutParams = new LayoutParams(size, size, 17);
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         addView(this.cameraContainer, layoutParams);
-        setVisibility(8);
+        setVisibility(4);
+    }
+
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (getVisibility() != 0) {
+            this.cameraContainer.setTranslationY((float) (getMeasuredHeight() / 2));
+        }
     }
 
     protected void onAttachedToWindow() {
@@ -198,6 +210,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.cameraView = new CameraView(getContext(), true);
             this.cameraView.setMirror(true);
             this.cameraContainer.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
+            startAnimation(true);
             this.cameraView.setDelegate(new CameraViewDelegate() {
                 public void onCameraCreated(Camera camera) {
                 }
@@ -233,7 +246,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                         InstantCameraView.this.recordStartTime = System.currentTimeMillis();
                                         AndroidUtilities.runOnUIThread(InstantCameraView.this.timerRunnable);
                                         NotificationCenter.getInstance().postNotificationName(NotificationCenter.recordStarted, new Object[0]);
-                                        InstantCameraView.this.startAnimation(true);
                                     }
                                 }
                             }, true);
@@ -323,7 +335,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 public void onAnimationEnd(Animator animation) {
                     if (animation.equals(InstantCameraView.this.animatorSet)) {
                         InstantCameraView.this.hideCamera(true);
-                        InstantCameraView.this.setVisibility(8);
+                        InstantCameraView.this.setVisibility(4);
                     }
                 }
             });

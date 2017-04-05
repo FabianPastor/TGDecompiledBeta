@@ -60,10 +60,10 @@ public class zzabr extends zzbam implements ConnectionCallbacks, OnConnectionFai
     private void zzc(zzbaw com_google_android_gms_internal_zzbaw) {
         ConnectionResult zzyh = com_google_android_gms_internal_zzbaw.zzyh();
         if (zzyh.isSuccess()) {
-            zzaf zzPT = com_google_android_gms_internal_zzbaw.zzPT();
-            ConnectionResult zzyh2 = zzPT.zzyh();
+            zzaf zzPU = com_google_android_gms_internal_zzbaw.zzPU();
+            ConnectionResult zzyh2 = zzPU.zzyh();
             if (zzyh2.isSuccess()) {
-                this.zzaDi.zzb(zzPT.zzyg(), this.zzakq);
+                this.zzaDi.zzb(zzPU.zzyg(), this.zzakq);
             } else {
                 String valueOf = String.valueOf(zzyh2);
                 Log.wtf("SignInCoordinator", new StringBuilder(String.valueOf(valueOf).length() + 48).append("Sign-in succeeded with resolve account failure: ").append(valueOf).toString(), new Exception());
@@ -99,7 +99,7 @@ public class zzabr extends zzbam implements ConnectionCallbacks, OnConnectionFai
         if (this.zzaDh) {
             GoogleSignInOptions zzrC = zzn.zzas(this.mContext).zzrC();
             this.zzakq = zzrC == null ? new HashSet() : new HashSet(zzrC.zzrj());
-            this.zzaAL = new zzg(null, this.zzakq, null, 0, null, null, null, zzbaj.zzbEm);
+            this.zzaAL = new zzg(null, this.zzakq, null, 0, null, null, null, zzbaj.zzbEi);
         }
         this.zzaBs = (zzbai) this.zzayH.zza(this.mContext, this.mHandler.getLooper(), this.zzaAL, this.zzaAL.zzxR(), this, this);
         this.zzaDi = com_google_android_gms_internal_zzabr_zza;

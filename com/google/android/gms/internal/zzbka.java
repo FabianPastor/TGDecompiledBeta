@@ -12,7 +12,7 @@ public class zzbka extends zza {
     public int rotation;
     final int versionCode;
     public int width;
-    public long zzbPp;
+    public long zzbPl;
 
     public zzbka() {
         this.versionCode = 1;
@@ -23,7 +23,7 @@ public class zzbka extends zza {
         this.width = i2;
         this.height = i3;
         this.id = i4;
-        this.zzbPp = j;
+        this.zzbPl = j;
         this.rotation = i5;
     }
 
@@ -33,7 +33,7 @@ public class zzbka extends zza {
         com_google_android_gms_internal_zzbka.height = frame.getMetadata().getHeight();
         com_google_android_gms_internal_zzbka.rotation = frame.getMetadata().getRotation();
         com_google_android_gms_internal_zzbka.id = frame.getMetadata().getId();
-        com_google_android_gms_internal_zzbka.zzbPp = frame.getMetadata().getTimestampMillis();
+        com_google_android_gms_internal_zzbka.zzbPl = frame.getMetadata().getTimestampMillis();
         return com_google_android_gms_internal_zzbka;
     }
 

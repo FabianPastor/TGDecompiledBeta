@@ -8,16 +8,16 @@ import com.google.android.gms.common.internal.safeparcel.zza;
 public class zzbkj extends zza {
     public static final Creator<zzbkj> CREATOR = new zzbkk();
     final int versionCode;
-    public final Rect zzbPK;
+    public final Rect zzbPG;
 
     public zzbkj() {
         this.versionCode = 1;
-        this.zzbPK = new Rect();
+        this.zzbPG = new Rect();
     }
 
     public zzbkj(int i, Rect rect) {
         this.versionCode = i;
-        this.zzbPK = rect;
+        this.zzbPG = rect;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

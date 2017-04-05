@@ -12,7 +12,7 @@ public class StreetViewPanoramaCamera extends zza implements ReflectedParcelable
     public final float bearing;
     public final float tilt;
     public final float zoom;
-    private StreetViewPanoramaOrientation zzbpY;
+    private StreetViewPanoramaOrientation zzbpU;
 
     public static final class Builder {
         public float bearing;
@@ -60,7 +60,7 @@ public class StreetViewPanoramaCamera extends zza implements ReflectedParcelable
         this.zoom = f;
         this.tilt = f2 + 0.0f;
         this.bearing = (((double) f3) <= 0.0d ? (f3 % 360.0f) + 360.0f : f3) % 360.0f;
-        this.zzbpY = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
+        this.zzbpU = new com.google.android.gms.maps.model.StreetViewPanoramaOrientation.Builder().tilt(f2).bearing(f3).build();
     }
 
     public static Builder builder() {
@@ -83,7 +83,7 @@ public class StreetViewPanoramaCamera extends zza implements ReflectedParcelable
     }
 
     public StreetViewPanoramaOrientation getOrientation() {
-        return this.zzbpY;
+        return this.zzbpU;
     }
 
     public int hashCode() {

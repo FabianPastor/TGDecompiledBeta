@@ -18,7 +18,7 @@ public class Cap extends zza {
     private final BitmapDescriptor bitmapDescriptor;
     private final int type;
     @Nullable
-    private final Float zzbpi;
+    private final Float zzbpe;
 
     protected Cap(int i) {
         this(i, null, null);
@@ -39,7 +39,7 @@ public class Cap extends zza {
         zzac.zzb(z, new StringBuilder((String.valueOf(valueOf).length() + 63) + String.valueOf(valueOf2).length()).append("Invalid Cap: type=").append(i).append(" bitmapDescriptor=").append(valueOf).append(" bitmapRefWidth=").append(valueOf2).toString());
         this.type = i;
         this.bitmapDescriptor = bitmapDescriptor;
-        this.zzbpi = f;
+        this.zzbpe = f;
     }
 
     protected Cap(@NonNull BitmapDescriptor bitmapDescriptor, float f) {
@@ -59,7 +59,7 @@ public class Cap extends zza {
             return false;
         }
         Cap cap = (Cap) obj;
-        return this.type == cap.type && zzaa.equal(this.bitmapDescriptor, cap.bitmapDescriptor) && zzaa.equal(this.zzbpi, cap.zzbpi);
+        return this.type == cap.type && zzaa.equal(this.bitmapDescriptor, cap.bitmapDescriptor) && zzaa.equal(this.zzbpe, cap.zzbpe);
     }
 
     public int getType() {
@@ -67,7 +67,7 @@ public class Cap extends zza {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.type), this.bitmapDescriptor, this.zzbpi);
+        return zzaa.hashCode(Integer.valueOf(this.type), this.bitmapDescriptor, this.zzbpe);
     }
 
     public String toString() {
@@ -79,16 +79,16 @@ public class Cap extends zza {
     }
 
     @Nullable
-    public Float zzJG() {
-        return this.zzbpi;
+    public Float zzJH() {
+        return this.zzbpe;
     }
 
     @Nullable
-    IBinder zzJH() {
-        return this.bitmapDescriptor == null ? null : this.bitmapDescriptor.zzJl().asBinder();
+    IBinder zzJI() {
+        return this.bitmapDescriptor == null ? null : this.bitmapDescriptor.zzJm().asBinder();
     }
 
-    Cap zzJI() {
+    Cap zzJJ() {
         switch (this.type) {
             case 0:
                 return new ButtCap();
@@ -97,7 +97,7 @@ public class Cap extends zza {
             case 2:
                 return new RoundCap();
             case 3:
-                return new CustomCap(this.bitmapDescriptor, this.zzbpi.floatValue());
+                return new CustomCap(this.bitmapDescriptor, this.zzbpe.floatValue());
             default:
                 Log.w(TAG, "Unknown Cap type: " + this.type);
                 return this;

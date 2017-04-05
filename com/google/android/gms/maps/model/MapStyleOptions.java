@@ -11,10 +11,10 @@ import java.io.IOException;
 public final class MapStyleOptions extends zza {
     public static final Creator<MapStyleOptions> CREATOR = new zzg();
     private static final String TAG = MapStyleOptions.class.getSimpleName();
-    private String zzbpE;
+    private String zzbpA;
 
     public MapStyleOptions(String str) {
-        this.zzbpE = str;
+        this.zzbpA = str;
     }
 
     public static MapStyleOptions loadRawResourceStyle(Context context, int i) throws NotFoundException {
@@ -30,7 +30,7 @@ public final class MapStyleOptions extends zza {
         zzg.zza(this, parcel, i);
     }
 
-    public String zzJK() {
-        return this.zzbpE;
+    public String zzJL() {
+        return this.zzbpA;
     }
 }

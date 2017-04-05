@@ -104,6 +104,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     private static final String TRACE_ON_LAYOUT_TAG = "RV OnLayout";
     static final String TRACE_PREFETCH_TAG = "RV Prefetch";
     static final String TRACE_SCROLL_TAG = "RV Scroll";
+    static final boolean VERBOSE_TRACING = false;
     public static final int VERTICAL = 1;
     static final Interpolator sQuinticInterpolator = new Interpolator() {
         public float getInterpolation(float t) {
@@ -588,6 +589,36 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         ChildHelper mChildHelper;
         private int mHeight;
         private int mHeightMode;
+        ViewBoundsCheck mHorizontalBoundCheck = new ViewBoundsCheck(this.mHorizontalBoundCheckCallback);
+        private final Callback mHorizontalBoundCheckCallback = new Callback() {
+            public int getChildCount() {
+                return LayoutManager.this.getChildCount();
+            }
+
+            public View getParent() {
+                return LayoutManager.this.mRecyclerView;
+            }
+
+            public View getChildAt(int index) {
+                return LayoutManager.this.getChildAt(index);
+            }
+
+            public int getParentStart() {
+                return LayoutManager.this.getPaddingLeft();
+            }
+
+            public int getParentEnd() {
+                return LayoutManager.this.getWidth() - LayoutManager.this.getPaddingRight();
+            }
+
+            public int getChildStart(View view) {
+                return LayoutManager.this.getDecoratedLeft(view) - ((LayoutParams) view.getLayoutParams()).leftMargin;
+            }
+
+            public int getChildEnd(View view) {
+                return LayoutManager.this.getDecoratedRight(view) + ((LayoutParams) view.getLayoutParams()).rightMargin;
+            }
+        };
         boolean mIsAttachedToWindow = false;
         private boolean mItemPrefetchEnabled = true;
         private boolean mMeasurementCacheEnabled = true;
@@ -597,6 +628,36 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         boolean mRequestedSimpleAnimations = false;
         @Nullable
         SmoothScroller mSmoothScroller;
+        ViewBoundsCheck mVerticalBoundCheck = new ViewBoundsCheck(this.mVerticalBoundCheckCallback);
+        private final Callback mVerticalBoundCheckCallback = new Callback() {
+            public int getChildCount() {
+                return LayoutManager.this.getChildCount();
+            }
+
+            public View getParent() {
+                return LayoutManager.this.mRecyclerView;
+            }
+
+            public View getChildAt(int index) {
+                return LayoutManager.this.getChildAt(index);
+            }
+
+            public int getParentStart() {
+                return LayoutManager.this.getPaddingTop();
+            }
+
+            public int getParentEnd() {
+                return LayoutManager.this.getHeight() - LayoutManager.this.getPaddingBottom();
+            }
+
+            public int getChildStart(View view) {
+                return LayoutManager.this.getDecoratedTop(view) - ((LayoutParams) view.getLayoutParams()).topMargin;
+            }
+
+            public int getChildEnd(View view) {
+                return LayoutManager.this.getDecoratedBottom(view) + ((LayoutParams) view.getLayoutParams()).bottomMargin;
+            }
+        };
         private int mWidth;
         private int mWidthMode;
 
@@ -1391,9 +1452,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             return null;
         }
 
-        public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate) {
+        private int[] getChildRectangleOnScreenScrollAmount(RecyclerView parent, View child, Rect rect, boolean immediate) {
             int dx;
             int dy;
+            int[] out = new int[2];
             int parentLeft = getPaddingLeft();
             int parentTop = getPaddingTop();
             int parentRight = getWidth() - getPaddingRight();
@@ -1422,6 +1484,22 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             } else {
                 dy = Math.min(childTop - parentTop, offScreenBottom);
             }
+            out[0] = dx;
+            out[1] = dy;
+            return out;
+        }
+
+        public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate) {
+            return requestChildRectangleOnScreen(parent, child, rect, immediate, false);
+        }
+
+        public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible) {
+            int[] scrollAmount = getChildRectangleOnScreenScrollAmount(parent, child, rect, immediate);
+            int dx = scrollAmount[0];
+            int dy = scrollAmount[1];
+            if (focusedChildVisible && !isFocusedChildVisibleAfterScrolling(parent, dx, dy)) {
+                return false;
+            }
             if (dx == 0 && dy == 0) {
                 return false;
             }
@@ -1429,6 +1507,40 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 parent.scrollBy(dx, dy);
             } else {
                 parent.smoothScrollBy(dx, dy);
+            }
+            return true;
+        }
+
+        public boolean isViewPartiallyVisible(@NonNull View child, boolean completelyVisible, boolean acceptEndPointInclusion) {
+            boolean isViewFullyVisible;
+            boolean z = true;
+            if (this.mHorizontalBoundCheck.isViewWithinBoundFlags(child, 24579) && this.mVerticalBoundCheck.isViewWithinBoundFlags(child, 24579)) {
+                isViewFullyVisible = true;
+            } else {
+                isViewFullyVisible = false;
+            }
+            if (completelyVisible) {
+                return isViewFullyVisible;
+            }
+            if (isViewFullyVisible) {
+                z = false;
+            }
+            return z;
+        }
+
+        private boolean isFocusedChildVisibleAfterScrolling(RecyclerView parent, int dx, int dy) {
+            View focusedChild = parent.getFocusedChild();
+            if (focusedChild == null) {
+                return false;
+            }
+            int parentLeft = getPaddingLeft();
+            int parentTop = getPaddingTop();
+            int parentRight = getWidth() - getPaddingRight();
+            int parentBottom = getHeight() - getPaddingBottom();
+            Rect bounds = this.mRecyclerView.mTempRect;
+            getDecoratedBoundsWithMargins(focusedChild, bounds);
+            if (bounds.left - dx >= parentRight || bounds.right - dx <= parentLeft || bounds.top - dy >= parentBottom || bounds.bottom - dy <= parentTop) {
+                return false;
             }
             return true;
         }
@@ -2501,7 +2613,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             for (int i = this.mCachedViews.size() - 1; i >= 0; i--) {
                 ViewHolder holder = (ViewHolder) this.mCachedViews.get(i);
                 if (holder != null) {
-                    int pos = holder.getLayoutPosition();
+                    int pos = holder.mPosition;
                     if (pos >= positionStart && pos < positionEnd) {
                         holder.addFlags(2);
                         recycleCachedViewAt(i);
@@ -4769,10 +4881,20 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                 resumeRequestLayout(false);
             }
         }
-        if (isPreferredNextFocus(focused, result, direction)) {
-            return result;
+        if (result == null || result.hasFocusable()) {
+            View view;
+            if (isPreferredNextFocus(focused, result, direction)) {
+                view = result;
+            } else {
+                view = super.focusSearch(focused, direction);
+            }
+            return view;
+        } else if (getFocusedChild() == null) {
+            return super.focusSearch(focused, direction);
+        } else {
+            requestChildOnScreen(result, null);
+            return focused;
         }
-        return super.focusSearch(focused, direction);
     }
 
     private boolean isPreferredNextFocus(View focused, View next, int direction) {
@@ -4836,34 +4958,52 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     }
 
     public void requestChildFocus(View child, View focused) {
-        boolean z = false;
         if (!(this.mLayout.onRequestChildFocus(this, this.mState, child, focused) || focused == null)) {
-            Rect rect;
-            this.mTempRect.set(0, 0, focused.getWidth(), focused.getHeight());
-            android.view.ViewGroup.LayoutParams focusedLayoutParams = focused.getLayoutParams();
-            if (focusedLayoutParams instanceof LayoutParams) {
-                LayoutParams lp = (LayoutParams) focusedLayoutParams;
-                if (!lp.mInsetsDirty) {
-                    Rect insets = lp.mDecorInsets;
-                    rect = this.mTempRect;
-                    rect.left -= insets.left;
-                    rect = this.mTempRect;
-                    rect.right += insets.right;
-                    rect = this.mTempRect;
-                    rect.top -= insets.top;
-                    rect = this.mTempRect;
-                    rect.bottom += insets.bottom;
-                }
-            }
-            offsetDescendantRectToMyCoords(focused, this.mTempRect);
-            offsetRectIntoDescendantCoords(child, this.mTempRect);
-            rect = this.mTempRect;
-            if (!this.mFirstLayoutComplete) {
-                z = true;
-            }
-            requestChildRectangleOnScreen(child, rect, z);
+            requestChildOnScreen(child, focused);
         }
         super.requestChildFocus(child, focused);
+    }
+
+    private void requestChildOnScreen(@NonNull View child, @Nullable View focused) {
+        View rectView;
+        boolean z;
+        boolean z2 = true;
+        if (focused != null) {
+            rectView = focused;
+        } else {
+            rectView = child;
+        }
+        this.mTempRect.set(0, 0, rectView.getWidth(), rectView.getHeight());
+        android.view.ViewGroup.LayoutParams focusedLayoutParams = rectView.getLayoutParams();
+        if (focusedLayoutParams instanceof LayoutParams) {
+            LayoutParams lp = (LayoutParams) focusedLayoutParams;
+            if (!lp.mInsetsDirty) {
+                Rect insets = lp.mDecorInsets;
+                Rect rect = this.mTempRect;
+                rect.left -= insets.left;
+                rect = this.mTempRect;
+                rect.right += insets.right;
+                rect = this.mTempRect;
+                rect.top -= insets.top;
+                rect = this.mTempRect;
+                rect.bottom += insets.bottom;
+            }
+        }
+        if (focused != null) {
+            offsetDescendantRectToMyCoords(focused, this.mTempRect);
+            offsetRectIntoDescendantCoords(child, this.mTempRect);
+        }
+        LayoutManager layoutManager = this.mLayout;
+        Rect rect2 = this.mTempRect;
+        if (this.mFirstLayoutComplete) {
+            z = false;
+        } else {
+            z = true;
+        }
+        if (focused != null) {
+            z2 = false;
+        }
+        layoutManager.requestChildRectangleOnScreen(this, child, rect2, z, z2);
     }
 
     public boolean requestChildRectangleOnScreen(View child, Rect rect, boolean immediate) {
@@ -4954,7 +5094,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
             }
             throw new IllegalStateException(message);
         } else if (this.mDispatchScrollCounter > 0) {
-            Log.w(TAG, "Cannot call this method in a scroll callback. Scroll callbacks might be run during a measure & layout pass where you cannot change the RecyclerView data. Any method call that might change the structure of the RecyclerView or the adapter contents should be postponed to the next frame.", new IllegalStateException(""));
+            Log.w(TAG, "Cannot call this method in a scroll callback. Scroll callbacks mightbe run during a measure & layout pass where you cannot change theRecyclerView data. Any method call that might change the structureof the RecyclerView or the adapter contents should be postponed tothe next frame.", new IllegalStateException(""));
         }
     }
 
@@ -5361,7 +5501,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         } else {
             if (this.mAdapterUpdateDuringMeasure) {
                 eatRequestLayout();
+                onEnterLayoutOrScroll();
                 processAdapterUpdatesAndSetAnimationFlags();
+                onExitLayoutOrScroll();
                 if (this.mState.mRunPredictiveAnimations) {
                     this.mState.mInPreLayout = true;
                 } else {

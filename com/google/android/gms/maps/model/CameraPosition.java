@@ -19,39 +19,39 @@ public final class CameraPosition extends zza implements ReflectedParcelable {
     public final float zoom;
 
     public static final class Builder {
-        private LatLng zzbpe;
-        private float zzbpf;
-        private float zzbpg;
-        private float zzbph;
+        private LatLng zzbpa;
+        private float zzbpb;
+        private float zzbpc;
+        private float zzbpd;
 
         public Builder(CameraPosition cameraPosition) {
-            this.zzbpe = cameraPosition.target;
-            this.zzbpf = cameraPosition.zoom;
-            this.zzbpg = cameraPosition.tilt;
-            this.zzbph = cameraPosition.bearing;
+            this.zzbpa = cameraPosition.target;
+            this.zzbpb = cameraPosition.zoom;
+            this.zzbpc = cameraPosition.tilt;
+            this.zzbpd = cameraPosition.bearing;
         }
 
         public Builder bearing(float f) {
-            this.zzbph = f;
+            this.zzbpd = f;
             return this;
         }
 
         public CameraPosition build() {
-            return new CameraPosition(this.zzbpe, this.zzbpf, this.zzbpg, this.zzbph);
+            return new CameraPosition(this.zzbpa, this.zzbpb, this.zzbpc, this.zzbpd);
         }
 
         public Builder target(LatLng latLng) {
-            this.zzbpe = latLng;
+            this.zzbpa = latLng;
             return this;
         }
 
         public Builder tilt(float f) {
-            this.zzbpg = f;
+            this.zzbpc = f;
             return this;
         }
 
         public Builder zoom(float f) {
-            this.zzbpf = f;
+            this.zzbpb = f;
             return this;
         }
     }

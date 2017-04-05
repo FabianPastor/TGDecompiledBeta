@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import com.google.android.gms.gcm.GcmListenerService;
 import org.json.JSONObject;
@@ -25,7 +26,7 @@ public class GcmPushListenerService extends GcmListenerService {
                         } else {
                             return;
                         }
-                    } else if (ApplicationLoader.mainInterfacePaused && UserConfig.isClientActivated() && bundle.getString("badge") == null) {
+                    } else if (VERSION.SDK_INT >= 24 && ApplicationLoader.mainInterfacePaused && UserConfig.isClientActivated() && bundle.get("badge") == null) {
                         long time;
                         Object obj = bundle.get("google.sent_time");
                         if (obj instanceof String) {
@@ -36,8 +37,9 @@ public class GcmPushListenerService extends GcmListenerService {
                             time = -1;
                         }
                         if (time == -1 || UserConfig.lastAppPauseTime < time) {
-                            NetworkInfo netInfo = ((ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-                            if (!(netInfo == null || netInfo.isConnected() || netInfo.getType() == 1)) {
+                            ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");
+                            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+                            if (connectivityManager.getRestrictBackgroundStatus() == 3 && netInfo.getType() != 0) {
                                 NotificationsController.getInstance().showSingleBackgroundNotification();
                             }
                         }

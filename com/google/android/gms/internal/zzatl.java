@@ -11,9 +11,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class zzatl extends zzauh {
-    private String zzbrA;
-    private Boolean zzbrB;
-    private long zzbrz;
+    private long zzbrv;
+    private String zzbrw;
+    private Boolean zzbrx;
 
     zzatl(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -21,10 +21,6 @@ public class zzatl extends zzauh {
 
     public /* bridge */ /* synthetic */ Context getContext() {
         return super.getContext();
-    }
-
-    public /* bridge */ /* synthetic */ void zzJU() {
-        super.zzJU();
     }
 
     public /* bridge */ /* synthetic */ void zzJV() {
@@ -35,99 +31,103 @@ public class zzatl extends zzauh {
         super.zzJW();
     }
 
-    public /* bridge */ /* synthetic */ zzatb zzJX() {
-        return super.zzJX();
+    public /* bridge */ /* synthetic */ void zzJX() {
+        super.zzJX();
     }
 
-    public /* bridge */ /* synthetic */ zzatf zzJY() {
+    public /* bridge */ /* synthetic */ zzatb zzJY() {
         return super.zzJY();
     }
 
-    public /* bridge */ /* synthetic */ zzauj zzJZ() {
+    public /* bridge */ /* synthetic */ zzatf zzJZ() {
         return super.zzJZ();
     }
 
-    public /* bridge */ /* synthetic */ zzatu zzKa() {
+    public /* bridge */ /* synthetic */ zzauj zzKa() {
         return super.zzKa();
     }
 
-    public /* bridge */ /* synthetic */ zzatl zzKb() {
+    public /* bridge */ /* synthetic */ zzatu zzKb() {
         return super.zzKb();
     }
 
-    public /* bridge */ /* synthetic */ zzaul zzKc() {
+    public /* bridge */ /* synthetic */ zzatl zzKc() {
         return super.zzKc();
     }
 
-    public /* bridge */ /* synthetic */ zzauk zzKd() {
+    public /* bridge */ /* synthetic */ zzaul zzKd() {
         return super.zzKd();
     }
 
-    public /* bridge */ /* synthetic */ zzatv zzKe() {
+    public /* bridge */ /* synthetic */ zzauk zzKe() {
         return super.zzKe();
     }
 
-    public /* bridge */ /* synthetic */ zzatj zzKf() {
+    public /* bridge */ /* synthetic */ zzatv zzKf() {
         return super.zzKf();
     }
 
-    public /* bridge */ /* synthetic */ zzaut zzKg() {
+    public /* bridge */ /* synthetic */ zzatj zzKg() {
         return super.zzKg();
     }
 
-    public /* bridge */ /* synthetic */ zzauc zzKh() {
+    public /* bridge */ /* synthetic */ zzaut zzKh() {
         return super.zzKh();
     }
 
-    public /* bridge */ /* synthetic */ zzaun zzKi() {
+    public /* bridge */ /* synthetic */ zzauc zzKi() {
         return super.zzKi();
     }
 
-    public /* bridge */ /* synthetic */ zzaud zzKj() {
+    public /* bridge */ /* synthetic */ zzaun zzKj() {
         return super.zzKj();
     }
 
-    public /* bridge */ /* synthetic */ zzatx zzKk() {
+    public /* bridge */ /* synthetic */ zzaud zzKk() {
         return super.zzKk();
     }
 
-    public /* bridge */ /* synthetic */ zzaua zzKl() {
+    public /* bridge */ /* synthetic */ zzatx zzKl() {
         return super.zzKl();
     }
 
-    public /* bridge */ /* synthetic */ zzati zzKm() {
+    public /* bridge */ /* synthetic */ zzaua zzKm() {
         return super.zzKm();
     }
 
-    public String zzLR() {
+    public /* bridge */ /* synthetic */ zzati zzKn() {
+        return super.zzKn();
+    }
+
+    public String zzLS() {
         zzob();
         return VERSION.RELEASE;
     }
 
-    public long zzLS() {
+    public long zzLT() {
         zzob();
-        return this.zzbrz;
+        return this.zzbrv;
     }
 
-    public String zzLT() {
+    public String zzLU() {
         zzob();
-        return this.zzbrA;
+        return this.zzbrw;
     }
 
     public boolean zzbL(Context context) {
-        if (this.zzbrB == null) {
-            zzKm().zzLf();
-            this.zzbrB = Boolean.valueOf(false);
+        if (this.zzbrx == null) {
+            zzKn().zzLg();
+            this.zzbrx = Boolean.valueOf(false);
             try {
                 PackageManager packageManager = context.getPackageManager();
                 if (packageManager != null) {
                     packageManager.getPackageInfo("com.google.android.gms", 128);
-                    this.zzbrB = Boolean.valueOf(true);
+                    this.zzbrx = Boolean.valueOf(true);
                 }
             } catch (NameNotFoundException e) {
             }
         }
-        return this.zzbrB.booleanValue();
+        return this.zzbrx.booleanValue();
     }
 
     public String zzkN() {
@@ -141,11 +141,11 @@ public class zzatl extends zzauh {
 
     protected void zzmS() {
         Calendar instance = Calendar.getInstance();
-        this.zzbrz = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
+        this.zzbrv = TimeUnit.MINUTES.convert((long) (instance.get(16) + instance.get(15)), TimeUnit.MILLISECONDS);
         Locale locale = Locale.getDefault();
         String valueOf = String.valueOf(locale.getLanguage().toLowerCase(Locale.ENGLISH));
         String valueOf2 = String.valueOf(locale.getCountry().toLowerCase(Locale.ENGLISH));
-        this.zzbrA = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
+        this.zzbrw = new StringBuilder((String.valueOf(valueOf).length() + 1) + String.valueOf(valueOf2).length()).append(valueOf).append("-").append(valueOf2).toString();
     }
 
     public /* bridge */ /* synthetic */ zze zznR() {

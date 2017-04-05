@@ -8,11 +8,11 @@ import com.google.android.gms.common.internal.zzad;
 public class zzbau extends zza {
     public static final Creator<zzbau> CREATOR = new zzbav();
     final int zzaiI;
-    final zzad zzbEx;
+    final zzad zzbEt;
 
     zzbau(int i, zzad com_google_android_gms_common_internal_zzad) {
         this.zzaiI = i;
-        this.zzbEx = com_google_android_gms_common_internal_zzad;
+        this.zzbEt = com_google_android_gms_common_internal_zzad;
     }
 
     public zzbau(zzad com_google_android_gms_common_internal_zzad) {
@@ -23,7 +23,7 @@ public class zzbau extends zza {
         zzbav.zza(this, parcel, i);
     }
 
-    public zzad zzPS() {
-        return this.zzbEx;
+    public zzad zzPT() {
+        return this.zzbEt;
     }
 }

@@ -11,12 +11,12 @@ public class zzbar extends zza {
     private final Account zzahh;
     final int zzaiI;
     private final String zzajw;
-    private final Scope[] zzbEv;
+    private final Scope[] zzbEr;
 
     zzbar(int i, Account account, Scope[] scopeArr, String str) {
         this.zzaiI = i;
         this.zzahh = account;
-        this.zzbEv = scopeArr;
+        this.zzbEr = scopeArr;
         this.zzajw = str;
     }
 
@@ -32,7 +32,7 @@ public class zzbar extends zza {
         zzbas.zza(this, parcel, i);
     }
 
-    public Scope[] zzPQ() {
-        return this.zzbEv;
+    public Scope[] zzPR() {
+        return this.zzbEr;
     }
 }

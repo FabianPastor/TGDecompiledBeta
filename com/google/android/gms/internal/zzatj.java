@@ -29,20 +29,20 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 class zzatj extends zzauh {
+    private static final Map<String, String> zzbrg = new ArrayMap(1);
+    private static final Map<String, String> zzbrh = new ArrayMap(18);
+    private static final Map<String, String> zzbri = new ArrayMap(1);
+    private static final Map<String, String> zzbrj = new ArrayMap(1);
     private static final Map<String, String> zzbrk = new ArrayMap(1);
-    private static final Map<String, String> zzbrl = new ArrayMap(18);
-    private static final Map<String, String> zzbrm = new ArrayMap(1);
-    private static final Map<String, String> zzbrn = new ArrayMap(1);
-    private static final Map<String, String> zzbro = new ArrayMap(1);
-    private final zzc zzbrp = new zzc(this, getContext(), zzow());
-    private final zzauo zzbrq = new zzauo(zznR());
+    private final zzc zzbrl = new zzc(this, getContext(), zzow());
+    private final zzauo zzbrm = new zzauo(zznR());
 
     public static class zza {
+        long zzbrn;
+        long zzbro;
+        long zzbrp;
+        long zzbrq;
         long zzbrr;
-        long zzbrs;
-        long zzbrt;
-        long zzbru;
-        long zzbrv;
     }
 
     interface zzb {
@@ -52,31 +52,31 @@ class zzatj extends zzauh {
     }
 
     private class zzc extends SQLiteOpenHelper {
-        final /* synthetic */ zzatj zzbrw;
+        final /* synthetic */ zzatj zzbrs;
 
         zzc(zzatj com_google_android_gms_internal_zzatj, Context context, String str) {
-            this.zzbrw = com_google_android_gms_internal_zzatj;
+            this.zzbrs = com_google_android_gms_internal_zzatj;
             super(context, str, null, 1);
         }
 
         @WorkerThread
         public SQLiteDatabase getWritableDatabase() {
-            if (this.zzbrw.zzbrq.zzA(this.zzbrw.zzKm().zzLb())) {
+            if (this.zzbrs.zzbrm.zzA(this.zzbrs.zzKn().zzLc())) {
                 SQLiteDatabase writableDatabase;
                 try {
                     writableDatabase = super.getWritableDatabase();
                 } catch (SQLiteException e) {
-                    this.zzbrw.zzbrq.start();
-                    this.zzbrw.zzKk().zzLX().log("Opening the database failed, dropping and recreating it");
-                    String zzow = this.zzbrw.zzow();
-                    if (!this.zzbrw.getContext().getDatabasePath(zzow).delete()) {
-                        this.zzbrw.zzKk().zzLX().zzj("Failed to delete corrupted db file", zzow);
+                    this.zzbrs.zzbrm.start();
+                    this.zzbrs.zzKl().zzLY().log("Opening the database failed, dropping and recreating it");
+                    String zzow = this.zzbrs.zzow();
+                    if (!this.zzbrs.getContext().getDatabasePath(zzow).delete()) {
+                        this.zzbrs.zzKl().zzLY().zzj("Failed to delete corrupted db file", zzow);
                     }
                     try {
                         writableDatabase = super.getWritableDatabase();
-                        this.zzbrw.zzbrq.clear();
+                        this.zzbrs.zzbrm.clear();
                     } catch (SQLiteException e2) {
-                        this.zzbrw.zzKk().zzLX().zzj("Failed to open freshly created database", e2);
+                        this.zzbrs.zzKl().zzLY().zzj("Failed to open freshly created database", e2);
                         throw e2;
                     }
                 }
@@ -87,7 +87,7 @@ class zzatj extends zzauh {
 
         @WorkerThread
         public void onCreate(SQLiteDatabase sQLiteDatabase) {
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase);
         }
 
         @WorkerThread
@@ -100,17 +100,17 @@ class zzatj extends zzauh {
                     rawQuery.close();
                 }
             }
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "events", "CREATE TABLE IF NOT EXISTS events ( app_id TEXT NOT NULL, name TEXT NOT NULL, lifetime_count INTEGER NOT NULL, current_bundle_count INTEGER NOT NULL, last_fire_timestamp INTEGER NOT NULL, PRIMARY KEY (app_id, name)) ;", "app_id,name,lifetime_count,current_bundle_count,last_fire_timestamp", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "conditional_properties", "CREATE TABLE IF NOT EXISTS conditional_properties ( app_id TEXT NOT NULL, origin TEXT NOT NULL, name TEXT NOT NULL, value BLOB NOT NULL, creation_timestamp INTEGER NOT NULL, active INTEGER NOT NULL, trigger_event_name TEXT, trigger_timeout INTEGER NOT NULL, timed_out_event BLOB,triggered_event BLOB, triggered_timestamp INTEGER NOT NULL, time_to_live INTEGER NOT NULL, expired_event BLOB, PRIMARY KEY (app_id, name)) ;", "app_id,origin,name,value,active,trigger_event_name,trigger_timeout,creation_timestamp,timed_out_event,triggered_event,triggered_timestamp,time_to_live,expired_event", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "user_attributes", "CREATE TABLE IF NOT EXISTS user_attributes ( app_id TEXT NOT NULL, name TEXT NOT NULL, set_timestamp INTEGER NOT NULL, value BLOB NOT NULL, PRIMARY KEY (app_id, name)) ;", "app_id,name,set_timestamp,value", zzatj.zzbrk);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "apps", "CREATE TABLE IF NOT EXISTS apps ( app_id TEXT NOT NULL, app_instance_id TEXT, gmp_app_id TEXT, resettable_device_id_hash TEXT, last_bundle_index INTEGER NOT NULL, last_bundle_end_timestamp INTEGER NOT NULL, PRIMARY KEY (app_id)) ;", "app_id,app_instance_id,gmp_app_id,resettable_device_id_hash,last_bundle_index,last_bundle_end_timestamp", zzatj.zzbrl);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "queue", "CREATE TABLE IF NOT EXISTS queue ( app_id TEXT NOT NULL, bundle_end_timestamp INTEGER NOT NULL, data BLOB NOT NULL);", "app_id,bundle_end_timestamp,data", zzatj.zzbrn);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "raw_events_metadata", "CREATE TABLE IF NOT EXISTS raw_events_metadata ( app_id TEXT NOT NULL, metadata_fingerprint INTEGER NOT NULL, metadata BLOB NOT NULL, PRIMARY KEY (app_id, metadata_fingerprint));", "app_id,metadata_fingerprint,metadata", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "raw_events", "CREATE TABLE IF NOT EXISTS raw_events ( app_id TEXT NOT NULL, name TEXT NOT NULL, timestamp INTEGER NOT NULL, metadata_fingerprint INTEGER NOT NULL, data BLOB NOT NULL);", "app_id,name,timestamp,metadata_fingerprint,data", zzatj.zzbrm);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "event_filters", "CREATE TABLE IF NOT EXISTS event_filters ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, filter_id INTEGER NOT NULL, event_name TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY (app_id, event_name, audience_id, filter_id));", "app_id,audience_id,filter_id,event_name,data", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "property_filters", "CREATE TABLE IF NOT EXISTS property_filters ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, filter_id INTEGER NOT NULL, property_name TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY (app_id, property_name, audience_id, filter_id));", "app_id,audience_id,filter_id,property_name,data", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "audience_filter_values", "CREATE TABLE IF NOT EXISTS audience_filter_values ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, current_results BLOB, PRIMARY KEY (app_id, audience_id));", "app_id,audience_id,current_results", null);
-            zzatj.zza(this.zzbrw.zzKk(), sQLiteDatabase, "app2", "CREATE TABLE IF NOT EXISTS app2 ( app_id TEXT NOT NULL, first_open_count INTEGER NOT NULL, PRIMARY KEY (app_id));", "app_id,first_open_count", zzatj.zzbro);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "events", "CREATE TABLE IF NOT EXISTS events ( app_id TEXT NOT NULL, name TEXT NOT NULL, lifetime_count INTEGER NOT NULL, current_bundle_count INTEGER NOT NULL, last_fire_timestamp INTEGER NOT NULL, PRIMARY KEY (app_id, name)) ;", "app_id,name,lifetime_count,current_bundle_count,last_fire_timestamp", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "conditional_properties", "CREATE TABLE IF NOT EXISTS conditional_properties ( app_id TEXT NOT NULL, origin TEXT NOT NULL, name TEXT NOT NULL, value BLOB NOT NULL, creation_timestamp INTEGER NOT NULL, active INTEGER NOT NULL, trigger_event_name TEXT, trigger_timeout INTEGER NOT NULL, timed_out_event BLOB,triggered_event BLOB, triggered_timestamp INTEGER NOT NULL, time_to_live INTEGER NOT NULL, expired_event BLOB, PRIMARY KEY (app_id, name)) ;", "app_id,origin,name,value,active,trigger_event_name,trigger_timeout,creation_timestamp,timed_out_event,triggered_event,triggered_timestamp,time_to_live,expired_event", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "user_attributes", "CREATE TABLE IF NOT EXISTS user_attributes ( app_id TEXT NOT NULL, name TEXT NOT NULL, set_timestamp INTEGER NOT NULL, value BLOB NOT NULL, PRIMARY KEY (app_id, name)) ;", "app_id,name,set_timestamp,value", zzatj.zzbrg);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "apps", "CREATE TABLE IF NOT EXISTS apps ( app_id TEXT NOT NULL, app_instance_id TEXT, gmp_app_id TEXT, resettable_device_id_hash TEXT, last_bundle_index INTEGER NOT NULL, last_bundle_end_timestamp INTEGER NOT NULL, PRIMARY KEY (app_id)) ;", "app_id,app_instance_id,gmp_app_id,resettable_device_id_hash,last_bundle_index,last_bundle_end_timestamp", zzatj.zzbrh);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "queue", "CREATE TABLE IF NOT EXISTS queue ( app_id TEXT NOT NULL, bundle_end_timestamp INTEGER NOT NULL, data BLOB NOT NULL);", "app_id,bundle_end_timestamp,data", zzatj.zzbrj);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "raw_events_metadata", "CREATE TABLE IF NOT EXISTS raw_events_metadata ( app_id TEXT NOT NULL, metadata_fingerprint INTEGER NOT NULL, metadata BLOB NOT NULL, PRIMARY KEY (app_id, metadata_fingerprint));", "app_id,metadata_fingerprint,metadata", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "raw_events", "CREATE TABLE IF NOT EXISTS raw_events ( app_id TEXT NOT NULL, name TEXT NOT NULL, timestamp INTEGER NOT NULL, metadata_fingerprint INTEGER NOT NULL, data BLOB NOT NULL);", "app_id,name,timestamp,metadata_fingerprint,data", zzatj.zzbri);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "event_filters", "CREATE TABLE IF NOT EXISTS event_filters ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, filter_id INTEGER NOT NULL, event_name TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY (app_id, event_name, audience_id, filter_id));", "app_id,audience_id,filter_id,event_name,data", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "property_filters", "CREATE TABLE IF NOT EXISTS property_filters ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, filter_id INTEGER NOT NULL, property_name TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY (app_id, property_name, audience_id, filter_id));", "app_id,audience_id,filter_id,property_name,data", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "audience_filter_values", "CREATE TABLE IF NOT EXISTS audience_filter_values ( app_id TEXT NOT NULL, audience_id INTEGER NOT NULL, current_results BLOB, PRIMARY KEY (app_id, audience_id));", "app_id,audience_id,current_results", null);
+            zzatj.zza(this.zzbrs.zzKl(), sQLiteDatabase, "app2", "CREATE TABLE IF NOT EXISTS app2 ( app_id TEXT NOT NULL, first_open_count INTEGER NOT NULL, PRIMARY KEY (app_id));", "app_id,first_open_count", zzatj.zzbrk);
         }
 
         @WorkerThread
@@ -119,36 +119,36 @@ class zzatj extends zzauh {
     }
 
     static {
-        zzbrk.put("origin", "ALTER TABLE user_attributes ADD COLUMN origin TEXT;");
-        zzbrl.put("app_version", "ALTER TABLE apps ADD COLUMN app_version TEXT;");
-        zzbrl.put("app_store", "ALTER TABLE apps ADD COLUMN app_store TEXT;");
-        zzbrl.put("gmp_version", "ALTER TABLE apps ADD COLUMN gmp_version INTEGER;");
-        zzbrl.put("dev_cert_hash", "ALTER TABLE apps ADD COLUMN dev_cert_hash INTEGER;");
-        zzbrl.put("measurement_enabled", "ALTER TABLE apps ADD COLUMN measurement_enabled INTEGER;");
-        zzbrl.put("last_bundle_start_timestamp", "ALTER TABLE apps ADD COLUMN last_bundle_start_timestamp INTEGER;");
-        zzbrl.put("day", "ALTER TABLE apps ADD COLUMN day INTEGER;");
-        zzbrl.put("daily_public_events_count", "ALTER TABLE apps ADD COLUMN daily_public_events_count INTEGER;");
-        zzbrl.put("daily_events_count", "ALTER TABLE apps ADD COLUMN daily_events_count INTEGER;");
-        zzbrl.put("daily_conversions_count", "ALTER TABLE apps ADD COLUMN daily_conversions_count INTEGER;");
-        zzbrl.put("remote_config", "ALTER TABLE apps ADD COLUMN remote_config BLOB;");
-        zzbrl.put("config_fetched_time", "ALTER TABLE apps ADD COLUMN config_fetched_time INTEGER;");
-        zzbrl.put("failed_config_fetch_time", "ALTER TABLE apps ADD COLUMN failed_config_fetch_time INTEGER;");
-        zzbrl.put("app_version_int", "ALTER TABLE apps ADD COLUMN app_version_int INTEGER;");
-        zzbrl.put("firebase_instance_id", "ALTER TABLE apps ADD COLUMN firebase_instance_id TEXT;");
-        zzbrl.put("daily_error_events_count", "ALTER TABLE apps ADD COLUMN daily_error_events_count INTEGER;");
-        zzbrl.put("daily_realtime_events_count", "ALTER TABLE apps ADD COLUMN daily_realtime_events_count INTEGER;");
-        zzbrl.put("health_monitor_sample", "ALTER TABLE apps ADD COLUMN health_monitor_sample TEXT;");
-        zzbrl.put("android_id", "ALTER TABLE apps ADD COLUMN android_id INTEGER;");
-        zzbrm.put("realtime", "ALTER TABLE raw_events ADD COLUMN realtime INTEGER;");
-        zzbrn.put("has_realtime", "ALTER TABLE queue ADD COLUMN has_realtime INTEGER;");
-        zzbro.put("previous_install_count", "ALTER TABLE app2 ADD COLUMN previous_install_count INTEGER;");
+        zzbrg.put("origin", "ALTER TABLE user_attributes ADD COLUMN origin TEXT;");
+        zzbrh.put("app_version", "ALTER TABLE apps ADD COLUMN app_version TEXT;");
+        zzbrh.put("app_store", "ALTER TABLE apps ADD COLUMN app_store TEXT;");
+        zzbrh.put("gmp_version", "ALTER TABLE apps ADD COLUMN gmp_version INTEGER;");
+        zzbrh.put("dev_cert_hash", "ALTER TABLE apps ADD COLUMN dev_cert_hash INTEGER;");
+        zzbrh.put("measurement_enabled", "ALTER TABLE apps ADD COLUMN measurement_enabled INTEGER;");
+        zzbrh.put("last_bundle_start_timestamp", "ALTER TABLE apps ADD COLUMN last_bundle_start_timestamp INTEGER;");
+        zzbrh.put("day", "ALTER TABLE apps ADD COLUMN day INTEGER;");
+        zzbrh.put("daily_public_events_count", "ALTER TABLE apps ADD COLUMN daily_public_events_count INTEGER;");
+        zzbrh.put("daily_events_count", "ALTER TABLE apps ADD COLUMN daily_events_count INTEGER;");
+        zzbrh.put("daily_conversions_count", "ALTER TABLE apps ADD COLUMN daily_conversions_count INTEGER;");
+        zzbrh.put("remote_config", "ALTER TABLE apps ADD COLUMN remote_config BLOB;");
+        zzbrh.put("config_fetched_time", "ALTER TABLE apps ADD COLUMN config_fetched_time INTEGER;");
+        zzbrh.put("failed_config_fetch_time", "ALTER TABLE apps ADD COLUMN failed_config_fetch_time INTEGER;");
+        zzbrh.put("app_version_int", "ALTER TABLE apps ADD COLUMN app_version_int INTEGER;");
+        zzbrh.put("firebase_instance_id", "ALTER TABLE apps ADD COLUMN firebase_instance_id TEXT;");
+        zzbrh.put("daily_error_events_count", "ALTER TABLE apps ADD COLUMN daily_error_events_count INTEGER;");
+        zzbrh.put("daily_realtime_events_count", "ALTER TABLE apps ADD COLUMN daily_realtime_events_count INTEGER;");
+        zzbrh.put("health_monitor_sample", "ALTER TABLE apps ADD COLUMN health_monitor_sample TEXT;");
+        zzbrh.put("android_id", "ALTER TABLE apps ADD COLUMN android_id INTEGER;");
+        zzbri.put("realtime", "ALTER TABLE raw_events ADD COLUMN realtime INTEGER;");
+        zzbrj.put("has_realtime", "ALTER TABLE queue ADD COLUMN has_realtime INTEGER;");
+        zzbrk.put("previous_install_count", "ALTER TABLE app2 ADD COLUMN previous_install_count INTEGER;");
     }
 
     zzatj(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
     }
 
-    private boolean zzLL() {
+    private boolean zzLM() {
         return getContext().getDatabasePath(zzow()).exists();
     }
 
@@ -174,7 +174,7 @@ class zzatj extends zzauh {
             }
             return j;
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Database error", str, e);
+            zzKl().zzLY().zze("Database error", str, e);
             throw e;
         } catch (Throwable th) {
             if (cursor != null) {
@@ -190,16 +190,16 @@ class zzatj extends zzauh {
         int i = VERSION.SDK_INT;
         File file = new File(sQLiteDatabase.getPath());
         if (!file.setReadable(false, false)) {
-            com_google_android_gms_internal_zzatx.zzLZ().log("Failed to turn off database read permission");
+            com_google_android_gms_internal_zzatx.zzMa().log("Failed to turn off database read permission");
         }
         if (!file.setWritable(false, false)) {
-            com_google_android_gms_internal_zzatx.zzLZ().log("Failed to turn off database write permission");
+            com_google_android_gms_internal_zzatx.zzMa().log("Failed to turn off database write permission");
         }
         if (!file.setReadable(true, true)) {
-            com_google_android_gms_internal_zzatx.zzLZ().log("Failed to turn on database read permission for owner");
+            com_google_android_gms_internal_zzatx.zzMa().log("Failed to turn on database read permission for owner");
         }
         if (!file.setWritable(true, true)) {
-            com_google_android_gms_internal_zzatx.zzLZ().log("Failed to turn on database write permission for owner");
+            com_google_android_gms_internal_zzatx.zzMa().log("Failed to turn on database write permission for owner");
         }
     }
 
@@ -214,7 +214,7 @@ class zzatj extends zzauh {
         try {
             zza(com_google_android_gms_internal_zzatx, sQLiteDatabase, str, str3, map);
         } catch (SQLiteException e) {
-            com_google_android_gms_internal_zzatx.zzLX().zzj("Failed to verify columns on table that was just created", str);
+            com_google_android_gms_internal_zzatx.zzLY().zzj("Failed to verify columns on table that was just created", str);
             throw e;
         }
     }
@@ -244,7 +244,7 @@ class zzatj extends zzauh {
             }
         }
         if (!zzb.isEmpty()) {
-            com_google_android_gms_internal_zzatx.zzLZ().zze("Table has extra columns. table, columns", str, TextUtils.join(", ", zzb));
+            com_google_android_gms_internal_zzatx.zzMa().zze("Table has extra columns. table, columns", str, TextUtils.join(", ", zzb));
         }
     }
 
@@ -255,34 +255,34 @@ class zzatj extends zzauh {
         zzmR();
         zzac.zzdr(str);
         zzac.zzw(com_google_android_gms_internal_zzauu_zza);
-        zzac.zzw(com_google_android_gms_internal_zzauu_zza.zzbwq);
-        zzac.zzw(com_google_android_gms_internal_zzauu_zza.zzbwp);
-        if (com_google_android_gms_internal_zzauu_zza.zzbwo == null) {
-            zzKk().zzLZ().zzj("Audience with no ID. appId", zzatx.zzfE(str));
+        zzac.zzw(com_google_android_gms_internal_zzauu_zza.zzbwm);
+        zzac.zzw(com_google_android_gms_internal_zzauu_zza.zzbwl);
+        if (com_google_android_gms_internal_zzauu_zza.zzbwk == null) {
+            zzKl().zzMa().zzj("Audience with no ID. appId", zzatx.zzfE(str));
             return;
         }
-        int intValue = com_google_android_gms_internal_zzauu_zza.zzbwo.intValue();
-        for (com.google.android.gms.internal.zzauu.zzb com_google_android_gms_internal_zzauu_zzb : com_google_android_gms_internal_zzauu_zza.zzbwq) {
-            if (com_google_android_gms_internal_zzauu_zzb.zzbws == null) {
-                zzKk().zzLZ().zze("Event filter with no ID. Audience definition ignored. appId, audienceId", zzatx.zzfE(str), com_google_android_gms_internal_zzauu_zza.zzbwo);
+        int intValue = com_google_android_gms_internal_zzauu_zza.zzbwk.intValue();
+        for (com.google.android.gms.internal.zzauu.zzb com_google_android_gms_internal_zzauu_zzb : com_google_android_gms_internal_zzauu_zza.zzbwm) {
+            if (com_google_android_gms_internal_zzauu_zzb.zzbwo == null) {
+                zzKl().zzMa().zze("Event filter with no ID. Audience definition ignored. appId, audienceId", zzatx.zzfE(str), com_google_android_gms_internal_zzauu_zza.zzbwk);
                 return;
             }
         }
-        for (zzauu.zze com_google_android_gms_internal_zzauu_zze : com_google_android_gms_internal_zzauu_zza.zzbwp) {
-            if (com_google_android_gms_internal_zzauu_zze.zzbws == null) {
-                zzKk().zzLZ().zze("Property filter with no ID. Audience definition ignored. appId, audienceId", zzatx.zzfE(str), com_google_android_gms_internal_zzauu_zza.zzbwo);
+        for (zzauu.zze com_google_android_gms_internal_zzauu_zze : com_google_android_gms_internal_zzauu_zza.zzbwl) {
+            if (com_google_android_gms_internal_zzauu_zze.zzbwo == null) {
+                zzKl().zzMa().zze("Property filter with no ID. Audience definition ignored. appId, audienceId", zzatx.zzfE(str), com_google_android_gms_internal_zzauu_zza.zzbwk);
                 return;
             }
         }
         Object obj2 = 1;
-        for (com.google.android.gms.internal.zzauu.zzb zza : com_google_android_gms_internal_zzauu_zza.zzbwq) {
+        for (com.google.android.gms.internal.zzauu.zzb zza : com_google_android_gms_internal_zzauu_zza.zzbwm) {
             if (!zza(str, intValue, zza)) {
                 obj2 = null;
                 break;
             }
         }
         if (obj2 != null) {
-            for (zzauu.zze zza2 : com_google_android_gms_internal_zzauu_zza.zzbwp) {
+            for (zzauu.zze zza2 : com_google_android_gms_internal_zzauu_zza.zzbwl) {
                 if (!zza(str, intValue, zza2)) {
                     break;
                 }
@@ -316,7 +316,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    com_google_android_gms_internal_zzatx.zzLZ().zze("Error querying for table", str, e);
+                    com_google_android_gms_internal_zzatx.zzMa().zze("Error querying for table", str, e);
                     if (query != null) {
                         query.close();
                     }
@@ -333,7 +333,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             query = null;
-            com_google_android_gms_internal_zzatx.zzLZ().zze("Error querying for table", str, e);
+            com_google_android_gms_internal_zzatx.zzMa().zze("Error querying for table", str, e);
             if (query != null) {
                 query.close();
             }
@@ -353,32 +353,32 @@ class zzatj extends zzauh {
         zzmR();
         zzac.zzdr(str);
         zzac.zzw(com_google_android_gms_internal_zzauu_zzb);
-        if (TextUtils.isEmpty(com_google_android_gms_internal_zzauu_zzb.zzbwt)) {
-            zzKk().zzLZ().zzd("Event filter had no event name. Audience definition ignored. appId, audienceId, filterId", zzatx.zzfE(str), Integer.valueOf(i), String.valueOf(com_google_android_gms_internal_zzauu_zzb.zzbws));
+        if (TextUtils.isEmpty(com_google_android_gms_internal_zzauu_zzb.zzbwp)) {
+            zzKl().zzMa().zzd("Event filter had no event name. Audience definition ignored. appId, audienceId, filterId", zzatx.zzfE(str), Integer.valueOf(i), String.valueOf(com_google_android_gms_internal_zzauu_zzb.zzbwo));
             return false;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauu_zzb.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauu_zzb.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauu_zzb.zza(zzag);
-            zzag.zzaeF();
+            zzag.zzaeG();
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", str);
             contentValues.put("audience_id", Integer.valueOf(i));
-            contentValues.put("filter_id", com_google_android_gms_internal_zzauu_zzb.zzbws);
-            contentValues.put("event_name", com_google_android_gms_internal_zzauu_zzb.zzbwt);
+            contentValues.put("filter_id", com_google_android_gms_internal_zzauu_zzb.zzbwo);
+            contentValues.put("event_name", com_google_android_gms_internal_zzauu_zzb.zzbwp);
             contentValues.put("data", bArr);
             try {
                 if (getWritableDatabase().insertWithOnConflict("event_filters", null, contentValues, 5) == -1) {
-                    zzKk().zzLX().zzj("Failed to insert event filter (got -1). appId", zzatx.zzfE(str));
+                    zzKl().zzLY().zzj("Failed to insert event filter (got -1). appId", zzatx.zzfE(str));
                 }
                 return true;
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing event filter. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Error storing event filter. appId", zzatx.zzfE(str), e);
                 return false;
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Configuration loss. Failed to serialize event filter. appId", zzatx.zzfE(str), e2);
+            zzKl().zzLY().zze("Configuration loss. Failed to serialize event filter. appId", zzatx.zzfE(str), e2);
             return false;
         }
     }
@@ -389,33 +389,33 @@ class zzatj extends zzauh {
         zzmR();
         zzac.zzdr(str);
         zzac.zzw(com_google_android_gms_internal_zzauu_zze);
-        if (TextUtils.isEmpty(com_google_android_gms_internal_zzauu_zze.zzbwI)) {
-            zzKk().zzLZ().zzd("Property filter had no property name. Audience definition ignored. appId, audienceId, filterId", zzatx.zzfE(str), Integer.valueOf(i), String.valueOf(com_google_android_gms_internal_zzauu_zze.zzbws));
+        if (TextUtils.isEmpty(com_google_android_gms_internal_zzauu_zze.zzbwE)) {
+            zzKl().zzMa().zzd("Property filter had no property name. Audience definition ignored. appId, audienceId, filterId", zzatx.zzfE(str), Integer.valueOf(i), String.valueOf(com_google_android_gms_internal_zzauu_zze.zzbwo));
             return false;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauu_zze.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauu_zze.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauu_zze.zza(zzag);
-            zzag.zzaeF();
+            zzag.zzaeG();
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", str);
             contentValues.put("audience_id", Integer.valueOf(i));
-            contentValues.put("filter_id", com_google_android_gms_internal_zzauu_zze.zzbws);
-            contentValues.put("property_name", com_google_android_gms_internal_zzauu_zze.zzbwI);
+            contentValues.put("filter_id", com_google_android_gms_internal_zzauu_zze.zzbwo);
+            contentValues.put("property_name", com_google_android_gms_internal_zzauu_zze.zzbwE);
             contentValues.put("data", bArr);
             try {
                 if (getWritableDatabase().insertWithOnConflict("property_filters", null, contentValues, 5) != -1) {
                     return true;
                 }
-                zzKk().zzLX().zzj("Failed to insert property filter (got -1). appId", zzatx.zzfE(str));
+                zzKl().zzLY().zzj("Failed to insert property filter (got -1). appId", zzatx.zzfE(str));
                 return false;
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing property filter. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Error storing property filter. appId", zzatx.zzfE(str), e);
                 return false;
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Configuration loss. Failed to serialize property filter. appId", zzatx.zzfE(str), e2);
+            zzKl().zzLY().zze("Configuration loss. Failed to serialize property filter. appId", zzatx.zzfE(str), e2);
             return false;
         }
     }
@@ -434,7 +434,7 @@ class zzatj extends zzauh {
             }
             throw new SQLiteException("Database returned empty set");
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Database error", str, e);
+            zzKl().zzLY().zze("Database error", str, e);
             throw e;
         } catch (Throwable th) {
             if (cursor != null) {
@@ -471,9 +471,9 @@ class zzatj extends zzauh {
     SQLiteDatabase getWritableDatabase() {
         zzmR();
         try {
-            return this.zzbrp.getWritableDatabase();
+            return this.zzbrl.getWritableDatabase();
         } catch (SQLiteException e) {
-            zzKk().zzLZ().zzj("Error opening database", e);
+            zzKl().zzMa().zzj("Error opening database", e);
             throw e;
         }
     }
@@ -508,12 +508,12 @@ class zzatj extends zzauh {
         stringBuilder.append(")");
         int delete = getWritableDatabase().delete("raw_events", stringBuilder.toString(), null);
         if (delete != list.size()) {
-            zzKk().zzLX().zze("Deleted fewer rows from raw events table than expected", Integer.valueOf(delete), Integer.valueOf(list.size()));
+            zzKl().zzLY().zze("Deleted fewer rows from raw events table than expected", Integer.valueOf(delete), Integer.valueOf(list.size()));
         }
     }
 
     @WorkerThread
-    public String zzLC() {
+    public String zzLD() {
         Cursor rawQuery;
         Object e;
         Throwable th;
@@ -532,7 +532,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zzj("Database error getting next bundle app id", e);
+                    zzKl().zzLY().zzj("Database error getting next bundle app id", e);
                     if (rawQuery != null) {
                         rawQuery.close();
                     }
@@ -548,7 +548,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             rawQuery = null;
-            zzKk().zzLX().zzj("Database error getting next bundle app id", e);
+            zzKl().zzLY().zzj("Database error getting next bundle app id", e);
             if (rawQuery != null) {
                 rawQuery.close();
             }
@@ -564,55 +564,55 @@ class zzatj extends zzauh {
         return str;
     }
 
-    public boolean zzLD() {
+    public boolean zzLE() {
         return zzb("select count(1) > 0 from queue where has_realtime = 1", null) != 0;
-    }
-
-    @WorkerThread
-    void zzLE() {
-        zzmR();
-        zzob();
-        if (zzLL()) {
-            long j = zzKl().zzbtg.get();
-            long elapsedRealtime = zznR().elapsedRealtime();
-            if (Math.abs(elapsedRealtime - j) > zzKm().zzLj()) {
-                zzKl().zzbtg.set(elapsedRealtime);
-                zzLF();
-            }
-        }
     }
 
     @WorkerThread
     void zzLF() {
         zzmR();
         zzob();
-        if (zzLL()) {
-            int delete = getWritableDatabase().delete("queue", "abs(bundle_end_timestamp - ?) > cast(? as integer)", new String[]{String.valueOf(zznR().currentTimeMillis()), String.valueOf(zzKm().zzLi())});
-            if (delete > 0) {
-                zzKk().zzMd().zzj("Deleted stale rows. rowsDeleted", Integer.valueOf(delete));
+        if (zzLM()) {
+            long j = zzKm().zzbtc.get();
+            long elapsedRealtime = zznR().elapsedRealtime();
+            if (Math.abs(elapsedRealtime - j) > zzKn().zzLk()) {
+                zzKm().zzbtc.set(elapsedRealtime);
+                zzLG();
             }
         }
     }
 
     @WorkerThread
-    public long zzLG() {
-        return zza("select max(bundle_end_timestamp) from queue", null, 0);
+    void zzLG() {
+        zzmR();
+        zzob();
+        if (zzLM()) {
+            int delete = getWritableDatabase().delete("queue", "abs(bundle_end_timestamp - ?) > cast(? as integer)", new String[]{String.valueOf(zznR().currentTimeMillis()), String.valueOf(zzKn().zzLj())});
+            if (delete > 0) {
+                zzKl().zzMe().zzj("Deleted stale rows. rowsDeleted", Integer.valueOf(delete));
+            }
+        }
     }
 
     @WorkerThread
     public long zzLH() {
+        return zza("select max(bundle_end_timestamp) from queue", null, 0);
+    }
+
+    @WorkerThread
+    public long zzLI() {
         return zza("select max(timestamp) from raw_events", null, 0);
     }
 
-    public boolean zzLI() {
+    public boolean zzLJ() {
         return zzb("select count(1) > 0 from raw_events", null) != 0;
     }
 
-    public boolean zzLJ() {
+    public boolean zzLK() {
         return zzb("select count(1) > 0 from raw_events where realtime = 1", null) != 0;
     }
 
-    public long zzLK() {
+    public long zzLL() {
         long j = -1;
         Cursor cursor = null;
         try {
@@ -626,7 +626,7 @@ class zzatj extends zzauh {
                 cursor.close();
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zzj("Error querying raw events", e);
+            zzKl().zzLY().zzj("Error querying raw events", e);
             if (cursor != null) {
                 cursor.close();
             }
@@ -654,7 +654,7 @@ class zzatj extends zzauh {
                 if (query.moveToFirst()) {
                     zzatn com_google_android_gms_internal_zzatn = new zzatn(str, str2, query.getLong(0), query.getLong(1), query.getLong(2));
                     if (query.moveToNext()) {
-                        zzKk().zzLX().zzj("Got multiple records for event aggregates, expected one. appId", zzatx.zzfE(str));
+                        zzKl().zzLY().zzj("Got multiple records for event aggregates, expected one. appId", zzatx.zzfE(str));
                     }
                     if (query == null) {
                         return com_google_android_gms_internal_zzatn;
@@ -670,7 +670,7 @@ class zzatj extends zzauh {
                 e = e2;
                 cursor = query;
                 try {
-                    zzKk().zzLX().zzd("Error querying events. appId", zzatx.zzfE(str), str2, e);
+                    zzKl().zzLY().zzd("Error querying events. appId", zzatx.zzfE(str), str2, e);
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -694,7 +694,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             cursor = null;
-            zzKk().zzLX().zzd("Error querying events. appId", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error querying events. appId", zzatx.zzfE(str), str2, e);
             if (cursor != null) {
                 cursor.close();
             }
@@ -715,9 +715,9 @@ class zzatj extends zzauh {
         zzmR();
         zzob();
         try {
-            zzKk().zzMd().zzj("Deleted user attribute rows", Integer.valueOf(getWritableDatabase().delete("user_attributes", "app_id=? and name=?", new String[]{str, str2})));
+            zzKl().zzMe().zzj("Deleted user attribute rows", Integer.valueOf(getWritableDatabase().delete("user_attributes", "app_id=? and name=?", new String[]{str, str2})));
         } catch (SQLiteException e) {
-            zzKk().zzLX().zzd("Error deleting user attribute. appId", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error deleting user attribute. appId", zzatx.zzfE(str), str2, e);
         }
     }
 
@@ -738,7 +738,7 @@ class zzatj extends zzauh {
                     String str3 = str;
                     zzaus com_google_android_gms_internal_zzaus = new zzaus(str3, query.getString(2), str2, query.getLong(0), zzb(query, 1));
                     if (query.moveToNext()) {
-                        zzKk().zzLX().zzj("Got multiple records for user property, expected one. appId", zzatx.zzfE(str));
+                        zzKl().zzLY().zzj("Got multiple records for user property, expected one. appId", zzatx.zzfE(str));
                     }
                     if (query == null) {
                         return com_google_android_gms_internal_zzaus;
@@ -754,7 +754,7 @@ class zzatj extends zzauh {
                 e = e2;
                 cursor = query;
                 try {
-                    zzKk().zzLX().zzd("Error querying user property. appId", zzatx.zzfE(str), str2, e);
+                    zzKl().zzLY().zzd("Error querying user property. appId", zzatx.zzfE(str), str2, e);
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -778,7 +778,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             cursor = null;
-            zzKk().zzLX().zzd("Error querying user property. appId", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error querying user property. appId", zzatx.zzfE(str), str2, e);
             if (cursor != null) {
                 cursor.close();
             }
@@ -794,7 +794,6 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public zzatg zzT(String str, String str2) {
-        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -802,6 +801,7 @@ class zzatj extends zzauh {
         zzac.zzdr(str2);
         zzmR();
         zzob();
+        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -811,13 +811,13 @@ class zzatj extends zzauh {
                     boolean z = query.getInt(2) != 0;
                     String string2 = query.getString(3);
                     long j = query.getLong(4);
-                    zzatq com_google_android_gms_internal_zzatq = (zzatq) zzKg().zzb(query.getBlob(5), zzatq.CREATOR);
+                    zzatq com_google_android_gms_internal_zzatq = (zzatq) zzKh().zzb(query.getBlob(5), zzatq.CREATOR);
                     long j2 = query.getLong(6);
-                    zzatq com_google_android_gms_internal_zzatq2 = (zzatq) zzKg().zzb(query.getBlob(7), zzatq.CREATOR);
+                    zzatq com_google_android_gms_internal_zzatq2 = (zzatq) zzKh().zzb(query.getBlob(7), zzatq.CREATOR);
                     long j3 = query.getLong(8);
-                    zzatg com_google_android_gms_internal_zzatg = new zzatg(str, string, new zzauq(str2, j3, zzb, string), j2, z, string2, com_google_android_gms_internal_zzatq, j, com_google_android_gms_internal_zzatq2, query.getLong(9), (zzatq) zzKg().zzb(query.getBlob(10), zzatq.CREATOR));
+                    zzatg com_google_android_gms_internal_zzatg = new zzatg(str, string, new zzauq(str2, j3, zzb, string), j2, z, string2, com_google_android_gms_internal_zzatq, j, com_google_android_gms_internal_zzatq2, query.getLong(9), (zzatq) zzKh().zzb(query.getBlob(10), zzatq.CREATOR));
                     if (query.moveToNext()) {
-                        zzKk().zzLX().zze("Got multiple records for conditional property, expected one", zzatx.zzfE(str), str2);
+                        zzKl().zzLY().zze("Got multiple records for conditional property, expected one", zzatx.zzfE(str), str2);
                     }
                     if (query == null) {
                         return com_google_android_gms_internal_zzatg;
@@ -833,7 +833,7 @@ class zzatj extends zzauh {
                 e = e2;
                 cursor = query;
                 try {
-                    zzKk().zzLX().zzd("Error querying conditional property", zzatx.zzfE(str), str2, e);
+                    zzKl().zzLY().zzd("Error querying conditional property", zzatx.zzfE(str), str2, e);
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -856,7 +856,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             cursor = null;
-            zzKk().zzLX().zzd("Error querying conditional property", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error querying conditional property", zzatx.zzfE(str), str2, e);
             if (cursor != null) {
                 cursor.close();
             }
@@ -881,7 +881,7 @@ class zzatj extends zzauh {
         try {
             i = getWritableDatabase().delete("conditional_properties", "app_id=? and name=?", new String[]{str, str2});
         } catch (SQLiteException e) {
-            zzKk().zzLX().zzd("Error deleting conditional property", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error deleting conditional property", zzatx.zzfE(str), str2, e);
         }
         return i;
     }
@@ -912,7 +912,7 @@ class zzatj extends zzauh {
                         list.add(com_google_android_gms_internal_zzauu_zzb);
                     } catch (IOException e2) {
                         try {
-                            zzKk().zzLX().zze("Failed to merge filter. appId", zzatx.zzfE(str), e2);
+                            zzKl().zzLY().zze("Failed to merge filter. appId", zzatx.zzfE(str), e2);
                         } catch (SQLiteException e3) {
                             e = e3;
                         }
@@ -933,7 +933,7 @@ class zzatj extends zzauh {
             e = e4;
             query = null;
             try {
-                zzKk().zzLX().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
                 if (query != null) {
                     query.close();
                 }
@@ -956,7 +956,6 @@ class zzatj extends zzauh {
     }
 
     Map<Integer, List<zzauu.zze>> zzW(String str, String str2) {
-        Cursor query;
         Object e;
         Throwable th;
         zzob();
@@ -964,6 +963,7 @@ class zzatj extends zzauh {
         zzac.zzdr(str);
         zzac.zzdr(str2);
         Map<Integer, List<zzauu.zze>> arrayMap = new ArrayMap();
+        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -981,7 +981,7 @@ class zzatj extends zzauh {
                         list.add(com_google_android_gms_internal_zzauu_zze);
                     } catch (IOException e2) {
                         try {
-                            zzKk().zzLX().zze("Failed to merge filter", zzatx.zzfE(str), e2);
+                            zzKl().zzLY().zze("Failed to merge filter", zzatx.zzfE(str), e2);
                         } catch (SQLiteException e3) {
                             e = e3;
                         }
@@ -1002,7 +1002,7 @@ class zzatj extends zzauh {
             e = e4;
             query = null;
             try {
-                zzKk().zzLX().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
                 if (query != null) {
                     query.close();
                 }
@@ -1042,7 +1042,7 @@ class zzatj extends zzauh {
                 contentValues.put("first_open_count", Integer.valueOf(0));
                 contentValues.put("previous_install_count", Integer.valueOf(0));
                 if (writableDatabase.insertWithOnConflict("app2", null, contentValues, 5) == -1) {
-                    zzKk().zzLX().zze("Failed to insert column (got -1). appId", zzatx.zzfE(str), str2);
+                    zzKl().zzLY().zze("Failed to insert column (got -1). appId", zzatx.zzfE(str), str2);
                     writableDatabase.endTransaction();
                     return -1;
                 }
@@ -1053,7 +1053,7 @@ class zzatj extends zzauh {
                 contentValues2.put("app_id", str);
                 contentValues2.put(str2, Long.valueOf(1 + zza));
                 if (((long) writableDatabase.update("app2", contentValues2, "app_id = ?", new String[]{str})) == 0) {
-                    zzKk().zzLX().zze("Failed to update column (got 0). appId", zzatx.zzfE(str), str2);
+                    zzKl().zzLY().zze("Failed to update column (got 0). appId", zzatx.zzfE(str), str2);
                     writableDatabase.endTransaction();
                     return -1;
                 }
@@ -1063,7 +1063,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zzd("Error inserting column. appId", zzatx.zzfE(str), str2, e);
+                    zzKl().zzLY().zzd("Error inserting column. appId", zzatx.zzfE(str), str2, e);
                     return zza;
                 } finally {
                     writableDatabase.endTransaction();
@@ -1072,7 +1072,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             zza = 0;
-            zzKk().zzLX().zzd("Error inserting column. appId", zzatx.zzfE(str), str2, e);
+            zzKl().zzLY().zzd("Error inserting column. appId", zzatx.zzfE(str), str2, e);
             return zza;
         }
     }
@@ -1083,11 +1083,11 @@ class zzatj extends zzauh {
         zzac.zzw(com_google_android_gms_internal_zzauw_zze);
         zzac.zzdr(com_google_android_gms_internal_zzauw_zze.zzaS);
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zze.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zze.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauw_zze.zza(zzag);
-            zzag.zzaeF();
-            long zzz = zzKg().zzz(bArr);
+            zzag.zzaeG();
+            long zzz = zzKh().zzz(bArr);
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", com_google_android_gms_internal_zzauw_zze.zzaS);
             contentValues.put("metadata_fingerprint", Long.valueOf(zzz));
@@ -1096,11 +1096,11 @@ class zzatj extends zzauh {
                 getWritableDatabase().insertWithOnConflict("raw_events_metadata", null, contentValues, 4);
                 return zzz;
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing raw event metadata. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e);
+                zzKl().zzLY().zze("Error storing raw event metadata. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e);
                 throw e;
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Data loss. Failed to serialize event metadata. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e2);
+            zzKl().zzLY().zze("Data loss. Failed to serialize event metadata. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e2);
             throw e2;
         }
     }
@@ -1121,41 +1121,41 @@ class zzatj extends zzauh {
             try {
                 if (query.moveToFirst()) {
                     if (query.getLong(0) == j) {
-                        com_google_android_gms_internal_zzatj_zza.zzbrs = query.getLong(1);
-                        com_google_android_gms_internal_zzatj_zza.zzbrr = query.getLong(2);
-                        com_google_android_gms_internal_zzatj_zza.zzbrt = query.getLong(3);
-                        com_google_android_gms_internal_zzatj_zza.zzbru = query.getLong(4);
-                        com_google_android_gms_internal_zzatj_zza.zzbrv = query.getLong(5);
+                        com_google_android_gms_internal_zzatj_zza.zzbro = query.getLong(1);
+                        com_google_android_gms_internal_zzatj_zza.zzbrn = query.getLong(2);
+                        com_google_android_gms_internal_zzatj_zza.zzbrp = query.getLong(3);
+                        com_google_android_gms_internal_zzatj_zza.zzbrq = query.getLong(4);
+                        com_google_android_gms_internal_zzatj_zza.zzbrr = query.getLong(5);
                     }
                     if (z) {
-                        com_google_android_gms_internal_zzatj_zza.zzbrs++;
+                        com_google_android_gms_internal_zzatj_zza.zzbro++;
                     }
                     if (z2) {
-                        com_google_android_gms_internal_zzatj_zza.zzbrr++;
+                        com_google_android_gms_internal_zzatj_zza.zzbrn++;
                     }
                     if (z3) {
-                        com_google_android_gms_internal_zzatj_zza.zzbrt++;
+                        com_google_android_gms_internal_zzatj_zza.zzbrp++;
                     }
                     if (z4) {
-                        com_google_android_gms_internal_zzatj_zza.zzbru++;
+                        com_google_android_gms_internal_zzatj_zza.zzbrq++;
                     }
                     if (z5) {
-                        com_google_android_gms_internal_zzatj_zza.zzbrv++;
+                        com_google_android_gms_internal_zzatj_zza.zzbrr++;
                     }
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("day", Long.valueOf(j));
-                    contentValues.put("daily_public_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrr));
-                    contentValues.put("daily_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrs));
-                    contentValues.put("daily_conversions_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrt));
-                    contentValues.put("daily_error_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbru));
-                    contentValues.put("daily_realtime_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrv));
+                    contentValues.put("daily_public_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrn));
+                    contentValues.put("daily_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbro));
+                    contentValues.put("daily_conversions_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrp));
+                    contentValues.put("daily_error_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrq));
+                    contentValues.put("daily_realtime_events_count", Long.valueOf(com_google_android_gms_internal_zzatj_zza.zzbrr));
                     writableDatabase.update("apps", contentValues, "app_id=?", strArr);
                     if (query != null) {
                         query.close();
                     }
                     return com_google_android_gms_internal_zzatj_zza;
                 }
-                zzKk().zzLZ().zzj("Not updating daily counts, app is not known. appId", zzatx.zzfE(str));
+                zzKl().zzMa().zzj("Not updating daily counts, app is not known. appId", zzatx.zzfE(str));
                 if (query != null) {
                     query.close();
                 }
@@ -1163,7 +1163,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zze("Error updating daily counts. appId", zzatx.zzfE(str), e);
+                    zzKl().zzLY().zze("Error updating daily counts. appId", zzatx.zzfE(str), e);
                     if (query != null) {
                         query.close();
                     }
@@ -1179,7 +1179,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             query = null;
-            zzKk().zzLX().zze("Error updating daily counts. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error updating daily counts. appId", zzatx.zzfE(str), e);
             if (query != null) {
                 query.close();
             }
@@ -1218,34 +1218,34 @@ class zzatj extends zzauh {
         contentValues.put("app_id", com_google_android_gms_internal_zzatc.zzke());
         contentValues.put("app_instance_id", com_google_android_gms_internal_zzatc.getAppInstanceId());
         contentValues.put("gmp_app_id", com_google_android_gms_internal_zzatc.getGmpAppId());
-        contentValues.put("resettable_device_id_hash", com_google_android_gms_internal_zzatc.zzKo());
-        contentValues.put("last_bundle_index", Long.valueOf(com_google_android_gms_internal_zzatc.zzKx()));
-        contentValues.put("last_bundle_start_timestamp", Long.valueOf(com_google_android_gms_internal_zzatc.zzKq()));
-        contentValues.put("last_bundle_end_timestamp", Long.valueOf(com_google_android_gms_internal_zzatc.zzKr()));
+        contentValues.put("resettable_device_id_hash", com_google_android_gms_internal_zzatc.zzKp());
+        contentValues.put("last_bundle_index", Long.valueOf(com_google_android_gms_internal_zzatc.zzKy()));
+        contentValues.put("last_bundle_start_timestamp", Long.valueOf(com_google_android_gms_internal_zzatc.zzKr()));
+        contentValues.put("last_bundle_end_timestamp", Long.valueOf(com_google_android_gms_internal_zzatc.zzKs()));
         contentValues.put("app_version", com_google_android_gms_internal_zzatc.zzmZ());
-        contentValues.put("app_store", com_google_android_gms_internal_zzatc.zzKt());
-        contentValues.put("gmp_version", Long.valueOf(com_google_android_gms_internal_zzatc.zzKu()));
-        contentValues.put("dev_cert_hash", Long.valueOf(com_google_android_gms_internal_zzatc.zzKv()));
-        contentValues.put("measurement_enabled", Boolean.valueOf(com_google_android_gms_internal_zzatc.zzKw()));
-        contentValues.put("day", Long.valueOf(com_google_android_gms_internal_zzatc.zzKB()));
-        contentValues.put("daily_public_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKC()));
-        contentValues.put("daily_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKD()));
-        contentValues.put("daily_conversions_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKE()));
-        contentValues.put("config_fetched_time", Long.valueOf(com_google_android_gms_internal_zzatc.zzKy()));
-        contentValues.put("failed_config_fetch_time", Long.valueOf(com_google_android_gms_internal_zzatc.zzKz()));
-        contentValues.put("app_version_int", Long.valueOf(com_google_android_gms_internal_zzatc.zzKs()));
-        contentValues.put("firebase_instance_id", com_google_android_gms_internal_zzatc.zzKp());
-        contentValues.put("daily_error_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKG()));
-        contentValues.put("daily_realtime_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKF()));
-        contentValues.put("health_monitor_sample", com_google_android_gms_internal_zzatc.zzKH());
+        contentValues.put("app_store", com_google_android_gms_internal_zzatc.zzKu());
+        contentValues.put("gmp_version", Long.valueOf(com_google_android_gms_internal_zzatc.zzKv()));
+        contentValues.put("dev_cert_hash", Long.valueOf(com_google_android_gms_internal_zzatc.zzKw()));
+        contentValues.put("measurement_enabled", Boolean.valueOf(com_google_android_gms_internal_zzatc.zzKx()));
+        contentValues.put("day", Long.valueOf(com_google_android_gms_internal_zzatc.zzKC()));
+        contentValues.put("daily_public_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKD()));
+        contentValues.put("daily_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKE()));
+        contentValues.put("daily_conversions_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKF()));
+        contentValues.put("config_fetched_time", Long.valueOf(com_google_android_gms_internal_zzatc.zzKz()));
+        contentValues.put("failed_config_fetch_time", Long.valueOf(com_google_android_gms_internal_zzatc.zzKA()));
+        contentValues.put("app_version_int", Long.valueOf(com_google_android_gms_internal_zzatc.zzKt()));
+        contentValues.put("firebase_instance_id", com_google_android_gms_internal_zzatc.zzKq());
+        contentValues.put("daily_error_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKH()));
+        contentValues.put("daily_realtime_events_count", Long.valueOf(com_google_android_gms_internal_zzatc.zzKG()));
+        contentValues.put("health_monitor_sample", com_google_android_gms_internal_zzatc.zzKI());
         contentValues.put("android_id", Long.valueOf(com_google_android_gms_internal_zzatc.zzuW()));
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             if (((long) writableDatabase.update("apps", contentValues, "app_id = ?", new String[]{com_google_android_gms_internal_zzatc.zzke()})) == 0 && writableDatabase.insertWithOnConflict("apps", null, contentValues, 5) == -1) {
-                zzKk().zzLX().zzj("Failed to insert/update app (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatc.zzke()));
+                zzKl().zzLY().zzj("Failed to insert/update app (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatc.zzke()));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error storing app. appId", zzatx.zzfE(com_google_android_gms_internal_zzatc.zzke()), e);
+            zzKl().zzLY().zze("Error storing app. appId", zzatx.zzfE(com_google_android_gms_internal_zzatc.zzke()), e);
         }
     }
 
@@ -1257,15 +1257,15 @@ class zzatj extends zzauh {
         ContentValues contentValues = new ContentValues();
         contentValues.put("app_id", com_google_android_gms_internal_zzatn.mAppId);
         contentValues.put("name", com_google_android_gms_internal_zzatn.mName);
-        contentValues.put("lifetime_count", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrE));
-        contentValues.put("current_bundle_count", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrF));
-        contentValues.put("last_fire_timestamp", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrG));
+        contentValues.put("lifetime_count", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrA));
+        contentValues.put("current_bundle_count", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrB));
+        contentValues.put("last_fire_timestamp", Long.valueOf(com_google_android_gms_internal_zzatn.zzbrC));
         try {
             if (getWritableDatabase().insertWithOnConflict("events", null, contentValues, 5) == -1) {
-                zzKk().zzLX().zzj("Failed to insert/update event aggregates (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatn.mAppId));
+                zzKl().zzLY().zzj("Failed to insert/update event aggregates (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatn.mAppId));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error storing event aggregates. appId", zzatx.zzfE(com_google_android_gms_internal_zzatn.mAppId), e);
+            zzKl().zzLY().zze("Error storing event aggregates. appId", zzatx.zzfE(com_google_android_gms_internal_zzatn.mAppId), e);
         }
     }
 
@@ -1275,23 +1275,23 @@ class zzatj extends zzauh {
         zzac.zzdr(str);
         zzac.zzw(com_google_android_gms_internal_zzauw_zzf);
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzf.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzf.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauw_zzf.zza(zzag);
-            zzag.zzaeF();
+            zzag.zzaeG();
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", str);
             contentValues.put("audience_id", Integer.valueOf(i));
             contentValues.put("current_results", bArr);
             try {
                 if (getWritableDatabase().insertWithOnConflict("audience_filter_values", null, contentValues, 5) == -1) {
-                    zzKk().zzLX().zzj("Failed to insert filter results (got -1). appId", zzatx.zzfE(str));
+                    zzKl().zzLY().zzj("Failed to insert filter results (got -1). appId", zzatx.zzfE(str));
                 }
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing filter results. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Error storing filter results. appId", zzatx.zzfE(str), e);
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Configuration loss. Failed to serialize filter results. appId", zzatx.zzfE(str), e2);
+            zzKl().zzLY().zze("Configuration loss. Failed to serialize filter results. appId", zzatx.zzfE(str), e2);
         }
     }
 
@@ -1345,7 +1345,7 @@ class zzatj extends zzauh {
                     String[] strArr2;
                     com_google_android_gms_internal_zzauw_zze.zzb(zzaf);
                     if (cursor2.moveToNext()) {
-                        zzKk().zzLZ().zzj("Get multiple raw event metadata records, expected one. appId", zzatx.zzfE(str));
+                        zzKl().zzMa().zzj("Get multiple raw event metadata records, expected one. appId", zzatx.zzfE(str));
                     }
                     cursor2.close();
                     com_google_android_gms_internal_zzatj_zzb.zzb(com_google_android_gms_internal_zzauw_zze);
@@ -1365,11 +1365,11 @@ class zzatj extends zzauh {
                             try {
                                 com_google_android_gms_internal_zzauw_zzb.zzb(zzaf2);
                             } catch (IOException e2) {
-                                zzKk().zzLX().zze("Data loss. Failed to merge raw event. appId", zzatx.zzfE(str), e2);
+                                zzKl().zzLY().zze("Data loss. Failed to merge raw event. appId", zzatx.zzfE(str), e2);
                             }
                             try {
                                 com_google_android_gms_internal_zzauw_zzb.name = cursor.getString(1);
-                                com_google_android_gms_internal_zzauw_zzb.zzbxd = Long.valueOf(cursor.getLong(2));
+                                com_google_android_gms_internal_zzauw_zzb.zzbwZ = Long.valueOf(cursor.getLong(2));
                                 if (!com_google_android_gms_internal_zzatj_zzb.zza(j3, com_google_android_gms_internal_zzauw_zzb)) {
                                     if (cursor != null) {
                                         cursor.close();
@@ -1387,14 +1387,14 @@ class zzatj extends zzauh {
                         }
                         return;
                     }
-                    zzKk().zzLZ().zzj("Raw event data disappeared while in transaction. appId", zzatx.zzfE(str));
+                    zzKl().zzMa().zzj("Raw event data disappeared while in transaction. appId", zzatx.zzfE(str));
                     if (cursor != null) {
                         cursor.close();
                         return;
                     }
                     return;
                 } catch (IOException e22) {
-                    zzKk().zzLX().zze("Data loss. Failed to merge raw event metadata. appId", zzatx.zzfE(str), e22);
+                    zzKl().zzLY().zze("Data loss. Failed to merge raw event metadata. appId", zzatx.zzfE(str), e22);
                     if (cursor2 != null) {
                         cursor2.close();
                         return;
@@ -1402,7 +1402,7 @@ class zzatj extends zzauh {
                     return;
                 }
             }
-            zzKk().zzLX().zzj("Raw event metadata record is missing. appId", zzatx.zzfE(str));
+            zzKl().zzLY().zzj("Raw event metadata record is missing. appId", zzatx.zzfE(str));
             if (cursor2 != null) {
                 cursor2.close();
             }
@@ -1410,7 +1410,7 @@ class zzatj extends zzauh {
             e = e4;
             cursor = cursor2;
             try {
-                zzKk().zzLX().zze("Data loss. Error selecting raw event. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Data loss. Error selecting raw event. appId", zzatx.zzfE(str), e);
                 if (cursor != null) {
                     cursor.close();
                 }
@@ -1436,33 +1436,33 @@ class zzatj extends zzauh {
         zzac.zzw(com_google_android_gms_internal_zzatg);
         zzmR();
         zzob();
-        if (zzS(com_google_android_gms_internal_zzatg.packageName, com_google_android_gms_internal_zzatg.zzbra.name) == null) {
+        if (zzS(com_google_android_gms_internal_zzatg.packageName, com_google_android_gms_internal_zzatg.zzbqW.name) == null) {
             long zzb = zzb("SELECT COUNT(1) FROM conditional_properties WHERE app_id=?", new String[]{com_google_android_gms_internal_zzatg.packageName});
-            zzKm().zzKY();
+            zzKn().zzKZ();
             if (zzb >= 1000) {
                 return false;
             }
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("app_id", com_google_android_gms_internal_zzatg.packageName);
-        contentValues.put("origin", com_google_android_gms_internal_zzatg.zzbqZ);
-        contentValues.put("name", com_google_android_gms_internal_zzatg.zzbra.name);
-        zza(contentValues, Param.VALUE, com_google_android_gms_internal_zzatg.zzbra.getValue());
-        contentValues.put("active", Boolean.valueOf(com_google_android_gms_internal_zzatg.zzbrc));
-        contentValues.put("trigger_event_name", com_google_android_gms_internal_zzatg.zzbrd);
-        contentValues.put("trigger_timeout", Long.valueOf(com_google_android_gms_internal_zzatg.zzbrf));
-        contentValues.put("timed_out_event", zzKg().zza(com_google_android_gms_internal_zzatg.zzbre));
-        contentValues.put("creation_timestamp", Long.valueOf(com_google_android_gms_internal_zzatg.zzbrb));
-        contentValues.put("triggered_event", zzKg().zza(com_google_android_gms_internal_zzatg.zzbrg));
-        contentValues.put("triggered_timestamp", Long.valueOf(com_google_android_gms_internal_zzatg.zzbra.zzbwg));
-        contentValues.put("time_to_live", Long.valueOf(com_google_android_gms_internal_zzatg.zzbrh));
-        contentValues.put("expired_event", zzKg().zza(com_google_android_gms_internal_zzatg.zzbri));
+        contentValues.put("origin", com_google_android_gms_internal_zzatg.zzbqV);
+        contentValues.put("name", com_google_android_gms_internal_zzatg.zzbqW.name);
+        zza(contentValues, Param.VALUE, com_google_android_gms_internal_zzatg.zzbqW.getValue());
+        contentValues.put("active", Boolean.valueOf(com_google_android_gms_internal_zzatg.zzbqY));
+        contentValues.put("trigger_event_name", com_google_android_gms_internal_zzatg.zzbqZ);
+        contentValues.put("trigger_timeout", Long.valueOf(com_google_android_gms_internal_zzatg.zzbrb));
+        contentValues.put("timed_out_event", zzKh().zza(com_google_android_gms_internal_zzatg.zzbra));
+        contentValues.put("creation_timestamp", Long.valueOf(com_google_android_gms_internal_zzatg.zzbqX));
+        contentValues.put("triggered_event", zzKh().zza(com_google_android_gms_internal_zzatg.zzbrc));
+        contentValues.put("triggered_timestamp", Long.valueOf(com_google_android_gms_internal_zzatg.zzbqW.zzbwc));
+        contentValues.put("time_to_live", Long.valueOf(com_google_android_gms_internal_zzatg.zzbrd));
+        contentValues.put("expired_event", zzKh().zza(com_google_android_gms_internal_zzatg.zzbre));
         try {
             if (getWritableDatabase().insertWithOnConflict("conditional_properties", null, contentValues, 5) == -1) {
-                zzKk().zzLX().zzj("Failed to insert/update conditional user property (got -1)", zzatx.zzfE(com_google_android_gms_internal_zzatg.packageName));
+                zzKl().zzLY().zzj("Failed to insert/update conditional user property (got -1)", zzatx.zzfE(com_google_android_gms_internal_zzatg.packageName));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error storing conditional user property", zzatx.zzfE(com_google_android_gms_internal_zzatg.packageName), e);
+            zzKl().zzLY().zze("Error storing conditional user property", zzatx.zzfE(com_google_android_gms_internal_zzatg.packageName), e);
         }
         return true;
     }
@@ -1473,25 +1473,25 @@ class zzatj extends zzauh {
         zzac.zzw(com_google_android_gms_internal_zzatm);
         zzac.zzdr(com_google_android_gms_internal_zzatm.mAppId);
         com.google.android.gms.internal.zzauw.zzb com_google_android_gms_internal_zzauw_zzb = new com.google.android.gms.internal.zzauw.zzb();
-        com_google_android_gms_internal_zzauw_zzb.zzbxe = Long.valueOf(com_google_android_gms_internal_zzatm.zzbrC);
-        com_google_android_gms_internal_zzauw_zzb.zzbxc = new com.google.android.gms.internal.zzauw.zzc[com_google_android_gms_internal_zzatm.zzbrD.size()];
-        Iterator it = com_google_android_gms_internal_zzatm.zzbrD.iterator();
+        com_google_android_gms_internal_zzauw_zzb.zzbxa = Long.valueOf(com_google_android_gms_internal_zzatm.zzbry);
+        com_google_android_gms_internal_zzauw_zzb.zzbwY = new com.google.android.gms.internal.zzauw.zzc[com_google_android_gms_internal_zzatm.zzbrz.size()];
+        Iterator it = com_google_android_gms_internal_zzatm.zzbrz.iterator();
         int i = 0;
         while (it.hasNext()) {
             String str = (String) it.next();
             com.google.android.gms.internal.zzauw.zzc com_google_android_gms_internal_zzauw_zzc = new com.google.android.gms.internal.zzauw.zzc();
             int i2 = i + 1;
-            com_google_android_gms_internal_zzauw_zzb.zzbxc[i] = com_google_android_gms_internal_zzauw_zzc;
+            com_google_android_gms_internal_zzauw_zzb.zzbwY[i] = com_google_android_gms_internal_zzauw_zzc;
             com_google_android_gms_internal_zzauw_zzc.name = str;
-            zzKg().zza(com_google_android_gms_internal_zzauw_zzc, com_google_android_gms_internal_zzatm.zzbrD.get(str));
+            zzKh().zza(com_google_android_gms_internal_zzauw_zzc, com_google_android_gms_internal_zzatm.zzbrz.get(str));
             i = i2;
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzb.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zzb.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauw_zzb.zza(zzag);
-            zzag.zzaeF();
-            zzKk().zzMd().zze("Saving event, name, data size", com_google_android_gms_internal_zzatm.mName, Integer.valueOf(bArr.length));
+            zzag.zzaeG();
+            zzKl().zzMe().zze("Saving event, name, data size", com_google_android_gms_internal_zzatm.mName, Integer.valueOf(bArr.length));
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", com_google_android_gms_internal_zzatm.mAppId);
             contentValues.put("name", com_google_android_gms_internal_zzatm.mName);
@@ -1503,14 +1503,14 @@ class zzatj extends zzauh {
                 if (getWritableDatabase().insert("raw_events", null, contentValues) != -1) {
                     return true;
                 }
-                zzKk().zzLX().zzj("Failed to insert raw event (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId));
+                zzKl().zzLY().zzj("Failed to insert raw event (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId));
                 return false;
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing raw event. appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId), e);
+                zzKl().zzLY().zze("Error storing raw event. appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId), e);
                 return false;
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Data loss. Failed to serialize event params/data. appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId), e2);
+            zzKl().zzLY().zze("Data loss. Failed to serialize event params/data. appId", zzatx.zzfE(com_google_android_gms_internal_zzatm.mAppId), e2);
             return false;
         }
     }
@@ -1524,13 +1524,13 @@ class zzatj extends zzauh {
             long zzb;
             if (zzaut.zzfT(com_google_android_gms_internal_zzaus.mName)) {
                 zzb = zzb("select count(1) from user_attributes where app_id=? and name not like '!_%' escape '!'", new String[]{com_google_android_gms_internal_zzaus.mAppId});
-                zzKm().zzKV();
+                zzKn().zzKW();
                 if (zzb >= 25) {
                     return false;
                 }
             }
             zzb = zzb("select count(1) from user_attributes where app_id=? and origin=? AND name like '!_%' escape '!'", new String[]{com_google_android_gms_internal_zzaus.mAppId, com_google_android_gms_internal_zzaus.mOrigin});
-            zzKm().zzKX();
+            zzKn().zzKY();
             if (zzb >= 25) {
                 return false;
             }
@@ -1539,14 +1539,14 @@ class zzatj extends zzauh {
         contentValues.put("app_id", com_google_android_gms_internal_zzaus.mAppId);
         contentValues.put("origin", com_google_android_gms_internal_zzaus.mOrigin);
         contentValues.put("name", com_google_android_gms_internal_zzaus.mName);
-        contentValues.put("set_timestamp", Long.valueOf(com_google_android_gms_internal_zzaus.zzbwk));
+        contentValues.put("set_timestamp", Long.valueOf(com_google_android_gms_internal_zzaus.zzbwg));
         zza(contentValues, Param.VALUE, com_google_android_gms_internal_zzaus.mValue);
         try {
             if (getWritableDatabase().insertWithOnConflict("user_attributes", null, contentValues, 5) == -1) {
-                zzKk().zzLX().zzj("Failed to insert/update user property (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzaus.mAppId));
+                zzKl().zzLY().zzj("Failed to insert/update user property (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzaus.mAppId));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error storing user property. appId", zzatx.zzfE(com_google_android_gms_internal_zzaus.mAppId), e);
+            zzKl().zzLY().zze("Error storing user property. appId", zzatx.zzfE(com_google_android_gms_internal_zzaus.mAppId), e);
         }
         return true;
     }
@@ -1557,36 +1557,36 @@ class zzatj extends zzauh {
         zzob();
         zzac.zzw(com_google_android_gms_internal_zzauw_zze);
         zzac.zzdr(com_google_android_gms_internal_zzauw_zze.zzaS);
-        zzac.zzw(com_google_android_gms_internal_zzauw_zze.zzbxo);
-        zzLE();
+        zzac.zzw(com_google_android_gms_internal_zzauw_zze.zzbxk);
+        zzLF();
         long currentTimeMillis = zznR().currentTimeMillis();
-        if (com_google_android_gms_internal_zzauw_zze.zzbxo.longValue() < currentTimeMillis - zzKm().zzLi() || com_google_android_gms_internal_zzauw_zze.zzbxo.longValue() > zzKm().zzLi() + currentTimeMillis) {
-            zzKk().zzLZ().zzd("Storing bundle outside of the max uploading time span. appId, now, timestamp", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), Long.valueOf(currentTimeMillis), com_google_android_gms_internal_zzauw_zze.zzbxo);
+        if (com_google_android_gms_internal_zzauw_zze.zzbxk.longValue() < currentTimeMillis - zzKn().zzLj() || com_google_android_gms_internal_zzauw_zze.zzbxk.longValue() > zzKn().zzLj() + currentTimeMillis) {
+            zzKl().zzMa().zzd("Storing bundle outside of the max uploading time span. appId, now, timestamp", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), Long.valueOf(currentTimeMillis), com_google_android_gms_internal_zzauw_zze.zzbxk);
         }
         try {
-            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zze.zzaeS()];
+            byte[] bArr = new byte[com_google_android_gms_internal_zzauw_zze.zzaeT()];
             zzbxm zzag = zzbxm.zzag(bArr);
             com_google_android_gms_internal_zzauw_zze.zza(zzag);
-            zzag.zzaeF();
-            bArr = zzKg().zzk(bArr);
-            zzKk().zzMd().zzj("Saving bundle, size", Integer.valueOf(bArr.length));
+            zzag.zzaeG();
+            bArr = zzKh().zzk(bArr);
+            zzKl().zzMe().zzj("Saving bundle, size", Integer.valueOf(bArr.length));
             ContentValues contentValues = new ContentValues();
             contentValues.put("app_id", com_google_android_gms_internal_zzauw_zze.zzaS);
-            contentValues.put("bundle_end_timestamp", com_google_android_gms_internal_zzauw_zze.zzbxo);
+            contentValues.put("bundle_end_timestamp", com_google_android_gms_internal_zzauw_zze.zzbxk);
             contentValues.put("data", bArr);
             contentValues.put("has_realtime", Integer.valueOf(z ? 1 : 0));
             try {
                 if (getWritableDatabase().insert("queue", null, contentValues) != -1) {
                     return true;
                 }
-                zzKk().zzLX().zzj("Failed to insert bundle (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS));
+                zzKl().zzLY().zzj("Failed to insert bundle (got -1). appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS));
                 return false;
             } catch (SQLiteException e) {
-                zzKk().zzLX().zze("Error storing bundle. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e);
+                zzKl().zzLY().zze("Error storing bundle. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e);
                 return false;
             }
         } catch (IOException e2) {
-            zzKk().zzLX().zze("Data loss. Failed to serialize bundle. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e2);
+            zzKl().zzLY().zze("Data loss. Failed to serialize bundle. appId", zzatx.zzfE(com_google_android_gms_internal_zzauw_zze.zzaS), e2);
             return false;
         }
     }
@@ -1600,7 +1600,7 @@ class zzatj extends zzauh {
                 throw new SQLiteException("Deleted fewer rows from queue than expected");
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zzj("Failed to delete a bundle in a queue table", e);
+            zzKl().zzLY().zzj("Failed to delete a bundle in a queue table", e);
             throw e;
         }
     }
@@ -1621,7 +1621,7 @@ class zzatj extends zzauh {
                         rawQuery.close();
                     }
                 } else {
-                    zzKk().zzMd().log("No expired configs for apps with pending events");
+                    zzKl().zzMe().log("No expired configs for apps with pending events");
                     if (rawQuery != null) {
                         rawQuery.close();
                     }
@@ -1629,7 +1629,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zzj("Error selecting expired configs", e);
+                    zzKl().zzLY().zzj("Error selecting expired configs", e);
                     if (rawQuery != null) {
                         rawQuery.close();
                     }
@@ -1645,7 +1645,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             rawQuery = str;
-            zzKk().zzLX().zzj("Error selecting expired configs", e);
+            zzKl().zzLY().zzj("Error selecting expired configs", e);
             if (rawQuery != null) {
                 rawQuery.close();
             }
@@ -1666,7 +1666,7 @@ class zzatj extends zzauh {
         int zza = zza(cursor, i);
         switch (zza) {
             case 0:
-                zzKk().zzLX().log("Loaded invalid null value from database");
+                zzKl().zzLY().log("Loaded invalid null value from database");
                 return null;
             case 1:
                 return Long.valueOf(cursor.getLong(i));
@@ -1675,10 +1675,10 @@ class zzatj extends zzauh {
             case 3:
                 return cursor.getString(i);
             case 4:
-                zzKk().zzLX().log("Loaded invalid blob type value, ignoring it");
+                zzKl().zzLY().log("Loaded invalid blob type value, ignoring it");
                 return null;
             default:
-                zzKk().zzLX().zzj("Loaded invalid unknown value type, ignoring it", Integer.valueOf(zza));
+                zzKl().zzLY().zzj("Loaded invalid unknown value type, ignoring it", Integer.valueOf(zza));
                 return null;
         }
     }
@@ -1700,7 +1700,7 @@ class zzatj extends zzauh {
             List arrayList = new ArrayList();
             int length = com_google_android_gms_internal_zzauu_zzaArr.length;
             while (i < length) {
-                arrayList.add(com_google_android_gms_internal_zzauu_zzaArr[i].zzbwo);
+                arrayList.add(com_google_android_gms_internal_zzauu_zzaArr[i].zzbwk);
                 i++;
             }
             zzd(str, arrayList);
@@ -1717,7 +1717,7 @@ class zzatj extends zzauh {
         zzmR();
         zzob();
         if (j < 0) {
-            zzKk().zzLZ().zzd("Invalid time querying triggered conditional properties", zzatx.zzfE(str), str2, Long.valueOf(j));
+            zzKl().zzMa().zzd("Invalid time querying triggered conditional properties", zzatx.zzfE(str), str2, Long.valueOf(j));
             return Collections.emptyList();
         }
         return zzc("active=0 and app_id=? and trigger_event_name=? and abs(? - creation_timestamp) <= trigger_timeout", new String[]{str, str2, String.valueOf(j)});
@@ -1733,13 +1733,13 @@ class zzatj extends zzauh {
         Cursor query;
         try {
             String[] strArr2 = new String[]{"app_id", "origin", "name", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"};
-            zzKm().zzKY();
+            zzKn().zzKZ();
             query = getWritableDatabase().query("conditional_properties", strArr2, str, strArr, null, null, "rowid", String.valueOf(PointerIconCompat.TYPE_CONTEXT_MENU));
             try {
                 if (query.moveToFirst()) {
                     do {
-                        if (arrayList.size() >= zzKm().zzKY()) {
-                            zzKk().zzLX().zzj("Read more than the max allowed conditional properties, ignoring extra", Integer.valueOf(zzKm().zzKY()));
+                        if (arrayList.size() >= zzKn().zzKZ()) {
+                            zzKl().zzLY().zzj("Read more than the max allowed conditional properties, ignoring extra", Integer.valueOf(zzKn().zzKZ()));
                             break;
                         }
                         String string = query.getString(0);
@@ -1749,12 +1749,12 @@ class zzatj extends zzauh {
                         boolean z = query.getInt(4) != 0;
                         String string4 = query.getString(5);
                         long j = query.getLong(6);
-                        zzatq com_google_android_gms_internal_zzatq = (zzatq) zzKg().zzb(query.getBlob(7), zzatq.CREATOR);
+                        zzatq com_google_android_gms_internal_zzatq = (zzatq) zzKh().zzb(query.getBlob(7), zzatq.CREATOR);
                         long j2 = query.getLong(8);
-                        zzatq com_google_android_gms_internal_zzatq2 = (zzatq) zzKg().zzb(query.getBlob(9), zzatq.CREATOR);
+                        zzatq com_google_android_gms_internal_zzatq2 = (zzatq) zzKh().zzb(query.getBlob(9), zzatq.CREATOR);
                         long j3 = query.getLong(10);
                         List<zzatg> list = arrayList;
-                        list.add(new zzatg(string, string2, new zzauq(string3, j3, zzb, string2), j2, z, string4, com_google_android_gms_internal_zzatq, j, com_google_android_gms_internal_zzatq2, query.getLong(11), (zzatq) zzKg().zzb(query.getBlob(12), zzatq.CREATOR)));
+                        list.add(new zzatg(string, string2, new zzauq(string3, j3, zzb, string2), j2, z, string4, com_google_android_gms_internal_zzatq, j, com_google_android_gms_internal_zzatq2, query.getLong(11), (zzatq) zzKh().zzb(query.getBlob(12), zzatq.CREATOR)));
                     } while (query.moveToNext());
                     if (query != null) {
                         query.close();
@@ -1775,7 +1775,7 @@ class zzatj extends zzauh {
             e = e3;
             cursor = null;
             try {
-                zzKk().zzLX().zzj("Error querying conditional user property value", e);
+                zzKl().zzLY().zzj("Error querying conditional user property value", e);
                 List<zzatg> emptyList = Collections.emptyList();
                 if (cursor == null) {
                     return emptyList;
@@ -1809,10 +1809,10 @@ class zzatj extends zzauh {
         contentValues.put("remote_config", bArr);
         try {
             if (((long) getWritableDatabase().update("apps", contentValues, "app_id = ?", new String[]{str})) == 0) {
-                zzKk().zzLX().zzj("Failed to update remote config (got 0). appId", zzatx.zzfE(str));
+                zzKl().zzLY().zzj("Failed to update remote config (got 0). appId", zzatx.zzfE(str));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error storing remote config. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error storing remote config. appId", zzatx.zzfE(str), e);
         }
     }
 
@@ -1822,7 +1822,7 @@ class zzatj extends zzauh {
         zzmR();
         SQLiteDatabase writableDatabase = getWritableDatabase();
         try {
-            if (zzb("select count(1) from audience_filter_values where app_id=?", new String[]{str}) <= ((long) zzKm().zzfo(str))) {
+            if (zzb("select count(1) from audience_filter_values where app_id=?", new String[]{str}) <= ((long) zzKn().zzfo(str))) {
                 return false;
             }
             Iterable arrayList = new ArrayList();
@@ -1839,7 +1839,7 @@ class zzatj extends zzauh {
             valueOf = new StringBuilder(String.valueOf(valueOf).length() + 2).append("(").append(valueOf).append(")").toString();
             return writableDatabase.delete("audience_filter_values", new StringBuilder(String.valueOf(valueOf).length() + 140).append("audience_id in (select audience_id from audience_filter_values where app_id=? and audience_id not in ").append(valueOf).append(" order by rowid desc limit -1 offset ?)").toString(), new String[]{str, Integer.toString(r5)}) > 0;
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Database error querying filters. appId", zzatx.zzfE(str), e);
             return false;
         }
     }
@@ -1856,7 +1856,7 @@ class zzatj extends zzauh {
         try {
             getWritableDatabase().execSQL("delete from raw_events_metadata where app_id=? and metadata_fingerprint not in (select distinct metadata_fingerprint from raw_events where app_id=?)", new String[]{str, str});
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Failed to remove unused event metadata. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Failed to remove unused event metadata. appId", zzatx.zzfE(str), e);
         }
     }
 
@@ -1876,7 +1876,7 @@ class zzatj extends zzauh {
         zzob();
         List<zzaus> arrayList = new ArrayList();
         try {
-            Cursor query = getWritableDatabase().query("user_attributes", new String[]{"name", "origin", "set_timestamp", Param.VALUE}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(zzKm().zzKW()));
+            Cursor query = getWritableDatabase().query("user_attributes", new String[]{"name", "origin", "set_timestamp", Param.VALUE}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(zzKn().zzKX()));
             try {
                 if (query.moveToFirst()) {
                     do {
@@ -1888,7 +1888,7 @@ class zzatj extends zzauh {
                         long j = query.getLong(2);
                         Object zzb = zzb(query, 3);
                         if (zzb == null) {
-                            zzKk().zzLX().zzj("Read invalid user property value, ignoring it. appId", zzatx.zzfE(str));
+                            zzKl().zzLY().zzj("Read invalid user property value, ignoring it. appId", zzatx.zzfE(str));
                         } else {
                             arrayList.add(new zzaus(str, string2, string, j, zzb));
                         }
@@ -1913,7 +1913,7 @@ class zzatj extends zzauh {
             e = e3;
             cursor = null;
             try {
-                zzKk().zzLX().zze("Error querying user properties. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Error querying user properties. appId", zzatx.zzfE(str), e);
                 if (cursor != null) {
                     cursor.close();
                 }
@@ -1947,7 +1947,7 @@ class zzatj extends zzauh {
             query = getWritableDatabase().query("apps", new String[]{"app_instance_id", "gmp_app_id", "resettable_device_id_hash", "last_bundle_index", "last_bundle_start_timestamp", "last_bundle_end_timestamp", "app_version", "app_store", "gmp_version", "dev_cert_hash", "measurement_enabled", "day", "daily_public_events_count", "daily_events_count", "daily_conversions_count", "config_fetched_time", "failed_config_fetch_time", "app_version_int", "firebase_instance_id", "daily_error_events_count", "daily_realtime_events_count", "health_monitor_sample", "android_id"}, "app_id=?", new String[]{str}, null, null, null);
             try {
                 if (query.moveToFirst()) {
-                    zzatc com_google_android_gms_internal_zzatc = new zzatc(this.zzbqg, str);
+                    zzatc com_google_android_gms_internal_zzatc = new zzatc(this.zzbqc, str);
                     com_google_android_gms_internal_zzatc.zzfd(query.getString(0));
                     com_google_android_gms_internal_zzatc.zzfe(query.getString(1));
                     com_google_android_gms_internal_zzatc.zzff(query.getString(2));
@@ -1971,9 +1971,9 @@ class zzatj extends zzauh {
                     com_google_android_gms_internal_zzatc.zzak(query.getLong(20));
                     com_google_android_gms_internal_zzatc.zzfi(query.getString(21));
                     com_google_android_gms_internal_zzatc.zzam(query.isNull(22) ? 0 : query.getLong(22));
-                    com_google_android_gms_internal_zzatc.zzKn();
+                    com_google_android_gms_internal_zzatc.zzKo();
                     if (query.moveToNext()) {
-                        zzKk().zzLX().zzj("Got multiple records for app, expected one. appId", zzatx.zzfE(str));
+                        zzKl().zzLY().zzj("Got multiple records for app, expected one. appId", zzatx.zzfE(str));
                     }
                     if (query == null) {
                         return com_google_android_gms_internal_zzatc;
@@ -1988,7 +1988,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zze("Error querying app. appId", zzatx.zzfE(str), e);
+                    zzKl().zzLY().zze("Error querying app. appId", zzatx.zzfE(str), e);
                     if (query != null) {
                         query.close();
                     }
@@ -2004,7 +2004,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             query = null;
-            zzKk().zzLX().zze("Error querying app. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error querying app. appId", zzatx.zzfE(str), e);
             if (query != null) {
                 query.close();
             }
@@ -2025,10 +2025,10 @@ class zzatj extends zzauh {
         zzob();
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
-            String valueOf = String.valueOf(zzKm().zzfs(str));
+            String valueOf = String.valueOf(zzKn().zzfs(str));
             return (long) writableDatabase.delete("raw_events", "rowid in (select rowid from raw_events where app_id=? order by rowid desc limit -1 offset ?)", new String[]{str, valueOf});
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error deleting over the limit events. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error deleting over the limit events. appId", zzatx.zzfE(str), e);
             return 0;
         }
     }
@@ -2047,7 +2047,7 @@ class zzatj extends zzauh {
                 if (query.moveToFirst()) {
                     byte[] blob = query.getBlob(0);
                     if (query.moveToNext()) {
-                        zzKk().zzLX().zzj("Got multiple records for app config, expected one. appId", zzatx.zzfE(str));
+                        zzKl().zzLY().zzj("Got multiple records for app config, expected one. appId", zzatx.zzfE(str));
                     }
                     if (query == null) {
                         return blob;
@@ -2062,7 +2062,7 @@ class zzatj extends zzauh {
             } catch (SQLiteException e2) {
                 e = e2;
                 try {
-                    zzKk().zzLX().zze("Error querying remote config. appId", zzatx.zzfE(str), e);
+                    zzKl().zzLY().zze("Error querying remote config. appId", zzatx.zzfE(str), e);
                     if (query != null) {
                         query.close();
                     }
@@ -2078,7 +2078,7 @@ class zzatj extends zzauh {
         } catch (SQLiteException e3) {
             e = e3;
             query = null;
-            zzKk().zzLX().zze("Error querying remote config. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error querying remote config. appId", zzatx.zzfE(str), e);
             if (query != null) {
                 query.close();
             }
@@ -2121,7 +2121,7 @@ class zzatj extends zzauh {
                     try {
                         com_google_android_gms_internal_zzauw_zzf.zzb(zzaf);
                     } catch (IOException e2) {
-                        zzKk().zzLX().zzd("Failed to merge filter results. appId, audienceId, error", zzatx.zzfE(str), Integer.valueOf(i), e2);
+                        zzKl().zzLY().zzd("Failed to merge filter results. appId, audienceId, error", zzatx.zzfE(str), Integer.valueOf(i), e2);
                     }
                     try {
                         arrayMap.put(Integer.valueOf(i), com_google_android_gms_internal_zzauw_zzf);
@@ -2143,7 +2143,7 @@ class zzatj extends zzauh {
             e = e4;
             query = null;
             try {
-                zzKk().zzLX().zze("Database error querying filter results. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Database error querying filter results. appId", zzatx.zzfE(str), e);
                 if (query != null) {
                     query.close();
                 }
@@ -2175,10 +2175,10 @@ class zzatj extends zzauh {
             String[] strArr = new String[]{str};
             int delete = writableDatabase.delete("audience_filter_values", "app_id=?", strArr) + ((((((((writableDatabase.delete("events", "app_id=?", strArr) + 0) + writableDatabase.delete("user_attributes", "app_id=?", strArr)) + writableDatabase.delete("conditional_properties", "app_id=?", strArr)) + writableDatabase.delete("apps", "app_id=?", strArr)) + writableDatabase.delete("raw_events", "app_id=?", strArr)) + writableDatabase.delete("raw_events_metadata", "app_id=?", strArr)) + writableDatabase.delete("event_filters", "app_id=?", strArr)) + writableDatabase.delete("property_filters", "app_id=?", strArr));
             if (delete > 0) {
-                zzKk().zzMd().zze("Deleted application data. app, records", str, Integer.valueOf(delete));
+                zzKl().zzMe().zze("Deleted application data. app, records", str, Integer.valueOf(delete));
             }
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error deleting application data. appId, error", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error deleting application data. appId, error", zzatx.zzfE(str), e);
         }
     }
 
@@ -2188,7 +2188,7 @@ class zzatj extends zzauh {
         zzmR();
         zzob();
         if (j < 0) {
-            zzKk().zzLZ().zze("Invalid time querying timed out conditional properties", zzatx.zzfE(str), Long.valueOf(j));
+            zzKl().zzMa().zze("Invalid time querying timed out conditional properties", zzatx.zzfE(str), Long.valueOf(j));
             return Collections.emptyList();
         }
         return zzc("active=0 and app_id=? and abs(? - creation_timestamp) > trigger_timeout", new String[]{str, String.valueOf(j)});
@@ -2200,7 +2200,7 @@ class zzatj extends zzauh {
         zzmR();
         zzob();
         if (j < 0) {
-            zzKk().zzLZ().zze("Invalid time querying expired conditional properties", zzatx.zzfE(str), Long.valueOf(j));
+            zzKl().zzMa().zze("Invalid time querying expired conditional properties", zzatx.zzfE(str), Long.valueOf(j));
             return Collections.emptyList();
         }
         return zzc("active<>0 and app_id=? and abs(? - triggered_timestamp) > time_to_live", new String[]{str, String.valueOf(j)});
@@ -2231,18 +2231,18 @@ class zzatj extends zzauh {
             }
             String[] strArr = (String[]) arrayList2.toArray(new String[arrayList2.size()]);
             String[] strArr2 = new String[]{"name", "set_timestamp", Param.VALUE, "origin"};
-            zzKm().zzKW();
+            zzKn().zzKX();
             Cursor query = getWritableDatabase().query("user_attributes", strArr2, stringBuilder.toString(), strArr, null, null, "rowid", String.valueOf(PointerIconCompat.TYPE_CONTEXT_MENU));
             try {
                 if (query.moveToFirst()) {
-                    while (arrayList.size() < zzKm().zzKW()) {
+                    while (arrayList.size() < zzKn().zzKX()) {
                         String string = query.getString(0);
                         long j = query.getLong(1);
                         Object zzb = zzb(query, 2);
                         String string2 = query.getString(3);
                         if (zzb == null) {
                             try {
-                                zzKk().zzLX().zzd("(2)Read invalid user property value, ignoring it", zzatx.zzfE(str), string2, str3);
+                                zzKl().zzLY().zzd("(2)Read invalid user property value, ignoring it", zzatx.zzfE(str), string2, str3);
                             } catch (SQLiteException e2) {
                                 e = e2;
                                 cursor = query;
@@ -2259,7 +2259,7 @@ class zzatj extends zzauh {
                         }
                         obj = string2;
                     }
-                    zzKk().zzLX().zzj("Read more than the max allowed user properties, ignoring excess", Integer.valueOf(zzKm().zzKW()));
+                    zzKl().zzLY().zzj("Read more than the max allowed user properties, ignoring excess", Integer.valueOf(zzKn().zzKX()));
                     if (query != null) {
                         query.close();
                     }
@@ -2280,7 +2280,7 @@ class zzatj extends zzauh {
             e = e4;
             cursor = null;
             try {
-                zzKk().zzLX().zzd("(2)Error querying user properties", zzatx.zzfE(str), obj, e);
+                zzKl().zzLY().zzd("(2)Error querying user properties", zzatx.zzfE(str), obj, e);
                 if (cursor != null) {
                     cursor.close();
                 }
@@ -2326,6 +2326,7 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public List<Pair<zze, Long>> zzn(String str, int i, int i2) {
+        Cursor query;
         List<Pair<zze, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -2339,7 +2340,6 @@ class zzatj extends zzauh {
         }
         zzac.zzax(z);
         zzac.zzdr(str);
-        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {
@@ -2350,7 +2350,7 @@ class zzatj extends zzauh {
                         long j = query.getLong(0);
                         int length;
                         try {
-                            byte[] zzx = zzKg().zzx(query.getBlob(1));
+                            byte[] zzx = zzKh().zzx(query.getBlob(1));
                             if (!arrayList.isEmpty() && zzx.length + i3 > i2) {
                                 break;
                             }
@@ -2361,7 +2361,7 @@ class zzatj extends zzauh {
                                 length = zzx.length + i3;
                                 arrayList.add(Pair.create(com_google_android_gms_internal_zzauw_zze, Long.valueOf(j)));
                             } catch (IOException e2) {
-                                zzKk().zzLX().zze("Failed to merge queued bundle. appId", zzatx.zzfE(str), e2);
+                                zzKl().zzLY().zze("Failed to merge queued bundle. appId", zzatx.zzfE(str), e2);
                                 length = i3;
                             }
                             if (!query.moveToNext() || length > i2) {
@@ -2369,7 +2369,7 @@ class zzatj extends zzauh {
                             }
                             i3 = length;
                         } catch (IOException e22) {
-                            zzKk().zzLX().zze("Failed to unzip queued bundle. appId", zzatx.zzfE(str), e22);
+                            zzKl().zzLY().zze("Failed to unzip queued bundle. appId", zzatx.zzfE(str), e22);
                             length = i3;
                         }
                     }
@@ -2392,7 +2392,7 @@ class zzatj extends zzauh {
             e = e4;
             cursor = null;
             try {
-                zzKk().zzLX().zze("Error querying bundles. appId", zzatx.zzfE(str), e);
+                zzKl().zzLY().zze("Error querying bundles. appId", zzatx.zzfE(str), e);
                 arrayList = Collections.emptyList();
                 if (cursor != null) {
                     cursor.close();
@@ -2418,7 +2418,7 @@ class zzatj extends zzauh {
     }
 
     String zzow() {
-        return zzKm().zzpv();
+        return zzKn().zzpv();
     }
 
     @WorkerThread
@@ -2429,7 +2429,7 @@ class zzatj extends zzauh {
         try {
             getWritableDatabase().execSQL("delete from user_attributes where app_id=? and name in (select name from user_attributes where app_id=? and name like '_ltv_%' order by set_timestamp desc limit ?,10);", new String[]{str, str, String.valueOf(i)});
         } catch (SQLiteException e) {
-            zzKk().zzLX().zze("Error pruning currencies. appId", zzatx.zzfE(str), e);
+            zzKl().zzLY().zze("Error pruning currencies. appId", zzatx.zzfE(str), e);
         }
     }
 }

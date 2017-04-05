@@ -9,17 +9,17 @@ import com.google.android.gms.common.internal.zzac;
 public class zzatd extends zza {
     public static final Creator<zzatd> CREATOR = new zzate();
     public final String packageName;
-    public final String zzbhM;
+    public final String zzbhN;
+    public final String zzbqL;
+    public final String zzbqM;
+    public final long zzbqN;
+    public final long zzbqO;
     public final String zzbqP;
-    public final String zzbqQ;
-    public final long zzbqR;
+    public final boolean zzbqQ;
+    public final boolean zzbqR;
     public final long zzbqS;
     public final String zzbqT;
-    public final boolean zzbqU;
-    public final boolean zzbqV;
-    public final long zzbqW;
-    public final String zzbqX;
-    public final long zzbqY;
+    public final long zzbqU;
 
     zzatd(String str, String str2, String str3, long j, String str4, long j2, long j3, String str5, boolean z, boolean z2, String str6, long j4) {
         zzac.zzdr(str);
@@ -27,32 +27,32 @@ public class zzatd extends zza {
         if (TextUtils.isEmpty(str2)) {
             str2 = null;
         }
-        this.zzbqP = str2;
-        this.zzbhM = str3;
-        this.zzbqW = j;
-        this.zzbqQ = str4;
-        this.zzbqR = j2;
-        this.zzbqS = j3;
-        this.zzbqT = str5;
-        this.zzbqU = z;
-        this.zzbqV = z2;
-        this.zzbqX = str6;
-        this.zzbqY = j4;
+        this.zzbqL = str2;
+        this.zzbhN = str3;
+        this.zzbqS = j;
+        this.zzbqM = str4;
+        this.zzbqN = j2;
+        this.zzbqO = j3;
+        this.zzbqP = str5;
+        this.zzbqQ = z;
+        this.zzbqR = z2;
+        this.zzbqT = str6;
+        this.zzbqU = j4;
     }
 
     zzatd(String str, String str2, String str3, String str4, long j, long j2, String str5, boolean z, boolean z2, long j3, String str6, long j4) {
         this.packageName = str;
-        this.zzbqP = str2;
-        this.zzbhM = str3;
-        this.zzbqW = j3;
-        this.zzbqQ = str4;
-        this.zzbqR = j;
-        this.zzbqS = j2;
-        this.zzbqT = str5;
-        this.zzbqU = z;
-        this.zzbqV = z2;
-        this.zzbqX = str6;
-        this.zzbqY = j4;
+        this.zzbqL = str2;
+        this.zzbhN = str3;
+        this.zzbqS = j3;
+        this.zzbqM = str4;
+        this.zzbqN = j;
+        this.zzbqO = j2;
+        this.zzbqP = str5;
+        this.zzbqQ = z;
+        this.zzbqR = z2;
+        this.zzbqT = str6;
+        this.zzbqU = j4;
     }
 
     public void writeToParcel(Parcel parcel, int i) {

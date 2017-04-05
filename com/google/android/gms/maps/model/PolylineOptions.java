@@ -13,81 +13,81 @@ import java.util.List;
 public final class PolylineOptions extends zza {
     public static final Creator<PolylineOptions> CREATOR = new zzl();
     private int mColor;
-    private final List<LatLng> zzbpP;
-    private boolean zzbpR;
+    private final List<LatLng> zzbpL;
+    private boolean zzbpN;
     @NonNull
-    private Cap zzbpU;
+    private Cap zzbpQ;
     @NonNull
-    private Cap zzbpV;
-    private int zzbpW;
+    private Cap zzbpR;
+    private int zzbpS;
     @Nullable
-    private List<PatternItem> zzbpX;
-    private float zzbpm;
-    private boolean zzbpn;
-    private boolean zzbpo;
-    private float zzbpt;
+    private List<PatternItem> zzbpT;
+    private float zzbpi;
+    private boolean zzbpj;
+    private boolean zzbpk;
+    private float zzbpp;
 
     public PolylineOptions() {
-        this.zzbpt = 10.0f;
+        this.zzbpp = 10.0f;
         this.mColor = -16777216;
-        this.zzbpm = 0.0f;
-        this.zzbpn = true;
-        this.zzbpR = false;
-        this.zzbpo = false;
-        this.zzbpU = new ButtCap();
-        this.zzbpV = new ButtCap();
-        this.zzbpW = 0;
-        this.zzbpX = null;
-        this.zzbpP = new ArrayList();
+        this.zzbpi = 0.0f;
+        this.zzbpj = true;
+        this.zzbpN = false;
+        this.zzbpk = false;
+        this.zzbpQ = new ButtCap();
+        this.zzbpR = new ButtCap();
+        this.zzbpS = 0;
+        this.zzbpT = null;
+        this.zzbpL = new ArrayList();
     }
 
     PolylineOptions(List list, float f, int i, float f2, boolean z, boolean z2, boolean z3, @Nullable Cap cap, @Nullable Cap cap2, int i2, @Nullable List<PatternItem> list2) {
-        this.zzbpt = 10.0f;
+        this.zzbpp = 10.0f;
         this.mColor = -16777216;
-        this.zzbpm = 0.0f;
-        this.zzbpn = true;
-        this.zzbpR = false;
-        this.zzbpo = false;
-        this.zzbpU = new ButtCap();
-        this.zzbpV = new ButtCap();
-        this.zzbpW = 0;
-        this.zzbpX = null;
-        this.zzbpP = list;
-        this.zzbpt = f;
+        this.zzbpi = 0.0f;
+        this.zzbpj = true;
+        this.zzbpN = false;
+        this.zzbpk = false;
+        this.zzbpQ = new ButtCap();
+        this.zzbpR = new ButtCap();
+        this.zzbpS = 0;
+        this.zzbpT = null;
+        this.zzbpL = list;
+        this.zzbpp = f;
         this.mColor = i;
-        this.zzbpm = f2;
-        this.zzbpn = z;
-        this.zzbpR = z2;
-        this.zzbpo = z3;
+        this.zzbpi = f2;
+        this.zzbpj = z;
+        this.zzbpN = z2;
+        this.zzbpk = z3;
         if (cap != null) {
-            this.zzbpU = cap;
+            this.zzbpQ = cap;
         }
         if (cap2 != null) {
-            this.zzbpV = cap2;
+            this.zzbpR = cap2;
         }
-        this.zzbpW = i2;
-        this.zzbpX = list2;
+        this.zzbpS = i2;
+        this.zzbpT = list2;
     }
 
     public PolylineOptions add(LatLng latLng) {
-        this.zzbpP.add(latLng);
+        this.zzbpL.add(latLng);
         return this;
     }
 
     public PolylineOptions add(LatLng... latLngArr) {
-        this.zzbpP.addAll(Arrays.asList(latLngArr));
+        this.zzbpL.addAll(Arrays.asList(latLngArr));
         return this;
     }
 
     public PolylineOptions addAll(Iterable<LatLng> iterable) {
         for (LatLng add : iterable) {
-            this.zzbpP.add(add);
+            this.zzbpL.add(add);
         }
         return this;
     }
 
     public PolylineOptions clickable(boolean z) {
-        this.zzbpo = z;
+        this.zzbpk = z;
         return this;
     }
 
@@ -97,12 +97,12 @@ public final class PolylineOptions extends zza {
     }
 
     public PolylineOptions endCap(@NonNull Cap cap) {
-        this.zzbpV = (Cap) zzac.zzb((Object) cap, (Object) "endCap must not be null");
+        this.zzbpR = (Cap) zzac.zzb((Object) cap, (Object) "endCap must not be null");
         return this;
     }
 
     public PolylineOptions geodesic(boolean z) {
-        this.zzbpR = z;
+        this.zzbpN = z;
         return this;
     }
 
@@ -112,69 +112,69 @@ public final class PolylineOptions extends zza {
 
     @NonNull
     public Cap getEndCap() {
-        return this.zzbpV;
+        return this.zzbpR;
     }
 
     public int getJointType() {
-        return this.zzbpW;
+        return this.zzbpS;
     }
 
     @Nullable
     public List<PatternItem> getPattern() {
-        return this.zzbpX;
+        return this.zzbpT;
     }
 
     public List<LatLng> getPoints() {
-        return this.zzbpP;
+        return this.zzbpL;
     }
 
     @NonNull
     public Cap getStartCap() {
-        return this.zzbpU;
+        return this.zzbpQ;
     }
 
     public float getWidth() {
-        return this.zzbpt;
+        return this.zzbpp;
     }
 
     public float getZIndex() {
-        return this.zzbpm;
+        return this.zzbpi;
     }
 
     public boolean isClickable() {
-        return this.zzbpo;
+        return this.zzbpk;
     }
 
     public boolean isGeodesic() {
-        return this.zzbpR;
+        return this.zzbpN;
     }
 
     public boolean isVisible() {
-        return this.zzbpn;
+        return this.zzbpj;
     }
 
     public PolylineOptions jointType(int i) {
-        this.zzbpW = i;
+        this.zzbpS = i;
         return this;
     }
 
     public PolylineOptions pattern(@Nullable List<PatternItem> list) {
-        this.zzbpX = list;
+        this.zzbpT = list;
         return this;
     }
 
     public PolylineOptions startCap(@NonNull Cap cap) {
-        this.zzbpU = (Cap) zzac.zzb((Object) cap, (Object) "startCap must not be null");
+        this.zzbpQ = (Cap) zzac.zzb((Object) cap, (Object) "startCap must not be null");
         return this;
     }
 
     public PolylineOptions visible(boolean z) {
-        this.zzbpn = z;
+        this.zzbpj = z;
         return this;
     }
 
     public PolylineOptions width(float f) {
-        this.zzbpt = f;
+        this.zzbpp = f;
         return this;
     }
 
@@ -183,7 +183,7 @@ public final class PolylineOptions extends zza {
     }
 
     public PolylineOptions zIndex(float f) {
-        this.zzbpm = f;
+        this.zzbpi = f;
         return this;
     }
 }

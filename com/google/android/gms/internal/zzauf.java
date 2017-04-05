@@ -18,10 +18,10 @@ import java.util.concurrent.ExecutionException;
 import org.telegram.messenger.exoplayer2.C;
 
 public class zzauf extends zza {
-    private final zzaue zzbqg;
-    private Boolean zzbuN;
+    private final zzaue zzbqc;
+    private Boolean zzbuJ;
     @Nullable
-    private String zzbuO;
+    private String zzbuK;
 
     public zzauf(zzaue com_google_android_gms_internal_zzaue) {
         this(com_google_android_gms_internal_zzaue, null);
@@ -29,27 +29,27 @@ public class zzauf extends zza {
 
     public zzauf(zzaue com_google_android_gms_internal_zzaue, @Nullable String str) {
         zzac.zzw(com_google_android_gms_internal_zzaue);
-        this.zzbqg = com_google_android_gms_internal_zzaue;
-        this.zzbuO = str;
+        this.zzbqc = com_google_android_gms_internal_zzaue;
+        this.zzbuK = str;
     }
 
     @BinderThread
     private void zzb(zzatd com_google_android_gms_internal_zzatd, boolean z) {
         zzac.zzw(com_google_android_gms_internal_zzatd);
         zzm(com_google_android_gms_internal_zzatd.packageName, z);
-        this.zzbqg.zzKg().zzga(com_google_android_gms_internal_zzatd.zzbqP);
+        this.zzbqc.zzKh().zzga(com_google_android_gms_internal_zzatd.zzbqL);
     }
 
     @BinderThread
     private void zzm(String str, boolean z) {
         if (TextUtils.isEmpty(str)) {
-            this.zzbqg.zzKk().zzLX().log("Measurement Service called without app package");
+            this.zzbqc.zzKl().zzLY().log("Measurement Service called without app package");
             throw new SecurityException("Measurement Service called without app package");
         }
         try {
             zzn(str, z);
         } catch (SecurityException e) {
-            this.zzbqg.zzKk().zzLX().zzj("Measurement Service called with invalid calling package. appId", zzatx.zzfE(str));
+            this.zzbqc.zzKl().zzLY().zzj("Measurement Service called with invalid calling package. appId", zzatx.zzfE(str));
             throw e;
         }
     }
@@ -59,16 +59,16 @@ public class zzauf extends zza {
         Object e;
         zzb(com_google_android_gms_internal_zzatd, false);
         try {
-            List<zzaus> list = (List) this.zzbqg.zzKj().zzd(new Callable<List<zzaus>>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            List<zzaus> list = (List) this.zzbqc.zzKk().zzd(new Callable<List<zzaus>>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMM();
+                    return zzMN();
                 }
 
-                public List<zzaus> zzMM() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zzKf().zzft(com_google_android_gms_internal_zzatd.packageName);
+                public List<zzaus> zzMN() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zzKg().zzft(com_google_android_gms_internal_zzatd.packageName);
                 }
             }).get();
             List<zzauq> arrayList = new ArrayList(list.size());
@@ -80,11 +80,11 @@ public class zzauf extends zza {
             return arrayList;
         } catch (InterruptedException e2) {
             e = e2;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
             return null;
         } catch (ExecutionException e3) {
             e = e3;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
             return null;
         }
     }
@@ -94,16 +94,16 @@ public class zzauf extends zza {
         Object e;
         zzb(com_google_android_gms_internal_zzatd, false);
         try {
-            return (List) this.zzbqg.zzKj().zzd(new Callable<List<zzatg>>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            return (List) this.zzbqc.zzKk().zzd(new Callable<List<zzatg>>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMM();
+                    return zzMN();
                 }
 
-                public List<zzatg> zzMM() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zzKf().zzl(com_google_android_gms_internal_zzatd.packageName, str, str2);
+                public List<zzatg> zzMN() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zzKg().zzl(com_google_android_gms_internal_zzatd.packageName, str, str2);
                 }
             }).get();
         } catch (InterruptedException e2) {
@@ -111,7 +111,7 @@ public class zzauf extends zza {
         } catch (ExecutionException e3) {
             e = e3;
         }
-        this.zzbqg.zzKk().zzLX().zzj("Failed to get conditional user properties", e);
+        this.zzbqc.zzKl().zzLY().zzj("Failed to get conditional user properties", e);
         return Collections.emptyList();
     }
 
@@ -120,16 +120,16 @@ public class zzauf extends zza {
         Object e;
         zzm(str, true);
         try {
-            List<zzaus> list = (List) this.zzbqg.zzKj().zzd(new Callable<List<zzaus>>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            List<zzaus> list = (List) this.zzbqc.zzKk().zzd(new Callable<List<zzaus>>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMM();
+                    return zzMN();
                 }
 
-                public List<zzaus> zzMM() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zzKf().zzk(str, str2, str3);
+                public List<zzaus> zzMN() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zzKg().zzk(str, str2, str3);
                 }
             }).get();
             List<zzauq> arrayList = new ArrayList(list.size());
@@ -141,11 +141,11 @@ public class zzauf extends zza {
             return arrayList;
         } catch (InterruptedException e2) {
             e = e2;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(str), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(str), e);
             return Collections.emptyList();
         } catch (ExecutionException e3) {
             e = e3;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(str), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(str), e);
             return Collections.emptyList();
         }
     }
@@ -155,16 +155,16 @@ public class zzauf extends zza {
         Object e;
         zzb(com_google_android_gms_internal_zzatd, false);
         try {
-            List<zzaus> list = (List) this.zzbqg.zzKj().zzd(new Callable<List<zzaus>>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            List<zzaus> list = (List) this.zzbqc.zzKk().zzd(new Callable<List<zzaus>>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMM();
+                    return zzMN();
                 }
 
-                public List<zzaus> zzMM() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zzKf().zzk(com_google_android_gms_internal_zzatd.packageName, str, str2);
+                public List<zzaus> zzMN() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zzKg().zzk(com_google_android_gms_internal_zzatd.packageName, str, str2);
                 }
             }).get();
             List<zzauq> arrayList = new ArrayList(list.size());
@@ -176,11 +176,11 @@ public class zzauf extends zza {
             return arrayList;
         } catch (InterruptedException e2) {
             e = e2;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
             return Collections.emptyList();
         } catch (ExecutionException e3) {
             e = e3;
-            this.zzbqg.zzKk().zzLX().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
+            this.zzbqc.zzKl().zzLY().zze("Failed to get user attributes. appId", zzatx.zzfE(com_google_android_gms_internal_zzatd.packageName), e);
             return Collections.emptyList();
         }
     }
@@ -191,19 +191,19 @@ public class zzauf extends zza {
         final String str5 = str3;
         final String str6 = str;
         final long j2 = j;
-        this.zzbqg.zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauf zzbuQ;
+        this.zzbqc.zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauf zzbuM;
 
             public void run() {
                 if (str4 == null) {
-                    this.zzbuQ.zzbqg.zzKd().zza(str5, null);
+                    this.zzbuM.zzbqc.zzKe().zza(str5, null);
                     return;
                 }
                 zzf com_google_android_gms_measurement_AppMeasurement_zzf = new zzf();
-                com_google_android_gms_measurement_AppMeasurement_zzf.zzbqj = str6;
-                com_google_android_gms_measurement_AppMeasurement_zzf.zzbqk = str4;
-                com_google_android_gms_measurement_AppMeasurement_zzf.zzbql = j2;
-                this.zzbuQ.zzbqg.zzKd().zza(str5, com_google_android_gms_measurement_AppMeasurement_zzf);
+                com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf = str6;
+                com_google_android_gms_measurement_AppMeasurement_zzf.zzbqg = str4;
+                com_google_android_gms_measurement_AppMeasurement_zzf.zzbqh = j2;
+                this.zzbuM.zzbqc.zzKe().zza(str5, com_google_android_gms_measurement_AppMeasurement_zzf);
             }
         });
     }
@@ -211,12 +211,12 @@ public class zzauf extends zza {
     @BinderThread
     public void zza(final zzatd com_google_android_gms_internal_zzatd) {
         zzb(com_google_android_gms_internal_zzatd, false);
-        this.zzbqg.zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauf zzbuQ;
+        this.zzbqc.zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauf zzbuM;
 
             public void run() {
-                this.zzbuQ.zzbqg.zzMK();
-                this.zzbuQ.zzbqg.zze(com_google_android_gms_internal_zzatd);
+                this.zzbuM.zzbqc.zzML();
+                this.zzbuM.zzbqc.zze(com_google_android_gms_internal_zzatd);
             }
         });
     }
@@ -224,26 +224,26 @@ public class zzauf extends zza {
     @BinderThread
     public void zza(zzatg com_google_android_gms_internal_zzatg, final zzatd com_google_android_gms_internal_zzatd) {
         zzac.zzw(com_google_android_gms_internal_zzatg);
-        zzac.zzw(com_google_android_gms_internal_zzatg.zzbra);
+        zzac.zzw(com_google_android_gms_internal_zzatg.zzbqW);
         zzb(com_google_android_gms_internal_zzatd, false);
         final zzatg com_google_android_gms_internal_zzatg2 = new zzatg(com_google_android_gms_internal_zzatg);
         com_google_android_gms_internal_zzatg2.packageName = com_google_android_gms_internal_zzatd.packageName;
-        if (com_google_android_gms_internal_zzatg.zzbra.getValue() == null) {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+        if (com_google_android_gms_internal_zzatg.zzbqW.getValue() == null) {
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zzc(com_google_android_gms_internal_zzatg2, com_google_android_gms_internal_zzatd);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zzc(com_google_android_gms_internal_zzatg2, com_google_android_gms_internal_zzatd);
                 }
             });
         } else {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zzb(com_google_android_gms_internal_zzatg2, com_google_android_gms_internal_zzatd);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zzb(com_google_android_gms_internal_zzatg2, com_google_android_gms_internal_zzatd);
                 }
             });
         }
@@ -253,12 +253,12 @@ public class zzauf extends zza {
     public void zza(final zzatq com_google_android_gms_internal_zzatq, final zzatd com_google_android_gms_internal_zzatd) {
         zzac.zzw(com_google_android_gms_internal_zzatq);
         zzb(com_google_android_gms_internal_zzatd, false);
-        this.zzbqg.zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauf zzbuQ;
+        this.zzbqc.zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauf zzbuM;
 
             public void run() {
-                this.zzbuQ.zzbqg.zzMK();
-                this.zzbuQ.zzbqg.zzb(com_google_android_gms_internal_zzatq, com_google_android_gms_internal_zzatd);
+                this.zzbuM.zzbqc.zzML();
+                this.zzbuM.zzbqc.zzb(com_google_android_gms_internal_zzatq, com_google_android_gms_internal_zzatd);
             }
         });
     }
@@ -268,12 +268,12 @@ public class zzauf extends zza {
         zzac.zzw(com_google_android_gms_internal_zzatq);
         zzac.zzdr(str);
         zzm(str, true);
-        this.zzbqg.zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauf zzbuQ;
+        this.zzbqc.zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauf zzbuM;
 
             public void run() {
-                this.zzbuQ.zzbqg.zzMK();
-                this.zzbuQ.zzbqg.zzb(com_google_android_gms_internal_zzatq, str);
+                this.zzbuM.zzbqc.zzML();
+                this.zzbuM.zzbqc.zzb(com_google_android_gms_internal_zzatq, str);
             }
         });
     }
@@ -283,21 +283,21 @@ public class zzauf extends zza {
         zzac.zzw(com_google_android_gms_internal_zzauq);
         zzb(com_google_android_gms_internal_zzatd, false);
         if (com_google_android_gms_internal_zzauq.getValue() == null) {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zzc(com_google_android_gms_internal_zzauq, com_google_android_gms_internal_zzatd);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zzc(com_google_android_gms_internal_zzauq, com_google_android_gms_internal_zzatd);
                 }
             });
         } else {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zzb(com_google_android_gms_internal_zzauq, com_google_android_gms_internal_zzatd);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zzb(com_google_android_gms_internal_zzauq, com_google_android_gms_internal_zzatd);
                 }
             });
         }
@@ -309,34 +309,34 @@ public class zzauf extends zza {
         zzac.zzdr(str);
         zzac.zzw(com_google_android_gms_internal_zzatq);
         zzm(str, true);
-        this.zzbqg.zzKk().zzMc().zzj("Log and bundle. event", com_google_android_gms_internal_zzatq.name);
-        long nanoTime = this.zzbqg.zznR().nanoTime() / C.MICROS_PER_SECOND;
+        this.zzbqc.zzKl().zzMd().zzj("Log and bundle. event", com_google_android_gms_internal_zzatq.name);
+        long nanoTime = this.zzbqc.zznR().nanoTime() / C.MICROS_PER_SECOND;
         try {
-            byte[] bArr = (byte[]) this.zzbqg.zzKj().zze(new Callable<byte[]>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            byte[] bArr = (byte[]) this.zzbqc.zzKk().zze(new Callable<byte[]>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMN();
+                    return zzMO();
                 }
 
-                public byte[] zzMN() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zza(com_google_android_gms_internal_zzatq, str);
+                public byte[] zzMO() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zza(com_google_android_gms_internal_zzatq, str);
                 }
             }).get();
             if (bArr == null) {
-                this.zzbqg.zzKk().zzLX().zzj("Log and bundle returned null. appId", zzatx.zzfE(str));
+                this.zzbqc.zzKl().zzLY().zzj("Log and bundle returned null. appId", zzatx.zzfE(str));
                 bArr = new byte[0];
             }
-            this.zzbqg.zzKk().zzMc().zzd("Log and bundle processed. event, size, time_ms", com_google_android_gms_internal_zzatq.name, Integer.valueOf(bArr.length), Long.valueOf((this.zzbqg.zznR().nanoTime() / C.MICROS_PER_SECOND) - nanoTime));
+            this.zzbqc.zzKl().zzMd().zzd("Log and bundle processed. event, size, time_ms", com_google_android_gms_internal_zzatq.name, Integer.valueOf(bArr.length), Long.valueOf((this.zzbqc.zznR().nanoTime() / C.MICROS_PER_SECOND) - nanoTime));
             return bArr;
         } catch (InterruptedException e2) {
             e = e2;
-            this.zzbqg.zzKk().zzLX().zzd("Failed to log and bundle. appId, event, error", zzatx.zzfE(str), com_google_android_gms_internal_zzatq.name, e);
+            this.zzbqc.zzKl().zzLY().zzd("Failed to log and bundle. appId, event, error", zzatx.zzfE(str), com_google_android_gms_internal_zzatq.name, e);
             return null;
         } catch (ExecutionException e3) {
             e = e3;
-            this.zzbqg.zzKk().zzLX().zzd("Failed to log and bundle. appId, event, error", zzatx.zzfE(str), com_google_android_gms_internal_zzatq.name, e);
+            this.zzbqc.zzKl().zzLY().zzd("Failed to log and bundle. appId, event, error", zzatx.zzfE(str), com_google_android_gms_internal_zzatq.name, e);
             return null;
         }
     }
@@ -344,12 +344,12 @@ public class zzauf extends zza {
     @BinderThread
     public void zzb(final zzatd com_google_android_gms_internal_zzatd) {
         zzb(com_google_android_gms_internal_zzatd, false);
-        this.zzbqg.zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauf zzbuQ;
+        this.zzbqc.zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauf zzbuM;
 
             public void run() {
-                this.zzbuQ.zzbqg.zzMK();
-                this.zzbuQ.zzbqg.zzd(com_google_android_gms_internal_zzatd);
+                this.zzbuM.zzbqc.zzML();
+                this.zzbuM.zzbqc.zzd(com_google_android_gms_internal_zzatd);
             }
         });
     }
@@ -357,25 +357,25 @@ public class zzauf extends zza {
     @BinderThread
     public void zzb(zzatg com_google_android_gms_internal_zzatg) {
         zzac.zzw(com_google_android_gms_internal_zzatg);
-        zzac.zzw(com_google_android_gms_internal_zzatg.zzbra);
+        zzac.zzw(com_google_android_gms_internal_zzatg.zzbqW);
         zzm(com_google_android_gms_internal_zzatg.packageName, true);
         final zzatg com_google_android_gms_internal_zzatg2 = new zzatg(com_google_android_gms_internal_zzatg);
-        if (com_google_android_gms_internal_zzatg.zzbra.getValue() == null) {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+        if (com_google_android_gms_internal_zzatg.zzbqW.getValue() == null) {
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zze(com_google_android_gms_internal_zzatg2);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zze(com_google_android_gms_internal_zzatg2);
                 }
             });
         } else {
-            this.zzbqg.zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            this.zzbqc.zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public void run() {
-                    this.zzbuQ.zzbqg.zzMK();
-                    this.zzbuQ.zzbqg.zzd(com_google_android_gms_internal_zzatg2);
+                    this.zzbuM.zzbqc.zzML();
+                    this.zzbuM.zzbqc.zzd(com_google_android_gms_internal_zzatg2);
                 }
             });
         }
@@ -384,7 +384,7 @@ public class zzauf extends zza {
     @BinderThread
     public String zzc(zzatd com_google_android_gms_internal_zzatd) {
         zzb(com_google_android_gms_internal_zzatd, false);
-        return this.zzbqg.zzfP(com_google_android_gms_internal_zzatd.packageName);
+        return this.zzbqc.zzfP(com_google_android_gms_internal_zzatd.packageName);
     }
 
     @BinderThread
@@ -392,16 +392,16 @@ public class zzauf extends zza {
         Object e;
         zzm(str, true);
         try {
-            return (List) this.zzbqg.zzKj().zzd(new Callable<List<zzatg>>(this) {
-                final /* synthetic */ zzauf zzbuQ;
+            return (List) this.zzbqc.zzKk().zzd(new Callable<List<zzatg>>(this) {
+                final /* synthetic */ zzauf zzbuM;
 
                 public /* synthetic */ Object call() throws Exception {
-                    return zzMM();
+                    return zzMN();
                 }
 
-                public List<zzatg> zzMM() throws Exception {
-                    this.zzbuQ.zzbqg.zzMK();
-                    return this.zzbuQ.zzbqg.zzKf().zzl(str, str2, str3);
+                public List<zzatg> zzMN() throws Exception {
+                    this.zzbuM.zzbqc.zzML();
+                    return this.zzbuM.zzbqc.zzKg().zzl(str, str2, str3);
                 }
             }).get();
         } catch (InterruptedException e2) {
@@ -409,24 +409,24 @@ public class zzauf extends zza {
         } catch (ExecutionException e3) {
             e = e3;
         }
-        this.zzbqg.zzKk().zzLX().zzj("Failed to get conditional user properties", e);
+        this.zzbqc.zzKl().zzLY().zzj("Failed to get conditional user properties", e);
         return Collections.emptyList();
     }
 
     protected void zzn(String str, boolean z) throws SecurityException {
         if (z) {
-            if (this.zzbuN == null) {
-                boolean z2 = "com.google.android.gms".equals(this.zzbuO) || zzy.zzf(this.zzbqg.getContext(), Binder.getCallingUid()) || zzh.zzaN(this.zzbqg.getContext()).zza(this.zzbqg.getContext().getPackageManager(), Binder.getCallingUid());
-                this.zzbuN = Boolean.valueOf(z2);
+            if (this.zzbuJ == null) {
+                boolean z2 = "com.google.android.gms".equals(this.zzbuK) || zzy.zzf(this.zzbqc.getContext(), Binder.getCallingUid()) || zzh.zzaN(this.zzbqc.getContext()).zza(this.zzbqc.getContext().getPackageManager(), Binder.getCallingUid());
+                this.zzbuJ = Boolean.valueOf(z2);
             }
-            if (this.zzbuN.booleanValue()) {
+            if (this.zzbuJ.booleanValue()) {
                 return;
             }
         }
-        if (this.zzbuO == null && zzg.zzc(this.zzbqg.getContext(), Binder.getCallingUid(), str)) {
-            this.zzbuO = str;
+        if (this.zzbuK == null && zzg.zzc(this.zzbqc.getContext(), Binder.getCallingUid(), str)) {
+            this.zzbuK = str;
         }
-        if (!str.equals(this.zzbuO)) {
+        if (!str.equals(this.zzbuK)) {
             throw new SecurityException(String.format("Unknown calling package name '%s'.", new Object[]{str}));
         }
     }

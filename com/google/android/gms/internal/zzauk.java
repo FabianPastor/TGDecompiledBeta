@@ -19,31 +19,31 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class zzauk extends zzauh {
-    protected zza zzbvq;
-    private volatile zzf zzbvr;
-    private zzf zzbvs;
-    private long zzbvt;
-    private final Map<Activity, zza> zzbvu = new ArrayMap();
-    private final CopyOnWriteArrayList<zzd> zzbvv = new CopyOnWriteArrayList();
-    private boolean zzbvw;
-    private zzf zzbvx;
-    private String zzbvy;
+    protected zza zzbvm;
+    private volatile zzf zzbvn;
+    private zzf zzbvo;
+    private long zzbvp;
+    private final Map<Activity, zza> zzbvq = new ArrayMap();
+    private final CopyOnWriteArrayList<zzd> zzbvr = new CopyOnWriteArrayList();
+    private boolean zzbvs;
+    private zzf zzbvt;
+    private String zzbvu;
 
     static class zza extends zzf {
-        public boolean zzbvD;
+        public boolean zzbvz;
 
         public zza(zza com_google_android_gms_internal_zzauk_zza) {
-            this.zzbqj = com_google_android_gms_internal_zzauk_zza.zzbqj;
-            this.zzbqk = com_google_android_gms_internal_zzauk_zza.zzbqk;
-            this.zzbql = com_google_android_gms_internal_zzauk_zza.zzbql;
-            this.zzbvD = com_google_android_gms_internal_zzauk_zza.zzbvD;
+            this.zzbqf = com_google_android_gms_internal_zzauk_zza.zzbqf;
+            this.zzbqg = com_google_android_gms_internal_zzauk_zza.zzbqg;
+            this.zzbqh = com_google_android_gms_internal_zzauk_zza.zzbqh;
+            this.zzbvz = com_google_android_gms_internal_zzauk_zza.zzbvz;
         }
 
         public zza(String str, String str2, long j) {
-            this.zzbqj = str;
-            this.zzbqk = str2;
-            this.zzbql = j;
-            this.zzbvD = false;
+            this.zzbqf = str;
+            this.zzbqg = str2;
+            this.zzbqh = j;
+            this.zzbvz = false;
         }
     }
 
@@ -54,43 +54,43 @@ public class zzauk extends zzauh {
     @MainThread
     private void zza(Activity activity, zza com_google_android_gms_internal_zzauk_zza, final boolean z) {
         int i = 1;
-        zzf com_google_android_gms_measurement_AppMeasurement_zzf = this.zzbvr != null ? this.zzbvr : (this.zzbvs == null || Math.abs(zznR().elapsedRealtime() - this.zzbvt) >= 1000) ? null : this.zzbvs;
+        zzf com_google_android_gms_measurement_AppMeasurement_zzf = this.zzbvn != null ? this.zzbvn : (this.zzbvo == null || Math.abs(zznR().elapsedRealtime() - this.zzbvp) >= 1000) ? null : this.zzbvo;
         com_google_android_gms_measurement_AppMeasurement_zzf = com_google_android_gms_measurement_AppMeasurement_zzf != null ? new zzf(com_google_android_gms_measurement_AppMeasurement_zzf) : null;
-        this.zzbvw = true;
+        this.zzbvs = true;
         try {
-            Iterator it = this.zzbvv.iterator();
+            Iterator it = this.zzbvr.iterator();
             while (it.hasNext()) {
                 int zza;
                 try {
                     zza = ((zzd) it.next()).zza(com_google_android_gms_measurement_AppMeasurement_zzf, com_google_android_gms_internal_zzauk_zza) & i;
                 } catch (Exception e) {
-                    zzKk().zzLX().zzj("onScreenChangeCallback threw exception", e);
+                    zzKl().zzLY().zzj("onScreenChangeCallback threw exception", e);
                     zza = i;
                 }
                 i = zza;
             }
         } catch (Exception e2) {
-            zzKk().zzLX().zzj("onScreenChangeCallback loop threw exception", e2);
+            zzKl().zzLY().zzj("onScreenChangeCallback loop threw exception", e2);
         } finally {
-            this.zzbvw = false;
+            this.zzbvs = false;
         }
         if (i != 0) {
-            if (com_google_android_gms_internal_zzauk_zza.zzbqk == null) {
-                com_google_android_gms_internal_zzauk_zza.zzbqk = zzfS(activity.getClass().getCanonicalName());
+            if (com_google_android_gms_internal_zzauk_zza.zzbqg == null) {
+                com_google_android_gms_internal_zzauk_zza.zzbqg = zzfS(activity.getClass().getCanonicalName());
             }
             final zzf com_google_android_gms_internal_zzauk_zza2 = new zza(com_google_android_gms_internal_zzauk_zza);
-            this.zzbvs = this.zzbvr;
-            this.zzbvt = zznR().elapsedRealtime();
-            this.zzbvr = com_google_android_gms_internal_zzauk_zza2;
-            zzKj().zzm(new Runnable(this) {
-                final /* synthetic */ zzauk zzbvB;
+            this.zzbvo = this.zzbvn;
+            this.zzbvp = zznR().elapsedRealtime();
+            this.zzbvn = com_google_android_gms_internal_zzauk_zza2;
+            zzKk().zzm(new Runnable(this) {
+                final /* synthetic */ zzauk zzbvx;
 
                 public void run() {
-                    if (z && this.zzbvB.zzbvq != null) {
-                        this.zzbvB.zza(this.zzbvB.zzbvq);
+                    if (z && this.zzbvx.zzbvm != null) {
+                        this.zzbvx.zza(this.zzbvx.zzbvm);
                     }
-                    this.zzbvB.zzbvq = com_google_android_gms_internal_zzauk_zza2;
-                    this.zzbvB.zzKc().zza(com_google_android_gms_internal_zzauk_zza2);
+                    this.zzbvx.zzbvm = com_google_android_gms_internal_zzauk_zza2;
+                    this.zzbvx.zzKd().zza(com_google_android_gms_internal_zzauk_zza2);
                 }
             });
         }
@@ -98,19 +98,19 @@ public class zzauk extends zzauh {
 
     @WorkerThread
     private void zza(@NonNull zza com_google_android_gms_internal_zzauk_zza) {
-        zzJX().zzW(zznR().elapsedRealtime());
-        if (zzKi().zzaO(com_google_android_gms_internal_zzauk_zza.zzbvD)) {
-            com_google_android_gms_internal_zzauk_zza.zzbvD = false;
+        zzJY().zzW(zznR().elapsedRealtime());
+        if (zzKj().zzaO(com_google_android_gms_internal_zzauk_zza.zzbvz)) {
+            com_google_android_gms_internal_zzauk_zza.zzbvz = false;
         }
     }
 
     public static void zza(zzf com_google_android_gms_measurement_AppMeasurement_zzf, Bundle bundle) {
         if (bundle != null && com_google_android_gms_measurement_AppMeasurement_zzf != null && !bundle.containsKey("_sc")) {
-            if (com_google_android_gms_measurement_AppMeasurement_zzf.zzbqj != null) {
-                bundle.putString("_sn", com_google_android_gms_measurement_AppMeasurement_zzf.zzbqj);
+            if (com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf != null) {
+                bundle.putString("_sn", com_google_android_gms_measurement_AppMeasurement_zzf.zzbqf);
             }
-            bundle.putString("_sc", com_google_android_gms_measurement_AppMeasurement_zzf.zzbqk);
-            bundle.putLong("_si", com_google_android_gms_measurement_AppMeasurement_zzf.zzbql);
+            bundle.putString("_sc", com_google_android_gms_measurement_AppMeasurement_zzf.zzbqg);
+            bundle.putLong("_si", com_google_android_gms_measurement_AppMeasurement_zzf.zzbqh);
         }
     }
 
@@ -133,31 +133,31 @@ public class zzauk extends zzauh {
             Bundle bundle2 = bundle.getBundle("com.google.firebase.analytics.screen_service");
             if (bundle2 != null) {
                 zza zzv = zzv(activity);
-                zzv.zzbql = bundle2.getLong(TtmlNode.ATTR_ID);
-                zzv.zzbqj = bundle2.getString("name");
-                zzv.zzbqk = bundle2.getString("referrer_name");
+                zzv.zzbqh = bundle2.getLong(TtmlNode.ATTR_ID);
+                zzv.zzbqf = bundle2.getString("name");
+                zzv.zzbqg = bundle2.getString("referrer_name");
             }
         }
     }
 
     @MainThread
     public void onActivityDestroyed(Activity activity) {
-        this.zzbvu.remove(activity);
+        this.zzbvq.remove(activity);
     }
 
     @MainThread
     public void onActivityPaused(Activity activity) {
         final zza zzv = zzv(activity);
-        this.zzbvs = this.zzbvr;
-        this.zzbvt = zznR().elapsedRealtime();
-        this.zzbvr = null;
-        zzKj().zzm(new Runnable(this) {
-            final /* synthetic */ zzauk zzbvB;
+        this.zzbvo = this.zzbvn;
+        this.zzbvp = zznR().elapsedRealtime();
+        this.zzbvn = null;
+        zzKk().zzm(new Runnable(this) {
+            final /* synthetic */ zzauk zzbvx;
 
             public void run() {
-                this.zzbvB.zza(zzv);
-                this.zzbvB.zzbvq = null;
-                this.zzbvB.zzKc().zza(null);
+                this.zzbvx.zza(zzv);
+                this.zzbvx.zzbvm = null;
+                this.zzbvx.zzKd().zza(null);
             }
         });
     }
@@ -165,18 +165,18 @@ public class zzauk extends zzauh {
     @MainThread
     public void onActivityResumed(Activity activity) {
         zza(activity, zzv(activity), false);
-        zzJX().zzJT();
+        zzJY().zzJU();
     }
 
     @MainThread
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
         if (bundle != null) {
-            zza com_google_android_gms_internal_zzauk_zza = (zza) this.zzbvu.get(activity);
+            zza com_google_android_gms_internal_zzauk_zza = (zza) this.zzbvq.get(activity);
             if (com_google_android_gms_internal_zzauk_zza != null) {
                 Bundle bundle2 = new Bundle();
-                bundle2.putLong(TtmlNode.ATTR_ID, com_google_android_gms_internal_zzauk_zza.zzbql);
-                bundle2.putString("name", com_google_android_gms_internal_zzauk_zza.zzbqj);
-                bundle2.putString("referrer_name", com_google_android_gms_internal_zzauk_zza.zzbqk);
+                bundle2.putLong(TtmlNode.ATTR_ID, com_google_android_gms_internal_zzauk_zza.zzbqh);
+                bundle2.putString("name", com_google_android_gms_internal_zzauk_zza.zzbqf);
+                bundle2.putString("referrer_name", com_google_android_gms_internal_zzauk_zza.zzbqg);
                 bundle.putBundle("com.google.firebase.analytics.screen_service", bundle2);
             }
         }
@@ -184,65 +184,61 @@ public class zzauk extends zzauh {
 
     @MainThread
     public void registerOnScreenChangeCallback(@NonNull zzd com_google_android_gms_measurement_AppMeasurement_zzd) {
-        zzJV();
+        zzJW();
         if (com_google_android_gms_measurement_AppMeasurement_zzd == null) {
-            zzKk().zzLZ().log("Attempting to register null OnScreenChangeCallback");
+            zzKl().zzMa().log("Attempting to register null OnScreenChangeCallback");
             return;
         }
-        this.zzbvv.remove(com_google_android_gms_measurement_AppMeasurement_zzd);
-        this.zzbvv.add(com_google_android_gms_measurement_AppMeasurement_zzd);
+        this.zzbvr.remove(com_google_android_gms_measurement_AppMeasurement_zzd);
+        this.zzbvr.add(com_google_android_gms_measurement_AppMeasurement_zzd);
     }
 
     @MainThread
     public void setCurrentScreen(@NonNull Activity activity, @Nullable @Size(max = 36, min = 1) String str, @Nullable @Size(max = 36, min = 1) String str2) {
         int i = VERSION.SDK_INT;
         if (activity == null) {
-            zzKk().zzLZ().log("setCurrentScreen must be called with a non-null activity");
-        } else if (!zzKj().zzbc()) {
-            zzKk().zzLZ().log("setCurrentScreen must be called from the main thread");
-        } else if (this.zzbvw) {
-            zzKk().zzLZ().log("Cannot call setCurrentScreen from onScreenChangeCallback");
-        } else if (this.zzbvr == null) {
-            zzKk().zzLZ().log("setCurrentScreen cannot be called while no activity active");
-        } else if (this.zzbvu.get(activity) == null) {
-            zzKk().zzLZ().log("setCurrentScreen must be called with an activity in the activity lifecycle");
+            zzKl().zzMa().log("setCurrentScreen must be called with a non-null activity");
+        } else if (!zzKk().zzbc()) {
+            zzKl().zzMa().log("setCurrentScreen must be called from the main thread");
+        } else if (this.zzbvs) {
+            zzKl().zzMa().log("Cannot call setCurrentScreen from onScreenChangeCallback");
+        } else if (this.zzbvn == null) {
+            zzKl().zzMa().log("setCurrentScreen cannot be called while no activity active");
+        } else if (this.zzbvq.get(activity) == null) {
+            zzKl().zzMa().log("setCurrentScreen must be called with an activity in the activity lifecycle");
         } else {
             if (str2 == null) {
                 str2 = zzfS(activity.getClass().getCanonicalName());
             }
-            boolean equals = this.zzbvr.zzbqk.equals(str2);
-            boolean z = (this.zzbvr.zzbqj == null && str == null) || (this.zzbvr.zzbqj != null && this.zzbvr.zzbqj.equals(str));
+            boolean equals = this.zzbvn.zzbqg.equals(str2);
+            boolean z = (this.zzbvn.zzbqf == null && str == null) || (this.zzbvn.zzbqf != null && this.zzbvn.zzbqf.equals(str));
             if (equals && z) {
-                zzKk().zzMa().log("setCurrentScreen cannot be called with the same class and name");
-            } else if (str != null && (str.length() < 1 || str.length() > zzKm().zzKO())) {
-                zzKk().zzLZ().zzj("Invalid screen name length in setCurrentScreen. Length", Integer.valueOf(str.length()));
-            } else if (str2 == null || (str2.length() >= 1 && str2.length() <= zzKm().zzKO())) {
+                zzKl().zzMb().log("setCurrentScreen cannot be called with the same class and name");
+            } else if (str != null && (str.length() < 1 || str.length() > zzKn().zzKP())) {
+                zzKl().zzMa().zzj("Invalid screen name length in setCurrentScreen. Length", Integer.valueOf(str.length()));
+            } else if (str2 == null || (str2.length() >= 1 && str2.length() <= zzKn().zzKP())) {
                 Object obj;
-                com.google.android.gms.internal.zzatx.zza zzMd = zzKk().zzMd();
+                com.google.android.gms.internal.zzatx.zza zzMe = zzKl().zzMe();
                 String str3 = "Setting current screen to name, class";
                 if (str == null) {
                     obj = "null";
                 } else {
                     String str4 = str;
                 }
-                zzMd.zze(str3, obj, str2);
-                zza com_google_android_gms_internal_zzauk_zza = new zza(str, str2, zzKg().zzNh());
-                this.zzbvu.put(activity, com_google_android_gms_internal_zzauk_zza);
+                zzMe.zze(str3, obj, str2);
+                zza com_google_android_gms_internal_zzauk_zza = new zza(str, str2, zzKh().zzNi());
+                this.zzbvq.put(activity, com_google_android_gms_internal_zzauk_zza);
                 zza(activity, com_google_android_gms_internal_zzauk_zza, true);
             } else {
-                zzKk().zzLZ().zzj("Invalid class name length in setCurrentScreen. Length", Integer.valueOf(str2.length()));
+                zzKl().zzMa().zzj("Invalid class name length in setCurrentScreen. Length", Integer.valueOf(str2.length()));
             }
         }
     }
 
     @MainThread
     public void unregisterOnScreenChangeCallback(@NonNull zzd com_google_android_gms_measurement_AppMeasurement_zzd) {
-        zzJV();
-        this.zzbvv.remove(com_google_android_gms_measurement_AppMeasurement_zzd);
-    }
-
-    public /* bridge */ /* synthetic */ void zzJU() {
-        super.zzJU();
+        zzJW();
+        this.zzbvr.remove(com_google_android_gms_measurement_AppMeasurement_zzd);
     }
 
     public /* bridge */ /* synthetic */ void zzJV() {
@@ -253,80 +249,84 @@ public class zzauk extends zzauh {
         super.zzJW();
     }
 
-    public /* bridge */ /* synthetic */ zzatb zzJX() {
-        return super.zzJX();
+    public /* bridge */ /* synthetic */ void zzJX() {
+        super.zzJX();
     }
 
-    public /* bridge */ /* synthetic */ zzatf zzJY() {
+    public /* bridge */ /* synthetic */ zzatb zzJY() {
         return super.zzJY();
     }
 
-    public /* bridge */ /* synthetic */ zzauj zzJZ() {
+    public /* bridge */ /* synthetic */ zzatf zzJZ() {
         return super.zzJZ();
     }
 
-    public /* bridge */ /* synthetic */ zzatu zzKa() {
+    public /* bridge */ /* synthetic */ zzauj zzKa() {
         return super.zzKa();
     }
 
-    public /* bridge */ /* synthetic */ zzatl zzKb() {
+    public /* bridge */ /* synthetic */ zzatu zzKb() {
         return super.zzKb();
     }
 
-    public /* bridge */ /* synthetic */ zzaul zzKc() {
+    public /* bridge */ /* synthetic */ zzatl zzKc() {
         return super.zzKc();
     }
 
-    public /* bridge */ /* synthetic */ zzauk zzKd() {
+    public /* bridge */ /* synthetic */ zzaul zzKd() {
         return super.zzKd();
     }
 
-    public /* bridge */ /* synthetic */ zzatv zzKe() {
+    public /* bridge */ /* synthetic */ zzauk zzKe() {
         return super.zzKe();
     }
 
-    public /* bridge */ /* synthetic */ zzatj zzKf() {
+    public /* bridge */ /* synthetic */ zzatv zzKf() {
         return super.zzKf();
     }
 
-    public /* bridge */ /* synthetic */ zzaut zzKg() {
+    public /* bridge */ /* synthetic */ zzatj zzKg() {
         return super.zzKg();
     }
 
-    public /* bridge */ /* synthetic */ zzauc zzKh() {
+    public /* bridge */ /* synthetic */ zzaut zzKh() {
         return super.zzKh();
     }
 
-    public /* bridge */ /* synthetic */ zzaun zzKi() {
+    public /* bridge */ /* synthetic */ zzauc zzKi() {
         return super.zzKi();
     }
 
-    public /* bridge */ /* synthetic */ zzaud zzKj() {
+    public /* bridge */ /* synthetic */ zzaun zzKj() {
         return super.zzKj();
     }
 
-    public /* bridge */ /* synthetic */ zzatx zzKk() {
+    public /* bridge */ /* synthetic */ zzaud zzKk() {
         return super.zzKk();
     }
 
-    public /* bridge */ /* synthetic */ zzaua zzKl() {
+    public /* bridge */ /* synthetic */ zzatx zzKl() {
         return super.zzKl();
     }
 
-    public /* bridge */ /* synthetic */ zzati zzKm() {
+    public /* bridge */ /* synthetic */ zzaua zzKm() {
         return super.zzKm();
     }
 
-    @WorkerThread
-    public zza zzMT() {
-        zzob();
-        zzmR();
-        return this.zzbvq;
+    public /* bridge */ /* synthetic */ zzati zzKn() {
+        return super.zzKn();
     }
 
-    public zzf zzMU() {
-        zzJV();
-        zzf com_google_android_gms_measurement_AppMeasurement_zzf = this.zzbvr;
+    @WorkerThread
+    public zza zzMU() {
+        zzob();
+        zzmR();
+        return this.zzbvm;
+    }
+
+    public zzf zzMV() {
+        zzJW();
+        zzf com_google_android_gms_measurement_AppMeasurement_zzf = this.zzbvn;
         return com_google_android_gms_measurement_AppMeasurement_zzf == null ? null : new zzf(com_google_android_gms_measurement_AppMeasurement_zzf);
     }
 
@@ -334,9 +334,9 @@ public class zzauk extends zzauh {
     public void zza(String str, zzf com_google_android_gms_measurement_AppMeasurement_zzf) {
         zzmR();
         synchronized (this) {
-            if (this.zzbvy == null || this.zzbvy.equals(str) || com_google_android_gms_measurement_AppMeasurement_zzf != null) {
-                this.zzbvy = str;
-                this.zzbvx = com_google_android_gms_measurement_AppMeasurement_zzf;
+            if (this.zzbvu == null || this.zzbvu.equals(str) || com_google_android_gms_measurement_AppMeasurement_zzf != null) {
+                this.zzbvu = str;
+                this.zzbvt = com_google_android_gms_measurement_AppMeasurement_zzf;
             }
         }
     }
@@ -355,12 +355,12 @@ public class zzauk extends zzauh {
     @MainThread
     zza zzv(@NonNull Activity activity) {
         zzac.zzw(activity);
-        zza com_google_android_gms_internal_zzauk_zza = (zza) this.zzbvu.get(activity);
+        zza com_google_android_gms_internal_zzauk_zza = (zza) this.zzbvq.get(activity);
         if (com_google_android_gms_internal_zzauk_zza != null) {
             return com_google_android_gms_internal_zzauk_zza;
         }
-        com_google_android_gms_internal_zzauk_zza = new zza(null, zzfS(activity.getClass().getCanonicalName()), zzKg().zzNh());
-        this.zzbvu.put(activity, com_google_android_gms_internal_zzauk_zza);
+        com_google_android_gms_internal_zzauk_zza = new zza(null, zzfS(activity.getClass().getCanonicalName()), zzKh().zzNi());
+        this.zzbvq.put(activity, com_google_android_gms_internal_zzauk_zza);
         return com_google_android_gms_internal_zzauk_zza;
     }
 }

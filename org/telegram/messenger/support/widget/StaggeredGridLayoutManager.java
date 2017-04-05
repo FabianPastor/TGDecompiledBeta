@@ -681,6 +681,13 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             return findOneVisibleChild(0, this.mViews.size(), false);
         }
 
+        public int findFirstPartiallyVisibleItemPosition() {
+            if (StaggeredGridLayoutManager.this.mReverseLayout) {
+                return findOnePartiallyVisibleChild(this.mViews.size() - 1, -1, true);
+            }
+            return findOnePartiallyVisibleChild(0, this.mViews.size(), true);
+        }
+
         public int findFirstCompletelyVisibleItemPosition() {
             if (StaggeredGridLayoutManager.this.mReverseLayout) {
                 return findOneVisibleChild(this.mViews.size() - 1, -1, true);
@@ -695,6 +702,13 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             return findOneVisibleChild(this.mViews.size() - 1, -1, false);
         }
 
+        public int findLastPartiallyVisibleItemPosition() {
+            if (StaggeredGridLayoutManager.this.mReverseLayout) {
+                return findOnePartiallyVisibleChild(0, this.mViews.size(), true);
+            }
+            return findOnePartiallyVisibleChild(this.mViews.size() - 1, -1, true);
+        }
+
         public int findLastCompletelyVisibleItemPosition() {
             if (StaggeredGridLayoutManager.this.mReverseLayout) {
                 return findOneVisibleChild(0, this.mViews.size(), true);
@@ -702,29 +716,39 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             return findOneVisibleChild(this.mViews.size() - 1, -1, true);
         }
 
-        int findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible) {
-            int next;
+        int findOnePartiallyOrCompletelyVisibleChild(int fromIndex, int toIndex, boolean completelyVisible, boolean acceptCompletelyVisible, boolean acceptEndPointInclusion) {
             int start = StaggeredGridLayoutManager.this.mPrimaryOrientation.getStartAfterPadding();
             int end = StaggeredGridLayoutManager.this.mPrimaryOrientation.getEndAfterPadding();
-            if (toIndex > fromIndex) {
-                next = 1;
-            } else {
-                next = -1;
-            }
+            int next = toIndex > fromIndex ? 1 : -1;
             for (int i = fromIndex; i != toIndex; i += next) {
                 View child = (View) this.mViews.get(i);
                 int childStart = StaggeredGridLayoutManager.this.mPrimaryOrientation.getDecoratedStart(child);
                 int childEnd = StaggeredGridLayoutManager.this.mPrimaryOrientation.getDecoratedEnd(child);
-                if (childStart < end && childEnd > start) {
-                    if (!completelyVisible) {
+                boolean childStartInclusion = acceptEndPointInclusion ? childStart <= end : childStart < end;
+                boolean childEndInclusion = acceptEndPointInclusion ? childEnd >= start : childEnd > start;
+                if (childStartInclusion && childEndInclusion) {
+                    if (completelyVisible && acceptCompletelyVisible) {
+                        if (childStart >= start && childEnd <= end) {
+                            return StaggeredGridLayoutManager.this.getPosition(child);
+                        }
+                    } else if (acceptCompletelyVisible) {
                         return StaggeredGridLayoutManager.this.getPosition(child);
-                    }
-                    if (childStart >= start && childEnd <= end) {
-                        return StaggeredGridLayoutManager.this.getPosition(child);
+                    } else {
+                        if (childStart < start || childEnd > end) {
+                            return StaggeredGridLayoutManager.this.getPosition(child);
+                        }
                     }
                 }
             }
             return -1;
+        }
+
+        int findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible) {
+            return findOnePartiallyOrCompletelyVisibleChild(fromIndex, toIndex, completelyVisible, true, false);
+        }
+
+        int findOnePartiallyVisibleChild(int fromIndex, int toIndex, boolean acceptEndPointInclusion) {
+            return findOnePartiallyOrCompletelyVisibleChild(fromIndex, toIndex, false, false, acceptEndPointInclusion);
         }
 
         public View getFocusableViewAfter(int referenceChildPosition, int layoutDir) {
@@ -734,16 +758,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
             if (layoutDir != -1) {
                 for (i = this.mViews.size() - 1; i >= 0; i--) {
                     view = (View) this.mViews.get(i);
-                    if (!view.isFocusable()) {
-                        break;
-                    }
-                    Object obj;
-                    if (StaggeredGridLayoutManager.this.getPosition(view) > referenceChildPosition) {
-                        obj = 1;
-                    } else {
-                        obj = null;
-                    }
-                    if (obj != (!StaggeredGridLayoutManager.this.mReverseLayout ? 1 : null)) {
+                    if ((StaggeredGridLayoutManager.this.mReverseLayout && StaggeredGridLayoutManager.this.getPosition(view) >= referenceChildPosition) || ((!StaggeredGridLayoutManager.this.mReverseLayout && StaggeredGridLayoutManager.this.getPosition(view) <= referenceChildPosition) || !view.hasFocusable())) {
                         break;
                     }
                     candidate = view;
@@ -752,16 +767,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 int limit = this.mViews.size();
                 for (i = 0; i < limit; i++) {
                     view = (View) this.mViews.get(i);
-                    if (!view.isFocusable()) {
-                        break;
-                    }
-                    boolean z;
-                    if (StaggeredGridLayoutManager.this.getPosition(view) > referenceChildPosition) {
-                        z = true;
-                    } else {
-                        z = false;
-                    }
-                    if (z != StaggeredGridLayoutManager.this.mReverseLayout) {
+                    if ((StaggeredGridLayoutManager.this.mReverseLayout && StaggeredGridLayoutManager.this.getPosition(view) <= referenceChildPosition) || ((!StaggeredGridLayoutManager.this.mReverseLayout && StaggeredGridLayoutManager.this.getPosition(view) >= referenceChildPosition) || !view.hasFocusable())) {
                         break;
                     }
                     candidate = view;
@@ -1939,7 +1945,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 updateRemainingSpans(currentSpan, this.mLayoutState.mLayoutDirection, targetLine);
             }
             recycle(recycler, this.mLayoutState);
-            if (this.mLayoutState.mStopInFocusable && view.isFocusable()) {
+            if (this.mLayoutState.mStopInFocusable && view.hasFocusable()) {
                 if (lp.mFullSpan) {
                     this.mRemainingSpans.clear();
                 } else {
@@ -2456,6 +2462,9 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         }
         int referenceChildPosition;
         View view;
+        int i;
+        int findFirstPartiallyVisibleItemPosition;
+        View unfocusableCandidate;
         LayoutParams prevFocusLayoutParams = (LayoutParams) directChild.getLayoutParams();
         boolean prevFocusFullSpan = prevFocusLayoutParams.mFullSpan;
         Span prevFocusSpan = prevFocusLayoutParams.mSpan;
@@ -2478,7 +2487,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 return view;
             }
         }
-        int i;
         if (preferLastSpan(layoutDir)) {
             for (i = this.mSpanCount - 1; i >= 0; i--) {
                 view = this.mSpans[i].getFocusableViewAfter(referenceChildPosition, layoutDir);
@@ -2491,6 +2499,45 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 view = this.mSpans[i].getFocusableViewAfter(referenceChildPosition, layoutDir);
                 if (view != null && view != directChild) {
                     return view;
+                }
+            }
+        }
+        boolean shouldSearchFromStart = (!this.mReverseLayout ? 1 : null) == (layoutDir == -1 ? 1 : null);
+        if (!prevFocusFullSpan) {
+            if (shouldSearchFromStart) {
+                findFirstPartiallyVisibleItemPosition = prevFocusSpan.findFirstPartiallyVisibleItemPosition();
+            } else {
+                findFirstPartiallyVisibleItemPosition = prevFocusSpan.findLastPartiallyVisibleItemPosition();
+            }
+            unfocusableCandidate = findViewByPosition(findFirstPartiallyVisibleItemPosition);
+            if (!(unfocusableCandidate == null || unfocusableCandidate == directChild)) {
+                return unfocusableCandidate;
+            }
+        }
+        if (preferLastSpan(layoutDir)) {
+            for (i = this.mSpanCount - 1; i >= 0; i--) {
+                if (i != prevFocusSpan.mIndex) {
+                    if (shouldSearchFromStart) {
+                        findFirstPartiallyVisibleItemPosition = this.mSpans[i].findFirstPartiallyVisibleItemPosition();
+                    } else {
+                        findFirstPartiallyVisibleItemPosition = this.mSpans[i].findLastPartiallyVisibleItemPosition();
+                    }
+                    unfocusableCandidate = findViewByPosition(findFirstPartiallyVisibleItemPosition);
+                    if (!(unfocusableCandidate == null || unfocusableCandidate == directChild)) {
+                        return unfocusableCandidate;
+                    }
+                }
+            }
+        } else {
+            for (i = 0; i < this.mSpanCount; i++) {
+                if (shouldSearchFromStart) {
+                    findFirstPartiallyVisibleItemPosition = this.mSpans[i].findFirstPartiallyVisibleItemPosition();
+                } else {
+                    findFirstPartiallyVisibleItemPosition = this.mSpans[i].findLastPartiallyVisibleItemPosition();
+                }
+                unfocusableCandidate = findViewByPosition(findFirstPartiallyVisibleItemPosition);
+                if (unfocusableCandidate != null && unfocusableCandidate != directChild) {
+                    return unfocusableCandidate;
                 }
             }
         }

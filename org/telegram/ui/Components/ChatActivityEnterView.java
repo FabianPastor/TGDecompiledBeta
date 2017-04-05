@@ -2859,7 +2859,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             String str = String.format("%02d:%02d.%02d", new Object[]{Long.valueOf(time.longValue() / 60), Long.valueOf(time.longValue() % 60), Integer.valueOf(ms)});
             if (this.lastTimeString == null || !this.lastTimeString.equals(str)) {
                 if (time.longValue() % 5 == 0) {
-                    MessagesController.getInstance().sendTyping(this.dialog_id, 1, 0);
+                    MessagesController instance = MessagesController.getInstance();
+                    long j = this.dialog_id;
+                    int i = (this.videoSendButton == null || this.videoSendButton.getTag() == null) ? 1 : 7;
+                    instance.sendTyping(j, i, 0);
                 }
                 if (this.recordTimeText != null) {
                     this.recordTimeText.setText(str);

@@ -99,19 +99,19 @@ public final class zzb extends zza {
         this.zzaRK.startActivityForResult(intent, i);
     }
 
-    public IObjectWrapper zzBN() {
+    public IObjectWrapper zzBO() {
         return zzd.zzA(this.zzaRK.getActivity());
     }
 
-    public zzc zzBO() {
+    public zzc zzBP() {
         return zza(this.zzaRK.getParentFragment());
     }
 
-    public IObjectWrapper zzBP() {
+    public IObjectWrapper zzBQ() {
         return zzd.zzA(this.zzaRK.getResources());
     }
 
-    public zzc zzBQ() {
+    public zzc zzBR() {
         return zza(this.zzaRK.getTargetFragment());
     }
 

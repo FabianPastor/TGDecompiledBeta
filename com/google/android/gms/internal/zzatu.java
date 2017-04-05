@@ -15,10 +15,10 @@ public class zzatu extends zzauh {
     private String zzVX;
     private String zzacL;
     private String zzacM;
-    private String zzbqA;
-    private long zzbqE;
-    private long zzbsA;
-    private int zzbsz;
+    private long zzbqA;
+    private String zzbqw;
+    private int zzbsv;
+    private long zzbsw;
 
     zzatu(zzaue com_google_android_gms_internal_zzaue) {
         super(com_google_android_gms_internal_zzaue);
@@ -33,10 +33,6 @@ public class zzatu extends zzauh {
         return this.zzVX;
     }
 
-    public /* bridge */ /* synthetic */ void zzJU() {
-        super.zzJU();
-    }
-
     public /* bridge */ /* synthetic */ void zzJV() {
         super.zzJV();
     }
@@ -45,106 +41,110 @@ public class zzatu extends zzauh {
         super.zzJW();
     }
 
-    public /* bridge */ /* synthetic */ zzatb zzJX() {
-        return super.zzJX();
+    public /* bridge */ /* synthetic */ void zzJX() {
+        super.zzJX();
     }
 
-    public /* bridge */ /* synthetic */ zzatf zzJY() {
+    public /* bridge */ /* synthetic */ zzatb zzJY() {
         return super.zzJY();
     }
 
-    public /* bridge */ /* synthetic */ zzauj zzJZ() {
+    public /* bridge */ /* synthetic */ zzatf zzJZ() {
         return super.zzJZ();
     }
 
-    public /* bridge */ /* synthetic */ zzatu zzKa() {
+    public /* bridge */ /* synthetic */ zzauj zzKa() {
         return super.zzKa();
     }
 
-    public /* bridge */ /* synthetic */ zzatl zzKb() {
+    public /* bridge */ /* synthetic */ zzatu zzKb() {
         return super.zzKb();
     }
 
-    public /* bridge */ /* synthetic */ zzaul zzKc() {
+    public /* bridge */ /* synthetic */ zzatl zzKc() {
         return super.zzKc();
     }
 
-    public /* bridge */ /* synthetic */ zzauk zzKd() {
+    public /* bridge */ /* synthetic */ zzaul zzKd() {
         return super.zzKd();
     }
 
-    public /* bridge */ /* synthetic */ zzatv zzKe() {
+    public /* bridge */ /* synthetic */ zzauk zzKe() {
         return super.zzKe();
     }
 
-    public /* bridge */ /* synthetic */ zzatj zzKf() {
+    public /* bridge */ /* synthetic */ zzatv zzKf() {
         return super.zzKf();
     }
 
-    public /* bridge */ /* synthetic */ zzaut zzKg() {
+    public /* bridge */ /* synthetic */ zzatj zzKg() {
         return super.zzKg();
     }
 
-    public /* bridge */ /* synthetic */ zzauc zzKh() {
+    public /* bridge */ /* synthetic */ zzaut zzKh() {
         return super.zzKh();
     }
 
-    public /* bridge */ /* synthetic */ zzaun zzKi() {
+    public /* bridge */ /* synthetic */ zzauc zzKi() {
         return super.zzKi();
     }
 
-    public /* bridge */ /* synthetic */ zzaud zzKj() {
+    public /* bridge */ /* synthetic */ zzaun zzKj() {
         return super.zzKj();
     }
 
-    public /* bridge */ /* synthetic */ zzatx zzKk() {
+    public /* bridge */ /* synthetic */ zzaud zzKk() {
         return super.zzKk();
     }
 
-    public /* bridge */ /* synthetic */ zzaua zzKl() {
+    public /* bridge */ /* synthetic */ zzatx zzKl() {
         return super.zzKl();
     }
 
-    public /* bridge */ /* synthetic */ zzati zzKm() {
+    public /* bridge */ /* synthetic */ zzaua zzKm() {
         return super.zzKm();
     }
 
-    String zzKt() {
-        zzob();
-        return this.zzbqA;
+    public /* bridge */ /* synthetic */ zzati zzKn() {
+        return super.zzKn();
     }
 
-    long zzKu() {
-        return zzKm().zzKu();
+    String zzKu() {
+        zzob();
+        return this.zzbqw;
+    }
+
+    long zzKv() {
+        return zzKn().zzKv();
     }
 
     @WorkerThread
-    long zzKv() {
+    long zzKw() {
         zzob();
         zzmR();
-        if (this.zzbsA == 0) {
-            this.zzbsA = this.zzbqg.zzKg().zzK(getContext(), getContext().getPackageName());
+        if (this.zzbsw == 0) {
+            this.zzbsw = this.zzbqc.zzKh().zzL(getContext(), getContext().getPackageName());
         }
-        return this.zzbsA;
+        return this.zzbsw;
     }
 
-    int zzLW() {
+    int zzLX() {
         zzob();
-        return this.zzbsz;
+        return this.zzbsv;
     }
 
     protected void zzbw(Status status) {
         if (status == null) {
-            zzKk().zzLX().log("GoogleService failed to initialize (no status)");
+            zzKl().zzLY().log("GoogleService failed to initialize (no status)");
         } else {
-            zzKk().zzLX().zze("GoogleService failed to initialize, status", Integer.valueOf(status.getStatusCode()), status.getStatusMessage());
+            zzKl().zzLY().zze("GoogleService failed to initialize, status", Integer.valueOf(status.getStatusCode()), status.getStatusMessage());
         }
     }
 
     @WorkerThread
     zzatd zzfD(String str) {
         zzmR();
-        return new zzatd(zzke(), getGmpAppId(), zzmZ(), (long) zzLW(), zzKt(), zzKu(), zzKv(), str, this.zzbqg.isEnabled(), !zzKl().zzbtu, zzKl().zzKp(), zzuW());
+        return new zzatd(zzke(), getGmpAppId(), zzmZ(), (long) zzLX(), zzKu(), zzKv(), zzKw(), str, this.zzbqc.isEnabled(), !zzKm().zzbtq, zzKm().zzKq(), zzuW());
     }
 
     String zzke() {
@@ -164,12 +164,12 @@ public class zzatu extends zzauh {
         String packageName = getContext().getPackageName();
         PackageManager packageManager = getContext().getPackageManager();
         if (packageManager == null) {
-            zzKk().zzLX().zzj("PackageManager is null, app identity information might be inaccurate. appId", zzatx.zzfE(packageName));
+            zzKl().zzLY().zzj("PackageManager is null, app identity information might be inaccurate. appId", zzatx.zzfE(packageName));
         } else {
             try {
                 str = packageManager.getInstallerPackageName(packageName);
             } catch (IllegalArgumentException e) {
-                zzKk().zzLX().zzj("Error retrieving app installer package name. appId", zzatx.zzfE(packageName));
+                zzKl().zzLY().zzj("Error retrieving app installer package name. appId", zzatx.zzfE(packageName));
             }
             if (str == null) {
                 str = "manual_install";
@@ -187,42 +187,42 @@ public class zzatu extends zzauh {
                     i = packageInfo.versionCode;
                 }
             } catch (NameNotFoundException e2) {
-                zzKk().zzLX().zze("Error retrieving package info. appId, appName", zzatx.zzfE(packageName), str3);
+                zzKl().zzLY().zze("Error retrieving package info. appId, appName", zzatx.zzfE(packageName), str3);
             }
         }
         this.mAppId = packageName;
-        this.zzbqA = str;
+        this.zzbqw = str;
         this.zzacM = str2;
-        this.zzbsz = i;
+        this.zzbsv = i;
         this.zzacL = str3;
-        this.zzbsA = 0;
-        zzKm().zzLf();
+        this.zzbsw = 0;
+        zzKn().zzLg();
         Status zzaQ = zzaba.zzaQ(getContext());
         Object obj = (zzaQ == null || !zzaQ.isSuccess()) ? null : 1;
         if (obj == null) {
             zzbw(zzaQ);
         }
         if (obj != null) {
-            Boolean zzLh = zzKm().zzLh();
-            if (zzKm().zzLg()) {
-                zzKk().zzMb().log("Collection disabled with firebase_analytics_collection_deactivated=1");
+            Boolean zzLi = zzKn().zzLi();
+            if (zzKn().zzLh()) {
+                zzKl().zzMc().log("Collection disabled with firebase_analytics_collection_deactivated=1");
                 obj = null;
-            } else if (zzLh != null && !zzLh.booleanValue()) {
-                zzKk().zzMb().log("Collection disabled with firebase_analytics_collection_enabled=0");
+            } else if (zzLi != null && !zzLi.booleanValue()) {
+                zzKl().zzMc().log("Collection disabled with firebase_analytics_collection_enabled=0");
                 obj = null;
-            } else if (zzLh == null && zzKm().zzwR()) {
-                zzKk().zzMb().log("Collection disabled with google_app_measurement_enable=0");
+            } else if (zzLi == null && zzKn().zzwR()) {
+                zzKl().zzMc().log("Collection disabled with google_app_measurement_enable=0");
                 obj = null;
             } else {
-                zzKk().zzMd().log("Collection enabled");
+                zzKl().zzMe().log("Collection enabled");
                 int i2 = 1;
             }
         } else {
             obj = null;
         }
         this.zzVX = "";
-        this.zzbqE = 0;
-        zzKm().zzLf();
+        this.zzbqA = 0;
+        zzKn().zzLg();
         try {
             String zzwQ = zzaba.zzwQ();
             if (TextUtils.isEmpty(zzwQ)) {
@@ -230,10 +230,10 @@ public class zzatu extends zzauh {
             }
             this.zzVX = zzwQ;
             if (obj != null) {
-                zzKk().zzMd().zze("App package, google app id", this.mAppId, this.zzVX);
+                zzKl().zzMe().zze("App package, google app id", this.mAppId, this.zzVX);
             }
         } catch (IllegalStateException e3) {
-            zzKk().zzLX().zze("getGoogleAppId or isMeasurementEnabled failed with exception. appId", zzatx.zzfE(packageName), e3);
+            zzKl().zzLY().zze("getGoogleAppId or isMeasurementEnabled failed with exception. appId", zzatx.zzfE(packageName), e3);
         }
     }
 

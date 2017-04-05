@@ -15,7 +15,7 @@ public class PatternItem extends zza {
     private static final String TAG = PatternItem.class.getSimpleName();
     private final int type;
     @Nullable
-    private final Float zzbpN;
+    private final Float zzbpJ;
 
     public PatternItem(int i, @Nullable Float f) {
         boolean z = true;
@@ -25,7 +25,7 @@ public class PatternItem extends zza {
         String valueOf = String.valueOf(f);
         zzac.zzb(z, new StringBuilder(String.valueOf(valueOf).length() + 45).append("Invalid PatternItem: type=").append(i).append(" length=").append(valueOf).toString());
         this.type = i;
-        this.zzbpN = f;
+        this.zzbpJ = f;
     }
 
     @Nullable
@@ -35,19 +35,19 @@ public class PatternItem extends zza {
         }
         List<PatternItem> arrayList = new ArrayList(list.size());
         for (PatternItem patternItem : list) {
-            arrayList.add(patternItem == null ? null : patternItem.zzJN());
+            arrayList.add(patternItem == null ? null : patternItem.zzJO());
         }
         return arrayList;
     }
 
-    private PatternItem zzJN() {
+    private PatternItem zzJO() {
         switch (this.type) {
             case 0:
-                return new Dash(this.zzbpN.floatValue());
+                return new Dash(this.zzbpJ.floatValue());
             case 1:
                 return new Dot();
             case 2:
-                return new Gap(this.zzbpN.floatValue());
+                return new Gap(this.zzbpJ.floatValue());
             default:
                 Log.w(TAG, "Unknown PatternItem type: " + this.type);
                 return this;
@@ -62,7 +62,7 @@ public class PatternItem extends zza {
             return false;
         }
         PatternItem patternItem = (PatternItem) obj;
-        return this.type == patternItem.type && zzaa.equal(this.zzbpN, patternItem.zzbpN);
+        return this.type == patternItem.type && zzaa.equal(this.zzbpJ, patternItem.zzbpJ);
     }
 
     public int getType() {
@@ -70,12 +70,12 @@ public class PatternItem extends zza {
     }
 
     public int hashCode() {
-        return zzaa.hashCode(Integer.valueOf(this.type), this.zzbpN);
+        return zzaa.hashCode(Integer.valueOf(this.type), this.zzbpJ);
     }
 
     public String toString() {
         int i = this.type;
-        String valueOf = String.valueOf(this.zzbpN);
+        String valueOf = String.valueOf(this.zzbpJ);
         return new StringBuilder(String.valueOf(valueOf).length() + 39).append("[PatternItem: type=").append(i).append(" length=").append(valueOf).append("]").toString();
     }
 
@@ -84,7 +84,7 @@ public class PatternItem extends zza {
     }
 
     @Nullable
-    public Float zzJM() {
-        return this.zzbpN;
+    public Float zzJN() {
+        return this.zzbpJ;
     }
 }
