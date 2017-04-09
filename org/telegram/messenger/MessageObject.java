@@ -2200,7 +2200,7 @@ public class MessageObject {
             if (FileLoader.getClosestPhotoSizeWithSize(this.photoThumbs, AndroidUtilities.getPhotoSize()) != null) {
                 this.mediaExists = FileLoader.getPathToMessage(this.messageOwner).exists();
             }
-        } else if (this.type == 8 || this.type == 3 || this.type == 9 || this.type == 2 || this.type == 14) {
+        } else if (this.type == 8 || this.type == 3 || this.type == 9 || this.type == 2 || this.type == 14 || this.type == 5) {
             if (this.messageOwner.attachPath != null && this.messageOwner.attachPath.length() > 0) {
                 this.attachPathExists = new File(this.messageOwner.attachPath).exists();
             }

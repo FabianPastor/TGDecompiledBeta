@@ -114,11 +114,11 @@ public class CameraSession {
         return this.currentFlashMode;
     }
 
-    protected void setInitied() {
+    public void setInitied() {
         this.initied = true;
     }
 
-    protected boolean isInitied() {
+    public boolean isInitied() {
         return this.initied;
     }
 
@@ -128,6 +128,99 @@ public class CameraSession {
 
     public boolean isSameTakePictureOrientation() {
         return this.sameTakePictureOrientation;
+    }
+
+    protected void configureRoundCamera() {
+        boolean z = true;
+        this.isVideo = true;
+        Camera camera = this.cameraInfo.camera;
+        if (camera != null) {
+            int cameraDisplayOrientation;
+            CameraInfo info = new CameraInfo();
+            Parameters params = null;
+            try {
+                params = camera.getParameters();
+            } catch (Throwable e) {
+                FileLog.e(e);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
+                return;
+            }
+            Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
+            int displayOrientation = getDisplayOrientation(info, true);
+            if ("samsung".equals(Build.MANUFACTURER) && "sf2wifixx".equals(Build.PRODUCT)) {
+                cameraDisplayOrientation = 0;
+            } else {
+                int temp;
+                int degrees = 0;
+                switch (displayOrientation) {
+                    case 0:
+                        degrees = 0;
+                        break;
+                    case 1:
+                        degrees = 90;
+                        break;
+                    case 2:
+                        degrees = 180;
+                        break;
+                    case 3:
+                        degrees = 270;
+                        break;
+                }
+                if (info.orientation % 90 != 0) {
+                    info.orientation = 0;
+                }
+                if (info.facing == 1) {
+                    temp = (360 - ((info.orientation + degrees) % 360)) % 360;
+                } else {
+                    temp = ((info.orientation - degrees) + 360) % 360;
+                }
+                cameraDisplayOrientation = temp;
+            }
+            this.currentOrientation = cameraDisplayOrientation;
+            camera.setDisplayOrientation(cameraDisplayOrientation);
+            if (params != null) {
+                params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
+                params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
+                params.setPictureFormat(this.pictureFormat);
+                params.setRecordingHint(true);
+                String desiredMode = "continuous-picture";
+                if (params.getSupportedFocusModes().contains(desiredMode)) {
+                    params.setFocusMode(desiredMode);
+                }
+                int outputOrientation = 0;
+                if (this.jpegOrientation != -1) {
+                    if (info.facing == 1) {
+                        outputOrientation = ((info.orientation - this.jpegOrientation) + 360) % 360;
+                    } else {
+                        outputOrientation = (info.orientation + this.jpegOrientation) % 360;
+                    }
+                }
+                try {
+                    params.setRotation(outputOrientation);
+                    if (info.facing == 1) {
+                        if ((360 - displayOrientation) % 360 != outputOrientation) {
+                            z = false;
+                        }
+                        this.sameTakePictureOrientation = z;
+                    } else {
+                        if (displayOrientation != outputOrientation) {
+                            z = false;
+                        }
+                        this.sameTakePictureOrientation = z;
+                    }
+                } catch (Exception e3) {
+                }
+                params.setFlashMode(this.currentFlashMode);
+                try {
+                    camera.setParameters(params);
+                } catch (Exception e4) {
+                }
+                if (params.getMaxNumMeteringAreas() > 0) {
+                    this.meteringAreaSupported = true;
+                }
+            }
+        }
     }
 
     protected void configurePhotoCamera() {

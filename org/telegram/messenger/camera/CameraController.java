@@ -399,6 +399,39 @@ public class CameraController implements OnInfoListener {
         }
     }
 
+    public void openRound(final CameraSession session, final SurfaceTexture texture, final Runnable callback) {
+        if (session != null && texture != null) {
+            this.threadPool.execute(new Runnable() {
+                @SuppressLint({"NewApi"})
+                public void run() {
+                    Camera camera = session.cameraInfo.camera;
+                    if (camera == null) {
+                        try {
+                            CameraInfo cameraInfo = session.cameraInfo;
+                            Camera camera2 = Camera.open(session.cameraInfo.cameraId);
+                            cameraInfo.camera = camera2;
+                            camera = camera2;
+                        } catch (Throwable e) {
+                            session.cameraInfo.camera = null;
+                            if (camera != null) {
+                                camera.release();
+                            }
+                            FileLog.e(e);
+                            return;
+                        }
+                    }
+                    Parameters params = camera.getParameters();
+                    session.configureRoundCamera();
+                    camera.setPreviewTexture(texture);
+                    camera.startPreview();
+                    if (callback != null) {
+                        AndroidUtilities.runOnUIThread(callback);
+                    }
+                }
+            });
+        }
+    }
+
     public void open(CameraSession session, SurfaceTexture texture, Runnable callback, Runnable prestartCallback) {
         if (session != null && texture != null) {
             final CameraSession cameraSession = session;
@@ -485,7 +518,7 @@ public class CameraController implements OnInfoListener {
                                 if (CameraController.this.recordingSmallVideo) {
                                     pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 640, 480, new Size(4, 3));
                                     CameraController.this.recorder.setVideoEncodingBitRate(1800000);
-                                    CameraController.this.recorder.setAudioEncodingBitRate(16000);
+                                    CameraController.this.recorder.setAudioEncodingBitRate(32000);
                                     CameraController.this.recorder.setAudioChannels(1);
                                 } else {
                                     pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), 720, 480, new Size(16, 9));

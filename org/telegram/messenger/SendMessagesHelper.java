@@ -29,7 +29,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.beta.R;
 import org.telegram.messenger.exoplayer2.ExoPlayerFactory;
-import org.telegram.messenger.exoplayer2.extractor.ts.PsExtractor;
 import org.telegram.messenger.exoplayer2.util.MimeTypes;
 import org.telegram.messenger.query.DraftQuery;
 import org.telegram.messenger.query.SearchQuery;
@@ -1910,7 +1909,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             newMsgObj = new MessageObject(newMsg, null, true);
             try {
                 newMsgObj.replyMessageObject = reply_to_msg;
-                if (!newMsgObj.isForwarded() && ((newMsgObj.type == 3 || videoEditedInfo != null) && !TextUtils.isEmpty(newMsg.attachPath))) {
+                if (!newMsgObj.isForwarded() && ((newMsgObj.type == 3 || videoEditedInfo != null || newMsgObj.type == 2) && !TextUtils.isEmpty(newMsg.attachPath))) {
                     newMsgObj.attachPathExists = true;
                 }
                 ArrayList<MessageObject> objArr = new ArrayList();
@@ -3885,6 +3884,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             TL_photo photo;
                             HashMap<String, String> params;
                             ArrayList<InputDocument> arrayList;
+                            boolean z;
                             AbstractSerializedData serializedData;
                             int b;
                             Object obj;
@@ -3933,7 +3933,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                             photo.caption = (String) arrayList.get(a);
                                         }
                                         if (arrayList2 != null) {
-                                            boolean z;
                                             arrayList = (ArrayList) arrayList2.get(a);
                                             z = arrayList == null && !arrayList.isEmpty();
                                             photo.has_stickers = z;
@@ -4213,31 +4212,27 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             new Thread(new Runnable() {
                 public void run() {
                     boolean isEncrypted = ((int) j) == 0;
-                    if (videoEditedInfo2 != null || str.endsWith("mp4")) {
+                    boolean isRound = videoEditedInfo2 != null && videoEditedInfo2.roundVideo;
+                    final VideoEditedInfo editedInfo = !isRound ? videoEditedInfo2 : null;
+                    if (editedInfo != null || str.endsWith("mp4") || isRound) {
                         String path = str;
                         String originalPath = str;
                         File file = new File(originalPath);
                         originalPath = originalPath + file.length() + "_" + file.lastModified();
-                        if (videoEditedInfo2 != null) {
-                            originalPath = originalPath + j2 + "_" + videoEditedInfo2.startTime + "_" + videoEditedInfo2.endTime;
-                            if (videoEditedInfo2.resultWidth == videoEditedInfo2.originalWidth) {
-                                originalPath = originalPath + "_" + videoEditedInfo2.resultWidth;
+                        if (editedInfo != null) {
+                            originalPath = originalPath + j2 + "_" + editedInfo.startTime + "_" + editedInfo.endTime;
+                            if (editedInfo.resultWidth == editedInfo.originalWidth) {
+                                originalPath = originalPath + "_" + editedInfo.resultWidth;
                             }
                         }
                         TL_document document = null;
                         PhotoSize size;
                         TL_documentAttributeVideo attributeVideo;
-                        boolean z;
-                        VideoEditedInfo videoEditedInfo;
                         String fileName;
-                        File cacheFile;
-                        TL_document videoFinal;
+                        final TL_document videoFinal;
                         String originalPathFinal;
-                        String finalPath;
-                        HashMap<String, String> params;
-                        final TL_document tL_document;
-                        final String str;
-                        final HashMap<String, String> hashMap;
+                        final String finalPath;
+                        final HashMap<String, String> params;
                         if (isEncrypted) {
                             if (null == null) {
                                 size = ImageLoader.scaleAndSaveImage(ThumbnailUtils.createVideoThumbnail(str, 1), 90.0f, 90.0f, 55, isEncrypted);
@@ -4252,43 +4247,34 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 document.mime_type = MimeTypes.VIDEO_MP4;
                                 UserConfig.saveConfig(false);
                                 attributeVideo = new TL_documentAttributeVideo();
-                                if (videoEditedInfo2 == null) {
-                                }
-                                attributeVideo.round_message = z;
+                                attributeVideo.round_message = isRound;
                                 document.attributes.add(attributeVideo);
-                                if (videoEditedInfo2 == null) {
+                                if (editedInfo == null) {
                                     if (file.exists()) {
                                         document.size = (int) file.length();
                                     }
                                     SendMessagesHelper.fillVideoAttribute(str, attributeVideo, null);
                                 } else {
-                                    if (!videoEditedInfo2.muted) {
-                                    }
-                                    if (!videoEditedInfo2.roundVideo) {
+                                    if (editedInfo.muted) {
                                         document.attributes.add(new TL_documentAttributeAnimated());
-                                    }
-                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
-                                    if (videoEditedInfo2.roundVideo) {
-                                        videoEditedInfo2.originalWidth = attributeVideo.w;
-                                        videoEditedInfo2.originalHeight = attributeVideo.h;
-                                        videoEditedInfo = videoEditedInfo2;
-                                        attributeVideo.w = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo.resultWidth = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo = videoEditedInfo2;
-                                        attributeVideo.h = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo.resultHeight = PsExtractor.VIDEO_STREAM_MASK;
+                                        SendMessagesHelper.fillVideoAttribute(str, attributeVideo, editedInfo);
+                                        editedInfo.originalWidth = attributeVideo.w;
+                                        editedInfo.originalHeight = attributeVideo.h;
+                                        attributeVideo.w = editedInfo.resultWidth;
+                                        attributeVideo.h = editedInfo.resultHeight;
                                     } else {
-                                        videoEditedInfo2.originalWidth = attributeVideo.w;
-                                        videoEditedInfo2.originalHeight = attributeVideo.h;
-                                        attributeVideo.w = videoEditedInfo2.resultWidth;
-                                        attributeVideo.h = videoEditedInfo2.resultHeight;
+                                        attributeVideo.duration = (int) (j2 / 1000);
+                                        if (editedInfo.rotationValue != 90) {
+                                        }
+                                        attributeVideo.w = i;
+                                        attributeVideo.h = i2;
                                     }
                                     document.size = (int) j3;
                                     fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
                                     UserConfig.lastLocalId--;
-                                    cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                                    file = new File(FileLoader.getInstance().getDirectory(4), fileName);
                                     UserConfig.saveConfig(false);
-                                    path = cacheFile.getAbsolutePath();
+                                    path = file.getAbsolutePath();
                                 }
                             }
                             videoFinal = document;
@@ -4299,12 +4285,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             if (originalPath != null) {
                                 params.put("originalPath", originalPath);
                             }
-                            tL_document = videoFinal;
-                            str = finalPath;
-                            hashMap = params;
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    SendMessagesHelper.getInstance().sendMessage(tL_document, videoEditedInfo2, str, j, messageObject, null, hashMap);
+                                    SendMessagesHelper.getInstance().sendMessage(videoFinal, editedInfo, finalPath, j, messageObject, null, params);
                                 }
                             });
                             return;
@@ -4322,33 +4305,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             document.mime_type = MimeTypes.VIDEO_MP4;
                             UserConfig.saveConfig(false);
                             attributeVideo = new TL_documentAttributeVideo();
-                            z = videoEditedInfo2 == null && videoEditedInfo2.roundVideo;
-                            attributeVideo.round_message = z;
+                            attributeVideo.round_message = isRound;
                             document.attributes.add(attributeVideo);
-                            if (videoEditedInfo2 == null) {
-                                if (videoEditedInfo2.muted || videoEditedInfo2.roundVideo) {
-                                    if (videoEditedInfo2.roundVideo) {
-                                        document.attributes.add(new TL_documentAttributeAnimated());
-                                    }
-                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, videoEditedInfo2);
-                                    if (videoEditedInfo2.roundVideo) {
-                                        videoEditedInfo2.originalWidth = attributeVideo.w;
-                                        videoEditedInfo2.originalHeight = attributeVideo.h;
-                                        videoEditedInfo = videoEditedInfo2;
-                                        attributeVideo.w = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo.resultWidth = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo = videoEditedInfo2;
-                                        attributeVideo.h = PsExtractor.VIDEO_STREAM_MASK;
-                                        videoEditedInfo.resultHeight = PsExtractor.VIDEO_STREAM_MASK;
-                                    } else {
-                                        videoEditedInfo2.originalWidth = attributeVideo.w;
-                                        videoEditedInfo2.originalHeight = attributeVideo.h;
-                                        attributeVideo.w = videoEditedInfo2.resultWidth;
-                                        attributeVideo.h = videoEditedInfo2.resultHeight;
-                                    }
+                            if (editedInfo == null) {
+                                if (editedInfo.muted) {
+                                    document.attributes.add(new TL_documentAttributeAnimated());
+                                    SendMessagesHelper.fillVideoAttribute(str, attributeVideo, editedInfo);
+                                    editedInfo.originalWidth = attributeVideo.w;
+                                    editedInfo.originalHeight = attributeVideo.h;
+                                    attributeVideo.w = editedInfo.resultWidth;
+                                    attributeVideo.h = editedInfo.resultHeight;
                                 } else {
                                     attributeVideo.duration = (int) (j2 / 1000);
-                                    if (videoEditedInfo2.rotationValue == 90 || videoEditedInfo2.rotationValue == 270) {
+                                    if (editedInfo.rotationValue != 90 || editedInfo.rotationValue == 270) {
                                         attributeVideo.w = i;
                                         attributeVideo.h = i2;
                                     } else {
@@ -4359,9 +4328,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 document.size = (int) j3;
                                 fileName = "-2147483648_" + UserConfig.lastLocalId + ".mp4";
                                 UserConfig.lastLocalId--;
-                                cacheFile = new File(FileLoader.getInstance().getDirectory(4), fileName);
+                                file = new File(FileLoader.getInstance().getDirectory(4), fileName);
                                 UserConfig.saveConfig(false);
-                                path = cacheFile.getAbsolutePath();
+                                path = file.getAbsolutePath();
                             } else {
                                 if (file.exists()) {
                                     document.size = (int) file.length();
@@ -4377,9 +4346,6 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         if (originalPath != null) {
                             params.put("originalPath", originalPath);
                         }
-                        tL_document = videoFinal;
-                        str = finalPath;
-                        hashMap = params;
                         AndroidUtilities.runOnUIThread(/* anonymous class already generated */);
                         return;
                     }

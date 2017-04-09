@@ -794,6 +794,7 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public zzatg zzT(String str, String str2) {
+        Cursor query;
         Object e;
         Cursor cursor;
         Throwable th;
@@ -801,7 +802,6 @@ class zzatj extends zzauh {
         zzac.zzdr(str2);
         zzmR();
         zzob();
-        Cursor query;
         try {
             query = getWritableDatabase().query("conditional_properties", new String[]{"origin", Param.VALUE, "active", "trigger_event_name", "trigger_timeout", "timed_out_event", "creation_timestamp", "triggered_event", "triggered_timestamp", "time_to_live", "expired_event"}, "app_id=? and name=?", new String[]{str, str2}, null, null, null);
             try {
@@ -956,6 +956,7 @@ class zzatj extends zzauh {
     }
 
     Map<Integer, List<zzauu.zze>> zzW(String str, String str2) {
+        Cursor query;
         Object e;
         Throwable th;
         zzob();
@@ -963,7 +964,6 @@ class zzatj extends zzauh {
         zzac.zzdr(str);
         zzac.zzdr(str2);
         Map<Integer, List<zzauu.zze>> arrayMap = new ArrayMap();
-        Cursor query;
         try {
             query = getWritableDatabase().query("property_filters", new String[]{"audience_id", "data"}, "app_id=? AND property_name=?", new String[]{str, str2}, null, null, null);
             if (query.moveToFirst()) {
@@ -1107,6 +1107,7 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public zza zza(long j, String str, boolean z, boolean z2, boolean z3, boolean z4, boolean z5) {
+        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdr(str);
@@ -1114,7 +1115,6 @@ class zzatj extends zzauh {
         zzob();
         String[] strArr = new String[]{str};
         zza com_google_android_gms_internal_zzatj_zza = new zza();
-        Cursor query;
         try {
             SQLiteDatabase writableDatabase = getWritableDatabase();
             query = writableDatabase.query("apps", new String[]{"day", "daily_events_count", "daily_public_events_count", "daily_conversions_count", "daily_error_events_count", "daily_realtime_events_count"}, "app_id=?", new String[]{str}, null, null, null);
@@ -1606,12 +1606,12 @@ class zzatj extends zzauh {
     }
 
     public String zzao(long j) {
-        Cursor rawQuery;
         Object e;
         Throwable th;
         String str = null;
         zzmR();
         zzob();
+        Cursor rawQuery;
         try {
             rawQuery = getWritableDatabase().rawQuery("select app_id from apps where app_id in (select distinct app_id from raw_events) and config_fetched_time < ? order by failed_config_fetch_time limit 1;", new String[]{String.valueOf(j)});
             try {
@@ -2035,12 +2035,12 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public byte[] zzfw(String str) {
-        Cursor query;
         Object e;
         Throwable th;
         zzac.zzdr(str);
         zzmR();
         zzob();
+        Cursor query;
         try {
             query = getWritableDatabase().query("apps", new String[]{"remote_config"}, "app_id=?", new String[]{str}, null, null, null);
             try {
@@ -2326,7 +2326,6 @@ class zzatj extends zzauh {
 
     @WorkerThread
     public List<Pair<zze, Long>> zzn(String str, int i, int i2) {
-        Cursor query;
         List<Pair<zze, Long>> arrayList;
         Object e;
         Cursor cursor;
@@ -2340,6 +2339,7 @@ class zzatj extends zzauh {
         }
         zzac.zzax(z);
         zzac.zzdr(str);
+        Cursor query;
         try {
             query = getWritableDatabase().query("queue", new String[]{"rowid", "data"}, "app_id=?", new String[]{str}, null, null, "rowid", String.valueOf(i));
             try {

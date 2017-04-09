@@ -30,4 +30,8 @@ public class CameraInfo {
     public ArrayList<Size> getPictureSizes() {
         return this.pictureSizes;
     }
+
+    public boolean isFrontface() {
+        return this.frontCamera != 0;
+    }
 }

@@ -42,15 +42,15 @@ public class OutputSurface implements OnFrameAvailableListener {
         this.mPixelBuf.order(ByteOrder.LITTLE_ENDIAN);
         eglSetup(width, height);
         makeCurrent();
-        setup(1.0f, 1.0f, false, false);
+        setup();
     }
 
-    public OutputSurface(float scaleX, float scaleY, boolean scaleRotated, boolean isRound) {
-        setup(scaleX, scaleY, scaleRotated, isRound);
+    public OutputSurface() {
+        setup();
     }
 
-    private void setup(float scaleX, float scaleY, boolean scaleRotated, boolean isRound) {
-        this.mTextureRender = new TextureRenderer(this.rotateRender, scaleX, scaleY, scaleRotated, isRound);
+    private void setup() {
+        this.mTextureRender = new TextureRenderer(this.rotateRender);
         this.mTextureRender.surfaceCreated();
         this.mSurfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
         this.mSurfaceTexture.setOnFrameAvailableListener(this);
@@ -114,10 +114,6 @@ public class OutputSurface implements OnFrameAvailableListener {
 
     public Surface getSurface() {
         return this.mSurface;
-    }
-
-    public void changeFragmentShader(String fragmentShader) {
-        this.mTextureRender.changeFragmentShader(fragmentShader);
     }
 
     public void awaitNewImage() {
